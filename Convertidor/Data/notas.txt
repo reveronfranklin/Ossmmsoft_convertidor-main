@@ -1,0 +1,10 @@
+﻿##############MIGRAR TABLAS DE CONTEXTO DESTINO############################################
+add-migration initialMigration -context DestinoDataContext
+update-database  -context DestinoDataContext
+
+
+add-migration addKeyHistiricoNomina -context DestinoDataContext
+update-database  -context DestinoDataContext
+
+
+add-migration PersonalHistoricoMigration -context DestinoDataContext
