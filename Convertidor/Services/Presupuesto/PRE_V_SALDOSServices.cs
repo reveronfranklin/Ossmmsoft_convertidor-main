@@ -3,6 +3,7 @@ using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Presupuesto;
+using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,29 +26,49 @@ namespace Convertidor.Services.Presupuesto
             _mapper = mapper;
         }
 
-        public async Task<List<PreVSaldosGetDto>> GetAll(FilterPRE_V_SALDOSDto filter)
+       
+        public async Task<ResultDto<List<PreVSaldosGetDto>>> GetAll(FilterPRE_V_SALDOSDto filter)
         {
+
+            ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
             try
             {
-                List<PreVSaldosGetDto> result = new List<PreVSaldosGetDto>();
                 var pRE_V_SALDOs = await _repository.GetAll(filter);
-                foreach (var item in pRE_V_SALDOs)
+                if (pRE_V_SALDOs.Count() > 0)
                 {
 
-                    result.Add(MapPRE_V_SADOSTOPreVSaldosGetDto(item));
+                    List<PreVSaldosGetDto> resultList = new List<PreVSaldosGetDto>();
+                    foreach (var item in pRE_V_SALDOs)
+                    {
+
+                        resultList.Add(MapPRE_V_SADOSTOPreVSaldosGetDto(item));
+                    }
+
+
+                    result.Data = resultList;
+
+                    result.IsValid = true;
+                    result.Message = "";
                 }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
 
-
-                return (List<PreVSaldosGetDto>)result;
+                }
             }
             catch (Exception ex)
             {
-
-                return null;
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
             }
 
-        }
 
+
+            return result;
+        }
 
         public PreVSaldosGetDto MapPRE_V_SADOSTOPreVSaldosGetDto(PRE_V_SALDOS entity)
         {

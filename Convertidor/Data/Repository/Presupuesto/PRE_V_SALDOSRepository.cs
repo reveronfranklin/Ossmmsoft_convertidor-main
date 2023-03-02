@@ -31,7 +31,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             catch (Exception ex)
             {
 
-                return null;
+                return null;@
             }
 
         }
