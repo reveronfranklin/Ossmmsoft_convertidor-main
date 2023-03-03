@@ -39,7 +39,7 @@ namespace Convertidor.Services.Presupuesto
             ResultDto<GetPRE_PRESUPUESTOSDto> result = new ResultDto<GetPRE_PRESUPUESTOSDto>(null);
             try
             {
-                var presupuesto = await _repository.GetByCodigo(filter.CODIGO_EMPRESA, filter.CODIGO_PRESUPUESTO);
+                var presupuesto = await _repository.GetByCodigo(filter.CodigoEmpresa, filter.CodigoPresupuesto);
                 if (presupuesto != null)
                 {
                     var dto = MapPrePresupuestoToGetPrePresupuestoDto(presupuesto);
