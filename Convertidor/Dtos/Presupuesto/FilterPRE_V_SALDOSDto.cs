@@ -7,6 +7,8 @@ namespace Convertidor.Dtos.Presupuesto
         public int CodigoEmpresa { get; set; }
         public int AnoDesde { get; set; }
         public int AnoHasta { get; set; }
+        public string SearchText { get; set; } = string.Empty;
+
     }
 }
 

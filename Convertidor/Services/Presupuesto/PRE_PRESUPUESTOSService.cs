@@ -243,16 +243,16 @@ namespace Convertidor.Services.Presupuesto
             dto.Denominacion = entity.DENOMINACION;
             dto.Descripcion = entity.DESCRIPCION ?? "";
             dto.Ano = entity.ANO;
-            dto.MontoPrespuesto = entity.MONTO_PRESUPUESTO;
+            dto.MontoPresupuesto = entity.MONTO_PRESUPUESTO;
             dto.FechaDesde = entity.FECHA_DESDE;
             dto.FechaHasta = entity.FECHA_HASTA;
-            dto.FechaAprobacion = entity.FECHA_APROBACION;
+            /*dto.FechaAprobacion = entity.FECHA_APROBACION;
             dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA ?? "";
             dto.FechaOrdenanza = entity.FECHA_ORDENANZA;
             dto.Extra1 = entity.EXTRA1 ?? "";
             dto.Extra2 = entity.EXTRA2 ?? "";
             dto.Extra3 = entity.EXTRA3 ?? "";
-            dto.CodigoEmpresa = entity.CODIGO_EMPRESA;
+            dto.CodigoEmpresa = entity.CODIGO_EMPRESA;*/
             return dto;
 
         }

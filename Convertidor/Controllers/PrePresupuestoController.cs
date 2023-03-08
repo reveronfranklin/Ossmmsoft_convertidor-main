@@ -31,12 +31,23 @@ namespace Convertidor.Controllers
         }
 
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAll()
+        {
+            FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
+            filter.CodigoEmpresa = 13;
+            filter.CodigoEmpresa = 0;
+            filter.SearchText = "";
 
-       
-       
+            var result = await _prePresupuestoService.GetAll(filter);
+            return Ok(result);
+        }
+
+
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult>  GetAll(FilterPRE_PRESUPUESTOSDto filter)
+        public async Task<IActionResult>  GetAllFilter(FilterPRE_PRESUPUESTOSDto filter)
         {
             var result = await _prePresupuestoService.GetAll(filter);
             return Ok(result);

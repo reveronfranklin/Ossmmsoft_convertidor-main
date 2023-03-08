@@ -45,6 +45,16 @@ namespace Convertidor.Services.Presupuesto
                     }
 
 
+                    var groupByDescripcionFinanciado =
+                        from item in resultList
+                        group item by item.DescripcionFinanciado;
+                    var groupByDenominacionIcp =
+                       from item in resultList
+                       group item by item.DenominacionIcp;
+                    var groupByunidadEjecutora =
+                                           from item in resultList
+                                           group item by item.UnidadEjecutora;
+
                     result.Data = resultList;
 
                     result.IsValid = true;

@@ -94,6 +94,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = "localhost:6379";
 });
 
+builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+{
+    build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+}));
+
 
 var app = builder.Build();
 
@@ -113,6 +118,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("corspolicy");
 
 app.UseAuthorization();
 
