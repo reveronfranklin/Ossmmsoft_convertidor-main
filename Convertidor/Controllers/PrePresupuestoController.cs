@@ -41,7 +41,7 @@ namespace Convertidor.Controllers
             filter.SearchText = "";
 
             var result = await _prePresupuestoService.GetAll(filter);
-            return Ok(result);
+            return Ok(result.Data);
         }
 
 
