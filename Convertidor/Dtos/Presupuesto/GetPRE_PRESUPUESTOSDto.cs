@@ -12,10 +12,11 @@ namespace Convertidor.Dtos.Presupuesto
         public DateTime FechaHasta { get; set; }
         public decimal TotalDisponible { get; set; }
         public decimal TotalPresupuesto { get; set; }
-        public string TotalDisponibleString { get; set; }
-        public string TotalPresupuestoString { get; set; }
-        public List<GetPRE_V_DENOMINACION_PUCDto> PreDenominacionPuc  { get; set; }
-      
+        public string TotalDisponibleString { get; set; } =string.Empty;
+        public string TotalPresupuestoString { get; set; } = string.Empty;
+        public List<GetPRE_V_DENOMINACION_PUCDto>? PreDenominacionPuc  { get; set; }
+        public List<GetPreDenominacionPucResumenAnoDto>? PreDenominacionPucResumen { get; set; }
+
     }
 }
 

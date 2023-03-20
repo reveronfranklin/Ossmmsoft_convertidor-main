@@ -279,15 +279,15 @@ namespace Convertidor.Services.Presupuesto
                     itemPreDenominacionPuc.Deuda = item.DEUDA;
                     itemPreDenominacionPuc.Disponibilidad = item.DISPONIBILIDAD;
                     itemPreDenominacionPuc.DisponibilidadFinan = item.DISPONIBILIDAD_FINAN;
-                    dto.TotalPresupuesto = dto.TotalPresupuesto + (item.CODIGO_PRESUPUESTO+ item.MODIFICADO);
+                    dto.TotalPresupuesto = dto.TotalPresupuesto + (item.CODIGO_PRESUPUESTO + item.MODIFICADO);
                     dto.TotalDisponible = dto.TotalDisponible + item.DISPONIBILIDAD;
                     listpreDenominacionPuc.Add(itemPreDenominacionPuc);
                 }
-               
+
                 if (dto.TotalPresupuesto > 1000) dto.TotalPresupuesto = dto.TotalPresupuesto / 1000;
                 if (dto.TotalDisponible > 1000) dto.TotalDisponible = dto.TotalDisponible / 1000;
-               
-                if (dto.TotalPresupuesto>0)
+
+                if (dto.TotalPresupuesto > 0)
                 {
                     dto.TotalPresupuestoString = dto.TotalPresupuesto.ToString("#,#", CultureInfo.InvariantCulture);
                 }
@@ -298,6 +298,11 @@ namespace Convertidor.Services.Presupuesto
 
                 dto.PreDenominacionPuc = listpreDenominacionPuc;
 
+                var preDenominacionPucresumen = ResumenePreDenominacionPuc(listpreDenominacionPuc);
+                if (preDenominacionPucresumen.Count > 0) { 
+                    dto.PreDenominacionPucResumen = preDenominacionPucresumen;
+                }
+
 
             }
             
@@ -305,7 +310,67 @@ namespace Convertidor.Services.Presupuesto
             return dto;
 
         }
+        public List<GetPreDenominacionPucResumenAnoDto> ResumenePreDenominacionPuc(List<GetPRE_V_DENOMINACION_PUCDto> dto)
+        {
+            List<GetPreDenominacionPucResumenAnoDto> result = new List<GetPreDenominacionPucResumenAnoDto>();
+            if (dto.Count > 0)
+            {
+                foreach (var item in dto)
+                {
 
+                    var getPreDenominacionPucResumenAnoDto = result
+                                .Where(x => x.AnoSaldo == item.AnoSaldo &&
+                                            x.CodigoPresupuesto == item.CodigoPresupuesto &&
+                                            x.CodigoPartida == item.CodigoPartida &&
+                                            x.CodigoGenerica == item.CodigoGenerica &&
+                                            x.CodigoEspecifica == item.CodigoEspecifica &&
+                                            x.CodigoNivel5 == item.CodigoNivel5).FirstOrDefault();
+                    if (getPreDenominacionPucResumenAnoDto == null)
+                    {
+                        GetPreDenominacionPucResumenAnoDto itemResult = new GetPreDenominacionPucResumenAnoDto();
+                        itemResult.AnoSaldo = item.AnoSaldo;
+                        itemResult.CodigoPresupuesto = item.CodigoPresupuesto;
+                        itemResult.CodigoPartida = item.CodigoPartida;
+                        itemResult.CodigoGenerica = item.CodigoGenerica;
+                        itemResult.CodigoEspecifica = item.CodigoEspecifica;
+                        itemResult.CodigoSubEspecifica = item.CodigoSubEspecifica;
+                        itemResult.CodigoNivel5 = item.CodigoNivel5;
+                        itemResult.DenominacionPuc = item.DenominacionPuc;
+                        itemResult.Presupuestado = item.Presupuestado;
+                        itemResult.Modificado = item.Modificado;
+                        itemResult.Comprometido = item.Comprometido;
+                        itemResult.Causado = item.Causado;
+                        itemResult.Pagado = item.Pagado;
+                        itemResult.Deuda = item.Deuda;
+                        itemResult.Disponibilidad = item.Disponibilidad;
+                        itemResult.DisponibilidadFinan = item.DisponibilidadFinan;
+
+                        result.Add(itemResult);
+
+                    }
+                    else
+                    {
+                        getPreDenominacionPucResumenAnoDto.Presupuestado += item.Presupuestado;
+                        getPreDenominacionPucResumenAnoDto.Modificado += item.Modificado;
+                        getPreDenominacionPucResumenAnoDto.Comprometido += item.Comprometido;
+                        getPreDenominacionPucResumenAnoDto.Causado += item.Causado;
+                        getPreDenominacionPucResumenAnoDto.Pagado += item.Pagado;
+                        getPreDenominacionPucResumenAnoDto.Deuda += item.Deuda;
+                        getPreDenominacionPucResumenAnoDto.Disponibilidad += item.Disponibilidad;
+                        getPreDenominacionPucResumenAnoDto.DisponibilidadFinan += item.DisponibilidadFinan;
+                    }
+
+                }
+
+            }
+
+
+
+            return result;
+
+
+
+        }
 
         public PRE_PRESUPUESTOS MapCreatePrePresupuestoDtoToPrePresupuesto(CreatePRE_PRESUPUESTOSDto dto)
         {

@@ -3,10 +3,10 @@ using System.Globalization;
 
 namespace Convertidor.Dtos.Presupuesto
 {
-	public class GetPreDenominacionPucResumenAnoDto
+	public class GetPRE_V_DENOMINACION_PUCDto
     {
-        
-        public int AnoSaldo { get; set; }
+        public int AnoSaldo { get; set; } 
+        public int MesSaldo { get; set; } 
         public int CodigoPresupuesto { get; set; }
         public string CodigoPartida { get; set; } = string.Empty;
         public string CodigoGenerica { get; set; } = string.Empty;
@@ -27,7 +27,7 @@ namespace Convertidor.Dtos.Presupuesto
         public string PresupuestadoString { get { return ConvertMoneda(TotalPresupuestado); } }
         public string DisponibilidadString { get { return ConvertMoneda(Disponibilidad); } }
         public string DisponibilidadFinanString { get { return ConvertMoneda(DisponibilidadFinan); } }
-        public string CodigoPUC { get { return $"{CodigoPartida}.{CodigoGenerica}.{CodigoEspecifica}.{CodigoSubEspecifica}.{CodigoNivel5}"; } }
+
 
         public string ConvertMoneda(decimal value)
         {

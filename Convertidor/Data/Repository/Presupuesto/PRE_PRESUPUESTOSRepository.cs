@@ -32,7 +32,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
             catch (Exception ex)
             {
-                
+                var res = ex.InnerException.Message;
                 return null;
             }
 
