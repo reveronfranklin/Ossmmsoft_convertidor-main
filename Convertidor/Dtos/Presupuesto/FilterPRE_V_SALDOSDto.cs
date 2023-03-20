@@ -10,5 +10,13 @@ namespace Convertidor.Dtos.Presupuesto
         public string SearchText { get; set; } = string.Empty;
 
     }
+
+    public class FilterPeriodo
+    {
+
+        public int CodigoPeriodo { get; set; }
+       
+
+    }
 }
 

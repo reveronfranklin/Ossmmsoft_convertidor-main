@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Data;
+using System.Security.Policy;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Oracle.ManagedDataAccess.Client;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
@@ -17,7 +21,42 @@ namespace Convertidor.Data.Repository.Presupuesto
             _context = context;
         }
 
+        public async Task RecalcularSaldo(int codigo_presupuesto)
+        {
 
+            // var codigo_presupuestoP = new SqlParameter("@Codigo_Presupuesto", codigo_presupuesto);
+
+
+            var parameters = new OracleParameter[]
+            {
+                    new OracleParameter("Codigo_Presupuesto", codigo_presupuesto)
+            };
+
+            try
+            {
+
+
+                FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
+                var result = _context.Database.ExecuteSqlInterpolated(xquery);
+
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_CREATE_SALDOS_DIARIOS({DateTime.Now},{codigo_presupuesto});\nEND;";
+
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                var aprobacion = result; 
+
+            }
+            catch (Exception ex)
+            {
+                var mess = ex.InnerException.Message;
+
+                throw;
+            }
+
+
+
+
+        }
 
         public async Task<IEnumerable<PRE_V_SALDOS>> GetAll(FilterPRE_V_SALDOSDto filter)
         {

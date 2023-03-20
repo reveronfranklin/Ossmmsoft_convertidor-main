@@ -14,14 +14,17 @@ namespace Convertidor.Services.Presupuesto
        
 
         private readonly IPRE_V_SALDOSRepository _repository;
+        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
 
         private readonly IMapper _mapper;
 
         public PRE_V_SALDOSServices(IPRE_V_SALDOSRepository repository,
+                                    IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
 
                                       IMapper mapper)
         {
             _repository = repository;
+            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
 
             _mapper = mapper;
         }
@@ -29,6 +32,8 @@ namespace Convertidor.Services.Presupuesto
        
         public async Task<ResultDto<List<PreVSaldosGetDto>>> GetAll(FilterPRE_V_SALDOSDto filter)
         {
+            var presupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
+            await _repository.RecalcularSaldo(presupuesto.CODIGO_PRESUPUESTO);
 
             ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
             try

@@ -29,10 +29,15 @@ builder.Services.AddTransient<IHistoricoRetencionesRepository, HistoricoRetencio
 builder.Services.AddTransient<IPRE_PRESUPUESTOSRepository, PRE_PRESUPUESTOSRepository>();
 builder.Services.AddTransient<IPRE_INDICE_CAT_PRGRepository, PRE_INDICE_CAT_PRGRepository>();
 builder.Services.AddTransient<IPRE_V_SALDOSRepository, PRE_V_SALDOSRepository>();
+builder.Services.AddTransient<IPRE_V_DENOMINACION_PUCRepository, PRE_V_DENOMINACION_PUCRepository>();
+    
 
 //Services Presupuesto
 builder.Services.AddTransient<IPRE_PRESUPUESTOSService, PRE_PRESUPUESTOSService>();
 builder.Services.AddTransient<IPRE_V_SALDOSServices, PRE_V_SALDOSServices>();
+builder.Services.AddTransient<IPRE_V_DENOMINACION_PUCServices, PRE_V_DENOMINACION_PUCServices>();
+
+
 
 
 //CATASTRO

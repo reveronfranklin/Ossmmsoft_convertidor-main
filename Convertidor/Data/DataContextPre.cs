@@ -14,7 +14,10 @@ namespace Convertidor.Data
 
         public DbSet<PRE_PRESUPUESTOS> PRE_PRESUPUESTOS { get; set; }
         public DbSet<PRE_V_SALDOS> PRE_V_SALDOS { get; set; }
+        public DbSet<PRE_V_DENOMINACION_PUC> PRE_V_DENOMINACION_PUC { get; set; }
+        public DbSet<PRE_V_DENOMINACION_ICP_PUC> PRE_V_DENOMINACION_ICP_PUC { get; set; }
         
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,6 +31,16 @@ namespace Convertidor.Data
             {
                 builder.HasNoKey();
                 builder.ToTable("PRE_V_SALDOS");
+            })
+            .Entity<PRE_V_DENOMINACION_PUC>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("PRE_V_DENOMINACION_PUC");
+            })
+            .Entity<PRE_V_DENOMINACION_ICP_PUC>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("PRE_V_DENOMINACION_ICP_PUC");
             })
              .Entity<PRE_INDICE_CAT_PRG>(builder =>
              {

@@ -9,6 +9,7 @@ namespace Convertidor.Data.Entities.Presupuesto
         public int CODIGO_FINANCIADO { get; set; }
         public string DESCRIPCION_FINANCIADO { get; set; } = string.Empty;
         public int CODIGO_ICP { get; set; }
+
         public string CODIGO_SECTOR { get; set; } = string.Empty;
         public string CODIGO_PROGRAMA { get; set; } = string.Empty;
         public string CODIGO_SUBPROGRAMA { get; set; } = string.Empty;
@@ -43,20 +44,6 @@ namespace Convertidor.Data.Entities.Presupuesto
         public int CODIGO_EMPRESA { get; set; }
         public int CODIGO_PRESUPUESTO { get; set; }
         public DateTime FECHA_SOLICITUD { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         
 
 

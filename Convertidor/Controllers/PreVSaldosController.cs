@@ -22,12 +22,16 @@ namespace Convertidor.Controllers
     {
        
         private readonly IPRE_V_SALDOSServices _service;
+        private readonly IPRE_V_DENOMINACION_PUCServices _preVSaldosDenominacionPucServices;
+        
 
-        public PreVSaldosController(IPRE_V_SALDOSServices service)
+        public PreVSaldosController(IPRE_V_SALDOSServices service, IPRE_V_DENOMINACION_PUCServices preVSaldosDenominacionPucServices)
         {
 
             _service = service;
-           
+            _preVSaldosDenominacionPucServices = preVSaldosDenominacionPucServices;
+
+
         }
 
 
@@ -50,6 +54,22 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+
+        [HttpPost]  
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllPRE_V_DENOMINACION_PUC(FilterPRE_V_DENOMINACION_PUC filter)
+        {
+            var result = await _preVSaldosDenominacionPucServices.GetAll(filter);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetResumenPresupuestoDenominacionPuc(FilterPreVDenominacionPuc filter)
+        {
+            var result = await _preVSaldosDenominacionPucServices.GetResumenPresupuestoDenominacionPuc(filter);
+            return Ok(result);
+        }
 
     }
 }

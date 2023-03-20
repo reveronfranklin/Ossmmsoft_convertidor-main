@@ -21,6 +21,10 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<int> GetNextKey();
 
 
+        Task RecalcularSaldo(int codigo_presupuesto);
+        Task<PRE_PRESUPUESTOS> GetLast();
+
+
     }
 }
 

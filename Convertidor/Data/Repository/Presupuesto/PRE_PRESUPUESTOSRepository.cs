@@ -5,6 +5,7 @@ using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Presupuesto
@@ -199,9 +200,51 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task RecalcularSaldo(int codigo_presupuesto)
+        {
+
+            var codigo_presupuestoP = new SqlParameter("@Codigo_Presupuesto", codigo_presupuesto);
+          
+            try
+            {
+                var result = await _context.PRE_PRESUPUESTOS.FromSqlRaw<PRE_PRESUPUESTOS>("execute PRE.PRE_ACTUALIZAR_SALDOS @Codigo_Presupuesto", codigo_presupuestoP).ToListAsync();
+                var aprobacion = result.FirstOrDefault();
+
+            }
+            catch (Exception ex)
+            {
+                var mess = ex.InnerException.Message;
+
+                throw;
+            }
 
 
 
+
+        }
+
+        public async Task<PRE_PRESUPUESTOS> GetLast()
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.PRE_PRESUPUESTOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_PRESUPUESTO)
+                    .FirstOrDefaultAsync();
+                
+
+                return last!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return (PRE_PRESUPUESTOS)null;
+            }
+
+
+
+        }
         public async Task<int> GetNextKey()
         {
             try

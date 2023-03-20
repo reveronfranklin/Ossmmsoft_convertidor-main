@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using AutoMapper;
 using Convertidor.Data.Entities.Catastro;
 using Convertidor.Data.Entities.Presupuesto;
@@ -17,15 +18,18 @@ namespace Convertidor.Services.Presupuesto
 		
 
         private readonly IPRE_PRESUPUESTOSRepository _repository;
-       
+        private readonly IPRE_V_DENOMINACION_PUCRepository _preDenominacionPucRepository;
+
         private readonly IMapper _mapper;
 
         public PRE_PRESUPUESTOSService(IPRE_PRESUPUESTOSRepository repository,
+                                        IPRE_V_DENOMINACION_PUCRepository preDenominacionPucRepository,
                                       
                                       IMapper mapper)
         {
             _repository = repository;
-           
+            _preDenominacionPucRepository = preDenominacionPucRepository;
+
             _mapper = mapper;
         }
 
@@ -42,7 +46,7 @@ namespace Convertidor.Services.Presupuesto
                 var presupuesto = await _repository.GetByCodigo(filter.CodigoEmpresa, filter.CodigoPresupuesto);
                 if (presupuesto != null)
                 {
-                    var dto = MapPrePresupuestoToGetPrePresupuestoDto(presupuesto);
+                    var dto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto);
                     result.Data = dto;
                     result.IsValid = true;
                     result.Message = "";
@@ -80,12 +84,12 @@ namespace Convertidor.Services.Presupuesto
 
                     foreach (var item in presupuesto)
                     {
-                        var dto = MapPrePresupuestoToGetPrePresupuestoDto(item);
+                        var dto = await MapPrePresupuestoToGetPrePresupuestoDto(item);
                         listDto.Add(dto);
                     }
 
                    
-                    result.Data = listDto;
+                    result.Data = listDto.OrderByDescending(x=>x.FechaHasta).ToList();
                     
                     result.IsValid = true;
                     result.Message = "";
@@ -145,7 +149,7 @@ namespace Convertidor.Services.Presupuesto
                 var entity = MapCreatePrePresupuestoDtoToPrePresupuesto(dto);
                 entity.CODIGO_PRESUPUESTO = await _repository.GetNextKey();  
                 var created = await _repository.Add(entity);
-                var resultDto = MapPrePresupuestoToGetPrePresupuestoDto(created.Data);
+                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -218,7 +222,7 @@ namespace Convertidor.Services.Presupuesto
                 presupuesto.FECHA_UPD = DateTime.Now;
                
                 await _repository.Update(presupuesto);
-                var resultDto = MapPrePresupuestoToGetPrePresupuestoDto(presupuesto);
+                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -236,7 +240,7 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public GetPRE_PRESUPUESTOSDto MapPrePresupuestoToGetPrePresupuestoDto(PRE_PRESUPUESTOS entity)
+        public async Task<GetPRE_PRESUPUESTOSDto> MapPrePresupuestoToGetPrePresupuestoDto(PRE_PRESUPUESTOS entity)
         {
             GetPRE_PRESUPUESTOSDto dto = new GetPRE_PRESUPUESTOSDto();
             dto.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
@@ -246,13 +250,58 @@ namespace Convertidor.Services.Presupuesto
             dto.MontoPresupuesto = entity.MONTO_PRESUPUESTO;
             dto.FechaDesde = entity.FECHA_DESDE;
             dto.FechaHasta = entity.FECHA_HASTA;
-            /*dto.FechaAprobacion = entity.FECHA_APROBACION;
-            dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA ?? "";
-            dto.FechaOrdenanza = entity.FECHA_ORDENANZA;
-            dto.Extra1 = entity.EXTRA1 ?? "";
-            dto.Extra2 = entity.EXTRA2 ?? "";
-            dto.Extra3 = entity.EXTRA3 ?? "";
-            dto.CodigoEmpresa = entity.CODIGO_EMPRESA;*/
+            dto.TotalPresupuesto = 0;
+            dto.TotalDisponible = 0;
+            dto.TotalPresupuestoString = "";
+            dto.TotalDisponibleString = "";
+            var preDenominacionPuc = await _preDenominacionPucRepository.GetByCodigoPresupuesto(dto.CodigoPresupuesto);
+            List<GetPRE_V_DENOMINACION_PUCDto> listpreDenominacionPuc = new List<GetPRE_V_DENOMINACION_PUCDto>();
+            if (preDenominacionPuc.Count() > 0)
+            {
+                foreach (var item in preDenominacionPuc)
+                {
+                    GetPRE_V_DENOMINACION_PUCDto itemPreDenominacionPuc = new GetPRE_V_DENOMINACION_PUCDto();
+                    itemPreDenominacionPuc.AnoSaldo = item.ANO_SALDO;
+                    itemPreDenominacionPuc.MesSaldo = item.MES_SALDO;
+                    itemPreDenominacionPuc.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+                    itemPreDenominacionPuc.CodigoPartida = item.CODIGO_PARTIDA;
+                    itemPreDenominacionPuc.CodigoGenerica = item.CODIGO_GENERICA;
+                    itemPreDenominacionPuc.CodigoEspecifica = item.CODIGO_ESPECIFICA;
+                    itemPreDenominacionPuc.CodigoSubEspecifica = item.CODIGO_SUBESPECIFICA;
+                    itemPreDenominacionPuc.CodigoNivel5 = item.CODIGO_NIVEL5;
+                    itemPreDenominacionPuc.DenominacionPuc = item.DENOMINACION_PUC;
+                    itemPreDenominacionPuc.Presupuestado = item.PRESUPUESTADO;
+                    itemPreDenominacionPuc.Modificado = item.MODIFICADO;
+                    itemPreDenominacionPuc.Comprometido = item.COMPROMETIDO;
+                    itemPreDenominacionPuc.Causado = item.CAUSADO;
+                    itemPreDenominacionPuc.Modificado = item.MODIFICADO;
+                    itemPreDenominacionPuc.Pagado = item.PAGADO;
+                    itemPreDenominacionPuc.Deuda = item.DEUDA;
+                    itemPreDenominacionPuc.Disponibilidad = item.DISPONIBILIDAD;
+                    itemPreDenominacionPuc.DisponibilidadFinan = item.DISPONIBILIDAD_FINAN;
+                    dto.TotalPresupuesto = dto.TotalPresupuesto + (item.CODIGO_PRESUPUESTO+ item.MODIFICADO);
+                    dto.TotalDisponible = dto.TotalDisponible + item.DISPONIBILIDAD;
+                    listpreDenominacionPuc.Add(itemPreDenominacionPuc);
+                }
+               
+                if (dto.TotalPresupuesto > 1000) dto.TotalPresupuesto = dto.TotalPresupuesto / 1000;
+                if (dto.TotalDisponible > 1000) dto.TotalDisponible = dto.TotalDisponible / 1000;
+               
+                if (dto.TotalPresupuesto>0)
+                {
+                    dto.TotalPresupuestoString = dto.TotalPresupuesto.ToString("#,#", CultureInfo.InvariantCulture);
+                }
+                if (dto.TotalDisponible > 0)
+                {
+                    dto.TotalDisponibleString = dto.TotalDisponible.ToString("#,#", CultureInfo.InvariantCulture);
+                }
+
+                dto.PreDenominacionPuc = listpreDenominacionPuc;
+
+
+            }
+            
+
             return dto;
 
         }
