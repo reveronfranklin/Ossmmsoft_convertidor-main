@@ -1,4 +1,5 @@
 ﻿using Convertidor.Data.Entities;
+using Convertidor.Data.Entities.Rh;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data
@@ -12,7 +13,9 @@ namespace Convertidor.Data
         public DbSet<RH_HISTORICO_NOMINA> RH_HISTORICO_NOMINA { get; set; }
         public DbSet<RH_HISTORICO_PERSONAL_CARGO> RH_HISTORICO_PERSONAL_CARGO { get; set; }
         public DbSet<PRE_INDICE_CAT_PRG> PRE_INDICE_CAT_PRG { get; set; }
-                     
+        public DbSet<RH_V_HISTORICO_MOVIMIENTOS> RH_V_HISTORICO_MOVIMIENTOS { get; set; }
+        
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +44,12 @@ namespace Convertidor.Data
               builder.HasNoKey();
               builder.ToTable("PRE_INDICE_CAT_PRG");
           });
+            modelBuilder
+         .Entity<RH_V_HISTORICO_MOVIMIENTOS>(builder =>
+         {
+             builder.HasNoKey();
+             builder.ToTable("RH_V_HISTORICO_MOVIMIENTOS");
+         });
 
         }
 

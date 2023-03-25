@@ -318,13 +318,16 @@ namespace Convertidor.Services.Presupuesto
                 foreach (var item in dto)
                 {
 
-                    var getPreDenominacionPucResumenAnoDto = result
+                    /*var getPreDenominacionPucResumenAnoDto = result
                                 .Where(x => x.AnoSaldo == item.AnoSaldo &&
                                             x.CodigoPresupuesto == item.CodigoPresupuesto &&
                                             x.CodigoPartida == item.CodigoPartida &&
                                             x.CodigoGenerica == item.CodigoGenerica &&
                                             x.CodigoEspecifica == item.CodigoEspecifica &&
-                                            x.CodigoNivel5 == item.CodigoNivel5).FirstOrDefault();
+                                            x.CodigoNivel5 == item.CodigoNivel5).FirstOrDefault();*/
+
+                    var getPreDenominacionPucResumenAnoDto = result
+                               .Where(x => x.CodigoPresupuesto == item.CodigoPresupuesto && x.DenominacionPuc==item.DenominacionPuc).FirstOrDefault();
                     if (getPreDenominacionPucResumenAnoDto == null)
                     {
                         GetPreDenominacionPucResumenAnoDto itemResult = new GetPreDenominacionPucResumenAnoDto();

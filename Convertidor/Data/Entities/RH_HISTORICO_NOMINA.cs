@@ -39,5 +39,8 @@
         public DateTime FECHA_UPD { get; set; }
 
         public long CODIGO_EMPRESA { get; set; }
+
+
+
     }
 }

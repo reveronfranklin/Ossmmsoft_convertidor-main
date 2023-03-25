@@ -3,14 +3,23 @@ using Convertidor.Data;
 using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Catastro;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository;
 using Convertidor.Data.Repository.Catastro;
 using Convertidor.Data.Repository.Presupuesto;
+using Convertidor.Data.Repository.Sis;
 using Convertidor.Services;
 using Convertidor.Services.Catastro;
 using Convertidor.Services.Presupuesto;
+using Convertidor.Services.Sis;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Configuration;
+using System.Text;
+using Swashbuckle;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +39,14 @@ builder.Services.AddTransient<IPRE_PRESUPUESTOSRepository, PRE_PRESUPUESTOSRepos
 builder.Services.AddTransient<IPRE_INDICE_CAT_PRGRepository, PRE_INDICE_CAT_PRGRepository>();
 builder.Services.AddTransient<IPRE_V_SALDOSRepository, PRE_V_SALDOSRepository>();
 builder.Services.AddTransient<IPRE_V_DENOMINACION_PUCRepository, PRE_V_DENOMINACION_PUCRepository>();
-    
+
+//Repository SIS
+
+builder.Services.AddTransient<ISisUsuarioRepository, SisUsuarioRepository>();
+//Services Sis
+builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
+
+
 
 //Services Presupuesto
 builder.Services.AddTransient<IPRE_PRESUPUESTOSService, PRE_PRESUPUESTOSService>();
@@ -68,7 +84,17 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description ="Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+        In=ParameterLocation.Header,
+        Name="Authorization",
+        Type=SecuritySchemeType.ApiKey
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionRH");
 builder.Services.AddDbContext<DataContext>(options =>
@@ -88,6 +114,10 @@ var catConnectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddDbContext<DataContextCat>(options =>
       options.UseOracle(catConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
+var sisConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionSIS");
+builder.Services.AddDbContext<DataContextSis>(options =>
+      options.UseOracle(sisConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
 
 
 var destinoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionPostgres");
@@ -101,9 +131,21 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
-    build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey=true,
+            IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8
+                        .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value )),
+            ValidateIssuer=false,
+            ValidateAudience=false
+        };
+
+    });
 
 var app = builder.Build();
 
@@ -124,8 +166,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("corspolicy");
-
-app.UseAuthorization();
+app.UseAuthentication();
+ app.UseAuthorization();
 
 app.MapControllers();
 

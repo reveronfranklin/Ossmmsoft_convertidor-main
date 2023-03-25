@@ -1,4 +1,5 @@
 ﻿
+
 using Convertidor.Data.Entities.RentasMunicipales;
 using Microsoft.EntityFrameworkCore;
 
