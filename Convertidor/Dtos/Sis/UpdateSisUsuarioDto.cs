@@ -1,11 +1,10 @@
-﻿
-
-namespace Convertidor.Data.Entities.Sis
+﻿using System;
+namespace Convertidor.Dtos.Sis
 {
-	public class SIS_USUARIOS
+	public class UpdateSisUsuarioDto
 	{
-		public int CODIGO_USUARIO { get; set; }
-		public string USUARIO { get; set; } = string.Empty;
+        public int CODIGO_USUARIO { get; set; }
+        public string USUARIO { get; set; } = string.Empty;
         public string LOGIN { get; set; } = string.Empty;
         public Byte[]? PASSWORD { get; set; }
         public int CEDULA { get; set; }
@@ -37,13 +36,11 @@ namespace Convertidor.Data.Entities.Sis
         public string EXTRA13 { get; set; } = string.Empty;
         public string EXTRA14 { get; set; } = string.Empty;
         public string EXTRA15 { get; set; } = string.Empty;
-        
+
         public string PASSWORDSTRING { get; set; } = string.Empty;
         public string REFRESHTOKEN { get; set; } = string.Empty;
         public DateTime TOKENCREATED { get; set; }
         public DateTime TOKENEXPIRES { get; set; }
-        
-
     }
 }
 

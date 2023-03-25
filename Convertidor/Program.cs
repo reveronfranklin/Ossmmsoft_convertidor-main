@@ -25,6 +25,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddTransient<IRH_HISTORICO_NOMINARepository, RH_HISTORICO_NOMINARepository>();
 builder.Services.AddTransient<IHistoricoNominaRepository, HistoricoNominaRepository>();
 builder.Services.AddTransient<IRH_HISTORICO_PERSONAL_CARGORepository, RH_HISTORICO_PERSONAL_CARGORepository>();
@@ -88,14 +90,14 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        Description ="Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-        In=ParameterLocation.Header,
-        Name="Authorization",
-        Type=SecuritySchemeType.ApiKey
+        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
     });
+
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionRH");
 builder.Services.AddDbContext<DataContext>(options =>
       options.UseOracle(connectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));

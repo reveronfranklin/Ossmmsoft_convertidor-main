@@ -28,7 +28,12 @@ WriteLiteral(@"dotnet ef migrations add InitialCreate --context DestinoDataConte
 dotnet ef database update InitialCreate --context DestinoDataContext
 
 
-Add-Migration InitialCreate -Context DestinoDataContext -OutputDir Migrations\DestinoMigrations");
+Add-Migration InitialCreate -Context DestinoDataContext -OutputDir Migrations\DestinoMigrations
+
+
+Configuracion JWT
+https://www.youtube.com/watch?v=fhWIkbF18lM&t=0s
+https://github.com/patrickgod/JwtWebApiTutorial/blob/master/JwtWebApiTutorial/Controllers/AuthController.cs");
 
 }
 }

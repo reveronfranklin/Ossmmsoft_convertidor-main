@@ -5,12 +5,15 @@ using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Text;
 using Convertidor.Data.Entities.Catastro;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Sis;
+using Convertidor.Dtos;
 using Convertidor.Dtos.Sis;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Protocol.Plugins;
 using Oracle.ManagedDataAccess.Client;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -45,7 +48,54 @@ namespace Convertidor.Data.Repository.Sis
         }
 
 
+        public async Task<SIS_USUARIOS> GetByLogin(string login)
+        {
+            try
+            {
+                var result = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x=>x.LOGIN==login).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
 
+
+        }
+
+        public async Task<ResultDto<SIS_USUARIOS>> Update(SIS_USUARIOS entity)
+        {
+            ResultDto<SIS_USUARIOS> result = new ResultDto<SIS_USUARIOS>(null);
+
+            try
+            {
+                SIS_USUARIOS entityUpdate = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x => x.CODIGO_USUARIO == entity.CODIGO_USUARIO).FirstOrDefaultAsync();
+                if (entityUpdate != null)
+                {
+                    _context.SIS_USUARIOS.Update(entity);
+                    _context.SaveChanges();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.InnerException.Message;
+                return result;
+            }
+
+
+
+
+
+
+        }
         public async Task<ResultLoginDto> Login(LoginDto dto)
         {
 
@@ -76,7 +126,7 @@ namespace Convertidor.Data.Repository.Sis
                         resultLogin.Message = "";
 
                         resultLogin.Token = GetToken(resultDiario);
-                        resultLogin.Name = resultDiario.USUARIO;
+                        resultLogin.Name = resultDiario.LOGIN;
                         return resultLogin;
                     }
                     else
