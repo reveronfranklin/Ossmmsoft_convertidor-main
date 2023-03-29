@@ -279,13 +279,13 @@ namespace Convertidor.Services.Presupuesto
                     itemPreDenominacionPuc.Deuda = item.DEUDA;
                     itemPreDenominacionPuc.Disponibilidad = item.DISPONIBILIDAD;
                     itemPreDenominacionPuc.DisponibilidadFinan = item.DISPONIBILIDAD_FINAN;
-                    dto.TotalPresupuesto = dto.TotalPresupuesto + (item.CODIGO_PRESUPUESTO + item.MODIFICADO);
+                    dto.TotalPresupuesto = dto.TotalPresupuesto + (item.PRESUPUESTADO + item.MODIFICADO);
                     dto.TotalDisponible = dto.TotalDisponible + item.DISPONIBILIDAD;
                     listpreDenominacionPuc.Add(itemPreDenominacionPuc);
                 }
 
-                if (dto.TotalPresupuesto > 1000) dto.TotalPresupuesto = dto.TotalPresupuesto / 1000;
-                if (dto.TotalDisponible > 1000) dto.TotalDisponible = dto.TotalDisponible / 1000;
+               // if (dto.TotalPresupuesto > 1000) dto.TotalPresupuesto = dto.TotalPresupuesto / 1000;
+                //if (dto.TotalDisponible > 1000) dto.TotalDisponible = dto.TotalDisponible / 1000;
 
                 if (dto.TotalPresupuesto > 0)
                 {

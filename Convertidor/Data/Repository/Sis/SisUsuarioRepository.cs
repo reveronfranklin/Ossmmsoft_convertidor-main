@@ -50,9 +50,15 @@ namespace Convertidor.Data.Repository.Sis
 
         public async Task<SIS_USUARIOS> GetByLogin(string login)
         {
+            string newlogin = login;
+            if (login.Contains("@"))
+            {
+                var listStrLineElements = login.Split('@').ToArray();
+                newlogin = listStrLineElements[0];
+            }
             try
             {
-                var result = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x=>x.LOGIN==login).FirstOrDefaultAsync();
+                var result = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x=>x.LOGIN== newlogin).FirstOrDefaultAsync();
                 return result;
             }
             catch (Exception ex)
@@ -98,7 +104,7 @@ namespace Convertidor.Data.Repository.Sis
         }
         public async Task<ResultLoginDto> Login(LoginDto dto)
         {
-
+           
             ResultLoginDto resultLogin = new ResultLoginDto();
             try
             {
@@ -115,8 +121,15 @@ namespace Convertidor.Data.Repository.Sis
                 if (resultDiario==null)
                 {
                     resultLogin.Message = "Usuario o Clave invalidos";
-                    resultLogin.Token = "";
+                    resultLogin.accessToken = "";
                     resultLogin.Name = "";
+                    UserData userData = new UserData();
+                    userData.Id = 0;
+                    userData.username = "";
+                    userData.FullName = "";
+                    userData.Role = "";
+                    userData.Email = "";
+                    resultLogin.UserData = userData;
                     return resultLogin;
                 }
                 else
@@ -125,15 +138,30 @@ namespace Convertidor.Data.Repository.Sis
                     {
                         resultLogin.Message = "";
 
-                        resultLogin.Token = GetToken(resultDiario);
+                        resultLogin.accessToken = GetToken(resultDiario);
                         resultLogin.Name = resultDiario.LOGIN;
+                        UserData userData = new UserData();
+                        userData.Id = resultDiario.CODIGO_USUARIO;
+                        userData.username = resultDiario.LOGIN;
+                        userData.FullName = resultDiario.USUARIO;
+                        userData.Role = "admin";
+                        userData.Email = $"{resultDiario.LOGIN}@ossmasoft.com";
+                        resultLogin.UserData = userData;
                         return resultLogin;
                     }
                     else
                     {
                         resultLogin.Message = "Usuario o Clave invalidos";
-                        resultLogin.Token = "";
+                        resultLogin.accessToken = "";
                         resultLogin.Name = "";
+
+                        UserData userData = new UserData();
+                        userData.Id = 0;
+                        userData.username = "";
+                        userData.FullName = "";
+                        userData.Role = "";
+                        userData.Email = "";
+                        resultLogin.UserData = userData;
                         return resultLogin;
                     }
                 }
@@ -144,8 +172,15 @@ namespace Convertidor.Data.Repository.Sis
             {
                 var msg = ex.Message;
                 resultLogin.Message = "Usuario o Clave invalidos";
-                resultLogin.Token = "";
+                resultLogin.accessToken = "";
                 resultLogin.Name = "";
+                UserData userData = new UserData();
+                userData.Id = 0;
+                userData.username = "";
+                userData.FullName = "";
+                userData.Role = "";
+                userData.Email = "";
+                resultLogin.UserData = userData;
                 return resultLogin;
             }
 
@@ -156,11 +191,11 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-        private string GetToken(SIS_USUARIOS usuario) {
+        public string GetToken(SIS_USUARIOS usuario) {
             
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name,usuario.USUARIO),
+                new Claim(ClaimTypes.Name,usuario.LOGIN),
 
                 new Claim(ClaimTypes.Role,"Admin")
             };
@@ -170,7 +205,7 @@ namespace Convertidor.Data.Repository.Sis
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires:DateTime.Now.AddDays(1),
+                expires:DateTime.Now.AddMinutes(5),
                 signingCredentials:cred
                 );
 

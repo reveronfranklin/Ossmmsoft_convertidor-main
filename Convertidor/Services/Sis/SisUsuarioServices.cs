@@ -42,7 +42,8 @@ namespace Convertidor.Services.Sis
             var login = string.Empty;
             if (_httpContextAccessor.HttpContext != null)
             {
-                login = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+                var usuario=_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                login = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
             }
 
             return login;

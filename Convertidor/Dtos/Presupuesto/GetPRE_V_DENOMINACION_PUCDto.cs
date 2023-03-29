@@ -32,13 +32,13 @@ namespace Convertidor.Dtos.Presupuesto
         public string ConvertMoneda(decimal value)
         {
             string result = string.Empty;
-            if (value > 100)
+            /*if (value > 100)
             {
                 value = value / 1000;
-            }
+            }*/
             result = value.ToString("#,#", CultureInfo.InvariantCulture);
 
-            return $"{ result} k";
+            return $"{ result}";
         }
 
 

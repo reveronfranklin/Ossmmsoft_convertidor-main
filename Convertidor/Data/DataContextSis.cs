@@ -25,7 +25,12 @@ namespace Convertidor.Data
             modelBuilder
           .Entity<SIS_USUARIOS>(builder =>
           {
-              builder.HasNoKey();
+              //builder.HasNoKey();
+              builder.HasKey(table => new
+              {
+                  table.CODIGO_USUARIO,
+
+              });
               builder.ToTable("SIS_USUARIOS");
           });
 
