@@ -1,11 +1,10 @@
 ﻿using System;
 using Convertidor.Data.Entities.Rh;
 
-namespace Convertidor.Data.Interfaces.RH
+namespace Convertidor.Services.Rh
 {
-	public interface IRhPeriodoRepository
+	public interface IRhPeriodoService
 	{
-
 
         Task<List<RH_PERIODOS>> GetAll();
         Task<List<RH_PERIODOS>> GetByTipoNomina(int tipoNomina);

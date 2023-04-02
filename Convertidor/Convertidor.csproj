@@ -51,6 +51,7 @@
     <None Remove="Services\Sis\" />
     <None Remove="Data\Repository\Rh\" />
     <None Remove="Data\Interfaces\RH\" />
+    <None Remove="Services\Rh\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
@@ -76,6 +77,7 @@
     <Folder Include="Services\Sis\" />
     <Folder Include="Data\Repository\Rh\" />
     <Folder Include="Data\Interfaces\RH\" />
+    <Folder Include="Services\Rh\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="recursos.cshtml" />

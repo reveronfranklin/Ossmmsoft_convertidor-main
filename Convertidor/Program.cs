@@ -22,6 +22,7 @@ using Swashbuckle;
 using Swashbuckle.AspNetCore.Filters;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Repository.Rh;
+using Convertidor.Services.Rh;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,9 @@ builder.Services.AddTransient<IConceptosRetencionesService, ConceptosRetenciones
 builder.Services.AddTransient<IHistoricoRetencionesService, HistoricoRetencionesService>();
 builder.Services.AddHttpClient<PetroClientService>();
 builder.Services.AddTransient<IPetroClientService, PetroClientService>();
+
+builder.Services.AddTransient<IRhPeriodoService, RhPeriodoService>();
+
 
 
 builder.Services.AddTransient<IRhTipoNominaRepository, RhTipoNominaRepository>();

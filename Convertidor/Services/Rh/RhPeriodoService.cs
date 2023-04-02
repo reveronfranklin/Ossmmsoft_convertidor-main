@@ -1,41 +1,37 @@
 ﻿using System;
+using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
+using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
+using Convertidor.Services.Rh;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhPeriodoRepository: IRhPeriodoRepository
+	public class RhPeriodoService: IRhPeriodoService
     {
 		
         private readonly DataContext _context;
 
-        public RhPeriodoRepository(DataContext context)
+
+
+   
+        private readonly IRhPeriodoRepository _repository;
+
+        private readonly IMapper _mapper;
+
+        public RhPeriodoService(IRhPeriodoRepository repository)
         {
-            _context = context;
+            _repository = repository;
+          
         }
+       
         public async Task<List<RH_PERIODOS>> GetAll()
         {
             try
             {
-
-                var result = await _context.RH_PERIODOS.DefaultIfEmpty().ToListAsync();
-                return (List<RH_PERIODOS>)result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
-        public async Task<List<RH_PERIODOS>> GetYear(int  ano)
-        {
-            try
-            {
-
-                var result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p => p.FECHA_NOMINA.Year == ano).ToListAsync();
+                var result = await _repository.GetAll();
                 return (List<RH_PERIODOS>)result;
             }
             catch (Exception ex)
@@ -51,7 +47,22 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p=> p.CODIGO_TIPO_NOMINA== tipoNomina).ToListAsync();
+                var result = await _repository.GetByTipoNomina(tipoNomina);
+                return (List<RH_PERIODOS>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        public async Task<List<RH_PERIODOS>> GetByYear(int ano)
+        {
+            try
+            {
+
+                var result = await _repository.GetByYear(ano);
                 return (List<RH_PERIODOS>)result;
             }
             catch (Exception ex)
