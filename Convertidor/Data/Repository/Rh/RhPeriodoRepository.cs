@@ -30,12 +30,12 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<List<RH_PERIODOS>> GetYear(int  ano)
+        public async Task<List<RH_PERIODOS>> GetByYear(int  ano)
         {
             try
             {
 
-                var result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p => p.FECHA_NOMINA.Year == ano).ToListAsync();
+                var result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p => p.FECHA_NOMINA.Year == ano).OrderByDescending(p=>p.FECHA_NOMINA).ToListAsync();
                 return (List<RH_PERIODOS>)result;
             }
             catch (Exception ex)

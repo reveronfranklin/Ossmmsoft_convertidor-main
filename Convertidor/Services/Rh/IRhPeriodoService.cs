@@ -1,5 +1,6 @@
 ﻿using System;
 using Convertidor.Data.Entities.Rh;
+using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Services.Rh
 {
@@ -8,7 +9,7 @@ namespace Convertidor.Services.Rh
 
         Task<List<RH_PERIODOS>> GetAll();
         Task<List<RH_PERIODOS>> GetByTipoNomina(int tipoNomina);
-        Task<List<RH_PERIODOS>> GetByYear(int ano);
+        Task<List<ListPeriodoDto>> GetByYear(int ano);
     }
 }
 

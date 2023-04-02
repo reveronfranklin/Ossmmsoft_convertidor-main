@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
+using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,19 +59,43 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<List<RH_PERIODOS>> GetByYear(int ano)
+        public async Task<List<ListPeriodoDto>> GetByYear(int ano)
         {
             try
             {
 
                 var result = await _repository.GetByYear(ano);
-                return (List<RH_PERIODOS>)result;
+                var resultDto = MapListPeriodoDto(result);
+                return resultDto;
             }
             catch (Exception ex)
             {
                 var res = ex.InnerException.Message;
                 return null;
             }
+
+        }
+
+        public List<ListPeriodoDto> MapListPeriodoDto(List<RH_PERIODOS> dtos)
+        {
+            List<ListPeriodoDto> result = new List<ListPeriodoDto>();
+
+            foreach (var item in dtos)
+            {
+
+                ListPeriodoDto itemResult = new ListPeriodoDto();
+                itemResult.CodigoPeriodo = item.CODIGO_PERIODO;
+                itemResult.CodigoTipoNomina = item.CODIGO_TIPO_NOMINA;
+                itemResult.FechaNomina = item.FECHA_NOMINA;
+                itemResult.Periodo = item.PERIODO;
+                itemResult.TipoNomina = item.TIPO_NOMINA;
+                result.Add(itemResult);
+
+
+            }
+            return result;
+
+
 
         }
 
