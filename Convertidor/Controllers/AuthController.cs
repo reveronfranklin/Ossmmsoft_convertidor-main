@@ -78,7 +78,8 @@ namespace Convertidor.Controllers
         {
             ResultLoginDto resultLogin = new ResultLoginDto();
 
-            var refreshToken = refreshTokento.RefreshToken; // Request.Cookies["X-Refresh-Token"];
+            var refreshToken = refreshTokento.RefreshToken;
+            // Request.Cookies["X-Refresh-Token"];
             //var token = Request.Cookies["osmmasoftToken"];
             string? userName = string.Empty;
             userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name); 
@@ -106,7 +107,6 @@ namespace Convertidor.Controllers
             resultLogin.Message = "";
             resultLogin.refreshToken = newRefreshToken.Refresh_Token; 
             resultLogin.accessToken = token;
-
             resultLogin.Name = sisUsuario.LOGIN;
             UserData userData = new UserData();
             userData.Id = sisUsuario.CODIGO_USUARIO;

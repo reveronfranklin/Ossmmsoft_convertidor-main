@@ -24,19 +24,28 @@ public partial class recursos : recursosBase
 
 public override void Execute()
 {
-WriteLiteral(@"dotnet ef migrations add InitialCreate --context DestinoDataContext --output-dir Migrations/DestinoMigrations
-dotnet ef database update InitialCreate --context DestinoDataContext
-
-
-Add-Migration InitialCreate -Context DestinoDataContext -OutputDir Migrations\DestinoMigrations
-
-
-Configuracion JWT
-https://www.youtube.com/watch?v=fhWIkbF18lM&t=0s
-https://github.com/patrickgod/JwtWebApiTutorial/blob/master/JwtWebApiTutorial/Controllers/AuthController.cs
-
-refresh-token axios
-https://srini-dev.hashnode.dev/authentication-refresh-token-flow-with-nextjs-typescript-react-query-and-axios-interceptors");
+WriteLiteral("dotnet ef migrations add InitialCreate --context DestinoDataContext --output-dir " +
+"Migrations/DestinoMigrations\ndotnet ef database update InitialCreate --context D" +
+"estinoDataContext\n\n\nAdd-Migration InitialCreate -Context DestinoDataContext -Out" +
+"putDir Migrations\\DestinoMigrations\n\n\nConfiguracion JWT\nhttps://www.youtube.com/" +
+"watch?v=fhWIkbF18lM&t=0s\nhttps://github.com/patrickgod/JwtWebApiTutorial/blob/ma" +
+"ster/JwtWebApiTutorial/Controllers/AuthController.cs\n\nrefresh-token axios\nhttps:" +
+"//srini-dev.hashnode.dev/authentication-refresh-token-flow-with-nextjs-typescrip" +
+"t-react-query-and-axios-interceptors\n\nCONFIGURAR ORACLE EN DOCKER\nhttps://elrera" +
+"g.medium.com/instalaci%C3%B3n-de-oracle-11-g-xe-con-docker-en-mac-e55f9c05be6d\n\n" +
+"PASO 1 : DESCARGAMOS LA IMAGEN\ndocker pull epiclabs/docker-oracle-xe-11g\n\nPASO 2" +
+" : REVISAMOS LA IMAGEN\ndocker images\n\nPASO 3 : CREAMOS CARPETA DEL VOLUMEN\nmkdir" +
+" oracle-volume\n\n/Users/freveron/Documents/DOCKER/oracle-volume\n\nPASO 4 : LEVANTA" +
+"MOS EL CONTENEDOR\n\ndocker run -d -v /Users/freveron/Documents/DOCKER/oracle-volu" +
+"me:/u01/app/oracle -p 1521:1521 epiclabs/docker-oracle-xe-11g\nsudo docker run -d" +
+" -p 49161:1521 epiclabs/docker-oracle-xe-11g\ndocker run -d -p 49161:1521 -e ORAC" +
+"LE_ALLOW_REMOTE=true -e ORACLE_PASSWORD=mvc4-2014 -e RELAX_SECURITY=1 epiclabs/d" +
+"ocker-oracle-xe-11g\ndocker run -it epiclabs/docker-oracle-xe-11g sh -c \'gosu ora" +
+"cle sqlplus \"sys as sysdba\"\'\n\n\n\ndocker run -d -p 1521:1521 -e ORACLE_PASSWORD=mv" +
+"c4-2014 -v oracle-volume:/opt/oracle/oradata gvenzl/oracle-xe\n\n    PASO 5 : VERI" +
+"FICAMOS EL CONTENEDOR\n    docker ps\n\n    PASO 6: CREDENCIALES DE CONEXION\n\n    h" +
+"ostname: localhost\n    port: 1521\n    sid: xe\n    username: system\n    password:" +
+" oracle\n");
 
 }
 }

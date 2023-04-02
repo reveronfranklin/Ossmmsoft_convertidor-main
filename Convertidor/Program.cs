@@ -20,6 +20,8 @@ using System.Configuration;
 using System.Text;
 using Swashbuckle;
 using Swashbuckle.AspNetCore.Filters;
+using Convertidor.Data.Interfaces.RH;
+using Convertidor.Data.Repository.Rh;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +76,9 @@ builder.Services.AddHttpClient<PetroClientService>();
 builder.Services.AddTransient<IPetroClientService, PetroClientService>();
 
 
-
+builder.Services.AddTransient<IRhTipoNominaRepository, RhTipoNominaRepository>();
+builder.Services.AddTransient<IRhPeriodoRepository, RhPeriodoRepository>();
+builder.Services.AddTransient<IRhPersonasRepository, RhPersonasRepository>();
 
 
 // Register AutoMapper

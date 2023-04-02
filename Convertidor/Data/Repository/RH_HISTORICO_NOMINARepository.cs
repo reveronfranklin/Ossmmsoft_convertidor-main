@@ -1,5 +1,6 @@
 ﻿
 using Convertidor.Data.Entities;
+using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,39 @@ namespace Convertidor.Data.Repository
                 return null;
             }
         }
+
+        //*************H_V_HISTORICO_MOVIMIENTOS>
+
+        public async Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetHistoricoMovimientosByCodigoPersona(int codigoPersona)
+        {
+            try
+            {
+                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(d => d.CODIGO_PERSONA == codigoPersona).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+        }
+        public async Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetHistoricoMovimientosByPeriodoTipoNomina(string tipoNomina,int codigoPeriodo)
+        {
+            try
+            {
+                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(d => d.TIPO_NOMINA == tipoNomina && d.CODIGO_PERIODO== codigoPeriodo).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+        }
+
+
+
+
 
     }
 }

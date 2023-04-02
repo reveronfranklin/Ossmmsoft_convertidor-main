@@ -11,3 +11,39 @@ https://github.com/patrickgod/JwtWebApiTutorial/blob/master/JwtWebApiTutorial/Co
 
 refresh-token axios
 https://srini-dev.hashnode.dev/authentication-refresh-token-flow-with-nextjs-typescript-react-query-and-axios-interceptors
+
+CONFIGURAR ORACLE EN DOCKER
+https://elrerag.medium.com/instalaci%C3%B3n-de-oracle-11-g-xe-con-docker-en-mac-e55f9c05be6d
+
+PASO 1 : DESCARGAMOS LA IMAGEN
+docker pull epiclabs/docker-oracle-xe-11g
+
+PASO 2 : REVISAMOS LA IMAGEN
+docker images
+
+PASO 3 : CREAMOS CARPETA DEL VOLUMEN
+mkdir oracle-volume
+
+/Users/freveron/Documents/DOCKER/oracle-volume
+
+PASO 4 : LEVANTAMOS EL CONTENEDOR
+
+docker run -d -v /Users/freveron/Documents/DOCKER/oracle-volume:/u01/app/oracle -p 1521:1521 epiclabs/docker-oracle-xe-11g
+sudo docker run -d -p 49161:1521 epiclabs/docker-oracle-xe-11g
+docker run -d -p 49161:1521 -e ORACLE_ALLOW_REMOTE=true -e ORACLE_PASSWORD=mvc4-2014 -e RELAX_SECURITY=1 epiclabs/docker-oracle-xe-11g
+docker run -it epiclabs/docker-oracle-xe-11g sh -c 'gosu oracle sqlplus "sys as sysdba"'
+
+
+
+docker run -d -p 1521:1521 -e ORACLE_PASSWORD=mvc4-2014 -v oracle-volume:/opt/oracle/oradata gvenzl/oracle-xe
+
+    PASO 5 : VERIFICAMOS EL CONTENEDOR
+    docker ps
+
+    PASO 6: CREDENCIALES DE CONEXION
+
+    hostname: localhost
+    port: 1521
+    sid: xe
+    username: system
+    password: oracle

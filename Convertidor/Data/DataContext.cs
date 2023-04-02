@@ -14,9 +14,10 @@ namespace Convertidor.Data
         public DbSet<RH_HISTORICO_PERSONAL_CARGO> RH_HISTORICO_PERSONAL_CARGO { get; set; }
         public DbSet<PRE_INDICE_CAT_PRG> PRE_INDICE_CAT_PRG { get; set; }
         public DbSet<RH_V_HISTORICO_MOVIMIENTOS> RH_V_HISTORICO_MOVIMIENTOS { get; set; }
+        public DbSet<RH_PERIODOS> RH_PERIODOS { get; set; }
+        public DbSet<RH_TIPOS_NOMINA> RH_TIPOS_NOMINA { get; set; }
+        public DbSet<RH_PERSONAS> RH_PERSONAS { get; set; }
         
-
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +50,24 @@ namespace Convertidor.Data
          {
              builder.HasNoKey();
              builder.ToTable("RH_V_HISTORICO_MOVIMIENTOS");
+         });
+            modelBuilder
+        .Entity<RH_PERIODOS>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("RH_PERIODOS");
+            });
+            modelBuilder
+       .Entity<RH_TIPOS_NOMINA>(builder =>
+       {
+           builder.HasNoKey();
+           builder.ToTable("RH_TIPOS_NOMINA");
+       });
+            modelBuilder
+         .Entity<RH_PERSONAS>(builder =>
+         {
+             builder.HasNoKey();
+             builder.ToTable("RH_PERSONAS");
          });
 
         }
