@@ -31,6 +31,39 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async Task<RH_PERSONAS> GetCedula(int cedula)
+        {
+            try
+            {
+
+                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p=> p.CEDULA==cedula).FirstOrDefaultAsync();
+                return (RH_PERSONAS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<RH_PERSONAS> GetCodogoPersona(int codigoPersona)
+        {
+            try
+            {
+
+                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p => p.CODIGO_PERSONA == codigoPersona).FirstOrDefaultAsync();
+                return (RH_PERSONAS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+
     }
 }
 

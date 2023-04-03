@@ -22,12 +22,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class PrePeriodosNominaController : ControllerBase
+    public class RhPersonaController : ControllerBase
     {
        
-        private readonly IRhPeriodoService _service;
+        private readonly IRhPersonaService _service;
 
-        public PrePeriodosNominaController(IRhPeriodoService service)
+        public RhPersonaController(IRhPersonaService service)
         {
 
             _service = service;
@@ -43,13 +43,7 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> GetAllByYear(PeriodoFilterDto filter)
-        {
-            var result = await _service.GetByYear(filter.year);
-            return Ok(result);
-        }
+       
 
 
     }

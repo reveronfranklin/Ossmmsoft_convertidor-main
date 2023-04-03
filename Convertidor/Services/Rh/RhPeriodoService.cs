@@ -29,11 +29,11 @@ namespace Convertidor.Data.Repository.Rh
           
         }
        
-        public async Task<List<RH_PERIODOS>> GetAll()
+        public async Task<List<RH_PERIODOS>> GetAll(PeriodoFilterDto filter)
         {
             try
             {
-                var result = await _repository.GetAll();
+                var result = await _repository.GetAll(filter);
                 return (List<RH_PERIODOS>)result;
             }
             catch (Exception ex)

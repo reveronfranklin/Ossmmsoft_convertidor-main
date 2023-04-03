@@ -1,10 +1,10 @@
 ﻿using System;
 namespace Convertidor.Dtos.Rh
 {
-	public class PeriodoFilterDto
+	public class ListTipoNominaDto
 	{
-		public int Year { get; set; }
         public int CodigoTipoNomina { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
     }
 }
 

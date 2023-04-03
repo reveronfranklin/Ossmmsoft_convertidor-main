@@ -83,6 +83,10 @@ builder.Services.AddTransient<IRhPeriodoService, RhPeriodoService>();
 builder.Services.AddTransient<IRhTipoNominaRepository, RhTipoNominaRepository>();
 builder.Services.AddTransient<IRhPeriodoRepository, RhPeriodoRepository>();
 builder.Services.AddTransient<IRhPersonasRepository, RhPersonasRepository>();
+builder.Services.AddTransient<IRhPersonaService, RhPersonaService>();
+
+
+builder.Services.AddTransient<IRhTipoNominaService, RhTipoNominaService>();
 
 
 // Register AutoMapper
