@@ -6,8 +6,8 @@ namespace Convertidor.Services.Rh
 	public interface IRhPersonaService
 	{
 
-        Task<List<ListPersonasDto>> GetAll();
-
+        Task<List<PersonasDto>> GetAll();
+        Task<ListPersonasDto> GetByCodigoPersona(int codigoPersona);
 
     }
 }

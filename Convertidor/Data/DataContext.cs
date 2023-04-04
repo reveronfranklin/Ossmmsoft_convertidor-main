@@ -17,8 +17,10 @@ namespace Convertidor.Data
         public DbSet<RH_PERIODOS> RH_PERIODOS { get; set; }
         public DbSet<RH_TIPOS_NOMINA> RH_TIPOS_NOMINA { get; set; }
         public DbSet<RH_PERSONAS> RH_PERSONAS { get; set; }
+        public DbSet<RH_EDUCACION> RH_EDUCACION { get; set; }
+        public DbSet<RH_DESCRIPTIVAS> RH_DESCRIPTIVAS { get; set; }
+        public DbSet<RH_DIRECCIONES> RH_DIRECCIONES { get; set; }
         
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
@@ -69,6 +71,24 @@ namespace Convertidor.Data
              builder.HasNoKey();
              builder.ToTable("RH_PERSONAS");
          });
+            modelBuilder
+        .Entity<RH_EDUCACION>(builder =>
+        {
+            builder.HasNoKey();
+            builder.ToTable("RH_EDUCACION");
+        });
+            modelBuilder
+       .Entity<RH_DESCRIPTIVAS>(builder =>
+       {
+           builder.HasNoKey();
+           builder.ToTable("RH_DESCRIPTIVAS");
+       });
+            modelBuilder
+      .Entity<RH_DIRECCIONES>(builder =>
+      {
+          builder.HasNoKey();
+          builder.ToTable("RH_DIRECCIONES");
+      });
 
         }
 

@@ -20,25 +20,34 @@ namespace Convertidor.Data.Repository.Rh
 
    
         private readonly IRhPersonasRepository _repository;
-
+        private readonly IRhHistoricoMovimientoService _historicoMovimientoService;
+        private readonly IRhEducacionService _rhEducacionService;
+        private readonly IRhDireccionesService _rhDireccionesService;
         private readonly IMapper _mapper;
 
-        public RhPersonaService(IRhPersonasRepository repository)
+        public RhPersonaService(IRhPersonasRepository repository,
+                                IRhHistoricoMovimientoService historicoMovimientoService,
+                                IRhEducacionService rhEducacionService,
+                                IRhDireccionesService rhDireccionesService)
         {
             _repository = repository;
-          
+            _historicoMovimientoService = historicoMovimientoService;
+            _rhEducacionService= rhEducacionService;
+            _rhDireccionesService = rhDireccionesService;
+
+
         }
        
-        public async Task<List<ListPersonasDto>> GetAll()
+        public async Task<List<PersonasDto>> GetAll()
         {
             try
             {
                 var personas = await _repository.GetAll();
 
-                var result = MapListPersonasto(personas);
+                var result =await  MapListPersonasDto(personas);
 
 
-                return (List<ListPersonasDto>)result;
+                return (List<PersonasDto>)result;
             }
             catch (Exception ex)
             {
@@ -48,17 +57,89 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-      
-      
-
-        public List<ListPersonasDto> MapListPersonasto(List<RH_PERSONAS> dtos)
+        public async Task<ListPersonasDto> GetByCodigoPersona(int codigoPersona)
         {
-            List<ListPersonasDto> result = new List<ListPersonasDto>();
+            try
+            {
+                var personas = await _repository.GetCodogoPersona(codigoPersona);
+
+                var result = await MapPersonasDto(personas);
+
+
+                return (ListPersonasDto)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        public async Task<ListPersonasDto> MapPersonasDto(RH_PERSONAS dtos)
+        {
+           
+
+                ListPersonasDto itemResult = new ListPersonasDto();
+
+
+
+                itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
+                itemResult.Cedula = dtos.CEDULA;
+                itemResult.Nombre = dtos.NOMBRE;
+                itemResult.Apellido = dtos.APELLIDO;
+                itemResult.Nacionalidad = dtos.NACIONALIDAD;
+                itemResult.Sexo = dtos.SEXO;
+                itemResult.FechaNacimiento = dtos.FECHA_NACIMIENTO.ToShortDateString();
+                itemResult.PaisNacimientoId = dtos.PAIS_NACIMIENTO_ID;
+                itemResult.EstadoNacimientoId = dtos.ESTADO_NACIMIENTO_ID;
+                itemResult.NumeroGacetaNacional = dtos.NUMERO_GACETA_NACIONAL;
+                itemResult.EstadoCivilId = dtos.ESTADO_CIVIL_ID;
+                itemResult.Estatura = dtos.ESTATURA;
+                itemResult.Peso = dtos.PESO;
+                itemResult.ManoHabil = dtos.MANO_HABIL;
+                itemResult.Extra1 = dtos.EXTRA1;
+                itemResult.Extra2 = dtos.EXTRA2;
+                itemResult.Extra3 = dtos.EXTRA3;
+                itemResult.Status = dtos.STATUS;
+                itemResult.IdentificacionId = dtos.IDENTIFICACION_ID;
+                itemResult.NumeroIdentificacion = dtos.NUMERO_IDENTIFICACION;
+                var educacion = await _rhEducacionService.GetByCodigoPersona(dtos.CODIGO_PERSONA);
+                if (educacion != null)
+                {
+                    itemResult.EducacionDto = educacion;
+                }
+
+                var direcciones = await _rhDireccionesService.GetByCodigoPersona(dtos.CODIGO_PERSONA);
+                if (direcciones != null)
+                {
+                    itemResult.DireccionesDto = direcciones;
+                }
+                var historico = await _historicoMovimientoService.GetByCodigoPersona(dtos.CODIGO_PERSONA);
+                if(historico!= null)
+                {
+                    itemResult.HistoricoMovimientoDto = historico;
+                }
+           
+
+            return itemResult;
+
+
+
+
+
+
+
+        }
+
+
+        public async Task<List<PersonasDto>> MapListPersonasDto(List<RH_PERSONAS> dtos)
+        {
+            List<PersonasDto> result = new List<PersonasDto>();
 
             foreach (var item in dtos)
             {
 
-                ListPersonasDto itemResult = new ListPersonasDto();
+                PersonasDto itemResult = new PersonasDto();
 
                 
 
@@ -68,7 +149,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Apellido = item.APELLIDO;
                 itemResult.Nacionalidad = item.NACIONALIDAD;
                 itemResult.Sexo = item.SEXO;
-                itemResult.FechaNacimiento = item.FECHA_NACIMIENTO;
+                itemResult.FechaNacimiento = item.FECHA_NACIMIENTO.ToShortDateString();
                 itemResult.PaisNacimientoId = item.PAIS_NACIMIENTO_ID;
                 itemResult.EstadoNacimientoId = item.ESTADO_NACIMIENTO_ID;
                 itemResult.NumeroGacetaNacional = item.NUMERO_GACETA_NACIONAL;
@@ -82,7 +163,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Status = item.STATUS;
                 itemResult.IdentificacionId = item.IDENTIFICACION_ID;
                 itemResult.NumeroIdentificacion = item.NUMERO_IDENTIFICACION;
-
+               
 
                 result.Add(itemResult);
 

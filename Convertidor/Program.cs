@@ -77,6 +77,9 @@ builder.Services.AddHttpClient<PetroClientService>();
 builder.Services.AddTransient<IPetroClientService, PetroClientService>();
 
 builder.Services.AddTransient<IRhPeriodoService, RhPeriodoService>();
+builder.Services.AddTransient<IRhHistoricoMovimientoService, RhHistoricoMovimientoService>();
+builder.Services.AddTransient<IRhEducacionRepository, RhEducacionRepository>();
+builder.Services.AddTransient<IRhEducacionService, RhEducacionService>();
 
 
 
@@ -84,9 +87,16 @@ builder.Services.AddTransient<IRhTipoNominaRepository, RhTipoNominaRepository>()
 builder.Services.AddTransient<IRhPeriodoRepository, RhPeriodoRepository>();
 builder.Services.AddTransient<IRhPersonasRepository, RhPersonasRepository>();
 builder.Services.AddTransient<IRhPersonaService, RhPersonaService>();
-
+builder.Services.AddTransient<IRhHistoricoMovimientoRepository, RhHistoricoMovimientoRepository>();
 
 builder.Services.AddTransient<IRhTipoNominaService, RhTipoNominaService>();
+builder.Services.AddTransient<IRhDescriptivaRepository, RhDescriptivaRepository>();
+builder.Services.AddTransient<IRhDescriptivasService, RhDescriptivasService>();
+
+builder.Services.AddTransient<IRhDireccionesRepository, RhDireccionesRepository>();
+builder.Services.AddTransient<IRhDireccionesService, RhDireccionesService>();
+
+
 
 
 // Register AutoMapper

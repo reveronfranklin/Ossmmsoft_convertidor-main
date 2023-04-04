@@ -34,6 +34,8 @@ namespace Convertidor.Controllers
            
         }
 
+        
+
 
         [HttpGet]
         [Route("[action]")]
@@ -43,7 +45,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-       
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByPersona(PersonaFilterDto filter)
+        {
+            var result = await _service.GetByCodigoPersona(filter.CodigoPersona);
+            return Ok(result);
+        }
+
 
 
     }
