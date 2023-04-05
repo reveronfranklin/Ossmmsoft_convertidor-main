@@ -8,8 +8,8 @@ namespace Convertidor.Services.Rh
 
 
         Task<List<ListHistoricoMovimientoDto>> GetByCodigoPersona(int codigoPersona);
-
-
+        Task<List<ListHistoricoMovimientoDto>> GetByTipoNominaPeriodo(int tipoNomina, int codigoPeriodo);
+        Task<List<ListHistoricoMovimientoDto>> GetByFechaNomina(DateTime desde, DateTime hasta);
     }
 }
 

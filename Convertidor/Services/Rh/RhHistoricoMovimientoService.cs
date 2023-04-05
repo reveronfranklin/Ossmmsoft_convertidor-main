@@ -44,17 +44,56 @@ namespace Convertidor.Services.Rh
 
         }
 
+        public async Task<List<ListHistoricoMovimientoDto>> GetByTipoNominaPeriodo(int tipoNomina,int codigoPeriodo)
+        {
+            try
+            {
+
+                List<ListHistoricoMovimientoDto> listHistoricoMovimientoDtos = new List<ListHistoricoMovimientoDto>();
+
+                var historico = await _repository.GetByTipoNominaPeriodo(tipoNomina, codigoPeriodo);
+                listHistoricoMovimientoDtos = MapListHistoricoMovimiento(historico);
+                return (List<ListHistoricoMovimientoDto>)listHistoricoMovimientoDtos;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        public async Task<List<ListHistoricoMovimientoDto>> GetByFechaNomina(DateTime desde, DateTime hasta)
+        {
+            try
+            {
+
+                List<ListHistoricoMovimientoDto> listHistoricoMovimientoDtos = new List<ListHistoricoMovimientoDto>();
+
+                var historico = await _repository.GetByFechaNomina(desde, hasta);
+                listHistoricoMovimientoDtos = MapListHistoricoMovimiento(historico);
+                return (List<ListHistoricoMovimientoDto>)listHistoricoMovimientoDtos;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         private List<ListHistoricoMovimientoDto> MapListHistoricoMovimiento(List<RH_V_HISTORICO_MOVIMIENTOS> dto)
         {
             List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
             foreach (var item in dto)
             {
                 ListHistoricoMovimientoDto itemResult = new ListHistoricoMovimientoDto();
+                itemResult.CodigoHistoricoNomina = item.CODIGO_HISTORICO_NOMINA;
                 itemResult.CodigoPersona = item.CODIGO_PERSONA;
                 itemResult.Cedula = item.CEDULA;
                 itemResult.Foto = item.FOTO;
                 itemResult.Nombre = item.NOMBRE;
                 itemResult.Apellido = item.APELLIDO;
+                itemResult.Full_Name = $"{item.NOMBRE} {item.APELLIDO}";
                 itemResult.Nacionalidad = item.NACIONALIDAD;
                 itemResult.DescripcionNacionalidad = item.DESCRIPCION_NACIONALIDAD;
                 itemResult.Sexo = item.SEXO;
@@ -80,7 +119,7 @@ namespace Convertidor.Services.Rh
                 itemResult.NoCuenta = item.NO_CUENTA;
               
               
-                itemResult.FechaNominaMov = item.FECHA_NOMINA_MOV;
+                itemResult.FechaNominaMov = item.FECHA_NOMINA_MOV.ToShortDateString();
                 itemResult.Complemento = item.COMPLEMENTO;
                 itemResult.Tipo = item.TIPO;
                 itemResult.Monto = item.MONTO;
@@ -88,6 +127,7 @@ namespace Convertidor.Services.Rh
                 itemResult.Codigo = item.CODIGO;
                 itemResult.Denominacion = item.DENOMINACION;
                 itemResult.CodigoPeriodo = (int)item.CODIGO_PERIODO;
+                itemResult.Avatar = "";
                 result.Add(itemResult);
             }
 

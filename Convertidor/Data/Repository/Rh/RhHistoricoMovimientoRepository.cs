@@ -37,7 +37,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h=>h.CODIGO_PERSONA== codigoPersona).OrderByDescending(h=>h.FECHA_NOMINA_MOV).ToListAsync();
+                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h=>h.CODIGO_PERSONA== codigoPersona).OrderByDescending(h=>h.FECHA_NOMINA_MOV).ThenBy(h=>h.CEDULA).ToListAsync();
                 return (List<RH_V_HISTORICO_MOVIMIENTOS>)result;
             }
             catch (Exception ex)
@@ -48,6 +48,36 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetByTipoNominaPeriodo(int tipoNomina,int codigoPeriodo)
+        {
+            try
+            {
+
+                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h => h.CODIGO_TIPO_NOMINA == tipoNomina && h.CODIGO_PERIODO==codigoPeriodo).OrderByDescending(h => h.FECHA_NOMINA_MOV).ToListAsync();
+                return (List<RH_V_HISTORICO_MOVIMIENTOS>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        public async Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetByFechaNomina(DateTime desde, DateTime hasta)
+        {
+            try
+            {
+
+                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h => h.FECHA_NOMINA_MOV >= desde && h.FECHA_NOMINA_MOV <= hasta).OrderByDescending(h => h.FECHA_NOMINA_MOV).ToListAsync();
+                return (List<RH_V_HISTORICO_MOVIMIENTOS>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
 
 
     }

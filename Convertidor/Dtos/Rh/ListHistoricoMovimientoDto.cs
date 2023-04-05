@@ -2,12 +2,14 @@
 namespace Convertidor.Dtos.Rh
 {
 	public class ListHistoricoMovimientoDto
-	{
+    {
+        public int CodigoHistoricoNomina { get; set; }
         public int CodigoPersona { get; set; }
         public int Cedula { get; set; }
         public string Foto { get; set; } = string.Empty;
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;
+        public string Full_Name { get; set; } = string.Empty;
         public string Nacionalidad { get; set; } = string.Empty;
         public string DescripcionNacionalidad { get; set; } = string.Empty;
         public string Sexo { get; set; } = string.Empty;
@@ -24,6 +26,7 @@ namespace Convertidor.Dtos.Rh
         public int CodigoTipoNomina { get; set; }
         public string TipoNomina { get; set; } = string.Empty;
         public int FrecuenciaPagoId { get; set; }
+        public string DescripcionFrecuenciaPago { get; set; } = string.Empty;
         public string CodigoSector { get; set; } = string.Empty;
         public string CodigoPrograma { get; set; } = string.Empty;
         public int TipoCuentaId { get; set; }
@@ -34,18 +37,18 @@ namespace Convertidor.Dtos.Rh
         public string Extra1 { get; set; } = string.Empty;
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
-        public int UsuarioIns { get; set; }
         public int CodigoPeriodo { get; set; }
-        public DateTime FechaNomina { get; set; }
+        public DateTime FechaNomina { get; set; } 
         public DateTime FechaIngreso { get; set; }
-        public DateTime FechaNominaMov { get; set; }
+        public string FechaNominaMov { get; set; } = string.Empty;
         public string Complemento { get; set; } = string.Empty;
         public string Tipo { get; set; } = string.Empty;
         public decimal Monto { get; set; }
         public string StatusMov { get; set; } = string.Empty;
         public string Codigo { get; set; } = string.Empty;
         public string Denominacion { get; set; } = string.Empty;
-    
+        public string Avatar { get; set; } = string.Empty;
+
     }
 }
 

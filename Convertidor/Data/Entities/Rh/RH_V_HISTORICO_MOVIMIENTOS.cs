@@ -8,7 +8,7 @@ namespace Convertidor.Data.Entities.Rh
 
 
 
-
+        public int CODIGO_HISTORICO_NOMINA { get; set; }
         public int CODIGO_PERSONA { get; set; }
         public int CODIGO_TIPO_NOMINA { get; set; }
         public int CODIGO_EMPRESA { get; set; }
