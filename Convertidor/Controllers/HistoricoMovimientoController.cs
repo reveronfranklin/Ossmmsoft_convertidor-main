@@ -11,6 +11,9 @@ using IronPdf;
 using Convertidor.Dtos;
 using Convertidor.Services.Rh;
 using Convertidor.Dtos.Rh;
+using Microsoft.AspNetCore.StaticFiles;
+
+using Ganss.Excel;
 
 namespace Convertidor.Controllers
 {
@@ -52,10 +55,78 @@ namespace Convertidor.Controllers
 
 
                 result = await _historicoNominaService.GetByFechaNomina(filter.Desde, filter.Hasta);
-                return Ok(result);
+            ExcelMapper mapper = new ExcelMapper();
+            var ruta = @"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+            var fileName = $"HistoricoNominaDesde {filter.Desde.Year.ToString()}-{filter.Desde.Month.ToString()}-{filter.Desde.Day.ToString()} Hasta {filter.Hasta.Year.ToString()}-{filter.Hasta.Month.ToString()}-{filter.Hasta.Day.ToString()}.xlsx";
+            string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+
+
+            mapper.Save(newFile, result, "HistoricoNomina", true);
+
+            ResultDto<List<ListHistoricoMovimientoDto>> resultDto = new ResultDto<List<ListHistoricoMovimientoDto>>(null);
+            resultDto.Data = result;
+            resultDto.IsValid = true;
+            resultDto.Message = "";
+            resultDto.LinkData = $"/ExcelFiles/{fileName}";
+
+            return Ok(resultDto);
           
-            
-            return Ok(result);
+          
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GenerateExcel(FilterHistoricoNominaPeriodo filter)
+        {
+            List<ListHistoricoMovimientoDto> historico = new List<ListHistoricoMovimientoDto>();
+
+
+            historico = await _historicoNominaService.GetByFechaNomina(filter.Desde, filter.Hasta);
+
+            ExcelMapper mapper = new ExcelMapper();
+            var ruta = @"/Users/freveron/Documents/MM/App/full-version/public";
+
+            string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, filter.Desde.Ticks.ToString() + ".xlsx");
+
+
+            mapper.Save(newFile, historico, "SheetName", true);
+
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(newFile, out var contettype))
+            {
+                contettype = "application/octet-stream";
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(newFile);
+            var result = File(bytes, contettype, Path.Combine(newFile));
+            return result;
+
+            /*string emailtemplatepath = Path.Combine(Directory.GetCurrentDirectory(), "ExcelTemplate//ProductReport.html");
+            string htmldata = System.IO.File.ReadAllText(emailtemplatepath);
+
+            string excelstring = "";
+            foreach (ListHistoricoMovimientoDto prod in historico)
+            {
+                excelstring += "<tr><td>" + prod.Nombre + "</td><td>" + prod.Apellido + "</td><td>" + prod.Sueldo + "</td></tr>";
+            }
+            htmldata = htmldata.Replace("@@ActualData", excelstring);
+
+            string StoredFilePath = Path.Combine(Directory.GetCurrentDirectory(), "ExcelFiles", DateTime.Now.Ticks.ToString() + ".xls");
+            System.IO.File.AppendAllText(StoredFilePath, htmldata);
+
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(StoredFilePath, out var contettype))
+            {
+                contettype = "application/octet-stream";
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(StoredFilePath);
+
+            return File(bytes, contettype, Path.Combine(StoredFilePath));*/
+
+
+
+
         }
 
 

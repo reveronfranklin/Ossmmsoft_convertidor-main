@@ -73,7 +73,7 @@ namespace Convertidor.Data.Repository.Rh
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
+              var res = ex.InnerException.Message;
                 return null;
             }
 

@@ -45,7 +45,8 @@ WriteLiteral("dotnet ef migrations add InitialCreate --context DestinoDataContex
 "c4-2014 -v oracle-volume:/opt/oracle/oradata gvenzl/oracle-xe\n\n    PASO 5 : VERI" +
 "FICAMOS EL CONTENEDOR\n    docker ps\n\n    PASO 6: CREDENCIALES DE CONEXION\n\n    h" +
 "ostname: localhost\n    port: 1521\n    sid: xe\n    username: system\n    password:" +
-" oracle\n");
+" oracle\n\n// EXPORTAR LIST C# A EXCEL\nhttps://github.com/mganss/ExcelMapper\nhttps" +
+"://www.youtube.com/watch?v=UOjf0uEPCC0\n");
 
 }
 }
