@@ -22,19 +22,17 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class RhPersonaController : ControllerBase
+    public class RhConceptosController : ControllerBase
     {
        
-        private readonly IRhPersonaService _service;
+        private readonly IRhConceptosService _service;
 
-        public RhPersonaController(IRhPersonaService service)
+        public RhConceptosController(IRhConceptosService service)
         {
 
             _service = service;
            
         }
-
-        
 
 
         [HttpGet]
@@ -45,27 +43,7 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-
-
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetAllSimple()
-        {
-            var result = await _service.GetAllSimple();
-            return Ok(result);
-        }
        
-
-
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> GetByPersona(PersonaFilterDto filter)
-        {
-            var result = await _service.GetByCodigoPersona(filter.CodigoPersona);
-            return Ok(result);
-        }
-
 
 
     }

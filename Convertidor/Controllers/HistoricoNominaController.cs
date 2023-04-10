@@ -86,7 +86,7 @@ namespace Convertidor.Controllers
         [HttpPost]
         public async Task<IActionResult>  GetHistoricoPeriodoTipoNomina(FilterHistoricoNominaPeriodo filter)
         {
-            var result = await _historicoNominaService.GetByPeriodo(filter.CodigoPeriodo, filter.TipoNomina);
+            var result = await _historicoNominaService.GetByPeriodo(1, filter.CodigoTipoNomina);
             return Ok(result);
         }
 

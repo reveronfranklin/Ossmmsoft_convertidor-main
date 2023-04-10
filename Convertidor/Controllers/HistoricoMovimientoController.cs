@@ -14,6 +14,8 @@ using Convertidor.Dtos.Rh;
 using Microsoft.AspNetCore.StaticFiles;
 
 using Ganss.Excel;
+using Convertidor.Utility;
+using NPOI.HPSF;
 
 namespace Convertidor.Controllers
 {
@@ -43,8 +45,8 @@ namespace Convertidor.Controllers
         {
             List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
 
- 
-                 result = await _historicoNominaService.GetByTipoNominaPeriodo(filter.TipoNomina, filter.CodigoPeriodo);
+         
+            result = await _historicoNominaService.GetByTipoNominaPeriodo(filter.CodigoTipoNomina, 1);
     
             return Ok(result);
         }
@@ -53,28 +55,94 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetHistoricoFecha(FilterHistoricoNominaPeriodo filter)
         {
+            ResultDto<List<ListHistoricoMovimientoDto>> resultDto = new ResultDto<List<ListHistoricoMovimientoDto>>(null);
             List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
 
 
-                result = await _historicoNominaService.GetByFechaNomina(filter.Desde, filter.Hasta);
-            ExcelMapper mapper = new ExcelMapper();
+            if (!DateValidate.IsDate(filter.Desde.ToShortDateString()))
+            {
+                resultDto.Data = null;
+                resultDto.IsValid = false;
+                resultDto.Message = "Fecha Desde Invalida";
+                resultDto.LinkData = "";
+                return Ok(resultDto);
+            }
+            if (!DateValidate.IsDate(filter.Hasta.ToShortDateString()))
+            {
+                resultDto.Data = null;
+                resultDto.IsValid = false;
+                resultDto.Message = "Fecha Hasta Invalida";
+                resultDto.LinkData = "";
+                return Ok(resultDto);
+            }
 
+
+            result = await _historicoNominaService.GetByFechaNomina(filter.Desde, filter.Hasta);
+
+            if (filter.CodigoPersona > 0)
+            {
+                result = result.Where(x => x.CodigoPersona == filter.CodigoPersona).ToList();
+               
+
+                if (!string.IsNullOrEmpty(filter.CodigoConcepto))
+                {
+                    var concepto = result.Where(x => x.Codigo == filter.CodigoConcepto).ToList();
+                    if (concepto.Count > 0) { result = concepto; }
+                }
+            }
+            else
+            {
+                if (filter.CodigoTipoNomina > 0)
+                {
+                    var tipoNomina = result.Where(x => x.CodigoTipoNomina == filter.CodigoTipoNomina).ToList();
+
+                    result = tipoNomina; 
+                }
+
+                if (!string.IsNullOrEmpty(filter.CodigoConcepto))
+                {
+                    var concepto = result.Where(x => x.Codigo == filter.CodigoConcepto).ToList();
+                    result = concepto; 
+                }
+            }
+
+         
+
+
+
+         
+
+    
+
+
+            if (result.Count() > 0)
+            {
+
+                ExcelMapper mapper = new ExcelMapper();
+
+
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+                var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+                var fileName = $"HistoricoNominaDesde {filter.Desde.Year.ToString()}-{filter.Desde.Month.ToString()}-{filter.Desde.Day.ToString()} Hasta {filter.Hasta.Year.ToString()}-{filter.Hasta.Month.ToString()}-{filter.Hasta.Day.ToString()}.xlsx";
+                string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+
+
+                mapper.Save(newFile, result, $"HistoricoNomina", true);
+                resultDto.Data = result;
+                resultDto.IsValid = true;
+                resultDto.Message = "";
+                resultDto.LinkData = $"/ExcelFiles/{fileName}";
+            }
+            else
+            {
+                resultDto.Data = result;
+                resultDto.IsValid = true;
+                resultDto.Message = "No Data";
+                resultDto.LinkData = $"";
+            }
            
-            var settings =_configuration.GetSection("Settings").Get<Settings>();
-
-
-            var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
-            var fileName = $"HistoricoNominaDesde {filter.Desde.Year.ToString()}-{filter.Desde.Month.ToString()}-{filter.Desde.Day.ToString()} Hasta {filter.Hasta.Year.ToString()}-{filter.Hasta.Month.ToString()}-{filter.Hasta.Day.ToString()}.xlsx";
-            string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-
-
-            mapper.Save(newFile, result, "HistoricoNomina", true);
-
-            ResultDto<List<ListHistoricoMovimientoDto>> resultDto = new ResultDto<List<ListHistoricoMovimientoDto>>(null);
-            resultDto.Data = result;
-            resultDto.IsValid = true;
-            resultDto.Message = "";
-            resultDto.LinkData = $"/ExcelFiles/{fileName}";
 
             return Ok(resultDto);
           

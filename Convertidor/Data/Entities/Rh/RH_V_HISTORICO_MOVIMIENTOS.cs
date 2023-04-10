@@ -16,8 +16,9 @@ namespace Convertidor.Data.Entities.Rh
         public int CODIGO_CARGO { get; set; }
         public string CARGO_CODIGO { get; set; } = string.Empty;
         public int CODIGO_ICP { get; set; }
-        public string CODIGO_SECTOR { get; set; } = string.Empty;
-        public string CODIGO_PROGRAMA { get; set; } = string.Empty;
+        public string UNIDAD_EJECUTORA { get; set; } = string.Empty;
+        //public string CODIGO_SECTOR { get; set; } = string.Empty;
+        //public string CODIGO_PROGRAMA { get; set; } = string.Empty;
         public int TIPO_CUENTA_ID { get; set; }
         public string DESCRIPCION_TIPO_CUENTA { get; set; } = string.Empty;
         public int BANCO_ID { get; set; }
@@ -30,6 +31,8 @@ namespace Convertidor.Data.Entities.Rh
         public string NACIONALIDAD { get; set; } = string.Empty;
         public string DESCRIPCION_NACIONALIDAD { get; set; } = string.Empty;
         public string SEXO { get; set; } = string.Empty;
+        public string ESTADO_CIVIL { get; set; } = string.Empty;
+        
         public string STATUS { get; set; } = string.Empty;
         public string DESCRIPCION_STATUS { get; set; } = string.Empty;
  

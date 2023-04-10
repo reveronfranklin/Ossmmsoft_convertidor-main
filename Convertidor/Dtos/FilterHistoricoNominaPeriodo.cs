@@ -3,11 +3,12 @@ namespace Convertidor.Dtos
 {
 	public class FilterHistoricoNominaPeriodo
 	{
-
-		public int CodigoPeriodo { get; set; }
-		public int  TipoNomina { get; set; }
-		public DateTime Desde { get; set; }
+        public DateTime Desde { get; set; }
         public DateTime Hasta { get; set; }
+        public int CodigoTipoNomina { get; set; }
+        public int CodigoPersona { get; set; }
+        public string CodigoConcepto { get; set; } = string.Empty;
+       
     }
 }
 

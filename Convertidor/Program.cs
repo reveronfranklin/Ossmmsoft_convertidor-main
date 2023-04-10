@@ -96,6 +96,9 @@ builder.Services.AddTransient<IRhDescriptivasService, RhDescriptivasService>();
 builder.Services.AddTransient<IRhDireccionesRepository, RhDireccionesRepository>();
 builder.Services.AddTransient<IRhDireccionesService, RhDireccionesService>();
 
+builder.Services.AddTransient<IRhConceptosRepository, RhConceptosRepository>();
+builder.Services.AddTransient<IRhConceptosService, RhConceptosService>();
+
 
 
 

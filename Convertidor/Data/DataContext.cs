@@ -20,7 +20,9 @@ namespace Convertidor.Data
         public DbSet<RH_EDUCACION> RH_EDUCACION { get; set; }
         public DbSet<RH_DESCRIPTIVAS> RH_DESCRIPTIVAS { get; set; }
         public DbSet<RH_DIRECCIONES> RH_DIRECCIONES { get; set; }
+        public DbSet<RH_CONCEPTOS> RH_CONCEPTOS { get; set; }
         
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
@@ -84,11 +86,17 @@ namespace Convertidor.Data
            builder.ToTable("RH_DESCRIPTIVAS");
        });
             modelBuilder
-      .Entity<RH_DIRECCIONES>(builder =>
-      {
-          builder.HasNoKey();
-          builder.ToTable("RH_DIRECCIONES");
-      });
+          .Entity<RH_DIRECCIONES>(builder =>
+          {
+              builder.HasNoKey();
+              builder.ToTable("RH_DIRECCIONES");
+          });
+            modelBuilder
+        .Entity<RH_CONCEPTOS>(builder =>
+        {
+            builder.HasNoKey();
+            builder.ToTable("RH_CONCEPTOS");
+        });
 
         }
 

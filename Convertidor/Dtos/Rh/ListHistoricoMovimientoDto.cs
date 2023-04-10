@@ -27,8 +27,8 @@ namespace Convertidor.Dtos.Rh
         public string TipoNomina { get; set; } = string.Empty;
         public int FrecuenciaPagoId { get; set; }
         public string DescripcionFrecuenciaPago { get; set; } = string.Empty;
-        public string CodigoSector { get; set; } = string.Empty;
-        public string CodigoPrograma { get; set; } = string.Empty;
+        //public string CodigoSector { get; set; } = string.Empty;
+        //public string CodigoPrograma { get; set; } = string.Empty;
         public int TipoCuentaId { get; set; }
         public string DescripcionTipoCuenta { get; set; } = string.Empty;
         public int BancoId { get; set; }
@@ -48,6 +48,8 @@ namespace Convertidor.Dtos.Rh
         public string Codigo { get; set; } = string.Empty;
         public string Denominacion { get; set; } = string.Empty;
         public string Avatar { get; set; } = string.Empty;
+        public string UnidadEjecutora { get; set; } = string.Empty;
+        public string EstadoCivil { get; set; } = string.Empty;
 
     }
 }

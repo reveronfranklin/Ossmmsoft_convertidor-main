@@ -8,7 +8,7 @@ namespace Convertidor.Services.Rh
 
         Task<List<PersonasDto>> GetAll();
         Task<ListPersonasDto> GetByCodigoPersona(int codigoPersona);
-
+        Task<List<ListSimplePersonaDto>> GetAllSimple();
     }
 }
 

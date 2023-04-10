@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.NetworkInformation;
+
 namespace Convertidor.Dtos.Rh
 {
 
@@ -61,6 +63,15 @@ namespace Convertidor.Dtos.Rh
 
 
     }
+
+    public class ListSimplePersonaDto
+    {
+        public int CodigoPersona { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;
+        public string NombreCompleto { get { return $"{Nombre.Trim()} {Apellido.Trim()}"; } }
+    }
+
     public class ListPersonasDto
 	{
         public int CodigoPersona { get; set; }

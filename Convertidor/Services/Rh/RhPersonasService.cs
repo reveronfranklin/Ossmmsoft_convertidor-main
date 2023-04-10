@@ -56,6 +56,25 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<List<ListSimplePersonaDto>> GetAllSimple()
+        {
+            try
+            {
+                var personas = await _repository.GetAll();
+
+                var result = MapListSimplePersonasDto(personas);
+
+
+                return (List<ListSimplePersonaDto>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+       
 
         public async Task<ListPersonasDto> GetByCodigoPersona(int codigoPersona)
         {
@@ -170,6 +189,35 @@ namespace Convertidor.Data.Repository.Rh
 
             }
             return result;
+
+
+
+        }
+
+
+        public List<ListSimplePersonaDto> MapListSimplePersonasDto(List<RH_PERSONAS> dtos)
+        {
+            List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
+
+            foreach (var item in dtos)
+            {
+
+                ListSimplePersonaDto itemResult = new ListSimplePersonaDto();
+
+
+
+                itemResult.CodigoPersona = item.CODIGO_PERSONA;
+                
+                itemResult.Nombre = item.NOMBRE;
+                itemResult.Apellido = item.APELLIDO;
+             
+
+
+                result.Add(itemResult);
+
+
+            }
+            return result.OrderBy(p=>p.NombreCompleto).ToList();
 
 
 
