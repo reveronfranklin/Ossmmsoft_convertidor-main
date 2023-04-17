@@ -16,8 +16,9 @@ namespace Convertidor.Data
         public DbSet<PRE_V_SALDOS> PRE_V_SALDOS { get; set; }
         public DbSet<PRE_V_DENOMINACION_PUC> PRE_V_DENOMINACION_PUC { get; set; }
         public DbSet<PRE_V_DENOMINACION_ICP_PUC> PRE_V_DENOMINACION_ICP_PUC { get; set; }
+        public DbSet<PRE_V_MTR_DENOMINACION_PUC> PRE_V_MTR_DENOMINACION_PUC { get; set; }
+        public DbSet<PRE_V_MTR_UNIDAD_EJECUTORA> PRE_V_MTR_UNIDAD_EJECUTORA { get; set; }
         
-
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,6 +38,16 @@ namespace Convertidor.Data
                 builder.HasNoKey();
                 builder.ToTable("PRE_V_DENOMINACION_PUC");
             })
+              .Entity<PRE_V_MTR_DENOMINACION_PUC>(builder =>
+              {
+                  builder.HasNoKey();
+                  builder.ToTable("PRE_V_MTR_DENOMINACION_PUC");
+              })
+             .Entity<PRE_V_MTR_UNIDAD_EJECUTORA>(builder =>
+             {
+                 builder.HasNoKey();
+                 builder.ToTable("PRE_V_MTR_UNIDAD_EJECUTORA");
+             })
             .Entity<PRE_V_DENOMINACION_ICP_PUC>(builder =>
             {
                 builder.HasNoKey();

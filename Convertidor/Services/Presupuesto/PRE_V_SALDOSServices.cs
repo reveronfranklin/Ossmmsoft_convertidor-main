@@ -28,8 +28,62 @@ namespace Convertidor.Services.Presupuesto
 
             _mapper = mapper;
         }
+        
+        public async Task<ResultDto<List<PreVSaldosGetDto>>> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter)
+        {
+            var presupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
+            //await _repository.RecalcularSaldo(presupuesto.CODIGO_PRESUPUESTO);
+            if (filter.CodigoPresupuesto == 0) filter.CodigoPresupuesto = presupuesto.CODIGO_PRESUPUESTO;
+            ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
+            try
+            {
+                var preVSaldos = await _repository.GetAllByPresupuesto(filter.CodigoPresupuesto);
+                if (preVSaldos.Count() > 0)
+                {
+                    if (filter.CodigoIPC>0) {
+                        preVSaldos = preVSaldos.Where(x => x.CODIGO_ICP == filter.CodigoIPC).ToList();
+                    }
+                    if (filter.CodigoPuc > 0)
+                    {
+                        preVSaldos = preVSaldos.Where(x => x.CODIGO_PUC == filter.CodigoPuc).ToList();
+                    }
+                    List<PreVSaldosGetDto> resultList = new List<PreVSaldosGetDto>();
+                    foreach (var item in preVSaldos)
+                    {
 
-       
+                        resultList.Add(MapPRE_V_SADOSTOPreVSaldosGetDto(item));
+                    }
+
+
+                 
+
+                    result.Data = resultList;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+
+
+        }
+
         public async Task<ResultDto<List<PreVSaldosGetDto>>> GetAll(FilterPRE_V_SALDOSDto filter)
         {
             var presupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();

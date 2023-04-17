@@ -71,6 +71,52 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<ResultDto<List<ListPresupuestoDto>>> GetListPresupuesto()
+        {
+
+            ResultDto<List<ListPresupuestoDto>> result = new ResultDto<List<ListPresupuestoDto>>(null);
+            try
+            {
+                var presupuesto = await _repository.GetAll();
+                if (presupuesto.Count() > 0)
+                {
+                    List<ListPresupuestoDto> listDto = new List<ListPresupuestoDto>();
+
+                    foreach (var item in presupuesto.OrderByDescending(x => x.FECHA_HASTA).ToList())
+                    {
+                        ListPresupuestoDto dto = new ListPresupuestoDto();
+                        dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+                        dto.Descripcion = item.DENOMINACION;
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
         public async Task<ResultDto<List<GetPRE_PRESUPUESTOSDto>>> GetAll(FilterPRE_PRESUPUESTOSDto filter)
         {
 

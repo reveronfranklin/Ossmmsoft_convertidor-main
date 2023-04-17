@@ -40,10 +40,22 @@ namespace Convertidor.Controllers
             FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
             filter.CodigoEmpresa = 13;
             filter.CodigoEmpresa = 0;
-            filter.SearchText = "";
+            filter.SearchText = ""; 
 
             var result = await _prePresupuestoService.GetAll(filter);
             return Ok(result.Data);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetListPresupuesto()
+        {
+          
+
+            var result = await _prePresupuestoService.GetListPresupuesto();
+            return Ok(result.Data);
+
+
         }
 
 

@@ -18,5 +18,14 @@ namespace Convertidor.Dtos.Presupuesto
        
 
     }
+    public class FilterPresupuestoIpcPuc
+    {
+
+        public int CodigoPresupuesto{ get; set; }
+        public int CodigoIPC { get; set; }
+        public int CodigoPuc { get; set; }
+    }
+
+
 }
 

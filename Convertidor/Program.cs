@@ -23,6 +23,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Services.Rh;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,10 @@ builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
 builder.Services.AddTransient<IPRE_PRESUPUESTOSService, PRE_PRESUPUESTOSService>();
 builder.Services.AddTransient<IPRE_V_SALDOSServices, PRE_V_SALDOSServices>();
 builder.Services.AddTransient<IPRE_V_DENOMINACION_PUCServices, PRE_V_DENOMINACION_PUCServices>();
+builder.Services.AddTransient<IPRE_V_MTR_DENOMINACION_PUCRepository, PRE_V_MTR_DENOMINACION_PUCRepository>();
+builder.Services.AddTransient<IPRE_V_MTR_DENOMINACION_PUCService, PRE_V_MTR_DENOMINACION_PUCService>();
+builder.Services.AddTransient<IPRE_V_MTR_UNIDAD_EJECUTORARepository, PRE_V_MTR_UNIDAD_EJECUTORARepository>();
+builder.Services.AddTransient<IPRE_V_MTR_UNIDAD_EJECUTORAService, PRE_V_MTR_UNIDAD_EJECUTORAService>();
 
 
 
@@ -127,6 +132,7 @@ builder.Services.AddSwaggerGen(options =>
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionRH");
 builder.Services.AddDbContext<DataContext>(options =>
       options.UseOracle(connectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
@@ -179,6 +185,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 //using (var scope = app.Services.CreateScope())
 //{

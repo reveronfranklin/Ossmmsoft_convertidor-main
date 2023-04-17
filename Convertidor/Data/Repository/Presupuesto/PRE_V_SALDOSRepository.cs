@@ -74,6 +74,23 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+
+        public async Task<List<PRE_V_SALDOS>> GetAllByPresupuesto(int codigoPresupuesto)
+        {
+            try
+            {
+
+                var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PRESUPUESTO== codigoPresupuesto).ToListAsync();
+                return (List<PRE_V_SALDOS>)result;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+
+        }
     }
 }
 
