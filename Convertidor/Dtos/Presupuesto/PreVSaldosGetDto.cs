@@ -37,7 +37,7 @@ namespace Convertidor.Dtos.Presupuesto
         public decimal Vigente { get; set; }
         public decimal Comprometido { get; set; }
         public decimal PorComprometido { get; set; }
-        public decimal Disponoble { get; set; }
+        public decimal Disponible { get; set; }
         public decimal Causado { get; set; }
         public decimal PorCausado { get; set; }
         public decimal Pagado { get; set; }
@@ -45,7 +45,11 @@ namespace Convertidor.Dtos.Presupuesto
         public int CodigoEmpresa { get; set; }
         public int CodigoPresupuesto { get; set; }
         public DateTime FechaSolicitud { get; set; }
-    
-	}
+        public string PresupuestadoFormat { get { return Presupuestado.ToString("C2"); } }
+        public string DisponibleFormat { get { return Disponible.ToString("C2"); } }
+
+
+
+    }
 }
 

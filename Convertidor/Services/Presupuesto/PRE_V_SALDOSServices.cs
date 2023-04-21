@@ -174,7 +174,7 @@ namespace Convertidor.Services.Presupuesto
             dto.Vigente=entity.VIGENTE;
             dto.Comprometido=entity.COMPROMETIDO;
             dto.PorComprometido=entity.POR_COMPROMETIDO;
-            dto.Disponoble=entity.DISPONIBLE;
+            dto.Disponible=entity.DISPONIBLE;
             dto.Causado=entity.CAUSADO;
             dto.PorCausado=entity.POR_CAUSADO;
             dto.Pagado=entity.PAGADO;
