@@ -7,7 +7,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
 	{
 
         Task<List<PRE_V_MTR_UNIDAD_EJECUTORA>> GetAll();
-
+        Task<List<PRE_V_MTR_UNIDAD_EJECUTORA>> GetAllByPresupuesto(int codigoPresupuesto);
 
     }
 }

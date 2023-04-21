@@ -7,7 +7,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
 	{
 
         Task<List<PRE_V_MTR_DENOMINACION_PUC>> GetAll();
-
+        Task<List<PRE_V_MTR_DENOMINACION_PUC>> GetByCodigoPresupuesto(int codigoPresupuesto);
     }
 }
 

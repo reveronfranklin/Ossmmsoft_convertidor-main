@@ -7,6 +7,7 @@ namespace Convertidor.Services.Presupuesto
     {
 
         Task<List<ListPreMtrUnidadEjecutora>> GetAll();
+        Task<List<ListPreMtrUnidadEjecutora>> GetAllByPresupuesto(int codigoPresupuesto);
 
     }
 }

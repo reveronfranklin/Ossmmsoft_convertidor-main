@@ -205,7 +205,7 @@ namespace Convertidor.Data.Repository.Sis
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires:DateTime.Now.AddMinutes(5),
+                expires:DateTime.Now.AddDays(30),
                 signingCredentials:cred
                 );
 

@@ -42,8 +42,14 @@ namespace Convertidor.Controllers
             var result = await _service.GetAll();
             return Ok(result);
         }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByPresupuesto(FilterByPresupuestoDto filter)
+        {
+            var result = await _service.GetAllByPresupuesto(filter.CodigoPresupuesto);
+            return Ok(result);
+        }
 
-       
 
 
     }

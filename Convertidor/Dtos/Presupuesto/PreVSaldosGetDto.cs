@@ -10,7 +10,7 @@ namespace Convertidor.Dtos.Presupuesto
         public int FinanciadoId { get; set; }
         public int CodigoFinanciado { get; set; }
         public string DescripcionFinanciado { get; set; } = string.Empty;
-        public int CodigiIcp { get; set; }
+        public int CodigoIcp { get; set; }
         public string CodigoSector { get; set; } = string.Empty;
         public string CodigoPrograma { get; set; } = string.Empty;
         public string CodigoSubPrograma { get; set; } = string.Empty;

@@ -7,6 +7,8 @@ namespace Convertidor.Services.Presupuesto
 	{
 
         Task<List<ListPreMtrDenominacionPuc>> GetAll();
+        Task<List<ListPreMtrDenominacionPuc>> GetAllByPresupuesto(int codigoPresupuesto);
+        
 
     }
 }

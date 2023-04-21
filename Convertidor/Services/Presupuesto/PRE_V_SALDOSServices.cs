@@ -147,7 +147,7 @@ namespace Convertidor.Services.Presupuesto
             dto.FinanciadoId=entity.FINANCIADO_ID;
             dto.CodigoFinanciado=entity.CODIGO_FINANCIADO;
             dto.DescripcionFinanciado=entity.DESCRIPCION_FINANCIADO;
-            dto.CodigiIcp=entity.CODIGO_ICP;
+            dto.CodigoIcp=entity.CODIGO_ICP;
             dto.CodigoSector=entity.CODIGO_SECTOR;
             dto.CodigoPrograma=entity.CODIGO_PROGRAMA;
             dto.CodigoSubPrograma=entity.CODIGO_SUBPROGRAMA;

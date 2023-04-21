@@ -30,6 +30,21 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+        public async Task<List<PRE_V_MTR_DENOMINACION_PUC>> GetByCodigoPresupuesto(int codigoPresupuesto)
+        {
+            try
+            {
+
+                var result = await _context.PRE_V_MTR_DENOMINACION_PUC.DefaultIfEmpty().Where(x=>x.CODIGO_PRESUPUESTO== codigoPresupuesto).ToListAsync();
+                return (List<PRE_V_MTR_DENOMINACION_PUC>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
 
 
     }

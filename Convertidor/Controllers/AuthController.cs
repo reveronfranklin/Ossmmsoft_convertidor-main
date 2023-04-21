@@ -128,7 +128,7 @@ namespace Convertidor.Controllers
             {
                 Refresh_Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
                 Token = token,
-                Expires = DateTime.Now.AddMinutes(5),
+                Expires = DateTime.Now.AddDays(30),
                 Created = DateTime.Now,
                 Login= userName
             };

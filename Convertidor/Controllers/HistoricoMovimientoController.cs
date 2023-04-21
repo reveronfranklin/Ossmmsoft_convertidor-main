@@ -109,12 +109,6 @@ namespace Convertidor.Controllers
          
 
 
-
-         
-
-    
-
-
             if (result.Count() > 0)
             {
 

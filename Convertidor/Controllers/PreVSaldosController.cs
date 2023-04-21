@@ -11,6 +11,7 @@ using IronPdf;
 using Convertidor.Dtos;
 using Convertidor.Services.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using Ganss.Excel;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,14 +24,14 @@ namespace Convertidor.Controllers
        
         private readonly IPRE_V_SALDOSServices _service;
         private readonly IPRE_V_DENOMINACION_PUCServices _preVSaldosDenominacionPucServices;
-        
+        private readonly IConfiguration _configuration;
 
-        public PreVSaldosController(IPRE_V_SALDOSServices service, IPRE_V_DENOMINACION_PUCServices preVSaldosDenominacionPucServices)
+        public PreVSaldosController(IPRE_V_SALDOSServices service, IPRE_V_DENOMINACION_PUCServices preVSaldosDenominacionPucServices, IConfiguration configuration)
         {
 
             _service = service;
             _preVSaldosDenominacionPucServices = preVSaldosDenominacionPucServices;
-
+            _configuration = configuration;
 
         }
 
@@ -59,6 +60,32 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter)
         {
             var result = await _service.GetAllByPresupuestoIpcPuc(filter);
+            if (result.Data.Count() > 0)
+            {
+
+                ExcelMapper mapper = new ExcelMapper();
+
+
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+                var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+                var fileName = $"SaldoPresupuesto {filter.CodigoPresupuesto.ToString()}-{filter.CodigoIPC.ToString()}-{filter.CodigoPuc.ToString()}.xlsx";
+                string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+
+
+                mapper.Save(newFile, result.Data, $"SaldoPresupuesto", true);
+
+                result.LinkData = $"/ExcelFiles/{fileName}";
+            }
+            else
+            {
+
+                result.IsValid = true;
+                result.Message = "No Data";
+                result.LinkData = $"";
+            }
+
             return Ok(result);
         }
         
