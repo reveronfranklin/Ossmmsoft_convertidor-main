@@ -9,6 +9,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<IEnumerable<PRE_V_SALDOS>> GetAll(FilterPRE_V_SALDOSDto filter);
         Task RecalcularSaldo(int codigo_presupuesto);
         Task<List<PRE_V_SALDOS>> GetAllByPresupuesto(int codigoPresupuesto);
+        Task<List<PRE_V_SALDOS>> GetAllByPresupuestoPucConcat(FilterPresupuestoPucConcat filter);
     }
 }
 

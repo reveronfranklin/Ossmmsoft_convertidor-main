@@ -51,7 +51,7 @@ namespace Convertidor.Services.Presupuesto
                     foreach (var item in preVSaldos)
                     {
 
-                        resultList.Add(MapPRE_V_SADOSTOPreVSaldosGetDto(item));
+                        resultList.Add(await MapPRE_V_SADOSTOPreVSaldosGetDto(item));
                     }
 
 
@@ -100,7 +100,7 @@ namespace Convertidor.Services.Presupuesto
                     foreach (var item in pRE_V_SALDOs)
                     {
 
-                        resultList.Add(MapPRE_V_SADOSTOPreVSaldosGetDto(item));
+                        resultList.Add(await MapPRE_V_SADOSTOPreVSaldosGetDto(item));
                     }
 
 
@@ -139,7 +139,7 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public PreVSaldosGetDto MapPRE_V_SADOSTOPreVSaldosGetDto(PRE_V_SALDOS entity)
+        public async Task<PreVSaldosGetDto> MapPRE_V_SADOSTOPreVSaldosGetDto(PRE_V_SALDOS entity)
         {
             PreVSaldosGetDto dto = new PreVSaldosGetDto();
             dto.CodigoSaldo=entity.CODIGO_SALDO;
@@ -160,7 +160,7 @@ namespace Convertidor.Services.Presupuesto
             dto.CodigoPuc=entity.CODIGO_PUC;
             dto.CodigoGrupo=entity.CODIGO_GRUPO;
             dto.CodigoPartida=entity.CODIGO_PARTIDA;
-            dto.Codigogenerica=entity.CODIGO_GENERICA;
+            dto.CodigoGenerica=entity.CODIGO_GENERICA;
             dto.CodigoEspecifica=entity.CODIGO_ESPECIFICA;
             dto.CodigoSubEspecifica=entity.CODIGO_SUBESPECIFICA;
             dto.CodigoNivel5=entity.CODIGO_NIVEL5;
@@ -182,11 +182,142 @@ namespace Convertidor.Services.Presupuesto
             dto.CodigoEmpresa=entity.CODIGO_EMPRESA;
             dto.CodigoPresupuesto=entity.CODIGO_PRESUPUESTO;
             dto.FechaSolicitud=entity.FECHA_SOLICITUD;
+            var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(dto.CodigoEmpresa,dto.CodigoPresupuesto);
+            if (presupuesto != null)
+            {
+                dto.DescripcionPresupuesto = presupuesto.DENOMINACION;
+            }
+            else
+            {
+                dto.DescripcionPresupuesto = "";
+            }
+            
 
 
             return dto;
 
 
+        }
+
+
+        public async Task<ResultDto<List<PreSaldoPorPartidaGetDto>>> GetAllByPresupuestoPucConcat(FilterPresupuestoPucConcat filter)
+        {
+            ResultDto<List<PreSaldoPorPartidaGetDto>> result = new ResultDto<List<PreSaldoPorPartidaGetDto>>(null);
+            try
+            {
+              
+                var pRE_V_SALDOs = await _repository.GetAllByPresupuestoPucConcat(filter);
+                if (pRE_V_SALDOs.Count() > 0)
+                {
+
+                    var q = from s in pRE_V_SALDOs.OrderBy(x => x.CODIGO_SALDO).ToList()
+                            group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO, CodigoPucConcat= s.CODIGO_PUC_CONCAT, DescripcionFinanciado =s.DESCRIPCION_FINANCIADO} into g
+                            select new {
+                                g.Key.CodigoPresupuesto,
+                                g.Key.CodigoPucConcat,
+                                g.Key.DescripcionFinanciado,
+                                Presupuestado = g.Sum(s => s.PRESUPUESTADO),
+                                Asignacion = g.Sum(s => s.ASIGNACION),
+                                Modificado = g.Sum(s => s.MODIFICADO),
+                                Bloqueado = g.Sum(s => s.BLOQUEADO),
+                                Comprometido = g.Sum(s => s.COMPROMETIDO),
+                                Causado = g.Sum(s => s.CAUSADO),
+                                Pagado = g.Sum(s => s.PAGADO)
+                            };
+                   
+
+                    List<PreSaldoPorPartidaGetDto> resultList = new List<PreSaldoPorPartidaGetDto>();
+                    var id = 0;
+                    decimal Presupuestado=0;
+                    decimal Asignacion = 0;
+                    decimal Modificado =0;
+                    decimal Bloqueado =0;
+                    decimal Comprometido =0 ;
+                    decimal Causado =0;
+                    decimal Pagado =0;
+                    foreach (var item in q.ToList())
+                    {
+                            id++;
+                            PreSaldoPorPartidaGetDto dto = new PreSaldoPorPartidaGetDto();
+                            dto.Id = id; ;
+                            dto.CodigoPresupuesto = item.CodigoPresupuesto;
+                            dto.CodigoPucConcat = item.CodigoPucConcat;
+                            dto.DescripcionFinanciado = item.DescripcionFinanciado;
+                            dto.Presupuestado = item.Presupuestado;
+                            dto.Asignacion = item.Asignacion;
+                            dto.Modificado = item.Modificado;
+                            dto.Bloqueado = item.Bloqueado;
+                            dto.Comprometido = item.Comprometido;
+                            dto.Causado = item.Causado;
+                            dto.Pagado = item.Pagado;
+                            Presupuestado = Presupuestado + item.Presupuestado;
+                            Asignacion = Asignacion + item.Asignacion;
+                            Modificado = Modificado + item.Modificado;
+                            Bloqueado = Bloqueado + item.Bloqueado;
+                            Comprometido = Comprometido + item.Comprometido;
+                            Causado = Causado + item.Causado;
+                            Pagado = Pagado + item.Pagado;
+
+
+
+                        resultList.Add(dto);
+                       
+                        
+                    }
+
+
+                    if (resultList.Count() > 0)
+                    {
+                        var totalExists = resultList.Where(x => x.DescripcionFinanciado == "TOTAL:").FirstOrDefault();
+                        if (totalExists == null)
+                        {
+                            id++;
+                            PreSaldoPorPartidaGetDto dtoTotal = new PreSaldoPorPartidaGetDto();
+                            dtoTotal.Id = -1 ;
+                            dtoTotal.CodigoPresupuesto = filter.CodigoPresupuesto;
+                            dtoTotal.CodigoPucConcat = filter.CodigoPucConcat;
+                            dtoTotal.DescripcionFinanciado = "TOTAL:";
+                            dtoTotal.Presupuestado = Presupuestado;
+                            dtoTotal.Asignacion = Asignacion;
+                            dtoTotal.Modificado = Modificado;
+                            dtoTotal.Bloqueado = Bloqueado;
+                            dtoTotal.Comprometido = Comprometido;
+                            dtoTotal.Causado = Causado;
+                            dtoTotal.Pagado = Pagado;
+
+                            resultList.Add(dtoTotal);
+                        }
+
+                        
+                    }
+                   
+
+
+
+
+                    result.Data = resultList.OrderBy(x=>x.Id).ToList();
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
         }
 
     }

@@ -91,6 +91,25 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+
+        public async Task<List<PRE_V_SALDOS>> GetAllByPresupuestoPucConcat(FilterPresupuestoPucConcat filter)
+        {
+            try
+            {
+
+                var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.CODIGO_PUC_CONCAT==filter.CodigoPucConcat).ToListAsync();
+                return (List<PRE_V_SALDOS>)result;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+
+        }
+
+        
     }
 }
 

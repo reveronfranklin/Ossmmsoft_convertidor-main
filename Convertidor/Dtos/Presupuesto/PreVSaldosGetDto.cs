@@ -23,7 +23,7 @@ namespace Convertidor.Dtos.Presupuesto
         public int CodigoPuc { get; set; }
         public string CodigoGrupo { get; set; } = string.Empty;
         public string CodigoPartida { get; set; } = string.Empty;
-        public string Codigogenerica { get; set; } = string.Empty;
+        public string CodigoGenerica { get; set; } = string.Empty;
         public string CodigoEspecifica { get; set; } = string.Empty;
         public string CodigoSubEspecifica { get; set; } = string.Empty;
         public string CodigoNivel5 { get; set; } = string.Empty;
@@ -44,11 +44,18 @@ namespace Convertidor.Dtos.Presupuesto
         public decimal PorPagado { get; set; }
         public int CodigoEmpresa { get; set; }
         public int CodigoPresupuesto { get; set; }
+        public string DescripcionPresupuesto { get; set; } = string.Empty;
         public DateTime FechaSolicitud { get; set; }
         public string PresupuestadoFormat { get { return Presupuestado.ToString("C2"); } }
         public string DisponibleFormat { get { return Disponible.ToString("C2"); } }
-
-
+        public string AsignacionFormat { get { return Asignacion.ToString("C2"); } }
+        public string BloqueadoFormat { get { return Bloqueado.ToString("C2"); } }
+        public string ModificadoFormat { get { return Modificado.ToString("C2"); } }
+        public string AjustadoFormat { get { return Ajustado.ToString("C2"); } }
+        public string VigenteFormat { get { return Vigente.ToString("C2"); } }
+        public string ComprometidoFormat { get { return Comprometido.ToString("C2"); } }
+        public string CausadoFormat { get { return Causado.ToString("C2"); } }
+        public string PagadoFormat { get { return Pagado.ToString("C2"); } }
 
     }
 }

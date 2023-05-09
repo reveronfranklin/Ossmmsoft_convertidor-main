@@ -45,14 +45,11 @@ builder.Services.AddTransient<IPRE_PRESUPUESTOSRepository, PRE_PRESUPUESTOSRepos
 builder.Services.AddTransient<IPRE_INDICE_CAT_PRGRepository, PRE_INDICE_CAT_PRGRepository>();
 builder.Services.AddTransient<IPRE_V_SALDOSRepository, PRE_V_SALDOSRepository>();
 builder.Services.AddTransient<IPRE_V_DENOMINACION_PUCRepository, PRE_V_DENOMINACION_PUCRepository>();
-
-//Repository SIS
-
-builder.Services.AddTransient<ISisUsuarioRepository, SisUsuarioRepository>();
-//Services Sis
-builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
-
-
+builder.Services.AddTransient<IPRE_V_DOC_COMPROMISOSRepository, PRE_V_DOC_COMPROMISOSRepository>();
+builder.Services.AddTransient<IPRE_V_DOC_CAUSADORepository, PRE_V_DOC_CAUSADORepository>();
+builder.Services.AddTransient<IPRE_V_DOC_PAGADORepository, PRE_V_DOC_PAGADORepository>();
+builder.Services.AddTransient<IPRE_V_DOC_BLOQUEADORepository, PRE_V_DOC_BLOQUEADORepository>();
+builder.Services.AddTransient<IPRE_V_DOC_MODIFICADORepository, PRE_V_DOC_MODIFICADORepository>();
 
 //Services Presupuesto
 builder.Services.AddTransient<IPRE_PRESUPUESTOSService, PRE_PRESUPUESTOSService>();
@@ -62,6 +59,21 @@ builder.Services.AddTransient<IPRE_V_MTR_DENOMINACION_PUCRepository, PRE_V_MTR_D
 builder.Services.AddTransient<IPRE_V_MTR_DENOMINACION_PUCService, PRE_V_MTR_DENOMINACION_PUCService>();
 builder.Services.AddTransient<IPRE_V_MTR_UNIDAD_EJECUTORARepository, PRE_V_MTR_UNIDAD_EJECUTORARepository>();
 builder.Services.AddTransient<IPRE_V_MTR_UNIDAD_EJECUTORAService, PRE_V_MTR_UNIDAD_EJECUTORAService>();
+builder.Services.AddTransient<IPRE_V_DOC_COMPROMISOSServices, PRE_V_DOC_COMPROMISOSServices>();
+builder.Services.AddTransient<IPRE_V_DOC_CAUSADOServices, PRE_V_DOC_CAUSADOServices>();
+builder.Services.AddTransient<IPRE_V_DOC_PAGADOServices, PRE_V_DOC_PAGADOServices>();
+builder.Services.AddTransient<IPRE_V_DOC_BLOQUEADOServices, PRE_V_DOC_BLOQUEADOServices>();
+builder.Services.AddTransient<IPRE_V_DOC_MODIFICADOServices, PRE_V_DOC_MODIFICADOServices>();
+
+
+//Repository SIS
+
+builder.Services.AddTransient<ISisUsuarioRepository, SisUsuarioRepository>();
+//Services Sis
+builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
+
+
+
 
 
 

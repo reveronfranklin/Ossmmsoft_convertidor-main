@@ -18,9 +18,12 @@ namespace Convertidor.Data
         public DbSet<PRE_V_DENOMINACION_ICP_PUC> PRE_V_DENOMINACION_ICP_PUC { get; set; }
         public DbSet<PRE_V_MTR_DENOMINACION_PUC> PRE_V_MTR_DENOMINACION_PUC { get; set; }
         public DbSet<PRE_V_MTR_UNIDAD_EJECUTORA> PRE_V_MTR_UNIDAD_EJECUTORA { get; set; }
+        public DbSet<PRE_V_DOC_COMPROMISOS> PRE_V_DOC_COMPROMISOS { get; set; }
+        public DbSet<PRE_V_DOC_CAUSADO> PRE_V_DOC_CAUSADO { get; set; }
+        public DbSet<PRE_V_DOC_PAGADO> PRE_V_DOC_PAGADO { get; set; }
+        public DbSet<PRE_V_DOC_BLOQUEADO> PRE_V_DOC_BLOQUEADO { get; set; }
+        public DbSet<PRE_V_DOC_MODIFICADO> PRE_V_DOC_MODIFICADO { get; set; } 
         
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
@@ -33,6 +36,31 @@ namespace Convertidor.Data
                 builder.HasNoKey();
                 builder.ToTable("PRE_V_SALDOS");
             })
+            .Entity<PRE_V_DOC_COMPROMISOS>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("PRE_V_DOC_COMPROMISOS");
+            })
+            .Entity<PRE_V_DOC_CAUSADO>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("PRE_V_DOC_CAUSADO");
+            })
+            .Entity<PRE_V_DOC_PAGADO>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("PRE_V_DOC_PAGADO");
+            })
+             .Entity<PRE_V_DOC_BLOQUEADO>(builder =>
+             {
+                 builder.HasNoKey();
+                 builder.ToTable("PRE_V_DOC_BLOQUEADO");
+             })
+              .Entity<PRE_V_DOC_MODIFICADO>(builder =>
+              {
+                  builder.HasNoKey();
+                  builder.ToTable("PRE_V_DOC_MODIFICADO");
+              })
             .Entity<PRE_V_DENOMINACION_PUC>(builder =>
             {
                 builder.HasNoKey();
