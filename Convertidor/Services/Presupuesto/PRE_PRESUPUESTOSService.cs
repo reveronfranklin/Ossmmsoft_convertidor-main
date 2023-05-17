@@ -285,6 +285,17 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
+        public FechaDto GetFechaDto(DateTime fecha)
+        {
+            var FechaDesdeObj = new FechaDto();
+            FechaDesdeObj.Year = fecha.Year.ToString();
+            string month = "00" + fecha.Month.ToString();
+            string day = "00" + fecha.Day.ToString();
+            FechaDesdeObj.Month = month.Substring(month.Length - 2);
+            FechaDesdeObj.Day = day.Substring(month.Length - 2);
+    
+            return FechaDesdeObj;
+        }
 
         public async Task<GetPRE_PRESUPUESTOSDto> MapPrePresupuestoToGetPrePresupuestoDto(PRE_PRESUPUESTOS entity)
         {
@@ -294,8 +305,29 @@ namespace Convertidor.Services.Presupuesto
             dto.Descripcion = entity.DESCRIPCION ?? "";
             dto.Ano = entity.ANO;
             dto.MontoPresupuesto = entity.MONTO_PRESUPUESTO;
-            dto.FechaDesde = entity.FECHA_DESDE;
-            dto.FechaHasta = entity.FECHA_HASTA;
+            dto.FechaDesde = entity.FECHA_DESDE.ToString("u");          
+            dto.FechaHasta = entity.FECHA_HASTA.ToString("u");  
+            dto.FechaAprobacion= entity.FECHA_APROBACION.ToString("u");
+            dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
+
+            dto.FechaOrdenanza = entity.FECHA_ORDENANZA.ToString("u");
+
+            FechaDto FechaDesdeObj = GetFechaDto(entity.FECHA_DESDE);
+            dto.FechaDesdeObj = (FechaDto)FechaDesdeObj;
+
+            FechaDto FechaHastaObj = GetFechaDto(entity.FECHA_HASTA);
+            dto.FechaHastaObj = (FechaDto)FechaHastaObj;
+
+            FechaDto FechaAprobacionObj = GetFechaDto(entity.FECHA_APROBACION);
+            dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
+
+            FechaDto FechaOrdenanzaObj = GetFechaDto(entity.FECHA_ORDENANZA);
+            dto.FechaOrdenanzaObj = (FechaDto)FechaOrdenanzaObj;
+       
+
+            dto.Extra1 = entity.EXTRA1;
+            dto.Extra2 = entity.EXTRA2;
+            dto.Extra2 = entity.EXTRA3;
             dto.TotalPresupuesto = 0;
             dto.TotalDisponible = 0;
             dto.TotalPresupuestoString = "";
