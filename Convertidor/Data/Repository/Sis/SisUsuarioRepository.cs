@@ -134,7 +134,7 @@ namespace Convertidor.Data.Repository.Sis
                 }
                 else
                 {
-                    if (resultDiario.PASSWORDSTRING == dto.Password)
+                    if (resultDiario.PASSWORDSTRING.ToUpper() == dto.Password.ToUpper())
                     {
                         resultLogin.Message = "";
 
