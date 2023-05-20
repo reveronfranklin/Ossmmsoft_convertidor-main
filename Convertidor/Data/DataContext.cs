@@ -53,7 +53,7 @@ namespace Convertidor.Data
          .Entity<RH_V_HISTORICO_MOVIMIENTOS>(builder =>
          {
              builder.HasNoKey();
-             builder.ToTable("RH_V_HISTORICO_MOVIMIENTOS");
+             builder.ToTable("RH_V_HISTORICO_MOVIMIENTOS_ALL");
          });
             modelBuilder
         .Entity<RH_PERIODOS>(builder =>
