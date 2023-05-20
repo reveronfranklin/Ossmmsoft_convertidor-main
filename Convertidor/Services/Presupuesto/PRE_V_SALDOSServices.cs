@@ -32,7 +32,7 @@ namespace Convertidor.Services.Presupuesto
         public async Task<ResultDto<List<PreVSaldosGetDto>>> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter)
         {
             var presupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
-            //await _repository.RecalcularSaldo(presupuesto.CODIGO_PRESUPUESTO);
+            await _repository.RecalcularSaldo(presupuesto.CODIGO_PRESUPUESTO);
             if (filter.CodigoPresupuesto == 0) filter.CodigoPresupuesto = presupuesto.CODIGO_PRESUPUESTO;
             ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
             try

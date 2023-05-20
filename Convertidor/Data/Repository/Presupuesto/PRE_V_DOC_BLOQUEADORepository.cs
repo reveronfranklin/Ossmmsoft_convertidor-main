@@ -23,7 +23,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             {
 
                 var result = await _context.PRE_V_DOC_BLOQUEADO.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.CODIGO_SALDO >= filter.CodigoSaldo ).ToListAsync();
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.CODIGO_SALDO == filter.CodigoSaldo ).ToListAsync();
                 return result;
             }
             catch (Exception ex)
