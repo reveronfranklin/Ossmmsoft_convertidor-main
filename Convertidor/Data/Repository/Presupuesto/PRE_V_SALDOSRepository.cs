@@ -24,7 +24,15 @@ namespace Convertidor.Data.Repository.Presupuesto
         public async Task RecalcularSaldo(int codigo_presupuesto)
         {
 
-            // var codigo_presupuestoP = new SqlParameter("@Codigo_Presupuesto", codigo_presupuesto);
+            var presupuestoActual = await _context.PRE_V_SALDOS.DefaultIfEmpty().OrderByDescending(x => x.CODIGO_PRESUPUESTO).FirstOrDefaultAsync();
+            if (presupuestoActual!=null)
+            {
+                if (codigo_presupuesto != (int)presupuestoActual.CODIGO_PRESUPUESTO)
+                {
+                    return;
+                }
+            }
+           
 
 
             var parameters = new OracleParameter[]
@@ -37,7 +45,7 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
                 FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
-                var result = _context.Database.ExecuteSqlInterpolated(xquery);
+                        var result = _context.Database.ExecuteSqlInterpolated(xquery);
 
                 FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_CREATE_SALDOS_DIARIOS({DateTime.Now},{codigo_presupuesto});\nEND;";
 

@@ -357,28 +357,50 @@ namespace Convertidor.Services.Presupuesto
                     itemPreDenominacionPuc.Deuda = item.DEUDA;
                     itemPreDenominacionPuc.Disponibilidad = item.DISPONIBILIDAD;
                     itemPreDenominacionPuc.DisponibilidadFinan = item.DISPONIBILIDAD_FINAN;
-                    dto.TotalPresupuesto = dto.TotalPresupuesto + (item.PRESUPUESTADO + item.MODIFICADO);
-                    dto.TotalDisponible = dto.TotalDisponible + item.DISPONIBILIDAD;
+                   
                     listpreDenominacionPuc.Add(itemPreDenominacionPuc);
                 }
 
-               // if (dto.TotalPresupuesto > 1000) dto.TotalPresupuesto = dto.TotalPresupuesto / 1000;
+                // if (dto.TotalPresupuesto > 1000) dto.TotalPresupuesto = dto.TotalPresupuesto / 1000;
                 //if (dto.TotalDisponible > 1000) dto.TotalDisponible = dto.TotalDisponible / 1000;
-
-                if (dto.TotalPresupuesto > 0)
-                {
-                    dto.TotalPresupuestoString = dto.TotalPresupuesto.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-                if (dto.TotalDisponible > 0)
-                {
-                    dto.TotalDisponibleString = dto.TotalDisponible.ToString("#,#", CultureInfo.InvariantCulture);
-                }
+             
 
                 dto.PreDenominacionPuc = listpreDenominacionPuc;
 
                 var preDenominacionPucresumen = ResumenePreDenominacionPuc(listpreDenominacionPuc);
                 if (preDenominacionPucresumen.Count > 0) { 
                     dto.PreDenominacionPucResumen = preDenominacionPucresumen;
+                    var resumen = from s in preDenominacionPucresumen.OrderBy(x => x.CodigoPresupuesto).ToList()
+                                  group s by new { CodigoPresupuesto = s.CodigoPresupuesto} into g
+                                  select new
+                                  {
+                                      g.Key.CodigoPresupuesto,
+                                      Presupuestado = g.Sum(s => s.Presupuestado),
+                                      Modificado = g.Sum(s => s.Modificado),
+                                      Comprometido = g.Sum(s => s.Comprometido),
+                                      Causado = g.Sum(s => s.Causado),
+                                      Pagado = g.Sum(s => s.Pagado),
+                                      Deuda = g.Sum(s => s.Deuda),
+                                      Disponibilidad = g.Sum(s => s.Disponibilidad),
+                                      DisponibilidadFinan = g.Sum(s => s.DisponibilidadFinan)
+                                  };
+                    if (resumen!=null)
+                    {
+                        var itemResumen = resumen.FirstOrDefault();
+                        dto.TotalPresupuesto = itemResumen.Presupuestado;
+                        dto.TotalDisponible = itemResumen.Disponibilidad;
+                    }
+                    
+                    if (dto.TotalPresupuesto > 0)
+                    {
+                        dto.TotalPresupuestoString = dto.TotalPresupuesto.ToString("#,#", CultureInfo.InvariantCulture);
+                    }
+                    if (dto.TotalDisponible > 0)
+                    {
+                        dto.TotalDisponibleString = dto.TotalDisponible.ToString("#,#", CultureInfo.InvariantCulture);
+                    }
+
+
                 }
 
 
@@ -393,19 +415,31 @@ namespace Convertidor.Services.Presupuesto
             List<GetPreDenominacionPucResumenAnoDto> result = new List<GetPreDenominacionPucResumenAnoDto>();
             if (dto.Count > 0)
             {
+
+
+                var resumen = from s in dto.OrderBy(x => x.CodigoPresupuesto).ToList()
+                        group s by new { CodigoPresupuesto = s.CodigoPresupuesto, DenominacionPuc = s.DenominacionPuc} into g
+                        select new
+                        {
+                            g.Key.CodigoPresupuesto,
+                            g.Key.DenominacionPuc,
+                          
+                            Presupuestado = g.Sum(s => s.Presupuestado),
+                            Modificado = g.Sum(s => s.Modificado),
+                            Comprometido = g.Sum(s => s.Comprometido),
+                            Causado = g.Sum(s => s.Causado),
+                            Pagado = g.Sum(s => s.Pagado),
+                            Deuda = g.Sum(s => s.Deuda),
+                            Disponibilidad = g.Sum(s => s.Disponibilidad),
+                            DisponibilidadFinan = g.Sum(s => s.DisponibilidadFinan)
+                        };
+
+
                 foreach (var item in dto)
                 {
-
-                    /*var getPreDenominacionPucResumenAnoDto = result
-                                .Where(x => x.AnoSaldo == item.AnoSaldo &&
-                                            x.CodigoPresupuesto == item.CodigoPresupuesto &&
-                                            x.CodigoPartida == item.CodigoPartida &&
-                                            x.CodigoGenerica == item.CodigoGenerica &&
-                                            x.CodigoEspecifica == item.CodigoEspecifica &&
-                                            x.CodigoNivel5 == item.CodigoNivel5).FirstOrDefault();*/
-
                     var getPreDenominacionPucResumenAnoDto = result
-                               .Where(x => x.CodigoPresupuesto == item.CodigoPresupuesto && x.DenominacionPuc==item.DenominacionPuc).FirstOrDefault();
+                               .Where(x => x.CodigoPresupuesto == item.CodigoPresupuesto && x.DenominacionPuc.Trim()==item.DenominacionPuc.Trim()).FirstOrDefault();
+
                     if (getPreDenominacionPucResumenAnoDto == null)
                     {
                         GetPreDenominacionPucResumenAnoDto itemResult = new GetPreDenominacionPucResumenAnoDto();
@@ -417,31 +451,41 @@ namespace Convertidor.Services.Presupuesto
                         itemResult.CodigoSubEspecifica = item.CodigoSubEspecifica;
                         itemResult.CodigoNivel5 = item.CodigoNivel5;
                         itemResult.DenominacionPuc = item.DenominacionPuc;
-                        itemResult.Presupuestado = item.Presupuestado;
-                        itemResult.Modificado = item.Modificado;
-                        itemResult.Comprometido = item.Comprometido;
-                        itemResult.Causado = item.Causado;
-                        itemResult.Pagado = item.Pagado;
-                        itemResult.Deuda = item.Deuda;
-                        itemResult.Disponibilidad = item.Disponibilidad;
-                        itemResult.DisponibilidadFinan = item.DisponibilidadFinan;
+
+                        itemResult.Presupuestado = 0;
+                        itemResult.Modificado = 0;
+                        itemResult.Comprometido = 0;
+                        itemResult.Causado = 0;
+                        itemResult.Pagado =0;
+                        itemResult.Deuda = 0;
+                        itemResult.Disponibilidad = 0;
+                        itemResult.DisponibilidadFinan = 0;
 
                         result.Add(itemResult);
 
-                    }
-                    else
-                    {
-                        getPreDenominacionPucResumenAnoDto.Presupuestado += item.Presupuestado;
-                        getPreDenominacionPucResumenAnoDto.Modificado += item.Modificado;
-                        getPreDenominacionPucResumenAnoDto.Comprometido += item.Comprometido;
-                        getPreDenominacionPucResumenAnoDto.Causado += item.Causado;
-                        getPreDenominacionPucResumenAnoDto.Pagado += item.Pagado;
-                        getPreDenominacionPucResumenAnoDto.Deuda += item.Deuda;
-                        getPreDenominacionPucResumenAnoDto.Disponibilidad += item.Disponibilidad;
-                        getPreDenominacionPucResumenAnoDto.DisponibilidadFinan += item.DisponibilidadFinan;
-                    }
+                    }             
 
                 }
+
+                foreach (var item in result)
+                {
+                    var getItem = resumen
+                              .Where(x => x.CodigoPresupuesto == item.CodigoPresupuesto && x.DenominacionPuc.Trim() == item.DenominacionPuc.Trim()).FirstOrDefault();
+
+                    if(getItem != null)
+                    {
+                        item.Presupuestado += getItem.Presupuestado;
+                        item.Modificado += getItem.Modificado;
+                        item.Comprometido += getItem.Comprometido;
+                        item.Causado += getItem.Causado;
+                        item.Pagado += getItem.Pagado;
+                        item.Deuda += getItem.Deuda;
+                        item.Disponibilidad += getItem.Disponibilidad;
+                        item.DisponibilidadFinan += getItem.DisponibilidadFinan;
+                    }
+                }
+             
+                
 
             }
 
