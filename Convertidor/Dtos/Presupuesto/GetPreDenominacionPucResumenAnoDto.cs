@@ -28,17 +28,24 @@ namespace Convertidor.Dtos.Presupuesto
         public string DisponibilidadString { get { return ConvertMoneda(Disponibilidad); } }
         public string DisponibilidadFinanString { get { return ConvertMoneda(DisponibilidadFinan); } }
 
+      
+
+
 
         public string ConvertMoneda(decimal value)
         {
-            string result = string.Empty;
-            if (value > 100)
+            string literal = "";
+            if (Pagado == 0)
             {
-                value = value / 1000;
+                literal = "Bs. 0,0";
             }
-            result = value.ToString("#,#", CultureInfo.InvariantCulture);
+            else
+            {
+                literal = "Bs. " + Pagado.ToString("#,#", CultureInfo.InvariantCulture);
+            }
 
-            return $"{ result} k";
+
+            return literal;
         }
 
 

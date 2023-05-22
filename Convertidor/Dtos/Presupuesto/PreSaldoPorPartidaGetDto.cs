@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+
 namespace Convertidor.Dtos.Presupuesto
 {
 	public class PreSaldoPorPartidaGetDto
@@ -14,13 +16,85 @@ namespace Convertidor.Dtos.Presupuesto
         public decimal Comprometido { get; set; }
         public decimal Causado { get; set; }
         public decimal Pagado { get; set; }
-        public string PresupuestadoFormat { get { return Presupuestado.ToString("C2"); } }       
-        public string AsignacionFormat { get { return Asignacion.ToString("C2"); } }
-        public string ModificadoFormat { get { return Modificado.ToString("C2"); } }
-        public string BloqueadoFormat { get { return Bloqueado.ToString("C2"); } }
-        public string ComprometidoFormat { get { return Comprometido.ToString("C2"); } }
-        public string CausadoFormat { get { return Causado.ToString("C2"); } }
-        public string PagadoFormat { get { return Pagado.ToString("C2"); } }
+
+        public string PresupuestadoFormat
+        {
+            get
+            {
+
+                return ConvertMoneda(Presupuestado);
+
+            }
+        }
+
+        public string AsignacionFormat
+        {
+            get
+            {
+                return ConvertMoneda(Asignacion);
+            }
+        }
+        public string ModificadoFormat
+        {
+            get
+            {
+
+       
+
+                return ConvertMoneda(Modificado);
+            }
+        }
+        public string BloqueadoFormat
+        {
+            get
+            {
+                return ConvertMoneda(Bloqueado);
+            }
+        }
+        public string ComprometidoFormat
+        {
+            get
+            {
+
+                return ConvertMoneda(Comprometido);
+            }
+        }
+        public string CausadoFormat
+        {
+            get
+            {
+
+                return ConvertMoneda(Causado);
+            }
+        }
+
+        public string PagadoFormat
+        {
+            get
+            {
+
+               return ConvertMoneda(Pagado);
+            }
+        }
+
+        public string ConvertMoneda(decimal value)
+        {
+            string literal = "";
+            if (Pagado == 0)
+            {
+                literal = "Bs. 0,0";
+            }
+            else
+            {
+                literal = "Bs. " + Pagado.ToString("#,#", CultureInfo.InvariantCulture);
+            }
+
+
+            return literal;
+        }
+
+
+
 
 
     }

@@ -53,194 +53,90 @@ namespace Convertidor.Dtos.Presupuesto
         public string PresupuestadoFormat {
             get {
 
-                    string literal = "";
-                    if (Presupuestado == 0)
-                    {
-                        literal = "Bs. 0,0";
-                    }
-                    else
-                    {
-                        literal = "Bs. " + Presupuestado.ToString("#,#", CultureInfo.InvariantCulture);
-                    }
-               
-                
-                    return literal;
-                }
+                return ConvertMoneda(Presupuestado);
+            }
         }
         public string DisponibleFormat
         {
             get
             {
-
-                string literal = "";
-                if (Disponible == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Disponible.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertMoneda(Disponible);
             }
         }
         public string AsignacionFormat
         {
             get
             {
-
-                string literal = "";
-                if (Asignacion == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Asignacion.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertMoneda(Asignacion);
             }
         }
         public string BloqueadoFormat
         {
             get
             {
-
-                string literal = "";
-                if (Bloqueado == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Bloqueado.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertMoneda(Bloqueado);
             }
         }
         public string ModificadoFormat
         {
             get
             {
-
-                string literal = "";
-                if (Modificado == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Modificado.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertMoneda(Modificado);
             }
         }
         public string AjustadoFormat
         {
             get
             {
-
-                string literal = "";
-                if (Ajustado == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Ajustado.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertMoneda(Ajustado);
             }
         }
         public string VigenteFormat
         {
             get
             {
-
-                string literal = "";
-                if (Vigente == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Vigente.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertMoneda(Vigente);
             }
         }
         public string ComprometidoFormat
         {
             get
             {
-
-                string literal = "";
-                if (Comprometido == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Comprometido.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertMoneda(Comprometido);
             }
         }
         public string CausadoFormat
         {
             get
             {
+                return ConvertMoneda(Causado);
 
-                string literal = "";
-                if (Causado == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Causado.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
             }
         }
         public string PagadoFormat
         {
             get
             {
-
-                string literal = "";
-                if (Pagado == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Pagado.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertMoneda(Pagado);
             }
         }
 
 
-       
+        public string ConvertMoneda(decimal value)
+        {
+            string literal = "";
+            if (Pagado == 0)
+            {
+                literal = "Bs. 0,0";
+            }
+            else
+            {
+                literal = "Bs. " + Pagado.ToString("#,#", CultureInfo.InvariantCulture);
+            }
+
+
+            return literal;
+        }
 
         //public string PagadoFormat { get { return Pagado.ToString("C2"); } }
 

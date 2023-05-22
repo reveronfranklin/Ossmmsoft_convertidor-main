@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+
 namespace Convertidor.Dtos.Presupuesto
 {
 	public class PreDetalleDocumentoGetDto
@@ -12,7 +14,26 @@ namespace Convertidor.Dtos.Presupuesto
         public string Origen { get; set; } = string.Empty;
         public string Motivo { get; set; } = string.Empty;
         public decimal Monto { get; set; }
-        public string MontoFormat { get { return Monto.ToString("C2"); } }
+     
+        public string MontoFormat
+        {
+            get
+            {
+
+                string literal = "";
+                if (Monto == 0)
+                {
+                    literal = "Bs. 0,0";
+                }
+                else
+                {
+                    literal = "Bs. " + Monto.ToString("#,#", CultureInfo.InvariantCulture);
+                }
+
+
+                return literal;
+            }
+        }
         public string FechaFormat { get { return Fecha.ToShortDateString(); } }
 
     }
