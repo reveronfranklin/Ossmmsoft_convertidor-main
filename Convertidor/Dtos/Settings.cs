@@ -5,6 +5,7 @@ namespace Convertidor.Dtos
 	{
         public string Url { get; set; }
         public string ExcelFiles { get; set; }
+        public string MenuFiles { get; set; }
     }
 }
 

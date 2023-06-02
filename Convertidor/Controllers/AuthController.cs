@@ -44,12 +44,24 @@ namespace Convertidor.Controllers
 
 
         [HttpGet, Authorize]
+        [Route("[action]")]
         public ActionResult<string> GetMe()
         {
             var userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name); //_service.GetMyName();
             return Ok(userName);
         }
 
+        [HttpGet, Authorize]
+        [Route("[action]")]
+        public async Task<ActionResult> GetMenu()
+        {
+            var userName = string.Empty;
+            userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name); //_service.GetMyName();
+            var menu = await _service.GetMenu(userName);
+
+
+            return Ok(menu);
+        }
 
         [HttpPost]
         [Route("[action]")]
@@ -112,7 +124,7 @@ namespace Convertidor.Controllers
             userData.Id = sisUsuario.CODIGO_USUARIO;
             userData.username = sisUsuario.LOGIN;
             userData.FullName = sisUsuario.USUARIO;
-            userData.Role = "admin";
+            userData.Role = null;
             userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
             resultLogin.UserData = userData;
 

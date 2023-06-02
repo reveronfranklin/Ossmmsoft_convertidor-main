@@ -20,7 +20,15 @@ namespace Convertidor.Dtos.Sis
         public string Email { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
+        public List<UserRole>? Roles { get; set; }
         public string username { get; set; } = string.Empty;
+
+    }
+    public class UserRole
+    {
+       
+        public string Role { get; set; } = string.Empty;
+        
 
     }
 

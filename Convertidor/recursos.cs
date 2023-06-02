@@ -46,7 +46,9 @@ WriteLiteral("dotnet ef migrations add InitialCreate --context DestinoDataContex
 "FICAMOS EL CONTENEDOR\n    docker ps\n\n    PASO 6: CREDENCIALES DE CONEXION\n\n    h" +
 "ostname: localhost\n    port: 1521\n    sid: xe\n    username: system\n    password:" +
 " oracle\n\n// EXPORTAR LIST C# A EXCEL\nhttps://github.com/mganss/ExcelMapper\nhttps" +
-"://www.youtube.com/watch?v=UOjf0uEPCC0\n");
+"://www.youtube.com/watch?v=UOjf0uEPCC0\n\n\n\n\ndeploy next js on iis web server\nhttp" +
+"s://www.youtube.com/watch?v=HLsx0iraA-Y\n\nhttps://github.com/dipneupane/NextJs-II" +
+"SDeployment/blob/main/web.config");
 
 }
 }

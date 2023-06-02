@@ -18,17 +18,19 @@ namespace Convertidor.Services.Sis
     {
 		
         private readonly ISisUsuarioRepository _repository;
-      
+        private readonly IConfiguration _configuration;
 
-     
+
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public SisUsuarioServices(ISisUsuarioRepository repository,
-                                    IHttpContextAccessor httpContextAccessor)
+                                    IHttpContextAccessor httpContextAccessor,
+                                    IConfiguration configuration)
         {
             _repository = repository;
             _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
         }
 
         public async Task<ResultLoginDto> Login(LoginDto dto)
@@ -76,7 +78,88 @@ namespace Convertidor.Services.Sis
             return jwt;
         }
 
+        public async  Task<List<RoleMenuDto>> GetMenu(string usuario)
+        {
 
+            List<RoleMenuDto> result = new List<RoleMenuDto> ();
+
+            var roles = await _repository.GetRolByUserName(usuario);
+            if (roles!=null)
+            {
+                foreach (var item in roles)
+                {
+                    RoleMenuDto resultItem = new RoleMenuDto();
+                    resultItem.Role = item.Role;
+                    if (item.Role == "DEV" || item.Role == "sis")
+                    {
+                        resultItem.Menu = GetMenuDeveloper();
+                    }
+                    if (item.Role == "pre")
+                    {
+                        resultItem.Menu = GetMenuPre();
+                    }
+                    if (item.Role == "rh")
+                    {
+                        resultItem.Menu = GetMenuRh();
+                    }
+
+                    result.Add(resultItem);
+
+                }
+                
+            }
+
+            return result;
+
+        }
+
+        public string GetMenuPre()
+        {
+
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+         
+
+            string jsonFilePath = @settings.MenuFiles;
+
+            string json = File.ReadAllText(jsonFilePath + "/MenuPre.json");
+
+            return json;
+
+        }
+
+        public string GetMenuRh()
+        {
+
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+
+
+            string jsonFilePath = @settings.MenuFiles;
+
+            string json = File.ReadAllText(jsonFilePath + "/MenuRh.json");
+
+            return json;
+
+        }
+
+        public string GetMenuDeveloper()
+        {
+
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+
+
+            string jsonFilePath = @settings.MenuFiles;
+
+            string json = File.ReadAllText(jsonFilePath + "/MenuDeveloper.json");
+
+            return json;
+
+        }
 
 
     }

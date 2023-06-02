@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Protocol.Plugins;
 using Oracle.ManagedDataAccess.Client;
+using StackExchange.Redis;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Convertidor.Data.Repository.Sis
@@ -102,9 +103,108 @@ namespace Convertidor.Data.Repository.Sis
 
 
         }
+
+        public List<UserRole> RolesValid()
+        {
+            
+
+            List<UserRole> result = new List<UserRole>
+            {
+               new UserRole { Role="sis" },
+               new UserRole { Role="pre" },
+               new UserRole { Role="rh" },
+                new UserRole { Role="DEV" },
+            };
+
+            return result;
+        }
+
+
+
+        public bool RolExists(string role)
+        {
+            bool result;
+            var exists = RolesValid().Where(x=>x.Role==role).FirstOrDefault();
+            if (exists != null)
+            {
+                result = true;
+
+            }
+            else
+            {
+                result = false;
+            }
+            return result;
+        }
+
+
+
+        public async Task<List<UserRole>> GetRolByUser(int codigousuario)
+        {
+            List<UserRole> result = new List<UserRole>();
+
+            var rolesUsuario = await _context.SIS_V_SISTEMA_USUARIO_PROGRAMA.Where(x => x.CODIGO_USUARIO == codigousuario).ToListAsync();
+            if (rolesUsuario.Count > 0)
+            {
+                foreach (var item in rolesUsuario)
+                {
+                    UserRole resultItem = new UserRole();
+                    resultItem.Role = item.SISTEMA;
+                    if (RolExists(resultItem.Role))
+                    {
+                        result.Add(resultItem);
+                    }
+
+                }
+            }
+
+            return result;
+        }
+        public async Task<List<UserRole>> GetRolByUserName(string usuario)
+        {
+            List<UserRole> result = new List<UserRole>();
+            try
+            {
+                var usuarioObj = await _context.SIS_USUARIOS.Where(x => x.LOGIN == usuario).FirstOrDefaultAsync();
+                if (usuarioObj != null)
+                {
+                    var rolesUsuario = await _context.SIS_V_SISTEMA_USUARIO_PROGRAMA.Where(x => x.CODIGO_USUARIO == usuarioObj.CODIGO_USUARIO).ToListAsync();
+                    if (rolesUsuario.Count > 0)
+                    {
+                        foreach (var item in rolesUsuario)
+                        {
+                            UserRole resultItem = new UserRole();
+                            resultItem.Role = item.SISTEMA;
+                            if (RolExists(resultItem.Role))
+                            {
+                                result.Add(resultItem);
+                            }
+
+                        }
+                    }
+                }
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+           
+        }
+
         public async Task<ResultLoginDto> Login(LoginDto dto)
         {
-           
+
+
+
+            //string jsonFilePath = @"C:\MyFolder\myFile.json";
+
+            //string json = File.ReadAllText(jsonFilePath);
+
+
             ResultLoginDto resultLogin = new ResultLoginDto();
             try
             {
@@ -128,13 +228,15 @@ namespace Convertidor.Data.Repository.Sis
                     userData.username = "";
                     userData.FullName = "";
                     userData.Role = "";
+                    userData.Roles = null;
                     userData.Email = "";
                     resultLogin.UserData = userData;
                     return resultLogin;
                 }
                 else
                 {
-                    if (resultDiario.PASSWORDSTRING.ToUpper() == dto.Password.ToUpper())
+                    var roles = await GetRolByUser(resultDiario.CODIGO_USUARIO);
+                    if (resultDiario.PASSWORDSTRING.ToUpper() == dto.Password.ToUpper() && roles.Count() >0)
                     {
                         resultLogin.Message = "";
 
@@ -145,6 +247,7 @@ namespace Convertidor.Data.Repository.Sis
                         userData.username = resultDiario.LOGIN;
                         userData.FullName = resultDiario.USUARIO;
                         userData.Role = "admin";
+                        userData.Roles = roles;
                         userData.Email = $"{resultDiario.LOGIN}@ossmasoft.com";
                         resultLogin.UserData = userData;
                         return resultLogin;
@@ -160,6 +263,7 @@ namespace Convertidor.Data.Repository.Sis
                         userData.username = "";
                         userData.FullName = "";
                         userData.Role = "";
+                        userData.Roles = null;
                         userData.Email = "";
                         resultLogin.UserData = userData;
                         return resultLogin;
@@ -179,6 +283,7 @@ namespace Convertidor.Data.Repository.Sis
                 userData.username = "";
                 userData.FullName = "";
                 userData.Role = "";
+                userData.Roles = null;
                 userData.Email = "";
                 resultLogin.UserData = userData;
                 return resultLogin;

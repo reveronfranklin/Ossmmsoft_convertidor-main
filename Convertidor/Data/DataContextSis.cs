@@ -1,5 +1,7 @@
 ﻿
 
+
+using CConvertidor.Data.Entities.Sis;
 using Convertidor.Data.Entities.RentasMunicipales;
 using Convertidor.Data.Entities.Sis;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +15,8 @@ namespace Convertidor.Data
 
         }
         public DbSet<SIS_USUARIOS> SIS_USUARIOS { get; set; }
-    
+        public DbSet<SIS_V_SISTEMA_USUARIO_PROGRAMA> SIS_V_SISTEMA_USUARIO_PROGRAMA { get; set; }
+
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,6 +26,11 @@ namespace Convertidor.Data
 
 
             modelBuilder
+            .Entity<SIS_V_SISTEMA_USUARIO_PROGRAMA>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("SIS_V_SISTEMA_USUARIO_PROGRAMA");
+            })
           .Entity<SIS_USUARIOS>(builder =>
           {
               //builder.HasNoKey();
