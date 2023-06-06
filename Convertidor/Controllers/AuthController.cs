@@ -67,19 +67,29 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult>  Login(LoginDto dto)
         {
-            var result = await _service.Login(dto);
-            if (result.accessToken.Length > 10)
+
+            try
             {
-                var refreshToken = GenerateRefreshToken(result.accessToken);
-                refreshToken.Login = dto.Login;
-                result.refreshToken = refreshToken.Refresh_Token;
-                SetRefreshToken(refreshToken);
-                return Ok(result);
+                var result = await _service.Login(dto);
+                if (result.accessToken.Length > 10)
+                {
+                    var refreshToken = GenerateRefreshToken(result.accessToken);
+                    refreshToken.Login = dto.Login;
+                    result.refreshToken = refreshToken.Refresh_Token;
+                    SetRefreshToken(refreshToken);
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest("Usuario o clave invalida");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Usuario o clave invalida");
+                return BadRequest(ex.Message);
             }
+
+           
            
           
         }
