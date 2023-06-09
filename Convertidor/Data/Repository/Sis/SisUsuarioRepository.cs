@@ -200,9 +200,7 @@ namespace Convertidor.Data.Repository.Sis
 
 
 
-            //string jsonFilePath = @"C:\MyFolder\myFile.json";
-
-            //string json = File.ReadAllText(jsonFilePath);
+          
 
 
             ResultLoginDto resultLogin = new ResultLoginDto();
@@ -236,7 +234,7 @@ namespace Convertidor.Data.Repository.Sis
                 else
                 {
                     var roles = await GetRolByUser(resultDiario.CODIGO_USUARIO);
-                    if (resultDiario.PASSWORDSTRING.ToUpper() == dto.Password.ToUpper() && roles.Count() >0)
+                    if ((resultDiario.PASSWORDSTRING.ToUpper() == dto.Password.ToUpper() )  && (resultDiario.PRIORIDAD==1 || roles.Count() >0))
                     {
                         resultLogin.Message = "";
 
@@ -275,7 +273,7 @@ namespace Convertidor.Data.Repository.Sis
             catch (Exception ex)
             {
                 var msg = ex.Message;
-                resultLogin.Message = "Usuario o Clave invalidos";
+                resultLogin.Message = ex.Message;
                 resultLogin.accessToken = "";
                 resultLogin.Name = "";
                 UserData userData = new UserData();

@@ -19,7 +19,7 @@ namespace Convertidor.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class PrePresupuestoController : ControllerBase
     {
        

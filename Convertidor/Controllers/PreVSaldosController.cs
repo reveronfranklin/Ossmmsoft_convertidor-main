@@ -57,6 +57,15 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> GetPreVDenominacionPuc(FilterPreDenominacionDto filter)
+        {
+            var result = await _service.GetPreVDenominacionPuc(filter);
+            return Ok(result);
+        }
+        
+
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter)
         {
             var result = await _service.GetAllByPresupuestoIpcPuc(filter);

@@ -5,6 +5,8 @@ using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
+using Ganss.Excel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Services.Presupuesto
@@ -15,20 +17,41 @@ namespace Convertidor.Services.Presupuesto
 
         private readonly IPRE_V_SALDOSRepository _repository;
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
-
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         
         public PRE_V_SALDOSServices(IPRE_V_SALDOSRepository repository,
                                     IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
 
-                                      IMapper mapper)
+                                      IMapper mapper,
+                                      IConfiguration configuration)
         {
             _repository = repository;
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
-
+            _configuration = configuration;
             _mapper = mapper;
         }
-        
+
+
+        public async Task<ResultDto<List<PreDenominacionDto>>> GetPreVDenominacionPuc(FilterPreDenominacionDto filter)
+        {
+            var result = await _repository.GetPreVDenominacionPuc(filter);
+            ExcelMapper mapper = new ExcelMapper();
+
+
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+            var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+            var fileName = $"ResumenDenominacionPUC Presupuesto {filter.CodigoPresupuesto}-{filter.FechaDesde.Year.ToString()}-{filter.FechaDesde.Month.ToString()}-{filter.FechaDesde.Day.ToString()} Hasta {filter.FechaHasta.Year.ToString()}-{filter.FechaHasta.Month.ToString()}-{filter.FechaHasta.Day.ToString()}.xlsx";
+            string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+
+
+            mapper.Save(newFile, result.Data, $"ResumenDenominacionPUC ", true);
+            return result;
+        }
+
+
         public async Task<ResultDto<List<PreVSaldosGetDto>>> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter)
         {
             var presupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
@@ -144,8 +167,8 @@ namespace Convertidor.Services.Presupuesto
             PreVSaldosGetDto dto = new PreVSaldosGetDto();
             dto.CodigoSaldo=entity.CODIGO_SALDO;
             dto.Ano = entity.ANO;
-            dto.FinanciadoId=entity.FINANCIADO_ID;
-            dto.CodigoFinanciado=entity.CODIGO_FINANCIADO;
+            dto.FinanciadoId=(int)entity.FINANCIADO_ID;
+            dto.CodigoFinanciado=(int)entity.CODIGO_FINANCIADO;
             dto.DescripcionFinanciado=entity.DESCRIPCION_FINANCIADO;
             dto.CodigoIcp=entity.CODIGO_ICP;
             dto.CodigoSector=entity.CODIGO_SECTOR;
@@ -171,17 +194,17 @@ namespace Convertidor.Services.Presupuesto
             dto.Bloqueado=entity.BLOQUEADO;
             dto.Modificado=entity.MODIFICADO;
             dto.Ajustado=entity.AJUSTADO;
-            dto.Vigente=entity.VIGENTE;
+            dto.Vigente=(decimal)entity.VIGENTE;
             dto.Comprometido=entity.COMPROMETIDO;
-            dto.PorComprometido=entity.POR_COMPROMETIDO;
-            dto.Disponible=entity.DISPONIBLE;
+            dto.PorComprometido=(decimal)entity.POR_COMPROMETIDO;
+            dto.Disponible=(decimal)entity.DISPONIBLE;
             dto.Causado=entity.CAUSADO;
-            dto.PorCausado=entity.POR_CAUSADO;
+            dto.PorCausado=(decimal)entity.POR_CAUSADO;
             dto.Pagado=entity.PAGADO;
-            dto.PorPagado=entity.POR_PAGADO;
-            dto.CodigoEmpresa=entity.CODIGO_EMPRESA;
-            dto.CodigoPresupuesto=entity.CODIGO_PRESUPUESTO;
-            dto.FechaSolicitud=entity.FECHA_SOLICITUD;
+            dto.PorPagado=(decimal)entity.POR_PAGADO;
+            dto.CodigoEmpresa=(int)entity.CODIGO_EMPRESA;
+            dto.CodigoPresupuesto=(int)entity.CODIGO_PRESUPUESTO;
+            dto.FechaSolicitud= (DateTime)entity.FECHA_SOLICITUD;
             var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(dto.CodigoEmpresa,dto.CodigoPresupuesto);
             if (presupuesto != null)
             {
@@ -240,7 +263,7 @@ namespace Convertidor.Services.Presupuesto
                             id++;
                             PreSaldoPorPartidaGetDto dto = new PreSaldoPorPartidaGetDto();
                             dto.Id = id; ;
-                            dto.CodigoPresupuesto = item.CodigoPresupuesto;
+                            dto.CodigoPresupuesto = (int)item.CodigoPresupuesto;
                             dto.CodigoPucConcat = item.CodigoPucConcat;
                             dto.DescripcionFinanciado = item.DescripcionFinanciado;
                             dto.Presupuestado = item.Presupuestado;
@@ -320,6 +343,13 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+
+       
+
+
+
+
+            
     }
 }
 

@@ -22,8 +22,12 @@ namespace Convertidor.Data
         public DbSet<PRE_V_DOC_CAUSADO> PRE_V_DOC_CAUSADO { get; set; }
         public DbSet<PRE_V_DOC_PAGADO> PRE_V_DOC_PAGADO { get; set; }
         public DbSet<PRE_V_DOC_BLOQUEADO> PRE_V_DOC_BLOQUEADO { get; set; }
-        public DbSet<PRE_V_DOC_MODIFICADO> PRE_V_DOC_MODIFICADO { get; set; } 
+        public DbSet<PRE_V_DOC_MODIFICADO> PRE_V_DOC_MODIFICADO { get; set; }
+        public DbSet<PRE_PLAN_UNICO_CUENTAS> PRE_PLAN_UNICO_CUENTAS { get; set; }
+        public DbSet<PRE_SALDOS_DIARIOS> PRE_SALDOS_DIARIOS { get; set; }
         
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
@@ -36,6 +40,11 @@ namespace Convertidor.Data
                 builder.HasNoKey();
                 builder.ToTable("PRE_V_SALDOS");
             })
+             .Entity<PRE_SALDOS_DIARIOS>(builder =>
+             {
+                 builder.HasNoKey();
+                 builder.ToTable("PRE_SALDOS_DIARIOS");
+             })
             .Entity<PRE_V_DOC_COMPROMISOS>(builder =>
             {
                 builder.HasNoKey();
@@ -86,6 +95,16 @@ namespace Convertidor.Data
                  builder.HasNoKey();
                  builder.ToTable("PRE_INDICE_CAT_PRG");
              })
+              .Entity<PRE_PLAN_UNICO_CUENTAS>(builder =>
+              {
+                  //builder.HasNoKey();
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_PUC,
+
+                  });
+                  builder.ToTable("PRE_PLAN_UNICO_CUENTAS");
+              })
             .Entity<PRE_PRESUPUESTOS>(builder =>
             {
                 //builder.HasNoKey();
@@ -96,6 +115,7 @@ namespace Convertidor.Data
                 });
                 builder.ToTable("PRE_PRESUPUESTOS");
             });
+           
 
         }
 
