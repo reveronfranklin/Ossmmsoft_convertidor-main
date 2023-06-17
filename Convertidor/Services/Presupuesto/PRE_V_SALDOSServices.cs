@@ -33,9 +33,9 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-        public async Task<ResultDto<List<PreDenominacionDto>>> GetPreVDenominacionPuc(FilterPreDenominacionDto filter)
+        public async Task<ResultDto<List<PreDenominacionPorPartidaDto>>> GetPreVDenominacionPuc(FilterPreDenominacionDto filter)
         {
-            var result = await _repository.GetPreVDenominacionPuc(filter);
+            var result = await _repository.GetPreVDenominacionPorPartidaPuc(filter);
             ExcelMapper mapper = new ExcelMapper();
 
 
