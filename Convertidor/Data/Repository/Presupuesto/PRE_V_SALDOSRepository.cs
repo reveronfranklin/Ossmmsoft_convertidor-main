@@ -143,189 +143,195 @@ namespace Convertidor.Data.Repository.Presupuesto
                .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto ).ToListAsync();
 
 
-                var inicioNivelUno = DateTime.Now;
 
-                var planUnicoCuentaPorPartidaNivelUno = planUnicoCuenta
-               .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
-                           x.CODIGO_GRUPO==filter.CodigoGrupo &&
-                           x.CODIGO_NIVEL1!= "00" &&
-                           x.CODIGO_NIVEL2 == "00" &&
-                           x.CODIGO_NIVEL3 == "00" &&
-                           x.CODIGO_NIVEL4 == "00" && x.CODIGO_NIVEL5 == "00").ToList();
-
-                if (planUnicoCuentaPorPartidaNivelUno.Count() > 0)
+                if (filter.Nivel>=1)
                 {
-                    foreach (var item in planUnicoCuentaPorPartidaNivelUno)
+                    var planUnicoCuentaPorPartidaNivelUno = planUnicoCuenta
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                    x.CODIGO_GRUPO == filter.CodigoGrupo &&
+                    x.CODIGO_NIVEL1 != "00" &&
+                    x.CODIGO_NIVEL2 == "00" &&
+                    x.CODIGO_NIVEL3 == "00" &&
+                    x.CODIGO_NIVEL4 == "00" && x.CODIGO_NIVEL5 == "00").ToList();
+
+                    if (planUnicoCuentaPorPartidaNivelUno.Count() > 0)
                     {
-                        PreDenominacionPorPartidaDto resultDetailItem = new PreDenominacionPorPartidaDto();
-                        resultDetailItem.CodigoPresupuesto = (int)item.CODIGO_PRESUPUESTO;
+                        foreach (var item in planUnicoCuentaPorPartidaNivelUno)
+                        {
+                            PreDenominacionPorPartidaDto resultDetailItem = new PreDenominacionPorPartidaDto();
+                            resultDetailItem.Nivel = 1;
+                            resultDetailItem.CodigoPresupuesto = (int)item.CODIGO_PRESUPUESTO;
 
-                        resultDetailItem.CodigoPartida = item.CODIGO_GRUPO + item.CODIGO_NIVEL1;
-                        resultDetailItem.CodigoGenerica = item.CODIGO_NIVEL2;
-                        resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
-                        resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
-                        resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
-                        resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
-                        resultDetailItem.DenominacionPuc = item.DENOMINACION;
-                    
+                            resultDetailItem.CodigoPartida = item.CODIGO_GRUPO + item.CODIGO_NIVEL1;
+                            resultDetailItem.CodigoGenerica = item.CODIGO_NIVEL2;
+                            resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
+                            resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
+                            resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
+                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
+                            resultDetailItem.DenominacionPuc = item.DENOMINACION;
 
-                        resultDetailItem.Presupuestado = await GetPresupuestadoNivelUno(planVSaldos,resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                        resultDetailItem.Modificado = await GetModificadoNivelUno(planVSaldos,filter.FinanciadoId,filter.FechaHasta,resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                        resultDetailItem.Comprometido = await GetComprometidoNivelUno(planVSaldos,filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                        resultDetailItem.Bloqueado = await GetBloqueadoNivelUno(planVSaldos,filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                        resultDetailItem.Causado = await GetCausadoNivelUno(planVSaldos,filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                        resultDetailItem.Pagado = await GetPagadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                        resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                        resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
-                        resultDetailItem.Asignacion =  await GetAsignacionNivelUno(planVSaldos,resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                        resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
-                        resultDetail.Add(resultDetailItem);
+
+                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelUno(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.Modificado = await GetModificadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.Comprometido = await GetComprometidoNivelUno(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.Bloqueado = await GetBloqueadoNivelUno(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.Causado = await GetCausadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.Pagado = await GetPagadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
+                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
+                            resultDetailItem.Asignacion = await GetAsignacionNivelUno(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
+                            resultDetail.Add(resultDetailItem);
+
+                        }
 
                     }
 
                 }
-                var finNivelUno = DateTime.Now;
-                var tiempoNivelUno = finNivelUno - inicioNivelUno;
-
-
-                var inicioNivelDos = DateTime.Now;
-                var planUnicoCuentaPorPartidaNivelDos = planUnicoCuenta
-                       .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
-                                   x.CODIGO_GRUPO == filter.CodigoGrupo &&
-                                   x.CODIGO_NIVEL1 != "00" &&
-                                   x.CODIGO_NIVEL2 != "00" &&
-                                   x.CODIGO_NIVEL3 == "00" &&
-                                   x.CODIGO_NIVEL4 == "00" &&
-                                   x.CODIGO_NIVEL5 == "00").ToList();
-
-                if (planUnicoCuentaPorPartidaNivelDos.Count > 0)
+                if (filter.Nivel >= 2)
                 {
-                    foreach (var item in planUnicoCuentaPorPartidaNivelDos)
+                    var planUnicoCuentaPorPartidaNivelDos = planUnicoCuenta
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                x.CODIGO_GRUPO == filter.CodigoGrupo &&
+                                x.CODIGO_NIVEL1 != "00" &&
+                                x.CODIGO_NIVEL2 != "00" &&
+                                x.CODIGO_NIVEL3 == "00" &&
+                                x.CODIGO_NIVEL4 == "00" &&
+                                x.CODIGO_NIVEL5 == "00").ToList();
+
+                    if (planUnicoCuentaPorPartidaNivelDos.Count > 0)
                     {
-                        PreDenominacionPorPartidaDto resultDetailItem = new PreDenominacionPorPartidaDto();
-                        resultDetailItem.CodigoPresupuesto = (int)item.CODIGO_PRESUPUESTO;
+                        foreach (var item in planUnicoCuentaPorPartidaNivelDos)
+                        {
+                            PreDenominacionPorPartidaDto resultDetailItem = new PreDenominacionPorPartidaDto();
+                            resultDetailItem.Nivel = 2;
+                            resultDetailItem.CodigoPresupuesto = (int)item.CODIGO_PRESUPUESTO;
 
-                        resultDetailItem.CodigoPartida = item.CODIGO_GRUPO + item.CODIGO_NIVEL1;
-                        resultDetailItem.CodigoGenerica = item.CODIGO_NIVEL2;
-                        resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
-                        resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
-                        resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
-                        resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
-                        resultDetailItem.DenominacionPuc = item.DENOMINACION;
-                      
+                            resultDetailItem.CodigoPartida = item.CODIGO_GRUPO + item.CODIGO_NIVEL1;
+                            resultDetailItem.CodigoGenerica = item.CODIGO_NIVEL2;
+                            resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
+                            resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
+                            resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
+                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
+                            resultDetailItem.DenominacionPuc = item.DENOMINACION;
 
-                        resultDetailItem.Presupuestado = await GetPresupuestadoNivelDos(planVSaldos,resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1,item.CODIGO_NIVEL2);
-                        resultDetailItem.Modificado = await GetModificadoNivelDos(planVSaldos, filter.FinanciadoId,filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-             
-                        resultDetailItem.Comprometido = await GetComprometidoNivelDos(planVSaldos, filter.FinanciadoId,resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                        resultDetailItem.Bloqueado = await GetBloqueadoNivelDos(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                        resultDetailItem.Causado = await GetCausadoNivelDos(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                        resultDetailItem.Pagado = await GetPagadoNivelDos(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                        resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                        resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
-                        resultDetailItem.Asignacion = await GetAsignacionNivelDos(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                        resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
-                        resultDetail.Add(resultDetailItem);
+
+                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelDos(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Modificado = await GetModificadoNivelDos(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+
+                            resultDetailItem.Comprometido = await GetComprometidoNivelDos(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Bloqueado = await GetBloqueadoNivelDos(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Causado = await GetCausadoNivelDos(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Pagado = await GetPagadoNivelDos(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
+                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
+                            resultDetailItem.Asignacion = await GetAsignacionNivelDos(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
+                            resultDetail.Add(resultDetailItem);
+
+                        }
 
                     }
-
                 }
-                var finNivelDos = DateTime.Now;
-                var tiempoNivelDos = finNivelDos - inicioNivelDos;
 
-                var inicioNivelTres = DateTime.Now;
-                var planUnicoCuentaPorPartidaNivelTres = planUnicoCuenta
-                      .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
-                                  x.CODIGO_GRUPO == filter.CodigoGrupo &&
-                                  x.CODIGO_NIVEL1 != "00" &&
-                                  x.CODIGO_NIVEL2 != "00" &&
-                                  x.CODIGO_NIVEL3 != "00" &&
-                                  x.CODIGO_NIVEL4 == "00" &&
-                                  x.CODIGO_NIVEL5 == "00").ToList();
-
-                if (planUnicoCuentaPorPartidaNivelTres.Count > 0)
+                if (filter.Nivel >= 3)
                 {
-                    foreach (var item in planUnicoCuentaPorPartidaNivelTres)
-                    {
-                        PreDenominacionPorPartidaDto resultDetailItem = new PreDenominacionPorPartidaDto();
-                        resultDetailItem.CodigoPresupuesto = (int)item.CODIGO_PRESUPUESTO;
-
-                        resultDetailItem.CodigoPartida = item.CODIGO_GRUPO + item.CODIGO_NIVEL1;
-                        resultDetailItem.CodigoGenerica = item.CODIGO_NIVEL2;
-                        resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
-                        resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
-                        resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
-                        resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
-                        resultDetailItem.DenominacionPuc = item.DENOMINACION;
-                        
-
-                        resultDetailItem.Presupuestado = await GetPresupuestadoNivelTres(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2,item.CODIGO_NIVEL3);
-                        resultDetailItem.Modificado = await GetModificadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde,filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2,item.CODIGO_NIVEL3);
-                 
-                        resultDetailItem.Comprometido = await GetComprometidoNivelTres(planVSaldos, filter.FinanciadoId,resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-                        resultDetailItem.Bloqueado = await GetBloqueadoNivelTres(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-                        resultDetailItem.Causado = await GetCausadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-                        resultDetailItem.Pagado = await GetPagadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-                        resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                        resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
-                        resultDetailItem.Asignacion = await GetAsignacionNivelTres(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-
-
-                       
-                        resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
-                        resultDetail.Add(resultDetailItem);
-
-                    }
-
-                }
-                var finNivelTres = DateTime.Now;
-                var tiempoNivelTres = finNivelTres - inicioNivelTres;
-
-
-                var inicioNivelCuatro = DateTime.Now;
-                var planUnicoCuentaPorPartidaNivelCuatro = planUnicoCuenta
+                    var planUnicoCuentaPorPartidaNivelTres = planUnicoCuenta
                      .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
                                  x.CODIGO_GRUPO == filter.CodigoGrupo &&
                                  x.CODIGO_NIVEL1 != "00" &&
                                  x.CODIGO_NIVEL2 != "00" &&
                                  x.CODIGO_NIVEL3 != "00" &&
-                                 x.CODIGO_NIVEL4 != "00" &&
+                                 x.CODIGO_NIVEL4 == "00" &&
                                  x.CODIGO_NIVEL5 == "00").ToList();
 
-                if (planUnicoCuentaPorPartidaNivelCuatro.Count > 0)
-                {
-                    foreach (var item in planUnicoCuentaPorPartidaNivelCuatro)
+                    if (planUnicoCuentaPorPartidaNivelTres.Count > 0)
                     {
-                        PreDenominacionPorPartidaDto resultDetailItem = new PreDenominacionPorPartidaDto();
-                        resultDetailItem.CodigoPresupuesto = (int)item.CODIGO_PRESUPUESTO;
+                        foreach (var item in planUnicoCuentaPorPartidaNivelTres)
+                        {
+                            PreDenominacionPorPartidaDto resultDetailItem = new PreDenominacionPorPartidaDto();
+                            resultDetailItem.Nivel = 3;
+                            resultDetailItem.CodigoPresupuesto = (int)item.CODIGO_PRESUPUESTO;
 
-                        resultDetailItem.CodigoPartida = item.CODIGO_GRUPO + item.CODIGO_NIVEL1;
-                        resultDetailItem.CodigoGenerica = item.CODIGO_NIVEL2;
-                        resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
-                        resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
-                        resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
-                        resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
-                        resultDetailItem.DenominacionPuc = item.DENOMINACION;
-                     
+                            resultDetailItem.CodigoPartida = item.CODIGO_GRUPO + item.CODIGO_NIVEL1;
+                            resultDetailItem.CodigoGenerica = item.CODIGO_NIVEL2;
+                            resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
+                            resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
+                            resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
+                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
+                            resultDetailItem.DenominacionPuc = item.DENOMINACION;
 
-                        resultDetailItem.Presupuestado = await GetPresupuestadoNivelCuatro(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3,item.CODIGO_NIVEL4); 
-                        resultDetailItem.Modificado = await GetModificadoNivelCuatro(planVSaldos, filter.FinanciadoId,filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-          
-                        resultDetailItem.Comprometido = await GetComprometidoNivelCuatro(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                        resultDetailItem.Bloqueado = await GetBloqueadoNivelCuatro(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                        resultDetailItem.Causado = await GetCausadoNivelCuatro(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                        resultDetailItem.Pagado = await GetPagadoNivelCuatro(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                        resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                        resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
-                        resultDetailItem.Asignacion = await GetAsignacionNivelCuatro(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                        resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
-                        resultDetail.Add(resultDetailItem);
+
+                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelTres(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Modificado = await GetModificadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+
+                            resultDetailItem.Comprometido = await GetComprometidoNivelTres(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Bloqueado = await GetBloqueadoNivelTres(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Causado = await GetCausadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Pagado = await GetPagadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
+                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
+                            resultDetailItem.Asignacion = await GetAsignacionNivelTres(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+
+
+
+                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
+                            resultDetail.Add(resultDetailItem);
+
+                        }
+
+                    }
+                }
+
+                if (filter.Nivel >= 4)
+                {
+                    var planUnicoCuentaPorPartidaNivelCuatro = planUnicoCuenta
+                .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                            x.CODIGO_GRUPO == filter.CodigoGrupo &&
+                            x.CODIGO_NIVEL1 != "00" &&
+                            x.CODIGO_NIVEL2 != "00" &&
+                            x.CODIGO_NIVEL3 != "00" &&
+                            x.CODIGO_NIVEL4 != "00" &&
+                            x.CODIGO_NIVEL5 == "00").ToList();
+
+                    if (planUnicoCuentaPorPartidaNivelCuatro.Count > 0)
+                    {
+                        foreach (var item in planUnicoCuentaPorPartidaNivelCuatro)
+                        {
+                            PreDenominacionPorPartidaDto resultDetailItem = new PreDenominacionPorPartidaDto();
+                            resultDetailItem.Nivel = 4;
+                            resultDetailItem.CodigoPresupuesto = (int)item.CODIGO_PRESUPUESTO;
+
+                            resultDetailItem.CodigoPartida = item.CODIGO_GRUPO + item.CODIGO_NIVEL1;
+                            resultDetailItem.CodigoGenerica = item.CODIGO_NIVEL2;
+                            resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
+                            resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
+                            resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
+                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
+                            resultDetailItem.DenominacionPuc = item.DENOMINACION;
+
+
+                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelCuatro(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Modificado = await GetModificadoNivelCuatro(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+
+                            resultDetailItem.Comprometido = await GetComprometidoNivelCuatro(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Bloqueado = await GetBloqueadoNivelCuatro(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Causado = await GetCausadoNivelCuatro(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Pagado = await GetPagadoNivelCuatro(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
+                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
+                            resultDetailItem.Asignacion = await GetAsignacionNivelCuatro(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
+                            resultDetail.Add(resultDetailItem);
+
+                        }
 
                     }
 
                 }
-                var finNivelCuatro = DateTime.Now;
-                var tiempoNivelCuatro = finNivelCuatro - inicioNivelCuatro;
+
+               
+               
 
                 var sortData = resultDetail.OrderBy(x => x.CodigoPartida)
                                             .ThenBy(x => x.CodigoPartida)

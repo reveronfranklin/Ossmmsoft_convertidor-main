@@ -6,7 +6,7 @@ namespace Convertidor.Dtos.Presupuesto
 {
 	public class PreDenominacionPorPartidaDto
 	{
-
+        public int Nivel { get; set; }
         public int CodigoPresupuesto { get; set; }
     
         public string CodigoPartida { get; set; } = string.Empty;
@@ -146,7 +146,8 @@ namespace Convertidor.Dtos.Presupuesto
         public DateTime FechaDesde { get; set; }
         public DateTime FechaHasta { get; set; }
         public string CodigoGrupo { get; set; } = string.Empty;
-        
+        public int Nivel { get; set; }
+
 
     }
 
