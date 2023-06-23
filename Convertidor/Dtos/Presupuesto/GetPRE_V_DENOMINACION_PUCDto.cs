@@ -22,7 +22,7 @@ namespace Convertidor.Dtos.Presupuesto
         public decimal Deuda { get; set; }
         public decimal Disponibilidad { get; set; }
         public decimal DisponibilidadFinan { get; set; }
-        public decimal TotalPresupuestado { get { return Presupuestado + Modificado; } }
+        public decimal TotalPresupuestado { get { return Presupuestado; } }
 
         public string PresupuestadoString { get { return ConvertMoneda(TotalPresupuestado); } }
         public string DisponibilidadString { get { return ConvertMoneda(Disponibilidad); } }
@@ -38,7 +38,7 @@ namespace Convertidor.Dtos.Presupuesto
             }
             else
             {
-                literal = "Bs. " + Pagado.ToString("#,#", CultureInfo.InvariantCulture);
+                literal = "Bs. " + value.ToString("#,#", CultureInfo.InvariantCulture);
             }
 
 
