@@ -164,60 +164,70 @@ namespace Convertidor.Services.Presupuesto
 
         public async Task<PreVSaldosGetDto> MapPRE_V_SADOSTOPreVSaldosGetDto(PRE_V_SALDOS entity)
         {
-            PreVSaldosGetDto dto = new PreVSaldosGetDto();
-            dto.CodigoSaldo=entity.CODIGO_SALDO;
-            dto.Ano = entity.ANO;
-            dto.FinanciadoId=(int)entity.FINANCIADO_ID;
-            dto.CodigoFinanciado=(int)entity.CODIGO_FINANCIADO;
-            dto.DescripcionFinanciado=entity.DESCRIPCION_FINANCIADO;
-            dto.CodigoIcp=entity.CODIGO_ICP;
-            dto.CodigoSector=entity.CODIGO_SECTOR;
-            dto.CodigoPrograma=entity.CODIGO_PROGRAMA;
-            dto.CodigoSubPrograma=entity.CODIGO_SUBPROGRAMA;
-            dto.CodigoProyecto=entity.CODIGO_PROYECTO;
-            dto.CodigoActividad=entity.CODIGO_ACTIVIDAD;
-            dto.CodigoOficina=entity.CODIGO_OFICINA;
-            dto.CodigoIcpConcat=entity.CODIGO_ICP_CONCAT;
-            dto.DenominacionIcp=entity.DENOMINACION_ICP;
-            dto.UnidadEjecutora=entity.UNIDAD_EJECUTORA;
-            dto.CodigoPuc=entity.CODIGO_PUC;
-            dto.CodigoGrupo=entity.CODIGO_GRUPO;
-            dto.CodigoPartida=entity.CODIGO_PARTIDA;
-            dto.CodigoGenerica=entity.CODIGO_GENERICA;
-            dto.CodigoEspecifica=entity.CODIGO_ESPECIFICA;
-            dto.CodigoSubEspecifica=entity.CODIGO_SUBESPECIFICA;
-            dto.CodigoNivel5=entity.CODIGO_NIVEL5;
-            dto.CodigoPucConcat=entity.CODIGO_PUC_CONCAT;
-            dto.DenominacionPuc=entity.DENOMINACION_PUC;
-            dto.Presupuestado=entity.PRESUPUESTADO;
-            dto.Asignacion=entity.ASIGNACION;
-            dto.Bloqueado=entity.BLOQUEADO;
-            dto.Modificado=entity.MODIFICADO;
-            dto.Ajustado=entity.AJUSTADO;
-            dto.Vigente=(decimal)entity.VIGENTE;
-            dto.Comprometido=entity.COMPROMETIDO;
-            dto.PorComprometido=(decimal)entity.POR_COMPROMETIDO;
-            dto.Disponible=(decimal)entity.DISPONIBLE;
-            dto.Causado=entity.CAUSADO;
-            dto.PorCausado=(decimal)entity.POR_CAUSADO;
-            dto.Pagado=entity.PAGADO;
-            dto.PorPagado=(decimal)entity.POR_PAGADO;
-            dto.CodigoEmpresa=(int)entity.CODIGO_EMPRESA;
-            dto.CodigoPresupuesto=(int)entity.CODIGO_PRESUPUESTO;
-            dto.FechaSolicitud= (DateTime)entity.FECHA_SOLICITUD;
-            var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(dto.CodigoEmpresa,dto.CodigoPresupuesto);
-            if (presupuesto != null)
+            try
             {
-                dto.DescripcionPresupuesto = presupuesto.DENOMINACION;
-            }
-            else
-            {
-                dto.DescripcionPresupuesto = "";
-            }
-            
+                PreVSaldosGetDto dto = new PreVSaldosGetDto();
+                dto.CodigoSaldo = entity.CODIGO_SALDO;
+                dto.Ano = entity.ANO;
+                dto.FinanciadoId = entity.FINANCIADO_ID;
+                dto.CodigoFinanciado =entity.CODIGO_FINANCIADO;
+                dto.DescripcionFinanciado = entity.DESCRIPCION_FINANCIADO;
+                dto.CodigoIcp = entity.CODIGO_ICP;
+                dto.CodigoSector = entity.CODIGO_SECTOR;
+                dto.CodigoPrograma = entity.CODIGO_PROGRAMA;
+                dto.CodigoSubPrograma = entity.CODIGO_SUBPROGRAMA;
+                dto.CodigoProyecto = entity.CODIGO_PROYECTO;
+                dto.CodigoActividad = entity.CODIGO_ACTIVIDAD;
+                dto.CodigoOficina = entity.CODIGO_OFICINA;
+                dto.CodigoIcpConcat = entity.CODIGO_ICP_CONCAT;
+                dto.DenominacionIcp = entity.DENOMINACION_ICP;
+                dto.UnidadEjecutora = entity.UNIDAD_EJECUTORA;
+                dto.CodigoPuc = entity.CODIGO_PUC;
+                dto.CodigoGrupo = entity.CODIGO_GRUPO;
+                dto.CodigoPartida = entity.CODIGO_PARTIDA;
+                dto.CodigoGenerica = entity.CODIGO_GENERICA;
+                dto.CodigoEspecifica = entity.CODIGO_ESPECIFICA;
+                dto.CodigoSubEspecifica = entity.CODIGO_SUBESPECIFICA;
+                dto.CodigoNivel5 = entity.CODIGO_NIVEL5;
+                dto.CodigoPucConcat = entity.CODIGO_PUC_CONCAT;
+                dto.DenominacionPuc = entity.DENOMINACION_PUC;
+                dto.Presupuestado = entity.PRESUPUESTADO;
+                dto.Asignacion = entity.ASIGNACION;
+                dto.Bloqueado = entity.BLOQUEADO;
+                dto.Modificado = entity.MODIFICADO;
+                dto.Ajustado = entity.AJUSTADO;
+                dto.Vigente = entity.VIGENTE;
+                dto.Comprometido = entity.COMPROMETIDO;
+                dto.PorComprometido = entity.POR_COMPROMETIDO;
+                dto.Disponible = entity.DISPONIBLE;
+                dto.Causado = entity.CAUSADO;
+                dto.PorCausado = entity.POR_CAUSADO;
+                dto.Pagado = entity.PAGADO;
+                dto.PorPagado = entity.POR_PAGADO;
+                dto.CodigoEmpresa = entity.CODIGO_EMPRESA;
+                dto.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
+                dto.FechaSolicitud = entity.FECHA_SOLICITUD;
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo((int)dto.CodigoEmpresa, (int)dto.CodigoPresupuesto);
+                if (presupuesto != null)
+                {
+                    dto.DescripcionPresupuesto = presupuesto.DENOMINACION;
+                }
+                else
+                {
+                    dto.DescripcionPresupuesto = "";
+                }
 
 
-            return dto;
+
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                var Msg = ex.Message;
+                return null;
+            }
+
+          
 
 
         }
