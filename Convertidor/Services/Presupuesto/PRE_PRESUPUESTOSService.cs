@@ -374,8 +374,8 @@ namespace Convertidor.Services.Presupuesto
 
                 // if (dto.TotalPresupuesto > 1000) dto.TotalPresupuesto = dto.TotalPresupuesto / 1000;
                 //if (dto.TotalDisponible > 1000) dto.TotalDisponible = dto.TotalDisponible / 1000;
-             
 
+                listpreDenominacionPuc = listpreDenominacionPuc.Where(X => X.Presupuestado > 0).ToList();
                 dto.PreDenominacionPuc = listpreDenominacionPuc;
 
                 var preDenominacionPucresumen = ResumenePreDenominacionPuc(listpreDenominacionPuc);

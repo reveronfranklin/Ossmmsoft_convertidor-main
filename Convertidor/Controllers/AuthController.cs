@@ -114,7 +114,7 @@ namespace Convertidor.Controllers
             {
                 return Unauthorized("Invalid Refresh Token.");
             }
-            else if (sisUsuario.TOKENEXPIRES < DateTime.Now)
+            if (sisUsuario.TOKENEXPIRES < DateTime.Now)
             {
                 return Unauthorized("Token expired.");
             }
