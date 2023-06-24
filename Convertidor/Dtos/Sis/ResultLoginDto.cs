@@ -7,8 +7,8 @@ namespace Convertidor.Dtos.Sis
         
 
         public string Message { get; set; } = string.Empty;
-        public string accessToken { get; set; } = string.Empty;
-        public string refreshToken { get; set; } = string.Empty;
+        public string AccessToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public UserData? UserData { get; set; }
     }

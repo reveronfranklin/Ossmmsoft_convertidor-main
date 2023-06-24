@@ -219,7 +219,7 @@ namespace Convertidor.Data.Repository.Sis
                 if (resultDiario==null)
                 {
                     resultLogin.Message = "Usuario o Clave invalidos";
-                    resultLogin.accessToken = "";
+                    resultLogin.AccessToken = "";
                     resultLogin.Name = "";
                     UserData userData = new UserData();
                     userData.Id = 0;
@@ -238,7 +238,7 @@ namespace Convertidor.Data.Repository.Sis
                     {
                         resultLogin.Message = "";
 
-                        resultLogin.accessToken = GetToken(resultDiario);
+                        resultLogin.AccessToken = GetToken(resultDiario);
                         resultLogin.Name = resultDiario.LOGIN;
                         UserData userData = new UserData();
                         userData.Id = resultDiario.CODIGO_USUARIO;
@@ -253,7 +253,7 @@ namespace Convertidor.Data.Repository.Sis
                     else
                     {
                         resultLogin.Message = "Usuario o Clave invalidos";
-                        resultLogin.accessToken = "";
+                        resultLogin.AccessToken = "";
                         resultLogin.Name = "";
 
                         UserData userData = new UserData();
@@ -274,7 +274,7 @@ namespace Convertidor.Data.Repository.Sis
             {
                 var msg = ex.Message;
                 resultLogin.Message = ex.Message;
-                resultLogin.accessToken = "";
+                resultLogin.AccessToken = "";
                 resultLogin.Name = "";
                 UserData userData = new UserData();
                 userData.Id = 0;

@@ -71,11 +71,11 @@ namespace Convertidor.Controllers
             try
             {
                 var result = await _service.Login(dto);
-                if (result.accessToken.Length > 10)
+                if (result.AccessToken.Length > 10)
                 {
-                    var refreshToken = GenerateRefreshToken(result.accessToken);
+                    var refreshToken = GenerateRefreshToken(result.AccessToken);
                     refreshToken.Login = dto.Login;
-                    result.refreshToken = refreshToken.Refresh_Token;
+                    result.RefreshToken = refreshToken.Refresh_Token;
                     SetRefreshToken(refreshToken);
                     return Ok(result);
                 }
@@ -99,8 +99,8 @@ namespace Convertidor.Controllers
         public async Task<ActionResult<ResultLoginDto>> RefreshToken(ResultRefreshTokenDto refreshTokento)
         {
             ResultLoginDto resultLogin = new ResultLoginDto();
-
-            var refreshToken = refreshTokento.RefreshToken;
+            //3mBx+k508wTfnpi0K+txwKWz64QFdTfsd6cP6G634khKNzs11W6zSaa2ffzx4B7D2LyXppCQcgU9odwFjK2iSQ==
+                var refreshToken = refreshTokento.RefreshToken;
             // Request.Cookies["X-Refresh-Token"];
             //var token = Request.Cookies["osmmasoftToken"];
             string? userName = string.Empty;
@@ -113,6 +113,7 @@ namespace Convertidor.Controllers
             if (!sisUsuario.REFRESHTOKEN.Equals(refreshToken))
             {
                 return Unauthorized("Invalid Refresh Token.");
+                //var esDiferente = "";
             }
             if (sisUsuario.TOKENEXPIRES < DateTime.Now)
             {
@@ -126,15 +127,15 @@ namespace Convertidor.Controllers
             //result.accessToken = token;
             //result.refreshToken = newRefreshToken.Refresh_Token;
 
-            resultLogin.Message = "";
-            resultLogin.refreshToken = newRefreshToken.Refresh_Token; 
-            resultLogin.accessToken = token;
+                resultLogin.Message = "";
+            resultLogin.RefreshToken = newRefreshToken.Refresh_Token; 
+            resultLogin.AccessToken = token;
             resultLogin.Name = sisUsuario.LOGIN;
             UserData userData = new UserData();
             userData.Id = sisUsuario.CODIGO_USUARIO;
             userData.username = sisUsuario.LOGIN;
             userData.FullName = sisUsuario.USUARIO;
-            userData.Role = null;
+            userData.Role = "admin";
             userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
             resultLogin.UserData = userData;
 
