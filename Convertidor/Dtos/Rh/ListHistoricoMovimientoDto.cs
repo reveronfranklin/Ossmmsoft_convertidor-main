@@ -49,7 +49,7 @@ namespace Convertidor.Dtos.Rh
         public string Denominacion { get; set; } = string.Empty;
         public string Avatar { get; set; } = string.Empty;
         public string UnidadEjecutora { get; set; } = string.Empty;
-        public string EstadoCivil { get; set; } = string.Empty;
+        public string? EstadoCivil { get; set; } = string.Empty;
 
     }
 }

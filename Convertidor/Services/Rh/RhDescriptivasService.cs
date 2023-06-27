@@ -51,7 +51,23 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-      
+        public async Task<List<RH_DESCRIPTIVAS>> GetAll()
+        {
+            try
+            {
+                var result = await _repository.GetAll();
+             
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
 
     }
 }

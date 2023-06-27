@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using AutoMapper;
 using Convertidor.Data;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos.Rh;
+using NPOI.SS.Formula.Functions;
+using static NPOI.HSSF.Util.HSSFColor;
 
 namespace Convertidor.Services.Rh
 {
@@ -83,10 +87,74 @@ namespace Convertidor.Services.Rh
 
         }
 
+        private RH_DESCRIPTIVAS GetDescriptiva(List<RH_DESCRIPTIVAS> list,string? codigo) {
+            var descriptivas = list.Where(d => d.CODIGO == codigo).First();
+
+            return descriptivas;
+        }
+
         private async Task<List<ListHistoricoMovimientoDto>> MapListHistoricoMovimiento(List<RH_V_HISTORICO_MOVIMIENTOS> dto)
         {
             List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
-            foreach (var item in dto)
+            var descriptivas =await _descriptivaServices.GetAll();
+            try
+            {
+                var resultNew = dto
+
+                 .Select(e => new ListHistoricoMovimientoDto
+                 {
+                     CodigoHistoricoNomina = e.CODIGO_HISTORICO_NOMINA,
+                     CodigoPersona = e.CODIGO_PERSONA,
+                     Cedula = e.CEDULA,
+                     Foto = e.FOTO,
+                     Nombre = e.NOMBRE,
+                     Apellido = e.APELLIDO,
+                     Full_Name = $"{e.NOMBRE} {e.APELLIDO}",
+                     Nacionalidad = e.NACIONALIDAD,
+                     DescripcionNacionalidad = e.DESCRIPCION_NACIONALIDAD,
+                     Sexo = e.SEXO,
+                     Status = e.STATUS,
+                     DescripcionStatus = e.DESCRIPCION_STATUS,
+                     CodigoRelacionCargo = e.CODIGO_RELACION_CARGO,
+                     CodigoCargo = e.CODIGO_CARGO,
+                     CargoCodigo = e.CARGO_CODIGO,
+                     CodigoIcp = e.CODIGO_ICP,
+                     Sueldo = e.SUELDO,
+                     DescripcionCargo = e.DESCRIPCION_CARGO,
+                     CodigoTipoNomina = e.CODIGO_TIPO_NOMINA,
+                     TipoNomina = e.TIPO_NOMINA,
+                     TipoCuentaId = e.TIPO_CUENTA_ID,
+                     DescripcionTipoCuenta = e.DESCRIPCION_TIPO_CUENTA,
+                     BancoId = e.BANCO_ID,
+                     DescripcionBanco = e.DESCRIPCION_BANCO,
+                     NoCuenta = e.NO_CUENTA,
+                     FechaNominaMov = e.FECHA_NOMINA_MOV.ToShortDateString(),
+                     Complemento = e.COMPLEMENTO,
+                     Tipo = e.TIPO,
+                     Monto = e.MONTO,
+                     StatusMov = e.ESTATUS_MOV,
+                     Codigo = e.CODIGO,
+                     Denominacion = e.DENOMINACION,
+                     CodigoPeriodo = (int)e.CODIGO_PERIODO,
+                     Avatar = "",
+                     UnidadEjecutora = e.UNIDAD_EJECUTORA,
+                     EstadoCivil = "" //descriptivas.Where(d => d.CODIGO == (e.ESTADO_CIVIL ?? "0")).First().DESCRIPCION
+
+                 });
+                result = resultNew.ToList();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+           
+
+
+
+           /* foreach (var item in dto)
             {
                 try
                 {
@@ -114,8 +182,6 @@ namespace Convertidor.Services.Rh
                     itemResult.CodigoTipoNomina = item.CODIGO_TIPO_NOMINA;
                     itemResult.TipoNomina = item.TIPO_NOMINA;
 
-                    //itemResult.CodigoSector =item.CODIGO_SECTOR;
-                    //itemResult.CodigoPrograma = item.CODIGO_PROGRAMA;
                     itemResult.TipoCuentaId = item.TIPO_CUENTA_ID;
                     itemResult.DescripcionTipoCuenta = item.DESCRIPCION_TIPO_CUENTA;
                     itemResult.BancoId = item.BANCO_ID;
@@ -148,9 +214,9 @@ namespace Convertidor.Services.Rh
                     var msg = ex.Message;
                 }
                
-            }
+            }*/
 
-            return result;
+         
 
         }
 
