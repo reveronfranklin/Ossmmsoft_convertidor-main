@@ -5,7 +5,9 @@ namespace Convertidor.Dtos.Presupuesto
 	{
         public int CodigoPresupuesto { get; set; }
         public string SearchText { get; set; } = string.Empty;
-        public int CodigoEmpresa { get; set; } 
+        public int CodigoEmpresa { get; set; }
+        public int FinanciadoId { get; set; } 
+
     }
 }
 

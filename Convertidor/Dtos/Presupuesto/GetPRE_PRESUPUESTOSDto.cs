@@ -22,11 +22,18 @@ namespace Convertidor.Dtos.Presupuesto
         public string TotalDisponibleString { get; set; } =string.Empty;
         public string TotalPresupuestoString { get; set; } = string.Empty;
 
+        public decimal TotalModificacion { get; set; }
+        public string TotalModificacionString { get; set; } = string.Empty;
+
+        public decimal TotalVigente { get; set; }
+        public string TotalVigenteString { get; set; } = string.Empty;
+
+
         public FechaDto FechaDesdeObj { get; set; }
         public FechaDto FechaHastaObj { get; set; }
         public FechaDto FechaAprobacionObj { get; set; }
         public FechaDto FechaOrdenanzaObj { get; set; }
-
+        public List<PreFinanciadoDto>? PreFinanciadoDto { get; set; }
         public List<GetPRE_V_DENOMINACION_PUCDto>? PreDenominacionPuc  { get; set; }
         public List<GetPreDenominacionPucResumenAnoDto>? PreDenominacionPucResumen { get; set; }
 

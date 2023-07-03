@@ -48,7 +48,7 @@ namespace Convertidor.Services.Presupuesto
                 var presupuesto = await _repository.GetByCodigo(filter.CodigoEmpresa, filter.CodigoPresupuesto);
                 if (presupuesto != null)
                 {
-                    var dto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto);
+                    var dto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto,filter);
                     result.Data = dto;
                     result.IsValid = true;
                     result.Message = "";
@@ -81,7 +81,7 @@ namespace Convertidor.Services.Presupuesto
             {
                 var presupuesto = await _repository.GetAll();
                 if (presupuesto.Count() > 0)
-                {
+                 {
                     List<ListPresupuestoDto> listDto = new List<ListPresupuestoDto>();
 
                     foreach (var item in presupuesto.OrderByDescending(x => x.FECHA_HASTA).ToList())
@@ -89,6 +89,12 @@ namespace Convertidor.Services.Presupuesto
                         ListPresupuestoDto dto = new ListPresupuestoDto();
                         dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
                         dto.Descripcion = item.DENOMINACION;
+                           var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
+                if (preListFinanciado.Count > 0) {
+
+                    dto.PreFinanciadoDto = preListFinanciado;
+                }
+
                         listDto.Add(dto);
                     }
 
@@ -125,14 +131,35 @@ namespace Convertidor.Services.Presupuesto
             ResultDto<List<GetPRE_PRESUPUESTOSDto>> result = new ResultDto<List<GetPRE_PRESUPUESTOSDto>>(null);
             try
             {
+
+
+
+
                 var presupuesto = await _repository.GetAll();
+
+                if (filter.CodigoPresupuesto == 0) {
+
+                    var ultimo = presupuesto.OrderByDescending(x => x.CODIGO_PRESUPUESTO).ToList();
+
+                    if (ultimo.Count > 0) {
+
+                        int codigoPresupuesto = ultimo.FirstOrDefault().CODIGO_PRESUPUESTO;
+                        presupuesto = presupuesto.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto).ToList();
+
+                    }
+                }
+                else {
+                    presupuesto = presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto).ToList();
+                }
+
+
                 if (presupuesto.Count() >0)
-                {
+                    {
                     List< GetPRE_PRESUPUESTOSDto> listDto = new List<GetPRE_PRESUPUESTOSDto>();
 
                     foreach (var item in presupuesto.OrderByDescending(X=>X.CODIGO_PRESUPUESTO).ToList())
                     {
-                        var dto = await MapPrePresupuestoToGetPrePresupuestoDto(item);
+                        var dto = await MapPrePresupuestoToGetPrePresupuestoDto(item,filter);
                         listDto.Add(dto);
                     }
 
@@ -197,7 +224,10 @@ namespace Convertidor.Services.Presupuesto
                 var entity = MapCreatePrePresupuestoDtoToPrePresupuesto(dto);
                 entity.CODIGO_PRESUPUESTO = await _repository.GetNextKey();  
                 var created = await _repository.Add(entity);
-                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDto(created.Data);
+                FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
+                filter.FinanciadoId = 0;
+                filter.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
+                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDto(created.Data,filter);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -270,7 +300,11 @@ namespace Convertidor.Services.Presupuesto
                 presupuesto.FECHA_UPD = DateTime.Now;
                
                 await _repository.Update(presupuesto);
-                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto);
+
+                FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
+                filter.FinanciadoId = 0;
+                filter.CodigoPresupuesto = presupuesto.CODIGO_PRESUPUESTO;
+                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto,filter);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -299,7 +333,7 @@ namespace Convertidor.Services.Presupuesto
             return FechaDesdeObj;
         }
 
-        public async Task<GetPRE_PRESUPUESTOSDto> MapPrePresupuestoToGetPrePresupuestoDto(PRE_PRESUPUESTOS entity)
+        public async Task<GetPRE_PRESUPUESTOSDto> MapPrePresupuestoToGetPrePresupuestoDto(PRE_PRESUPUESTOS entity, FilterPRE_PRESUPUESTOSDto filterDto)
         {
             GetPRE_PRESUPUESTOSDto dto = new GetPRE_PRESUPUESTOSDto();
             dto.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
@@ -334,12 +368,23 @@ namespace Convertidor.Services.Presupuesto
             dto.TotalDisponible = 0;
             dto.TotalPresupuestoString = "";
             dto.TotalDisponibleString = "";
+            dto.TotalModificacion = 0;
+            dto.TotalModificacionString = "";
+            dto.TotalVigente = 0;
+            dto.TotalVigenteString = "";
             //var preDenominacionPuc = await _preDenominacionPucRepository.GetByCodigoPresupuesto(dto.CodigoPresupuesto);
             List<GetPRE_V_DENOMINACION_PUCDto> listpreDenominacionPuc = new List<GetPRE_V_DENOMINACION_PUCDto>();
             FilterPreDenominacionDto filter = new FilterPreDenominacionDto();
-
+            filter.FinanciadoId = 0;
+           
+           
             filter.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
-            filter.FinanciadoId = 92;
+
+            int financiadoInt = filterDto.FinanciadoId;
+            if (financiadoInt > 0) {
+                filter.FinanciadoId = financiadoInt;
+            }
+            
             filter.FechaDesde = entity.FECHA_DESDE;
             filter.FechaHasta = entity.FECHA_HASTA;
             filter.CodigoGrupo = "4";
@@ -375,7 +420,7 @@ namespace Convertidor.Services.Presupuesto
                 // if (dto.TotalPresupuesto > 1000) dto.TotalPresupuesto = dto.TotalPresupuesto / 1000;
                 //if (dto.TotalDisponible > 1000) dto.TotalDisponible = dto.TotalDisponible / 1000;
 
-                listpreDenominacionPuc = listpreDenominacionPuc.Where(X => X.Presupuestado > 0).ToList();
+                //listpreDenominacionPuc = listpreDenominacionPuc.Where(X => X.Presupuestado > 0).ToList();
                 dto.PreDenominacionPuc = listpreDenominacionPuc;
 
                 var preDenominacionPucresumen = ResumenePreDenominacionPuc(listpreDenominacionPuc);
@@ -388,15 +433,25 @@ namespace Convertidor.Services.Presupuesto
                     {
                         dto.TotalPresupuesto = dto.TotalPresupuesto + item.Presupuestado;
                         dto.TotalDisponible = dto.TotalDisponible + item.Disponibilidad;
+                        dto.TotalModificacion = dto.TotalModificacion + item.Modificado;
+                        
                     }
 
-                  
+                    dto.TotalVigente = dto.TotalModificacion + dto.TotalPresupuesto;
+
+                    dto.TotalVigenteString = dto.TotalVigente.ToString("#,#", CultureInfo.InvariantCulture);
+
                     dto.TotalPresupuestoString = dto.TotalPresupuesto.ToString("#,#", CultureInfo.InvariantCulture);
                     
                     dto.TotalDisponibleString = dto.TotalDisponible.ToString("#,#", CultureInfo.InvariantCulture);
-                    
 
+                    dto.TotalModificacionString = dto.TotalModificacion.ToString("#,#", CultureInfo.InvariantCulture);
+                }
 
+                var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
+                if (preListFinanciado.Count > 0) {
+
+                    dto.PreFinanciadoDto = preListFinanciado;
                 }
 
 
@@ -406,6 +461,7 @@ namespace Convertidor.Services.Presupuesto
             return dto;
 
         }
+
         public List<GetPreDenominacionPucResumenAnoDto> ResumenePreDenominacionPuc(List<GetPRE_V_DENOMINACION_PUCDto> dto)
         {
             List<GetPreDenominacionPucResumenAnoDto> result = new List<GetPreDenominacionPucResumenAnoDto>();

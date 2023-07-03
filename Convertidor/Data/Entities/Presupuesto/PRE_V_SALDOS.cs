@@ -44,7 +44,7 @@ namespace Convertidor.Data.Entities.Presupuesto
         public int? CODIGO_EMPRESA { get; set; }
         public int? CODIGO_PRESUPUESTO { get; set; }
         public DateTime? FECHA_SOLICITUD { get; set; }
-        
+        public string DESCRIPTIVA_FINANCIADO { get; set; } = string.Empty;
 
 
     }

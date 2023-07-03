@@ -7,6 +7,7 @@ using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos.Rh;
+using Convertidor.Utility;
 using NPOI.SS.Formula.Functions;
 using static NPOI.HSSF.Util.HSSFColor;
 
@@ -95,6 +96,7 @@ namespace Convertidor.Services.Rh
 
         private async Task<List<ListHistoricoMovimientoDto>> MapListHistoricoMovimiento(List<RH_V_HISTORICO_MOVIMIENTOS> dto)
         {
+            
             List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
             var descriptivas =await _descriptivaServices.GetAll();
             try
@@ -133,16 +135,16 @@ namespace Convertidor.Services.Rh
                      Tipo = e.TIPO,
                      Monto = e.MONTO,
                      StatusMov = e.ESTATUS_MOV,
-                     Codigo = e.CODIGO,
+                     Codigo = e.CODIGO, 
                      Denominacion = e.DENOMINACION,
                      CodigoPeriodo = (int)e.CODIGO_PERIODO,
                      Avatar = "",
                      UnidadEjecutora = e.UNIDAD_EJECUTORA,
-                     EstadoCivil = "" //descriptivas.Where(d => d.CODIGO == (e.ESTADO_CIVIL ?? "0")).First().DESCRIPCION
+                     EstadoCivil = e.ESTADO_CIVIL
 
                  });
-                result = resultNew.ToList();
-
+                    result = resultNew.ToList();
+             
                 return result;
             }
             catch (Exception ex)

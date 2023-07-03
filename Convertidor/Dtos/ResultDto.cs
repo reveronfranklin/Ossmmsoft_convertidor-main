@@ -18,7 +18,9 @@ namespace Convertidor.Dtos
         public bool IsValid  { get; set; }
         public string LinkData { get; set; }
         public string Message { get; set; } = string.Empty;
-    
+        public int Page { get; set; }
+        public int CantidadRegistros { get; set; }
+
 
     }
 

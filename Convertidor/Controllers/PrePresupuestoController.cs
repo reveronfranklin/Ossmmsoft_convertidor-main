@@ -52,20 +52,17 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetListPresupuesto()
         {
           
-
             var result = await _prePresupuestoService.GetListPresupuesto();
             return Ok(result.Data);
-
-
         }
-
+                
 
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult>  GetAllFilter(FilterPRE_PRESUPUESTOSDto filter)
         {
-            var result = await _prePresupuestoService.GetAll(filter);
-            return Ok(result);
+                var result = await _prePresupuestoService.GetAll(filter);
+                return Ok(result);
         }
 
         [HttpPost]

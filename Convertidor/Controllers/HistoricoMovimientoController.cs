@@ -128,6 +128,11 @@ namespace Convertidor.Controllers
                 resultDto.IsValid = true;
                 resultDto.Message = "";
                 resultDto.LinkData = $"/ExcelFiles/{fileName}";
+                //if (filter.Page == 0) filter.Page = 1;
+               // var historico = Paginacion<ListHistoricoMovimientoDto>.CrearPaginacion(result, filter.Page, filter.PageSize);
+                //resultDto.Data = historico;
+                resultDto.Page = filter.Page;
+                resultDto.CantidadRegistros = result.Count();
             }
             else
             {
@@ -136,7 +141,10 @@ namespace Convertidor.Controllers
                 resultDto.Message = "No Data";
                 resultDto.LinkData = $"";
             }
-           
+
+
+            
+         
 
             return Ok(resultDto);
           

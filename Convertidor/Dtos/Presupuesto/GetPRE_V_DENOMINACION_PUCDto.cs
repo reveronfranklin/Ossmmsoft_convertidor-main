@@ -27,6 +27,10 @@ namespace Convertidor.Dtos.Presupuesto
         public string PresupuestadoString { get { return ConvertMoneda(TotalPresupuestado); } }
         public string DisponibilidadString { get { return ConvertMoneda(Disponibilidad); } }
         public string DisponibilidadFinanString { get { return ConvertMoneda(DisponibilidadFinan); } }
+        public string ModificadoString { get { return ConvertMoneda(Modificado); } }
+        public string VigenteString { get { return ConvertMoneda(Presupuestado + Modificado); } }
+
+
         public string CodigoPUC { get { return $"{CodigoPartida}.{CodigoGenerica}.{CodigoEspecifica}.{CodigoSubEspecifica}.{CodigoNivel5}"; } }
 
         public string ConvertMoneda(decimal value)

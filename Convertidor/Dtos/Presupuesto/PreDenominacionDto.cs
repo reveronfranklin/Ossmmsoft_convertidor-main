@@ -31,9 +31,19 @@ namespace Convertidor.Dtos.Presupuesto
         public decimal DisponibilidadFinan { get; set; }
 
         public decimal Vigente { get { return Presupuestado + Modificado; } }
+        List<PreFinanciadoDto>? PreFinanciadoDto { get; set; }
 
-     
+
+
+    }
+    public class PreFinanciadoDto
+    {
+
+
+        public int FinanciadoId { get; set; }
+        public string DescripcionFinanciado { get; set; } = string.Empty;
     
+
 
     }
     public class PreDenominacionPorDepartamentoDto
