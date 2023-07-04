@@ -35,7 +35,7 @@ namespace Convertidor.Dtos.Presupuesto
         public string ConvertMoneda(decimal value)
         {
             string literal = "";
-            if (Pagado == 0)
+            if (value == 0)
             {
                 literal = "Bs. 0,0";
             }

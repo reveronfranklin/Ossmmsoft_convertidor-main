@@ -159,8 +159,36 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
 
-                var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.CODIGO_PUC_CONCAT==filter.CodigoPucConcat).ToListAsync();
+
+                List<PRE_V_SALDOS> result = new List<PRE_V_SALDOS>();
+
+                
+
+                if(filter.CodigoPresupuesto == 0 && filter.CodigoPucConcat.Length == 0)
+                {
+
+                    var last = await _context.PRE_PRESUPUESTOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_PRESUPUESTO)
+                    .FirstOrDefaultAsync();
+                    result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PRESUPUESTO == last.CODIGO_PRESUPUESTO).ToListAsync();
+
+
+                }
+                if (filter.CodigoPresupuesto>0 && filter.CodigoPucConcat.Length>0)
+                {
+                    result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.CODIGO_PUC_CONCAT == filter.CodigoPucConcat).ToListAsync();
+                }
+                if (filter.CodigoPresupuesto > 0 && filter.CodigoPucConcat.Length == 0)
+                {
+                    result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto ).ToListAsync();
+                }
+
+
+
+
                 return (List<PRE_V_SALDOS>)result;
             }
             catch (Exception ex)
