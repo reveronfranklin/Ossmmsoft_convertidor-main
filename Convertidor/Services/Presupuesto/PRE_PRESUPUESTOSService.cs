@@ -11,6 +11,7 @@ using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Catastro;
 using Convertidor.Dtos.Presupuesto;
+using static Convertidor.Dtos.PetroBsGetDto;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -190,6 +191,60 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
+        public async Task<ResultDto<List<GetPRE_PRESUPUESTOSDto>>> GetList(FilterPRE_PRESUPUESTOSDto filter)
+        {
+
+            ResultDto<List<GetPRE_PRESUPUESTOSDto>> result = new ResultDto<List<GetPRE_PRESUPUESTOSDto>>(null);
+            try
+            {
+
+
+
+
+                var presupuesto = await _repository.GetAll();
+
+              
+
+
+                if (presupuesto.Count() > 0)
+                {
+                    List<GetPRE_PRESUPUESTOSDto> listDto = new List<GetPRE_PRESUPUESTOSDto>();
+
+                    foreach (var item in presupuesto.OrderByDescending(X => X.CODIGO_PRESUPUESTO).ToList())
+                    {
+                        var dto = await MapPrePresupuestoToGetPrePresupuestoDtoCrud(item, filter);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto.OrderByDescending(x => x.FechaHasta).ToList();
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
+
+
         public async Task<ResultDto<GetPRE_PRESUPUESTOSDto>> Create(CreatePRE_PRESUPUESTOSDto dto)
         {
 
@@ -288,11 +343,11 @@ namespace Convertidor.Services.Presupuesto
                 presupuesto.DESCRIPCION = dto.Descripcion;
                 presupuesto.ANO = dto.Ano;
                 presupuesto.MONTO_PRESUPUESTO = dto.MontoPresupuesto;
-                presupuesto.FECHA_DESDE = dto.FechaDesde;
-                presupuesto.FECHA_HASTA = dto.FechaHasta;
-                presupuesto.FECHA_APROBACION = dto.FechaAprobacion;
+                presupuesto.FECHA_DESDE = Convert.ToDateTime(dto.FechaDesde, CultureInfo.InvariantCulture);
+                presupuesto.FECHA_HASTA = Convert.ToDateTime(dto.FechaHasta, CultureInfo.InvariantCulture); 
+                presupuesto.FECHA_APROBACION = Convert.ToDateTime(dto.FechaAprobacion, CultureInfo.InvariantCulture);  
                 presupuesto.NUMERO_ORDENANZA = dto.NumeroOrdenanza;
-                presupuesto.FECHA_ORDENANZA = dto.FechaOrdenanza;
+                presupuesto.FECHA_ORDENANZA = Convert.ToDateTime(dto.FechaOrdenanza, CultureInfo.InvariantCulture); 
                 presupuesto.EXTRA1 = dto.Extra1;
                 presupuesto.EXTRA2 = dto.Extra2;
                 presupuesto.EXTRA3 = dto.Extra3;
@@ -304,7 +359,7 @@ namespace Convertidor.Services.Presupuesto
                 FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
                 filter.FinanciadoId = 0;
                 filter.CodigoPresupuesto = presupuesto.CODIGO_PRESUPUESTO;
-                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto,filter);
+                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDtoCrud(presupuesto,filter);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -462,6 +517,57 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
+
+        public async Task<GetPRE_PRESUPUESTOSDto> MapPrePresupuestoToGetPrePresupuestoDtoCrud(PRE_PRESUPUESTOS entity, FilterPRE_PRESUPUESTOSDto filterDto)
+        {
+            GetPRE_PRESUPUESTOSDto dto = new GetPRE_PRESUPUESTOSDto();
+            dto.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
+            dto.Denominacion = entity.DENOMINACION;
+            dto.Descripcion = entity.DESCRIPCION ?? "";
+            dto.Ano = entity.ANO;
+            dto.MontoPresupuesto = entity.MONTO_PRESUPUESTO;
+            dto.FechaDesde = entity.FECHA_DESDE.ToString("u");
+            dto.FechaHasta = entity.FECHA_HASTA.ToString("u");
+            dto.FechaAprobacion = entity.FECHA_APROBACION.ToString("u");
+            dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
+
+            dto.FechaOrdenanza = entity.FECHA_ORDENANZA.ToString("u");
+
+            FechaDto FechaDesdeObj = GetFechaDto(entity.FECHA_DESDE);
+            dto.FechaDesdeObj = (FechaDto)FechaDesdeObj;
+
+            FechaDto FechaHastaObj = GetFechaDto(entity.FECHA_HASTA);
+            dto.FechaHastaObj = (FechaDto)FechaHastaObj;
+
+            FechaDto FechaAprobacionObj = GetFechaDto(entity.FECHA_APROBACION);
+            dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
+
+            FechaDto FechaOrdenanzaObj = GetFechaDto(entity.FECHA_ORDENANZA);
+            dto.FechaOrdenanzaObj = (FechaDto)FechaOrdenanzaObj;
+
+
+            dto.Extra1 = entity.EXTRA1;
+            dto.Extra2 = entity.EXTRA2;
+            dto.Extra2 = entity.EXTRA3;
+            dto.TotalPresupuesto = 0;
+            dto.TotalDisponible = 0;
+            dto.TotalPresupuestoString = "";
+            dto.TotalDisponibleString = "";
+            dto.TotalModificacion = 0;
+            dto.TotalModificacionString = "";
+            dto.TotalVigente = 0;
+            dto.TotalVigenteString = "";
+          
+
+
+            return dto;
+
+        }
+
+
+
+
+
         public List<GetPreDenominacionPucResumenAnoDto> ResumenePreDenominacionPuc(List<GetPRE_V_DENOMINACION_PUCDto> dto)
         {
             List<GetPreDenominacionPucResumenAnoDto> result = new List<GetPreDenominacionPucResumenAnoDto>();
@@ -552,11 +658,11 @@ namespace Convertidor.Services.Presupuesto
             entity.DESCRIPCION = dto.Descripcion;
             entity.ANO = dto.Ano;
             entity.MONTO_PRESUPUESTO = dto.MontoPresupuesto;
-            entity.FECHA_DESDE = dto.FechaDesde;
-            entity.FECHA_HASTA = dto.FechaHasta;
-            entity.FECHA_APROBACION = dto.FechaAprobacion;
+            entity.FECHA_DESDE = Convert.ToDateTime(dto.FechaDesde, CultureInfo.InvariantCulture);  
+            entity.FECHA_HASTA = Convert.ToDateTime(dto.FechaHasta, CultureInfo.InvariantCulture); 
+            entity.FECHA_APROBACION = Convert.ToDateTime(dto.FechaAprobacion, CultureInfo.InvariantCulture);  
             entity.NUMERO_ORDENANZA = dto.NumeroOrdenanza;
-            entity.FECHA_ORDENANZA = dto.FechaOrdenanza;
+            entity.FECHA_ORDENANZA = Convert.ToDateTime(dto.FechaOrdenanza, CultureInfo.InvariantCulture); 
             entity.EXTRA1 = dto.Extra1;
             entity.EXTRA2 = dto.Extra2;
             entity.EXTRA3 = dto.Extra3;
