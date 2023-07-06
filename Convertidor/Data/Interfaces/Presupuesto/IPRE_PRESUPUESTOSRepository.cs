@@ -15,7 +15,8 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<PRE_PRESUPUESTOS>> Add(PRE_PRESUPUESTOS entity);
 
         Task<ResultDto<PRE_PRESUPUESTOS>> Update(PRE_PRESUPUESTOS entity);
-        Task Delete(int codigoEmpresa, int codigoPresupuesto);
+
+        Task<string> Delete(int codigoEmpresa, int codigoPresupuesto);
         Task<bool> ExisteEnPeriodo(int codigoEmpresa, DateTime desde, DateTime hasta);
 
         Task<int> GetNextKey();

@@ -105,7 +105,17 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-        // PUT api/<HistoricoNominaController>/5
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete(DeletePrePresupuestoDto dto)
+        {
+            var result = await _prePresupuestoService.Delete(dto);
+            return Ok(result);
+        }
+
+
+       
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {

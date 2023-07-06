@@ -50,6 +50,9 @@ builder.Services.AddTransient<IPRE_V_DOC_CAUSADORepository, PRE_V_DOC_CAUSADORep
 builder.Services.AddTransient<IPRE_V_DOC_PAGADORepository, PRE_V_DOC_PAGADORepository>();
 builder.Services.AddTransient<IPRE_V_DOC_BLOQUEADORepository, PRE_V_DOC_BLOQUEADORepository>();
 builder.Services.AddTransient<IPRE_V_DOC_MODIFICADORepository, PRE_V_DOC_MODIFICADORepository>();
+builder.Services.AddTransient<IPRE_ASIGNACIONESRepository, PRE_ASIGNACIONESRepository>();
+
+
 
 //Services Presupuesto
 builder.Services.AddTransient<IPRE_PRESUPUESTOSService, PRE_PRESUPUESTOSService>();

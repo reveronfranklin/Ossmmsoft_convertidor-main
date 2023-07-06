@@ -188,14 +188,24 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task Delete(int codigoEmpresa, int codigoPresupuesto)
+        public async Task<string> Delete(int codigoEmpresa, int codigoPresupuesto)
         {
-            PRE_PRESUPUESTOS entity = await GetByCodigo(codigoEmpresa, codigoPresupuesto);
-            if (entity != null)
+
+            try
             {
-                _context.PRE_PRESUPUESTOS.Remove(entity);
-                _context.SaveChanges();
+                PRE_PRESUPUESTOS entity = await GetByCodigo(codigoEmpresa, codigoPresupuesto);
+                if (entity != null)
+                {
+                    _context.PRE_PRESUPUESTOS.Remove(entity);
+                    _context.SaveChanges();
+                }
+                return "";
             }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+         
 
 
         }

@@ -14,6 +14,7 @@ namespace Convertidor.Services.Presupuesto
 
         Task<ResultDto<GetPRE_PRESUPUESTOSDto>> Create(CreatePRE_PRESUPUESTOSDto dto);
         Task<ResultDto<GetPRE_PRESUPUESTOSDto>> Update(UpdatePRE_PRESUPUESTOSDto dto);
+        Task<ResultDto<DeletePrePresupuestoDto>> Delete(DeletePrePresupuestoDto dto);
 
         Task<ResultDto<List<ListPresupuestoDto>>> GetListPresupuesto();
         Task<ResultDto<List<GetPRE_PRESUPUESTOSDto>>> GetList(FilterPRE_PRESUPUESTOSDto filter);

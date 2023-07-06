@@ -22,17 +22,19 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPRE_PRESUPUESTOSRepository _repository;
         private readonly IPRE_V_DENOMINACION_PUCRepository _preDenominacionPucRepository;
         private readonly IPRE_V_SALDOSRepository _pre_V_SALDOSRepository;
-
+        private readonly IPRE_ASIGNACIONESRepository _PRE_ASIGNACIONESRepository;
         private readonly IMapper _mapper;
 
         public PRE_PRESUPUESTOSService(IPRE_PRESUPUESTOSRepository repository,
                                         IPRE_V_DENOMINACION_PUCRepository preDenominacionPucRepository,
                                         IPRE_V_SALDOSRepository pre_V_SALDOSRepository,
+                                        IPRE_ASIGNACIONESRepository PRE_ASIGNACIONESRepository,
                                       IMapper mapper)
         {
             _repository = repository;
             _preDenominacionPucRepository = preDenominacionPucRepository;
             _pre_V_SALDOSRepository = pre_V_SALDOSRepository;
+            _PRE_ASIGNACIONESRepository = PRE_ASIGNACIONESRepository;
             _mapper = mapper;
         }
 
@@ -243,6 +245,64 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
+        
+        public async Task<ResultDto<DeletePrePresupuestoDto>> Delete(DeletePrePresupuestoDto dto)
+        {
+
+            ResultDto<DeletePrePresupuestoDto> result = new ResultDto<DeletePrePresupuestoDto>(null);
+            try
+            {
+
+                var presupuesto = await _repository.GetByCodigo(13, dto.CodigoPresupuesto);
+                if (presupuesto == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto no existe";
+                    return result;
+                }
+
+                var presupuestoExiste = await _PRE_ASIGNACIONESRepository.PresupuestoExiste(dto.CodigoPresupuesto);
+                if (presupuestoExiste)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto no puede ser eliminado,tiene Movimiento creado";
+                    return result;
+                }
+
+
+                var  deleted =await _repository.Delete(13,dto.CodigoPresupuesto);
+
+                if (deleted.Length>0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+               
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
 
 
         public async Task<ResultDto<GetPRE_PRESUPUESTOSDto>> Create(CreatePRE_PRESUPUESTOSDto dto)
@@ -266,8 +326,9 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Periodo Presupuesto  Invalido";
                     return result;
                 }
-              
-                var existePeriodo = await _repository.ExisteEnPeriodo(dto.CodigoEmpresa,dto.FechaDesde,dto.FechaHasta);
+               var fechaDesde = Convert.ToDateTime(dto.FechaDesde, CultureInfo.InvariantCulture);
+                var fechaHasta = Convert.ToDateTime(dto.FechaHasta, CultureInfo.InvariantCulture);
+                var existePeriodo = await _repository.ExisteEnPeriodo(dto.CodigoEmpresa, fechaDesde, fechaHasta);
                 if (existePeriodo)
                 {
                     result.Data = null;
@@ -376,6 +437,9 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
+
+
+
         public FechaDto GetFechaDto(DateTime fecha)
         {
             var FechaDesdeObj = new FechaDto();
@@ -627,23 +691,29 @@ namespace Convertidor.Services.Presupuesto
             entity.DESCRIPCION = dto.Descripcion;
             entity.ANO = dto.Ano;
             entity.MONTO_PRESUPUESTO = dto.MontoPresupuesto;
-            entity.FECHA_DESDE = dto.FechaDesde;
-            entity.FECHA_HASTA = dto.FechaHasta;
-            entity.FECHA_APROBACION = dto.FechaAprobacion;
+            entity.FECHA_DESDE = Convert.ToDateTime(dto.FechaDesde, CultureInfo.InvariantCulture); 
+            entity.FECHA_HASTA = Convert.ToDateTime(dto.FechaHasta, CultureInfo.InvariantCulture);
+            DateTime dDate;
+
+            if (DateTime.TryParse(dto.FechaAprobacion, out dDate))
+            {
+                entity.FECHA_APROBACION = Convert.ToDateTime(dto.FechaAprobacion, CultureInfo.InvariantCulture);
+            }
+     
+           
             entity.NUMERO_ORDENANZA = dto.NumeroOrdenanza;
-            entity.FECHA_ORDENANZA = dto.FechaOrdenanza;
+            if (DateTime.TryParse(dto.FechaOrdenanza, out dDate))
+            {
+                entity.FECHA_ORDENANZA = Convert.ToDateTime(dto.FechaOrdenanza, CultureInfo.InvariantCulture);
+            }
+           
             entity.EXTRA1 = dto.Extra1;
             entity.EXTRA2 = dto.Extra2;
             entity.EXTRA3 = dto.Extra3;
             entity.USUARIO_INS = dto.UsuarioIns;
             entity.FECHA_INS = DateTime.Now;
             entity.CODIGO_EMPRESA = dto.CodigoEmpresa;
-
-        
-
             return entity;
-
-
 
 
         }
