@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Convertidor.Data.Entities;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.EntitiesDestino;
 
 namespace Convertidor.Profiles

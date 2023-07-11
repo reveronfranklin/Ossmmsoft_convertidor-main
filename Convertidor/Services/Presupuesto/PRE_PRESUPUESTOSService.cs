@@ -11,6 +11,7 @@ using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Catastro;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 using static Convertidor.Dtos.PetroBsGetDto;
 
 namespace Convertidor.Services.Presupuesto
@@ -558,13 +559,13 @@ namespace Convertidor.Services.Presupuesto
 
                     dto.TotalVigente = dto.TotalModificacion + dto.TotalPresupuesto;
 
-                    dto.TotalVigenteString = dto.TotalVigente.ToString("#,#", CultureInfo.InvariantCulture);
+                    dto.TotalVigenteString = ConvertidorMoneda.ConvertMoneda(dto.TotalVigente);
 
-                    dto.TotalPresupuestoString = dto.TotalPresupuesto.ToString("#,#", CultureInfo.InvariantCulture);
-                    
-                    dto.TotalDisponibleString = dto.TotalDisponible.ToString("#,#", CultureInfo.InvariantCulture);
+                    dto.TotalPresupuestoString = ConvertidorMoneda.ConvertMoneda(dto.TotalPresupuesto);
 
-                    dto.TotalModificacionString = dto.TotalModificacion.ToString("#,#", CultureInfo.InvariantCulture);
+                    dto.TotalDisponibleString = ConvertidorMoneda.ConvertMoneda(dto.TotalDisponible);
+
+                    dto.TotalModificacionString = ConvertidorMoneda.ConvertMoneda(dto.TotalModificacion); 
                 }
 
                 var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);

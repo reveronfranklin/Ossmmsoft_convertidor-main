@@ -98,7 +98,12 @@ namespace Convertidor.Data
             })
              .Entity<PRE_INDICE_CAT_PRG>(builder =>
              {
-                 builder.HasNoKey();
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_ICP,
+
+                 });
                  builder.ToTable("PRE_INDICE_CAT_PRG");
              })
               .Entity<PRE_PLAN_UNICO_CUENTAS>(builder =>

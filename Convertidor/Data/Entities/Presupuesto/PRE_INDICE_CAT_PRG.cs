@@ -1,7 +1,10 @@
-﻿namespace Convertidor.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Convertidor.Data.Entities.Presupuesto
 {
     public class PRE_INDICE_CAT_PRG 
     {
+        [Key]
         public int CODIGO_ICP { get; set; }
         public int ANO { get; set; }
         public int ESCENARIO { get; set; }

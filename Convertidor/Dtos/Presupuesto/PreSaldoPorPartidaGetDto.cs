@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Convertidor.Utility;
 
 namespace Convertidor.Dtos.Presupuesto
 {
@@ -22,7 +23,7 @@ namespace Convertidor.Dtos.Presupuesto
             get
             {
 
-                return ConvertMoneda(Presupuestado);
+                return ConvertidorMoneda.ConvertMoneda(Presupuestado);
 
             }
         }
@@ -31,7 +32,7 @@ namespace Convertidor.Dtos.Presupuesto
         {
             get
             {
-                return ConvertMoneda(Asignacion);
+                return ConvertidorMoneda.ConvertMoneda(Asignacion);
             }
         }
         public string ModificadoFormat
@@ -41,14 +42,14 @@ namespace Convertidor.Dtos.Presupuesto
 
        
 
-                return ConvertMoneda(Modificado);
+                return ConvertidorMoneda.ConvertMoneda(Modificado);
             }
         }
         public string BloqueadoFormat
         {
             get
             {
-                return ConvertMoneda(Bloqueado);
+                return ConvertidorMoneda.ConvertMoneda(Bloqueado);
             }
         }
         public string ComprometidoFormat
@@ -56,7 +57,7 @@ namespace Convertidor.Dtos.Presupuesto
             get
             {
 
-                return ConvertMoneda(Comprometido);
+                return ConvertidorMoneda.ConvertMoneda(Comprometido);
             }
         }
         public string CausadoFormat
@@ -64,7 +65,7 @@ namespace Convertidor.Dtos.Presupuesto
             get
             {
 
-                return ConvertMoneda(Causado);
+                return ConvertidorMoneda.ConvertMoneda(Causado);
             }
         }
 
@@ -73,25 +74,11 @@ namespace Convertidor.Dtos.Presupuesto
             get
             {
 
-               return ConvertMoneda(Pagado);
+               return ConvertidorMoneda.ConvertMoneda(Pagado);
             }
         }
 
-        public string ConvertMoneda(decimal value)
-        {
-            string literal = "";
-            if (value == 0)
-            {
-                literal = "Bs. 0,0";
-            }
-            else
-            {
-                literal = "Bs. " + value.ToString("#,#", CultureInfo.InvariantCulture);
-            }
-
-
-            return literal;
-        }
+     
 
 
 

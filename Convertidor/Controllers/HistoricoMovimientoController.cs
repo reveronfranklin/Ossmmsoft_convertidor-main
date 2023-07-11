@@ -117,7 +117,7 @@ namespace Convertidor.Controllers
 
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
-
+               
                 var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
                 var fileName = $"HistoricoNominaDesde {filter.Desde.Year.ToString()}-{filter.Desde.Month.ToString()}-{filter.Desde.Day.ToString()} Hasta {filter.Hasta.Year.ToString()}-{filter.Hasta.Month.ToString()}-{filter.Hasta.Day.ToString()}.xlsx";
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);

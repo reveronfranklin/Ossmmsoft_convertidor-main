@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Convertidor.Utility;
 
 namespace Convertidor.Dtos.Presupuesto
 {
@@ -24,30 +25,16 @@ namespace Convertidor.Dtos.Presupuesto
         public decimal DisponibilidadFinan { get; set; }
         public decimal TotalPresupuestado { get { return Presupuestado; } }
 
-        public string PresupuestadoString { get { return ConvertMoneda(TotalPresupuestado); } }
-        public string DisponibilidadString { get { return ConvertMoneda(Disponibilidad); } }
-        public string DisponibilidadFinanString { get { return ConvertMoneda(DisponibilidadFinan); } }
-        public string ModificadoString { get { return ConvertMoneda(Modificado); } }
-        public string VigenteString { get { return ConvertMoneda(Presupuestado + Modificado); } }
+        public string PresupuestadoString { get { return ConvertidorMoneda.ConvertMoneda(TotalPresupuestado); } }
+        public string DisponibilidadString { get { return ConvertidorMoneda.ConvertMoneda(Disponibilidad); } }
+        public string DisponibilidadFinanString { get { return ConvertidorMoneda.ConvertMoneda(DisponibilidadFinan); } }
+        public string ModificadoString { get { return ConvertidorMoneda.ConvertMoneda(Modificado); } }
+        public string VigenteString { get { return ConvertidorMoneda.ConvertMoneda(Presupuestado + Modificado); } }
 
 
         public string CodigoPUC { get { return $"{CodigoPartida}.{CodigoGenerica}.{CodigoEspecifica}.{CodigoSubEspecifica}.{CodigoNivel5}"; } }
 
-        public string ConvertMoneda(decimal value)
-        {
-            string literal = "";
-            if (value == 0)
-            {
-                literal = "Bs. 0,0";
-            }
-            else
-            {
-                literal = "Bs. " + value.ToString("#,#", CultureInfo.InvariantCulture);
-            }
-
-
-            return literal;
-        }
+      
 
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Convertidor.Utility;
 
 namespace Convertidor.Dtos.Presupuesto
 {
@@ -19,19 +20,8 @@ namespace Convertidor.Dtos.Presupuesto
         {
             get
             {
-
-                string literal = "";
-                if (Monto == 0)
-                {
-                    literal = "Bs. 0,0";
-                }
-                else
-                {
-                    literal = "Bs. " + Monto.ToString("#,#", CultureInfo.InvariantCulture);
-                }
-
-
-                return literal;
+                return ConvertidorMoneda.ConvertMoneda(Monto);
+              
             }
         }
         public string FechaFormat { get { return Fecha.ToShortDateString(); } }

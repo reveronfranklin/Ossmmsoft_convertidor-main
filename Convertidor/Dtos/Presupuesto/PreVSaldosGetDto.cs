@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Convertidor.Utility;
 
 namespace Convertidor.Dtos.Presupuesto
 {
@@ -53,63 +54,63 @@ namespace Convertidor.Dtos.Presupuesto
         public string PresupuestadoFormat {
             get {
 
-                return ConvertMoneda(Presupuestado);
+                return ConvertidorMoneda.ConvertMoneda(Presupuestado);
             }
         }
         public string DisponibleFormat
         {
             get
             {
-                return ConvertMoneda((decimal)Disponible);
+                return ConvertidorMoneda.ConvertMoneda((decimal)Disponible);
             }
         }
         public string AsignacionFormat
         {
             get
             {
-                return ConvertMoneda(Asignacion);
+                return ConvertidorMoneda.ConvertMoneda(Asignacion);
             }
         }
         public string BloqueadoFormat
         {
             get
             {
-                return ConvertMoneda(Bloqueado);
+                return ConvertidorMoneda.ConvertMoneda(Bloqueado);
             }
         }
         public string ModificadoFormat
         {
             get
             {
-                return ConvertMoneda(Modificado);
+                return ConvertidorMoneda.ConvertMoneda(Modificado);
             }
         }
         public string AjustadoFormat
         {
             get
             {
-                return ConvertMoneda(Ajustado);
+                return ConvertidorMoneda.ConvertMoneda(Ajustado);
             }
         }
         public string VigenteFormat
         {
             get
             {
-                return ConvertMoneda((decimal)Vigente);
+                return ConvertidorMoneda.ConvertMoneda((decimal)Vigente);
             }
         }
         public string ComprometidoFormat
         {
             get
             {
-                return ConvertMoneda(Comprometido);
+                return ConvertidorMoneda.ConvertMoneda(Comprometido);
             }
         }
         public string CausadoFormat
         {
             get
             {
-                return ConvertMoneda(Causado);
+                return ConvertidorMoneda.ConvertMoneda(Causado);
 
             }
         }
@@ -117,26 +118,12 @@ namespace Convertidor.Dtos.Presupuesto
         {
             get
             {
-                return ConvertMoneda(Pagado);
+                return ConvertidorMoneda.ConvertMoneda(Pagado);
             }
         }
 
 
-        public string ConvertMoneda(decimal value)
-        {
-            string literal = "";
-            if (value == 0)
-            {
-                literal = "Bs. 0,0";
-            }
-            else
-            {
-                literal = "Bs. " + value.ToString("#,#", CultureInfo.InvariantCulture);
-            }
-
-
-            return literal;
-        }
+     
 
         //public string PagadoFormat { get { return Pagado.ToString("C2"); } }
 
