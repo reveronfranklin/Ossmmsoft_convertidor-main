@@ -32,6 +32,22 @@ namespace Convertidor.Controllers
            
         }
 
+        
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> ListCodigosValidosIcp()
+        {
+            var result = await _indiceCategoriaProgramaService.ListCodigosValidosIcp();
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> ListCodigosHistoricoIcp()
+        {
+            var result = await _indiceCategoriaProgramaService.ListCodigosHistoricoIcp();
+            return Ok(result);
+        }
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult>  GetAllFilter(FilterByPresupuestoDto filter)

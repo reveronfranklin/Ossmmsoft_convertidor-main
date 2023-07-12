@@ -16,6 +16,7 @@ namespace Convertidor.Data
         }
         public DbSet<SIS_USUARIOS> SIS_USUARIOS { get; set; }
         public DbSet<SIS_V_SISTEMA_USUARIO_PROGRAMA> SIS_V_SISTEMA_USUARIO_PROGRAMA { get; set; }
+        public DbSet<OSS_CONFIG> OSS_CONFIG { get; set; }
 
         
 
@@ -40,8 +41,17 @@ namespace Convertidor.Data
 
               });
               builder.ToTable("SIS_USUARIOS");
-          });
+          })
+        .Entity<OSS_CONFIG>(builder =>
+        {
+            //builder.HasNoKey();
+            builder.HasKey(table => new
+            {
+                table.ID,
 
+            });
+            builder.ToTable("OSS_CONFIG");
+        });
 
         }
 

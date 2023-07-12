@@ -72,8 +72,12 @@ builder.Services.AddTransient<IPRE_V_DOC_MODIFICADOServices, PRE_V_DOC_MODIFICAD
 //Repository SIS
 
 builder.Services.AddTransient<ISisUsuarioRepository, SisUsuarioRepository>();
+builder.Services.AddTransient<IOssConfigRepository, OssConfigRepository>();
+
+
 //Services Sis
 builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
+builder.Services.AddTransient<IOssConfigServices, OssServices>();
 
 
 

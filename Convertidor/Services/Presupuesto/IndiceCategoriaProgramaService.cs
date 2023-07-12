@@ -4,6 +4,7 @@ using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto;
@@ -17,16 +18,19 @@ namespace Convertidor.Services
         private readonly IPRE_INDICE_CAT_PRGRepository _repository;
         private readonly IIndiceCategoriaProgramaRepository _destinoRepository;
         private readonly IPRE_PRESUPUESTOSRepository _presupuesttoRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
         private readonly IMapper _mapper;
 
         public IndiceCategoriaProgramaService(IPRE_INDICE_CAT_PRGRepository repository,
                                       IIndiceCategoriaProgramaRepository destinoRepository,
                                       IPRE_PRESUPUESTOSRepository presupuesttoRepository,
-                                      IMapper mapper)
+                                      IOssConfigRepository ossConfigRepository,
+                                        IMapper mapper)
         {
             _repository = repository;
             _destinoRepository = destinoRepository;
             _presupuesttoRepository = presupuesttoRepository;
+            _ossConfigRepository = ossConfigRepository;
             _mapper = mapper;
         }
 
@@ -381,6 +385,101 @@ namespace Convertidor.Services
             return result;
         }
 
+        public async Task<ResultDto<List<PreCodigosIcp>>> ListCodigosValidosIcp()
+        {
+            ResultDto<List<PreCodigosIcp>> result = new ResultDto<List<PreCodigosIcp>>(null);
+
+            List<PreCodigosIcp> resultList = new List<PreCodigosIcp>();
+            var listSector = await _ossConfigRepository.GetListByClave("CODIGO_SECTOR");
+            listSector = listSector.Where(x => x.VALOR == "01" ).ToList();
+            var listPrograma= await _ossConfigRepository.GetListByClave("CODIGO_PROGRAMA");
+            var listSubPrograma = await _ossConfigRepository.GetListByClave("CODIGO_SUBPROGRAMA");
+            var listProyecto = await _ossConfigRepository.GetListByClave("CODIGO_PROYECTO");
+            var listActividad = await _ossConfigRepository.GetListByClave("CODIGO_ACTIVIDAD");
+            listActividad = listActividad.Where(x => Int32.Parse(x.VALOR) <= 60).ToList();
+            var listOficina = await _ossConfigRepository.GetListByClave("CODIGO_OFICINA");
+
+            foreach (var itemSector in listSector)
+            {
+                
+                foreach (var itemPrograma in listPrograma)
+                {
+                    foreach (var itemSubPrograma in listSubPrograma)
+                    {
+                        foreach (var itemProyecto in listProyecto)
+                        {
+                            foreach (var itemActividad in listActividad)
+                            {
+                                foreach (var itemOficina in listOficina)
+                                {
+                                    PreCodigosIcp itemNew = new PreCodigosIcp();
+                                    itemNew.CodigoSector = itemSector.VALOR;
+                                    itemNew.CodigoPrograma = itemPrograma.VALOR;
+                                    itemNew.CodigoSubPrograma = itemSubPrograma.VALOR;
+                                    itemNew.CodigoProyecto = itemProyecto.VALOR;
+                                    itemNew.CodigoActividad = itemActividad.VALOR;
+                                    itemNew.CodigoOficina = itemOficina.VALOR;
+                                    resultList.Add(itemNew);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            result.Data = resultList;
+            result.IsValid = true;
+            result.Message = "";
+
+
+            return result;
+        }
+
+        public async Task<ResultDto<List<PreCodigosIcp>>> ListCodigosHistoricoIcp()
+        {
+            ResultDto<List<PreCodigosIcp>> result = new ResultDto<List<PreCodigosIcp>>(null);
+
+            List<PreCodigosIcp> resultList = new List<PreCodigosIcp>();
+
+
+            var icp = await _repository.GetAll();
+
+                var qicpDto = from s in icp.ToList()
+                              group s by new
+                              {
+                               
+                                  CodigoSector = s.CODIGO_SECTOR,
+                                  CodigoPrograma = s.CODIGO_PROGRAMA,
+                                  CodigoSubPrograma = s.CODIGO_SUBPROGRAMA,
+                                  CodigoProyecto = s.CODIGO_PROYECTO,
+                                  CodigoActividad = s.CODIGO_ACTIVIDAD,
+                               
+                                  CodigoOficina = s.CODIGO_OFICINA,
+                                 
+                              } into g
+                              select new PreCodigosIcp
+                              {
+
+                               
+                                  CodigoSector = g.Key.CodigoSector,
+                                  CodigoPrograma = g.Key.CodigoPrograma,
+                                  CodigoSubPrograma = g.Key.CodigoSubPrograma,
+                                  CodigoProyecto = g.Key.CodigoProyecto,
+                                  CodigoActividad = g.Key.CodigoActividad,
+                                  CodigoOficina = g.Key.CodigoOficina,
+                                
+
+                              };
+
+            resultList = qicpDto.ToList();
+            result.Data = resultList;
+            result.IsValid = true;
+            result.Message = "";
+
+
+            return result;
+        }
 
     }
 }
