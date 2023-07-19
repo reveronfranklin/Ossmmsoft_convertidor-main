@@ -69,31 +69,42 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter)
         {
             var result = await _service.GetAllByPresupuestoIpcPuc(filter);
-            if (result.Data.Count() > 0)
+            try
             {
+                if (result.Data.Count() > 0)
+                {
 
-                ExcelMapper mapper = new ExcelMapper();
-
-
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-
-
-                var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
-                var fileName = $"SaldoPresupuesto {filter.CodigoPresupuesto.ToString()}-{filter.CodigoIPC.ToString()}-{filter.CodigoPuc.ToString()}.xlsx";
-                string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+                    ExcelMapper mapper = new ExcelMapper();
 
 
-                mapper.Save(newFile, result.Data, $"SaldoPresupuesto", true);
+                    var settings = _configuration.GetSection("Settings").Get<Settings>();
 
-                result.LinkData = $"/ExcelFiles/{fileName}";
+
+                    var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+                    var fileName = $"SaldoPresupuesto {filter.CodigoPresupuesto.ToString()}-{filter.CodigoIPC.ToString()}-{filter.CodigoPuc.ToString()}.xlsx";
+                    string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+
+
+                    mapper.Save(newFile, result.Data, $"SaldoPresupuesto", true);
+
+                    result.LinkData = $"/ExcelFiles/{fileName}";
+                }
+                else
+                {
+
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    result.LinkData = $"";
+                }
             }
-            else
+            catch (Exception ex)
             {
-
-                result.IsValid = true;
-                result.Message = "No Data";
+                result.IsValid = false;
+                result.Message = ex.Message;
                 result.LinkData = $"";
             }
+
+            
 
             return Ok(result);
         }
