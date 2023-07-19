@@ -46,13 +46,15 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> ListCodigosHistoricoIcp()
         {
             var result = await _indiceCategoriaProgramaService.ListCodigosHistoricoIcp();
+           
             return Ok(result);
         }
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult>  GetAllFilter(FilterByPresupuestoDto filter)
         {
-                var result = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+            var res = await _indiceCategoriaProgramaService.UpdateIcpPadre(filter.CodigoPresupuesto);
+            var result = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
                 return Ok(result);
         }
 
@@ -71,6 +73,14 @@ namespace Convertidor.Controllers
             var result = await _indiceCategoriaProgramaService.Create(dto);
             return Ok(result);
         }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete(DeletePreIcpDto dto)
+        {
+            var result = await _indiceCategoriaProgramaService.Delete(dto);
+            return Ok(result);
+        }
+
 
     }
 }

@@ -93,6 +93,7 @@ namespace Convertidor.Services.Presupuesto
                         ListPresupuestoDto dto = new ListPresupuestoDto();
                         dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
                         dto.Descripcion = item.DENOMINACION;
+                        dto.Ano = item.ANO;
                            var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
                 if (preListFinanciado.Count > 0) {
 

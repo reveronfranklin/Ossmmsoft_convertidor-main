@@ -29,6 +29,7 @@ namespace Convertidor.Data.Entities.Presupuesto
         public int CODIGO_EMPRESA { get; set; }
         public string CODIGO_OFICINA { get; set; } = string.Empty;
         public int CODIGO_PRESUPUESTO { get; set; }
+        public int CODIGO_ICP_FK { get; set; }
 
 
     }

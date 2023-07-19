@@ -5,7 +5,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
 	{
 
         Task<bool> PresupuestoExiste(int codPresupuesto);
-
+        Task<bool> ICPExiste(int codigoICP);
     }
 }
 

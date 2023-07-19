@@ -123,6 +123,199 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<PRE_INDICE_CAT_PRG> GetHastaActividad(int ano,int codIcp,string sector,string programa,string subPrograma,string proyecto,string actividad)
+        {
+            try
+            {
+
+                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_ICP!= codIcp &&
+                                        x.ANO == ano &&
+                                        x.CODIGO_SECTOR == sector &&
+                                        x.CODIGO_PROGRAMA == programa &&
+                                        x.CODIGO_SUBPROGRAMA == subPrograma &&
+                                        x.CODIGO_PROYECTO == proyecto &&
+                                         x.CODIGO_ACTIVIDAD == actividad 
+                             )
+                             .OrderBy(x => x.CODIGO_SECTOR)
+                             .ThenBy(x => x.CODIGO_PROGRAMA)
+                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
+                             .ThenBy(x => x.CODIGO_PROYECTO)
+                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                            .FirstOrDefaultAsync();
+                return (PRE_INDICE_CAT_PRG)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<PRE_INDICE_CAT_PRG> GetHastaProyecto(int ano, int codIcp, string sector, string programa, string subPrograma, string proyecto)
+        {
+            try
+            {
+
+                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_ICP != codIcp &&
+                                        x.ANO == ano &&
+                                        x.CODIGO_SECTOR == sector &&
+                                        x.CODIGO_PROGRAMA == programa &&
+                                        x.CODIGO_SUBPROGRAMA == subPrograma &&
+                                        x.CODIGO_PROYECTO == proyecto 
+                                         
+                             )
+                              .OrderBy(x => x.CODIGO_SECTOR)
+                             .ThenBy(x => x.CODIGO_PROGRAMA)
+                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
+                             .ThenBy(x => x.CODIGO_PROYECTO)
+                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                            .FirstOrDefaultAsync();
+                return (PRE_INDICE_CAT_PRG)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        public async Task<PRE_INDICE_CAT_PRG> GetHastaSubPrograma(int ano, int codIcp, string sector, string programa, string subPrograma)
+        {
+            try
+            {
+
+                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_ICP != codIcp &&
+                                        x.ANO == ano &&
+                                        x.CODIGO_SECTOR == sector &&
+                                        x.CODIGO_PROGRAMA == programa &&
+                                        x.CODIGO_SUBPROGRAMA == subPrograma
+                                     
+
+                             )
+                             .OrderBy(x => x.CODIGO_SECTOR)
+                             .ThenBy(x => x.CODIGO_PROGRAMA)
+                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
+                             .ThenBy(x => x.CODIGO_PROYECTO)
+                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
+
+                            .FirstOrDefaultAsync();
+                return (PRE_INDICE_CAT_PRG)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        public async Task<PRE_INDICE_CAT_PRG> GetHastaPrograma(int ano, int codIcp, string sector, string programa)
+        {
+            try
+            {
+
+                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_ICP != codIcp &&
+                                        x.ANO == ano &&
+                                        x.CODIGO_SECTOR == sector &&
+                                        x.CODIGO_PROGRAMA == programa 
+                             )
+                              .OrderBy(x => x.CODIGO_SECTOR)
+                             .ThenBy(x => x.CODIGO_PROGRAMA)
+                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
+                             .ThenBy(x => x.CODIGO_PROYECTO)
+                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
+
+                            .FirstOrDefaultAsync();
+                return (PRE_INDICE_CAT_PRG)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        public async Task<PRE_INDICE_CAT_PRG> GetHastaSector(int ano, int codIcp, string sector)
+        {
+            try
+            {
+
+                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                            .Where(x =>
+                                        x.ANO == ano &&
+                                        x.CODIGO_SECTOR == sector 
+                             )
+                              .OrderBy(x => x.CODIGO_SECTOR)
+                             .ThenBy(x => x.CODIGO_PROGRAMA)
+                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
+                             .ThenBy(x => x.CODIGO_PROYECTO)
+                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                            .FirstOrDefaultAsync();
+                return (PRE_INDICE_CAT_PRG)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<bool> IcpContieneHijos(int codigoIcp)
+        {
+            bool result;
+            try
+            {
+                var icp = await GetByCodigo(codigoIcp);
+                if (icp == null)
+                {
+                    result = false;
+
+                }
+                else
+                {
+                    var resultSearch = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                          .Where(x => x.CODIGO_ICP!=codigoIcp &&
+                                      x.ANO == icp.ANO &&
+                                      x.CODIGO_SECTOR == icp.CODIGO_SECTOR &&
+                                      x.CODIGO_PROGRAMA == icp.CODIGO_PROGRAMA &&
+                                      x.CODIGO_SUBPROGRAMA == icp.CODIGO_SUBPROGRAMA &&
+                                      x.CODIGO_PROYECTO == icp.CODIGO_PROYECTO &&
+                                      x.CODIGO_ACTIVIDAD == icp.CODIGO_ACTIVIDAD &&
+                                      x.CODIGO_OFICINA == icp.CODIGO_OFICINA
+                           )
+                          .FirstOrDefaultAsync();
+                    result = true;
+                }
+              
+                return (bool)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return false;
+            }
+
+
+
+        }
+
+
         public async Task<PRE_INDICE_CAT_PRG> GetByCodigo(int codigoIcp)
         {
             try
@@ -138,6 +331,27 @@ namespace Convertidor.Data.Repository.Presupuesto
             {
                 var msg = ex.InnerException.Message;
                 return null;
+            }
+
+
+
+        }
+        public async Task<string> Delete(int codigoICP)
+        {
+
+            try
+            {
+                PRE_INDICE_CAT_PRG entity = await GetByCodigo(codigoICP);
+                if (entity != null)
+                {
+                    _context.PRE_INDICE_CAT_PRG.Remove(entity);
+                    _context.SaveChanges();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
 
 
@@ -192,7 +406,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var empresString = @settings.EmpresaConfig;
                 var empresa = Int32.Parse(empresString);
                 entity.CODIGO_EMPRESA = empresa;
-               
+
+                entity.CODIGO_ICP = await GetNextKey();
+
                 _context.PRE_INDICE_CAT_PRG.Add(entity);
                 await _context.SaveChangesAsync();
                 result.Data = entity;
@@ -210,6 +426,35 @@ namespace Convertidor.Data.Repository.Presupuesto
                 result.Message = ex.Message;
                 return result;
             }
+
+
+        }
+        public async Task<int> GetNextKey()
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_ICP)
+                    .FirstOrDefaultAsync();
+                if (last == null)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = last.CODIGO_ICP + 1;
+                }
+
+                return (int)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return 0;
+            }
+
 
 
         }
