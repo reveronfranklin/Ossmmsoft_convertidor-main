@@ -26,7 +26,7 @@ namespace Convertidor.Data.Entities.Presupuesto
         public DateTime? FECHA_UPD { get; set; }
         public int? CODIGO_PRESUPUESTO { get; set; }
         public int? CODIGO_EMPRESA { get; set; }
-        public int CODIGO_PUC_FK { get; set; }
+        public int? CODIGO_PUC_FK { get; set; }
 
 
     }

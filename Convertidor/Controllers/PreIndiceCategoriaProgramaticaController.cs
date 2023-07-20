@@ -57,6 +57,14 @@ namespace Convertidor.Controllers
             var result = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
                 return Ok(result);
         }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetTree(FilterByPresupuestoDto filter)
+        {
+            //var res = await _indiceCategoriaProgramaService.UpdateIcpPadre(filter.CodigoPresupuesto);
+            var result = await _indiceCategoriaProgramaService.GetTreeByPresupuesto(filter.CodigoPresupuesto);
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("[action]")]

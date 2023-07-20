@@ -101,7 +101,6 @@ namespace Convertidor.Services
         }
 
 
-
         public async Task<ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>> GetAllByCodigoPresupuesto(int codigoPresupuesto)
         {
 
@@ -109,68 +108,74 @@ namespace Convertidor.Services
             try
             {
 
-                if (codigoPresupuesto==0)
+                if (codigoPresupuesto == 0)
                 {
                     var lastPresupuesto = await _presupuesttoRepository.GetLast();
                     if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
-
-               
+              
 
                 var icp = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
                 if (icp.ToList().Count > 0)
                 {
 
+
+
+
+
                     var qicpDto = from s in icp.ToList()
-                            group s by new  { CodigoIcp = s.CODIGO_ICP,
-                                              Ano=s.ANO,
-                                              Escenario=s.ESCENARIO,
-                                              CodigoSector=s.CODIGO_SECTOR,
-                                              CodigoPrograma=s.CODIGO_PROGRAMA,
-                                              CodigoSubPrograma= s.CODIGO_SUBPROGRAMA,
-                                              CodigoProyecto=s.CODIGO_PROYECTO,
-                                              CodigoActividad=s.CODIGO_ACTIVIDAD,
-                                              Denominacion=s.DENOMINACION,
-                                              UnidadEjecutora=s.UNIDAD_EJECUTORA,
-                                              Descripcion=s.DENOMINACION,
-                                              CodigoFuncionario=s.CODIGO_FUNCIONARIO,
-                                              FechaIni=s.FECHA_INI,
-                                              FechaFin=s.FECHA_FIN,
-                                              Extra1=s.EXTRA1,
-                                              Extra2 = s.EXTRA2,
-                                              Extra3 = s.EXTRA3,
-                                              CodigoOficina=s.CODIGO_OFICINA,
-                                              CodigoPresupuesto = s.CODIGO_PRESUPUESTO} into g
-                            select new PreIndiceCategoriaProgramaticaGetDto
-                            {
+                                  group s by new
+                                  {
+                                      CodigoIcp = s.CODIGO_ICP,
+                                      Ano = s.ANO,
+                                      Escenario = s.ESCENARIO,
+                                      CodigoSector = s.CODIGO_SECTOR,
+                                      CodigoPrograma = s.CODIGO_PROGRAMA,
+                                      CodigoSubPrograma = s.CODIGO_SUBPROGRAMA,
+                                      CodigoProyecto = s.CODIGO_PROYECTO,
+                                      CodigoActividad = s.CODIGO_ACTIVIDAD,
+                                      Denominacion = s.DENOMINACION,
+                                      UnidadEjecutora = s.UNIDAD_EJECUTORA,
+                                      Descripcion = s.DENOMINACION,
+                                      CodigoFuncionario = s.CODIGO_FUNCIONARIO,
+                                      FechaIni = s.FECHA_INI,
+                                      FechaFin = s.FECHA_FIN,
+                                      Extra1 = s.EXTRA1,
+                                      Extra2 = s.EXTRA2,
+                                      Extra3 = s.EXTRA3,
+                                      CodigoOficina = s.CODIGO_OFICINA,
+                                      CodigoPresupuesto = s.CODIGO_PRESUPUESTO
+                                  } into g
+                                  select new PreIndiceCategoriaProgramaticaGetDto
+                                  {
 
-                                CodigoIcp=g.Key.CodigoIcp,
-                                Ano=g.Key.Ano,
-                                Escenario= g.Key.Escenario,
-                                CodigoSector= g.Key.CodigoSector,
-                                CodigoPrograma= g.Key.CodigoPrograma,
-                                CodigoSubPrograma= g.Key.CodigoSubPrograma,
-                                CodigoProyecto= g.Key.CodigoProyecto,
-                                CodigoActividad= g.Key.CodigoActividad,
-                                Denominacion= g.Key.Denominacion,
-                                UnidadEjecutora= g.Key.UnidadEjecutora,
-                                Descripcion= g.Key.Denominacion,
-                                CodigoFuncionario= g.Key.CodigoFuncionario,
-                                FechaIni= g.Key.FechaIni.ToString("u"),
-                                FechaFin = g.Key.FechaFin.ToString("u"),
-                                FechaIniDate = g.Key.FechaIni,
-                                FechaFinDate = g.Key.FechaFin,
-                                Extra1 = g.Key.Extra1,
-                                Extra2= g.Key.Extra2,
-                                Extra3= g.Key.Extra3,
-                                CodigoOficina= g.Key.CodigoOficina,
-                                CodigoPresupuesto= g.Key.CodigoPresupuesto,
-                                
-                            };
+                                      CodigoIcp = g.Key.CodigoIcp,
+                                      Ano = g.Key.Ano,
+                                      Escenario = g.Key.Escenario,
+                                      CodigoSector = g.Key.CodigoSector,
+                                      CodigoPrograma = g.Key.CodigoPrograma,
+                                      CodigoSubPrograma = g.Key.CodigoSubPrograma,
+                                      CodigoProyecto = g.Key.CodigoProyecto,
+                                      CodigoActividad = g.Key.CodigoActividad,
+                                      Denominacion = g.Key.Denominacion,
+                                      UnidadEjecutora = g.Key.UnidadEjecutora,
+                                      Descripcion = g.Key.Denominacion,
+                                      CodigoFuncionario = g.Key.CodigoFuncionario,
+                                      FechaIni = g.Key.FechaIni.ToString("u"),
+                                      FechaFin = g.Key.FechaFin.ToString("u"),
+                                      FechaIniDate = g.Key.FechaIni,
+                                      FechaFinDate = g.Key.FechaFin,
+                                      Extra1 = g.Key.Extra1,
+                                      Extra2 = g.Key.Extra2,
+                                      Extra3 = g.Key.Extra3,
+                                      CodigoOficina = g.Key.CodigoOficina,
+                                      CodigoPresupuesto = g.Key.CodigoPresupuesto,
+
+                                  };
 
 
-                    result.Data = qicpDto.OrderBy(x=> x.CodigoSector)
-                                         .ThenBy(x=>x.CodigoPrograma)
+                    result.Data = qicpDto.OrderBy(x => x.CodigoSector)
+                                         .ThenBy(x => x.CodigoPrograma)
                                          .ThenBy(x => x.CodigoSubPrograma)
                                          .ThenBy(x => x.CodigoProyecto)
                                          .ThenBy(x => x.CodigoActividad)
@@ -188,6 +193,73 @@ namespace Convertidor.Services
                     return result;
 
                 }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+
+            }
+
+
+
+        }
+
+        public async Task<ResultDto<List<TreeICP>>> GetTreeByPresupuesto(int codigoPresupuesto)
+        {
+
+            List<TreeICP> listTreeICP = new List<TreeICP>();
+            ResultDto<List<TreeICP>> result = new ResultDto<List<TreeICP>>(null);
+            try
+            {
+
+                if (codigoPresupuesto==0)
+                {
+                    var lastPresupuesto = await _presupuesttoRepository.GetLast();
+                    if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
+                }
+                //string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}", parent.Name, child.Name, grandChild.Name,grandChild.Id,grandChild.ParentId,grandChild.Denominacion,grandChild.Descripcion)
+                var treeIcp = await WriteStrings(codigoPresupuesto);
+                foreach (var item in treeIcp)
+                {
+                    var arraIcp = item.Split(":");
+                    var id = arraIcp[3];
+                    var parentId = arraIcp[4];
+                    List<string> icpString = new List<string>();
+                    if (id == parentId)
+                    {
+                        icpString.Add(arraIcp[0]);
+                    }
+                    else
+                    {
+                        icpString.Add(arraIcp[0]);
+                        icpString.Add(arraIcp[1]);
+                        icpString.Add(arraIcp[2]);
+                    }
+                    TreeICP treeICP = new TreeICP();
+                    treeICP.Path = icpString;
+                    treeICP.Id = Int32.Parse(id);
+                    treeICP.Denominacion = arraIcp[5];
+                    treeICP.Descripcion = arraIcp[6];
+                    treeICP.UnidadEjecutora = arraIcp[7];
+                    listTreeICP.Add(treeICP);
+
+
+
+                }
+
+                result.Data = listTreeICP;
+                result.IsValid = true;
+                result.Message = $"";
+                return result;
+
+
+               
 
 
 
@@ -795,6 +867,71 @@ namespace Convertidor.Services
         }
 
 
+        public List<TreeICP> CreateTree(List<PRE_INDICE_CAT_PRG> listDto)
+        {
+            List<TreeICP> result = new List<TreeICP>();
+
+            foreach (var item in listDto)
+            {
+
+            }
+
+            return result;
+
+        }
+
+        /*public  List<TreeICP> ListarPadres(List<PRE_INDICE_CAT_PRG> listDto, int codIcp)
+        {
+
+            List<TreeICP> result = new List<TreeICP>();
+            try
+            {
+
+                var icpEvaluar = listDto.Where(x => x.CODIGO_ICP == codIcp).FirstOrDefault();
+                if (icpEvaluar != null)
+                {
+                    if (icpEvaluar.CODIGO_ICP != icpEvaluar.CODIGO_ICP_FK)
+                    {
+                        var padre = listDto.Where(x => x.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK).FirstOrDefault();
+                        if (padre != null)
+                        {
+                            TreeICP resultItem = new TreeICP();
+                            resultItem.Path.Add(padre.CODIGO_SECTOR + "-" + padre.CODIGO_PROGRAMA + "-" + padre.CODIGO_SUBPROGRAMA + "-" + padre.CODIGO_PROYECTO + "-" + padre.CODIGO_ACTIVIDAD + "-" + padre.CODIGO_OFICINA);
+                            resultItem.Descripcion = padre.DENOMINACION;
+                            resultItem.Id = padre.CODIGO_ICP;
+                            result.Add(resultItem);
+                        }
+                    }
+                    else {
+                        TreeICP resultItem = new TreeICP();
+                        resultItem.Path.Add(icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA);
+                        resultItem.Descripcion = icpEvaluar.DENOMINACION;
+                        resultItem.Id = icpEvaluar.CODIGO_ICP;
+                        result.Add(resultItem);
+                    }
+                    
+                    
+
+                }
+               
+
+
+
+                return result;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+
+            return result;
+        }*/
+
         public async Task<List<int>> ListarHijos(List<PRE_INDICE_CAT_PRG> listDto, int codIcp)
         {
 
@@ -845,6 +982,236 @@ namespace Convertidor.Services
 
 
             return result;
+        }
+
+
+        private IList<Item> GetChild(int id, IList<Item> items)
+        {
+            var childs = items
+                .Where(x => x.ParentId == id || x.Id == id)
+                .Union(items.Where(x => x.ParentId == id)
+                .SelectMany(y => GetChild(y.Id, items)));
+
+            return childs.ToList();
+        }
+
+
+        public async  Task<List<Item>> GetItems(int codigoPresupuesto)
+        {
+            List<Item> result = new List<Item>();
+            var categoriasList = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
+
+            foreach (var item in categoriasList)
+            {
+                Item itenNew = new Item();
+                itenNew.Id = item.CODIGO_ICP;
+                itenNew.ParentId = item.CODIGO_ICP_FK;
+                var patchEvaluado = item.CODIGO_SECTOR + "-" + item.CODIGO_PROGRAMA + "-" + item.CODIGO_SUBPROGRAMA + "-" + item.CODIGO_PROYECTO + "-" + item.CODIGO_ACTIVIDAD + "-" + item.CODIGO_OFICINA;
+
+                itenNew.Name = patchEvaluado;
+                itenNew.Denominacion = item.DENOMINACION;
+                itenNew.Descripcion = item.DESCRIPCION;
+                itenNew.UnidadEjecutora = item.UNIDAD_EJECUTORA;
+                result.Add(itenNew);
+
+            }
+
+            return result;
+        }
+
+        public async Task<List<string>> WriteStrings(int codigoPresupuesto)
+        {
+
+            List<string> result = new List<string>();
+            List<Item> items = await  GetItems(codigoPresupuesto);
+            IEnumerable<string> resultingStrings = from parent in items.Where(x => x.ParentId == x.Id)
+                                                   join child in items on parent.Id equals child.ParentId
+                                                   join grandChild in items on child.Id equals grandChild.ParentId
+                                                   select string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}", parent.Name, child.Name, grandChild.Name,grandChild.Id,grandChild.ParentId,grandChild.Denominacion,grandChild.Descripcion, grandChild.UnidadEjecutora);
+          
+         
+
+            foreach (var item in resultingStrings)
+                result.Add(item);
+            return result;
+        }
+      
+
+        public async Task<List<string>> ListarPadre(int codigoPresupuesto, int codIcp)
+        {
+
+            List<string> result = new List<string>();
+            try
+            {
+
+                var listDto = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
+                var icpEvaluar =  listDto.Where(x => x.CODIGO_ICP == codIcp).FirstOrDefault();
+
+                if (icpEvaluar != null)
+                {
+                    var padre = listDto.Where(x => x.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK && x.CODIGO_ICP != icpEvaluar.CODIGO_ICP).FirstOrDefault();
+                    if (padre != null)
+                    {
+                        
+                        var patch = padre.CODIGO_SECTOR + "-" + padre.CODIGO_PROGRAMA + "-" + padre.CODIGO_SUBPROGRAMA + "-" + padre.CODIGO_PROYECTO + "-" + padre.CODIGO_ACTIVIDAD + "-" + padre.CODIGO_OFICINA;
+
+                        if (result.Count > 0)
+                        {
+                            var existe = result.Where(x => x == patch).First();
+                            if (existe == null)
+                            {
+                                result.Add(patch);
+                            }
+                        }
+                        else
+                        {
+                            result.Add(patch);
+                        }
+                      
+                       
+
+                        var newObj = await ListarPadre(codigoPresupuesto, padre.CODIGO_ICP);
+                        if (newObj != null)
+                        {
+                           
+                            result.AddRange(newObj);
+                        }
+                        else
+                        {
+                            var patchEvaluado = icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA;
+
+                            result.Add(patchEvaluado);
+                        }
+
+                    }
+                    else
+                    {
+                        if (icpEvaluar.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK)
+                        {
+                            try
+                            {
+                            
+                                string patch = "";
+                                patch = icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA;
+                               
+                                 result.Add(patch);
+                            }
+                            catch (Exception ex)
+                            {
+                                var msg = ex.Message;
+                                var res = 0;
+                            }
+                            
+
+                        }
+                    }
+                }
+               
+
+
+                return result;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+
+       
+        }
+
+
+
+        public async Task<List<string>> ListarPadreBk(int codigoPresupuesto, int codIcp)
+        {
+
+            List<string> result = new List<string>();
+            try
+            {
+
+                var listDto = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
+                var icpEvaluar = listDto.Where(x => x.CODIGO_ICP == codIcp).FirstOrDefault();
+
+                if (icpEvaluar != null)
+                {
+                    var padre = listDto.Where(x => x.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK && x.CODIGO_ICP != icpEvaluar.CODIGO_ICP).FirstOrDefault();
+                    if (padre != null)
+                    {
+
+                        var patch = padre.CODIGO_SECTOR + "-" + padre.CODIGO_PROGRAMA + "-" + padre.CODIGO_SUBPROGRAMA + "-" + padre.CODIGO_PROYECTO + "-" + padre.CODIGO_ACTIVIDAD + "-" + padre.CODIGO_OFICINA;
+
+                        if (result.Count > 0)
+                        {
+                            var existe = result.Where(x => x == patch).First();
+                            if (existe == null)
+                            {
+                                result.Add(patch);
+                            }
+                        }
+                        else
+                        {
+                            result.Add(patch);
+                        }
+
+
+
+                        var newObj = await ListarPadre(codigoPresupuesto, padre.CODIGO_ICP);
+                        if (newObj != null)
+                        {
+
+                            result.AddRange(newObj);
+                        }
+                        else
+                        {
+                            var patchEvaluado = icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA;
+                            result.Add(patchEvaluado);
+                        }
+
+                    }
+                    else
+                    {
+                        if (icpEvaluar.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK)
+                        {
+                            try
+                            {
+
+                                string patch = "";
+                                patch = icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA;
+
+                                result.Add(patch);
+                            }
+                            catch (Exception ex)
+                            {
+                                var msg = ex.Message;
+                                var res = 0;
+                            }
+
+
+                        }
+                    }
+                }
+
+
+
+                return result;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+
+
         }
 
         public async Task<ResultDto<PreIndiceCategoriaProgramaticaGetDto>> ValidateDto(PreIndiceCategoriaProgramaticaUpdateDto dto)
