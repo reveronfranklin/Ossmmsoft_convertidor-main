@@ -251,7 +251,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                             resultDetailItem.Causado = await GetCausadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
                             resultDetailItem.Pagado = await GetPagadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
                             resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
+                            resultDetailItem.Disponibilidad = (resultDetailItem.Presupuestado + resultDetailItem.Modificado) - resultDetailItem.Comprometido;
                             resultDetailItem.Asignacion = await GetAsignacionNivelUno(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
                             resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
                             resultDetail.Add(resultDetailItem);
@@ -547,25 +547,27 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                     if (preVSaldosDiarios.Count > 0)
                         {
-                            /*foreach (var itemDiario in preVSaldosDiarios)
+                        /*foreach (var itemDiario in preVSaldosDiarios)
+                        {
+                            if (finaciadoId == 92 || finaciadoId == 0)
                             {
-                                if (finaciadoId == 92 || finaciadoId == 0)
+                                if (item.FINANCIADO_ID == 719)
                                 {
-                                    if (item.FINANCIADO_ID == 719)
-                                    {
-                                        result = result + 0;
-                                    }
-                                    else
-                                    {
-                                        result = result + itemDiario.MODIFICADO;
-                                    }
-
+                                    result = result + 0;
                                 }
                                 else
                                 {
                                     result = result + itemDiario.MODIFICADO;
                                 }
-                            }*/
+
+                            }
+                            else
+                            {
+                                result = result + itemDiario.MODIFICADO;
+                            }
+                        }*/
+                        if (finaciadoId != 92 && finaciadoId != 0)
+                        {
                             var resumen = from s in preVSaldos
                                           group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
                                           select new
@@ -585,6 +587,32 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
                             }
+
+                        }
+                        else
+                        {
+                            var resumen = from s in preVSaldos
+                                          where s.FINANCIADO_ID!=719
+                                          group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
+                                          select new
+                                          {
+                                              g.Key.CodigoPresupuesto,
+
+                                              MODIFICADO = g.Sum(s => s.MODIFICADO),
+
+                                          };
+                            if (resumen.Count() > 0)
+                            {
+                                var itemResumen = resumen.FirstOrDefault();
+                                if (itemResumen != null)
+                                {
+                                    result = itemResumen.MODIFICADO;
+                                }
+
+
+                            }
+                        }
+                           
 
 
                     }
@@ -622,12 +650,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                         //   SUM(nvl(CASE WHEN (:P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.COMPROMETIDO) ELSE C.COMPROMETIDO END,0)) COMPROMETIDO,
                         if (finaciadoId == 92 || finaciadoId == 0)
                         {
-                            if (item.FINANCIADO_ID == 719)
+                            if (item.FINANCIADO_ID != 719)
                             {
-                                result = result + 0;
-                            }
-                            else
-                            {
+                              
                                 result = result + item.COMPROMETIDO;
                             }
 

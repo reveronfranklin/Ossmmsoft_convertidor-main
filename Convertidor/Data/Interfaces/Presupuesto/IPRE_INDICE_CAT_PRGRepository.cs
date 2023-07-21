@@ -19,5 +19,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<PRE_INDICE_CAT_PRG> GetHastaSubPrograma(int ano, int codIcp, string sector, string programa, string subPrograma);
         Task<PRE_INDICE_CAT_PRG> GetHastaPrograma(int ano, int codIcp, string sector, string programa);
         Task<PRE_INDICE_CAT_PRG> GetHastaSector(int ano, int codIcp, string sector);
+        Task<ResultDto<List<PRE_INDICE_CAT_PRG>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen, int codigoPresupuestoDestino);
+
     }
 }

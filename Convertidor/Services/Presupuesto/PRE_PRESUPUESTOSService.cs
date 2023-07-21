@@ -24,18 +24,24 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPRE_V_DENOMINACION_PUCRepository _preDenominacionPucRepository;
         private readonly IPRE_V_SALDOSRepository _pre_V_SALDOSRepository;
         private readonly IPRE_ASIGNACIONESRepository _PRE_ASIGNACIONESRepository;
+        private readonly IPRE_INDICE_CAT_PRGRepository _PRE_INDICE_CAT_PRGRepository;
+        private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
         private readonly IMapper _mapper;
 
         public PRE_PRESUPUESTOSService(IPRE_PRESUPUESTOSRepository repository,
                                         IPRE_V_DENOMINACION_PUCRepository preDenominacionPucRepository,
                                         IPRE_V_SALDOSRepository pre_V_SALDOSRepository,
                                         IPRE_ASIGNACIONESRepository PRE_ASIGNACIONESRepository,
-                                      IMapper mapper)
+                                        IPRE_INDICE_CAT_PRGRepository PRE_INDICE_CAT_PRGRepository,
+                                        IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
+                                        IMapper mapper)
         {
             _repository = repository;
             _preDenominacionPucRepository = preDenominacionPucRepository;
             _pre_V_SALDOSRepository = pre_V_SALDOSRepository;
             _PRE_ASIGNACIONESRepository = PRE_ASIGNACIONESRepository;
+            _PRE_INDICE_CAT_PRGRepository = PRE_INDICE_CAT_PRGRepository;
+            _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
             _mapper = mapper;
         }
 
@@ -273,7 +279,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-
+                await _indiceCategoriaProgramaService.DeleteByCodigoPresupuesto(dto.CodigoPresupuesto);
                 var  deleted =await _repository.Delete(13,dto.CodigoPresupuesto);
 
                 if (deleted.Length>0)
@@ -342,6 +348,17 @@ namespace Convertidor.Services.Presupuesto
                 var entity = MapCreatePrePresupuestoDtoToPrePresupuesto(dto);
                 entity.CODIGO_PRESUPUESTO = await _repository.GetNextKey();  
                 var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data!=null)
+                {
+
+
+
+
+                    int codigoPresupuestoOrigen = created.Data.CODIGO_PRESUPUESTO - 1;
+                    var resultClonado = await _PRE_INDICE_CAT_PRGRepository.ClonarByCodigoPresupuesto(codigoPresupuestoOrigen, created.Data.CODIGO_PRESUPUESTO);
+                }
+
+
                 FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
                 filter.FinanciadoId = 0;
                 filter.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
@@ -553,8 +570,13 @@ namespace Convertidor.Services.Presupuesto
                     foreach (var item in listpreDenominacionPuc)
                     {
                         dto.TotalPresupuesto = dto.TotalPresupuesto + item.Presupuestado;
-                        dto.TotalDisponible = dto.TotalDisponible + item.Disponibilidad;
-                        dto.TotalModificacion = dto.TotalModificacion + item.Modificado;
+                        var partida = Int32.Parse(item.CodigoPartida);
+                        if (  partida> 0 && item.CodigoGenerica == "00" && item.CodigoEspecifica == "00" && item.CodigoSubEspecifica == "00" && item.CodigoNivel5 == "00")
+                        {
+                            dto.TotalDisponible = dto.TotalDisponible + item.Disponibilidad;
+                            dto.TotalModificacion = dto.TotalModificacion + item.Modificado;
+                        }
+                      
                         
                     }
 

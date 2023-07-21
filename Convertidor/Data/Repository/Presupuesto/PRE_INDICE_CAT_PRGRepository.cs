@@ -373,6 +373,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (entityUpdate != null)
                 {
                     entityUpdate.CODIGO_EMPRESA = empresa;
+                    entity.DENOMINACION = entity.DENOMINACION.ToUpper();
+                    entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
+                    entity.UNIDAD_EJECUTORA = entity.UNIDAD_EJECUTORA.ToUpper();
                     _context.PRE_INDICE_CAT_PRG.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
@@ -406,7 +409,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var empresString = @settings.EmpresaConfig;
                 var empresa = Int32.Parse(empresString);
                 entity.CODIGO_EMPRESA = empresa;
-
+                entity.DENOMINACION = entity.DENOMINACION.ToUpper();
+                entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
+                entity.UNIDAD_EJECUTORA = entity.UNIDAD_EJECUTORA.ToUpper();
                 entity.CODIGO_ICP = await GetNextKey();
 
                 _context.PRE_INDICE_CAT_PRG.Add(entity);
@@ -459,6 +464,102 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+
+        public async Task<ResultDto<List<PRE_INDICE_CAT_PRG>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,int codigoPresupuestoDestino)
+        {
+
+            ResultDto<List<PRE_INDICE_CAT_PRG>> result = new ResultDto<List<PRE_INDICE_CAT_PRG>>(null);
+            try
+            {
+                var presupuestoDestino = await _context.PRE_PRESUPUESTOS.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoDestino).DefaultIfEmpty().FirstOrDefaultAsync();
+                if (presupuestoDestino == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto destino no existe";
+                    return result;
+                }
+                var presupuestoOrigen = await _context.PRE_PRESUPUESTOS.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoOrigen).DefaultIfEmpty().FirstOrDefaultAsync();
+                if (presupuestoOrigen == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto origen no existe";
+                    return result;
+                }
+
+
+                var icpDestino = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                           .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoDestino)
+                           .FirstOrDefaultAsync();
+
+                if (icpDestino != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Ya existe ICP para este  presupuesto";
+                    return result;
+                }
+
+                var icpOrigenResult = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                          .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoOrigen)
+                          .OrderBy(x => x.CODIGO_SECTOR)
+                          .ThenBy(x => x.CODIGO_PROGRAMA)
+                          .ThenBy(x => x.CODIGO_PROYECTO)
+                          .ThenBy(x => x.CODIGO_SUBPROGRAMA)
+                          .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                          .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                          .ToListAsync();
+
+                if (icpOrigenResult.Count > 0)
+                {
+                    foreach (var item in icpOrigenResult)
+                    {
+                        PRE_INDICE_CAT_PRG newItem = new PRE_INDICE_CAT_PRG();
+                        newItem = item;
+                        newItem.CODIGO_ICP = 0;
+                        newItem.CODIGO_ICP_FK = 0;
+                        newItem.ANO = presupuestoDestino.ANO;
+                        newItem.CODIGO_PRESUPUESTO = presupuestoDestino.CODIGO_PRESUPUESTO;
+                        await Create(newItem);
+
+
+                    }
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existe ICP para el presupuesto Origen";
+                    return result;
+                }
+
+
+                var icpDestinoResult = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoDestino)
+                            .OrderBy(x => x.CODIGO_SECTOR)
+                            .ThenBy(x => x.CODIGO_PROGRAMA)
+                            .ThenBy(x => x.CODIGO_PROYECTO)
+                            .ThenBy(x => x.CODIGO_SUBPROGRAMA)
+                            .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                            .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                            .ToListAsync();
+
+                result.Data = icpDestinoResult;
+                result.IsValid = true;
+                result.Message = "";
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+
+        }
 
     }
 }

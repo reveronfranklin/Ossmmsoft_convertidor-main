@@ -15,5 +15,6 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<DeletePreIcpDto>> Delete(DeletePreIcpDto dto);
         Task<ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>> UpdateIcpPadre(int codigoPresupuesto);
         Task<ResultDto<List<TreeICP>>> GetTreeByPresupuesto(int codigoPresupuesto);
+        Task DeleteByCodigoPresupuesto(int codigoPresupuesto);
     }
 }

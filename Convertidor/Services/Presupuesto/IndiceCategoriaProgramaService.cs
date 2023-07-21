@@ -786,6 +786,21 @@ namespace Convertidor.Services
         }
 
 
+        public async Task DeleteByCodigoPresupuesto(int codigoPresupuesto)
+        {
+            var icps= await  GetAllByCodigoPresupuesto(codigoPresupuesto);
+            if (icps!=null && icps.Data != null)
+            {
+                foreach (var item in icps.Data)
+                {
+                    DeletePreIcpDto dto = new DeletePreIcpDto();
+                    dto.CodigoIcp = item.CodigoIcp;
+                    await Delete(dto);
+                }
+            }
+
+        }
+
         public async Task<ResultDto<DeletePreIcpDto>> Delete(DeletePreIcpDto dto)
         {
 
@@ -798,7 +813,7 @@ namespace Convertidor.Services
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "ICPno existe";
+                    result.Message = "ICP no existe";
                     return result;
                 }
                 var listDto = await _repository.GetAllByCodigoPresupuesto(icp.CODIGO_PRESUPUESTO);
@@ -829,12 +844,7 @@ namespace Convertidor.Services
                         return result;
                     }
                 }
-                result.Data = dto;
-                result.IsValid = true;
-                result.Message = "Borrado";
-
-                /*
-
+               
 
                 var deleted = await _repository.Delete(dto.CodigoIcp);
 
@@ -850,7 +860,7 @@ namespace Convertidor.Services
                     result.IsValid = true;
                     result.Message = deleted;
 
-                }*/
+                }
 
 
             }
@@ -867,70 +877,8 @@ namespace Convertidor.Services
         }
 
 
-        public List<TreeICP> CreateTree(List<PRE_INDICE_CAT_PRG> listDto)
-        {
-            List<TreeICP> result = new List<TreeICP>();
-
-            foreach (var item in listDto)
-            {
-
-            }
-
-            return result;
-
-        }
-
-        /*public  List<TreeICP> ListarPadres(List<PRE_INDICE_CAT_PRG> listDto, int codIcp)
-        {
-
-            List<TreeICP> result = new List<TreeICP>();
-            try
-            {
-
-                var icpEvaluar = listDto.Where(x => x.CODIGO_ICP == codIcp).FirstOrDefault();
-                if (icpEvaluar != null)
-                {
-                    if (icpEvaluar.CODIGO_ICP != icpEvaluar.CODIGO_ICP_FK)
-                    {
-                        var padre = listDto.Where(x => x.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK).FirstOrDefault();
-                        if (padre != null)
-                        {
-                            TreeICP resultItem = new TreeICP();
-                            resultItem.Path.Add(padre.CODIGO_SECTOR + "-" + padre.CODIGO_PROGRAMA + "-" + padre.CODIGO_SUBPROGRAMA + "-" + padre.CODIGO_PROYECTO + "-" + padre.CODIGO_ACTIVIDAD + "-" + padre.CODIGO_OFICINA);
-                            resultItem.Descripcion = padre.DENOMINACION;
-                            resultItem.Id = padre.CODIGO_ICP;
-                            result.Add(resultItem);
-                        }
-                    }
-                    else {
-                        TreeICP resultItem = new TreeICP();
-                        resultItem.Path.Add(icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA);
-                        resultItem.Descripcion = icpEvaluar.DENOMINACION;
-                        resultItem.Id = icpEvaluar.CODIGO_ICP;
-                        result.Add(resultItem);
-                    }
-                    
-                    
-
-                }
-               
-
-
-
-                return result;
-
-
-
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-
-
-
-            return result;
-        }*/
+      
+      
 
         public async Task<List<int>> ListarHijos(List<PRE_INDICE_CAT_PRG> listDto, int codIcp)
         {
@@ -1037,182 +985,7 @@ namespace Convertidor.Services
         }
       
 
-        public async Task<List<string>> ListarPadre(int codigoPresupuesto, int codIcp)
-        {
-
-            List<string> result = new List<string>();
-            try
-            {
-
-                var listDto = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
-                var icpEvaluar =  listDto.Where(x => x.CODIGO_ICP == codIcp).FirstOrDefault();
-
-                if (icpEvaluar != null)
-                {
-                    var padre = listDto.Where(x => x.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK && x.CODIGO_ICP != icpEvaluar.CODIGO_ICP).FirstOrDefault();
-                    if (padre != null)
-                    {
-                        
-                        var patch = padre.CODIGO_SECTOR + "-" + padre.CODIGO_PROGRAMA + "-" + padre.CODIGO_SUBPROGRAMA + "-" + padre.CODIGO_PROYECTO + "-" + padre.CODIGO_ACTIVIDAD + "-" + padre.CODIGO_OFICINA;
-
-                        if (result.Count > 0)
-                        {
-                            var existe = result.Where(x => x == patch).First();
-                            if (existe == null)
-                            {
-                                result.Add(patch);
-                            }
-                        }
-                        else
-                        {
-                            result.Add(patch);
-                        }
-                      
-                       
-
-                        var newObj = await ListarPadre(codigoPresupuesto, padre.CODIGO_ICP);
-                        if (newObj != null)
-                        {
-                           
-                            result.AddRange(newObj);
-                        }
-                        else
-                        {
-                            var patchEvaluado = icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA;
-
-                            result.Add(patchEvaluado);
-                        }
-
-                    }
-                    else
-                    {
-                        if (icpEvaluar.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK)
-                        {
-                            try
-                            {
-                            
-                                string patch = "";
-                                patch = icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA;
-                               
-                                 result.Add(patch);
-                            }
-                            catch (Exception ex)
-                            {
-                                var msg = ex.Message;
-                                var res = 0;
-                            }
-                            
-
-                        }
-                    }
-                }
-               
-
-
-                return result;
-
-
-
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-                return null;
-            }
-
-
-
-       
-        }
-
-
-
-        public async Task<List<string>> ListarPadreBk(int codigoPresupuesto, int codIcp)
-        {
-
-            List<string> result = new List<string>();
-            try
-            {
-
-                var listDto = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
-                var icpEvaluar = listDto.Where(x => x.CODIGO_ICP == codIcp).FirstOrDefault();
-
-                if (icpEvaluar != null)
-                {
-                    var padre = listDto.Where(x => x.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK && x.CODIGO_ICP != icpEvaluar.CODIGO_ICP).FirstOrDefault();
-                    if (padre != null)
-                    {
-
-                        var patch = padre.CODIGO_SECTOR + "-" + padre.CODIGO_PROGRAMA + "-" + padre.CODIGO_SUBPROGRAMA + "-" + padre.CODIGO_PROYECTO + "-" + padre.CODIGO_ACTIVIDAD + "-" + padre.CODIGO_OFICINA;
-
-                        if (result.Count > 0)
-                        {
-                            var existe = result.Where(x => x == patch).First();
-                            if (existe == null)
-                            {
-                                result.Add(patch);
-                            }
-                        }
-                        else
-                        {
-                            result.Add(patch);
-                        }
-
-
-
-                        var newObj = await ListarPadre(codigoPresupuesto, padre.CODIGO_ICP);
-                        if (newObj != null)
-                        {
-
-                            result.AddRange(newObj);
-                        }
-                        else
-                        {
-                            var patchEvaluado = icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA;
-                            result.Add(patchEvaluado);
-                        }
-
-                    }
-                    else
-                    {
-                        if (icpEvaluar.CODIGO_ICP == icpEvaluar.CODIGO_ICP_FK)
-                        {
-                            try
-                            {
-
-                                string patch = "";
-                                patch = icpEvaluar.CODIGO_SECTOR + "-" + icpEvaluar.CODIGO_PROGRAMA + "-" + icpEvaluar.CODIGO_SUBPROGRAMA + "-" + icpEvaluar.CODIGO_PROYECTO + "-" + icpEvaluar.CODIGO_ACTIVIDAD + "-" + icpEvaluar.CODIGO_OFICINA;
-
-                                result.Add(patch);
-                            }
-                            catch (Exception ex)
-                            {
-                                var msg = ex.Message;
-                                var res = 0;
-                            }
-
-
-                        }
-                    }
-                }
-
-
-
-                return result;
-
-
-
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-                return null;
-            }
-
-
-
-
-        }
+   
 
         public async Task<ResultDto<PreIndiceCategoriaProgramaticaGetDto>> ValidateDto(PreIndiceCategoriaProgramaticaUpdateDto dto)
         {

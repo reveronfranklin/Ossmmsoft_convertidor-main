@@ -7,6 +7,7 @@ using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using static Convertidor.Dtos.PetroBsGetDto;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
@@ -129,9 +130,12 @@ namespace Convertidor.Data.Repository.Presupuesto
         public async Task<ResultDto<PRE_PRESUPUESTOS>> Add(PRE_PRESUPUESTOS entity)
         {
             ResultDto<PRE_PRESUPUESTOS> result = new ResultDto<PRE_PRESUPUESTOS>(null);
-           
-             try
+            try
             {
+
+                entity.DENOMINACION= entity.DENOMINACION.ToUpper();
+                entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
+
                 await _context.PRE_PRESUPUESTOS.AddAsync(entity);
                 _context.SaveChanges();
 
@@ -164,6 +168,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                 PRE_PRESUPUESTOS entityUpdate = await GetByCodigo(entity.CODIGO_EMPRESA, entity.CODIGO_PRESUPUESTO);
                 if (entityUpdate != null)
                 {
+                    entity.DENOMINACION = entity.DENOMINACION.ToUpper();
+                    entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
+
                     _context.PRE_PRESUPUESTOS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
