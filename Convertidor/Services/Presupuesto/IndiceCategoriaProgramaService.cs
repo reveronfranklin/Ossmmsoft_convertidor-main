@@ -144,7 +144,8 @@ namespace Convertidor.Services
                                       Extra2 = s.EXTRA2,
                                       Extra3 = s.EXTRA3,
                                       CodigoOficina = s.CODIGO_OFICINA,
-                                      CodigoPresupuesto = s.CODIGO_PRESUPUESTO
+                                      CodigoPresupuesto = s.CODIGO_PRESUPUESTO,
+                                      CodigoIcpPadre=s.CODIGO_ICP_FK
                                   } into g
                                   select new PreIndiceCategoriaProgramaticaGetDto
                                   {
@@ -170,6 +171,7 @@ namespace Convertidor.Services
                                       Extra3 = g.Key.Extra3,
                                       CodigoOficina = g.Key.CodigoOficina,
                                       CodigoPresupuesto = g.Key.CodigoPresupuesto,
+                                      CodigoIcpPadre=g.Key.CodigoIcpPadre
 
                                   };
 
@@ -295,7 +297,7 @@ namespace Convertidor.Services
 
                 var presupuestoObj = await _presupuesttoRepository.GetByCodigo(13,codigoPresupuesto);
 
-                var icpList = icp.Data.ToList();
+                var icpList = icp.Data.Where(x => x.CodigoIcpPadre == null || x.CodigoIcpPadre == 0).ToList();
 
 
                 if (icpList.Count > 0)
@@ -714,6 +716,7 @@ namespace Convertidor.Services
             icp.CODIGO_FUNCIONARIO = dto.CodigoFuncionario;
             icp.CODIGO_OFICINA = dto.CodigoOficina;
             icp.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+            icp.CODIGO_ICP_FK = dto.CodigoIcpPadre;
             var  updated = await _repository.Update(icp);
             if (updated.Data != null)
             {
@@ -767,6 +770,7 @@ namespace Convertidor.Services
             icpNew.CODIGO_FUNCIONARIO = dto.CodigoFuncionario;
             icpNew.CODIGO_OFICINA = dto.CodigoOficina;
             icpNew.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+            icpNew.CODIGO_ICP_FK = dto.CodigoIcpPadre;
             var created = await _repository.Create(icpNew);
             if (created.Data != null)
             {

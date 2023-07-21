@@ -49,8 +49,9 @@ namespace Convertidor.Dtos.Presupuesto
         public int? CodigoPresupuesto { get; set; }
         public string DescripcionPresupuesto { get; set; } = string.Empty;
         public DateTime? FechaSolicitud { get; set; }
+        public string SearchText { get { return $"{CodigoIcpConcat}-{DenominacionIcp}-{UnidadEjecutora}-{DenominacionPuc}-{DescripcionFinanciado}-{CodigoPucConcat}"; } }
 
-       
+
         public string PresupuestadoFormat {
             get {
 

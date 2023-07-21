@@ -25,14 +25,17 @@ namespace Convertidor.Controllers
     {
        
         private readonly IRhHistoricoMovimientoService _historicoNominaService;
+        private readonly IRhTipoNominaService    _tipoNominaService;
         private readonly IConfiguration _configuration;
         public HistoricoMovimientoController(IRhHistoricoMovimientoService historicoNominaService,
+                                             IRhTipoNominaService tipoNominaService,
                                              IConfiguration configuration
                                          )
         {
           
             _historicoNominaService = historicoNominaService;
             _configuration = configuration;
+            _tipoNominaService = tipoNominaService;
         }
 
   
@@ -75,7 +78,20 @@ namespace Convertidor.Controllers
                 resultDto.LinkData = "";
                 return Ok(resultDto);
             }
+            var tiposNomina = await _tipoNominaService.GetAll();
+            if (tiposNomina.Count > 0)
+            {
+                if( filter.CodigoTipoNomina == 0)
+                {
+                    var firstTipo = tiposNomina.FirstOrDefault();
+                    if (firstTipo!=null)
+                    {
+                        filter.CodigoTipoNomina = firstTipo.CodigoTipoNomina;
+                    }
+                  
+                }
 
+            }
 
             result = await _historicoNominaService.GetByFechaNomina(filter.Desde, filter.Hasta);
 

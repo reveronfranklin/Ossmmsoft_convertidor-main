@@ -4,6 +4,7 @@ namespace Convertidor.Dtos.Presupuesto
 	public class PreIndiceCategoriaProgramaticaUpdateDto
 	{
         public int CodigoIcp { get; set; }
+        public int CodigoIcpPadre { get; set; }
         public int Ano { get; set; }
         public int Escenario { get; set; }
         public string CodigoSector { get; set; } = string.Empty;

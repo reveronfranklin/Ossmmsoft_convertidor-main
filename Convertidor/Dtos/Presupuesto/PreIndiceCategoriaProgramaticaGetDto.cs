@@ -22,8 +22,11 @@ namespace Convertidor.Dtos.Presupuesto
         public string Extra3 { get; set; } = string.Empty;
         public string CodigoOficina { get; set; } = string.Empty;       
         public int CodigoPresupuesto { get; set; }
+        public int CodigoIcpPadre { get; set; }
         public DateTime FechaIniDate { get; set; } 
         public DateTime FechaFinDate { get; set; }
+        public string CodigoIcpConcat { get { return $"{CodigoSector}-{CodigoPrograma}-{CodigoSubPrograma}-{CodigoProyecto}-{CodigoActividad}-{CodigoOficina}"; } }
+       
         public FechaDto FechaIninObj { get { return GetFechaDto(FechaIniDate); } }
         public FechaDto FechaFinObj { get { return GetFechaDto(FechaFinDate); } }
 

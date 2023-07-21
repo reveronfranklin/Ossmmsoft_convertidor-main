@@ -1,4 +1,6 @@
 ﻿using System;
+using static NPOI.HSSF.Util.HSSFColor;
+
 namespace Convertidor.Dtos.Rh
 {
 	public class ListHistoricoMovimientoDto
@@ -50,6 +52,7 @@ namespace Convertidor.Dtos.Rh
         public string Avatar { get; set; } = string.Empty;
         public string UnidadEjecutora { get; set; } = string.Empty;
         public string? EstadoCivil { get; set; } = string.Empty;
+        public string SearchText { get { return $"{TipoNomina}-{Cedula}-{Nombre}-{UnidadEjecutora}-{Apellido}-{DescripcionNacionalidad}-{DescripcionCargo}-{EstadoCivil}-{FechaNominaMov}-{Codigo}-{Denominacion}"; } }
 
     }
 }
