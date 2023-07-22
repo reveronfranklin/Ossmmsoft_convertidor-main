@@ -10,6 +10,7 @@ using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.VisualStudio.Web.CodeGeneration.Design;
 using NPOI.SS.Formula.Functions;
 using static NPOI.HSSF.Record.UnicodeString;
@@ -297,8 +298,8 @@ namespace Convertidor.Services
 
                 var presupuestoObj = await _presupuesttoRepository.GetByCodigo(13,codigoPresupuesto);
 
-                var icpList = icp.Data.Where(x => x.CodigoIcpPadre == null || x.CodigoIcpPadre == 0).ToList();
-
+                //var icpList = icp.Data.Where(x => x.CodigoIcpPadre == null || x.CodigoIcpPadre == 0).ToList();
+                var icpList = icp.Data.ToList();
 
                 if (icpList.Count > 0)
                 {
@@ -390,266 +391,89 @@ namespace Convertidor.Services
                 result.IsValid = false;
                 result.Message = ex.Message;
                 return result;
-
             }
-
-
-
         }
 
-
-        public async Task<ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>> UpdateIcpPadreBK(int codigoPresupuesto)
+        public async Task<PRE_INDICE_CAT_PRG> GetIcpPadre(PreIndiceCategoriaProgramaticaUpdateDto dto)
         {
 
-            ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>> result = new ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>(null);
+            PRE_INDICE_CAT_PRG padre = new PRE_INDICE_CAT_PRG();
             try
             {
 
-                var presupuesto = await GetAllByCodigoPresupuesto(codigoPresupuesto);
 
-                var presupuestoObj = await _presupuesttoRepository.GetByCodigo(13, codigoPresupuesto);
-
-                var presupuestoList = presupuesto.Data.ToList();
-
-
-                if (presupuestoList.Count > 0)
+                if (dto != null)
                 {
+                           
 
-                    var qSector = from s in presupuestoList
-                                  group s by new
-                                  {
-
-                                      CodigoSector = s.CodigoSector,
-
-                                  } into g
-                                  select new PreIndiceCategoriaProgramaticaGetDto
-                                  {
-
-
-                                      CodigoSector = g.Key.CodigoSector,
-
-
-                                  };
-                    if (qSector != null)
-                    {
-                        foreach (var itemSectores in qSector.ToList())
-                        {
-                            var listSectores = presupuestoList.Where(x => x.CodigoSector == itemSectores.CodigoSector).ToList();
-                            var qPrograma = from s in listSectores
-                                            group s by new
-                                            {
-
-
-                                                CodigoPrograma = s.CodigoPrograma
-
-                                            } into g
-                                            select new PreIndiceCategoriaProgramaticaGetDto
-                                            {
-
-
-
-                                                CodigoPrograma = g.Key.CodigoPrograma
-
-
-                                            };
-                            if (qPrograma != null)
+                            if (dto.CodigoActividad != "00")
                             {
-                                foreach (var itemPrograma in qPrograma.ToList())
-                                {
-                                    var listPrograma = listSectores.Where(x => x.CodigoPrograma == itemPrograma.CodigoPrograma).ToList();
-                                    var qSubPrograma = from s in listPrograma
-                                                       group s by new
-                                                       {
-
-
-                                                           CodoSubPrograma = s.CodigoSubPrograma
-
-                                                       } into g
-                                                       select new PreIndiceCategoriaProgramaticaGetDto
-                                                       {
-
-
-
-                                                           CodigoSubPrograma = g.Key.CodoSubPrograma
-
-
-                                                       };
-                                    if (qSubPrograma != null)
-                                    {
-
-                                        foreach (var itemSubProgram in qSubPrograma.ToList())
-                                        {
-                                            var listSubPrograma = listPrograma.Where(x => x.CodigoSubPrograma == itemSubProgram.CodigoSubPrograma).ToList();
-                                            var qProyecto = from s in listSubPrograma
-                                                            group s by new
-                                                            {
-
-
-                                                                CodigoProyecto = s.CodigoProyecto
-
-                                                            } into g
-                                                            select new PreIndiceCategoriaProgramaticaGetDto
-                                                            {
-
-
-
-                                                                CodigoProyecto = g.Key.CodigoProyecto
-
-
-                                                            };
-                                            if (qProyecto != null)
-                                            {
-                                                foreach (var itemProyecto in qProyecto)
-                                                {
-                                                    var listProyecto = listPrograma.Where(x => x.CodigoProyecto == itemProyecto.CodigoProyecto).ToList();
-                                                    var qActividad = from s in listProyecto
-                                                                     group s by new
-                                                                     {
-
-
-                                                                         CodigoActividad = s.CodigoActividad
-
-                                                                     } into g
-                                                                     select new PreIndiceCategoriaProgramaticaGetDto
-                                                                     {
-
-
-
-                                                                         CodigoActividad = g.Key.CodigoActividad
-
-
-                                                                     };
-                                                    if (qActividad != null)
-                                                    {
-                                                        foreach (var itemActividad in qActividad)
-                                                        {
-                                                            var listActividad = listProyecto.Where(x => x.CodigoActividad == itemActividad.CodigoActividad).ToList();
-                                                            var qOficina = from s in listActividad
-                                                                           group s by new
-                                                                           {
-
-
-                                                                               CodigoOficina = s.CodigoOficina
-
-                                                                           } into g
-                                                                           select new PreIndiceCategoriaProgramaticaGetDto
-                                                                           {
-
-
-
-                                                                               CodigoOficina = g.Key.CodigoOficina
-
-
-                                                                           };
-                                                            if (qOficina != null)
-                                                            {
-                                                                foreach (var itemOficina in qOficina)
-                                                                {
-                                                                    var listOficina = listActividad.Where(x => x.CodigoOficina == itemOficina.CodigoOficina).ToList();
-                                                                    foreach (var itemOficinaUpdate in listOficina)
-                                                                    {
-                                                                        var oficina = await _repository.GetByCodigo(itemOficinaUpdate.CodigoIcp);
-                                                                        if (oficina != null)
-                                                                        {
-                                                                            PRE_INDICE_CAT_PRG padre = new PRE_INDICE_CAT_PRG();
-
-                                                                            if (itemOficinaUpdate.CodigoActividad != "00")
-                                                                            {
-                                                                                padre = await _repository.GetHastaProyecto(presupuestoObj.ANO,
-                                                                                                                           oficina.CODIGO_ICP,
-                                                                                                                           oficina.CODIGO_SECTOR,
-                                                                                                                           oficina.CODIGO_PROGRAMA,
-                                                                                                                           oficina.CODIGO_SUBPROGRAMA,
-                                                                                                                           oficina.CODIGO_PROYECTO);
-                                                                            }
-                                                                            else if (itemOficinaUpdate.CodigoProyecto != "00")
-                                                                            {
-                                                                                padre = await _repository.GetHastaSubPrograma(presupuestoObj.ANO,
-                                                                                                                          oficina.CODIGO_ICP,
-                                                                                                                          oficina.CODIGO_SECTOR,
-                                                                                                                          oficina.CODIGO_PROGRAMA,
-                                                                                                                          oficina.CODIGO_SUBPROGRAMA);
-                                                                            }
-                                                                            else if (itemOficinaUpdate.CodigoSubPrograma != "00")
-                                                                            {
-                                                                                padre = await _repository.GetHastaPrograma(presupuestoObj.ANO,
-                                                                                                                          oficina.CODIGO_ICP,
-                                                                                                                          oficina.CODIGO_SECTOR,
-                                                                                                                          oficina.CODIGO_PROGRAMA);
-                                                                            }
-                                                                            else if (itemOficinaUpdate.CodigoPrograma != "00")
-                                                                            {
-                                                                                padre = await _repository.GetHastaSector(presupuestoObj.ANO,
-                                                                                                                        oficina.CODIGO_ICP,
-                                                                                                                        oficina.CODIGO_SECTOR);
-
-                                                                            }
-                                                                            else if (itemOficinaUpdate.CodigoSector != "00")
-                                                                            {
-                                                                                padre = await _repository.GetHastaSector(presupuestoObj.ANO,
-                                                                                                                        oficina.CODIGO_ICP,
-                                                                                                                        oficina.CODIGO_SECTOR);
-
-                                                                            }
-
-                                                                            if (padre != null)
-                                                                            {
-                                                                                oficina.EXTRA3 = padre.CODIGO_ICP.ToString();
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                oficina.EXTRA3 = oficina.CODIGO_ICP.ToString();
-                                                                            }
-                                                                            await _repository.Update(oficina);
-
-
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                        }
-                                    }
-                                }
+                                padre = await _repository.GetHastaProyecto(dto.Ano,
+                                                                           dto.CodigoIcp,
+                                                                           dto.CodigoSector,
+                                                                           dto.CodigoPrograma,
+                                                                           dto.CodigoSubPrograma,
+                                                                           dto.CodigoProyecto);
                             }
-                        }
-                    }
+                            else if (dto.CodigoProyecto != "00")
+                            {
+                                padre = await _repository.GetHastaSubPrograma(dto.Ano,
+                                                                           dto.CodigoIcp,
+                                                                           dto.CodigoSector,
+                                                                           dto.CodigoPrograma,
+                                                                           dto.CodigoSubPrograma);
+                            }
+                            else if (dto.CodigoSubPrograma != "00")
+                            {
+                                padre = await _repository.GetHastaPrograma(dto.Ano,
+                                                                           dto.CodigoIcp,
+                                                                           dto.CodigoSector,
+                                                                           dto.CodigoPrograma);
+                            }
+                            else if (dto.CodigoPrograma != "00")
+                            {
+                                padre = await _repository.GetHastaSector(dto.Ano,
+                                                                           dto.CodigoIcp,
+                                                                           dto.CodigoSector);
+
+                            }
+                            else if (dto.CodigoSector != "00")
+                            {
+                                padre = await _repository.GetHastaSector(dto.Ano,
+                                                                           dto.CodigoIcp,
+                                                                           dto.CodigoSector);
+
+                            }
+
+                            
+
+
+                 }
+                    
+
+
+ 
+
+                  return padre;
+                
 
 
 
-
-                    result = await GetAllByCodigoPresupuesto(codigoPresupuesto);
-
-                    return result;
-                }
-                else
-                {
-                    result.Data = null;
-                    result.IsValid = true;
-                    result.Message = $" No existen Datos";
-                    return result;
-
-                }
-
+              
 
 
             }
             catch (Exception ex)
             {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-                return result;
+              
+                return padre;
 
             }
 
 
 
         }
+
 
 
         public PreIndiceCategoriaProgramaticaGetDto MapIcpToDto(PRE_INDICE_CAT_PRG entity)
@@ -1047,6 +871,37 @@ namespace Convertidor.Services
                 result.Message = "CodigoOficina debe ser de 2 digitos";
                 return result;
             }
+
+            var padre = await GetIcpPadre(dto) ;
+            if(padre == null  && dto.CodigoActividad != "00")
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = $"No existe un padre para la Actividad: {dto.CodigoActividad}";
+                return result;
+            }
+            if (padre == null && dto.CodigoProyecto != "00")
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = $"No existe un padre para el proyecto: {dto.CodigoProyecto}";
+                return result;
+            }
+            if (padre == null && dto.CodigoSubPrograma != "00")
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = $"No existe un padre para el SubPrograma: {dto.CodigoSubPrograma}";
+                return result;
+            }
+            if (padre == null && dto.CodigoPrograma != "00")
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = $"No existe un padre para el Programa: {dto.CodigoPrograma}";
+                return result;
+            }
+
             result.Data = null;
             result.IsValid = true;
             result.Message = "";
