@@ -373,6 +373,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (entityUpdate != null)
                 {
                     entityUpdate.CODIGO_EMPRESA = empresa;
+                    if (entity.DENOMINACION == null) entity.DENOMINACION = "";
+                    if (entity.DESCRIPCION == null) entity.DESCRIPCION = "";
+                    if (entity.UNIDAD_EJECUTORA == null) entity.UNIDAD_EJECUTORA = "";
                     entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                     entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
                     entity.UNIDAD_EJECUTORA = entity.UNIDAD_EJECUTORA.ToUpper();
@@ -409,6 +412,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var empresString = @settings.EmpresaConfig;
                 var empresa = Int32.Parse(empresString);
                 entity.CODIGO_EMPRESA = empresa;
+                if (entity.DENOMINACION == null) entity.DENOMINACION = "";
+                if (entity.DESCRIPCION == null) entity.DESCRIPCION = "";
+                if (entity.UNIDAD_EJECUTORA == null) entity.UNIDAD_EJECUTORA = "";
                 entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                 entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
                 entity.UNIDAD_EJECUTORA = entity.UNIDAD_EJECUTORA.ToUpper();
