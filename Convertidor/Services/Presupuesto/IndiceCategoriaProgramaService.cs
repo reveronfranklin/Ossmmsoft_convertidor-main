@@ -310,6 +310,7 @@ namespace Convertidor.Services
                         if (icpObj != null)
                         {
                             PRE_INDICE_CAT_PRG padre = new PRE_INDICE_CAT_PRG();
+                            //var newPadre = GetIcpPadre(item);
 
                             if (item.CodigoActividad != "00")
                             {
