@@ -12,6 +12,7 @@ using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.VisualStudio.Web.CodeGeneration.Design;
+using NPOI.POIFS.Properties;
 using NPOI.SS.Formula.Functions;
 using static NPOI.HSSF.Record.UnicodeString;
 
@@ -226,15 +227,17 @@ namespace Convertidor.Services
                     var lastPresupuesto = await _presupuesttoRepository.GetLast();
                     if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
-                //string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}", parent.Name, child.Name, grandChild.Name,grandChild.Id,grandChild.ParentId,grandChild.Denominacion,grandChild.Descripcion)
+
+                //string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}", parent.Name, child.Name, grandChild.Name, grandGrandChild.Name, grandGrandChild.Id, grandGrandChild.ParentId, grandGrandChild.Denominacion, grandGrandChild.Descripcion, grandGrandChild.UnidadEjecutora);
+               
                 var treeIcp = await WriteStrings(codigoPresupuesto);
                 foreach (var item in treeIcp)
                 {
                     var arraIcp = item.Split(":");
-                    var id = arraIcp[3];
+                    var id = arraIcp[4];
                     var parentId = arraIcp[4];
                     List<string> icpString = new List<string>();
-                    if (id == parentId)
+                    /*if (id == parentId)
                     {
                         icpString.Add(arraIcp[0]);
                     }
@@ -243,13 +246,20 @@ namespace Convertidor.Services
                         icpString.Add(arraIcp[0]);
                         icpString.Add(arraIcp[1]);
                         icpString.Add(arraIcp[2]);
-                    }
+                        icpString.Add(arraIcp[3]);
+                    }*/
+
+                    icpString.Add(arraIcp[0]);
+                    icpString.Add(arraIcp[1]);
+                    icpString.Add(arraIcp[2]);
+                    icpString.Add(arraIcp[3]);
+
                     TreeICP treeICP = new TreeICP();
                     treeICP.Path = icpString;
                     treeICP.Id = Int32.Parse(id);
-                    treeICP.Denominacion = arraIcp[5];
-                    treeICP.Descripcion = arraIcp[6];
-                    treeICP.UnidadEjecutora = arraIcp[7];
+                    treeICP.Denominacion = arraIcp[6];
+                    treeICP.Descripcion = arraIcp[7];
+                    treeICP.UnidadEjecutora = arraIcp[8];
                     listTreeICP.Add(treeICP);
 
 
@@ -804,7 +814,8 @@ namespace Convertidor.Services
             IEnumerable<string> resultingStrings = from parent in items.Where(x => x.ParentId == x.Id)
                                                    join child in items on parent.Id equals child.ParentId
                                                    join grandChild in items on child.Id equals grandChild.ParentId
-                                                   select string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}", parent.Name, child.Name, grandChild.Name,grandChild.Id,grandChild.ParentId,grandChild.Denominacion,grandChild.Descripcion, grandChild.UnidadEjecutora);
+                                                   join grandGrandChild in items on grandChild.Id equals grandGrandChild.ParentId
+                                                   select string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}", parent.Name, child.Name, grandChild.Name, grandGrandChild.Name, grandGrandChild.Id, grandGrandChild.ParentId, grandGrandChild.Denominacion, grandGrandChild.Descripcion, grandGrandChild.UnidadEjecutora);
           
          
 
