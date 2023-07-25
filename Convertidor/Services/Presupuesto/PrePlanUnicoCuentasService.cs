@@ -553,6 +553,7 @@ namespace Convertidor.Services
             puc.CODIGO_NIVEL6 = dto.CodigoNivel6;
             puc.DENOMINACION = dto.Denominacion;
             puc.DESCRIPCION = dto.Descripcion;
+            puc.CODIGO_PUC_FK = 0;
             var  updated = await _repository.Update(puc);
             if (updated.Data != null)
             {
