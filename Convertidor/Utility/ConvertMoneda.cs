@@ -11,11 +11,14 @@ namespace Convertidor.Utility
             string literal = "";
             if (value == 0)
             {
-                literal = "Bs. 0.0";
+                literal = "0,00";
             }
             else
             {
-                literal = "Bs. " + value.ToString("N", CultureInfo.InvariantCulture);
+                // literal = "Bs. " + value.ToString("n");
+                // literal = "Bs. " + value.ToString("n");
+                literal = $"{value:N2}";
+
             }
 
 

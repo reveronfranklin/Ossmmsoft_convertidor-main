@@ -25,7 +25,9 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPRE_V_SALDOSRepository _pre_V_SALDOSRepository;
         private readonly IPRE_ASIGNACIONESRepository _PRE_ASIGNACIONESRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _PRE_INDICE_CAT_PRGRepository;
+        private readonly IPRE_PLAN_UNICO_CUENTASRepository _pRE_PLAN_UNICO_CUENTASRepository;
         private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
+        private readonly IPrePlanUnicoCuentasService _prePlanUnicoCuentasService;
         private readonly IMapper _mapper;
 
         public PRE_PRESUPUESTOSService(IPRE_PRESUPUESTOSRepository repository,
@@ -34,6 +36,8 @@ namespace Convertidor.Services.Presupuesto
                                         IPRE_ASIGNACIONESRepository PRE_ASIGNACIONESRepository,
                                         IPRE_INDICE_CAT_PRGRepository PRE_INDICE_CAT_PRGRepository,
                                         IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
+                                        IPRE_PLAN_UNICO_CUENTASRepository pRE_PLAN_UNICO_CUENTASRepository,
+                                        IPrePlanUnicoCuentasService prePlanUnicoCuentasService,
                                         IMapper mapper)
         {
             _repository = repository;
@@ -42,6 +46,8 @@ namespace Convertidor.Services.Presupuesto
             _PRE_ASIGNACIONESRepository = PRE_ASIGNACIONESRepository;
             _PRE_INDICE_CAT_PRGRepository = PRE_INDICE_CAT_PRGRepository;
             _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
+            _pRE_PLAN_UNICO_CUENTASRepository = pRE_PLAN_UNICO_CUENTASRepository;
+            _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
             _mapper = mapper;
         }
 
@@ -280,6 +286,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 await _indiceCategoriaProgramaService.DeleteByCodigoPresupuesto(dto.CodigoPresupuesto);
+                await _prePlanUnicoCuentasService.DeleteByCodigoPresupuesto(dto.CodigoPresupuesto);
                 var  deleted =await _repository.Delete(13,dto.CodigoPresupuesto);
 
                 if (deleted.Length>0)
@@ -356,6 +363,10 @@ namespace Convertidor.Services.Presupuesto
 
                     int codigoPresupuestoOrigen = created.Data.CODIGO_PRESUPUESTO - 1;
                     var resultClonado = await _PRE_INDICE_CAT_PRGRepository.ClonarByCodigoPresupuesto(codigoPresupuestoOrigen, created.Data.CODIGO_PRESUPUESTO);
+
+
+                    var resultClonadoPUC = await _pRE_PLAN_UNICO_CUENTASRepository.ClonarByCodigoPresupuesto(codigoPresupuestoOrigen, created.Data.CODIGO_PRESUPUESTO);
+
                 }
 
 
