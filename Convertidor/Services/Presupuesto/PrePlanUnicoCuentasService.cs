@@ -249,8 +249,7 @@ namespace Convertidor.Services
 
                 
                 var pucList = puc.Data.Where(x=>x.CodigoPucPadre==0 || x.CodigoPucPadre==null).ToList();
-                //var pucList = puc.Data.ToList();
-
+              
                 if (pucList.Count > 0)
                 {
 

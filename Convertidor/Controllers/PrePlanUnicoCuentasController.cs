@@ -57,7 +57,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetTree(FilterByPresupuestoDto filter)
         {
-            //var res = await _indiceCategoriaProgramaService.UpdateIcpPadre(filter.CodigoPresupuesto);
+            
             var result = await _service.GetTreeByPresupuesto(filter.CodigoPresupuesto);
             return Ok(result);
         }
