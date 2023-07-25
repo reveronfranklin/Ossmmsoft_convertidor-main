@@ -8,7 +8,7 @@ using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
-    public class PRE_PLAN_UNICO_CUENTASRepository 
+    public class PRE_PLAN_UNICO_CUENTASRepository: IPRE_PLAN_UNICO_CUENTASRepository
     {
 
         private readonly DataContextPre _context;
@@ -29,7 +29,8 @@ namespace Convertidor.Data.Repository.Presupuesto
             {
 
                 var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
-                            .OrderBy(x => x.CODIGO_NIVEL1)
+                            .OrderBy(x => x.CODIGO_GRUPO)
+                            .ThenBy(x => x.CODIGO_NIVEL1)
                             .ThenBy(x => x.CODIGO_NIVEL2)
                             .ThenBy(x => x.CODIGO_NIVEL3)
                             .ThenBy(x => x.CODIGO_NIVEL4)
@@ -58,7 +59,8 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                 var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
                             .Where(x=> x.CODIGO_PRESUPUESTO == codigoPresupuesto)
-                            .OrderBy(x => x.CODIGO_NIVEL1)
+                            .OrderBy(x => x.CODIGO_GRUPO)
+                            .ThenBy(x => x.CODIGO_NIVEL1)
                             .ThenBy(x => x.CODIGO_NIVEL2)
                             .ThenBy(x => x.CODIGO_NIVEL3)
                             .ThenBy(x => x.CODIGO_NIVEL4)
@@ -86,6 +88,7 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
                     .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                x.CODIGO_GRUPO == filter.CodigoGrupo &&
                                 x.CODIGO_NIVEL1 == filter.CodicoNivel1 &&
                                 x.CODIGO_NIVEL2 == filter.CodicoNivel2 &&
                                 x.CODIGO_NIVEL3 == filter.CodicoNivel3 &&
@@ -109,228 +112,224 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<PRE_INDICE_CAT_PRG> GetHastaActividad(int ano,int codIcp,string sector,string programa,string subPrograma,string proyecto,string actividad)
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaNivel5(int codigoPresupuesto,int codigoPuc,string grupo,string nivel1,string nivel2, string nivel3, string nivel4,string nivel5)
         {
+          
             try
             {
 
-                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
-                            .Where(x => x.CODIGO_ICP!= codIcp &&
-                                        x.ANO == ano &&
-                                        x.CODIGO_SECTOR == sector &&
-                                        x.CODIGO_PROGRAMA == programa &&
-                                        x.CODIGO_SUBPROGRAMA == subPrograma &&
-                                        x.CODIGO_PROYECTO == proyecto &&
-                                         x.CODIGO_ACTIVIDAD == actividad 
+                var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_PUC!= codigoPuc &&
+                                        x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                        x.CODIGO_GRUPO == grupo &&
+                                        x.CODIGO_NIVEL1 == nivel1 &&
+                                        x.CODIGO_NIVEL2 == nivel2 &&
+                                        x.CODIGO_NIVEL3 == nivel3 &&
+                                        x.CODIGO_NIVEL4 == nivel4 &&
+                                        x.CODIGO_NIVEL5 == nivel5
                              )
-                             .OrderBy(x => x.CODIGO_SECTOR)
-                             .ThenBy(x => x.CODIGO_PROGRAMA)
-                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
-                             .ThenBy(x => x.CODIGO_PROYECTO)
-                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                             .OrderBy(x => x.CODIGO_GRUPO)
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             .ThenBy(x => x.CODIGO_NIVEL2)
+                             .ThenBy(x => x.CODIGO_NIVEL3)
+                             .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
                             .FirstOrDefaultAsync();
-                return (PRE_INDICE_CAT_PRG)result!;
+                return (PRE_PLAN_UNICO_CUENTAS)result!;
 
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
+                var msg = ex.Message;
                 return null;
             }
 
 
         }
-
-        public async Task<PRE_INDICE_CAT_PRG> GetHastaProyecto(int ano, int codIcp, string sector, string programa, string subPrograma, string proyecto)
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaNivel4(int codigoPresupuesto, int codigoPuc, string grupo, string nivel1, string nivel2, string nivel3, string nivel4)
         {
+
             try
             {
 
-                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
-                            .Where(x => x.CODIGO_ICP != codIcp &&
-                                        x.ANO == ano &&
-                                        x.CODIGO_SECTOR == sector &&
-                                        x.CODIGO_PROGRAMA == programa &&
-                                        x.CODIGO_SUBPROGRAMA == subPrograma &&
-                                        x.CODIGO_PROYECTO == proyecto 
-                                         
+                var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_PUC != codigoPuc &&
+                                        x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                        x.CODIGO_GRUPO == grupo &&
+                                        x.CODIGO_NIVEL1 == nivel1 &&
+                                        x.CODIGO_NIVEL2 == nivel2 &&
+                                        x.CODIGO_NIVEL3 == nivel3 &&
+                                        x.CODIGO_NIVEL4 == nivel4 
                              )
-                              .OrderBy(x => x.CODIGO_SECTOR)
-                             .ThenBy(x => x.CODIGO_PROGRAMA)
-                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
-                             .ThenBy(x => x.CODIGO_PROYECTO)
-                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                             .OrderBy(x => x.CODIGO_GRUPO)
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             .ThenBy(x => x.CODIGO_NIVEL2)
+                             .ThenBy(x => x.CODIGO_NIVEL3)
+                             .ThenBy(x => x.CODIGO_NIVEL4)
+                            
                             .FirstOrDefaultAsync();
-                return (PRE_INDICE_CAT_PRG)result!;
+                return (PRE_PLAN_UNICO_CUENTAS)result!;
 
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
+                var msg = ex.Message;
                 return null;
             }
 
 
         }
-        public async Task<PRE_INDICE_CAT_PRG> GetHastaSubPrograma(int ano, int codIcp, string sector, string programa, string subPrograma)
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaNivel3(int codigoPresupuesto, int codigoPuc, string grupo, string nivel1, string nivel2, string nivel3)
         {
+
             try
             {
 
-                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
-                            .Where(x => x.CODIGO_ICP != codIcp &&
-                                        x.ANO == ano &&
-                                        x.CODIGO_SECTOR == sector &&
-                                        x.CODIGO_PROGRAMA == programa &&
-                                        x.CODIGO_SUBPROGRAMA == subPrograma
+                var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_PUC != codigoPuc &&
+                                        x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                        x.CODIGO_GRUPO == grupo &&
+                                        x.CODIGO_NIVEL1 == nivel1 &&
+                                        x.CODIGO_NIVEL2 == nivel2 &&
+                                        x.CODIGO_NIVEL3 == nivel3 
+                                    
+
+                             )
+                             .OrderBy(x => x.CODIGO_GRUPO)
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             .ThenBy(x => x.CODIGO_NIVEL2)
+                             .ThenBy(x => x.CODIGO_NIVEL3)
+                            
+
+                            .FirstOrDefaultAsync();
+                return (PRE_PLAN_UNICO_CUENTAS)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+        }
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaNivel2(int codigoPresupuesto, int codigoPuc, string grupo, string nivel1, string nivel2)
+        {
+
+            try
+            {
+
+                var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_PUC != codigoPuc &&
+                                        x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                        x.CODIGO_GRUPO == grupo &&
+                                        x.CODIGO_NIVEL1 == nivel1 &&
+                                        x.CODIGO_NIVEL2 == nivel2
                                      
 
                              )
-                             .OrderBy(x => x.CODIGO_SECTOR)
-                             .ThenBy(x => x.CODIGO_PROGRAMA)
-                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
-                             .ThenBy(x => x.CODIGO_PROYECTO)
-                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
-
+                             .OrderBy(x => x.CODIGO_GRUPO)
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             .ThenBy(x => x.CODIGO_NIVEL2)
                             .FirstOrDefaultAsync();
-                return (PRE_INDICE_CAT_PRG)result!;
+                return (PRE_PLAN_UNICO_CUENTAS)result!;
 
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
+                var msg = ex.Message;
                 return null;
             }
 
 
         }
-        public async Task<PRE_INDICE_CAT_PRG> GetHastaPrograma(int ano, int codIcp, string sector, string programa)
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaNivel1(int codigoPresupuesto, int codigoPuc, string grupo, string nivel1)
         {
+
             try
             {
 
-                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
-                            .Where(x => x.CODIGO_ICP != codIcp &&
-                                        x.ANO == ano &&
-                                        x.CODIGO_SECTOR == sector &&
-                                        x.CODIGO_PROGRAMA == programa 
+                var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_PUC != codigoPuc &&
+                                        x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                        x.CODIGO_GRUPO == grupo &&
+                                        x.CODIGO_NIVEL1 == nivel1
+
                              )
-                              .OrderBy(x => x.CODIGO_SECTOR)
-                             .ThenBy(x => x.CODIGO_PROGRAMA)
-                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
-                             .ThenBy(x => x.CODIGO_PROYECTO)
-                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
-
+                             .OrderBy(x => x.CODIGO_GRUPO)
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             
                             .FirstOrDefaultAsync();
-                return (PRE_INDICE_CAT_PRG)result!;
+                return (PRE_PLAN_UNICO_CUENTAS)result!;
 
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
+                var msg = ex.Message;
                 return null;
             }
 
 
         }
-        public async Task<PRE_INDICE_CAT_PRG> GetHastaSector(int ano, int codIcp, string sector)
+
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaGrupo(int codigoPresupuesto, int codigoPuc, string grupo)
         {
+
             try
             {
 
-                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
-                            .Where(x =>
-                                        x.ANO == ano &&
-                                        x.CODIGO_SECTOR == sector 
+                var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_PUC == codigoPuc &&
+                                        x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                        x.CODIGO_GRUPO == grupo
+                                       
+
                              )
-                              .OrderBy(x => x.CODIGO_SECTOR)
-                             .ThenBy(x => x.CODIGO_PROGRAMA)
-                             .ThenBy(x => x.CODIGO_SUBPROGRAMA)
-                             .ThenBy(x => x.CODIGO_PROYECTO)
-                             .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                             .OrderBy(x => x.CODIGO_GRUPO)
+                             
+
                             .FirstOrDefaultAsync();
-                return (PRE_INDICE_CAT_PRG)result!;
+                return (PRE_PLAN_UNICO_CUENTAS)result!;
 
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
+                var msg = ex.Message;
                 return null;
             }
 
 
         }
 
-        public async Task<bool> IcpContieneHijos(int codigoIcp)
-        {
-            bool result;
-            try
-            {
-                var icp = await GetByCodigo(codigoIcp);
-                if (icp == null)
-                {
-                    result = false;
-
-                }
-                else
-                {
-                    var resultSearch = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
-                          .Where(x => x.CODIGO_ICP!=codigoIcp &&
-                                      x.ANO == icp.ANO &&
-                                      x.CODIGO_SECTOR == icp.CODIGO_SECTOR &&
-                                      x.CODIGO_PROGRAMA == icp.CODIGO_PROGRAMA &&
-                                      x.CODIGO_SUBPROGRAMA == icp.CODIGO_SUBPROGRAMA &&
-                                      x.CODIGO_PROYECTO == icp.CODIGO_PROYECTO &&
-                                      x.CODIGO_ACTIVIDAD == icp.CODIGO_ACTIVIDAD &&
-                                      x.CODIGO_OFICINA == icp.CODIGO_OFICINA
-                           )
-                          .FirstOrDefaultAsync();
-                    result = true;
-                }
-              
-                return (bool)result!;
-
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.InnerException.Message;
-                return false;
-            }
-
-
-
-        }
-
-
-        public async Task<PRE_INDICE_CAT_PRG> GetByCodigo(int codigoIcp)
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetByCodigo(int codigoIcp)
         {
             try
             {
 
-                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
-                    .Where(x =>  x.CODIGO_ICP == codigoIcp)
+                var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                    .Where(x =>  x.CODIGO_PUC == codigoIcp)
                     .FirstOrDefaultAsync();
-                return (PRE_INDICE_CAT_PRG)result!;
+                return (PRE_PLAN_UNICO_CUENTAS)result!;
 
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
+                var msg = ex.Message;
                 return null;
             }
 
 
 
         }
-        public async Task<string> Delete(int codigoICP)
+        public async Task<string> Delete(int codigoPuc)
         {
 
             try
             {
-                PRE_INDICE_CAT_PRG entity = await GetByCodigo(codigoICP);
+                PRE_PLAN_UNICO_CUENTAS entity = await GetByCodigo(codigoPuc);
                 if (entity != null)
                 {
-                    _context.PRE_INDICE_CAT_PRG.Remove(entity);
+                    _context.PRE_PLAN_UNICO_CUENTAS.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -343,10 +342,9 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
-
-        public async Task<ResultDto<PRE_INDICE_CAT_PRG>> Update(PRE_INDICE_CAT_PRG entity)
+        public async Task<ResultDto<PRE_PLAN_UNICO_CUENTAS>> Update(PRE_PLAN_UNICO_CUENTAS entity)
         {
-            ResultDto<PRE_INDICE_CAT_PRG> result = new ResultDto<PRE_INDICE_CAT_PRG>(null);
+            ResultDto<PRE_PLAN_UNICO_CUENTAS> result = new ResultDto<PRE_PLAN_UNICO_CUENTAS>(null);
 
             try
             {
@@ -355,14 +353,16 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var empresString = @settings.EmpresaConfig;
                 var empresa = Int32.Parse(empresString);
 
-                PRE_INDICE_CAT_PRG entityUpdate = await GetByCodigo( entity.CODIGO_ICP);
+                PRE_PLAN_UNICO_CUENTAS entityUpdate = await GetByCodigo( entity.CODIGO_PUC);
                 if (entityUpdate != null)
                 {
                     entityUpdate.CODIGO_EMPRESA = empresa;
+                    if (entity.DENOMINACION == null) entity.DENOMINACION = "";
+                    if (entity.DESCRIPCION == null) entity.DESCRIPCION = "";
                     entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                     entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
-                    entity.UNIDAD_EJECUTORA = entity.UNIDAD_EJECUTORA.ToUpper();
-                    _context.PRE_INDICE_CAT_PRG.Update(entity);
+                   
+                    _context.PRE_PLAN_UNICO_CUENTAS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -382,11 +382,9 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
-
-
-        public async Task<ResultDto<PRE_INDICE_CAT_PRG>> Create(PRE_INDICE_CAT_PRG entity)
+        public async Task<ResultDto<PRE_PLAN_UNICO_CUENTAS>> Create(PRE_PLAN_UNICO_CUENTAS entity)
         {
-            ResultDto<PRE_INDICE_CAT_PRG> result = new ResultDto<PRE_INDICE_CAT_PRG>(null);
+            ResultDto<PRE_PLAN_UNICO_CUENTAS> result = new ResultDto<PRE_PLAN_UNICO_CUENTAS>(null);
 
             try
             {
@@ -395,12 +393,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var empresString = @settings.EmpresaConfig;
                 var empresa = Int32.Parse(empresString);
                 entity.CODIGO_EMPRESA = empresa;
+                if (entity.DENOMINACION == null) entity.DENOMINACION = "";
+                if (entity.DESCRIPCION == null) entity.DESCRIPCION = "";
                 entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                 entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
-                entity.UNIDAD_EJECUTORA = entity.UNIDAD_EJECUTORA.ToUpper();
-                entity.CODIGO_ICP = await GetNextKey();
+              
+                entity.CODIGO_PUC = await GetNextKey();
 
-                _context.PRE_INDICE_CAT_PRG.Add(entity);
+                _context.PRE_PLAN_UNICO_CUENTAS.Add(entity);
                 await _context.SaveChangesAsync();
                 result.Data = entity;
                 result.IsValid = true;
@@ -425,8 +425,8 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
                 int result = 0;
-                var last = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_ICP)
+                var last = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_PUC)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -434,7 +434,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
                 else
                 {
-                    result = last.CODIGO_ICP + 1;
+                    result = last.CODIGO_PUC + 1;
                 }
 
                 return (int)result!;
@@ -449,12 +449,10 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
-
-
-        public async Task<ResultDto<List<PRE_INDICE_CAT_PRG>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,int codigoPresupuestoDestino)
+        public async Task<ResultDto<List<PRE_PLAN_UNICO_CUENTAS>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,int codigoPresupuestoDestino)
         {
 
-            ResultDto<List<PRE_INDICE_CAT_PRG>> result = new ResultDto<List<PRE_INDICE_CAT_PRG>>(null);
+            ResultDto<List<PRE_PLAN_UNICO_CUENTAS>> result = new ResultDto<List<PRE_PLAN_UNICO_CUENTAS>>(null);
             try
             {
                 var presupuestoDestino = await _context.PRE_PRESUPUESTOS.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoDestino).DefaultIfEmpty().FirstOrDefaultAsync();
@@ -475,37 +473,36 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
 
 
-                var icpDestino = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                var pucDestino = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
                            .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoDestino)
                            .FirstOrDefaultAsync();
 
-                if (icpDestino != null)
+                if (pucDestino != null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Ya existe ICP para este  presupuesto";
+                    result.Message = "Ya existe PUC para este  presupuesto";
                     return result;
                 }
 
-                var icpOrigenResult = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                var pucOrigenResult = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
                           .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoOrigen)
-                          .OrderBy(x => x.CODIGO_SECTOR)
-                          .ThenBy(x => x.CODIGO_PROGRAMA)
-                          .ThenBy(x => x.CODIGO_PROYECTO)
-                          .ThenBy(x => x.CODIGO_SUBPROGRAMA)
-                          .ThenBy(x => x.CODIGO_ACTIVIDAD)
-                          .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                           .OrderBy(x => x.CODIGO_GRUPO)
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             .ThenBy(x => x.CODIGO_NIVEL2)
+                             .ThenBy(x => x.CODIGO_NIVEL3)
+                             .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
                           .ToListAsync();
 
-                if (icpOrigenResult.Count > 0)
+                if (pucOrigenResult.Count > 0)
                 {
-                    foreach (var item in icpOrigenResult)
+                    foreach (var item in pucOrigenResult)
                     {
-                        PRE_INDICE_CAT_PRG newItem = new PRE_INDICE_CAT_PRG();
+                        PRE_PLAN_UNICO_CUENTAS newItem = new PRE_PLAN_UNICO_CUENTAS();
                         newItem = item;
-                        newItem.CODIGO_ICP = 0;
-                        newItem.CODIGO_ICP_FK = 0;
-                        newItem.ANO = presupuestoDestino.ANO;
+                        newItem.CODIGO_PUC = 0;
+                        newItem.CODIGO_PUC_FK = 0;  
                         newItem.CODIGO_PRESUPUESTO = presupuestoDestino.CODIGO_PRESUPUESTO;
                         await Create(newItem);
 
@@ -521,14 +518,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
 
 
-                var icpDestinoResult = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                var icpDestinoResult = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
                             .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoDestino)
-                            .OrderBy(x => x.CODIGO_SECTOR)
-                            .ThenBy(x => x.CODIGO_PROGRAMA)
-                            .ThenBy(x => x.CODIGO_PROYECTO)
-                            .ThenBy(x => x.CODIGO_SUBPROGRAMA)
-                            .ThenBy(x => x.CODIGO_ACTIVIDAD)
-                            .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                            .OrderBy(x => x.CODIGO_GRUPO)
+                            .ThenBy(x => x.CODIGO_NIVEL1)
+                            .ThenBy(x => x.CODIGO_NIVEL2)
+                            .ThenBy(x => x.CODIGO_NIVEL3)
+                            .ThenBy(x => x.CODIGO_NIVEL4)
+                            .ThenBy(x => x.CODIGO_NIVEL5)
                             .ToListAsync();
 
                 result.Data = icpDestinoResult;

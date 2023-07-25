@@ -67,6 +67,9 @@ builder.Services.AddTransient<IPRE_V_DOC_CAUSADOServices, PRE_V_DOC_CAUSADOServi
 builder.Services.AddTransient<IPRE_V_DOC_PAGADOServices, PRE_V_DOC_PAGADOServices>();
 builder.Services.AddTransient<IPRE_V_DOC_BLOQUEADOServices, PRE_V_DOC_BLOQUEADOServices>();
 builder.Services.AddTransient<IPRE_V_DOC_MODIFICADOServices, PRE_V_DOC_MODIFICADOServices>();
+builder.Services.AddTransient<IPRE_PLAN_UNICO_CUENTASRepository, PRE_PLAN_UNICO_CUENTASRepository>();
+builder.Services.AddTransient<IPrePlanUnicoCuentasService, PrePlanUnicoCuentasService>();
+
 
 
 //Repository SIS

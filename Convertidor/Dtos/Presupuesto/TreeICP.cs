@@ -21,5 +21,15 @@ namespace Convertidor.Dtos.Presupuesto
         public string Descripcion { get; set; } = string.Empty;
         public string UnidadEjecutora { get; set; } = string.Empty;
     }
+
+    public class TreePUC
+    {
+
+        public List<string> Path { get; set; }
+        public string Denominacion { get; set; } = string.Empty;
+        public string Descripcion { get; set; } = string.Empty;
+        public int Id { get; set; }
+
+    }
 }
 

@@ -74,6 +74,35 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<bool> PUCExiste(int codigoPUC)
+        {
+
+            bool result;
+            try
+            {
+
+                var asignaciones = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PUC == codigoPUC).FirstOrDefaultAsync();
+                if (asignaciones != null)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+
+        }
+
     }
 }
 

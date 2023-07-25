@@ -5,6 +5,8 @@ namespace Convertidor.Dtos.Presupuesto
 	{
 
         public int? CodigoPresupuesto { get; set; }
+        public int? CodigoPuc { get; set; }
+        public string CodigoGrupo { get; set; } = string.Empty;
         public string CodicoNivel1 { get; set; } = string.Empty;
         public string CodicoNivel2 { get; set; } = string.Empty;
         public string CodicoNivel3 { get; set; } = string.Empty;
