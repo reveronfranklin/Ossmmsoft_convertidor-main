@@ -59,6 +59,7 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetHistoricoFecha(FilterHistoricoNominaPeriodo filter)
         {
             ResultDto<List<ListHistoricoMovimientoDto>> resultDto = new ResultDto<List<ListHistoricoMovimientoDto>>(null);
+         
             List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
 
 
@@ -78,51 +79,63 @@ namespace Convertidor.Controllers
                 resultDto.LinkData = "";
                 return Ok(resultDto);
             }
-            var tiposNomina = await _tipoNominaService.GetAll();
-            if (tiposNomina.Count > 0)
+            if (filter.CodigoTipoNomina == 0)
             {
-                if( filter.CodigoTipoNomina == 0)
+                var tiposNomina = await _tipoNominaService.GetAll();
+                if (tiposNomina.Count > 0)
                 {
                     var firstTipo = tiposNomina.FirstOrDefault();
-                    if (firstTipo!=null)
+                    if (firstTipo != null)
                     {
                         filter.CodigoTipoNomina = firstTipo.CodigoTipoNomina;
                     }
-                  
+
                 }
+         
 
             }
 
+
+
+
             result = await _historicoNominaService.GetByFechaNomina(filter.Desde, filter.Hasta);
+
+            if (filter.CodigoTipoNomina > 0)
+            {
+                result = result.Where(x => x.CodigoTipoNomina == filter.CodigoTipoNomina).ToList();
+
+
+
+            }
 
             if (filter.CodigoPersona > 0)
             {
                 result = result.Where(x => x.CodigoPersona == filter.CodigoPersona).ToList();
                
 
-                if (!string.IsNullOrEmpty(filter.CodigoConcepto))
-                {
-                    var concepto = result.Where(x => x.Codigo == filter.CodigoConcepto).ToList();
-                    if (concepto.Count > 0) { result = concepto; }
-                }
+             
             }
-            else
+        
+
+
+            if (filter.CodigoConcepto.Count>0)
             {
-                if (filter.CodigoTipoNomina > 0)
+                List<ListHistoricoMovimientoDto> resultConcepto = new List<ListHistoricoMovimientoDto>();
+                foreach (var item in filter.CodigoConcepto)
                 {
-                    var tipoNomina = result.Where(x => x.CodigoTipoNomina == filter.CodigoTipoNomina).ToList();
-
-                    result = tipoNomina; 
+                    var concepto = result.Where(x => x.Codigo.Trim() == item.Codigo.Trim()).ToList();
+                    if (concepto.Count > 0) resultConcepto.AddRange(concepto);
                 }
+                result = resultConcepto;
 
-                if (!string.IsNullOrEmpty(filter.CodigoConcepto))
-                {
-                    var concepto = result.Where(x => x.Codigo == filter.CodigoConcepto).ToList();
-                    result = concepto; 
-                }
+
+
             }
-
-         
+            result = result.OrderBy(x => x.CodigoTipoNomina)
+                           .ThenBy(x => x.Nombre)
+                           .ThenBy(x => x.Apellido)
+                           .ThenBy(x => x.FechaNomina)
+                           .ToList();
 
 
             if (result.Count() > 0)
