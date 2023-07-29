@@ -275,6 +275,161 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<PreIndiceCategoriaProgramaticaDescripciones> GetDescripcionIcp(int codIcp)
+        {
+            PreIndiceCategoriaProgramaticaDescripciones result = new PreIndiceCategoriaProgramaticaDescripciones();
+
+            try
+            {
+
+                var icp = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                            .Where(x =>
+                                        x.CODIGO_ICP == codIcp)
+                  
+                            .FirstOrDefaultAsync();
+                if (icp != null)
+                {
+                    result.CodigoIcp = codIcp;
+                    result.CodigoSector = icp.CODIGO_SECTOR;
+                    result.CodigoPrograma = icp.CODIGO_PROGRAMA;
+                    result.CodigoSubPrograma = icp.CODIGO_SUBPROGRAMA;
+                    result.CodigoProyecto = icp.CODIGO_PROYECTO;
+                    result.CodigoActividad = icp.CODIGO_ACTIVIDAD;
+                    result.CodigoOficina = icp.CODIGO_OFICINA;
+                    var sector = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                          .Where(x => x.CODIGO_PRESUPUESTO == icp.CODIGO_PRESUPUESTO &&
+                                      x.CODIGO_SECTOR == icp.CODIGO_SECTOR &&
+                                      x.CODIGO_PROGRAMA == "00" &&
+                                      x.CODIGO_SUBPROGRAMA == "00" &&
+                                      x.CODIGO_PROYECTO == "00" &&
+                                      x.CODIGO_ACTIVIDAD == "00" &&
+                                      x.CODIGO_OFICINA == "00"
+                                      )
+                          .FirstOrDefaultAsync();
+                    if (sector != null)
+                    {
+                        result.DescripcionSector = sector.DENOMINACION;
+                    }
+                    else {
+                        result.DescripcionSector = "S/S";
+                    }
+
+                    var programa = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                         .Where(x => x.CODIGO_PRESUPUESTO == icp.CODIGO_PRESUPUESTO &&
+                                     x.CODIGO_SECTOR == icp.CODIGO_SECTOR &&
+                                     x.CODIGO_PROGRAMA == icp.CODIGO_PROGRAMA &&
+                                     x.CODIGO_SUBPROGRAMA == "00" &&
+                                     x.CODIGO_PROYECTO == "00" &&
+                                     x.CODIGO_ACTIVIDAD == "00" &&
+                                     x.CODIGO_OFICINA == "00"
+                                     )
+                         .FirstOrDefaultAsync();
+                    if (programa != null)
+                    {
+                        result.DescripcionPrograma = programa.DENOMINACION;
+                    }
+                    else
+                    {
+                        result.DescripcionPrograma = "S/P";
+                    }
+
+                    var subPrograma = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                         .Where(x => x.CODIGO_PRESUPUESTO == icp.CODIGO_PRESUPUESTO &&
+                                     x.CODIGO_SECTOR == icp.CODIGO_SECTOR &&
+                                     x.CODIGO_PROGRAMA == icp.CODIGO_PROGRAMA &&
+                                     x.CODIGO_SUBPROGRAMA == icp.CODIGO_SUBPROGRAMA &&
+                                     x.CODIGO_PROYECTO == "00" &&
+                                     x.CODIGO_ACTIVIDAD == "00" &&
+                                     x.CODIGO_OFICINA == "00"
+                                     )
+                         .FirstOrDefaultAsync();
+                    if (subPrograma != null)
+                    {
+                        result.DescripcionSubPrograma = subPrograma.DENOMINACION;
+                    }
+                    else
+                    {
+                        result.DescripcionSubPrograma = "S/SP";
+                    }
+
+                    var proyecto = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                        .Where(x => x.CODIGO_PRESUPUESTO == icp.CODIGO_PRESUPUESTO &&
+                                    x.CODIGO_SECTOR == icp.CODIGO_SECTOR &&
+                                    x.CODIGO_PROGRAMA == icp.CODIGO_PROGRAMA &&
+                                    x.CODIGO_SUBPROGRAMA == icp.CODIGO_SUBPROGRAMA &&
+                                    x.CODIGO_PROYECTO == icp.CODIGO_PROYECTO &&
+                                    x.CODIGO_ACTIVIDAD == "00" &&
+                                    x.CODIGO_OFICINA == "00"
+                                    )
+                        .FirstOrDefaultAsync();
+                    if (proyecto != null)
+                    {
+                        result.DescripcionProyecto = proyecto.DENOMINACION;
+                    }
+                    else
+                    {
+                        result.DescripcionProyecto = "S/SP";
+                    }
+                    var actividad = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                       .Where(x => x.CODIGO_PRESUPUESTO == icp.CODIGO_PRESUPUESTO &&
+                                   x.CODIGO_SECTOR == icp.CODIGO_SECTOR &&
+                                   x.CODIGO_PROGRAMA == icp.CODIGO_PROGRAMA &&
+                                   x.CODIGO_SUBPROGRAMA == icp.CODIGO_SUBPROGRAMA &&
+                                   x.CODIGO_PROYECTO == icp.CODIGO_PROYECTO &&
+                                   x.CODIGO_ACTIVIDAD == icp.CODIGO_ACTIVIDAD &&
+                                   x.CODIGO_OFICINA == "00"
+                                   )
+                       .FirstOrDefaultAsync();
+                    if (actividad != null)
+                    {
+                        result.DescripcionActividad = actividad.DENOMINACION;
+                    }
+                    else
+                    {
+                        result.DescripcionActividad = "S/A";
+                    }
+                    var oficina = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                     .Where(x => x.CODIGO_PRESUPUESTO == icp.CODIGO_PRESUPUESTO &&
+                                 x.CODIGO_SECTOR == icp.CODIGO_SECTOR &&
+                                 x.CODIGO_PROGRAMA == icp.CODIGO_PROGRAMA &&
+                                 x.CODIGO_SUBPROGRAMA == icp.CODIGO_SUBPROGRAMA &&
+                                 x.CODIGO_PROYECTO == icp.CODIGO_PROYECTO &&
+                                 x.CODIGO_ACTIVIDAD == icp.CODIGO_ACTIVIDAD &&
+                                 x.CODIGO_OFICINA == icp.CODIGO_OFICINA
+                                 )
+                     .FirstOrDefaultAsync();
+                    if (oficina != null)
+                    {
+                        result.CodigoOficina = oficina.DENOMINACION;
+                    }
+                    else
+                    {
+                        result.CodigoOficina = "S/O"; 
+                    }
+
+                    if (result.CodigoSector == "00") result.DescripcionSector = icp.DENOMINACION;          
+                    if (result.CodigoPrograma == "00") result.DescripcionPrograma = icp.DENOMINACION;
+                    if (result.CodigoSubPrograma == "00") result.DescripcionSubPrograma = icp.DENOMINACION;
+                    if (result.CodigoProyecto == "00") result.DescripcionProyecto = icp.DENOMINACION;
+                    if (result.CodigoActividad == "00") result.DescripcionActividad = icp.DENOMINACION;
+                    if (result.CodigoOficina == "00") result.DescripcionOficina = icp.DENOMINACION;
+                }
+
+
+                return (PreIndiceCategoriaProgramaticaDescripciones)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return result;
+            }
+
+
+        }
+
+
+
         public async Task<bool> IcpContieneHijos(int codigoIcp)
         {
             bool result;

@@ -60,7 +60,7 @@ namespace Convertidor.Controllers
         {
             ResultDto<List<ListHistoricoMovimientoDto>> resultDto = new ResultDto<List<ListHistoricoMovimientoDto>>(null);
          
-            List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
+                List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
 
 
             if (!DateValidate.IsDate(filter.Desde.ToShortDateString()))
@@ -131,12 +131,30 @@ namespace Convertidor.Controllers
 
 
             }
-            result = result.OrderBy(x => x.CodigoTipoNomina)
-                           .ThenBy(x => x.Nombre)
-                           .ThenBy(x => x.Apellido)
-                           .ThenBy(x => x.FechaNomina)
-                           .ToList();
+            result = result.OrderBy(x => x.Denominacion)
+                     .ThenBy(x => x.Nombre)
+                     .ThenBy(x => x.Apellido)
+                     .ThenBy(x => x.FechaNomina)
+                     .ToList();
 
+            if (filter.sortColumn == "denominacion")
+            {
+                result = result.OrderBy(x => x.Denominacion)
+                        
+                         .ToList();
+            }
+            if (filter.sortColumn == "fechaNominaMov")
+            {
+                result = result.OrderBy(x => x.FechaNominaMov)
+                       
+                         .ToList();
+            }
+            if (filter.sortColumn == "fechaNomina")
+            {
+                result = result.OrderBy(x => x.FechaNomina)
+
+                         .ToList();
+            }
 
             if (result.Count() > 0)
             {

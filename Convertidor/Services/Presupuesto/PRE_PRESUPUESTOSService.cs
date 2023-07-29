@@ -534,8 +534,8 @@ namespace Convertidor.Services.Presupuesto
                 filter.FinanciadoId = financiadoInt;
             }
             
-            filter.FechaDesde = entity.FECHA_DESDE;
-            filter.FechaHasta = entity.FECHA_HASTA;
+            filter.FechaDesde = filterDto.FechaDesde;
+            filter.FechaHasta = filterDto.FechaHasta;
             filter.CodigoGrupo = "4";
             filter.Nivel = 1;
             var preDenominacionPuc = await _pre_V_SALDOSRepository.GetPreVDenominacionPorPartidaPuc(filter);

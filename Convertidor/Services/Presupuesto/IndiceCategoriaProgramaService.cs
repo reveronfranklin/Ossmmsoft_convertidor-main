@@ -174,6 +174,7 @@ namespace Convertidor.Services
                                       CodigoOficina = g.Key.CodigoOficina,
                                       CodigoPresupuesto = g.Key.CodigoPresupuesto,
                                       CodigoIcpPadre=g.Key.CodigoIcpPadre
+                                   
 
                                   };
 
@@ -185,6 +186,11 @@ namespace Convertidor.Services
                                          .ThenBy(x => x.CodigoActividad)
                                          .ThenBy(x => x.CodigoOficina)
                                          .ToList();
+                    foreach (var item in result.Data)
+                    {
+                        item.DescripcionesIcp = await GetDescripcionesIcp(item.CodigoIcp);
+                    }
+
                     result.IsValid = true;
                     result.Message = $"";
                     return result;
@@ -485,9 +491,17 @@ namespace Convertidor.Services
 
         }
 
+        public async Task<PreIndiceCategoriaProgramaticaDescripciones> GetDescripcionesIcp(int codIcp)
+        {
+            PreIndiceCategoriaProgramaticaDescripciones result = new PreIndiceCategoriaProgramaticaDescripciones();
 
+            result = await _repository.GetDescripcionIcp(codIcp);
 
-        public PreIndiceCategoriaProgramaticaGetDto MapIcpToDto(PRE_INDICE_CAT_PRG entity)
+            return result;
+
+        }
+
+        public async Task<PreIndiceCategoriaProgramaticaGetDto> MapIcpToDto(PRE_INDICE_CAT_PRG entity)
         {
             PreIndiceCategoriaProgramaticaGetDto result = new PreIndiceCategoriaProgramaticaGetDto();
 
@@ -512,7 +526,7 @@ namespace Convertidor.Services
             result.Extra3 = entity.EXTRA3;
             result.CodigoOficina = entity.CODIGO_OFICINA;
             result.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
-
+            result.DescripcionesIcp = await GetDescripcionesIcp(entity.CODIGO_ICP);
             return result;
 
         }
@@ -555,7 +569,7 @@ namespace Convertidor.Services
             var  updated = await _repository.Update(icp);
             if (updated.Data != null)
             {
-                result.Data = MapIcpToDto(updated.Data);
+                result.Data = await MapIcpToDto(updated.Data);
                 result.IsValid = updated.IsValid;
                 result.Message = updated.Message;
             }
@@ -609,7 +623,7 @@ namespace Convertidor.Services
             var created = await _repository.Create(icpNew);
             if (created.Data != null)
             {
-                result.Data = MapIcpToDto(created.Data);
+                result.Data = await MapIcpToDto(created.Data);
                 result.IsValid = created.IsValid;
                 result.Message = created.Message;
             }

@@ -12,6 +12,8 @@ namespace Convertidor.Dtos
         public List<ListConceptosDto> CodigoConcepto { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
+        public string TipoSort { get; set; }
+        public string sortColumn { get; set; }
     }
 }
 

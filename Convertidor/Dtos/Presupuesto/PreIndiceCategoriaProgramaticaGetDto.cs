@@ -30,7 +30,7 @@ namespace Convertidor.Dtos.Presupuesto
         public FechaDto FechaIninObj { get { return GetFechaDto(FechaIniDate); } }
         public FechaDto FechaFinObj { get { return GetFechaDto(FechaFinDate); } }
 
-
+        public PreIndiceCategoriaProgramaticaDescripciones DescripcionesIcp { get; set; }
 
         public FechaDto GetFechaDto(DateTime fecha)
         {
