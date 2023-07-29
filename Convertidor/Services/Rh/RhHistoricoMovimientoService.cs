@@ -131,6 +131,7 @@ namespace Convertidor.Services.Rh
                      DescripcionBanco = e.DESCRIPCION_BANCO,
                      NoCuenta = e.NO_CUENTA,
                      FechaNominaMov = e.FECHA_NOMINA_MOV.ToShortDateString(),
+                     FechaNomina=e.FECHA_NOMINA_MOV,
                      Complemento = e.COMPLEMENTO,
                      Tipo = e.TIPO,
                      Monto = e.MONTO,

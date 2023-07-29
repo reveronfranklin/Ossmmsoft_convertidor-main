@@ -131,30 +131,9 @@ namespace Convertidor.Controllers
 
 
             }
-            result = result.OrderBy(x => x.Denominacion)
-                     .ThenBy(x => x.Nombre)
-                     .ThenBy(x => x.Apellido)
-                     .ThenBy(x => x.FechaNomina)
-                     .ToList();
+         
 
-            if (filter.sortColumn == "denominacion")
-            {
-                result = result.OrderBy(x => x.Denominacion)
-                        
-                         .ToList();
-            }
-            if (filter.sortColumn == "fechaNominaMov")
-            {
-                result = result.OrderBy(x => x.FechaNominaMov)
-                       
-                         .ToList();
-            }
-            if (filter.sortColumn == "fechaNomina")
-            {
-                result = result.OrderBy(x => x.FechaNomina)
-
-                         .ToList();
-            }
+            result = result.OrderBy(x => x.FechaNomina).ToList();
 
             if (result.Count() > 0)
             {

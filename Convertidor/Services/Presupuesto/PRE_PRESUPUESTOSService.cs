@@ -538,7 +538,7 @@ namespace Convertidor.Services.Presupuesto
             filter.FechaHasta = filterDto.FechaHasta;
             filter.CodigoGrupo = "4";
             filter.Nivel = 1;
-            var preDenominacionPuc = await _pre_V_SALDOSRepository.GetPreVDenominacionPorPartidaPuc(filter);
+                var preDenominacionPuc = await _pre_V_SALDOSRepository.GetPreVDenominacionPorPartidaPuc(filter);
             if (preDenominacionPuc.Data!= null && preDenominacionPuc.Data.Count() > 0)
             {
                 foreach (var item in preDenominacionPuc.Data)
