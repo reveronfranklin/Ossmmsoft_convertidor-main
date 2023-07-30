@@ -22,6 +22,7 @@ namespace Convertidor.Data
         public DbSet<RH_DESCRIPTIVAS> RH_DESCRIPTIVAS { get; set; }
         public DbSet<RH_DIRECCIONES> RH_DIRECCIONES { get; set; }
         public DbSet<RH_CONCEPTOS> RH_CONCEPTOS { get; set; }
+        public DbSet<RH_RELACION_CARGOS> RH_RELACION_CARGOS { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -93,6 +94,16 @@ namespace Convertidor.Data
               builder.ToTable("RH_DIRECCIONES");
           });
             modelBuilder
+                    .Entity<RH_RELACION_CARGOS>(builder =>
+                    {
+                        builder.HasKey(table => new
+                        {
+                            table.CODIGO_RELACION_CARGO,
+
+                        });
+                        builder.ToTable("RH_RELACION_CARGOS");
+                    });
+            modelBuilder
         .Entity<RH_CONCEPTOS>(builder =>
         {
             builder.HasNoKey();
@@ -102,6 +113,7 @@ namespace Convertidor.Data
         }
 
 
+     
 
     }
 }

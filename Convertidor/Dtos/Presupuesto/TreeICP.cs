@@ -31,5 +31,14 @@ namespace Convertidor.Dtos.Presupuesto
         public int Id { get; set; }
 
     }
+
+    public class TreeDescriptivaSimple
+    {
+
+        public List<string> Path { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
+        public int Id { get; set; }
+
+    }
 }
 

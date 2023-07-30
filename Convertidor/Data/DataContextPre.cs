@@ -26,8 +26,11 @@ namespace Convertidor.Data
         public DbSet<PRE_PLAN_UNICO_CUENTAS> PRE_PLAN_UNICO_CUENTAS { get; set; }
         public DbSet<PRE_SALDOS_DIARIOS> PRE_SALDOS_DIARIOS { get; set; }
         public DbSet<PRE_ASIGNACIONES> PRE_ASIGNACIONES { get; set; }
+        public DbSet<PRE_RELACION_CARGOS> PRE_RELACION_CARGOS { get; set; }
+        public DbSet<PRE_CARGOS> PRE_CARGOS { get; set; }
+        public DbSet<PRE_DESCRIPTIVAS> PRE_DESCRIPTIVAS { get; set; }
+        public DbSet<PRE_TITULOS> PRE_TITULOS { get; set; }
         
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -116,6 +119,47 @@ namespace Convertidor.Data
                   });
                   builder.ToTable("PRE_PLAN_UNICO_CUENTAS");
               })
+                 .Entity<PRE_RELACION_CARGOS>(builder =>
+                 {
+                     //builder.HasNoKey();
+                     builder.HasKey(table => new
+                     {
+                         table.CODIGO_RELACION_CARGO,
+
+                     });
+                     builder.ToTable("PRE_RELACION_CARGOS");
+                 })
+            .Entity<PRE_CARGOS>(builder =>
+            {
+                //builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_CARGO,
+
+                });
+                builder.ToTable("PRE_CARGOS");
+            })
+            .Entity<PRE_DESCRIPTIVAS>(builder =>
+            {
+                //builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.DESCRIPCION_ID,
+
+                });
+                builder.ToTable("PRE_DESCRIPTIVAS");
+            })
+            .Entity<PRE_TITULOS>(builder =>
+            {
+                //builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.TITULO_ID,
+
+                });
+                builder.ToTable("PRE_TITULOS");
+            })
+                     
             .Entity<PRE_PRESUPUESTOS>(builder =>
             {
                 //builder.HasNoKey();

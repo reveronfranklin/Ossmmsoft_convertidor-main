@@ -70,6 +70,11 @@ builder.Services.AddTransient<IPRE_V_DOC_MODIFICADOServices, PRE_V_DOC_MODIFICAD
 builder.Services.AddTransient<IPRE_PLAN_UNICO_CUENTASRepository, PRE_PLAN_UNICO_CUENTASRepository>();
 builder.Services.AddTransient<IPrePlanUnicoCuentasService, PrePlanUnicoCuentasService>();
 
+builder.Services.AddTransient<IPRE_RELACION_CARGOSRepository, PRE_RELACION_CARGOSRepository>();
+builder.Services.AddTransient<IPreDescriptivaRepository, PreDescriptivaRepository>();
+builder.Services.AddTransient<IPreDescriptivasService, PreDescriptivasService>();
+builder.Services.AddTransient<IPreTitulosRepository, PreTitulosRepository>();
+
 
 
 //Repository SIS
