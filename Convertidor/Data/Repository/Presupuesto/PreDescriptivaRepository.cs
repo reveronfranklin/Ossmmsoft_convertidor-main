@@ -33,6 +33,21 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo)
+        {
+            try
+            {
+                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.CODIGO == codigo).FirstOrDefaultAsync();
+
+                return (PRE_DESCRIPTIVAS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<List<PRE_DESCRIPTIVAS>> GetByTitulo(int tituloId)
         {
             try

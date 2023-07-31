@@ -22,12 +22,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class PreDescriptivasController : ControllerBase
+    public class PreTitulosController : ControllerBase
     {
        
-        private readonly IPreDescriptivasService _service;
+        private readonly IPreTituloService _service;
 
-        public PreDescriptivasController(IPreDescriptivasService service)
+        public PreTitulosController(IPreTituloService service)
         {
 
             _service = service;
@@ -38,9 +38,9 @@ namespace Convertidor.Controllers
        
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetTreeDescriptiva()
+        public async Task<IActionResult> GetTreeTitulos()
         {
-                var result = await _service.GetTreeDecriptiva();
+                var result = await _service.GetTreeTitulos();
                 return Ok(result);
         }
 
@@ -50,32 +50,6 @@ namespace Convertidor.Controllers
         {
             var result = await _service.GetAll();
             return Ok(result);
-        }
-
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Update(PreDescriptivasUpdateDto dto)
-        {
-            var result = await _service.Update(dto);
-            return Ok(result);
-        }
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Create(PreDescriptivasUpdateDto dto)
-        {
-            var result = await _service.Create(dto);
-            return Ok(result);
-        }
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Delete(PreDescriptivaDeleteDto dto)
-        {
-            var result = await _service.Delete(dto);
-            return Ok(result);
-
         }
 
     }

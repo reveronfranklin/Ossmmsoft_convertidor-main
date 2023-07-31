@@ -647,17 +647,40 @@ namespace Convertidor.Services
             try
             {
 
-                var icp = await _repository.GetByCodigo(dto.CodigoPuc);
-                if (icp == null)
+                var puc = await _repository.GetByCodigo(dto.CodigoPuc);
+                if (puc == null)
                 {
                     result.Data = dto;
                     result.IsValid = false;
                     result.Message = "PUC no existe";
                     return result;
                 }
-                var listDto = await _repository.GetAllByCodigoPresupuesto((int)icp.CODIGO_PRESUPUESTO);
+
+               
+                var icpExiste = await _PRE_ASIGNACIONESRepository.PUCExiste(dto.CodigoPuc);
+                if (icpExiste)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "PUC no puede ser eliminado,tiene Movimiento Creado";
+                    return result;
+                }
+               
+                var listDto = await _repository.GetAllByCodigoPresupuesto((int)puc.CODIGO_PRESUPUESTO);
                 var hijos = await ListarHijos(listDto, dto.CodigoPuc);
+
+
                 if (hijos.Count > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "PUC no puede ser eliminado,tiene Hijos!1";
+                    return result;
+
+                }
+
+
+                /*if (hijos.Count > 0)
                 {
                     foreach (var item in hijos)
                     {
@@ -671,19 +694,8 @@ namespace Convertidor.Services
                         }
                     }
 
-                }
-                else
-                {
-                    var icpExiste = await _PRE_ASIGNACIONESRepository.PUCExiste(dto.CodigoPuc);
-                    if (icpExiste)
-                    {
-                        result.Data = dto;
-                        result.IsValid = false;
-                        result.Message = "PUC no puede ser eliminado,tiene Movimiento Creado";
-                        return result;
-                    }
-                }
-               
+                }*/
+
 
                 var deleted = await _repository.Delete(dto.CodigoPuc);
 

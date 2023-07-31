@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Rh;
@@ -43,22 +46,7 @@ namespace Convertidor.Services.Presupuesto
                     foreach (var item in titulos)
                     {
                         PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
-                        dto.DescripcionId = item.DESCRIPCION_ID;
-                        dto.DescripcionIdFk = item.DESCRIPCION_FK_ID;
-                        dto.Descripcion = item.DESCRIPCION;
-                        if (item.CODIGO == null) item.CODIGO = "";
-                        dto.Codigo = item.CODIGO;
-                        dto.TituloId = item.TITULO_ID;
-                        dto.DescripcionTitulo = "";
-                        var titulo = await _preTitulosRepository.GetByCodigo(item.TITULO_ID);
-                        if(titulo!=null) dto.DescripcionTitulo = titulo.TITULO;
-
-                        if (item.EXTRA1 == null) item.EXTRA1 = "";
-                        if (item.EXTRA2 == null) item.EXTRA2 = "";
-                        if (item.EXTRA3 == null) item.EXTRA3 = "";
-                        dto.Extra1 = item.EXTRA1;
-                        dto.Extra2 = item.EXTRA2;
-                        dto.Extra3 = item.EXTRA3;
+                        dto = await MapPreDecriptiva(item);
 
                         listDto.Add(dto);
                     }
@@ -242,10 +230,266 @@ namespace Convertidor.Services.Presupuesto
 
 
         }
-    
+
+
+        public async Task<ResultDto<PreDescriptivasGetDto>> Update(PreDescriptivasUpdateDto dto)
+        {
+
+            ResultDto<PreDescriptivasGetDto> result = new ResultDto<PreDescriptivasGetDto>(null);
+            try
+            {
+
+                var descriptiva = await _repository.GetByCodigo(dto.DescripcionId);
+                if (descriptiva == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Decriptiva no existe";
+                    return result;
+                }
+                if (dto.Descripcion.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+                }
+
+                var titulo = await _preTitulosRepository.GetByCodigo(dto.TituloId);
+                if (titulo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalido";
+                    return result;
+                }
+
+                if (dto.DescripcionIdFk > 0)
+                {
+                    var padre = await _repository.GetByCodigo(dto.DescripcionIdFk);
+                    if (padre == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Padre Invalido";
+                        return result;
+                    }
+
+                }
+                if (dto.Codigo.Length > 0)
+                {
+                    var descriptivaCodigo = await _repository.GetByCodigoDescriptivaTexto(dto.Codigo);
+                    if (descriptivaCodigo != null && descriptivaCodigo.CODIGO==dto.Codigo)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = $"Ya existe Descriptiva con ese codigo: {dto.Codigo}";
+                        return result;
+                    }
+
+                }
+                //No se permite modificar ni Extra1 ni Codigo
+                //descriptiva.EXTRA1 = dto.Extra1;
+                //descriptiva.CODIGO = dto.Codigo;
+
+                descriptiva.DESCRIPCION = dto.Descripcion;
+                descriptiva.DESCRIPCION_FK_ID = dto.DescripcionIdFk;
+                descriptiva.TITULO_ID = dto.TituloId;
+               
+                descriptiva.EXTRA2 = dto.Extra2;
+                descriptiva.EXTRA3 = dto.Extra3;
+                descriptiva.FECHA_UPD = DateTime.Now;
+
+              
+                
+
+                await _repository.Update(descriptiva);
+
+                var resultDto = await MapPreDecriptiva(descriptiva);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
 
 
 
+            return result;
+        }
+
+        public async Task<ResultDto<PreDescriptivasGetDto>> Create(PreDescriptivasUpdateDto dto)
+        {
+
+            ResultDto<PreDescriptivasGetDto> result = new ResultDto<PreDescriptivasGetDto>(null);
+            try
+            {
+
+                var descriptiva = await _repository.GetByCodigo(dto.DescripcionId);
+                if (descriptiva != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Decriptiva existe";
+                    return result;
+                }
+                if (dto.Descripcion.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+                }
+
+                var titulo = await _preTitulosRepository.GetByCodigo(dto.TituloId);
+                if (titulo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalido";
+                    return result;
+                }
+
+                if (dto.DescripcionIdFk > 0)
+                {
+                    var padre = await _repository.GetByCodigo(dto.DescripcionIdFk);
+                    if (padre == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Padre Invalido";
+                        return result;
+                    }
+
+                }
+                var descriptivaCodigo = await _repository.GetByCodigoDescriptivaTexto(dto.Codigo);
+                if (descriptivaCodigo != null )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Ya existe Descriptiva con ese codigo: {dto.Codigo}";
+                    return result;
+                }
+
+                PRE_DESCRIPTIVAS entity = new PRE_DESCRIPTIVAS();        
+                entity.DESCRIPCION_ID = await _repository.GetNextKey();
+                entity.DESCRIPCION_FK_ID = dto.DescripcionIdFk;
+                entity.TITULO_ID = dto.TituloId;
+                entity.CODIGO = dto.Codigo;
+                entity.DESCRIPCION = dto.Descripcion;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data!=null)
+                {
+                    var resultDto = await MapPreDecriptiva(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                }
+                else
+                {
+                    
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+              
+               
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+        public async Task<PreDescriptivasGetDto> MapPreDecriptiva(PRE_DESCRIPTIVAS entity)
+        {
+            PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
+            dto.DescripcionId = entity.DESCRIPCION_ID;
+            dto.DescripcionIdFk = entity.DESCRIPCION_FK_ID;
+            dto.Descripcion = entity.DESCRIPCION;
+            if (entity.CODIGO == null) entity.CODIGO = "";
+            dto.Codigo = entity.CODIGO;
+            dto.TituloId = entity.TITULO_ID;
+            dto.DescripcionTitulo = "";
+            var titulo = await _preTitulosRepository.GetByCodigo(entity.TITULO_ID);
+            if (titulo != null) dto.DescripcionTitulo = titulo.TITULO;
+
+            if (entity.EXTRA1 == null) entity.EXTRA1 = "";
+            if (entity.EXTRA2 == null) entity.EXTRA2 = "";
+            if (entity.EXTRA3 == null) entity.EXTRA3 = "";
+            dto.Extra1 = entity.EXTRA1;
+            dto.Extra2 = entity.EXTRA2;
+            dto.Extra3 = entity.EXTRA3;
+
+            return dto;
+
+        }
+
+
+        public async Task<ResultDto<PreDescriptivaDeleteDto>> Delete(PreDescriptivaDeleteDto dto)
+        {
+
+            ResultDto<PreDescriptivaDeleteDto> result = new ResultDto<PreDescriptivaDeleteDto>(null);
+            try
+            {
+
+                var presupuesto = await _repository.GetByCodigo(dto.DescripcionId);
+                if (presupuesto == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Descriptiva no existe";
+                    return result;
+                }
+
+              
+                var deleted = await _repository.Delete(dto.DescripcionId);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
 
     }

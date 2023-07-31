@@ -15,6 +15,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<PRE_DESCRIPTIVAS>> Update(PRE_DESCRIPTIVAS entity);
         Task<string> Delete(int descripcionId);
         Task<int> GetNextKey();
+        Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo);
 
     }
 }
