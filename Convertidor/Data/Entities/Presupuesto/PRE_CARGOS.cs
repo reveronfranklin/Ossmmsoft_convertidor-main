@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using static NPOI.HSSF.Record.UnicodeString;
 
 namespace Convertidor.Data.Entities.Presupuesto
 {
 	public class PRE_CARGOS
 	{
+        [Key]
         public int CODIGO_CARGO { get; set; }
         public int TIPO_PERSONAL_ID { get; set; }
         public int TIPO_CARGO_ID { get; set; }

@@ -61,6 +61,27 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<List<PRE_RELACION_CARGOS>> GetByCodigoCargo(int codigoCargo)
+        {
+            try
+            {
+
+                var result = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_CARGO == codigoCargo)
+                    .ToListAsync();
+                return (List<PRE_RELACION_CARGOS>)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+
+        }
+
         public async Task<ResultDto<PRE_RELACION_CARGOS>> GetByIcp(int codigoIcp)
         {
 

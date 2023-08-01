@@ -11,6 +11,7 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<PreDescriptivasGetDto>> Update(PreDescriptivasUpdateDto dto);
         Task<ResultDto<PreDescriptivasGetDto>> Create(PreDescriptivasUpdateDto dto);
         Task<ResultDto<PreDescriptivaDeleteDto>> Delete(PreDescriptivaDeleteDto dto);
+        Task<ResultDto<List<PreDescriptivasGetDto>>> GetByTitulo(int tituloId);
     }
 }
 

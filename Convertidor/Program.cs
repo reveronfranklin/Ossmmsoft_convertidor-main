@@ -75,6 +75,9 @@ builder.Services.AddTransient<IPreDescriptivaRepository, PreDescriptivaRepositor
 builder.Services.AddTransient<IPreDescriptivasService, PreDescriptivasService>();
 builder.Services.AddTransient<IPreTitulosRepository, PreTitulosRepository>();
 builder.Services.AddTransient<IPreTituloService, PreTituloService>();
+builder.Services.AddTransient<IPreCargosRepository, PreCargosRepository>();
+builder.Services.AddTransient<IPreCargosService, PreCargosService>();
+
 
 
 

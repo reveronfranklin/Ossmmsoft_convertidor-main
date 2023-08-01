@@ -13,6 +13,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<PRE_RELACION_CARGOS>> Update(PRE_RELACION_CARGOS entity);
         Task<string> Delete(int codigoRelacionCargo);
         Task<int> GetNextKey();
+        Task<List<PRE_RELACION_CARGOS>> GetByCodigoCargo(int codigoCargo);
 
     }
 }

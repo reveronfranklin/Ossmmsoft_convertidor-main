@@ -22,12 +22,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class PreDescriptivasController : ControllerBase
+    public class PreCargosController : ControllerBase
     {
        
-        private readonly IPreDescriptivasService _service;
+        private readonly IPreCargosService _service;
 
-        public PreDescriptivasController(IPreDescriptivasService service)
+        public PreCargosController(IPreCargosService service)
         {
 
             _service = service;
@@ -36,13 +36,7 @@ namespace Convertidor.Controllers
         }
 
        
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetTreeDescriptiva()
-        {
-                var result = await _service.GetTreeDecriptiva();
-                return Ok(result);
-        }
+     
 
         [HttpGet]
         [Route("[action]")]
@@ -52,18 +46,18 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-   
+        
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllByTitulo(FilterPreTituloDto dto)
+        public async Task<IActionResult> GetAllByPresupuesto(FilterByPresupuestoDto dto)
         {
-            var result = await _service.GetByTitulo(dto.TituloId);
+            var result = await _service.GetAllByPresupuesto(dto);
             return Ok(result);
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(PreDescriptivasUpdateDto dto)
+        public async Task<IActionResult> Update(PreCargosUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -71,7 +65,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(PreDescriptivasUpdateDto dto)
+        public async Task<IActionResult> Create(PreCargosUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -79,12 +73,16 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(PreDescriptivaDeleteDto dto)
+        public async Task<IActionResult> Delete(PreCargosDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
 
         }
+
+
+
+
 
     }
 }

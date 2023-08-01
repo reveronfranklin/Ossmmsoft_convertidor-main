@@ -78,6 +78,54 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
+        public async Task<ResultDto<List<PreDescriptivasGetDto>>> GetByTitulo(int tituloId)
+        {
+
+            ResultDto<List<PreDescriptivasGetDto>> result = new ResultDto<List<PreDescriptivasGetDto>>(null);
+            try
+            {
+
+                var titulos = await _repository.GetByTitulo(tituloId);
+
+
+
+                if (titulos.Count() > 0)
+                {
+                    List<PreDescriptivasGetDto> listDto = new List<PreDescriptivasGetDto>();
+
+                    foreach (var item in titulos)
+                    {
+                        PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
+                        dto = await MapPreDecriptiva(item);
+
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
 
         public async Task<List<Item>> GetItems()
