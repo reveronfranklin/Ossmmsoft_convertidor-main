@@ -35,6 +35,22 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async Task<PRE_TITULOS> GetByCodigoString(string codigo)
+        {
+            try
+            {
+                var result = await _context.PRE_TITULOS.DefaultIfEmpty().Where(e => e.CODIGO.Trim() == codigo).FirstOrDefaultAsync();
+
+                return (PRE_TITULOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<List<PRE_TITULOS>> GetAll()
         {
             try

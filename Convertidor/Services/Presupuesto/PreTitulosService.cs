@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Rh;
@@ -13,12 +15,16 @@ namespace Convertidor.Services.Presupuesto
 
       
         private readonly IPreTitulosRepository _repository;
+        private readonly IPreDescriptivaRepository _repositoryPreDescriptiva;
         private readonly IConfiguration _configuration;
         public PreTituloService(IPreTitulosRepository repository,
-                                      IConfiguration configuration)
+                                      IConfiguration configuration,
+                                      IPreDescriptivaRepository repositoryPreDescriptiva)
 		{
             _repository = repository;
             _configuration = configuration;
+            _repositoryPreDescriptiva = repositoryPreDescriptiva;
+
 
         }
 
@@ -232,8 +238,258 @@ namespace Convertidor.Services.Presupuesto
 
 
         }
-    
 
+
+
+        public async Task<ResultDto<PreTitulosGetDto>> Update(PreTitulosUpdateDto dto)
+        {
+
+            ResultDto<PreTitulosGetDto> result = new ResultDto<PreTitulosGetDto>(null);
+            try
+            {
+
+                var tituloUpdate = await _repository.GetByCodigo(dto.TituloId);
+                if (tituloUpdate == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo no existe";
+                    return result;
+                }
+                if (dto.Titulo.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalida";
+                    return result;
+                }
+
+            
+
+                if (dto.TituloIdFk > 0)
+                {
+                    var padre = await _repository.GetByCodigo(dto.TituloIdFk);
+                    if (padre == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Padre Invalido";
+                        return result;
+                    }
+
+                }
+                if (dto.Codigo.Length > 0)
+                {
+                    var tituloCodigo = await _repository.GetByCodigoString(dto.Codigo);
+                    if (tituloCodigo != null && tituloCodigo.TITULO_ID != dto.TituloId)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = $"Ya existe titulo con ese codigo: {dto.Codigo}";
+                        return result;
+                    }
+
+                }
+                //No se permite modificar ni Extra1 ni Codigo
+                //descriptiva.EXTRA1 = dto.Extra1;
+                //descriptiva.CODIGO = dto.Codigo;
+
+                tituloUpdate.TITULO = dto.Titulo;
+                tituloUpdate.TITULO_FK_ID = dto.TituloIdFk;
+
+
+                tituloUpdate.EXTRA2 = dto.Extra2;
+                tituloUpdate.EXTRA3 = dto.Extra3;
+                tituloUpdate.FECHA_UPD = DateTime.Now;
+
+
+
+
+                await _repository.Update(tituloUpdate);
+
+                var resultDto = MapPreTitulo(tituloUpdate);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        public async Task<ResultDto<PreTitulosGetDto>> Create(PreTitulosUpdateDto dto)
+        {
+
+            ResultDto<PreTitulosGetDto> result = new ResultDto<PreTitulosGetDto>(null);
+            try
+            {
+
+                var titulo = await _repository.GetByCodigo(dto.TituloId);
+                if (titulo != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo existe";
+                    return result;
+                }
+                if (dto.Titulo.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalida";
+                    return result;
+                }
+
+            
+
+                if (dto.TituloIdFk > 0)
+                {
+                    var padre = await _repository.GetByCodigo(dto.TituloIdFk);
+                    if (padre == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Padre Invalido";
+                        return result;
+                    }
+
+                }
+                var descriptivaCodigo = await _repository.GetByCodigoString(dto.Codigo);
+                if (descriptivaCodigo != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Ya existe Titulo con ese codigo: {dto.Codigo}";
+                    return result;
+                }
+
+                PRE_TITULOS entity = new PRE_TITULOS();
+                entity.TITULO_ID = await _repository.GetNextKey();
+                entity.TITULO_FK_ID = dto.TituloIdFk;
+           
+                entity.CODIGO = dto.Codigo;
+                entity.TITULO = dto.Titulo;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = MapPreTitulo(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+        public PreTitulosGetDto MapPreTitulo(PRE_TITULOS entity)
+        {
+            PreTitulosGetDto dto = new PreTitulosGetDto();
+            dto.TituloId = entity.TITULO_ID;
+            dto.TituloIdFk = entity.TITULO_FK_ID;
+            dto.Titulo = entity.TITULO;
+            if (entity.CODIGO == null) entity.CODIGO = "";
+            dto.Codigo = entity.CODIGO;
+            dto.TituloId = entity.TITULO_ID;
+            if (entity.EXTRA1 == null) entity.EXTRA1 = "";
+            if (entity.EXTRA2 == null) entity.EXTRA2 = "";
+            if (entity.EXTRA3 == null) entity.EXTRA3 = "";
+            dto.Extra1 = entity.EXTRA1;
+            dto.Extra2 = entity.EXTRA2;
+            dto.Extra3 = entity.EXTRA3;
+
+            return dto;
+
+        }
+
+
+        public async Task<ResultDto<PreTitulosDeleteDto>> Delete(PreTitulosDeleteDto dto)
+        {
+
+            ResultDto<PreTitulosDeleteDto> result = new ResultDto<PreTitulosDeleteDto>(null);
+            try
+            {
+
+                var titulo = await _repository.GetByCodigo(dto.TituloId);
+                if (titulo == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Titulo no existe";
+                    return result;
+                }
+
+                var descriptiva = await  _repositoryPreDescriptiva.GetByTitulo(dto.TituloId);
+                if (descriptiva != null && descriptiva.Count>0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = $"Titulo esta asociado a una  descriptiva";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.TituloId);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
 
 

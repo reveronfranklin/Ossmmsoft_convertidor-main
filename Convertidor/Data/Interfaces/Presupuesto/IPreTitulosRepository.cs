@@ -13,6 +13,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<PRE_TITULOS>> Update(PRE_TITULOS entity);
         Task<string> Delete(int tituloId);
         Task<int> GetNextKey();
+        Task<PRE_TITULOS> GetByCodigoString(string codigo);
     }
 }
 

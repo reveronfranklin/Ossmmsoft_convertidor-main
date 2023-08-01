@@ -674,7 +674,7 @@ namespace Convertidor.Services
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "PUC no puede ser eliminado,tiene Hijos!1";
+                    result.Message = "PUC no puede ser eliminado,tiene Hijos!";
                     return result;
 
                 }
