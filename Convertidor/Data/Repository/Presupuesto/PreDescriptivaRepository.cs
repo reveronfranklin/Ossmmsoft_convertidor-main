@@ -101,7 +101,27 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-      
+
+        public async Task<List<PRE_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk)
+        {
+            try
+            {
+
+                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty()
+                    .Where(x => x.DESCRIPCION_FK_ID== descripcionIdFk)
+                    .ToListAsync();
+                return (List<PRE_DESCRIPTIVAS>)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+
+        }
 
 
 

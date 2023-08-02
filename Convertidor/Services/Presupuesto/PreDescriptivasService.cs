@@ -4,6 +4,7 @@ using System.Globalization;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Presupuesto;
+using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Rh;
@@ -126,7 +127,78 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
+        public async Task<ResultDto<List<PreDescriptivasGetDto>>> GetByCodigoTitulo(string codigo)
+        {
 
+            ResultDto<List<PreDescriptivasGetDto>> result = new ResultDto<List<PreDescriptivasGetDto>>(null);
+            try
+            {
+
+
+
+
+                var titulo = await _preTitulosRepository.GetByCodigoString(codigo);
+
+
+                var titulos = await _repository.GetByTitulo(titulo.TITULO_ID);
+                if (titulos.Count() > 0)
+                {
+                    List<PreDescriptivasGetDto> listDto = new List<PreDescriptivasGetDto>();
+
+                    PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
+                    itemDefault.DescripcionId = 0;
+                    itemDefault.DescripcionIdFk = 0;
+                    itemDefault.Descripcion = "Seleccione";
+                    itemDefault.Codigo = "";
+                    itemDefault.TituloId = 0;
+                    itemDefault.DescripcionTitulo = "";
+                    itemDefault.Extra1 = "";
+                    itemDefault.Extra2 = "";
+                    itemDefault.Extra3 = "";
+
+                    List<PreDescriptivasGetDto> lista = new List<PreDescriptivasGetDto>();
+                    lista.Add(GetDefaultDecriptiva());
+                    itemDefault.ListaDescriptiva = lista;
+
+                    listDto.Add(itemDefault);
+
+
+
+
+
+                    foreach (var item in titulos)
+                    {
+                        PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
+                        dto = await MapPreDecriptiva(item);
+
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
         public async Task<List<Item>> GetItems()
         {
@@ -467,6 +539,23 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
+
+        public PreDescriptivasGetDto GetDefaultDecriptiva()
+        {
+            PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
+            itemDefault.DescripcionId = 0;
+            itemDefault.DescripcionIdFk = 0;
+            itemDefault.Descripcion = "Seleccione";
+            itemDefault.Codigo = "";
+            itemDefault.TituloId = 0;
+            itemDefault.DescripcionTitulo = "";
+            itemDefault.Extra1 = "";
+            itemDefault.Extra2 = "";
+            itemDefault.Extra3 = "";
+            return itemDefault;
+          
+        }
+
         public async Task<PreDescriptivasGetDto> MapPreDecriptiva(PRE_DESCRIPTIVAS entity)
         {
             PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
@@ -486,6 +575,57 @@ namespace Convertidor.Services.Presupuesto
             dto.Extra1 = entity.EXTRA1;
             dto.Extra2 = entity.EXTRA2;
             dto.Extra3 = entity.EXTRA3;
+
+
+
+            List<PreDescriptivasGetDto> listDto = new List<PreDescriptivasGetDto>();
+            var hijos = await _repository.GetByFKID(entity.DESCRIPCION_ID);
+            if (hijos.Count > 0)
+            {
+                PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
+                itemDefault = GetDefaultDecriptiva();
+                List<PreDescriptivasGetDto> lista = new List<PreDescriptivasGetDto>();
+                lista.Add(GetDefaultDecriptiva());
+                itemDefault.ListaDescriptiva= lista;
+
+
+                listDto.Add(itemDefault);
+                foreach (var item in hijos)
+                {
+                    PreDescriptivasGetDto itemDto = new PreDescriptivasGetDto();
+                    itemDto.DescripcionId = item.DESCRIPCION_ID;
+                    itemDto.DescripcionIdFk = item.DESCRIPCION_FK_ID;
+                    itemDto.Descripcion = item.DESCRIPCION;
+                    if (item.CODIGO == null) item.CODIGO = "";
+                    itemDto.Codigo = item.CODIGO;
+                    itemDto.TituloId = item.TITULO_ID;
+                    itemDto.DescripcionTitulo = "";
+                    var tituloItem = await _preTitulosRepository.GetByCodigo(item.TITULO_ID);
+                    if (tituloItem != null) itemDto.DescripcionTitulo = tituloItem.TITULO;
+
+                    if (item.EXTRA1 == null) item.EXTRA1 = "";
+                    if (item.EXTRA2 == null) item.EXTRA2 = "";
+                    if (item.EXTRA3 == null) item.EXTRA3 = "";
+                    itemDto.Extra1 = item.EXTRA1;
+                    itemDto.Extra2 = item.EXTRA2;
+                    itemDto.Extra3 = item.EXTRA3;
+                    listDto.Add(itemDto);
+                }
+                dto.ListaDescriptiva = listDto;
+            }
+            else
+            {
+                PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
+                itemDefault = GetDefaultDecriptiva();
+                List<PreDescriptivasGetDto> lista = new List<PreDescriptivasGetDto>();
+                lista.Add(GetDefaultDecriptiva());
+                itemDefault.ListaDescriptiva = lista;
+
+
+                listDto.Add(itemDefault);
+                dto.ListaDescriptiva = listDto;
+            }
+
 
             return dto;
 

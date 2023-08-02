@@ -38,7 +38,21 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+        public async Task<List<PRE_RELACION_CARGOS>> GetAllByCodigoPresupuesto(int codigoPresupuesto)
+        {
+            try
+            {
 
+                var result = await _context.PRE_RELACION_CARGOS.Where(x=>x.CODIGO_PRESUPUESTO==codigoPresupuesto).DefaultIfEmpty().ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
 
         public async Task<PRE_RELACION_CARGOS> GetByCodigo(int codigoRelacionCargo)
         {

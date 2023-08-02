@@ -14,7 +14,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<string> Delete(int codigoRelacionCargo);
         Task<int> GetNextKey();
         Task<List<PRE_RELACION_CARGOS>> GetByCodigoCargo(int codigoCargo);
-
+        Task<List<PRE_RELACION_CARGOS>> GetAllByCodigoPresupuesto(int codigoPresupuesto);
     }
 }
 

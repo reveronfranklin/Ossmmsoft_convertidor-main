@@ -103,7 +103,7 @@ namespace Convertidor.Services.Presupuesto
                     }
 
 
-                    result.Data = listDto;
+                    result.Data = listDto.OrderBy(x=>x.DescripcionTipoPersonal).ThenBy(x=>x.DescripcionTipoCargo).ToList();
 
                     result.IsValid = true;
                     result.Message = "";
@@ -151,6 +151,21 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.TipoPersonalId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Personal Invalido";
+                    return result;
+                }
+                if (dto.TipoCargoId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Cargo Invalido";
+                    return result;
+                }
+
                 var descriptivaTipoPersonal= await _repositoryPreDescriptiva.GetByCodigo(dto.TipoPersonalId);
 
                 if (descriptivaTipoPersonal ==null)
@@ -163,6 +178,8 @@ namespace Convertidor.Services.Presupuesto
              
 
                 }
+
+
                 var descriptivaTipoCargo = await _repositoryPreDescriptiva.GetByCodigo(dto.TipoCargoId);
 
                 if (descriptivaTipoCargo == null)

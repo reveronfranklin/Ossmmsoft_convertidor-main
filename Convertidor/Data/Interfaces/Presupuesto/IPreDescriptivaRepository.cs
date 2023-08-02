@@ -16,7 +16,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<string> Delete(int descripcionId);
         Task<int> GetNextKey();
         Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo);
-
+        Task<List<PRE_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk);
     }
 }
 

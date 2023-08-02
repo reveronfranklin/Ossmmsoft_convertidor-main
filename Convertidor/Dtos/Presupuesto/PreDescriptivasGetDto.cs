@@ -14,6 +14,8 @@ namespace Convertidor.Dtos.Presupuesto
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
 
+        public List<PreDescriptivasGetDto>? ListaDescriptiva { get; set; }
+
     }
 }
 

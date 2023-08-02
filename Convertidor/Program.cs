@@ -77,6 +77,8 @@ builder.Services.AddTransient<IPreTitulosRepository, PreTitulosRepository>();
 builder.Services.AddTransient<IPreTituloService, PreTituloService>();
 builder.Services.AddTransient<IPreCargosRepository, PreCargosRepository>();
 builder.Services.AddTransient<IPreCargosService, PreCargosService>();
+builder.Services.AddTransient<IPRE_RELACION_CARGOSRepository, PRE_RELACION_CARGOSRepository>();
+builder.Services.AddTransient<IPreRelacionCargosService, PreRelacionCargosService>();
 
 
 
