@@ -10,6 +10,8 @@ namespace Convertidor.Dtos.Presupuesto
         public string DenominacionIcp { get; set; } = string.Empty;
         public int CodigoCargo { get; set; }
         public string DenominacionCargo { get; set; } = string.Empty;
+        public string DescripcionTipoCargo { get; set; } = string.Empty;
+        public string DescripcionTipoPersonal { get; set; } = string.Empty;
         public int Cantidad { get; set; }
         public decimal Sueldo { get; set; }
         public decimal Compensacion { get; set; }

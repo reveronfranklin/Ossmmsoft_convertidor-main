@@ -103,26 +103,25 @@ namespace Convertidor.Services
         }
 
 
-        public async Task<ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>> GetAllByCodigoPresupuesto(int codigoPresupuesto)
+        public async Task<ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>> GetAllByCodigoPresupuesto(FilterByPresupuestoDto filter)
         {
 
             ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>> result = new ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>(null);
             try
             {
 
-                if (codigoPresupuesto == 0)
+                if (filter.CodigoPresupuesto == 0)
                 {
                     var lastPresupuesto = await _presupuesttoRepository.GetLast();
-                    if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
+                    if (lastPresupuesto != null) filter.CodigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
               
 
-                var icp = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
+                var icp = await _repository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
                 if (icp.ToList().Count > 0)
                 {
 
-
-
+                
 
 
                     var qicpDto = from s in icp.ToList()
@@ -309,8 +308,9 @@ namespace Convertidor.Services
                     var lastPresupuesto = await _presupuesttoRepository.GetLast();
                     if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
-
-                var icp = await GetAllByCodigoPresupuesto(codigoPresupuesto);
+                FilterByPresupuestoDto filter = new FilterByPresupuestoDto();
+                filter.CodigoPresupuesto = codigoPresupuesto;
+                var icp = await GetAllByCodigoPresupuesto(filter);
 
                 var presupuestoObj = await _presupuesttoRepository.GetByCodigo(13,codigoPresupuesto);
 
@@ -382,8 +382,9 @@ namespace Convertidor.Services
                     }
 
 
-
-                    result= await GetAllByCodigoPresupuesto(codigoPresupuesto);
+                    FilterByPresupuestoDto filterPre = new FilterByPresupuestoDto();
+                    filterPre.CodigoPresupuesto = codigoPresupuesto;
+                    result = await GetAllByCodigoPresupuesto(filterPre);
                    
                     return result;
                 }
@@ -641,7 +642,9 @@ namespace Convertidor.Services
 
         public async Task DeleteByCodigoPresupuesto(int codigoPresupuesto)
         {
-            var icps= await  GetAllByCodigoPresupuesto(codigoPresupuesto);
+            FilterByPresupuestoDto filter = new FilterByPresupuestoDto();
+            filter.CodigoPresupuesto = codigoPresupuesto;
+            var icps= await  GetAllByCodigoPresupuesto(filter);
             if (icps!=null && icps.Data != null)
             {
                 foreach (var item in icps.Data)

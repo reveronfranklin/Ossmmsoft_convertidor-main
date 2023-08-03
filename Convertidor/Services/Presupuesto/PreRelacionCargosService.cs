@@ -99,6 +99,10 @@ namespace Convertidor.Services.Presupuesto
 
                 var cargos = await _repository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
 
+                if (filter.CodigoIcp != null && filter.CodigoIcp > 0)
+                {
+                    cargos = cargos.Where(x => x.CODIGO_ICP == filter.CodigoIcp).ToList();
+                }
 
 
                 if (cargos.Count() > 0)
@@ -359,9 +363,23 @@ namespace Convertidor.Services.Presupuesto
             if (cargo != null)
             {
                 dto.DenominacionCargo = cargo.DENOMINACION;
+               
+                dto.DescripcionTipoCargo = "";
+                var tipoCargo = await _repositoryPreDescriptiva.GetByCodigo(cargo.TIPO_CARGO_ID);
+                if (tipoCargo != null)
+                {
+                    dto.DescripcionTipoCargo = tipoCargo.DESCRIPCION;
+                }
+                dto.DescripcionTipoPersonal="";
+                var tipoPersonal = await _repositoryPreDescriptiva.GetByCodigo(cargo.TIPO_PERSONAL_ID);
+                if (tipoPersonal != null)
+                {
+                    dto.DescripcionTipoPersonal = tipoPersonal.DESCRIPCION;
+                }
+
             }
 
-            var icp = await _preICPRepository.GetByCodigo(item.CODIGO_ICP);
+    var icp = await _preICPRepository.GetByCodigo(item.CODIGO_ICP);
             if (icp != null)
             {
                 dto.DenominacionIcp = icp.DENOMINACION;

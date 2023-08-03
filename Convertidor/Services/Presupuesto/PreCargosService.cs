@@ -197,6 +197,7 @@ namespace Convertidor.Services.Presupuesto
                 cargoUpdate.TIPO_PERSONAL_ID = dto.TipoPersonalId;
                 cargoUpdate.DENOMINACION = dto.Denominacion;
                 cargoUpdate.DESCRIPCION = dto.Descripcion;
+                cargoUpdate.GRADO = dto.Grado;
                 cargoUpdate.EXTRA1 = dto.Extra1;
                 cargoUpdate.EXTRA2 = dto.Extra2;
                 cargoUpdate.EXTRA3 = dto.Extra3;
@@ -283,6 +284,7 @@ namespace Convertidor.Services.Presupuesto
                 entity.TIPO_PERSONAL_ID = dto.TipoPersonalId;
                 entity.DENOMINACION = dto.Denominacion;
                 entity.DESCRIPCION = dto.Descripcion;
+                entity.GRADO = dto.Grado;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;

@@ -54,7 +54,7 @@ namespace Convertidor.Controllers
         public async Task<IActionResult>  GetAllFilter(FilterByPresupuestoDto filter)
         {
             var res = await _indiceCategoriaProgramaService.UpdateIcpPadre(filter.CodigoPresupuesto);
-            var result = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+            var result = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filter);
                 return Ok(result);
         }
         [HttpPost]
