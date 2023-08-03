@@ -6,6 +6,10 @@ using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Rh;
+using Convertidor.Utility;
+using NPOI.POIFS.Properties;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
 using NuGet.Packaging;
 
 namespace Convertidor.Services.Presupuesto
@@ -165,8 +169,12 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public async Task<ResultDto<List<TreePUC>>> GetTreeTitulos()
+      
+
+        public async Task<ResultDto<List<TreePUC>>> GetTreeTitulosRespaldo()
         {
+
+          
 
             List<TreePUC> listTreePUC = new List<TreePUC>();
             ResultDto<List<TreePUC>> result = new ResultDto<List<TreePUC>>(null);
@@ -175,6 +183,7 @@ namespace Convertidor.Services.Presupuesto
 
 
                 var treePuc = await WriteStrings();
+
                 foreach (var item in treePuc)
                 {
                     var arraIcp = item.Split(":");
@@ -195,7 +204,7 @@ namespace Convertidor.Services.Presupuesto
                     match = icpString.FirstOrDefault(stringToCheck => stringToCheck.Contains(arraIcp[3]));
                     if (match == null)
                         icpString.Add(arraIcp[3]);*/
-                
+
 
 
 
@@ -205,17 +214,17 @@ namespace Convertidor.Services.Presupuesto
                     treePUC.Denominacion = arraIcp[4];
                     treePUC.Descripcion = arraIcp[5];
                     var search = listTreePUC.Where(x => x.Id == treePUC.Id).FirstOrDefault();
-                    if (search==null)
+                    if (search == null)
                     {
                         listTreePUC.Add(treePUC);
                     }
-                   
+
 
 
 
                 }
-               
-                result.Data = listTreePUC.OrderBy(x=>x.Id).ToList();
+
+                result.Data = listTreePUC.OrderBy(x => x.Id).ToList();
                 result.IsValid = true;
                 result.Message = $"";
                 return result;
@@ -238,8 +247,6 @@ namespace Convertidor.Services.Presupuesto
 
 
         }
-
-
 
         public async Task<ResultDto<PreTitulosGetDto>> Update(PreTitulosUpdateDto dto)
         {
@@ -493,6 +500,135 @@ namespace Convertidor.Services.Presupuesto
 
 
 
+        public async Task<ResultDto<List<TreePUC>>> GetTreeTitulos()
+        {
+
+            ResultDto<List<TreePUC>> result = new ResultDto<List<TreePUC>>(null);
+
+
+            try
+            {
+
+
+                List<TreePUC> listTreePUC2 = new List<TreePUC>();
+                var titulosArbol = await BuscarTitulosEnArbol();
+
+                foreach (var item in titulosArbol)
+                {
+                    string patch = getPatch(titulosArbol, item);
+                    var arrayTitulos = patch.Split(":");
+
+                    List<string> list = new List<string>(arrayTitulos);
+
+                    TreePUC treePUC = new TreePUC();
+                    treePUC.Path = list;
+                    treePUC.Id = item.Id;
+                    treePUC.Denominacion = item.Text;
+                    treePUC.Descripcion = item.Text;
+                    var search = listTreePUC2.Where(x => x.Id == treePUC.Id).FirstOrDefault();
+                    if (search == null)
+                    {
+                        listTreePUC2.Add(treePUC);
+                    }
+
+                    Console.WriteLine(patch);
+                }
+                result.Data = listTreePUC2.OrderBy(x => x.Id).ToList();
+                result.IsValid = true;
+                result.Message = $"";
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+
+            }
+
+
+
+        }
+
+     
+
+        private async Task<List<Comment>> BuscarTitulosEnArbol()
+        {
+            List<Comment> categories = new List<Comment>();
+            var descriptivas = await _repository.GetAll();
+            foreach (var item in descriptivas)
+            {
+                Comment itenNew = new Comment();
+                itenNew.Id = item.TITULO_ID;
+                itenNew.ParentId = (int)item.TITULO_FK_ID;
+                if (item.TITULO == null) item.TITULO = "";
+                itenNew.Text = item.TITULO;
+                categories.Add(itenNew);
+
+            }
+
+            List<Comment> hierarchy = new List<Comment>();
+            hierarchy = categories
+                            .Where(c => c.ParentId == 0)
+                            .Select(c => new Comment()
+                            {
+                                Id = c.Id,
+                                Text = c.Text,
+                                ParentId = c.ParentId,
+                                //hierarchy = "0000" + c.Id,
+                                hierarchy =  c.Text,
+                                Children = GetChildren(categories, c.Id)
+                            })
+                            .ToList();
+         
+
+           return hierarchy;
+            
+
+        }
+
+        public string getPatch(List<Comment> titulosArbol, Comment item)
+        {
+            string result = "";
+            if (item.Children.Count == 0)
+            {
+                result = item.Text;
+                return result;
+            }
+            else
+            {
+                result = item.Text;
+                foreach (var itemChield in item.Children)
+                {
+                    result = result + ":" + getPatch(item.Children, itemChield);
+
+                }
+
+            }
+            return result;
+
+        }
+
+        public List<Comment> GetChildren(List<Comment> comments, int parentId)
+        {
+            return comments
+                    .Where(c => c.ParentId == parentId)
+                    .Select(c => new Comment
+                    {
+                        Id = c.Id,
+                        Text = c.Text,
+                        ParentId = c.ParentId,
+                        //hierarchy = "0000" + comments.Where(a => a.Id == parentId).FirstOrDefault().Id + ".0000" + c.Id,
+                        hierarchy =  comments.Where(a => a.Id == parentId).FirstOrDefault().Text + ":" + c.Text ,
+                        Children = GetChildren(comments, c.Id)
+                    })
+                    .ToList();
+        }
+
+        
 
     }
 }
