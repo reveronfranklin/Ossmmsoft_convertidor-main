@@ -511,11 +511,11 @@ namespace Convertidor.Services.Presupuesto
 
 
                 List<TreePUC> listTreePUC2 = new List<TreePUC>();
-                var titulosArbol = await BuscarTitulosEnArbol();
+                var titulosArbol = await BuscarArbol();
               
                 foreach (var item in titulosArbol)
                 {
-                    var patch = getPatch(titulosArbol, item);
+                    var patch = getPatch(item);
                   
 
                     TreePUC treePUC = new TreePUC();
@@ -553,7 +553,7 @@ namespace Convertidor.Services.Presupuesto
 
      
 
-        private async Task<List<Comment>> BuscarTitulosEnArbol()
+        private async Task<List<Comment>> BuscarArbol()
         {
             List<Comment> categories = new List<Comment>();
             var descriptivas = await _repository.GetAll();
@@ -578,7 +578,7 @@ namespace Convertidor.Services.Presupuesto
                                 ParentId = c.ParentId,
                                 //hierarchy = "0000" + c.Id,
                                 hierarchy =  c.Text,
-                                Children = GetChildren(categories, c)
+                                Children = GetParent(categories, c)
                             })
                             .ToList();
          
@@ -588,7 +588,7 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
-        public List<string> getPatch(List<Comment> titulosArbol, Comment item)
+        public List<string> getPatch(Comment item)
         {
             List<string> result = new List<string>();
             if (item.Children.Count == 0)
@@ -610,7 +610,7 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
-        public List<Comment> GetChildren(List<Comment> comments, Comment comment)
+        public List<Comment> GetParent(List<Comment> comments, Comment comment)
         {
             if (comment.Id == 15)
             {
@@ -635,7 +635,7 @@ namespace Convertidor.Services.Presupuesto
                 }
                 else
                 {
-                    result.AddRange(GetChildren(comments, padre));
+                    result.AddRange(GetParent(comments, padre));
                     result.Add(comment);
                     return result;
                 }
@@ -647,21 +647,7 @@ namespace Convertidor.Services.Presupuesto
             }
         }
 
-        /* return comments
-                 .Where(c => c.Id == parentId)
-                 .Select(c => new Comment
-                 {
-                     Id = c.Id,
-                     Text = c.Text,
-                     ParentId = c.ParentId,
-                     //hierarchy = "0000" + comments.Where(a => a.Id == parentId).FirstOrDefault().Id + ".0000" + c.Id,
-                     hierarchy =  comments.Where(a => a.Id == parentId).FirstOrDefault().Text + "-" + c.Text ,
-                     Children = GetChildren(comments, c.Id)
-                 })
-                 .ToList();*/
-
-
-
+   
 
 
 

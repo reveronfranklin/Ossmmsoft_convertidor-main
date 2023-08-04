@@ -10,6 +10,7 @@ using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto;
+using Convertidor.Utility;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.VisualStudio.Web.CodeGeneration.Design;
 using NPOI.POIFS.Properties;
@@ -219,6 +220,102 @@ namespace Convertidor.Services
 
         }
 
+        private async Task<List<Comment>> BuscarArbol(int codigoPresupuesto)
+        {
+            List<Comment> categories = new List<Comment>();
+            var descriptivas = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
+            foreach (var item in descriptivas)
+            {
+                Comment itenNew = new Comment();
+                itenNew.Id = item.CODIGO_ICP;
+                itenNew.ParentId = (int)item.CODIGO_ICP_FK;
+                if (item.DENOMINACION == null) item.DENOMINACION = "";
+                itenNew.Text = item.DENOMINACION;
+                categories.Add(itenNew);
+
+            }
+
+            List<Comment> hierarchy = new List<Comment>();
+            hierarchy = categories
+                            //.Where(c => c.ParentId != 0)
+                            .Select(c => new Comment()
+                            {
+                                Id = c.Id,
+                                Text = c.Text,
+                                ParentId = c.ParentId,
+                                //hierarchy = "0000" + c.Id,
+                                hierarchy = c.Text,
+                                Children = GetParent(categories, c)
+                            })
+                            .ToList();
+
+
+            return hierarchy.OrderBy(x => x.Id).ToList();
+
+
+        }
+
+        public List<string> getPatch(Comment item)
+        {
+            List<string> result = new List<string>();
+            if (item.Children.Count == 0)
+            {
+                result.Add(item.Text);
+                return result;
+            }
+            else
+            {
+
+                foreach (var itemChield in item.Children)
+                {
+                    result.Add(itemChield.Text);
+
+                }
+                return result;
+            }
+
+
+        }
+
+        public List<Comment> GetParent(List<Comment> comments, Comment comment)
+        {
+            if (comment.Id == 15)
+            {
+                var detener = 1;
+            }
+
+            List<Comment> result = new List<Comment>();
+
+            if (comment.ParentId == 0)
+            {
+                result.Add(comment);
+                return result;
+            }
+            var padre = comments.Where(c => c.Id == comment.ParentId).FirstOrDefault();
+            if (padre != null)
+            {
+                if (padre.ParentId == 0)
+                {
+                    result.Add(padre);
+                    result.Add(comment);
+                    return result;
+
+                }
+                else
+                {
+                    result.AddRange(GetParent(comments, padre));
+                    result.Add(comment);
+                    return result;
+                }
+            }
+            else
+            {
+                result.Add(comment);
+                return result;
+            }
+        }
+
+
         public async Task<ResultDto<List<TreeICP>>> GetTreeByPresupuesto(int codigoPresupuesto)
         {
 
@@ -233,9 +330,36 @@ namespace Convertidor.Services
                     if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
 
+
+                List<TreeICP> listTreePUC2 = new List<TreeICP>();
+                var titulosArbol = await BuscarArbol(codigoPresupuesto);
+
+                foreach (var item in titulosArbol)
+                {
+                    var patch = getPatch(item);
+
+                    var icp = await _repository.GetByCodigo(item.Id);
+                    TreeICP treePUC = new TreeICP();
+                    treePUC.Path = patch;
+                    treePUC.Id = item.Id;
+                    treePUC.Denominacion = item.Text;
+                    treePUC.Descripcion = icp.DESCRIPCION;
+                    treePUC.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
+                    var search = listTreePUC2.Where(x => x.Id == treePUC.Id).FirstOrDefault();
+                    if (search == null)
+                    {
+                        listTreePUC2.Add(treePUC);
+                    }
+
+                    Console.WriteLine(patch);
+                }
+
+
+
                 //string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}", parent.Name, child.Name, grandChild.Name, grandGrandChild.Name, grandGrandChild.Id, grandGrandChild.ParentId, grandGrandChild.Denominacion, grandGrandChild.Descripcion, grandGrandChild.UnidadEjecutora);
-               
+
                 var treeIcp = await WriteStrings(codigoPresupuesto);
+
                 foreach (var item in treeIcp)
                 {
                     var arraIcp = item.Split(":");
@@ -270,8 +394,10 @@ namespace Convertidor.Services
 
 
                 }
+                
 
-                result.Data = listTreeICP;
+
+                result.Data = listTreePUC2;
                 result.IsValid = true;
                 result.Message = $"";
                 return result;
@@ -369,11 +495,19 @@ namespace Convertidor.Services
 
                             if (padre != null)
                             {
-                                icpObj.CODIGO_ICP_FK = padre.CODIGO_ICP;
+                                if(icpObj.CODIGO_ICP == padre.CODIGO_ICP)
+                                {
+                                    icpObj.CODIGO_ICP_FK = 0;
+                                }
+                                else
+                                {
+                                    icpObj.CODIGO_ICP_FK = padre.CODIGO_ICP;
+                                }
+                               
                             }
                             else
                             {
-                                icpObj.CODIGO_ICP_FK = icpObj.CODIGO_ICP;
+                                icpObj.CODIGO_ICP_FK = 0; //icpObj.CODIGO_ICP;
                             }
                             await _repository.Update(icpObj);
 
