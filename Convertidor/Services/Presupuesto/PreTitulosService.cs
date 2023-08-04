@@ -512,16 +512,14 @@ namespace Convertidor.Services.Presupuesto
 
                 List<TreePUC> listTreePUC2 = new List<TreePUC>();
                 var titulosArbol = await BuscarTitulosEnArbol();
-
+              
                 foreach (var item in titulosArbol)
                 {
-                    string patch = getPatch(titulosArbol, item);
-                    var arrayTitulos = patch.Split(":");
-
-                    List<string> list = new List<string>(arrayTitulos);
+                    var patch = getPatch(titulosArbol, item);
+                  
 
                     TreePUC treePUC = new TreePUC();
-                    treePUC.Path = list;
+                    treePUC.Path = patch;
                     treePUC.Id = item.Id;
                     treePUC.Denominacion = item.Text;
                     treePUC.Descripcion = item.Text;
@@ -572,7 +570,7 @@ namespace Convertidor.Services.Presupuesto
 
             List<Comment> hierarchy = new List<Comment>();
             hierarchy = categories
-                            .Where(c => c.ParentId == 0)
+                            //.Where(c => c.ParentId != 0)
                             .Select(c => new Comment()
                             {
                                 Id = c.Id,
@@ -580,55 +578,92 @@ namespace Convertidor.Services.Presupuesto
                                 ParentId = c.ParentId,
                                 //hierarchy = "0000" + c.Id,
                                 hierarchy =  c.Text,
-                                Children = GetChildren(categories, c.Id)
+                                Children = GetChildren(categories, c)
                             })
                             .ToList();
          
 
-           return hierarchy;
+           return hierarchy.OrderBy(x=>x.Id).ToList();
             
 
         }
 
-        public string getPatch(List<Comment> titulosArbol, Comment item)
+        public List<string> getPatch(List<Comment> titulosArbol, Comment item)
         {
-            string result = "";
+            List<string> result = new List<string>();
             if (item.Children.Count == 0)
             {
-                result = item.Text;
+                result.Add(item.Text);
                 return result;
             }
             else
             {
-                result = item.Text;
+                
                 foreach (var itemChield in item.Children)
                 {
-                    result = result + ":" + getPatch(item.Children, itemChield);
+                    result.Add(itemChield.Text);
 
                 }
-
+                return result;
             }
-            return result;
+          
 
         }
 
-        public List<Comment> GetChildren(List<Comment> comments, int parentId)
+        public List<Comment> GetChildren(List<Comment> comments, Comment comment)
         {
-            return comments
-                    .Where(c => c.ParentId == parentId)
-                    .Select(c => new Comment
-                    {
-                        Id = c.Id,
-                        Text = c.Text,
-                        ParentId = c.ParentId,
-                        //hierarchy = "0000" + comments.Where(a => a.Id == parentId).FirstOrDefault().Id + ".0000" + c.Id,
-                        hierarchy =  comments.Where(a => a.Id == parentId).FirstOrDefault().Text + ":" + c.Text ,
-                        Children = GetChildren(comments, c.Id)
-                    })
-                    .ToList();
+            if (comment.Id == 15)
+            {
+                var detener = 1;
+            }
+
+            List<Comment> result = new List<Comment>();
+
+            if (comment.ParentId == 0) {
+                 result.Add(comment);
+                return result;
+            }
+            var padre = comments.Where(c => c.Id == comment.ParentId).FirstOrDefault();
+            if (padre != null)
+            {
+                if (padre.ParentId == 0)
+                {
+                    result.Add(padre);
+                    result.Add(comment);
+                    return result;
+
+                }
+                else
+                {
+                    result.AddRange(GetChildren(comments, padre));
+                    result.Add(comment);
+                    return result;
+                }
+            }
+            else
+            {
+                result.Add(comment);
+                return result;
+            }
         }
 
-        
+        /* return comments
+                 .Where(c => c.Id == parentId)
+                 .Select(c => new Comment
+                 {
+                     Id = c.Id,
+                     Text = c.Text,
+                     ParentId = c.ParentId,
+                     //hierarchy = "0000" + comments.Where(a => a.Id == parentId).FirstOrDefault().Id + ".0000" + c.Id,
+                     hierarchy =  comments.Where(a => a.Id == parentId).FirstOrDefault().Text + "-" + c.Text ,
+                     Children = GetChildren(comments, c.Id)
+                 })
+                 .ToList();*/
+
+
+
+
+
 
     }
 }

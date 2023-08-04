@@ -1,4 +1,6 @@
 ﻿using System;
+using Convertidor.Utility;
+
 namespace Convertidor.Dtos.Presupuesto
 {
 	public class PreRelacionCargoGetDto
@@ -21,6 +23,8 @@ namespace Convertidor.Dtos.Presupuesto
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
         public int CodigoPresupuesto { get; set; }
+        public string TotalMensual { get { return ConvertidorMoneda.ConvertMoneda(Sueldo + Compensacion + Prima); } }
+        public string TotalAnual { get { return ConvertidorMoneda.ConvertMoneda((Sueldo + Compensacion + Prima) * 12); } }
     }
 }
 
