@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.EntitiesDestino;
@@ -12,6 +13,7 @@ using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto;
+using Convertidor.Utility;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.VisualStudio.Web.CodeGeneration.Design;
 using NPOI.POIFS.Properties;
@@ -144,7 +146,98 @@ namespace Convertidor.Services
 
 
         }
+        private async Task<List<Comment>> BuscarArbol(int codigoPresupuesto)
+        {
+            List<Comment> categories = new List<Comment>();
+            var descriptivas = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
+            foreach (var item in descriptivas)
+            {
+                Comment itemNew = new Comment();
+                itemNew.Id = item.CODIGO_PUC;
+                itemNew.ParentId = (int)item.CODIGO_PUC_FK;
+                var pucConcat = item.CODIGO_GRUPO + "-" + item.CODIGO_NIVEL1 + "-" + item.CODIGO_NIVEL2 + "-" + item.CODIGO_NIVEL3 + "-" + item.CODIGO_NIVEL4 + "-" + item.CODIGO_NIVEL5 + "-" + item.CODIGO_NIVEL6;
+                itemNew.Text = pucConcat;
+                itemNew.Denominacion = item.DENOMINACION;
+                itemNew.Descripcion = item.DESCRIPCION;
+                categories.Add(itemNew);
 
+            }
+
+            List<Comment> hierarchy = new List<Comment>();
+            hierarchy = categories
+                            //.Where(c => c.ParentId != 0)
+                            .Select(c => new Comment()
+                            {
+                                Id = c.Id,
+                                Text = c.Text,
+                                ParentId = c.ParentId,
+                                //hierarchy = "0000" + c.Id,
+                                hierarchy = c.Text,
+                                Children = GetParent(categories, c)
+                            })
+                            .ToList();
+
+
+            return hierarchy.OrderBy(x => x.Id).ToList();
+
+
+        }
+
+        public List<string> getPatch(Comment item)
+        {
+            List<string> result = new List<string>();
+            if (item.Children.Count == 0)
+            {
+                result.Add(item.Text);
+                return result;
+            }
+            else
+            {
+
+                foreach (var itemChield in item.Children)
+                {
+                    result.Add(itemChield.Text);
+
+                }
+                return result;
+            }
+
+
+        }
+
+        public List<Comment> GetParent(List<Comment> comments, Comment comment)
+        {
+
+            List<Comment> result = new List<Comment>();
+
+            if (comment.ParentId == 0)
+            {
+                result.Add(comment);
+                return result;
+            }
+            var padre = comments.Where(c => c.Id == comment.ParentId).FirstOrDefault();
+            if (padre != null)
+            {
+                if (padre.ParentId == 0)
+                {
+                    result.Add(padre);
+                    result.Add(comment);
+                    return result;
+
+                }
+                else
+                {
+                    result.AddRange(GetParent(comments, padre));
+                    result.Add(comment);
+                    return result;
+                }
+            }
+            else
+            {
+                result.Add(comment);
+                return result;
+            }
+        }
         public async Task<ResultDto<List<TreePUC>>> GetTreeByPresupuesto(int codigoPresupuesto)
         {
 
@@ -159,9 +252,30 @@ namespace Convertidor.Services
                     if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
 
-                //string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}", parent.Name, child.Name, grandChild.Name, grandGrandChild.Name, grandGrandChild.Id, grandGrandChild.ParentId, grandGrandChild.Denominacion, grandGrandChild.Descripcion, grandGrandChild.UnidadEjecutora);
 
-                //select string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}:{9}", parent.Name, child.Name, grandChild.Name, grandGrandChild.Name, grandGrandGrandChild.Name, grandGrandGrandChild.Id, grandGrandGrandChild.ParentId, grandGrandGrandChild.Denominacion, grandGrandGrandChild.Descripcion, grandGrandGrandChild.UnidadEjecutora);
+
+                List<TreePUC> listTreePUC2 = new List<TreePUC>();
+                var titulosArbol = await BuscarArbol(codigoPresupuesto);
+
+                foreach (var item in titulosArbol)
+                {
+                    var patch = getPatch(item);
+
+                    var icp = await _repository.GetByCodigo(item.Id);
+                    TreePUC treePUC = new TreePUC();
+                    treePUC.Path = patch;
+                    treePUC.Id = item.Id;
+                    treePUC.Denominacion = icp.DENOMINACION;
+                    treePUC.Descripcion = icp.DESCRIPCION;
+                  
+                    var search = listTreePUC2.Where(x => x.Id == treePUC.Id).FirstOrDefault();
+                    if (search == null)
+                    {
+                        listTreePUC2.Add(treePUC);
+                    }
+
+                    Console.WriteLine(patch);
+                }
 
                 var treePuc = await WriteStrings(codigoPresupuesto);
                 foreach (var item in treePuc)
@@ -205,7 +319,7 @@ namespace Convertidor.Services
 
                 }
                 //listTreePUC = await ListTreeByPresupuesto(codigoPresupuesto);
-                result.Data = listTreePUC;
+                result.Data = listTreePUC2;
                 result.IsValid = true;
                 result.Message = $"";
                 return result;
@@ -248,7 +362,7 @@ namespace Convertidor.Services
                 var presupuestoObj = await _presupuesttoRepository.GetByCodigo(13,codigoPresupuesto);
 
                 
-                var pucList = puc.Data.Where(x=>x.CodigoPucPadre==0 || x.CodigoPucPadre==null).ToList();
+                var pucList = puc.Data.Where(x=>x.CodigoPucPadre==null).ToList();
               
                 if (pucList.Count > 0)
                 {
@@ -276,11 +390,19 @@ namespace Convertidor.Services
 
                             if (newPadre != null)
                             {
-                                icpObj.CODIGO_PUC_FK = newPadre.CODIGO_PUC;
+                               
+                                if (icpObj.CODIGO_PUC == newPadre.CODIGO_PUC)
+                                {
+                                    icpObj.CODIGO_PUC_FK = 0;
+                                }
+                                else
+                                {
+                                    icpObj.CODIGO_PUC_FK = newPadre.CODIGO_PUC;
+                                }
                             }
                             else
                             {
-                                icpObj.CODIGO_PUC_FK = icpObj.CODIGO_PUC;
+                                icpObj.CODIGO_PUC_FK = 0;
                             }
                             await _repository.Update(icpObj);
 
@@ -367,15 +489,14 @@ namespace Convertidor.Services
                             }
                             else if (dto.CodicoNivel1 != "00")
                             {
-                                padre = await _repository.GetHastaGrupo((int)dto.CodigoPresupuesto,
+                                padre = await _repository.GetHastaGrupoDiferentePuc((int)dto.CodigoPresupuesto,
                                                                            (int)dto.CodigoPuc,
                                                                            dto.CodigoGrupo);
 
                             }else if (dto.CodigoGrupo != "0")
-                            {
-                                padre = await _repository.GetHastaGrupo((int)dto.CodigoPresupuesto,
-                                                                           (int)dto.CodigoPuc,
-                                                                           dto.CodigoGrupo);
+                    {
+                        padre = await _repository.GetHastaNivel5((int)dto.CodigoPresupuesto, (int)dto.CodigoPuc, dto.CodigoGrupo, "00", "00", "00", "00", "00");
+                                                                         
 
                             }
 
@@ -457,14 +578,14 @@ namespace Convertidor.Services
                     }
                     else if (dto.CodicoNivel1 != "00")
                     {
-                        padre = await _repository.GetHastaGrupo((int)dto.CodigoPresupuesto,
+                        padre = await _repository.GetHastaGrupoDiferentePuc((int)dto.CodigoPresupuesto,
                                                                    (int)dto.CodigoPuc,
                                                                    dto.CodigoGrupo);
 
                     }
                     else if (dto.CodigoGrupo != "0")
                     {
-                        padre = await _repository.GetHastaGrupo((int)dto.CodigoPresupuesto,
+                        padre = await _repository.GetHastaGrupoIgualPuc((int)dto.CodigoPresupuesto,
                                                                    (int)dto.CodigoPuc,
                                                                    dto.CodigoGrupo);
 

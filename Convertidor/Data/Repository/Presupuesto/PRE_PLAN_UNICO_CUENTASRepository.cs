@@ -98,6 +98,14 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
                      )
+                       .OrderBy(x => x.CODIGO_GRUPO)
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             .ThenBy(x => x.CODIGO_NIVEL2)
+                              .ThenBy(x => x.CODIGO_NIVEL3)
+                              .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
+                              .ThenBy(x => x.CODIGO_NIVEL6)
+
                     .FirstOrDefaultAsync();
                 return (PRE_PLAN_UNICO_CUENTAS)result!;
 
@@ -128,12 +136,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                                         x.CODIGO_NIVEL4 == nivel4 &&
                                         x.CODIGO_NIVEL5 == nivel5
                              )
-                             .OrderBy(x => x.CODIGO_GRUPO)
+                                .OrderBy(x => x.CODIGO_GRUPO)
                              .ThenBy(x => x.CODIGO_NIVEL1)
                              .ThenBy(x => x.CODIGO_NIVEL2)
-                             .ThenBy(x => x.CODIGO_NIVEL3)
-                             .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL3)
+                              .ThenBy(x => x.CODIGO_NIVEL4)
                               .ThenBy(x => x.CODIGO_NIVEL5)
+                              .ThenBy(x => x.CODIGO_NIVEL6)
+
                             .FirstOrDefaultAsync();
                 return (PRE_PLAN_UNICO_CUENTAS)result!;
 
@@ -161,12 +171,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                                         x.CODIGO_NIVEL3 == nivel3 &&
                                         x.CODIGO_NIVEL4 == nivel4 
                              )
-                             .OrderBy(x => x.CODIGO_GRUPO)
+                                .OrderBy(x => x.CODIGO_GRUPO)
                              .ThenBy(x => x.CODIGO_NIVEL1)
                              .ThenBy(x => x.CODIGO_NIVEL2)
-                             .ThenBy(x => x.CODIGO_NIVEL3)
-                             .ThenBy(x => x.CODIGO_NIVEL4)
-                            
+                              .ThenBy(x => x.CODIGO_NIVEL3)
+                              .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
+                              .ThenBy(x => x.CODIGO_NIVEL6)
+
                             .FirstOrDefaultAsync();
                 return (PRE_PLAN_UNICO_CUENTAS)result!;
 
@@ -195,11 +207,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                                     
 
                              )
-                             .OrderBy(x => x.CODIGO_GRUPO)
+                              .OrderBy(x => x.CODIGO_GRUPO)
                              .ThenBy(x => x.CODIGO_NIVEL1)
                              .ThenBy(x => x.CODIGO_NIVEL2)
-                             .ThenBy(x => x.CODIGO_NIVEL3)
-                            
+                              .ThenBy(x => x.CODIGO_NIVEL3)
+                              .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
+                              .ThenBy(x => x.CODIGO_NIVEL6)
+
 
                             .FirstOrDefaultAsync();
                 return (PRE_PLAN_UNICO_CUENTAS)result!;
@@ -228,9 +243,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                                      
 
                              )
-                             .OrderBy(x => x.CODIGO_GRUPO)
+                               .OrderBy(x => x.CODIGO_GRUPO)
                              .ThenBy(x => x.CODIGO_NIVEL1)
                              .ThenBy(x => x.CODIGO_NIVEL2)
+                              .ThenBy(x => x.CODIGO_NIVEL3)
+                              .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
+                              .ThenBy(x => x.CODIGO_NIVEL6)
+
                             .FirstOrDefaultAsync();
                 return (PRE_PLAN_UNICO_CUENTAS)result!;
 
@@ -256,9 +276,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                                         x.CODIGO_NIVEL1 == nivel1
 
                              )
-                             .OrderBy(x => x.CODIGO_GRUPO)
+                               .OrderBy(x => x.CODIGO_GRUPO)
                              .ThenBy(x => x.CODIGO_NIVEL1)
-                             
+                             .ThenBy(x => x.CODIGO_NIVEL2)
+                              .ThenBy(x => x.CODIGO_NIVEL3)
+                              .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
+                              .ThenBy(x => x.CODIGO_NIVEL6)
+
                             .FirstOrDefaultAsync();
                 return (PRE_PLAN_UNICO_CUENTAS)result!;
 
@@ -272,21 +297,69 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaGrupo(int codigoPresupuesto, int codigoPuc, string grupo)
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaGrupoDiferentePuc(int codigoPresupuesto, int codigoPuc, string grupo)
         {
 
             try
             {
+              
 
                 var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
-                            .Where(x => x.CODIGO_PUC == codigoPuc &&
+                            .Where(x => x.CODIGO_PUC != codigoPuc &&
                                         x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                         x.CODIGO_GRUPO == grupo
                                        
 
                              )
                              .OrderBy(x => x.CODIGO_GRUPO)
-                             
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             .ThenBy(x => x.CODIGO_NIVEL2)
+                              .ThenBy(x => x.CODIGO_NIVEL3)
+                              .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
+                              .ThenBy(x => x.CODIGO_NIVEL6)
+                           
+
+
+
+
+                            .FirstOrDefaultAsync();
+                return (PRE_PLAN_UNICO_CUENTAS)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+        }
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetHastaGrupoIgualPuc(int codigoPresupuesto, int codigoPuc, string grupo)
+        {
+
+            try
+            {
+
+
+                var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                            .Where(x => x.CODIGO_PUC != codigoPuc &&
+                                        x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                        x.CODIGO_GRUPO == grupo
+
+
+                             )
+                             .OrderBy(x => x.CODIGO_GRUPO)
+                             .ThenBy(x => x.CODIGO_NIVEL1)
+                             .ThenBy(x => x.CODIGO_NIVEL2)
+                              .ThenBy(x => x.CODIGO_NIVEL3)
+                              .ThenBy(x => x.CODIGO_NIVEL4)
+                              .ThenBy(x => x.CODIGO_NIVEL5)
+                              .ThenBy(x => x.CODIGO_NIVEL6)
+
+
+
+
 
                             .FirstOrDefaultAsync();
                 return (PRE_PLAN_UNICO_CUENTAS)result!;

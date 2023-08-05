@@ -16,7 +16,8 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<PRE_PLAN_UNICO_CUENTAS> GetHastaNivel3(int codigoPresupuesto, int codigoPuc, string grupo, string nivel1, string nivel2, string nivel3);
         Task<PRE_PLAN_UNICO_CUENTAS> GetHastaNivel2(int codigoPresupuesto, int codigoPuc, string grupo, string nivel1, string nivel2);
         Task<PRE_PLAN_UNICO_CUENTAS> GetHastaNivel1(int codigoPresupuesto, int codigoPuc, string grupo, string nivel1);
-        Task<PRE_PLAN_UNICO_CUENTAS> GetHastaGrupo(int codigoPresupuesto, int codigoPuc, string grupo);
+        Task<PRE_PLAN_UNICO_CUENTAS> GetHastaGrupoDiferentePuc(int codigoPresupuesto, int codigoPuc, string grupo);
+        Task<PRE_PLAN_UNICO_CUENTAS> GetHastaGrupoIgualPuc(int codigoPresupuesto, int codigoPuc, string grupo);
         Task<PRE_PLAN_UNICO_CUENTAS> GetByCodigo(int codigoIcp);
         Task<string> Delete(int codigoPuc);
         Task<ResultDto<PRE_PLAN_UNICO_CUENTAS>> Update(PRE_PLAN_UNICO_CUENTAS entity);

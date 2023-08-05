@@ -212,7 +212,7 @@ namespace Convertidor.Services
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = ex.Message;
-                return result;
+                return result;  
 
             }
 
@@ -226,12 +226,15 @@ namespace Convertidor.Services
             var descriptivas = await _repository.GetAllByCodigoPresupuesto(codigoPresupuesto);
             foreach (var item in descriptivas)
             {
-                Comment itenNew = new Comment();
-                itenNew.Id = item.CODIGO_ICP;
-                itenNew.ParentId = (int)item.CODIGO_ICP_FK;
-                if (item.DENOMINACION == null) item.DENOMINACION = "";
-                itenNew.Text = item.DENOMINACION;
-                categories.Add(itenNew);
+                Comment itemNew = new Comment();
+                itemNew.Id = item.CODIGO_ICP;
+                itemNew.ParentId = (int)item.CODIGO_ICP_FK;
+              
+                var icoConcat = item.CODIGO_SECTOR + "-" + item.CODIGO_PROGRAMA + "-" + item.CODIGO_SUBPROGRAMA + "-" + item.CODIGO_PROYECTO + "-" + item.CODIGO_ACTIVIDAD + "-" + item.CODIGO_OFICINA;
+                itemNew.Text = icoConcat;
+                itemNew.Denominacion =item.DENOMINACION;
+                itemNew.Descripcion = item.DESCRIPCION;
+                categories.Add(itemNew);
 
             }
 
@@ -279,11 +282,7 @@ namespace Convertidor.Services
 
         public List<Comment> GetParent(List<Comment> comments, Comment comment)
         {
-            if (comment.Id == 15)
-            {
-                var detener = 1;
-            }
-
+            
             List<Comment> result = new List<Comment>();
 
             if (comment.ParentId == 0)
@@ -342,7 +341,7 @@ namespace Convertidor.Services
                     TreeICP treePUC = new TreeICP();
                     treePUC.Path = patch;
                     treePUC.Id = item.Id;
-                    treePUC.Denominacion = item.Text;
+                    treePUC.Denominacion = icp.DENOMINACION;
                     treePUC.Descripcion = icp.DESCRIPCION;
                     treePUC.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
                     var search = listTreePUC2.Where(x => x.Id == treePUC.Id).FirstOrDefault();
