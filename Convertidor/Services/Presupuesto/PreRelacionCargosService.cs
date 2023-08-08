@@ -6,6 +6,7 @@ using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Rh;
+using Ganss.Excel;
 using NuGet.Packaging;
 
 namespace Convertidor.Services.Presupuesto
@@ -97,6 +98,12 @@ namespace Convertidor.Services.Presupuesto
             try
             {
 
+                if (filter.CodigoPresupuesto == 0)
+                {
+                    var lastPresupuesto = await _prePresupuestoRepository.GetLast();
+                    if (lastPresupuesto != null) filter.CodigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
+                }
+
                 var cargos = await _repository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
 
                 if (filter.CodigoIcp != null && filter.CodigoIcp > 0)
@@ -115,6 +122,21 @@ namespace Convertidor.Services.Presupuesto
                         listDto.Add(dto);
                     }
 
+                    listDto = listDto.OrderBy(x => x.IcpConcat).ToList();
+                    ExcelMapper mapper = new ExcelMapper();
+
+
+                    var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+                    var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+                    var fileName = $"RelacionCargos {filter.CodigoPresupuesto.ToString()}-{filter.CodigoIcp.ToString()}-{DateTime.Now.ToLongDateString()}.xlsx";
+                    string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+
+
+                    mapper.Save(newFile, listDto, $"RelacionCargos", true);
+                 
+                    result.LinkData = $"/ExcelFiles/{fileName}";
 
                     result.Data = listDto;
 
@@ -126,6 +148,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Data = null;
                     result.IsValid = true;
                     result.Message = " No existen Datos";
+                    result.LinkData = "";
 
                 }
             }
@@ -150,7 +173,7 @@ namespace Convertidor.Services.Presupuesto
 
 
 
-                var relacionCargoUpdate = await _repository.GetByCodigo(dto.CodigoCargo);
+                var relacionCargoUpdate = await _repository.GetByCodigo(dto.CodigoRelacionCargo);
                 if (relacionCargoUpdate == null)
                 {
                     result.Data = null;
@@ -379,10 +402,13 @@ namespace Convertidor.Services.Presupuesto
 
             }
 
-    var icp = await _preICPRepository.GetByCodigo(item.CODIGO_ICP);
+            var icp = await _preICPRepository.GetByCodigo(item.CODIGO_ICP);
             if (icp != null)
             {
                 dto.DenominacionIcp = icp.DENOMINACION;
+
+                dto.IcpConcat = $"{icp.CODIGO_SECTOR}-{icp.CODIGO_PROGRAMA}-{icp.CODIGO_SUBPROGRAMA}-{icp.CODIGO_PROYECTO}-{icp.CODIGO_ACTIVIDAD}-{icp.CODIGO_OFICINA}";
+           
             }
 
             return dto;

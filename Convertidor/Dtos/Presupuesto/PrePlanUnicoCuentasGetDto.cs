@@ -15,7 +15,7 @@ namespace Convertidor.Dtos.Presupuesto
         public string Descripcion { get; set; } = string.Empty;
         public int? CodigoPresupuesto { get; set; }
         public int? CodigoPucPadre { get; set; }
-        public string CodigoPucConcat { get { return $"{CodigoGrupo}-{CodigoNivel1}-{CodigoNivel2}-{CodigoNivel3}-{CodigoNivel4}-{CodigoNivel5}-{CodigoNivel6}"; } }
+        public string CodigoPucConcat { get { return $"{CodigoGrupo}.{CodigoNivel1}.{CodigoNivel2}.{CodigoNivel3}.{CodigoNivel4}.{CodigoNivel5}.{CodigoNivel6}"; } }
 
     }
 }
