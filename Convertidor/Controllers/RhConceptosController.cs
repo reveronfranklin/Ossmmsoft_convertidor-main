@@ -43,7 +43,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-       
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetConceptosByPersonas(PersonaFilterDto filter)
+        {
+            var result = await _service.GetConceptosByCodigoPersona(filter.CodigoPersona,(DateTime)filter.Desde,(DateTime)filter.Hasta);
+            return Ok(result.OrderBy(x=>x.Denominacion));
+        }
 
 
     }

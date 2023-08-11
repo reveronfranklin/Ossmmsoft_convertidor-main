@@ -7,6 +7,7 @@ namespace Convertidor.Services.Rh
 	{
         Task<List<ListTipoNominaDto>> GetAll();
 
+        Task<List<ListTipoNominaDto>> GetTipoNominaByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta);
 
     }
 }

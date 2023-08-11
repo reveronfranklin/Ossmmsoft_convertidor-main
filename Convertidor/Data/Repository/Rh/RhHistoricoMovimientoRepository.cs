@@ -1,4 +1,5 @@
 ﻿using System;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
 using Microsoft.EntityFrameworkCore;
@@ -45,8 +46,11 @@ namespace Convertidor.Data.Repository.Rh
                 var res = ex.InnerException.Message;
                 return null;
             }
-
         }
+
+     
+
+    
 
         public async Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetByTipoNominaPeriodo(int tipoNomina,int codigoPeriodo)
         {
@@ -75,6 +79,23 @@ namespace Convertidor.Data.Repository.Rh
             catch (Exception ex)
             {
               var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetByFechaNominaPersona(DateTime desde, DateTime hasta,int idPersona)
+        {
+            try
+            {
+
+                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h => h.FECHA_NOMINA_MOV >= desde && h.FECHA_NOMINA_MOV <= hasta && h.CODIGO_PERSONA== idPersona)
+                    .ToListAsync();
+                return (List<RH_V_HISTORICO_MOVIMIENTOS>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
                 return null;
             }
 

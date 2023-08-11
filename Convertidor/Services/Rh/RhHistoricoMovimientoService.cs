@@ -88,6 +88,25 @@ namespace Convertidor.Services.Rh
 
         }
 
+        public async Task<List<ListHistoricoMovimientoDto>> GetByFechaNominaPersona(DateTime desde, DateTime hasta,int idPersona)
+        {
+            try
+            {
+
+                List<ListHistoricoMovimientoDto> listHistoricoMovimientoDtos = new List<ListHistoricoMovimientoDto>();
+
+                var historico = await _repository.GetByFechaNominaPersona(desde, hasta,idPersona);
+                listHistoricoMovimientoDtos = await MapListHistoricoMovimiento(historico);
+                return (List<ListHistoricoMovimientoDto>)listHistoricoMovimientoDtos;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         private RH_DESCRIPTIVAS GetDescriptiva(List<RH_DESCRIPTIVAS> list,string? codigo) {
             var descriptivas = list.Where(d => d.CODIGO == codigo).First();
 

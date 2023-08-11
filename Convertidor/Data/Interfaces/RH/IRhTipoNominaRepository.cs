@@ -7,6 +7,7 @@ namespace Convertidor.Data.Interfaces.RH
 	{
         Task<List<RH_TIPOS_NOMINA>> GetAll();
 
+        Task<List<RH_TIPOS_NOMINA>> GetTipoNominaByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta);
 
     }
 }

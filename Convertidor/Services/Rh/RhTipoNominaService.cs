@@ -48,8 +48,27 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-      
-      
+        public async Task<List<ListTipoNominaDto>> GetTipoNominaByCodigoPersona(int codigoPersona,DateTime desde,DateTime hasta)
+        {
+            try
+            {
+                var tipoNomina = await _repository.GetTipoNominaByCodigoPersona(codigoPersona,desde,hasta);
+
+                var result = MapListTipoNominaDto(tipoNomina);
+
+
+                return (List<ListTipoNominaDto>)result; 
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+
+
 
         public List<ListTipoNominaDto> MapListTipoNominaDto(List<RH_TIPOS_NOMINA> dtos)
         {

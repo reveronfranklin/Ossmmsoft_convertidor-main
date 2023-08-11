@@ -8,6 +8,8 @@ namespace Convertidor.Services.Rh
 
         Task<List<ListConceptosDto>> GetAll();
 
+        Task<List<ListConceptosDto>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta);
+
 
     }
 }

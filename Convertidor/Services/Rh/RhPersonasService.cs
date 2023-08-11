@@ -23,17 +23,20 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IRhHistoricoMovimientoService _historicoMovimientoService;
         private readonly IRhEducacionService _rhEducacionService;
         private readonly IRhDireccionesService _rhDireccionesService;
+        private readonly IRhConceptosService _rhConceptosService;
         private readonly IMapper _mapper;
 
         public RhPersonaService(IRhPersonasRepository repository,
                                 IRhHistoricoMovimientoService historicoMovimientoService,
                                 IRhEducacionService rhEducacionService,
-                                IRhDireccionesService rhDireccionesService)
+                                IRhDireccionesService rhDireccionesService,
+                                IRhConceptosService rhConceptosService)
         {
             _repository = repository;
             _historicoMovimientoService = historicoMovimientoService;
             _rhEducacionService= rhEducacionService;
             _rhDireccionesService = rhDireccionesService;
+            _rhConceptosService = rhConceptosService;
 
 
         }
@@ -62,7 +65,7 @@ namespace Convertidor.Data.Repository.Rh
             {
                 var personas = await _repository.GetAll();
 
-                var result = MapListSimplePersonasDto(personas);
+                var result =await MapListSimplePersonasDto(personas);
 
 
                 return (List<ListSimplePersonaDto>)result;
@@ -138,7 +141,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     itemResult.HistoricoMovimientoDto = historico;
                 }
-           
+               
 
             return itemResult;
 
@@ -195,7 +198,7 @@ namespace Convertidor.Data.Repository.Rh
         }
 
 
-        public List<ListSimplePersonaDto> MapListSimplePersonasDto(List<RH_PERSONAS> dtos)
+        public async Task<List<ListSimplePersonaDto>> MapListSimplePersonasDto(List<RH_PERSONAS> dtos)
         {
             List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
 
@@ -210,14 +213,15 @@ namespace Convertidor.Data.Repository.Rh
                 
                 itemResult.Nombre = item.NOMBRE;
                 itemResult.Apellido = item.APELLIDO;
-             
+                //itemResult.Conceptos = await _rhConceptosService.GetConceptosByCodigoPersona(item.CODIGO_PERSONA);
+
 
 
                 result.Add(itemResult);
 
 
             }
-            return result.OrderBy(p=>p.NombreCompleto).ToList();
+                return result.OrderBy(p=>p.NombreCompleto).ToList();
 
 
 

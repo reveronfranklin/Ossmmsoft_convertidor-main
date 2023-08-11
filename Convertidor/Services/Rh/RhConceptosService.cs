@@ -47,9 +47,28 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+      
+        public async Task<List<ListConceptosDto>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta)
+        {
+            try
+            {
+                var conceptos = await _repository.GetConceptosByCodigoPersona(codigoPersona,desde,hasta);
 
-      
-      
+                var result = MapListConceptosDto(conceptos);
+
+
+                return (List<ListConceptosDto>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+
+
 
         public List<ListConceptosDto> MapListConceptosDto(List<RH_CONCEPTOS> dtos)
         {
