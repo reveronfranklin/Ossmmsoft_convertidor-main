@@ -176,68 +176,7 @@ namespace Convertidor.Services.Rh
 
 
 
-           /* foreach (var item in dto)
-            {
-                try
-                {
-                    ListHistoricoMovimientoDto itemResult = new ListHistoricoMovimientoDto();
-                    itemResult.CodigoHistoricoNomina = item.CODIGO_HISTORICO_NOMINA;
-                    itemResult.CodigoPersona = item.CODIGO_PERSONA;
-                    itemResult.Cedula = item.CEDULA;
-                    itemResult.Foto = item.FOTO;
-                    itemResult.Nombre = item.NOMBRE;
-                    itemResult.Apellido = item.APELLIDO;
-                    itemResult.Full_Name = $"{item.NOMBRE} {item.APELLIDO}";
-                    itemResult.Nacionalidad = item.NACIONALIDAD;
-                    itemResult.DescripcionNacionalidad = item.DESCRIPCION_NACIONALIDAD;
-                    itemResult.Sexo = item.SEXO;
-                    itemResult.Status = item.STATUS;
-                    itemResult.DescripcionStatus = item.DESCRIPCION_STATUS;
-
-                    itemResult.CodigoRelacionCargo = item.CODIGO_RELACION_CARGO;
-                    itemResult.CodigoCargo = item.CODIGO_CARGO;
-                    itemResult.CargoCodigo = item.CARGO_CODIGO;
-                    itemResult.CodigoIcp = item.CODIGO_ICP;
-
-                    itemResult.Sueldo = item.SUELDO;
-                    itemResult.DescripcionCargo = item.DESCRIPCION_CARGO;
-                    itemResult.CodigoTipoNomina = item.CODIGO_TIPO_NOMINA;
-                    itemResult.TipoNomina = item.TIPO_NOMINA;
-
-                    itemResult.TipoCuentaId = item.TIPO_CUENTA_ID;
-                    itemResult.DescripcionTipoCuenta = item.DESCRIPCION_TIPO_CUENTA;
-                    itemResult.BancoId = item.BANCO_ID;
-                    itemResult.DescripcionBanco = item.DESCRIPCION_BANCO;
-                    itemResult.NoCuenta = item.NO_CUENTA;
-
-
-                    itemResult.FechaNominaMov = item.FECHA_NOMINA_MOV.ToShortDateString();
-                    itemResult.Complemento = item.COMPLEMENTO;
-                    itemResult.Tipo = item.TIPO;
-                    itemResult.Monto = item.MONTO;
-                    itemResult.StatusMov = item.ESTATUS_MOV;
-                    itemResult.Codigo = item.CODIGO;
-                    itemResult.Denominacion = item.DENOMINACION;
-                    itemResult.CodigoPeriodo = (int)item.CODIGO_PERIODO;
-                    itemResult.Avatar = "";
-                    itemResult.UnidadEjecutora = item.UNIDAD_EJECUTORA;
-                    if (item.ESTADO_CIVIL == null)
-                    {
-                        item.ESTADO_CIVIL = "0";
-                    }
-                    int idStadoCivil = Int32.Parse(item.ESTADO_CIVIL);
-                    itemResult.EstadoCivil = await _descriptivaServices.GetDescripcionByCodigoDescriptiva(idStadoCivil);
-
-                    result.Add(itemResult);
-
-                }
-                catch (Exception ex)
-                {
-                    var msg = ex.Message;
-                }
-               
-            }*/
-
+         
          
 
         }

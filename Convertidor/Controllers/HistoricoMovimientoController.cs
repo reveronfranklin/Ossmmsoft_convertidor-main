@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using Ganss.Excel;
 using Convertidor.Utility;
 using NPOI.HPSF;
+using Convertidor.Data.Repository.Rh;
+using Convertidor.Data.Interfaces.RH;
 
 namespace Convertidor.Controllers
 {
@@ -26,16 +28,23 @@ namespace Convertidor.Controllers
        
         private readonly IRhHistoricoMovimientoService _historicoNominaService;
         private readonly IRhTipoNominaService    _tipoNominaService;
+        private readonly IRhProcesoDetalleRepository _rhProcesoDetalleRepository;
+        private readonly IRhConceptosRepository _rhConceptosRepository;
+
         private readonly IConfiguration _configuration;
         public HistoricoMovimientoController(IRhHistoricoMovimientoService historicoNominaService,
                                              IRhTipoNominaService tipoNominaService,
-                                             IConfiguration configuration
+                                             IConfiguration configuration,
+                                             IRhProcesoDetalleRepository rhProcesoDetalleRepository,
+                                             IRhConceptosRepository rhConceptosRepository
                                          )
         {
           
             _historicoNominaService = historicoNominaService;
             _configuration = configuration;
             _tipoNominaService = tipoNominaService;
+            _rhProcesoDetalleRepository = rhProcesoDetalleRepository;
+            _rhConceptosRepository = rhConceptosRepository;
         }
 
   
@@ -60,10 +69,9 @@ namespace Convertidor.Controllers
         {
             ResultDto<List<ListHistoricoMovimientoDto>> resultDto = new ResultDto<List<ListHistoricoMovimientoDto>>(null);
          
-                List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
+            List<ListHistoricoMovimientoDto> result = new List<ListHistoricoMovimientoDto>();
 
-
-                if (!DateValidate.IsDate(filter.Desde.ToShortDateString()))
+            if (!DateValidate.IsDate(filter.Desde.ToShortDateString()))
             {
                 resultDto.Data = null;
                 resultDto.IsValid = false;
@@ -79,17 +87,31 @@ namespace Convertidor.Controllers
                 resultDto.LinkData = "";
                 return Ok(resultDto);
             }
+            if(filter.CodigoProceso > 0)
+            {
+                var conceptosProceso = await _rhProcesoDetalleRepository.GetByCodigoProceso(filter.CodigoProceso);
+                List<ListConceptosDto> resultConcepto = new List<ListConceptosDto>();
+                foreach (var item in conceptosProceso)
+                {
+                    ListConceptosDto itemConcepto = new ListConceptosDto();
+                    var concepto = await _rhConceptosRepository.GetByCodigo(item.CODIGO_CONCEPTO);
+                    itemConcepto.Codigo = concepto.CODIGO;
+                    itemConcepto.CodigoConcepto = concepto.CODIGO_CONCEPTO;
+                    itemConcepto.CodigoTipoNomina = concepto.CODIGO_TIPO_NOMINA;
+                    itemConcepto.Denominacion = concepto.DENOMINACION;
+                    resultConcepto.Add(itemConcepto);
+                }
 
-
-           
-
+                filter.CodigoConcepto = resultConcepto;
+             }
+            
             if (filter.CodigoPersona > 0)
             {
                 result = await _historicoNominaService.GetByFechaNominaPersona(filter.Desde, filter.Hasta, filter.CodigoPersona);
 
                 if (filter.CodigoTipoNomina.Count > 0)
                 {
-                   
+
                     List<ListHistoricoMovimientoDto> resultTipoNomina = new List<ListHistoricoMovimientoDto>();
                     foreach (var item in filter.CodigoTipoNomina)
                     {
@@ -107,8 +129,8 @@ namespace Convertidor.Controllers
                     List<ListHistoricoMovimientoDto> resultConcepto = new List<ListHistoricoMovimientoDto>();
                     foreach (var item in filter.CodigoConcepto)
                     {
-                        
-                        var concepto = result.Where(x => x.Codigo.Trim() == item.Codigo.Trim()).ToList();
+
+                        var concepto = result.Where(x => x.CodigoTipoNomina == item.CodigoTipoNomina && x.Codigo.Trim() == item.Codigo.Trim()).ToList();
                         if (concepto.Count > 0) resultConcepto.AddRange(concepto);
                     }
                     result = resultConcepto;
@@ -155,7 +177,7 @@ namespace Convertidor.Controllers
                     List<ListHistoricoMovimientoDto> resultConcepto = new List<ListHistoricoMovimientoDto>();
                     foreach (var item in filter.CodigoConcepto)
                     {
-                        var concepto = result.Where(x => x.Codigo.Trim() == item.Codigo.Trim()).ToList();
+                        var concepto = result.Where(x => x.CodigoTipoNomina == item.CodigoTipoNomina && x.Codigo.Trim() == item.Codigo.Trim()).ToList();
                         if (concepto.Count > 0) resultConcepto.AddRange(concepto);
                     }
                     result = resultConcepto;
@@ -163,6 +185,11 @@ namespace Convertidor.Controllers
                 }
 
             }
+            
+
+           
+
+           
 
 
            

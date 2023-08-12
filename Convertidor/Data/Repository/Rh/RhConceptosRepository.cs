@@ -45,8 +45,23 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<RH_CONCEPTOS> GetByCodigo(int codigoConcepto)
+        {
+            try
+            {
 
-       
+                var result = await _context.RH_CONCEPTOS.DefaultIfEmpty().Where(tn => tn.CODIGO_CONCEPTO == codigoConcepto).FirstOrDefaultAsync();
+                return (RH_CONCEPTOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+
 
         public async Task<List<RH_CONCEPTOS>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta)
         {

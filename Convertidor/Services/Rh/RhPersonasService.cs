@@ -210,7 +210,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 itemResult.CodigoPersona = item.CODIGO_PERSONA;
-                
+                itemResult.Cedula = item.CEDULA;
                 itemResult.Nombre = item.NOMBRE;
                 itemResult.Apellido = item.APELLIDO;
                 //itemResult.Conceptos = await _rhConceptosService.GetConceptosByCodigoPersona(item.CODIGO_PERSONA);

@@ -9,6 +9,7 @@ namespace Convertidor.Dtos
         public DateTime Hasta { get; set; }
         public List<ListTipoNominaDto>? CodigoTipoNomina { get; set; }
         public int CodigoPersona { get; set; }
+        public int CodigoProceso { get; set; }
         public List<ListConceptosDto>? CodigoConcepto { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
