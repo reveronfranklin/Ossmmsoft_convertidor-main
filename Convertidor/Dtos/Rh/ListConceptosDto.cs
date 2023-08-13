@@ -9,7 +9,7 @@ namespace Convertidor.Dtos.Rh
         public string Codigo { get; set; } = string.Empty;
         public int CodigoTipoNomina { get; set; }
         public string Denominacion { get; set; } = string.Empty;
-        public string Dercripcion { get { return $"{Codigo.Trim()} {Denominacion.Trim()}"; } }
+        public string Descripcion { get { return $"{Codigo.Trim()} {Denominacion.Trim()}"; } }
     }
 }
 

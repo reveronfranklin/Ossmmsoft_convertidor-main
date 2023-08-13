@@ -8,8 +8,9 @@ namespace Convertidor.Data.Entities.Rh
         [Key]
         public int CODIGO_DETALLE_PROCESO { get; set; }
         public int CODIGO_PROCESO { get; set; } 
-        public int CODIGO_CONCEPTO { get; set; } 
-
+        public int CODIGO_CONCEPTO { get; set; }
+        public int CODIGO_TIPO_NOMINA { get; set; }
+        
     }
 }
 

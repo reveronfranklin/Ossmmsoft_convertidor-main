@@ -60,6 +60,21 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<RH_CONCEPTOS> GetByCodigoTipoNomina(int codigoConcepto,int codigoTipoNomina)
+        {
+            try
+            {
+
+                var result = await _context.RH_CONCEPTOS.DefaultIfEmpty().Where(tn => tn.CODIGO_TIPO_NOMINA == codigoTipoNomina && tn.CODIGO_CONCEPTO == codigoConcepto).FirstOrDefaultAsync();
+                return (RH_CONCEPTOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
 
 
 

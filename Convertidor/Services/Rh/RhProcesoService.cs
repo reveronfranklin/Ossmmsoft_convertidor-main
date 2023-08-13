@@ -22,13 +22,19 @@ namespace Convertidor.Data.Repository.Rh
 
    
         private readonly IRhProcesoRepository _repository;
+        private readonly IRhProcesoDetalleRepository _rhProcesoDetalleRepository;
+        private readonly IRhConceptosRepository _rhConceptosRepository;
 
         private readonly IMapper _mapper;
 
-        public RhProcesosService(IRhProcesoRepository repository)
+        public RhProcesosService(IRhProcesoRepository repository,
+                                 IRhProcesoDetalleRepository rhProcesoDetalleRepository, IRhConceptosRepository rhConceptosRepository)
         {
             _repository = repository;
-          
+            _rhProcesoDetalleRepository = rhProcesoDetalleRepository;
+            _rhConceptosRepository = rhConceptosRepository;
+
+
         }
        
         public async Task<RH_PROCESOS> GetByCodigo(int codigoProcesso)
@@ -55,7 +61,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 var procesos = await _repository.GetAll();
-                var listDto = MapListProceso(procesos);
+                var listDto = await MapListProceso(procesos);
 
                 result.Data = listDto;
                 result.IsValid = true;
@@ -77,7 +83,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
 
-        private List<RhprocesosDto> MapListProceso(List<RH_PROCESOS> dto)
+        private async Task<List<RhprocesosDto>> MapListProceso(List<RH_PROCESOS> dto)
         {
 
             List<RhprocesosDto> result = new List<RhprocesosDto>();
@@ -94,6 +100,31 @@ namespace Convertidor.Data.Repository.Rh
 
                  });
                 result = resultNew.ToList();
+
+                foreach (var item in result)
+                {
+                    var detalleConceptos = await _rhProcesoDetalleRepository.GetByCodigoProceso(item.CodigoProceso);
+                    if (detalleConceptos.Count > 0)
+                    {
+                        List<ListConceptosDto> listConceptosDto = new List<ListConceptosDto>();
+                        foreach (var itemDetalle in detalleConceptos)
+                        {
+                            var concepto = await _rhConceptosRepository.GetByCodigoTipoNomina(itemDetalle.CODIGO_CONCEPTO, itemDetalle.CODIGO_TIPO_NOMINA);
+                            ListConceptosDto itemlistConceptosDto = new ListConceptosDto();
+                            itemlistConceptosDto.Codigo = concepto.CODIGO;
+                            itemlistConceptosDto.CodigoConcepto = concepto.CODIGO_CONCEPTO;
+                            itemlistConceptosDto.CodigoTipoNomina = concepto.CODIGO_TIPO_NOMINA;
+                            itemlistConceptosDto.Denominacion = concepto.DENOMINACION;
+
+                            listConceptosDto.Add(itemlistConceptosDto);
+
+                        }
+                        item.Conceptos = listConceptosDto;
+                    }
+                }
+
+
+               
 
                 return result;
             }
