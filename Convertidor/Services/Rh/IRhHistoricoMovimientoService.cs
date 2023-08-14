@@ -1,4 +1,5 @@
 ﻿using System;
+using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Services.Rh
@@ -12,6 +13,9 @@ namespace Convertidor.Services.Rh
 
         Task<List<ListHistoricoMovimientoDto>> GetByFechaNomina(DateTime desde, DateTime hasta);
         Task<List<ListHistoricoMovimientoDto>> GetByFechaNominaPersona(DateTime desde, DateTime hasta, int idPersona);
+        Task<List<ListHistoricoMovimientoDto>> GetByProceso(FilterHistoricoNominaPeriodo filter);
+        Task<List<ListHistoricoMovimientoDto>> GetByIndividual(FilterHistoricoNominaPeriodo filter);
+        Task<List<ListHistoricoMovimientoDto>> GetByMasivo(FilterHistoricoNominaPeriodo filter);
     }
 }
 
