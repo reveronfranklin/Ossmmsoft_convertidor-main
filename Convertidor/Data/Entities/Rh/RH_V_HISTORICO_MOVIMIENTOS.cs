@@ -48,6 +48,8 @@ namespace Convertidor.Data.Entities.Rh
         public string DENOMINACION { get; set; } = string.Empty;
         public int PERIODO { get; set; }
         public int CODIGO_PERIODO { get; set; }
+        public int CODIGO_CONCEPTO { get; set; }
+        
 
 
 

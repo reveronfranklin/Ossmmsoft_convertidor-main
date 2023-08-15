@@ -18,6 +18,7 @@ using Convertidor.Utility;
 using NPOI.HPSF;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Data.Interfaces.RH;
+using Convertidor.Data.Entities.Rh;
 
 namespace Convertidor.Controllers
 {
@@ -107,14 +108,16 @@ namespace Convertidor.Controllers
                     break;
             }
 
-          
-         
+           
+
 
             result = result.OrderBy(x => x.FechaNomina).ToList();
 
             if (result.Count() > 0)
             {
 
+                List<ListHistoricoMovimientoExcelDto> excelData = new List<ListHistoricoMovimientoExcelDto>();
+                excelData = await MapListHistoricoMovimiento(result);
                 ExcelMapper mapper = new ExcelMapper();
 
 
@@ -126,7 +129,7 @@ namespace Convertidor.Controllers
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
 
 
-                mapper.Save(newFile, result, $"HistoricoNomina", true);
+                mapper.Save(newFile, excelData, $"HistoricoNomina", true);
                 resultDto.Data = result;
                 resultDto.IsValid = true;
                 resultDto.Message = "";
@@ -228,5 +231,67 @@ namespace Convertidor.Controllers
         public void Delete(int id)
         {
         }
+
+        private async Task<List<ListHistoricoMovimientoExcelDto>> MapListHistoricoMovimiento(List<ListHistoricoMovimientoDto> dto)
+        {
+
+            List<ListHistoricoMovimientoExcelDto> result = new List<ListHistoricoMovimientoExcelDto>();
+           
+            try
+            {
+                var resultNew = dto
+
+                 .Select(e => new ListHistoricoMovimientoExcelDto
+                 {
+                  
+                   
+                     Cedula = e.Cedula,
+                     Nombre = e.Nombre,
+                     Apellido = e.Apellido,
+                     Nacionalidad = e.Nacionalidad,
+                     DescripcionNacionalidad = e.DescripcionNacionalidad,
+                     Sexo = e.Sexo,
+                     Status = e.Status,
+                     DescripcionStatus = e.DescripcionStatus,
+                     Sueldo = e.Sueldo,
+                     DescripcionCargo = e.DescripcionCargo,
+                   
+                     TipoNomina = e.TipoNomina,
+                   
+                     DescripcionTipoCuenta = e.DescripcionTipoCuenta,
+                   
+                     DescripcionBanco = e.DescripcionBanco,
+                     NoCuenta = e.NoCuenta,
+                     FechaNominaMov = e.FechaNominaMov,
+                     FechaNomina = e.FechaNomina,
+                     Complemento = e.Complemento,
+                     Tipo = e.Tipo,
+                     Monto = e.Monto,
+                     StatusMov = e.StatusMov,
+                     Codigo = e.Codigo,
+                     Denominacion = e.Denominacion,
+      
+                     UnidadEjecutora = e.UnidadEjecutora,
+                     EstadoCivil = e.EstadoCivil
+
+                 });
+                result = resultNew.ToList();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+
+
+
+
+
+        }
+
     }
 }

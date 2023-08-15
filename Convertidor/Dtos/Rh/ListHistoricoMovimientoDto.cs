@@ -55,5 +55,36 @@ namespace Convertidor.Dtos.Rh
         public string SearchText { get { return $"{TipoNomina}-{Cedula}-{Nombre}-{UnidadEjecutora}-{Apellido}-{DescripcionNacionalidad}-{DescripcionCargo}-{EstadoCivil}-{FechaNominaMov}-{Codigo}-{Denominacion}"; } }
 
     }
+    public class ListHistoricoMovimientoExcelDto
+    {
+       
+        public int Cedula { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;    
+        public string Nacionalidad { get; set; } = string.Empty;
+        public string DescripcionNacionalidad { get; set; } = string.Empty;
+        public string Sexo { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string DescripcionStatus { get; set; } = string.Empty;
+        public string DescripcionSexo { get; set; } = string.Empty;
+        public decimal Sueldo { get; set; }
+        public string DescripcionCargo { get; set; } = string.Empty;
+        public string TipoNomina { get; set; } = string.Empty;
+        public string DescripcionTipoCuenta { get; set; } = string.Empty;
+        public string DescripcionBanco { get; set; } = string.Empty;
+        public string NoCuenta { get; set; } = string.Empty;
+        public DateTime FechaNomina { get; set; }
+        public DateTime FechaIngreso { get; set; }
+        public string FechaNominaMov { get; set; } = string.Empty;
+        public string Complemento { get; set; } = string.Empty;
+        public string Tipo { get; set; } = string.Empty;
+        public decimal Monto { get; set; }
+        public string StatusMov { get; set; } = string.Empty;
+        public string Codigo { get; set; } = string.Empty;
+        public string Denominacion { get; set; } = string.Empty;
+        public string UnidadEjecutora { get; set; } = string.Empty;
+        public string? EstadoCivil { get; set; } = string.Empty;
+      
+    }
 }
 
