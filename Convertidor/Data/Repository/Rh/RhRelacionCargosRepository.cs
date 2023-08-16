@@ -1,8 +1,10 @@
 ﻿using System;
 using Convertidor.Data.Entities;
 using Convertidor.Data.Entities.Presupuesto;
+using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.Data.SqlClient;
@@ -11,12 +13,12 @@ using static Convertidor.Dtos.PetroBsGetDto;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
-	public class PRE_RELACION_CARGOSRepository : IPRE_RELACION_CARGOSRepository
+	public class RhRelacionCargosRepository : IRhRelacionCargosRepository
     {
 		
-        private readonly DataContextPre _context;
+        private readonly DataContext _context;
         private readonly IConfiguration _configuration;
-        public PRE_RELACION_CARGOSRepository(DataContextPre context, IConfiguration configuration)
+        public RhRelacionCargosRepository(DataContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
@@ -24,12 +26,12 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
      
-        public async Task<List<PRE_RELACION_CARGOS>> GetAll()
+        public async Task<List<RH_RELACION_CARGOS>> GetAll()
         {
             try
             {
 
-                var result = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.RH_RELACION_CARGOS.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -39,12 +41,12 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
-        public async Task<List<PRE_RELACION_CARGOS>> GetAllByCodigoPresupuesto(int codigoPresupuesto)
+        public async Task<List<RH_RELACION_CARGOS>> GetAllByPreCodigoRelacionCargos(int preCodigoRelaciconCargo)
         {
             try
             {
 
-                var result = await _context.PRE_RELACION_CARGOS.Where(x=>x.CODIGO_PRESUPUESTO==codigoPresupuesto).DefaultIfEmpty().ToListAsync();
+                var result = await _context.RH_RELACION_CARGOS.Where(x=>x.CODIGO_RELACION_CARGO_PRE== preCodigoRelaciconCargo).DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -56,36 +58,17 @@ namespace Convertidor.Data.Repository.Presupuesto
         }
 
 
-        public async Task<PRE_RELACION_CARGOS> GetByPresupuestoIcpCargo(int codigoPresupuesto,int codigoIcp,int codigoCargo)
+    
+
+        public async Task<RH_RELACION_CARGOS> GetByCodigo(int codigoRelacionCargo)
         {
             try
             {
 
-                var result = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_ICP==codigoIcp && x.CODIGO_CARGO == codigoCargo)
-                    .FirstOrDefaultAsync();
-                return (PRE_RELACION_CARGOS)result!;
-
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-                return null;
-            }
-
-
-
-        }
-
-        public async Task<PRE_RELACION_CARGOS> GetByCodigo(int codigoRelacionCargo)
-        {
-            try
-            {
-
-                var result = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty()
+                var result = await _context.RH_RELACION_CARGOS.DefaultIfEmpty()
                     .Where(x => x.CODIGO_RELACION_CARGO == codigoRelacionCargo)
                     .FirstOrDefaultAsync();
-                return (PRE_RELACION_CARGOS)result!;
+                return (RH_RELACION_CARGOS)result!;
                
             }
             catch (Exception ex)
@@ -98,64 +81,14 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<List<PRE_RELACION_CARGOS>> GetByCodigoCargo(int codigoCargo)
-        {
-            try
-            {
-
-                var result = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_CARGO == codigoCargo)
-                    .ToListAsync();
-                return (List<PRE_RELACION_CARGOS>)result!;
-
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-                return null;
-            }
-
-
-
-        }
-
-        public async Task<ResultDto<PRE_RELACION_CARGOS>> GetByIcp(int codigoIcp)
-        {
-
-            ResultDto<PRE_RELACION_CARGOS> result = new ResultDto<PRE_RELACION_CARGOS>(null);
-
-            try
-            {
-
-                var presupuesto = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_ICP == codigoIcp)
-                    .FirstOrDefaultAsync();
-                result.Data = presupuesto;
-                result.IsValid = true;
-                result.Message = "";
-                return result;
-               
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.InnerException.Message;
-                return result;
-               
-            }
-
-
-
-        }
-
+    
 
   
+  
 
-        public async Task<ResultDto<PRE_RELACION_CARGOS>> Add(PRE_RELACION_CARGOS entity)
+        public async Task<ResultDto<RH_RELACION_CARGOS>> Add(RH_RELACION_CARGOS entity)
         {
-            ResultDto<PRE_RELACION_CARGOS> result = new ResultDto<PRE_RELACION_CARGOS>(null);
+            ResultDto<RH_RELACION_CARGOS> result = new ResultDto<RH_RELACION_CARGOS>(null);
             try
             {
 
@@ -163,7 +96,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var empresString = @settings.EmpresaConfig;
                 var empresa = Int32.Parse(empresString);
                 entity.CODIGO_EMPRESA = empresa;
-                await _context.PRE_RELACION_CARGOS.AddAsync(entity);
+                await _context.RH_RELACION_CARGOS.AddAsync(entity);
                 _context.SaveChanges();
 
 
@@ -186,20 +119,20 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<ResultDto<PRE_RELACION_CARGOS>> Update(PRE_RELACION_CARGOS entity)
+        public async Task<ResultDto<RH_RELACION_CARGOS>> Update(RH_RELACION_CARGOS entity)
         {
-            ResultDto<PRE_RELACION_CARGOS> result = new ResultDto<PRE_RELACION_CARGOS>(null);
+            ResultDto<RH_RELACION_CARGOS> result = new ResultDto<RH_RELACION_CARGOS>(null);
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var empresString = @settings.EmpresaConfig;
             var empresa = Int32.Parse(empresString);
             try
             {
-                PRE_RELACION_CARGOS entityUpdate = await GetByCodigo(entity.CODIGO_RELACION_CARGO);
+                RH_RELACION_CARGOS entityUpdate = await GetByCodigo(entity.CODIGO_RELACION_CARGO);
                 if (entityUpdate != null)
                 {
 
                     entityUpdate.CODIGO_EMPRESA = empresa;
-                    _context.PRE_RELACION_CARGOS.Update(entity);
+                    _context.RH_RELACION_CARGOS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -216,11 +149,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                 return result;
             }
 
-
-
-
-
-
         }
 
         public async Task<string> Delete(int codigoRelacionCargo)
@@ -228,10 +156,10 @@ namespace Convertidor.Data.Repository.Presupuesto
 
             try
             {
-                PRE_RELACION_CARGOS entity = await GetByCodigo(codigoRelacionCargo);
+                RH_RELACION_CARGOS entity = await GetByCodigo(codigoRelacionCargo);
                 if (entity != null)
                 {
-                    _context.PRE_RELACION_CARGOS.Remove(entity);
+                    _context.RH_RELACION_CARGOS.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -252,7 +180,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
                 int result = 0;
-                var last = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty()
+                var last = await _context.RH_RELACION_CARGOS.DefaultIfEmpty()
                     .OrderByDescending(x => x.CODIGO_RELACION_CARGO)
                     .FirstOrDefaultAsync();
                 if (last == null)

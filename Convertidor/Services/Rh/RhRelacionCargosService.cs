@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Convertidor.Data.Entities.Presupuesto;
+using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
@@ -13,41 +15,50 @@ using NuGet.Packaging;
 
 namespace Convertidor.Services.Presupuesto
 {
-	public class PreRelacionCargosService: IPreRelacionCargosService
+	public class RhRelacionCargosService: IRhRelacionCargosService
     {
 
-      
-        private readonly IPRE_RELACION_CARGOSRepository _repository;
+        private readonly IRhRelacionCargosRepository _repository;
+        private readonly IPRE_RELACION_CARGOSRepository _preRelacionCargosRepository;
+        private readonly IRhPersonasRepository _rhPersonasRepository;
         private readonly IPreCargosRepository _preCargoRepository;
+
         private readonly IPRE_PRESUPUESTOSRepository _prePresupuestoRepository;
         private readonly IPreDescriptivaRepository _repositoryPreDescriptiva;
         private readonly IPRE_RELACION_CARGOSRepository _preRelacionCargoRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _preICPRepository;
+        private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
+ 
         private readonly IConfiguration _configuration;
-        public PreRelacionCargosService(IPRE_RELACION_CARGOSRepository repository,
+        public RhRelacionCargosService(IRhRelacionCargosRepository repository,
+                                        IPRE_RELACION_CARGOSRepository preRelacionCargosRepository,
                                         IPreCargosRepository preCargoRepository,
+                                        IRhPersonasRepository rhPersonasRepository,
                                         IPRE_PRESUPUESTOSRepository prePresupuestoRepository,
                                       IConfiguration configuration,
                                       IPreDescriptivaRepository repositoryPreDescriptiva,
                                       IPRE_INDICE_CAT_PRGRepository preICPRepository,
-                                      IPRE_RELACION_CARGOSRepository preRelacionCargoRepository)
+                                      IPRE_RELACION_CARGOSRepository preRelacionCargoRepository,
+                                      IRhTipoNominaRepository rhTipoNominaRepository)
 		{
             _repository = repository;
             _preCargoRepository = preCargoRepository;
+            _rhPersonasRepository = rhPersonasRepository;
             _configuration = configuration;
             _repositoryPreDescriptiva = repositoryPreDescriptiva;
             _preRelacionCargoRepository = preRelacionCargoRepository;
             _preICPRepository = preICPRepository;
             _prePresupuestoRepository = prePresupuestoRepository;
-
+            _preRelacionCargosRepository = preRelacionCargosRepository;
+            _rhTipoNominaRepository = rhTipoNominaRepository;
 
         }
 
 
-        public async Task<ResultDto<List<PreRelacionCargoGetDto>>> GetAll()
+        public async Task<ResultDto<List<RhRelacionCargoDto>>> GetAll()
         {
 
-            ResultDto<List<PreRelacionCargoGetDto>> result = new ResultDto<List<PreRelacionCargoGetDto>>(null);
+            ResultDto<List<RhRelacionCargoDto>> result = new ResultDto<List<RhRelacionCargoDto>>(null);
             try
             {
 
@@ -57,11 +68,11 @@ namespace Convertidor.Services.Presupuesto
 
                 if (relacionCargo.Count() > 0)
                 {
-                    List<PreRelacionCargoGetDto> listDto = new List<PreRelacionCargoGetDto>();
+                    List<RhRelacionCargoDto> listDto = new List<RhRelacionCargoDto>();
 
                     foreach (var item in relacionCargo)
                     {
-                        var dto = await MapPreRelacionCargo(item);
+                        var dto = await MapRhRelacionCargo(item);
                         listDto.Add(dto);
                     }
 
@@ -93,65 +104,33 @@ namespace Convertidor.Services.Presupuesto
 
 
 
-        public async Task<ResultDto<List<PreRelacionCargoGetDto>>> GetAllByPresupuesto(FilterByPresupuestoDto filter)
+        public async Task<ResultDto<List<RhRelacionCargoDto>>> GetAllByPreRelacionCargo(int codigoPreRelacionCargo)
         {
 
-            ResultDto<List<PreRelacionCargoGetDto>> result = new ResultDto<List<PreRelacionCargoGetDto>>(null);
+            ResultDto<List<RhRelacionCargoDto>> result = new ResultDto<List<RhRelacionCargoDto>>(null);
             try
             {
 
-                if (filter.CodigoPresupuesto == 0)
-                {
-                    var lastPresupuesto = await _prePresupuestoRepository.GetLast();
-                    if (lastPresupuesto != null) filter.CodigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
-                }
+               
 
-                var cargos = await _repository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+                var rhRelacionCargos = await _repository.GetAllByPreCodigoRelacionCargos(codigoPreRelacionCargo);
 
-                /*if (filter.CodigoIcp == 0)
+               
+
+
+                if (rhRelacionCargos.Count() > 0)
                 {
-                    var icps  = await _preICPRepository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
-                    if (icps.Count > 0)
+                    List<RhRelacionCargoDto> listDto = new List<RhRelacionCargoDto>();
+
+                    foreach (var item in rhRelacionCargos)
                     {
-                        filter.CodigoIcp = icps.FirstOrDefault().CODIGO_ICP;
-                    }
-                    
-                }*/
-
-                if (filter.CodigoIcp != null && filter.CodigoIcp > 0)
-                {
-                    cargos = cargos.Where(x => x.CODIGO_ICP == filter.CodigoIcp).ToList();
-                }
-
-
-                if (cargos.Count() > 0)
-                {
-                    List<PreRelacionCargoGetDto> listDto = new List<PreRelacionCargoGetDto>();
-
-                    foreach (var item in cargos)
-                    {
-                        var dto = await MapPreRelacionCargo(item);
+                        var dto = await MapRhRelacionCargo(item);
                         listDto.Add(dto);
                     }
 
-                    listDto = listDto.OrderBy(x => x.IcpConcat).ToList();
-                    ExcelMapper mapper = new ExcelMapper();
-
-
-                    var settings = _configuration.GetSection("Settings").Get<Settings>();
-
-
-                    var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
-                    var fileName = $"RelacionCargos {filter.CodigoPresupuesto.ToString()}-{filter.CodigoIcp.ToString()}-{DateTime.Now.ToLongDateString()}.xlsx";
-                    string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-
-
-                    mapper.Save(newFile, listDto, $"RelacionCargos", true);
-                 
-                    result.LinkData = $"/ExcelFiles/{fileName}";
 
                     result.Data = listDto;
-
+                    result.LinkData = "";
                     result.IsValid = true;
                     result.Message = "";
                 }
@@ -177,15 +156,21 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-        public async Task<ResultDto<PreRelacionCargoGetDto>> Update(PreRelacionCargoUpdateDto dto)
+        public async Task<ResultDto<RhRelacionCargoDto>> Update(RhRelacionCargoUpdateDto dto)
         {
 
-            ResultDto<PreRelacionCargoGetDto> result = new ResultDto<PreRelacionCargoGetDto>(null);
+            ResultDto<RhRelacionCargoDto> result = new ResultDto<RhRelacionCargoDto>(null);
             try
             {
 
-
-
+                var prerRelacionCargoUpdate = await _preRelacionCargoRepository.GetByCodigo(dto.CodigoRelacionCargoPre);
+                if (prerRelacionCargoUpdate == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Pre Relacion Cargo no existe";
+                    return result;
+                }
                 var relacionCargoUpdate = await _repository.GetByCodigo(dto.CodigoRelacionCargo);
                 if (relacionCargoUpdate == null)
                 {
@@ -194,12 +179,12 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Relacion Cargo no existe";
                     return result;
                 }
-                var presupuesto = await _prePresupuestoRepository.GetByCodigo(13, dto.CodigoPresupuesto);
-                if (presupuesto == null)
+                var persona = await _rhPersonasRepository.GetCodogoPersona(dto.CodigoPersona);
+                if (persona == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Presupuesto no existe";
+                    result.Message = "Persona no existe";
                     return result;
                 }
 
@@ -212,22 +197,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var icp = await _preICPRepository.GetByCodigo(dto.CodigoIcp);
-                if (icp == null)
+                var tipoNomina = await _rhTipoNominaRepository.GetByCodigo(dto.TipoNomina);
+                if (tipoNomina == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo ICP no existe";
+                    result.Message = "Tipo de Nomina no existe";
                     return result;
                 }
 
-                if (dto.Cantidad <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cantidad debe ser Mayor a Cero";
-                    return result;
-                }
+
                 if (dto.Sueldo <= 0)
                 {
                     result.Data = null;
@@ -236,25 +215,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-
-                relacionCargoUpdate.ANO = presupuesto.ANO;
-                relacionCargoUpdate.ESCENARIO = dto.Escenario;
-                relacionCargoUpdate.CODIGO_CARGO = dto.CodigoCargo;
-                relacionCargoUpdate.CODIGO_ICP = dto.CodigoIcp;
-                relacionCargoUpdate.CANTIDAD = dto.Cantidad;
+            
+                relacionCargoUpdate.CODIGO_PERSONA = dto.CodigoPersona;
+                relacionCargoUpdate.CODIGO_TIPO_NOMINA = dto.TipoNomina;
                 relacionCargoUpdate.SUELDO = dto.Sueldo;
-                relacionCargoUpdate.COMPENSACION = dto.Compensacion;
-                relacionCargoUpdate.PRIMA = dto.Prima;
-                relacionCargoUpdate.OTRO = dto.Otro;
-                relacionCargoUpdate.EXTRA1 = dto.Extra1;
-                relacionCargoUpdate.EXTRA2 = dto.Extra2;
-                relacionCargoUpdate.EXTRA3 = dto.Extra3;
+                relacionCargoUpdate.FECHA_INI = Convert.ToDateTime(dto.FechaIni, CultureInfo.InvariantCulture);
+                relacionCargoUpdate.FECHA_FIN = Convert.ToDateTime(dto.FechaFin, CultureInfo.InvariantCulture);     
                 relacionCargoUpdate.FECHA_UPD = DateTime.Now;
-
-
                 await _repository.Update(relacionCargoUpdate);
 
-                var resultDto = await MapPreRelacionCargo(relacionCargoUpdate);
+                var resultDto = await MapRhRelacionCargo(relacionCargoUpdate);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -271,10 +241,10 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
-        public async Task<ResultDto<PreRelacionCargoGetDto>> UpdateField(UpdateFieldDto dto)
+        public async Task<ResultDto<RhRelacionCargoDto>> UpdateField(UpdateFieldDto dto)
         {
 
-            ResultDto<PreRelacionCargoGetDto> result = new ResultDto<PreRelacionCargoGetDto>(null);
+            ResultDto<RhRelacionCargoDto> result = new ResultDto<RhRelacionCargoDto>(null);
             try
             {
                 CultureInfo cultures = new CultureInfo("en-US");
@@ -297,10 +267,7 @@ namespace Convertidor.Services.Presupuesto
                     {
                         relacionCargoUpdate.SUELDO = val;
                     }
-                    if (dto.Field == "cantidad")
-                    {
-                        relacionCargoUpdate.CANTIDAD = (int)val;
-                    }
+              
 
 
                 }
@@ -321,7 +288,7 @@ namespace Convertidor.Services.Presupuesto
 
                 await _repository.Update(relacionCargoUpdate);
 
-                var resultDto =await  MapPreRelacionCargo(relacionCargoUpdate);
+                var resultDto =await  MapRhRelacionCargo(relacionCargoUpdate);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -339,47 +306,32 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public async Task<ResultDto<PreRelacionCargoGetDto>> Create(PreRelacionCargoUpdateDto dto)
+        public async Task<ResultDto<RhRelacionCargoDto>> Create(RhRelacionCargoUpdateDto dto)
         {
 
-            ResultDto<PreRelacionCargoGetDto> result = new ResultDto<PreRelacionCargoGetDto>(null);
+            ResultDto<RhRelacionCargoDto> result = new ResultDto<RhRelacionCargoDto>(null);
             try
             {
 
-                var presupuesto = await _prePresupuestoRepository.GetByCodigo(13, dto.CodigoPresupuesto);
-                if (presupuesto == null)
+                var preRelacionCargo = await _preRelacionCargoRepository.GetByCodigo(dto.CodigoRelacionCargoPre);
+                if (preRelacionCargo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Presupuesto no existe";
+                    result.Message = $"No existe la relacion de cargo en presupuesto ";
+                    return result;
+                }
+                var persona = await _rhPersonasRepository.GetCodogoPersona(dto.CodigoPersona);
+                if (persona == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Persona no existe";
                     return result;
                 }
 
-                var cargo = await _preCargoRepository.GetByCodigo(dto.CodigoCargo);
-                if (cargo == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cargo no existe";
-                    return result;
-                }
+             
 
-                var icp = await _preICPRepository.GetByCodigo(dto.CodigoIcp);
-                if (icp == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo ICP no existe";
-                    return result;
-                }
-
-                if (dto.Cantidad <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cantidad debe ser Mayor a Cero";
-                    return result;
-                }
                 if (dto.Sueldo <= 0)
                 {
                     result.Data = null;
@@ -388,36 +340,38 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var relacionCargo = _preRelacionCargoRepository.GetByPresupuestoIcpCargo(dto.CodigoPresupuesto, dto.CodigoIcp, dto.CodigoCargo);
-                if (relacionCargo!= null)
+                var tipoNomina = await _rhTipoNominaRepository.GetByCodigo(dto.TipoNomina);
+                if (tipoNomina == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = $"Ya existe una relacion de cargos para este Icp y Cargo ";
+                    result.Message = "Tipo de Nomina no existe";
                     return result;
                 }
 
 
-                PRE_RELACION_CARGOS entity = new PRE_RELACION_CARGOS();
+                RH_RELACION_CARGOS entity = new RH_RELACION_CARGOS();
                 entity.CODIGO_RELACION_CARGO = await _repository.GetNextKey();
-                entity.ANO = presupuesto.ANO;
-                entity.ESCENARIO = dto.Escenario;
-                entity.CODIGO_CARGO = dto.CodigoCargo;
-                entity.CODIGO_ICP = dto.CodigoIcp;
+                entity.CODIGO_RELACION_CARGO_PRE = preRelacionCargo.CODIGO_RELACION_CARGO;
+                entity.CODIGO_CARGO = preRelacionCargo.CODIGO_CARGO;
+                entity.CODIGO_ICP = preRelacionCargo.CODIGO_ICP;  
+                entity.CODIGO_PRESUPUESTO = preRelacionCargo.CODIGO_PRESUPUESTO;
+                entity.CODIGO_EMPRESA = preRelacionCargo.CODIGO_EMPRESA;
+                entity.CODIGO_TIPO_NOMINA = dto.TipoNomina;
                 entity.SUELDO = dto.Sueldo;
-                entity.COMPENSACION = dto.Compensacion;
-                entity.PRIMA = dto.Prima;
-                entity.OTRO = dto.Otro;
-                entity.EXTRA1 = dto.Extra1;
-                entity.EXTRA2 = dto.Extra2;
-                entity.EXTRA3 = dto.Extra3;
+                entity.CODIGO_PERSONA = dto.CodigoPersona;
+                entity.EXTRA1 ="";
+                entity.EXTRA2 ="";
+                entity.EXTRA3 = "";
+                entity.FECHA_FIN = Convert.ToDateTime(dto.FechaFin, CultureInfo.InvariantCulture);
+                entity.FECHA_INI = Convert.ToDateTime(dto.FechaIni, CultureInfo.InvariantCulture);
                 entity.FECHA_UPD = DateTime.Now;
                 entity.FECHA_INS = DateTime.Now;
-                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+             
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapPreRelacionCargo(created.Data);
+                    var resultDto = await MapRhRelacionCargo(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -448,56 +402,52 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
-        public async Task<PreRelacionCargoGetDto> MapPreRelacionCargo(PRE_RELACION_CARGOS item)
+        public FechaDto GetFechaDto(DateTime fecha)
         {
-            PreRelacionCargoGetDto dto = new PreRelacionCargoGetDto();
+            var FechaDesdeObj = new FechaDto();
+            FechaDesdeObj.Year = fecha.Year.ToString();
+            string month = "00" + fecha.Month.ToString();
+            string day = "00" + fecha.Day.ToString();
+            FechaDesdeObj.Month = month.Substring(month.Length - 2);
+            FechaDesdeObj.Day = day.Substring(month.Length - 2);
+
+            return FechaDesdeObj;
+        }
+
+        public async Task<RhRelacionCargoDto> MapRhRelacionCargo(RH_RELACION_CARGOS item)
+        {
+            RhRelacionCargoDto dto = new RhRelacionCargoDto();
             dto.CodigoRelacionCargo = item.CODIGO_RELACION_CARGO;
-            dto.Ano = item.ANO;
-            dto.Escenario = item.ESCENARIO;
-            dto.CodigoIcp = item.CODIGO_ICP;
-            dto.DenominacionIcp = "";
+            dto.CodigoRelacionCargoPre = item.CODIGO_RELACION_CARGO_PRE;
+            dto.TipoNomina = item.CODIGO_TIPO_NOMINA;
             dto.CodigoCargo = item.CODIGO_CARGO;
             dto.DenominacionCargo = "";
-            dto.Cantidad = item.CANTIDAD;
             dto.Sueldo = item.SUELDO;
-            dto.Compensacion = item.COMPENSACION;
-            dto.Prima = item.PRIMA;
-            dto.Otro = item.OTRO;
-            if (item.EXTRA1 == null) item.EXTRA1 = "";
-            if (item.EXTRA2 == null) item.EXTRA2 = "";
-            if (item.EXTRA3 == null) item.EXTRA3 = "";
-            dto.Extra1 = item.EXTRA1;
-            dto.Extra2 = item.EXTRA2;
-            dto.Extra3 = item.EXTRA3;
-            dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
-      
+            dto.FechaIni =item.FECHA_INI.ToString("u"); ;
+            dto.FechaFin = item.FECHA_FIN.ToString("u"); ;
+    
+
+        
+            FechaDto FechaIniObj = GetFechaDto(item.FECHA_INI);
+            dto.FechaIniObj = (FechaDto)FechaIniObj;
+            FechaDto FechaFinObj = GetFechaDto(item.FECHA_FIN);
+            dto.FechaFinObj = (FechaDto)FechaFinObj;
+
             var cargo = await _preCargoRepository.GetByCodigo(dto.CodigoCargo);
             if (cargo != null)
             {
                 dto.DenominacionCargo = cargo.DENOMINACION;
-               
-                dto.DescripcionTipoCargo = "";
-                var tipoCargo = await _repositoryPreDescriptiva.GetByCodigo(cargo.TIPO_CARGO_ID);
-                if (tipoCargo != null)
-                {
-                    dto.DescripcionTipoCargo = tipoCargo.DESCRIPCION;
-                }
-                dto.DescripcionTipoPersonal="";
-                var tipoPersonal = await _repositoryPreDescriptiva.GetByCodigo(cargo.TIPO_PERSONAL_ID);
-                if (tipoPersonal != null)
-                {
-                    dto.DescripcionTipoPersonal = tipoPersonal.DESCRIPCION;
-                }
 
             }
-
-            var icp = await _preICPRepository.GetByCodigo(item.CODIGO_ICP);
-            if (icp != null)
+            dto.CodigoPersona = item.CODIGO_PERSONA;
+            var persona = await _rhPersonasRepository.GetCodogoPersona(item.CODIGO_PERSONA);
+            if (persona != null)
             {
-                dto.DenominacionIcp = icp.DENOMINACION;
+                dto.Nombre = persona.NOMBRE;
+                dto.Apellido = persona.APELLIDO;
+                dto.Cedula = persona.CEDULA;
 
-                dto.IcpConcat = $"{icp.CODIGO_SECTOR}-{icp.CODIGO_PROGRAMA}-{icp.CODIGO_SUBPROGRAMA}-{icp.CODIGO_PROYECTO}-{icp.CODIGO_ACTIVIDAD}-{icp.CODIGO_OFICINA}";
-           
+               
             }
 
             return dto;
@@ -505,10 +455,10 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-        public async Task<ResultDto<PreRelacionCargoDeleteDto>> Delete(PreRelacionCargoDeleteDto dto)
+        public async Task<ResultDto<RhRelacionCargoDeleteDto>> Delete(RhRelacionCargoDeleteDto dto)
         {
 
-            ResultDto<PreRelacionCargoDeleteDto> result = new ResultDto<PreRelacionCargoDeleteDto>(null);
+            ResultDto<RhRelacionCargoDeleteDto> result = new ResultDto<RhRelacionCargoDeleteDto>(null);
             try
             {
 

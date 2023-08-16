@@ -31,6 +31,22 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async Task<RH_TIPOS_NOMINA> GetByCodigo(int codigoTipoNomina)
+        {
+            try
+            {
+
+                var result = await _context.RH_TIPOS_NOMINA.DefaultIfEmpty().Where(t => t.CODIGO_TIPO_NOMINA == codigoTipoNomina).FirstOrDefaultAsync();
+                return (RH_TIPOS_NOMINA)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<List<RH_TIPOS_NOMINA>> GetTipoNominaByCodigoPersona(int codigoPersona,DateTime desde,DateTime hasta)
         {
             try

@@ -15,6 +15,8 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<int> GetNextKey();
         Task<List<PRE_RELACION_CARGOS>> GetByCodigoCargo(int codigoCargo);
         Task<List<PRE_RELACION_CARGOS>> GetAllByCodigoPresupuesto(int codigoPresupuesto);
+
+        Task<PRE_RELACION_CARGOS> GetByPresupuestoIcpCargo(int codigoPresupuesto, int codigoIcp, int codigoCargo);
     }
 }
 

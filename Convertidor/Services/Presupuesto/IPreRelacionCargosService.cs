@@ -2,6 +2,7 @@
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -14,6 +15,7 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<PreRelacionCargoGetDto>> Create(PreRelacionCargoUpdateDto dto);
         Task<PreRelacionCargoGetDto> MapPreRelacionCargo(PRE_RELACION_CARGOS item);
         Task<ResultDto<PreRelacionCargoDeleteDto>> Delete(PreRelacionCargoDeleteDto dto);
+        Task<ResultDto<PreRelacionCargoGetDto>> UpdateField(UpdateFieldDto dto);
     }
 }
 

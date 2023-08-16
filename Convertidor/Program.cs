@@ -140,6 +140,9 @@ builder.Services.AddTransient<IRhConceptosService, RhConceptosService>();
 builder.Services.AddTransient<IRhProcesoRepository, RhProcesoRepository>();
 builder.Services.AddTransient<IRhProcesosService, RhProcesosService>();
 builder.Services.AddTransient<IRhProcesoDetalleRepository, RhProcesoDetalleRepository>();
+builder.Services.AddTransient<IRhRelacionCargosRepository, RhRelacionCargosRepository>();
+builder.Services.AddTransient<IRhRelacionCargosService, RhRelacionCargosService>();
+
 
 
 
