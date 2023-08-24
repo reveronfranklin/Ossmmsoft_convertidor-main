@@ -5,6 +5,7 @@ using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.Data.SqlClient;
@@ -18,9 +19,11 @@ namespace Convertidor.Data.Repository.Presupuesto
 		
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
-        public RhRelacionCargosRepository(DataContext context, IConfiguration configuration)
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        public RhRelacionCargosRepository(DataContext context, IConfiguration configuration, ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
+            _sisUsuarioRepository = sisUsuarioRepository;
             _configuration = configuration;
         }
 
@@ -92,10 +95,10 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
 
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-                var empresString = @settings.EmpresaConfig;
-                var empresa = Int32.Parse(empresString);
-                entity.CODIGO_EMPRESA = empresa;
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
                 await _context.RH_RELACION_CARGOS.AddAsync(entity);
                 _context.SaveChanges();
 
@@ -122,16 +125,19 @@ namespace Convertidor.Data.Repository.Presupuesto
         public async Task<ResultDto<RH_RELACION_CARGOS>> Update(RH_RELACION_CARGOS entity)
         {
             ResultDto<RH_RELACION_CARGOS> result = new ResultDto<RH_RELACION_CARGOS>(null);
-            var settings = _configuration.GetSection("Settings").Get<Settings>();
-            var empresString = @settings.EmpresaConfig;
-            var empresa = Int32.Parse(empresString);
+          
             try
             {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
                 RH_RELACION_CARGOS entityUpdate = await GetByCodigo(entity.CODIGO_RELACION_CARGO);
                 if (entityUpdate != null)
                 {
 
-                    entityUpdate.CODIGO_EMPRESA = empresa;
+                    entityUpdate.CODIGO_EMPRESA = conectado.Empresa;
+                    entityUpdate.USUARIO_UPD = conectado.Usuario;
+                    entityUpdate.FECHA_UPD = DateTime.Now;
+
                     _context.RH_RELACION_CARGOS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;

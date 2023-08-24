@@ -21,19 +21,16 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Convertidor.Data.Repository.Sis
 {
-	public class SisUsuarioRepository: Interfaces.Sis.ISisUsuarioRepository
+	public class SisUbicacionNacionalRepository: ISisUbicacionNacionalRepository
     {
 		
 
         private readonly DataContextSis _context;
         private readonly IConfiguration _configuration;
-  
-        private IHttpContextAccessor _httpContextAccessor;
-        public SisUsuarioRepository(DataContextSis context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public SisUbicacionNacionalRepository(DataContextSis context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<List<SIS_USUARIOS>> GetALL()
@@ -51,20 +48,7 @@ namespace Convertidor.Data.Repository.Sis
 
 
         }
-        public async Task<UserConectadoDto> GetConectado()
-        {
-            UserConectadoDto dto = new UserConectadoDto();
-            var settings = _configuration.GetSection("Settings").Get<Settings>();
-            var empresString = @settings.EmpresaConfig;
-            var empresa = Int32.Parse(empresString);
-            var userName = "";
-            userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
-            SIS_USUARIOS sisUsuario = await GetByLogin(userName);
-            dto.Empresa = empresa;
-            dto.Usuario = sisUsuario.CODIGO_USUARIO;
-            return dto;
 
-        }
 
         public async Task<SIS_USUARIOS> GetByLogin(string login)
         {

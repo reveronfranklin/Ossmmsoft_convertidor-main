@@ -12,6 +12,7 @@ namespace Convertidor.Data.Repository.Rh
         Task<List<RH_CONCEPTOS>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta);
         Task<RH_CONCEPTOS> GetByCodigo(int codigoConcepto);
         Task<RH_CONCEPTOS> GetByCodigoTipoNomina(int codigoConcepto, int codigoTipoNomina);
+        Task<RH_CONCEPTOS> GetByExtra1(string extra1);
     }
 }
 

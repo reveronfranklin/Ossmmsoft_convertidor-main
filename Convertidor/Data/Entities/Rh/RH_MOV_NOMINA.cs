@@ -1,19 +1,22 @@
 ﻿using System;
 using static NPOI.HSSF.Record.UnicodeString;
+using System.Net.NetworkInformation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Convertidor.Data.Entities.Rh
 {
-	public class RH_RELACION_CARGOS
+	public class RH_MOV_NOMINA
 	{
-        public int CODIGO_RELACION_CARGO { get; set; }
+        [Key]
+        public int CODIGO_MOV_NOMINA { get; set; }
         public int CODIGO_TIPO_NOMINA { get; set; }
-        public int CODIGO_ICP { get; set; }
-        public int CODIGO_CARGO { get; set; }
-        public string CARGO_CODIGO { get; set; } = string.Empty;
         public int CODIGO_PERSONA { get; set; }
-        public decimal SUELDO { get; set; }
-        public DateTime? FECHA_INI { get; set; }
-        public DateTime? FECHA_FIN { get; set; }
+        public int CODIGO_CONCEPTO { get; set; }
+        public string COMPLEMENTO_CONCEPTO { get; set; } = string.Empty;
+        public string TIPO { get; set; } = string.Empty;
+        public int FRECUENCIA_ID { get; set; }
+        public decimal MONTO { get; set; }
+        public string STATUS { get; set; } = string.Empty;
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;
         public string EXTRA3 { get; set; } = string.Empty;
@@ -22,12 +25,8 @@ namespace Convertidor.Data.Entities.Rh
         public int USUARIO_UPD { get; set; }
         public DateTime FECHA_UPD { get; set; }
         public int CODIGO_EMPRESA { get; set; }
-        public int CODIGO_PRESUPUESTO { get; set; }
-        public int CODIGO_RELACION_CARGO_PRE { get; set; }
-        public DateTime FECHA_INI_VIGENCIA { get; set; }
-        public DateTime FECHA_FIN_VIGENCIA { get; set; }
 
-
+        
     }
 }
 

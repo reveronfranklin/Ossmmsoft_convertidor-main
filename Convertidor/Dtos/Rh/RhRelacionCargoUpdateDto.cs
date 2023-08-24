@@ -6,6 +6,7 @@ namespace Convertidor.Dtos.Rh
         public int CodigoRelacionCargo { get; set; }    
         public int CodigoCargo { get; set; }
         public int TipoNomina { get; set; }
+        public int CodigoIcp { get; set; }
 
         public int CodigoPersona { get; set; }
  

@@ -1,6 +1,7 @@
 ﻿
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,13 @@ namespace Convertidor.Data.Repository.Presupuesto
     {
 
         private readonly DataContextPre _context;
-        private readonly IConfiguration _configuration;
+     
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public PRE_PLAN_UNICO_CUENTASRepository(DataContextPre context, IConfiguration configuration)
+        public PRE_PLAN_UNICO_CUENTASRepository(DataContextPre context, ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
-            _configuration = configuration;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
         
@@ -421,20 +423,19 @@ namespace Convertidor.Data.Repository.Presupuesto
 
             try
             {
-
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-                var empresString = @settings.EmpresaConfig;
-                var empresa = Int32.Parse(empresString);
+                var conectado = await _sisUsuarioRepository.GetConectado();
+               
 
                 PRE_PLAN_UNICO_CUENTAS entityUpdate = await GetByCodigo( entity.CODIGO_PUC);
                 if (entityUpdate != null)
                 {
-                    entityUpdate.CODIGO_EMPRESA = empresa;
+                    entityUpdate.CODIGO_EMPRESA = conectado.Empresa;
                     if (entity.DENOMINACION == null) entity.DENOMINACION = "";
                     if (entity.DESCRIPCION == null) entity.DESCRIPCION = "";
                     entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                     entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
-                   
+                    entity.USUARIO_UPD = conectado.Usuario;
+                    entity.FECHA_UPD = DateTime.Now;
                     _context.PRE_PLAN_UNICO_CUENTAS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
@@ -461,18 +462,17 @@ namespace Convertidor.Data.Repository.Presupuesto
 
             try
             {
+                var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-                var empresString = @settings.EmpresaConfig;
-                var empresa = Int32.Parse(empresString);
-                entity.CODIGO_EMPRESA = empresa;
+                entity.CODIGO_EMPRESA = conectado.Empresa;
                 if (entity.DENOMINACION == null) entity.DENOMINACION = "";
                 if (entity.DESCRIPCION == null) entity.DESCRIPCION = "";
                 entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                 entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
               
                 entity.CODIGO_PUC = await GetNextKey();
-
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
                 _context.PRE_PLAN_UNICO_CUENTAS.Add(entity);
                 await _context.SaveChangesAsync();
                 result.Data = entity;

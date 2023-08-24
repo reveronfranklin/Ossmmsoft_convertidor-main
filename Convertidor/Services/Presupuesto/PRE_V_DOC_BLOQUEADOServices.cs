@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
+using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
@@ -14,15 +15,15 @@ namespace Convertidor.Services.Presupuesto
        
 
         private readonly IPRE_V_DOC_BLOQUEADORepository _repository;
-        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
+   
 
-       
 
-        public PRE_V_DOC_BLOQUEADOServices(IPRE_V_DOC_BLOQUEADORepository repository,
-                                    IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository)
+
+        public PRE_V_DOC_BLOQUEADOServices(IPRE_V_DOC_BLOQUEADORepository repository
+                                            )
         {
             _repository = repository;
-            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
+           
 
         }
         

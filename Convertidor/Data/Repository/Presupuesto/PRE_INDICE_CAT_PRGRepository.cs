@@ -1,6 +1,9 @@
 ﻿
+using System.Security.Claims;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.Sis;
+using Convertidor.Data.Repository.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +15,16 @@ namespace Convertidor.Data.Repository.Presupuesto
     {
 
         private readonly DataContextPre _context;
-        private readonly IConfiguration _configuration;
+      
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public PRE_INDICE_CAT_PRGRepository(DataContextPre context, IConfiguration configuration)
+        public PRE_INDICE_CAT_PRGRepository(DataContextPre context,
+                                         
+                                            ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
-            _configuration = configuration;
+         
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
         
@@ -520,20 +527,23 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
 
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-                var empresString = @settings.EmpresaConfig;
-                var empresa = Int32.Parse(empresString);
+          
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+
 
                 PRE_INDICE_CAT_PRG entityUpdate = await GetByCodigo( entity.CODIGO_ICP);
                 if (entityUpdate != null)
                 {
-                    entityUpdate.CODIGO_EMPRESA = empresa;
+                    entityUpdate.CODIGO_EMPRESA = conectado.Empresa;
                     if (entity.DENOMINACION == null) entity.DENOMINACION = "";
                     if (entity.DESCRIPCION == null) entity.DESCRIPCION = "";
                     if (entity.UNIDAD_EJECUTORA == null) entity.UNIDAD_EJECUTORA = "";
                     entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                     entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
                     entity.UNIDAD_EJECUTORA = entity.UNIDAD_EJECUTORA.ToUpper();
+                    entity.FECHA_UPD = DateTime.Now;
+                    entity.USUARIO_UPD = conectado.Usuario;
                     _context.PRE_INDICE_CAT_PRG.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
@@ -559,14 +569,16 @@ namespace Convertidor.Data.Repository.Presupuesto
         public async Task<ResultDto<PRE_INDICE_CAT_PRG>> Create(PRE_INDICE_CAT_PRG entity)
         {
             ResultDto<PRE_INDICE_CAT_PRG> result = new ResultDto<PRE_INDICE_CAT_PRG>(null);
-
+           
             try
             {
 
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-                var empresString = @settings.EmpresaConfig;
-                var empresa = Int32.Parse(empresString);
-                entity.CODIGO_EMPRESA = empresa;
+              
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
                 if (entity.DENOMINACION == null) entity.DENOMINACION = "";
                 if (entity.DESCRIPCION == null) entity.DESCRIPCION = "";
                 if (entity.UNIDAD_EJECUTORA == null) entity.UNIDAD_EJECUTORA = "";
@@ -574,6 +586,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
                 entity.UNIDAD_EJECUTORA = entity.UNIDAD_EJECUTORA.ToUpper();
                 entity.CODIGO_ICP = await GetNextKey();
+                entity.FECHA_INS = DateTime.Now;
+                entity.USUARIO_INS = conectado.Usuario;
 
                 _context.PRE_INDICE_CAT_PRG.Add(entity);
                 await _context.SaveChangesAsync();

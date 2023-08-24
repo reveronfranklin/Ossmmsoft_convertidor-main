@@ -14,6 +14,7 @@ namespace Convertidor.Data.Interfaces.Sis
         Task<ResultDto<SIS_USUARIOS>> Update(SIS_USUARIOS entity);
         string GetToken(SIS_USUARIOS usuario);
         Task<List<UserRole>> GetRolByUserName(string usuario);
+        Task<UserConectadoDto> GetConectado();
 
     }
 }

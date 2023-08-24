@@ -83,7 +83,7 @@ namespace Convertidor.Data.Repository.Rh
         {
             try
             {
-                var personas = await _repository.GetCodogoPersona(codigoPersona);
+                var personas = await _repository.GetCodigoPersona(codigoPersona);
 
                 var result = await MapPersonasDto(personas);
 

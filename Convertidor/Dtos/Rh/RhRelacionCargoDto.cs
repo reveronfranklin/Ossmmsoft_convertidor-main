@@ -7,6 +7,7 @@ namespace Convertidor.Dtos.Rh
         public int CodigoCargo { get; set; }
         public string DenominacionCargo { get; set; } = string.Empty;
         public int TipoNomina { get; set; }
+        public int CodigoIcp { get; set; }
         public int CodigoPersona { get; set; }
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;

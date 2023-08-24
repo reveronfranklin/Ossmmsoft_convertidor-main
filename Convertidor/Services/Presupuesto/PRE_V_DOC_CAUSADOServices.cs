@@ -14,15 +14,15 @@ namespace Convertidor.Services.Presupuesto
        
 
         private readonly IPRE_V_DOC_CAUSADORepository _repository;
-        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
+       
 
        
 
-        public PRE_V_DOC_CAUSADOServices(IPRE_V_DOC_CAUSADORepository repository,
-                                    IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository)
+        public PRE_V_DOC_CAUSADOServices(IPRE_V_DOC_CAUSADORepository repository)
+                                    
         {
             _repository = repository;
-            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
+          
 
         }
         

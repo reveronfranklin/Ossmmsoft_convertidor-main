@@ -7,6 +7,7 @@ using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Catastro;
@@ -18,9 +19,9 @@ namespace Convertidor.Services.Presupuesto
 {
 	public class PRE_PRESUPUESTOSService: IPRE_PRESUPUESTOSService
     {
-		
 
-        private readonly IPRE_PRESUPUESTOSRepository _repository;
+        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
+        
         private readonly IPRE_V_DENOMINACION_PUCRepository _preDenominacionPucRepository;
         private readonly IPRE_V_SALDOSRepository _pre_V_SALDOSRepository;
         private readonly IPRE_ASIGNACIONESRepository _PRE_ASIGNACIONESRepository;
@@ -28,9 +29,11 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPRE_PLAN_UNICO_CUENTASRepository _pRE_PLAN_UNICO_CUENTASRepository;
         private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
         private readonly IPrePlanUnicoCuentasService _prePlanUnicoCuentasService;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IMapper _mapper;
 
-        public PRE_PRESUPUESTOSService(IPRE_PRESUPUESTOSRepository repository,
+        public PRE_PRESUPUESTOSService(IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
+                            
                                         IPRE_V_DENOMINACION_PUCRepository preDenominacionPucRepository,
                                         IPRE_V_SALDOSRepository pre_V_SALDOSRepository,
                                         IPRE_ASIGNACIONESRepository PRE_ASIGNACIONESRepository,
@@ -38,9 +41,11 @@ namespace Convertidor.Services.Presupuesto
                                         IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
                                         IPRE_PLAN_UNICO_CUENTASRepository pRE_PLAN_UNICO_CUENTASRepository,
                                         IPrePlanUnicoCuentasService prePlanUnicoCuentasService,
+                                        ISisUsuarioRepository sisUsuarioRepository,
                                         IMapper mapper)
         {
-            _repository = repository;
+            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
+            
             _preDenominacionPucRepository = preDenominacionPucRepository;
             _pre_V_SALDOSRepository = pre_V_SALDOSRepository;
             _PRE_ASIGNACIONESRepository = PRE_ASIGNACIONESRepository;
@@ -48,6 +53,7 @@ namespace Convertidor.Services.Presupuesto
             _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
             _pRE_PLAN_UNICO_CUENTASRepository = pRE_PLAN_UNICO_CUENTASRepository;
             _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
+            _sisUsuarioRepository = sisUsuarioRepository;
             _mapper = mapper;
         }
 
@@ -61,7 +67,7 @@ namespace Convertidor.Services.Presupuesto
             ResultDto<GetPRE_PRESUPUESTOSDto> result = new ResultDto<GetPRE_PRESUPUESTOSDto>(null);
             try
             {
-                var presupuesto = await _repository.GetByCodigo(filter.CodigoEmpresa, filter.CodigoPresupuesto);
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(filter.CodigoEmpresa, filter.CodigoPresupuesto);
                 if (presupuesto != null)
                 {
                     var dto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto,filter);
@@ -95,7 +101,7 @@ namespace Convertidor.Services.Presupuesto
             ResultDto<List<ListPresupuestoDto>> result = new ResultDto<List<ListPresupuestoDto>>(null);
             try
             {
-                var presupuesto = await _repository.GetAll();
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
                 if (presupuesto.Count() > 0)
                  {
                     List<ListPresupuestoDto> listDto = new List<ListPresupuestoDto>();
@@ -152,7 +158,7 @@ namespace Convertidor.Services.Presupuesto
 
 
 
-                var presupuesto = await _repository.GetAll();
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
 
                 if (filter.CodigoPresupuesto == 0) {
 
@@ -217,7 +223,7 @@ namespace Convertidor.Services.Presupuesto
 
 
 
-                var presupuesto = await _repository.GetAll();
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
 
               
 
@@ -267,7 +273,7 @@ namespace Convertidor.Services.Presupuesto
             try
             {
 
-                var presupuesto = await _repository.GetByCodigo(13, dto.CodigoPresupuesto);
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(13, dto.CodigoPresupuesto);
                 if (presupuesto == null)
                 {
                     result.Data = dto;
@@ -287,8 +293,8 @@ namespace Convertidor.Services.Presupuesto
 
                 await _indiceCategoriaProgramaService.DeleteByCodigoPresupuesto(dto.CodigoPresupuesto);
                 await _prePlanUnicoCuentasService.DeleteByCodigoPresupuesto(dto.CodigoPresupuesto);
-                var  deleted =await _repository.Delete(13,dto.CodigoPresupuesto);
-
+                var  deleted =await _pRE_PRESUPUESTOSRepository.Delete(13,dto.CodigoPresupuesto);
+                
                 if (deleted.Length>0)
                 {
                     result.Data = dto;
@@ -343,7 +349,7 @@ namespace Convertidor.Services.Presupuesto
                 }
                var fechaDesde = Convert.ToDateTime(dto.FechaDesde, CultureInfo.InvariantCulture);
                 var fechaHasta = Convert.ToDateTime(dto.FechaHasta, CultureInfo.InvariantCulture);
-                var existePeriodo = await _repository.ExisteEnPeriodo(dto.CodigoEmpresa, fechaDesde, fechaHasta);
+                var existePeriodo = await _pRE_PRESUPUESTOSRepository.ExisteEnPeriodo(dto.CodigoEmpresa, fechaDesde, fechaHasta);
                 if (existePeriodo)
                 {
                     result.Data = null;
@@ -353,8 +359,12 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var entity = MapCreatePrePresupuestoDtoToPrePresupuesto(dto);
-                entity.CODIGO_PRESUPUESTO = await _repository.GetNextKey();  
-                var created = await _repository.Add(entity);
+                entity.CODIGO_PRESUPUESTO = await _pRE_PRESUPUESTOSRepository.GetNextKey();
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                var created = await _pRE_PRESUPUESTOSRepository.Add(entity);
+                
                 if (created.IsValid && created.Data!=null)
                 {
 
@@ -398,7 +408,7 @@ namespace Convertidor.Services.Presupuesto
             try
             {
 
-                var presupuesto = await _repository.GetByCodigo(dto.CodigoEmpresa, dto.CodigoPresupuesto);
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(dto.CodigoEmpresa, dto.CodigoPresupuesto);
                 if (presupuesto==null)
                 {
                     result.Data = null;
@@ -428,8 +438,8 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }*/
 
+                var conectado = await _sisUsuarioRepository.GetConectado();
 
-               
                 presupuesto.DENOMINACION = dto.Denominacion;
                 presupuesto.DESCRIPCION = dto.Descripcion;
                 presupuesto.ANO = dto.Ano;
@@ -442,10 +452,12 @@ namespace Convertidor.Services.Presupuesto
                 presupuesto.EXTRA1 = dto.Extra1;
                 presupuesto.EXTRA2 = dto.Extra2;
                 presupuesto.EXTRA3 = dto.Extra3;
-                presupuesto.USUARIO_UPD = dto.UsuarioUpd;
+                presupuesto.USUARIO_UPD = conectado.Usuario;
+                presupuesto.CODIGO_EMPRESA = conectado.Empresa;
                 presupuesto.FECHA_UPD = DateTime.Now;
                
-                await _repository.Update(presupuesto);
+                await _pRE_PRESUPUESTOSRepository.Update(presupuesto);
+             
 
                 FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
                 filter.FinanciadoId = 0;

@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
+using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
@@ -14,12 +15,12 @@ namespace Convertidor.Services.Presupuesto
        
 
         private readonly IPRE_V_SALDOSRepository _repository;
-        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
+        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository ;
         private readonly IPRE_V_DENOMINACION_PUCRepository _pRE_V_DENOMINACION_PUCRepository;
         private readonly IMapper _mapper;
 
         public PRE_V_DENOMINACION_PUCServices(IPRE_V_SALDOSRepository repository,
-                                    IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
+                                     IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                     IPRE_V_DENOMINACION_PUCRepository pRE_V_DENOMINACION_PUCRepository,
                                     IMapper mapper)
         {

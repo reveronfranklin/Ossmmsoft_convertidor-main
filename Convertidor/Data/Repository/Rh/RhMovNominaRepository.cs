@@ -1,30 +1,67 @@
 ﻿using System;
+using System;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
+using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhPersonasRepository: IRhPersonasRepository
+	public class RhMovNominaRepository: IRhMovNominaRepository
     {
 		
         private readonly DataContext _context;
-        private readonly IConfiguration _configuration;
 
-        public RhPersonasRepository(DataContext context, IConfiguration configuration)
+        public RhMovNominaRepository(DataContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
-        public async Task<List<RH_PERSONAS>> GetAll()
+      
+        public async Task<RH_MOV_NOMINA> GetByCodigo(int codigoMovNomina)
         {
             try
             {
+                var result = await _context.RH_MOV_NOMINA.DefaultIfEmpty().Where(e => e.CODIGO_MOV_NOMINA == codigoMovNomina).FirstOrDefaultAsync();
 
-                var result = await _context.RH_PERSONAS.DefaultIfEmpty().ToListAsync();
-                return (List<RH_PERSONAS>)result;
+                return (RH_MOV_NOMINA)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+
+        public async Task<RH_MOV_NOMINA> GetByTipoNominaPersonaConcepto(int codigoTipoNomina,int codigoPersona,int codigoConcepto)
+        {
+            try
+            {
+                var result = await _context.RH_MOV_NOMINA.DefaultIfEmpty()
+                            .Where(e => e.CODIGO_TIPO_NOMINA== codigoTipoNomina && e.CODIGO_PERSONA==codigoPersona && e.CODIGO_CONCEPTO==codigoConcepto)
+                            .FirstOrDefaultAsync();
+
+                return (RH_MOV_NOMINA)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+
+        public async Task<List<RH_MOV_NOMINA>> GetAll()
+        {
+            try
+            {
+                var result = await _context.RH_MOV_NOMINA.DefaultIfEmpty().ToListAsync();
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -34,55 +71,21 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<RH_PERSONAS> GetCedula(int cedula)
+
+     
+      
+
+
+
+        public async Task<ResultDto<RH_MOV_NOMINA>> Add(RH_MOV_NOMINA entity)
         {
+            ResultDto<RH_MOV_NOMINA> result = new ResultDto<RH_MOV_NOMINA>(null);
             try
             {
 
-                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p=> p.CEDULA==cedula).FirstOrDefaultAsync();
-                return (RH_PERSONAS)result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
-
-        public async Task<RH_PERSONAS> GetCodigoPersona(int codigoPersona)
-        {
-            try
-            {
-
-                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p => p.CODIGO_PERSONA == codigoPersona).FirstOrDefaultAsync();
-                return (RH_PERSONAS)result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
 
 
-
-
-
-
-
-        public async Task<ResultDto<RH_PERSONAS>> Add(RH_PERSONAS entity)
-        {
-            ResultDto<RH_PERSONAS> result = new ResultDto<RH_PERSONAS>(null);
-            try
-            {
-
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-                var empresString = @settings.EmpresaConfig;
-                var empresa = Int32.Parse(empresString);
-                entity.CODIGO_EMPRESA = empresa;
-                await _context.RH_PERSONAS.AddAsync(entity);
+                await _context.RH_MOV_NOMINA.AddAsync(entity);
                 _context.SaveChanges();
 
 
@@ -105,20 +108,18 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<ResultDto<RH_PERSONAS>> Update(RH_PERSONAS entity)
+        public async Task<ResultDto<RH_MOV_NOMINA>> Update(RH_MOV_NOMINA entity)
         {
-            ResultDto<RH_PERSONAS> result = new ResultDto<RH_PERSONAS>(null);
-            var settings = _configuration.GetSection("Settings").Get<Settings>();
-            var empresString = @settings.EmpresaConfig;
-            var empresa = Int32.Parse(empresString);
+            ResultDto<RH_MOV_NOMINA> result = new ResultDto<RH_MOV_NOMINA>(null);
+
             try
             {
-                RH_PERSONAS entityUpdate = await GetCodigoPersona(entity.CODIGO_PERSONA);
+                RH_MOV_NOMINA entityUpdate = await GetByCodigo(entity.CODIGO_MOV_NOMINA);
                 if (entityUpdate != null)
                 {
 
-                    entityUpdate.CODIGO_EMPRESA = empresa;
-                    _context.RH_PERSONAS.Update(entity);
+
+                    _context.RH_MOV_NOMINA.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -135,17 +136,22 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
+
+
+
+
+
         }
 
-        public async Task<string> Delete(int codigoRelacionCargo)
+        public async Task<string> Delete(int codigoMovNomina)
         {
 
             try
             {
-                RH_PERSONAS entity = await GetCodigoPersona(codigoRelacionCargo);
+                RH_MOV_NOMINA entity = await GetByCodigo(codigoMovNomina);
                 if (entity != null)
                 {
-                    _context.RH_PERSONAS.Remove(entity);
+                    _context.RH_MOV_NOMINA.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -166,8 +172,8 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 int result = 0;
-                var last = await _context.RH_PERSONAS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_PERSONA)
+                var last = await _context.RH_MOV_NOMINA.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_MOV_NOMINA)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -175,7 +181,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 else
                 {
-                    result = last.CODIGO_PERSONA + 1;
+                    result = last.CODIGO_MOV_NOMINA + 1;
                 }
 
                 return (int)result!;
@@ -190,6 +196,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
+
 
     }
 }

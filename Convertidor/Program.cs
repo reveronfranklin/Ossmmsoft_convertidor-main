@@ -25,11 +25,15 @@ using Convertidor.Data.Repository.Rh;
 using Convertidor.Services.Rh;
 using Microsoft.AspNetCore.HttpOverrides;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddHttpContextAccessor();
+
+
 
 builder.Services.AddTransient<IRH_HISTORICO_NOMINARepository, RH_HISTORICO_NOMINARepository>();
 builder.Services.AddTransient<IHistoricoNominaRepository, HistoricoNominaRepository>();
@@ -143,6 +147,7 @@ builder.Services.AddTransient<IRhProcesoDetalleRepository, RhProcesoDetalleRepos
 builder.Services.AddTransient<IRhRelacionCargosRepository, RhRelacionCargosRepository>();
 builder.Services.AddTransient<IRhRelacionCargosService, RhRelacionCargosService>();
 
+builder.Services.AddTransient<IRhMovNominaRepository, RhMovNominaRepository>();
 
 
 

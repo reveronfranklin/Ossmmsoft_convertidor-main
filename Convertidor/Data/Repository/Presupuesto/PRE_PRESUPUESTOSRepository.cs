@@ -3,6 +3,7 @@ using Convertidor.Data.Entities;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.Data.SqlClient;
@@ -19,6 +20,7 @@ namespace Convertidor.Data.Repository.Presupuesto
         public PRE_PRESUPUESTOSRepository(DataContextPre context)
         {
             _context = context;
+           
         }
 
 
@@ -132,10 +134,14 @@ namespace Convertidor.Data.Repository.Presupuesto
             ResultDto<PRE_PRESUPUESTOS> result = new ResultDto<PRE_PRESUPUESTOS>(null);
             try
             {
-
+                //var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.DENOMINACION= entity.DENOMINACION.ToUpper();
                 entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
-
+                entity.FECHA_DESDE = entity.FECHA_DESDE.Date;
+                entity.FECHA_HASTA = entity.FECHA_HASTA.Date;
+                entity.FECHA_INS = DateTime.Now;
+                //entity.USUARIO_INS = conectado.Usuario;
+                //entity.CODIGO_EMPRESA = conectado.Empresa;
                 await _context.PRE_PRESUPUESTOS.AddAsync(entity);
                 _context.SaveChanges();
 
@@ -168,9 +174,13 @@ namespace Convertidor.Data.Repository.Presupuesto
                 PRE_PRESUPUESTOS entityUpdate = await GetByCodigo(entity.CODIGO_EMPRESA, entity.CODIGO_PRESUPUESTO);
                 if (entityUpdate != null)
                 {
+                    
                     entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                     entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
-
+                    entity.FECHA_DESDE = entity.FECHA_DESDE.Date;
+                    entity.FECHA_HASTA = entity.FECHA_HASTA.Date;
+                    entity.FECHA_UPD = DateTime.Now;
+                   
                     _context.PRE_PRESUPUESTOS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;

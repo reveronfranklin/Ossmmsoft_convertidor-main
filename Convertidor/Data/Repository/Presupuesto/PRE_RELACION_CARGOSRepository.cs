@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using Convertidor.Data.Entities;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.EntitiesDestino;
@@ -16,10 +17,12 @@ namespace Convertidor.Data.Repository.Presupuesto
 		
         private readonly DataContextPre _context;
         private readonly IConfiguration _configuration;
-        public PRE_RELACION_CARGOSRepository(DataContextPre context, IConfiguration configuration)
+        private IHttpContextAccessor _httpContextAccessor;
+        public PRE_RELACION_CARGOSRepository(DataContextPre context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -63,6 +66,26 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                 var result = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty()
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_ICP==codigoIcp && x.CODIGO_CARGO == codigoCargo)
+                    .FirstOrDefaultAsync();
+                return (PRE_RELACION_CARGOS)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+
+        }
+        public async Task<PRE_RELACION_CARGOS> GetByPresupuestoIcp(int codigoPresupuesto, int codigoIcp)
+        {
+            try
+            {
+
+                var result = await _context.PRE_RELACION_CARGOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_ICP == codigoIcp)
                     .FirstOrDefaultAsync();
                 return (PRE_RELACION_CARGOS)result!;
 
@@ -192,6 +215,8 @@ namespace Convertidor.Data.Repository.Presupuesto
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var empresString = @settings.EmpresaConfig;
             var empresa = Int32.Parse(empresString);
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name); //_service.GetMyName();
+
             try
             {
                 PRE_RELACION_CARGOS entityUpdate = await GetByCodigo(entity.CODIGO_RELACION_CARGO);

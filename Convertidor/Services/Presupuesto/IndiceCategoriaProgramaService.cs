@@ -24,7 +24,7 @@ namespace Convertidor.Services
         
         private readonly IPRE_INDICE_CAT_PRGRepository _repository;
         private readonly IIndiceCategoriaProgramaRepository _destinoRepository;
-        private readonly IPRE_PRESUPUESTOSRepository _presupuesttoRepository;
+        private readonly IPRE_PRESUPUESTOSRepository  _pRE_PRESUPUESTOSRepository;
         private readonly IOssConfigRepository _ossConfigRepository;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
@@ -32,7 +32,7 @@ namespace Convertidor.Services
 
         public IndiceCategoriaProgramaService(IPRE_INDICE_CAT_PRGRepository repository,
                                       IIndiceCategoriaProgramaRepository destinoRepository,
-                                      IPRE_PRESUPUESTOSRepository presupuesttoRepository,
+                                      IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                       IOssConfigRepository ossConfigRepository,
                                       IConfiguration configuration,
                                       IPRE_ASIGNACIONESRepository PRE_ASIGNACIONESRepository,
@@ -40,7 +40,7 @@ namespace Convertidor.Services
         {
             _repository = repository;
             _destinoRepository = destinoRepository;
-            _presupuesttoRepository = presupuesttoRepository;
+            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
             _ossConfigRepository = ossConfigRepository;
             _configuration = configuration;
             _PRE_ASIGNACIONESRepository = PRE_ASIGNACIONESRepository;
@@ -113,7 +113,7 @@ namespace Convertidor.Services
 
                 if (filter.CodigoPresupuesto == 0)
                 {
-                    var lastPresupuesto = await _presupuesttoRepository.GetLast();
+                    var lastPresupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
                     if (lastPresupuesto != null) filter.CodigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
               
@@ -325,7 +325,7 @@ namespace Convertidor.Services
 
                 if (codigoPresupuesto==0)
                 {
-                    var lastPresupuesto = await _presupuesttoRepository.GetLast();
+                    var lastPresupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
                     if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
 
@@ -430,14 +430,14 @@ namespace Convertidor.Services
 
                 if (codigoPresupuesto == 0)
                 {
-                    var lastPresupuesto = await _presupuesttoRepository.GetLast();
+                    var lastPresupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
                     if (lastPresupuesto != null) codigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
                 FilterByPresupuestoDto filter = new FilterByPresupuestoDto();
                 filter.CodigoPresupuesto = codigoPresupuesto;
                 var icp = await GetAllByCodigoPresupuesto(filter);
 
-                var presupuestoObj = await _presupuesttoRepository.GetByCodigo(13,codigoPresupuesto);
+                var presupuestoObj = await _pRE_PRESUPUESTOSRepository.GetByCodigo(13,codigoPresupuesto);
 
                 //var icpList = icp.Data.Where(x => x.CodigoIcpPadre == null || x.CodigoIcpPadre == 0).ToList();
                 var icpList = icp.Data.ToList();
@@ -684,7 +684,7 @@ namespace Convertidor.Services
             result = await ValidateDto(dto);
             if (result.IsValid == false) return result;
 
-            var presupuesto = await _presupuesttoRepository.GetByCodigo(empresa, dto.CodigoPresupuesto);
+            var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(empresa, dto.CodigoPresupuesto);
 
             icp.ANO = presupuesto.ANO;
             icp.ESCENARIO = dto.Escenario;
@@ -739,7 +739,7 @@ namespace Convertidor.Services
             if (result.IsValid == false) return result;
 
             PRE_INDICE_CAT_PRG icpNew = new PRE_INDICE_CAT_PRG();
-            var presupuesto = await _presupuesttoRepository.GetByCodigo(empresa,dto.CodigoPresupuesto);
+            var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(empresa,dto.CodigoPresupuesto);
             icpNew.ANO = presupuesto.ANO;
             icpNew.ESCENARIO = dto.Escenario;
             icpNew.CODIGO_SECTOR = dto.CodigoSector;
