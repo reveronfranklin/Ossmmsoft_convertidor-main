@@ -5,7 +5,7 @@ namespace Convertidor.Data.Interfaces.Sis
 {
 	public interface ISisUbicacionNacionalRepository
 	{
-        Task<List<SIS_USUARIOS>> GetALL();
+        Task<SIS_UBICACION_NACIONAL> GetPais(int pais);
 
 
     }

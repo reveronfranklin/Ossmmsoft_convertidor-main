@@ -1,4 +1,5 @@
 ﻿using System;
+using Convertidor.Data.Entities.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 
@@ -16,6 +17,7 @@ namespace Convertidor.Services.Rh
         Task<List<ListHistoricoMovimientoDto>> GetByProceso(FilterHistoricoNominaPeriodo filter);
         Task<List<ListHistoricoMovimientoDto>> GetByIndividual(FilterHistoricoNominaPeriodo filter);
         Task<List<ListHistoricoMovimientoDto>> GetByMasivo(FilterHistoricoNominaPeriodo filter);
+        Task<RH_V_HISTORICO_MOVIMIENTOS> GetPrimerMovimientoByCodigoPersona(int codigoPersona);
     }
 }
 

@@ -10,10 +10,10 @@ namespace Convertidor.Dtos
             public List<string>? coins { get; set; }
 
             public List<string>? fiats { get; set; }
+   
 
-      
 
-		
-	}
+
+    }
 }
 

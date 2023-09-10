@@ -33,34 +33,15 @@ namespace Convertidor.Data.Repository.Sis
             _configuration = configuration;
         }
 
-        public async Task<List<SIS_USUARIOS>> GetALL()
+    
+
+
+        public async Task<SIS_UBICACION_NACIONAL> GetPais(int pais)
         {
+          
             try
             {
-                var result = await _context.SIS_USUARIOS.DefaultIfEmpty().ToListAsync();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.InnerException.Message;
-                return null;
-            }
-
-
-        }
-
-
-        public async Task<SIS_USUARIOS> GetByLogin(string login)
-        {
-            string newlogin = login;
-            if (login.Contains("@"))
-            {
-                var listStrLineElements = login.Split('@').ToArray();
-                newlogin = listStrLineElements[0];
-            }
-            try
-            {
-                var result = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x=>x.LOGIN== newlogin).FirstOrDefaultAsync();
+                var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty().Where(x=>x.PAIS== pais && x.ENTIDAD==0).FirstOrDefaultAsync();
                 return result;
             }
             catch (Exception ex)

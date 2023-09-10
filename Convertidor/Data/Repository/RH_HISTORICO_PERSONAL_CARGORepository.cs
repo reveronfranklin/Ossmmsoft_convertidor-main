@@ -1,4 +1,5 @@
 ﻿using Convertidor.Data.Entities;
+using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,43 @@ namespace Convertidor.Data.Repository
 
         }
 
-      
+        public async Task<IEnumerable<RH_HISTORICO_PERSONAL_CARGO>> GetByCodigoPersona(int codigoPersona)
+        {
+            try
+            {
+              
+                var result = await _context.RH_HISTORICO_PERSONAL_CARGO.DefaultIfEmpty().Where(h => h.CODIGO_PERSONA==codigoPersona).ToListAsync();
+                return (IEnumerable<RH_HISTORICO_PERSONAL_CARGO>)result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+
+        }
+        
+        
+        
+
+        public async Task<RH_HISTORICO_PERSONAL_CARGO> GetPrimerMovimientoByCodigoPersona(int codigoPersona)
+        {
+            try
+            {
+
+                var result = await _context.RH_HISTORICO_PERSONAL_CARGO.DefaultIfEmpty().Where(h => h.CODIGO_PERSONA == codigoPersona).OrderBy(h => h.FECHA_NOMINA).FirstOrDefaultAsync();
+                return (RH_HISTORICO_PERSONAL_CARGO)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+
+
 
     }
 }

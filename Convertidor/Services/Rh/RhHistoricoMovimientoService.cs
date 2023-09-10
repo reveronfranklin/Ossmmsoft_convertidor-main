@@ -10,6 +10,7 @@ using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Utility;
+using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
 using static NPOI.HSSF.Util.HSSFColor;
 
@@ -176,7 +177,20 @@ namespace Convertidor.Services.Rh
         }
 
 
+        public async Task<RH_V_HISTORICO_MOVIMIENTOS> GetPrimerMovimientoByCodigoPersona(int codigoPersona)
+        {
+            try
+            {
 
+                var result = await _repository.GetPrimerMovimientoByCodigoPersona(codigoPersona);
+                return (RH_V_HISTORICO_MOVIMIENTOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
         public async Task<List<ListHistoricoMovimientoDto>> GetByCodigoPersona(int codigoPersona)
         {
             try

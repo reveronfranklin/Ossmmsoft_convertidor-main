@@ -91,6 +91,7 @@ builder.Services.AddTransient<IPreRelacionCargosService, PreRelacionCargosServic
 
 builder.Services.AddTransient<ISisUsuarioRepository, SisUsuarioRepository>();
 builder.Services.AddTransient<IOssConfigRepository, OssConfigRepository>();
+builder.Services.AddTransient<ISisUbicacionNacionalRepository, SisUbicacionNacionalRepository>();
 
 
 //Services Sis
@@ -148,7 +149,9 @@ builder.Services.AddTransient<IRhRelacionCargosRepository, RhRelacionCargosRepos
 builder.Services.AddTransient<IRhRelacionCargosService, RhRelacionCargosService>();
 
 builder.Services.AddTransient<IRhMovNominaRepository, RhMovNominaRepository>();
-
+builder.Services.AddTransient<IRhComunicacionessRepository, RhComunicacionessRepository>();
+builder.Services.AddTransient<IRhAdministrativosRepository, RhAdministrativosRepository>();
+builder.Services.AddTransient<IRhAdministrativosService, RhAdministrativosService>();
 
 
 

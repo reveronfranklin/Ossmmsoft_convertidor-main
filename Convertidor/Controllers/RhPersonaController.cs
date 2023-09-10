@@ -43,6 +43,11 @@ namespace Convertidor.Controllers
         {
             var result = await _service.GetAll();
             return Ok(result);
+
+         
+
+
+
         }
 
 
@@ -66,7 +71,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetPersona(PersonaFilterDto filter)
+        {
+            var result = await _service.GetPersona(filter.CodigoPersona);
+            return Ok(result);
+        }
 
     }
 }

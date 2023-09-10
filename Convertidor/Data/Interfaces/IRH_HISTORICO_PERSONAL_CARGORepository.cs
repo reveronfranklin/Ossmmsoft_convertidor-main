@@ -6,5 +6,7 @@ namespace Convertidor.Data.Interfaces
     {
 
         Task<IEnumerable<RH_HISTORICO_PERSONAL_CARGO>> GetByLastDay(int days);
+        Task<RH_HISTORICO_PERSONAL_CARGO> GetPrimerMovimientoByCodigoPersona(int codigoPersona);
+        Task<IEnumerable<RH_HISTORICO_PERSONAL_CARGO>> GetByCodigoPersona(int codigoPersona);
     }
 }

@@ -17,8 +17,9 @@ namespace Convertidor.Data
         public DbSet<SIS_USUARIOS> SIS_USUARIOS { get; set; }
         public DbSet<SIS_V_SISTEMA_USUARIO_PROGRAMA> SIS_V_SISTEMA_USUARIO_PROGRAMA { get; set; }
         public DbSet<OSS_CONFIG> OSS_CONFIG { get; set; }
-
+        public DbSet<SIS_UBICACION_NACIONAL> SIS_UBICACION_NACIONAL { get; set; }
         
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,26 +33,31 @@ namespace Convertidor.Data
                 builder.HasNoKey();
                 builder.ToTable("SIS_V_SISTEMA_USUARIO_PROGRAMA");
             })
-          .Entity<SIS_USUARIOS>(builder =>
-          {
-              //builder.HasNoKey();
-              builder.HasKey(table => new
-              {
-                  table.CODIGO_USUARIO,
-
-              });
-              builder.ToTable("SIS_USUARIOS");
-          })
-        .Entity<OSS_CONFIG>(builder =>
-        {
+            .Entity<SIS_USUARIOS>(builder =>
+            {
             //builder.HasNoKey();
             builder.HasKey(table => new
             {
-                table.ID,
+            table.CODIGO_USUARIO,
+
+            });
+            builder.ToTable("SIS_USUARIOS");
+            })
+            .Entity<OSS_CONFIG>(builder =>
+            {
+            //builder.HasNoKey();
+            builder.HasKey(table => new
+            {
+            table.ID,
 
             });
             builder.ToTable("OSS_CONFIG");
-        });
+            })
+            .Entity<SIS_UBICACION_NACIONAL>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("SIS_UBICACION_NACIONAL");
+            });
 
         }
 

@@ -2,6 +2,8 @@
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
 using Convertidor.Dtos;
+using Convertidor.Dtos.Rh;
+using Convertidor.Services.Rh;
 
 namespace Convertidor.Services
 {
@@ -11,17 +13,19 @@ namespace Convertidor.Services
         private readonly IRH_HISTORICO_PERSONAL_CARGORepository _repository;
         private readonly IHistoricoPersonalCargoRepository _destinoRepository;
         private readonly IIndiceCategoriaProgramaRepository _indiceCategoriaProgramaRepository;
+        private readonly IRhPersonaService _personaService;
         private readonly IMapper _mapper;
 
         public HistoricoPersonalCargoService(IRH_HISTORICO_PERSONAL_CARGORepository repository,
                                       IHistoricoPersonalCargoRepository destinoRepository,
                                       IIndiceCategoriaProgramaRepository indiceCategoriaProgramaRepository,
-                                      IMapper mapper)
+                                      IMapper mapper, IRhPersonaService personaService)
         {
             _repository = repository;
             _destinoRepository = destinoRepository;
             _indiceCategoriaProgramaRepository = indiceCategoriaProgramaRepository;
             _mapper = mapper;
+            _personaService = personaService;
         }
 
         public async Task<ResultDto<HistoricoPersonalCargo>> TransferirHistoricoPersonalCargoPorCantidadDeDias(int dias)
@@ -95,6 +99,53 @@ namespace Convertidor.Services
             }
         }
 
+
+        public async Task<List<RhTipoNominaCargosResponseDto> > GetListCargosPorPersona(int codigoPersona)
+        {
+
+            List<RhTipoNominaCargosResponseDto> result = new List<RhTipoNominaCargosResponseDto>();
+            var historico = await _repository.GetByCodigoPersona(codigoPersona);
+            var cargoActual = await _personaService.CargoActual(codigoPersona);
+            
+            
+            var q= from s in historico.OrderByDescending(x => x.FECHA_NOMINA).ToList()
+                group s by new { CodigoTipoNomina = s.CODIGO_TIPO_NOMINA, TipoNomina= s.TIPO_NOMINA, CodigoCargo =s.CODIGO_CARGO,DescripcionCargo= s.DESCRIPCION_CARGO} into g
+                select new  {
+                    g.Key.CodigoTipoNomina,
+                    g.Key.TipoNomina,
+                    g.Key.CodigoCargo,
+                    g.Key.DescripcionCargo
+                   
+                };
+
+            foreach (var item in q.ToList())
+            {
+                var existe = result.Where(x => x.DescripcionCargo == item.DescripcionCargo).FirstOrDefault();
+                if(existe is null){
+                    RhTipoNominaCargosResponseDto itemResult = new RhTipoNominaCargosResponseDto();
+                    itemResult.Color = "error";
+                    if (item.CodigoCargo == cargoActual.CODIGO_CARGO) itemResult.Color  = "success";
+                    itemResult.CodigoCargo = item.CodigoCargo;
+                    itemResult.DescripcionCargo = item.DescripcionCargo;
+                    itemResult.CodigoTipoNomina = item.CodigoTipoNomina;
+                    var firstCargo = historico.Where(x => x.DESCRIPCION_CARGO == item.DescripcionCargo)
+                        .OrderBy(x => x.FECHA_NOMINA).FirstOrDefault();
+                    var lastCargo = historico.Where(x => x.DESCRIPCION_CARGO == item.DescripcionCargo)
+                        .OrderByDescending(x => x.FECHA_NOMINA).FirstOrDefault();
+                    itemResult.Desde = firstCargo.FECHA_NOMINA.ToShortDateString();
+                    itemResult.Hasta = lastCargo.FECHA_NOMINA.ToShortDateString();
+                    itemResult.TipoNomina = item.TipoNomina;
+                    result.Add(itemResult);
+
+                }
+
+            }
+
+            return result;
+
+
+
+        }
 
 
     }

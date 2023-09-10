@@ -22,7 +22,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().ToListAsync() ;
                 return (List<RH_V_HISTORICO_MOVIMIENTOS>)result;
             }
             catch (Exception ex)
@@ -48,9 +48,22 @@ namespace Convertidor.Data.Repository.Rh
             }
         }
 
-     
+        public async Task<RH_V_HISTORICO_MOVIMIENTOS> GetPrimerMovimientoByCodigoPersona(int codigoPersona)
+        {
+            try
+            {
 
-    
+                var result = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h => h.CODIGO_PERSONA == codigoPersona).OrderBy(h => h.FECHA_NOMINA_MOV).FirstOrDefaultAsync();
+                return (RH_V_HISTORICO_MOVIMIENTOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+
+
 
         public async Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetByTipoNominaPeriodo(int tipoNomina,int codigoPeriodo)
         {

@@ -13,8 +13,9 @@ namespace Convertidor.Data.Interfaces.RH
         Task<ResultDto<RH_RELACION_CARGOS>> Update(RH_RELACION_CARGOS entity);
         Task<string> Delete(int codigoRelacionCargo);
         Task<int> GetNextKey();
+        Task<RH_RELACION_CARGOS> GetUltimoCargoPorPersona(int codigoPersona);
 
 
-    }
+	}
 }
 

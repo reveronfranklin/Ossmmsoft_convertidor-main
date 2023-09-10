@@ -129,7 +129,7 @@ namespace Convertidor.Services.Presupuesto
                 {
                     List<RhRelacionCargoDto> listDto = new List<RhRelacionCargoDto>();
 
-                    foreach (var item in rhRelacionCargos)
+                        foreach (var item in rhRelacionCargos)
                     {
                         var dto = await MapRhRelacionCargo(item);
                         listDto.Add(dto);

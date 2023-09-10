@@ -211,6 +211,28 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        
+        public async Task<RH_RELACION_CARGOS> GetUltimoCargoPorPersona(int codigoPersona)
+        {
+            try
+            {
+
+                var result = await _context.RH_RELACION_CARGOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PERSONA == codigoPersona)
+                    .OrderByDescending(x=>x.FECHA_INI)
+                    .FirstOrDefaultAsync();
+                return (RH_RELACION_CARGOS)result!;
+               
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+
+
+        }
 
     }
 }
