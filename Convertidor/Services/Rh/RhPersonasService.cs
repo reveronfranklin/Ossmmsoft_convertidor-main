@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
@@ -7,11 +9,13 @@ using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Interfaces.Sis;
+using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -33,7 +37,8 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IRhRelacionCargosRepository _rhRelacionCargosRepository;
         private readonly IPreCargosRepository _preCargosRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _preIndiceCatPrg;
-     
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IDistributedCache _distributedCache;
 
         public RhPersonaService(IRhPersonasRepository repository,
                                 IRhHistoricoMovimientoService historicoMovimientoService,
@@ -47,7 +52,9 @@ namespace Convertidor.Data.Repository.Rh
                                  IRhAdministrativosService rhAdministrativosServices,
                                 IRhRelacionCargosRepository rhRelacionCargosRepository, 
                                 IPreCargosRepository preCargosRepository,
-                                IPRE_INDICE_CAT_PRGRepository preIndiceCatPrg)
+                                IPRE_INDICE_CAT_PRGRepository preIndiceCatPrg, 
+                                ISisUsuarioRepository sisUsuarioRepository ,
+                                    IDistributedCache distributedCache)
         {
             
             _repository = repository;
@@ -63,18 +70,58 @@ namespace Convertidor.Data.Repository.Rh
             _rhRelacionCargosRepository = rhRelacionCargosRepository;
             _preCargosRepository = preCargosRepository;
             _preIndiceCatPrg = preIndiceCatPrg;
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _distributedCache = distributedCache;
         }
        
-        public async Task<List<PersonasDto>> GetAll()
+        
+        /*public async Task AddRedis(string key, string value)
+        {
+            var db = _connectionMultiplexer.GetDatabase();
+            await db.StringSetAsync(key, value,TimeSpan.FromHours(2));
+        }
+        public void DeleteRedis(string key)
+        {
+            var db = _connectionMultiplexer.GetDatabase();
+            db.KeyDelete(key);
+        }
+        public async Task<string> GetRedis(string key)
+        {
+            var db = _connectionMultiplexer.GetDatabase();
+            //db.KeyDelete("ListProducts");
+            return await db.StringGetAsync(key);
+        }*/
+        public async Task<List<ListSimplePersonaDto>> GetAll()
         {
             try
             {
-                var personas = await _repository.GetAll();
+                var cacheKey = "ListSimplePersonaDto";
+                List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
+                List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
+                //personas = await _repository.GetAll();
 
-                var result =await  MapListPersonasDto(personas);
+                // =await  MapListSimplePersonasDto(personas);
+                var listPersonas= await _distributedCache.GetAsync(cacheKey);
+                if (listPersonas != null)
+                {
+                    result = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                    return result;
+                }
+                else
+                {
+                    personas = await _repository.GetAll();
 
+                    result =await  MapListSimplePersonasDto(personas);
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
+                        .SetSlidingExpiration(TimeSpan.FromDays(1));
+                   var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                   var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                  
+                }
 
-                return (List<PersonasDto>)result;
+                return (List<ListSimplePersonaDto>)result;
             }
             catch (Exception ex)
             {
@@ -89,10 +136,33 @@ namespace Convertidor.Data.Repository.Rh
         {
             try
             {
-                var personas = await _repository.GetAll();
+                var cacheKey = "GetAllListSimplePersonaDto";
+                List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
+                List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
+                
+                //personas = await _repository.GetAll();
 
-                var result =await MapListSimplePersonasDto(personas);
+                //result =await MapListSimplePersonasDto(personas);
+                
+              
+                var listPersonas= await _distributedCache.GetAsync(cacheKey);
+                if (listPersonas != null)
+                {
+                    result = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                    return result;
+                }
+                else
+                {
+                    personas = await _repository.GetAll();
 
+                    result =await MapListSimplePersonasDto(personas);
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
+                        .SetSlidingExpiration(TimeSpan.FromDays(1));
+                    var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                }
 
                 return (List<ListSimplePersonaDto>)result;
             }
@@ -193,17 +263,15 @@ namespace Convertidor.Data.Repository.Rh
             return itemResult;
 
 
-
-
-
-
-
         }
         
         public async Task<PersonasDto> MapObjPersonasDto(RH_PERSONAS dtos)
         {
-               PersonasDto result;
+               
                PersonasDto itemResult = new PersonasDto();
+               try
+               {
+                 
                 itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
                 itemResult.Cedula = dtos.CEDULA;
                 itemResult.Nombre = dtos.NOMBRE;
@@ -257,19 +325,22 @@ namespace Convertidor.Data.Repository.Rh
 
                 itemResult.Avatar = $"/images/avatars/{dtos.CEDULA.ToString()}.jpg";
                 var desde = DateTime.Now;
-                var primerMovimiento = await _rhHistoricoPersonalCargorepository.GetPrimerMovimientoByCodigoPersona(dtos.CODIGO_PERSONA);
-                desde = primerMovimiento.FECHA_NOMINA;
+                //var primerMovimiento = await _rhHistoricoPersonalCargorepository.GetPrimerMovimientoByCodigoPersona(dtos.CODIGO_PERSONA);
+                //desde = primerMovimiento.FECHA_NOMINA;
 
                 desde = await FechaIngresoTrabajador(dtos.CODIGO_PERSONA);
                 var hasta = DateTime.Now;
                 var tiempoServicio = TiempoServicio(desde, hasta);
                 itemResult.TiempoServicio = tiempoServicio;
                 var relacionCargo = await CargoActual(dtos.CODIGO_PERSONA);
+                if(relacionCargo is not null)
                 {
+                    itemResult.Sueldo = relacionCargo.SUELDO;
                     itemResult.CodigoCargo = relacionCargo.CODIGO_CARGO;
                     var cargo = await _preCargosRepository.GetByCodigo(relacionCargo.CODIGO_CARGO);
                     itemResult.DescripcionCargo = cargo.DENOMINACION;
                     var icp = await _preIndiceCatPrg.GetByCodigo(relacionCargo.CODIGO_ICP);
+                    if(icp is not null)
                     {
                         itemResult.CodigoIcp = relacionCargo.CODIGO_ICP;
                         itemResult.DescripcionIcp = icp.DENOMINACION;
@@ -277,13 +348,17 @@ namespace Convertidor.Data.Repository.Rh
                     
 
                 }
-
-
-                result =itemResult;
-
-            
       
-            return result;
+                return itemResult;
+               }
+               catch (Exception e)
+               {
+                   Console.WriteLine(e);
+                   var result = dtos;
+                   throw;
+               }
+               
+              
 
 
 
@@ -302,7 +377,11 @@ namespace Convertidor.Data.Repository.Rh
             }
 
             var administrativos = await _rhAdministrativosServices.GetPrimerMovimientoByCodigoPersona(codigoPersona);
-            listFechas.Add(administrativos.FECHA_INGRESO);
+            if (administrativos is not null)
+            {
+                listFechas.Add(administrativos.FECHA_INGRESO);
+            }
+          
 
             if (listFechas.Count > 0)
             {
@@ -311,6 +390,7 @@ namespace Convertidor.Data.Repository.Rh
             }
             else
             {
+                result=DateTime.Now;
                 return result;
             }
 
@@ -420,9 +500,6 @@ namespace Convertidor.Data.Repository.Rh
             cantidadAños = añoHasta - añoDesde;
             cantidadMeses = mesHasta - mesDesde;
             cantidadDias = diaHasta - diaDesde;
-            var p_dias = cantidadDias;
-            var p_meses = cantidadMeses;
-            var p_anos = cantidadAños;
 
 
             if (cantidadDias > 28)
@@ -442,30 +519,11 @@ namespace Convertidor.Data.Repository.Rh
                 cantidadAños++;
             }
             else if (cantidadMeses < 0)
-            //else if (cantidadMeses == 0)
-                    {
+            {
                 cantidadMeses = 12 + cantidadMeses;
                 cantidadAños--;
             }
-
-
-            /*if (p_dias > 28) {
-                p_dias= 0;
-                p_meses= p_meses + 1;
-            }
-            else if (p_dias < 0 ) {
-                p_dias  = 30 + p_dias;
-                p_meses= p_meses - 1;
-            }
-            if (p_meses == 12) {
-                p_meses = 0;
-                p_anos = p_anos + 1;
-            }
-            else if (p_meses< 0) {
-                p_meses = 12 + p_meses;
-                p_anos= p_anos - 1;
-            }*/
-
+            
             result.CantidadAños = cantidadAños;
             result.CantidadMeses = cantidadMeses;
             result.CantidadDias = cantidadDias;
@@ -486,6 +544,411 @@ namespace Convertidor.Data.Repository.Rh
         {
             RH_RELACION_CARGOS result;
             result = await _rhRelacionCargosRepository.GetUltimoCargoPorPersona(codigoPersona);
+            return result;
+        }
+
+        public List<string> GetListNacionalidad()
+        {
+            List<string> result = new List<string>();
+            result.Add("V");
+            result.Add("E");
+            return result;
+        }
+        public List<string> GetListSexo()
+        {
+            List<string> result = new List<string>();
+            result.Add("M");
+            result.Add("F");
+            return result;
+        }
+        public List<string> GetListStatus()
+        {
+            List<string> result = new List<string>();
+            result.Add("A");
+            result.Add("E");
+            result.Add("S");
+            return result;
+        }
+        public List<string> GetListManoHabil()
+        {
+            List<string> result = new List<string>();
+            result.Add("D");
+            result.Add("I");
+          
+            return result;
+        }
+        public async Task<ResultDto<PersonasDto>> Update(RhPersonaUpdateDto dto)
+        {
+
+            ResultDto<PersonasDto> result = new ResultDto<PersonasDto>(null);
+            try
+            {
+
+                var persona = await _repository.GetCodigoPersona(dto.CodigoPersona);
+                if (persona == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Persona No Existe";
+                    return result;
+                }
+                if (dto.Cedula <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cedula Invalida";
+                    return result;
+                }
+                if (dto.Nombre.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nombre Invalido";
+                    return result;
+                }
+                if (dto.Apellido.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Apellido Invalido";
+                    return result;
+                }
+
+                var nacionalidad = GetListNacionalidad().Where(x => x== dto.Nacionalidad).FirstOrDefault();
+                if (String.IsNullOrEmpty(nacionalidad))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nacionalidad Invalida";
+                    return result;
+                    
+                }
+                var sexo = GetListSexo().Where(x => x== dto.Sexo).FirstOrDefault();
+                if (String.IsNullOrEmpty(sexo))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Sexo Invalido";
+                    return result;
+                    
+                }
+                
+                if (dto.Estatura <0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estatura Invalida";
+                    return result;
+                }
+                if (dto.Peso <0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Peso Invalido";
+                    return result;
+                }
+                var status = GetListStatus().Where(x => x== dto.Status).FirstOrDefault();
+                if (String.IsNullOrEmpty(status))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status Invalido";
+                    return result;
+                    
+                }
+                var manoHabil = GetListManoHabil().Where(x => x == dto.ManoHabil).FirstOrDefault();
+                if (String.IsNullOrEmpty(manoHabil))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Mano Habil Invalida";
+                    return result;
+                    
+                }
+                var estadoCivil = await _rhDescriptivasServices.GetDescripcionByCodigoDescriptiva(dto.EstadoCivilId);
+                if (String.IsNullOrEmpty(estadoCivil))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estado Civil Invalido";
+                    return result;
+                    
+                }
+                var pais = await _sisUbicacionNacionalRepository.GetPais(dto.PaisNacimientoId);
+                if (pais is null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Pais Invalido";
+                    return result;
+                }
+                var estado = await _sisUbicacionNacionalRepository.GetEstado(dto.PaisNacimientoId,dto.EstadoNacimientoId);
+                if (estado is null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estado Invalido";
+                    return result;
+                }
+                
+                persona.CEDULA = dto.Cedula;
+                persona.NOMBRE = dto.Nombre;
+                persona.APELLIDO = dto.Apellido;
+                persona.NACIONALIDAD = dto.Nacionalidad;
+                persona.SEXO = dto.Sexo;
+                persona.PAIS_NACIMIENTO_ID = dto.PaisNacimientoId;
+                persona.ESTADO_NACIMIENTO_ID = dto.EstadoNacimientoId;
+                persona.ESTADO_CIVIL_ID = dto.EstadoCivilId;
+                persona.ESTATURA = dto.Estatura;
+                persona.PESO = dto.Peso;
+                persona.MANO_HABIL = dto.ManoHabil;
+                persona.STATUS = dto.Status;
+                persona.IDENTIFICACION_ID = dto.IdentificacionId;
+                persona.NUMERO_IDENTIFICACION = dto.NumeroIdentificacion;
+           
+             
+                var fechaNacimiento = Convert.ToDateTime(dto.FechaNacimiento, CultureInfo.InvariantCulture);
+                persona.FECHA_NACIMIENTO = fechaNacimiento;
+                persona.FECHA_UPD = DateTime.Now;
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                persona.CODIGO_EMPRESA = conectado.Empresa;
+                persona.USUARIO_UPD = conectado.Usuario;
+
+
+                await _repository.Update(persona);
+
+        
+                
+                var resultDto = await GetPersona(dto.CodigoPersona);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        public async Task<ResultDto<PersonasDto>> Create(RhPersonaUpdateDto dto)
+        {
+
+            ResultDto<PersonasDto> result = new ResultDto<PersonasDto>(null);
+            try
+            {
+                if (dto.Cedula <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cedula Invalida";
+                    return result;
+                }
+                if (dto.Nombre.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nombre Invalido";
+                    return result;
+                }
+                if (dto.Apellido.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Apellido Invalido";
+                    return result;
+                }
+
+                var nacionalidad = GetListNacionalidad().Where(x => x== dto.Nacionalidad).FirstOrDefault();
+                if (String.IsNullOrEmpty(nacionalidad))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nacionalidad Invalida";
+                    return result;
+                    
+                }
+                var sexo = GetListSexo().Where(x=> x== dto.Sexo).FirstOrDefault();
+                if (String.IsNullOrEmpty(sexo))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Sexo Invalido";
+                    return result;
+                    
+                }
+                
+                if (dto.Estatura <0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estatura Invalida";
+                    return result;
+                }
+                if (dto.Peso <0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Peso Invalido";
+                    return result;
+                }
+                var status = GetListStatus().Where(x => x== dto.Status).FirstOrDefault();
+                if (String.IsNullOrEmpty(status))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status Invalido";
+                    return result;
+                    
+                }
+                var manoHabil = GetListManoHabil().Where(x => x== dto.ManoHabil).FirstOrDefault();
+                if (String.IsNullOrEmpty(manoHabil))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Mano Habil Invalida";
+                    return result;
+                    
+                }
+                var estadoCivil = await _rhDescriptivasServices.GetDescripcionByCodigoDescriptiva(dto.EstadoCivilId);
+                if (String.IsNullOrEmpty(estadoCivil))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estado Civil Invalido";
+                    return result;
+                    
+                }
+                var pais = await _sisUbicacionNacionalRepository.GetPais(dto.PaisNacimientoId);
+                if (pais is null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Pais Invalido";
+                    return result;
+                }
+                var estado = await _sisUbicacionNacionalRepository.GetEstado(dto.PaisNacimientoId,dto.EstadoNacimientoId);
+                if (estado is null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estado Invalido";
+                    return result;
+                }
+                RH_PERSONAS persona = new RH_PERSONAS();
+                persona.CODIGO_PERSONA = await _repository.GetNextKey();
+                persona.CEDULA = dto.Cedula;
+                persona.NOMBRE = dto.Nombre;
+                persona.APELLIDO = dto.Apellido;
+                persona.NACIONALIDAD = dto.Nacionalidad;
+                persona.SEXO = dto.Sexo;
+                persona.PAIS_NACIMIENTO_ID = dto.PaisNacimientoId;
+                persona.ESTADO_NACIMIENTO_ID = dto.EstadoNacimientoId;
+                persona.ESTADO_CIVIL_ID = dto.EstadoCivilId;
+                persona.ESTATURA = dto.Estatura;
+                persona.PESO = dto.Peso;
+                persona.MANO_HABIL = dto.ManoHabil;
+                persona.STATUS = dto.Status;
+                persona.IDENTIFICACION_ID = dto.IdentificacionId;
+                persona.NUMERO_IDENTIFICACION = dto.NumeroIdentificacion;
+           
+             
+                var fechaNacimiento = Convert.ToDateTime(dto.FechaNacimiento, CultureInfo.InvariantCulture);
+                persona.FECHA_NACIMIENTO = fechaNacimiento;
+                persona.FECHA_INS = DateTime.Now;
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                persona.CODIGO_EMPRESA = conectado.Empresa;
+                persona.USUARIO_INS = conectado.Usuario;
+
+
+                var created=await _repository.Add(persona);
+                
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await GetPersona(dto.CodigoPersona);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;  
+
+              
+
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+ 
+        public async Task<ResultDto<RhPersonaDeleteDto>> Delete(RhPersonaDeleteDto dto)
+        {
+
+            ResultDto<RhPersonaDeleteDto> result = new ResultDto<RhPersonaDeleteDto>(null);
+            try
+            {
+
+                var persona = await _repository.GetCodigoPersona(dto.CodigoPersona);
+                if (persona == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Persona no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoPersona);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
             return result;
         }
         

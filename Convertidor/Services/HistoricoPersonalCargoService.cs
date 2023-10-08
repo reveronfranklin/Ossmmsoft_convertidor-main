@@ -106,9 +106,10 @@ namespace Convertidor.Services
             List<RhTipoNominaCargosResponseDto> result = new List<RhTipoNominaCargosResponseDto>();
             var historico = await _repository.GetByCodigoPersona(codigoPersona);
             var cargoActual = await _personaService.CargoActual(codigoPersona);
-            
-            
-            var q= from s in historico.OrderByDescending(x => x.FECHA_NOMINA).ToList()
+
+
+            var rhHistoricoPersonalCargoes = historico.ToList();
+            var q= from s in rhHistoricoPersonalCargoes.OrderByDescending(x => x.FECHA_NOMINA).ToList()
                 group s by new { CodigoTipoNomina = s.CODIGO_TIPO_NOMINA, TipoNomina= s.TIPO_NOMINA, CodigoCargo =s.CODIGO_CARGO,DescripcionCargo= s.DESCRIPCION_CARGO} into g
                 select new  {
                     g.Key.CodigoTipoNomina,
@@ -124,14 +125,13 @@ namespace Convertidor.Services
                 if(existe is null){
                     RhTipoNominaCargosResponseDto itemResult = new RhTipoNominaCargosResponseDto();
                     itemResult.Color = "error";
-                    if (item.CodigoCargo == cargoActual.CODIGO_CARGO) itemResult.Color  = "success";
+                    if (cargoActual != null && item.CodigoCargo == cargoActual.CODIGO_CARGO) itemResult.Color  = "success";
                     itemResult.CodigoCargo = item.CodigoCargo;
                     itemResult.DescripcionCargo = item.DescripcionCargo;
                     itemResult.CodigoTipoNomina = item.CodigoTipoNomina;
-                    var firstCargo = historico.Where(x => x.DESCRIPCION_CARGO == item.DescripcionCargo)
-                        .OrderBy(x => x.FECHA_NOMINA).FirstOrDefault();
-                    var lastCargo = historico.Where(x => x.DESCRIPCION_CARGO == item.DescripcionCargo)
-                        .OrderByDescending(x => x.FECHA_NOMINA).FirstOrDefault();
+                    var firstCargo = rhHistoricoPersonalCargoes.
+                        Where(x => x.DESCRIPCION_CARGO == item.DescripcionCargo).MinBy(x => x.FECHA_NOMINA);
+                    var lastCargo = rhHistoricoPersonalCargoes.Where(x => x.DESCRIPCION_CARGO == item.DescripcionCargo).MaxBy(x => x.FECHA_NOMINA);
                     itemResult.Desde = firstCargo.FECHA_NOMINA.ToShortDateString();
                     itemResult.Hasta = lastCargo.FECHA_NOMINA.ToShortDateString();
                     itemResult.TipoNomina = item.TipoNomina;

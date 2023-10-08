@@ -52,6 +52,60 @@ namespace Convertidor.Data.Repository.Sis
 
 
         }
+        public async Task<List<SIS_UBICACION_NACIONAL>> GetPaises()
+        {
+          
+            try
+            {
+                var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
+                    .Where(x=> x.PAIS != 0 && x.ENTIDAD==0 )
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        
+        public async Task<List<SIS_UBICACION_NACIONAL>> GetEstados()
+        {
+          
+            try
+            {
+                var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
+                    .Where(x=> x.PAIS != 0 && x.ENTIDAD!=0 &&  x.MUNICIPIO ==0 && x.CIUDAD ==0 && x.PARROQUIA ==0 && x.SECTOR == 0 && x.URBANIZACION ==0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        
+        public async Task<SIS_UBICACION_NACIONAL> GetEstado(int pais,int estado)
+        {
+          
+            try
+            {
+                var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty().Where(x=>x.PAIS== pais && x.ENTIDAD==estado && x.MUNICIPIO==0).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
 
         public async Task<ResultDto<SIS_USUARIOS>> Update(SIS_USUARIOS entity)
         {

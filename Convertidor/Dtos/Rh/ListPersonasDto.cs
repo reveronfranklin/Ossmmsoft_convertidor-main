@@ -45,6 +45,8 @@ namespace Convertidor.Dtos.Rh
         public string NombreCompleto { get { return $"{Nombre} {Apellido}"; } }
         public string Avatar { get; set; } = string.Empty;
         public string DescripcionStatus { get { return GetStatus(Status); } }
+        
+        public decimal Sueldo { get; set; } 
         private string GetStatus(string status)
         {
 

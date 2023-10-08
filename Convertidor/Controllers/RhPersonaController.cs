@@ -78,6 +78,33 @@ namespace Convertidor.Controllers
             var result = await _service.GetPersona(filter.CodigoPersona);
             return Ok(result);
         }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(RhPersonaUpdateDto dto)
+        {
+            var result = await _service.Create(dto);
+            return Ok(result);
+        }
+
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Update(RhPersonaUpdateDto dto)
+        {
+            var result = await _service.Update(dto);
+            return Ok(result);
+        }
+
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete(RhPersonaDeleteDto dto)
+        {
+            var result = await _service.Delete(dto);
+            return Ok(result);
+        }
+
 
     }
 }

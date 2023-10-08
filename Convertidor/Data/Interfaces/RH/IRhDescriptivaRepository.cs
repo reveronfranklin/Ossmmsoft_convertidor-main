@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.RH
 
         Task<RH_DESCRIPTIVAS> GetByCodigoDescriptiva(int descripcionId);
         Task<List<RH_DESCRIPTIVAS>> GetAll();
-    }
+        Task<List<RH_DESCRIPTIVAS>> GetByTituloId(int tituloId);
+	}
 }
 

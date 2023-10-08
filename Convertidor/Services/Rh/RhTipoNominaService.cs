@@ -13,16 +13,8 @@ namespace Convertidor.Data.Repository.Rh
 {
 	public class RhTipoNominaService: IRhTipoNominaService
     {
-		
-        private readonly DataContext _context;
-
-
-
-   
         private readonly IRhTipoNominaRepository _repository;
-
-        private readonly IMapper _mapper;
-
+        
         public RhTipoNominaService(IRhTipoNominaRepository repository)
         {
             _repository = repository;
@@ -42,7 +34,7 @@ namespace Convertidor.Data.Repository.Rh
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
+                Console.WriteLine(ex.Message);
                 return null;
             }
 

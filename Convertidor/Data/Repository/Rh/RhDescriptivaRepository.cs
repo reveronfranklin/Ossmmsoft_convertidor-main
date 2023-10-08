@@ -31,6 +31,26 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        
+        
+        public async Task<List<RH_DESCRIPTIVAS>> GetByTituloId(int tituloId)
+        {
+            try
+            {
+                var result = await _context.RH_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.TITULO_ID == tituloId).ToListAsync();
+        
+                return (List<RH_DESCRIPTIVAS>)result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+        }
+        
+        
+        
 
         public async Task<List<RH_DESCRIPTIVAS>> GetAll()
         {

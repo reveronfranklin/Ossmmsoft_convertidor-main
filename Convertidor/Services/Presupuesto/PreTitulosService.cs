@@ -421,27 +421,7 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
-        public PreTitulosGetDto MapPreTitulo(PRE_TITULOS entity)
-        {
-            PreTitulosGetDto dto = new PreTitulosGetDto();
-            dto.TituloId = entity.TITULO_ID;
-            dto.TituloIdFk = entity.TITULO_FK_ID;
-            dto.Titulo = entity.TITULO;
-            if (entity.CODIGO == null) entity.CODIGO = "";
-            dto.Codigo = entity.CODIGO;
-            dto.TituloId = entity.TITULO_ID;
-            if (entity.EXTRA1 == null) entity.EXTRA1 = "";
-            if (entity.EXTRA2 == null) entity.EXTRA2 = "";
-            if (entity.EXTRA3 == null) entity.EXTRA3 = "";
-            dto.Extra1 = entity.EXTRA1;
-            dto.Extra2 = entity.EXTRA2;
-            dto.Extra3 = entity.EXTRA3;
-
-            return dto;
-
-        }
-
-
+ 
         public async Task<ResultDto<PreTitulosDeleteDto>> Delete(PreTitulosDeleteDto dto)
         {
 
@@ -496,6 +476,26 @@ namespace Convertidor.Services.Presupuesto
 
 
             return result;
+        }
+
+        public PreTitulosGetDto MapPreTitulo(PRE_TITULOS entity)
+        {
+            PreTitulosGetDto dto = new PreTitulosGetDto();
+            dto.TituloId = entity.TITULO_ID;
+            dto.TituloIdFk = entity.TITULO_FK_ID;
+            dto.Titulo = entity.TITULO;
+            if (entity.CODIGO == null) entity.CODIGO = "";
+            dto.Codigo = entity.CODIGO;
+            dto.TituloId = entity.TITULO_ID;
+            if (entity.EXTRA1 == null) entity.EXTRA1 = "";
+            if (entity.EXTRA2 == null) entity.EXTRA2 = "";
+            if (entity.EXTRA3 == null) entity.EXTRA3 = "";
+            dto.Extra1 = entity.EXTRA1;
+            dto.Extra2 = entity.EXTRA2;
+            dto.Extra3 = entity.EXTRA3;
+
+            return dto;
+
         }
 
 

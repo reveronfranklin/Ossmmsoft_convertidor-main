@@ -12,7 +12,8 @@ namespace Convertidor.Data.Interfaces.RH
         Task<ResultDto<RH_PERSONAS>> Add(RH_PERSONAS entity);
         Task<ResultDto<RH_PERSONAS>> Update(RH_PERSONAS entity);
         Task<string> Delete(int codigoRelacionCargo);
+        Task<int> GetNextKey();
 
-    }
+	}
 }
 

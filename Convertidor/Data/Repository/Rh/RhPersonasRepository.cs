@@ -66,12 +66,6 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-
-
-
-
-
-
         public async Task<ResultDto<RH_PERSONAS>> Add(RH_PERSONAS entity)
         {
             ResultDto<RH_PERSONAS> result = new ResultDto<RH_PERSONAS>(null);

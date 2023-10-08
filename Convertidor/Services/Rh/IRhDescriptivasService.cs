@@ -1,5 +1,6 @@
 ﻿using System;
 using Convertidor.Data.Entities.Rh;
+using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Services.Rh
 {
@@ -8,6 +9,7 @@ namespace Convertidor.Services.Rh
 
         Task<string> GetDescripcionByCodigoDescriptiva(int descripcionId);
         Task<List<RH_DESCRIPTIVAS>> GetAll();
-    }
+        Task<List<SelectListDescriptiva>> GetByTitulo(int tituloId);
+	}
 }
 

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="IronPdf.MacOs" Version="2022.11.10347" />
+    <PackageReference Include="MailKitLite" Version="4.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>
@@ -18,6 +19,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="6.21.61" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.61" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.15" />
@@ -74,9 +76,7 @@
     <Folder Include="Data\Entities\Rh\" />
     <Folder Include="Data\Entities\Sis\" />
     <Folder Include="Data\Repository\Sis\" />
-    <Folder Include="Dtos\Sis\" />
     <Folder Include="Data\Interfaces\Sis\" />
-    <Folder Include="Services\Sis\" />
     <Folder Include="Data\Repository\Rh\" />
     <Folder Include="Data\Interfaces\RH\" />
     <Folder Include="Services\Rh\" />

@@ -18,13 +18,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Configuration;
 using System.Text;
+using Convertidor.Data.Interfaces.Bm;
 using Swashbuckle;
 using Swashbuckle.AspNetCore.Filters;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Services.Rh;
 using Microsoft.AspNetCore.HttpOverrides;
-
+using StackExchange.Redis;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -86,18 +87,19 @@ builder.Services.AddTransient<IPreRelacionCargosService, PreRelacionCargosServic
 
 
 
-
 //Repository SIS
 
 builder.Services.AddTransient<ISisUsuarioRepository, SisUsuarioRepository>();
 builder.Services.AddTransient<IOssConfigRepository, OssConfigRepository>();
 builder.Services.AddTransient<ISisUbicacionNacionalRepository, SisUbicacionNacionalRepository>();
+builder.Services.AddTransient<ISisUbicacionService, SisUbicacionService>();
+
 
 
 //Services Sis
 builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
 builder.Services.AddTransient<IOssConfigServices, OssServices>();
-
+builder.Services.AddTransient<IEmailServices, EmailServices>();
 
 
 
@@ -154,6 +156,12 @@ builder.Services.AddTransient<IRhAdministrativosRepository, RhAdministrativosRep
 builder.Services.AddTransient<IRhAdministrativosService, RhAdministrativosService>();
 
 
+//BM Repository
+builder.Services.AddTransient<IBM_V_BM1Repository, BM_V_BM1Repository>();
+//BM Services
+builder.Services.AddTransient<IBM_V_BM1Service, BM_V_BM1Service>();
+
+
 
 // Register AutoMapper
 
@@ -203,6 +211,10 @@ var sisConnectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddDbContext<DataContextSis>(options =>
       options.UseOracle(sisConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
+var bmConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionBM");
+builder.Services.AddDbContext<DataContextBm>(options =>
+    options.UseOracle(bmConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
 
 
 var destinoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionPostgres");
@@ -213,6 +225,10 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = "localhost:6379";
 });
+
+/*var redisConnectionString = builder.Configuration.GetConnectionString("redisConnection");
+builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
+    ConnectionMultiplexer.Connect(redisConnectionString));*/
 
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
