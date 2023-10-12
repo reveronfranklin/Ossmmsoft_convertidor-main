@@ -72,7 +72,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
+                var settings = _configuration.GetSection("urlReport").Get<Settings>();
                 var empresString = @settings.EmpresaConfig;
                 var empresa = Int32.Parse(empresString);
                 entity.CODIGO_EMPRESA = empresa;

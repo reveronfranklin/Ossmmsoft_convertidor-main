@@ -8,6 +8,8 @@ namespace Convertidor.Dtos
         public string MenuFiles { get; set; }
         public string PaisConfig { get; set; }
         public string EmpresaConfig { get; set; }
+        public string UrlReport { get; set; }
+        
     }
 }
 

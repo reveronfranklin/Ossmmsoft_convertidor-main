@@ -94,13 +94,22 @@ namespace AppService.Api.Controllers
         {
            
             //string urlBase = "http://192.168.1.124:7779/reports/rwservlet?destype=cache&desformat=pdf&server=samiAIO_webpre&report=PRE_PUC2.rdf&userid=system/s4m1apps@samiapps";
-            string urlBase =
-                "http://192.168.1.124:7779/reports/rwservlet?destype=cache&desformat=HTML&report=RH_RECIBOS_NOMINA.rdf&P_TIPO_NOMINA=10&P_TIPO_GENERACION=3&userid=sis/sis@samiapps";
-            //string urlBase = requestDto.ReportUrl;
-            _client.BaseAddress = new Uri(urlBase);
+            //string urlBase = "http://192.168.1.124:7779/reports/rwservlet?destype=cache&desformat=HTML&report=RH_RECIBOS_NOMINA.rdf&P_TIPO_NOMINA=10&P_TIPO_GENERACION=3&userid=sis/sis@samiapps";
+            
+            var settingUrl = _configuration.GetSection("settings").Get<Settings>();
+            var urlString = @settingUrl.UrlReport;
 
-            // la url final
-            string url = urlBase;
+            string urlBase = urlString;
+            if (string.IsNullOrEmpty(requestDto.ReportUrl ))
+            {
+                requestDto.ReportUrl = "/rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiappsrs&desname=RCNOM&CODIGO_EMPRESA=13&P_TIPO_NOMINA=10&P_TIPO_GENERACION=3&P_FECHA_PAGO=’31/07/2023’";
+
+            }
+            
+            string url = $"{urlBase}{requestDto.ReportUrl}";
+            //string urlBase = requestDto.ReportUrl;
+            _client.BaseAddress = new Uri(url);
+            
             try
             {
                 var result = await _client.GetByteArrayAsync(_client.BaseAddress);

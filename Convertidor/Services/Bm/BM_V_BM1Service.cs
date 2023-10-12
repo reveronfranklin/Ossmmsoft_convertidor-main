@@ -53,7 +53,9 @@ namespace Convertidor.Services.Catastro
                                       Articulo = s.ARTICULO,
                                       Especificacion = s.ESPECIFICACION,
                                       Servicio = s.SERVICIO,
-                                      ResponsableBien = s.RESPONSABLE_BIEN
+                                      ResponsableBien = s.RESPONSABLE_BIEN,
+                                      CodigoBien = s.CODIGO_BIEN,
+                                      CodigoMovBien=s.CODIGO_MOV_BIEN
                  
                                       
                                   } into g
@@ -71,7 +73,9 @@ namespace Convertidor.Services.Catastro
                                       Articulo = g.Key.Articulo,
                                       Especificacion = g.Key.Especificacion,   
                                       Servicio = g.Key.Servicio,
-                                      ResponsableBien = g.Key.ResponsableBien
+                                      ResponsableBien = g.Key.ResponsableBien,
+                                      CodigoBien = g.Key.CodigoBien,
+                                      CodigoMovBien = g.Key.CodigoMovBien
 
                                   };
                 

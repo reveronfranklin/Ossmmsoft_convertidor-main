@@ -17,4 +17,11 @@ public class BM_V_BM1
     public DateTime FECHA_MOVIMIENTO { get; set; }
     public int CODIGO_EMPRESA { get; set; }
     
+    public int CODIGO_BIEN { get; set; }
+
+    public int CODIGO_MOV_BIEN { get; set; }
+
+    
+        
+    
 }
