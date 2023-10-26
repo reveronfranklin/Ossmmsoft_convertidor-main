@@ -44,10 +44,6 @@ namespace Convertidor.Controllers
             var result = await _service.GetAll();
             return Ok(result);
 
-         
-
-
-
         }
 
 

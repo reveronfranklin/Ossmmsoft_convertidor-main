@@ -1,6 +1,7 @@
 ﻿using AppService.Api.Utility;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.Text;
 using Convertidor.Data.Entities;
 using Convertidor.Data.Interfaces;
 using Convertidor.Services;
@@ -12,6 +13,7 @@ using Convertidor.Dtos;
 using Convertidor.Services.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
 using Ganss.Excel;
+using Microsoft.Extensions.Caching.Distributed;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,13 +27,18 @@ namespace Convertidor.Controllers
         private readonly IPRE_V_SALDOSServices _service;
         private readonly IPRE_V_DENOMINACION_PUCServices _preVSaldosDenominacionPucServices;
         private readonly IConfiguration _configuration;
+        private readonly IDistributedCache _distributedCache;
 
-        public PreVSaldosController(IPRE_V_SALDOSServices service, IPRE_V_DENOMINACION_PUCServices preVSaldosDenominacionPucServices, IConfiguration configuration)
+        public PreVSaldosController(IPRE_V_SALDOSServices service, 
+                                    IPRE_V_DENOMINACION_PUCServices preVSaldosDenominacionPucServices,
+                                    IConfiguration configuration,
+                                    IDistributedCache distributedCache)
         {
 
             _service = service;
             _preVSaldosDenominacionPucServices = preVSaldosDenominacionPucServices;
             _configuration = configuration;
+            _distributedCache = distributedCache;
 
         }
 
@@ -68,7 +75,24 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter)
         {
-            var result = await _service.GetAllByPresupuestoIpcPuc(filter);
+            ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
+            var cacheKey = $"GetAllByPresupuestoIpcPuc{filter.CodigoPresupuesto.ToString()}-{filter.CodigoPuc.ToString()}-{filter.CodigoIPC.ToString()}";
+            var listPresupuesto= await _distributedCache.GetAsync(cacheKey);
+            if (listPresupuesto != null)
+            {
+                result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<PreVSaldosGetDto>> > (listPresupuesto);
+            }
+            else
+            {
+                result = await _service.GetAllByPresupuestoIpcPuc(filter);
+                var options = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
+                    .SetSlidingExpiration(TimeSpan.FromDays(1));
+                var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+            }
+            
             try
             {
                 if (result.Data.Count() > 0)

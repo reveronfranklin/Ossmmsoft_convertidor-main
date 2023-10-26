@@ -107,18 +107,16 @@ namespace Convertidor.Data.Repository.Rh
             var empresa = Int32.Parse(empresString);
             try
             {
-                RH_PERSONAS entityUpdate = await GetCodigoPersona(entity.CODIGO_PERSONA);
-                if (entityUpdate != null)
-                {
+                
 
-                    entityUpdate.CODIGO_EMPRESA = empresa;
+                    entity.CODIGO_EMPRESA = empresa;
                     _context.RH_PERSONAS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
 
-                }
+                
                 return result;
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using AppService.Api.Utility;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.Text;
 using Convertidor.Data.Entities;
 using Convertidor.Data.Interfaces;
 using Convertidor.Services;
@@ -12,6 +13,7 @@ using Convertidor.Dtos;
 using Convertidor.Services.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,12 +26,13 @@ namespace Convertidor.Controllers
     {
        
         private readonly IPRE_PRESUPUESTOSService _prePresupuestoService;
-
-        public PrePresupuestoController(IPRE_PRESUPUESTOSService prePresupuestoService)
+        private readonly IDistributedCache _distributedCache;
+        public PrePresupuestoController(IPRE_PRESUPUESTOSService prePresupuestoService,
+                                        IDistributedCache distributedCache)
         {
 
             _prePresupuestoService = prePresupuestoService;
-           
+            _distributedCache = distributedCache;
         }
 
 
@@ -75,7 +78,24 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult>  GetAllFilter(FilterPRE_PRESUPUESTOSDto filter)
         {
-                var result = await _prePresupuestoService.GetAll(filter);
+                ResultDto<List<GetPRE_PRESUPUESTOSDto>> result = new ResultDto<List<GetPRE_PRESUPUESTOSDto>>(null);
+                var cacheKey = $"GetAllFilterPresupuesto{filter.CodigoPresupuesto.ToString()}-{filter.FinanciadoId.ToString()}-{filter.FechaDesde.ToShortDateString()}-{filter.FechaHasta.ToShortDateString()}";
+                var listPresupuesto= await _distributedCache.GetAsync(cacheKey);
+                if (listPresupuesto != null)
+                {
+                    result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<GetPRE_PRESUPUESTOSDto>> > (listPresupuesto);
+                }
+                else
+                {
+                    result = await _prePresupuestoService.GetAll(filter);
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
+                        .SetSlidingExpiration(TimeSpan.FromDays(1));
+                    var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                }
+               
                 return Ok(result);
         }
 

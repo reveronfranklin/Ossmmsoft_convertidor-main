@@ -186,7 +186,7 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.ApiKey
     });
 
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
+    options.OperationFilter<SecurityRequirementsOperationFilter>(); 
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionRH");

@@ -59,3 +59,25 @@ deploy next js on iis web server
 https://www.youtube.com/watch?v=HLsx0iraA-Y
 
 https://github.com/dipneupane/NextJs-IISDeployment/blob/main/web.config
+
+
+
+.NET y DOCKER! - Cómo desplegar tus aplicaciones// Containers, .NET, Dockerfiles y MUCHO MÁS!
+https://www.youtube.com/watch?v=8WO-WlZ9NoA&t=12s
+CONFIGURAR DOCKER DOTNET
+dotnet restore
+dotnet publish -c Release -o out
+dotnet out/Convertidor.dll
+
+
+
+crear imagen
+
+docker build -t dotnetcoreapp .
+
+crear contenedor
+docker run -d -p 5000:5000 --name Convertidor dotnetcoreapp
+
+docker save dotnetcoreapp > ~/Downloads/dotnetcoreapp.tar
+docker load < ~/Downloads/dotnetcoreapp.tar
+

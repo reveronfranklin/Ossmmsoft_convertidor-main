@@ -91,85 +91,111 @@ namespace Convertidor.Data.Repository.Rh
             //db.KeyDelete("ListProducts");
             return await db.StringGetAsync(key);
         }*/
-        public async Task<List<ListSimplePersonaDto>> GetAll()
+        public async  Task<ResultDto<List<ListSimplePersonaDto>>> GetAll()
         {
+            ResultDto<List<ListSimplePersonaDto>> result = new ResultDto<List<ListSimplePersonaDto>>(null);
             try
             {
-                var cacheKey = "ListSimplePersonaDto";
+                var cacheKey = "GetAllListSimplePersonaDto";
                 List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
-                List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
+                List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
                 //personas = await _repository.GetAll();
 
                 // =await  MapListSimplePersonasDto(personas);
                 var listPersonas= await _distributedCache.GetAsync(cacheKey);
                 if (listPersonas != null)
                 {
-                    result = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                    result.Data =resultData;
+
+                    result.IsValid = true;
+                    result.Message = "";
                     return result;
                 }
                 else
                 {
                     personas = await _repository.GetAll();
 
-                    result =await  MapListSimplePersonasDto(personas);
+                    resultData =await  MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
                         .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
-                   var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                   var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
                     await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
-                  
+                    result.Data =resultData;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                    return result;
                 }
 
-                return (List<ListSimplePersonaDto>)result;
+               
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
-                return null;
+                result.Data =null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
             }
 
         }
 
 
-        public async Task<List<ListSimplePersonaDto>> GetAllSimple()
+        public async Task<ResultDto<List<ListSimplePersonaDto>>> GetAllSimple()
         {
+            ResultDto<List<ListSimplePersonaDto>> result = new ResultDto<List<ListSimplePersonaDto>>(null);
+
             try
             {
-                var cacheKey = "GetAllListSimplePersonaDto";
+                
+                var cacheKey = "GetAllSimpleListSimplePersonaDto";
                 List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
-                List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
+                List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
                 
                 //personas = await _repository.GetAll();
 
                 //result =await MapListSimplePersonasDto(personas);
                 
-              
+               
                 var listPersonas= await _distributedCache.GetAsync(cacheKey);
+                
                 if (listPersonas != null)
                 {
-                    result = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                    result.Data =resultData;
+
+                    result.IsValid = true;
+                    result.Message = "";
                     return result;
                 }
                 else
                 {
                     personas = await _repository.GetAll();
 
-                    result =await MapListSimplePersonasDto(personas);
+                    resultData =await MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
                         .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
-                    var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                    var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                     var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
                     await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                    result.Data =resultData;
+                    result.IsValid = true;
+                    result.Message = "";
+                    return result;
                 }
 
-                return (List<ListSimplePersonaDto>)result;
+              
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
-                return null;
+                result.Data =null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+              
             }
 
         }
@@ -230,6 +256,10 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.EstadoCivilId = dtos.ESTADO_CIVIL_ID;
                 itemResult.Estatura = dtos.ESTATURA;
                 itemResult.Peso = dtos.PESO;
+                if (string.IsNullOrEmpty(dtos.MANO_HABIL))
+                {
+                    dtos.MANO_HABIL = "D";
+                }
                 itemResult.ManoHabil = dtos.MANO_HABIL;
                 itemResult.Extra1 = dtos.EXTRA1;
                 itemResult.Extra2 = dtos.EXTRA2;
@@ -292,6 +322,11 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.DescripcionEstadoCivil = await _rhDescriptivasServices.GetDescripcionByCodigoDescriptiva(dtos.ESTADO_CIVIL_ID);
                 itemResult.Estatura = dtos.ESTATURA;
                 itemResult.Peso = dtos.PESO;
+                if (string.IsNullOrEmpty(dtos.MANO_HABIL))
+                {
+                    dtos.MANO_HABIL = "D";
+                }
+                
                 itemResult.ManoHabil = dtos.MANO_HABIL;
                 itemResult.Extra1 = dtos.EXTRA1;
                 itemResult.Extra2 = dtos.EXTRA2;
@@ -441,6 +476,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Sexo = item.SEXO;
                 itemResult.FechaNacimiento = item.FECHA_NACIMIENTO.ToShortDateString();
                 itemResult.Email = "";
+                
            
                 var pais = await _sisUbicacionNacionalRepository.GetPais(item.PAIS_NACIMIENTO_ID);
                 if(pais is not null)
@@ -702,11 +738,11 @@ namespace Convertidor.Data.Repository.Rh
                 persona.ESTATURA = dto.Estatura;
                 persona.PESO = dto.Peso;
                 persona.MANO_HABIL = dto.ManoHabil;
-                persona.STATUS = dto.Status;
+                //persona.STATUS = dto.Status;
                 persona.IDENTIFICACION_ID = dto.IdentificacionId;
                 persona.NUMERO_IDENTIFICACION = dto.NumeroIdentificacion;
            
-             
+                
                 var fechaNacimiento = Convert.ToDateTime(dto.FechaNacimiento, CultureInfo.InvariantCulture);
                 persona.FECHA_NACIMIENTO = fechaNacimiento;
                 persona.FECHA_UPD = DateTime.Now;

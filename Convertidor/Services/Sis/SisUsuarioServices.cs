@@ -102,6 +102,10 @@ namespace Convertidor.Services.Sis
                     {
                         resultItem.Menu = GetMenuRh();
                     }
+                    if (item.Role == "bm")
+                    {
+                        resultItem.Menu = GetMenuBm();
+                    }
 
                     result.Add(resultItem);
 
@@ -144,7 +148,21 @@ namespace Convertidor.Services.Sis
             return json;
 
         }
+        public string GetMenuBm()
+        {
 
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+
+
+            string jsonFilePath = @settings.MenuFiles;
+
+            string json = File.ReadAllText(jsonFilePath + "/MenuBM.json");
+
+            return json;
+
+        }
         public string GetMenuDeveloper()
         {
 

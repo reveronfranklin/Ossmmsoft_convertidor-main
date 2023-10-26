@@ -77,7 +77,12 @@ namespace Convertidor.Data
             modelBuilder
          .Entity<RH_PERSONAS>(builder =>
          {
-             builder.HasNoKey();
+           
+             builder.HasKey(table => new
+             {
+                 table.CODIGO_PERSONA,
+
+             });
              builder.ToTable("RH_PERSONAS");
          });
             modelBuilder
