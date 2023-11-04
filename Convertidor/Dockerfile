@@ -1,12 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR convertidor
+WORKDIR /app
 
-EXPOSE 80
+EXPOSE 5000
 EXPOSE 5000
 
 #COPY PROJECT FILES
 COPY ./*.csproj ./
-#RUN dotnet restore 
+RUN dotnet restore 
 
 #COPY EVERYTHING ELSE
 
@@ -15,6 +15,6 @@ RUN dotnet publish -c Release -o out
 
 #BUILD IMAGE
 FROM mcr.microsoft.com/dotnet/sdk:6.0
-WORKDIR /convertidor
-COPY --from=build /convertidor/out .
+WORKDIR /app
+COPY --from=build /app/out .
 ENTRYPOINT ["dotnet","Convertidor.dll"]

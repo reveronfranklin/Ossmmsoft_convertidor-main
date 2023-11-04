@@ -65,7 +65,6 @@ namespace Convertidor.Data.Repository.Catastro
                 _context.SaveChanges();
             }
 
-
         }
 
 
