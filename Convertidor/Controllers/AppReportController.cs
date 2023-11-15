@@ -145,7 +145,7 @@ namespace AppService.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Ok(ex.Message);
             }
 
         }

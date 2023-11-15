@@ -9,6 +9,7 @@ using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
+using Convertidor.Dtos.Sis;
 using Convertidor.Utility;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
@@ -270,6 +271,104 @@ namespace Convertidor.Services.Rh
             var descriptivas = list.Where(d => d.CODIGO == codigo).First();
 
             return descriptivas;
+        }
+
+        
+        
+        
+        //RhResumenPagoPorPersona
+        public async Task<List<RhResumenPagoPorPersona>> GetResumenPagoCodigoPersona(int codigoPersona)
+        {
+            try
+            {
+                
+                List<RhResumenPagoPorPersona> listHistoricoMovimientoDtos = new List<RhResumenPagoPorPersona>();
+
+                var historico = await _repository.GetByCodigoPersona(codigoPersona);
+                listHistoricoMovimientoDtos=await MapRhResumenPagoPorPersona(historico);
+                return (List<RhResumenPagoPorPersona>)listHistoricoMovimientoDtos;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        private string BuildLinkRecibo(List<ClaveValorDto> list)
+        {
+            
+            //var link =
+             //   $"http://216.244.81.115:7779/reports/rwservlet?destype=cache&desformat=PDF&server=samiAIO_webrh&report=/u3/fuentes/rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiapps&desname=RCNOM&CODIGO_EMPRESA=13&P_CEDULA=[CEDULA]&P_TIPO_GENERACION=3&P_TIPO_NOMINA=[TIPONOMINA]&P_FECHA_PAGO=[FECHAPAGO]";
+            var link =
+                $"http://192.168.1.124:7779/reports/rwservlet?destype=cache&desformat=PDF&server=samiAIO_webrh&report=/u3/fuentes/rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiapps&desname=RCNOM&CODIGO_EMPRESA=13&P_CEDULA=[CEDULA]&P_TIPO_GENERACION=3&P_TIPO_NOMINA=[TIPONOMINA]&P_FECHA_PAGO=[FECHAPAGO]";
+
+            foreach (var item in list)
+            {
+                link = link.Replace("[" + item.Clave + "]", item.Valor.Trim());
+            }
+
+            return link;
+        }
+        
+         private async Task<List<RhResumenPagoPorPersona>> MapRhResumenPagoPorPersona(List<RH_V_HISTORICO_MOVIMIENTOS> dto)
+        {
+            
+            List<RhResumenPagoPorPersona> result = new List<RhResumenPagoPorPersona>(); 
+           
+            try
+            {
+                
+                var resultNew = from s in dto.OrderBy(x => x.FECHA_NOMINA_MOV).ToList()
+                        group s by new { Cedula = s.CEDULA, CodigoTipoNomina= s.CODIGO_TIPO_NOMINA, TipoNomina=s.TIPO_NOMINA,FechaNomina =s.FECHA_NOMINA_MOV} into g
+                        select new  RhResumenPagoPorPersona {
+                            Cedula =g.Key.Cedula,
+                            CodigoTipoNomina=g.Key.CodigoTipoNomina,
+                            TipoNomina=g.Key.TipoNomina,
+                            FechaNomina=g.Key.FechaNomina,
+                          
+                        };
+                foreach (var item in resultNew)
+                {
+
+                    List<ClaveValorDto> list = new List<ClaveValorDto>();
+                    ClaveValorDto itemList = new ClaveValorDto();
+                    itemList.Clave = "CEDULA";
+                    itemList.Valor = item.Cedula.ToString();
+                    list.Add(itemList);
+                    ClaveValorDto itemListTipo = new ClaveValorDto();
+                    itemListTipo.Clave = "TIPONOMINA";
+                    itemListTipo.Valor = item.CodigoTipoNomina.ToString();
+                    list.Add(itemListTipo);
+                    ClaveValorDto itemListFecha = new ClaveValorDto();
+                    itemListFecha.Clave = "FECHAPAGO";
+                    itemListFecha.Valor = $"{item.FechaNomina.Day.ToString()}/{item.FechaNomina.Month.ToString()}/{item.FechaNomina.Year.ToString()} ";
+                    list.Add(itemListFecha);
+
+                    item.LinkData = BuildLinkRecibo(list);
+                    RhResumenPagoPorPersona resultItem = new RhResumenPagoPorPersona();
+                    resultItem.Cedula = item.Cedula;
+                    resultItem.CodigoTipoNomina = item.CodigoTipoNomina;
+                    resultItem.TipoNomina = item.TipoNomina;
+                    resultItem.FechaNominaString = itemListFecha.Valor;
+                    resultItem.FechaNomina = item.FechaNomina;
+                    resultItem.LinkData = item.LinkData;
+                    result.Add(resultItem);
+
+                }
+                
+                
+             
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+            
+
         }
 
         private async Task<List<ListHistoricoMovimientoDto>> MapListHistoricoMovimiento(List<RH_V_HISTORICO_MOVIMIENTOS> dto)

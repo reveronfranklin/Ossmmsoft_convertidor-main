@@ -18,6 +18,7 @@ namespace Convertidor.Services.Rh
         Task<List<ListHistoricoMovimientoDto>> GetByIndividual(FilterHistoricoNominaPeriodo filter);
         Task<List<ListHistoricoMovimientoDto>> GetByMasivo(FilterHistoricoNominaPeriodo filter);
         Task<RH_V_HISTORICO_MOVIMIENTOS> GetPrimerMovimientoByCodigoPersona(int codigoPersona);
-    }
+        Task<List<RhResumenPagoPorPersona>> GetResumenPagoCodigoPersona(int codigoPersona);
+	}
 }
 

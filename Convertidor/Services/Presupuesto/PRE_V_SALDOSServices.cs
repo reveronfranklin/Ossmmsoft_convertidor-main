@@ -129,7 +129,7 @@ namespace Convertidor.Services.Presupuesto
                     }
 
 
-                    var groupByDescripcionFinanciado =
+                   /* var groupByDescripcionFinanciado =
                         from item in resultList
                         group item by item.DescripcionFinanciado;
                     var groupByDenominacionIcp =
@@ -137,7 +137,7 @@ namespace Convertidor.Services.Presupuesto
                        group item by item.DenominacionIcp;
                     var groupByunidadEjecutora =
                                            from item in resultList
-                                           group item by item.UnidadEjecutora;
+                                           group item by item.UnidadEjecutora;*/
 
                     result.Data = resultList;
 

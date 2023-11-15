@@ -76,8 +76,48 @@ crear imagen
 docker build -t dotnetcoreapp .
 
 crear contenedor
-docker run -d -p 5000:5000 --name Convertidor dotnetcoreapp
+docker run -d -p 5000:5000 --name convertidor contenedorimage
 
 docker save dotnetcoreapp > ~/Downloads/dotnetcoreapp.tar
 docker load < ~/Downloads/dotnetcoreapp.tar
+
+CREAR RED
+sudo docker network create ossmmasoftred
+
+CONTENEDOR DE BASE DE DATOS
+sudo docker network connect --alias samidb ossmmasoftred contaiderid
+
+CONTENEDOR BACK
+sudo docker run -p 8081:80 -e APSNETCORE_URLS=http://+:80 nombreimagen
+sudo docker network connect --alias ossmmasoftback ossmmasoftred contaiderid
+
+
+How to Deploy .Net Core Web Application to Ubuntu Linux
+https://www.youtube.com/watch?v=ll-1O-3IBmY
+https://javafish.blogspot.com/2021/12/youtube-how-to-deploy-net-core-web.html
+
+sudo apt-get update && \
+sudo apt-get install -y dotnet-sdk-6.0
+sudo apt-get install -y dotnet-runtime-6.0
+
+sudo mkdir /var/www/webapi
+
+
+[Unit] 
+Description=ASP .NET Web Application 
+[Service] 
+WorkingDirectory=/var/www/webapi 
+ExecStart=/usr/bin/dotnet /var/www/webapi/Convertidor.dll 
+Restart=always 
+RestartSec=10 
+SyslogIdentifier=netcore-demo 
+User=www-data 
+Environment=ASPNETCORE_ENVIRONMENT=Production 
+[Install] 
+WantedBy=multi-user.target 
+
+
+Redis
+docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
+
 

@@ -156,7 +156,52 @@ namespace Convertidor.Controllers
           
           
         }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetResumenPago( FilterPersonaDto filter)
+        {
+            ResultDto<List<RhResumenPagoPorPersona>> resultDto = new ResultDto<List<RhResumenPagoPorPersona>>(null);
+         
+            List<RhResumenPagoPorPersona> result = new List<RhResumenPagoPorPersona>();
 
+            result = await _historicoNominaService.GetResumenPagoCodigoPersona(filter.CodigoPersona);
+            
+
+            result = result.OrderByDescending(x => x.FechaNomina).ToList();
+
+            if (result.Count() > 0)
+            {
+                resultDto.Data = result;
+                resultDto.IsValid = true;
+                resultDto.Message = "";
+                resultDto.LinkData = $"";
+                //if (filter.Page == 0) filter.Page = 1;
+               // var historico = Paginacion<ListHistoricoMovimientoDto>.CrearPaginacion(result, filter.Page, filter.PageSize);
+                //resultDto.Data = historico;
+                resultDto.Page = 0;
+                resultDto.CantidadRegistros = result.Count();
+            }
+            else
+            {
+                resultDto.Data = result;
+                resultDto.IsValid = true;
+                resultDto.Message = "No Data";
+                resultDto.LinkData = $"";
+            }
+
+
+            
+         
+
+            return Ok(resultDto);
+          
+          
+        }
+
+
+        
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GenerateExcel(FilterHistoricoNominaPeriodo filter)

@@ -269,7 +269,9 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     app.UseSwagger();
     app.UseSwaggerUI();
 }*/
-
+//Server de desarrollo
+//app.Urls.Add("http://216.244.81.116:5000");
+app.Urls.Add("http://localhost:5000");
 app.UseSwagger();
 app.UseSwaggerUI();
 
