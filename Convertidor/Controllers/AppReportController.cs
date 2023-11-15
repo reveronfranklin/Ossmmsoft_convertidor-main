@@ -105,20 +105,7 @@ namespace AppService.Api.Controllers
                 requestDto.ReportUrl = "/rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiappsrs&desname=RCNOM&CODIGO_EMPRESA=13&P_TIPO_NOMINA=10&P_TIPO_GENERACION=3&P_FECHA_PAGO=’31/07/2023’";
 
             }
-            /* Recibos Produccion
-             * {
-               "reportName":"RECIBOS",
-               "reportUrl":"rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiappsrs&desname=RCNOM&CODIGO_EMPRESA=13&P_TIPO_NOMINA=10&P_TIPO_GENERACION=3&P_FECHA_PAGO=’31/07/2023’"
-               }
-             */
-            
-            /* recibos desarrollo
-             *{
-               "reportName":"RECIBOS",
-               "reportUrl":"rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiapps&desname=RCNOM&CODIGO_EMPRESA=13&P_TIPO_NOMINA=10&P_TIPO_GENERACION=3&P_FECHA_PAGO=’31/07/2023’"
-               }
-             * 
-             */
+          
             
             
             string url = $"{urlBase}{requestDto.ReportUrl}";

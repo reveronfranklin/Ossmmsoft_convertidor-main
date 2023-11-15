@@ -31,18 +31,20 @@ namespace Convertidor.Services.Rh
         private readonly IRhProcesoDetalleRepository _rhProcesoDetalleRepository;
         private readonly IRhConceptosRepository _rhConceptosRepository;
         private readonly IRhTipoNominaService _tipoNominaService;
-
+        private readonly IConfiguration _configuration;
         public RhHistoricoMovimientoService(IRhHistoricoMovimientoRepository repository,
                                             IRhDescriptivasService descriptivaServices,
                                             IRhProcesoDetalleRepository rhProcesoDetalleRepository,
                                             IRhConceptosRepository rhConceptosRepository,
-                                            IRhTipoNominaService tipoNominaService)
+                                            IRhTipoNominaService tipoNominaService,
+                                            IConfiguration configuration)
         {
             _repository = repository;
             _descriptivaServices = descriptivaServices;
             _rhProcesoDetalleRepository = rhProcesoDetalleRepository;
             _rhConceptosRepository = rhConceptosRepository;
             _tipoNominaService = tipoNominaService;
+            _configuration = configuration;
 
         }
 
@@ -298,11 +300,14 @@ namespace Convertidor.Services.Rh
 
         private string BuildLinkRecibo(List<ClaveValorDto> list)
         {
-            
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+               
+            var urlReport = @settings.UrlReport;  
             //var link =
              //   $"http://216.244.81.115:7779/reports/rwservlet?destype=cache&desformat=PDF&server=samiAIO_webrh&report=/u3/fuentes/rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiapps&desname=RCNOM&CODIGO_EMPRESA=13&P_CEDULA=[CEDULA]&P_TIPO_GENERACION=3&P_TIPO_NOMINA=[TIPONOMINA]&P_FECHA_PAGO=[FECHAPAGO]";
-            var link =
-                $"http://192.168.1.124:7779/reports/rwservlet?destype=cache&desformat=PDF&server=samiAIO_webrh&report=/u3/fuentes/rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiapps&desname=RCNOM&CODIGO_EMPRESA=13&P_CEDULA=[CEDULA]&P_TIPO_GENERACION=3&P_TIPO_NOMINA=[TIPONOMINA]&P_FECHA_PAGO=[FECHAPAGO]";
+            //var link = $"http://192.168.1.124:7779/reports/rwservlet?destype=cache&desformat=PDF&server=samiAIO_webrh&report=/u3/fuentes/rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiapps&desname=RCNOM&CODIGO_EMPRESA=13&P_CEDULA=[CEDULA]&P_TIPO_GENERACION=3&P_TIPO_NOMINA=[TIPONOMINA]&P_FECHA_PAGO=[FECHAPAGO]";
+            var link = $"{urlReport}rh/reports/RH_RECIBOS_NOMINA.rdf&userid=sis/sis@samiapps&desname=RCNOM&CODIGO_EMPRESA=13&P_CEDULA=[CEDULA]&P_TIPO_GENERACION=3&P_TIPO_NOMINA=[TIPONOMINA]&P_FECHA_PAGO=[FECHAPAGO]";
 
             foreach (var item in list)
             {

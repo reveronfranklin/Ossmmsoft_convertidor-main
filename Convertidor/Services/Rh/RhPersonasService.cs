@@ -118,7 +118,7 @@ namespace Convertidor.Data.Repository.Rh
 
                     resultData =await  MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(1))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
                    var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
@@ -502,9 +502,6 @@ namespace Convertidor.Data.Repository.Rh
                     itemResult.Avatar = "/images/avatars/1.png";
                 }
                 itemResult.Avatar = $"/images/avatars/{item.CEDULA.ToString()}.jpg";
-
-      
-
 
                 result.Add(itemResult);
 
