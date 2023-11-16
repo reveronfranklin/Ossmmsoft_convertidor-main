@@ -30,7 +30,7 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IRhDireccionesService _rhDireccionesService;
         private readonly IRhConceptosService _rhConceptosService;
         private readonly ISisUbicacionNacionalRepository _sisUbicacionNacionalRepository;
-        private readonly IRhComunicacionessRepository _rhComunicacionessRepository;
+        private readonly IRhComunicacionesRepository _rhComunicacionessRepository;
         private readonly IRH_HISTORICO_PERSONAL_CARGORepository _rhHistoricoPersonalCargorepository;
         private readonly IRhDescriptivasService _rhDescriptivasServices;
         private readonly IRhAdministrativosService _rhAdministrativosServices;
@@ -46,7 +46,7 @@ namespace Convertidor.Data.Repository.Rh
                                 IRhDireccionesService rhDireccionesService,
                                 IRhConceptosService rhConceptosService,
                                 ISisUbicacionNacionalRepository sisUbicacionNacionalRepository,
-                                IRhComunicacionessRepository rhComunicacionessRepository,
+                                IRhComunicacionesRepository rhComunicacionessRepository,
                                 IRH_HISTORICO_PERSONAL_CARGORepository rhHistoricoPersonalCargorepository,
                                 IRhDescriptivasService rhDescriptivasServices,
                                  IRhAdministrativosService rhAdministrativosServices,

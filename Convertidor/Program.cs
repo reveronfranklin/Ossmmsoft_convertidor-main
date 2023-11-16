@@ -151,9 +151,10 @@ builder.Services.AddTransient<IRhRelacionCargosRepository, RhRelacionCargosRepos
 builder.Services.AddTransient<IRhRelacionCargosService, RhRelacionCargosService>();
 
 builder.Services.AddTransient<IRhMovNominaRepository, RhMovNominaRepository>();
-builder.Services.AddTransient<IRhComunicacionessRepository, RhComunicacionessRepository>();
+builder.Services.AddTransient<IRhComunicacionesRepository, RhComunicacionesRepository>();
 builder.Services.AddTransient<IRhAdministrativosRepository, RhAdministrativosRepository>();
 builder.Services.AddTransient<IRhAdministrativosService, RhAdministrativosService>();
+builder.Services.AddTransient<IRhComunicacionService, RhComunicacionService>();
 
 
 //BM Repository

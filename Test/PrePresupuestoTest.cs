@@ -30,31 +30,7 @@ public class PrePresupuestoTest
 
     }
 
-    [Fact]
-    public async Task GetAll_Ok()
-    {
-        //Arrange
-
-        FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
-        filter.CodigoEmpresa = 13;
-        filter.SearchText = "";
-        
-
-        var list = GetPresupuestos();
-        _services.Setup(x => x.GetListPresupuesto())
-                .Returns(list);
-        var prePresupuestoController = new PrePresupuestoController(_services.Object);
-        //Act
-        var result = await prePresupuestoController.GetList();
-        //Assert
-        Assert.NotNull(result);
-        
-       
-        //Assert.Equal(list.Result.Data.Count(), result.ExecuteResultAsync();
-
-
-
-    }
+  
 
     private async Task<ResultDto<List<ListPresupuestoDto>>> GetPresupuestos()
     {

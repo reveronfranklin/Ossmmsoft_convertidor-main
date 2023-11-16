@@ -79,7 +79,6 @@
     <Folder Include="Data\Interfaces\Sis\" />
     <Folder Include="Data\Repository\Rh\" />
     <Folder Include="Data\Interfaces\RH\" />
-    <Folder Include="Services\Rh\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="recursos.cshtml" />
