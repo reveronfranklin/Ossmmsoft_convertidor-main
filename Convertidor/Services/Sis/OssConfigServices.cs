@@ -74,7 +74,39 @@ namespace Convertidor.Services.Sis
 
         }
 
+        public async Task<int> GetNextByClave(string clave)
+        {
 
+            int result = 0;
+            try
+            {
+                var ossConfig = await _repository.GetByClave(clave);
+                if(ossConfig == null) 
+                {
+                  OSS_CONFIG config= new OSS_CONFIG();
+                  config.CLAVE = clave;
+                    config.VALOR = "1";
+                    await _repository.Add(config);
+                    result = 1;
+                }
+                else 
+                {
+                    int ultimo = Int32.Parse(ossConfig.VALOR);
+                    result = ultimo+1;
+                    ossConfig.VALOR = result.ToString();
+                    await _repository.Update(ossConfig);
+                }
+                
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+
+        }
 
 
 

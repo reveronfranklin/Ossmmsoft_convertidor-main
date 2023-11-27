@@ -73,12 +73,9 @@
     <Folder Include="Data\Interfaces\Presupuesto\" />
     <Folder Include="Services\Presupuesto\" />
     <Folder Include="Dtos\Presupuesto\" />
-    <Folder Include="Data\Entities\Rh\" />
     <Folder Include="Data\Entities\Sis\" />
     <Folder Include="Data\Repository\Sis\" />
     <Folder Include="Data\Interfaces\Sis\" />
-    <Folder Include="Data\Repository\Rh\" />
-    <Folder Include="Data\Interfaces\RH\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="recursos.cshtml" />
