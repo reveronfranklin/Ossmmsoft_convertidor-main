@@ -93,6 +93,7 @@ builder.Services.AddTransient<ISisUsuarioRepository, SisUsuarioRepository>();
 builder.Services.AddTransient<IOssConfigRepository, OssConfigRepository>();
 builder.Services.AddTransient<ISisUbicacionNacionalRepository, SisUbicacionNacionalRepository>();
 builder.Services.AddTransient<ISisUbicacionService, SisUbicacionService>();
+builder.Services.AddTransient<IUtilityService, UtilityService>();
 
 
 
@@ -155,6 +156,8 @@ builder.Services.AddTransient<IRhComunicacionesRepository, RhComunicacionesRepos
 builder.Services.AddTransient<IRhAdministrativosRepository, RhAdministrativosRepository>();
 builder.Services.AddTransient<IRhAdministrativosService, RhAdministrativosService>();
 builder.Services.AddTransient<IRhComunicacionService, RhComunicacionService>();
+builder.Services.AddTransient<IRhFamiliaresRepository, RhFamiliaresRepository>();
+builder.Services.AddTransient<IRhFamiliaresService, RhFamiliaresService>();
 
 
 //BM Repository

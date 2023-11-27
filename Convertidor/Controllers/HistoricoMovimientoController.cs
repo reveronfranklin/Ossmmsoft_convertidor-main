@@ -117,26 +117,20 @@ namespace Convertidor.Controllers
             {
 
                 List<ListHistoricoMovimientoExcelDto> excelData = new List<ListHistoricoMovimientoExcelDto>();
+               
                 excelData = await MapListHistoricoMovimiento(result);
                 ExcelMapper mapper = new ExcelMapper();
-
-
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
-
-               
                 var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
                 var fileName = $"HistoricoNominaDesde {filter.Desde.Year.ToString()}-{filter.Desde.Month.ToString()}-{filter.Desde.Day.ToString()} Hasta {filter.Hasta.Year.ToString()}-{filter.Hasta.Month.ToString()}-{filter.Hasta.Day.ToString()}.xlsx";
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-
-
                 mapper.Save(newFile, excelData, $"HistoricoNomina", true);
+                
                 resultDto.Data = result;
                 resultDto.IsValid = true;
                 resultDto.Message = "";
                 resultDto.LinkData = $"/ExcelFiles/{fileName}";
-                //if (filter.Page == 0) filter.Page = 1;
-               // var historico = Paginacion<ListHistoricoMovimientoDto>.CrearPaginacion(result, filter.Page, filter.PageSize);
-                //resultDto.Data = historico;
+            
                 resultDto.Page = filter.Page;
                 resultDto.CantidadRegistros = result.Count();
             }

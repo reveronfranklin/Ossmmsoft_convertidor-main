@@ -28,6 +28,8 @@ namespace Convertidor.Data
         public DbSet<RH_MOV_NOMINA> RH_MOV_NOMINA { get; set; }
         public DbSet<RH_COMUNICACIONES> RH_COMUNICACIONES { get; set; }
         public DbSet<RH_ADMINISTRATIVOS> RH_ADMINISTRATIVOS { get; set; }
+        public DbSet<RH_FAMILIARES> RH_FAMILIARES { get; set; }
+        
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -164,6 +166,16 @@ namespace Convertidor.Data
            });
            builder.ToTable("RH_ADMINISTRATIVOS");
        });
+            modelBuilder
+       .Entity<RH_FAMILIARES>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_FAMILIAR,
+
+                });
+                builder.ToTable("RH_FAMILIARES");
+            });
 
             modelBuilder
         .Entity<RH_CONCEPTOS>(builder =>
