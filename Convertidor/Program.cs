@@ -126,7 +126,30 @@ builder.Services.AddTransient<IRhPeriodoService, RhPeriodoService>();
 builder.Services.AddTransient<IRhHistoricoMovimientoService, RhHistoricoMovimientoService>();
 builder.Services.AddTransient<IRhEducacionRepository, RhEducacionRepository>();
 builder.Services.AddTransient<IRhEducacionService, RhEducacionService>();
-
+builder.Services.AddTransient<IRhTmpRetencionesSsoRepository, RhTmpRetencionesSsoRepository>(); 
+builder.Services.AddTransient<IRhTmpRetencionesSsoService, RhTmpRetencionesSsoService>();
+builder.Services.AddTransient<IRhTmpRetencionesFaovRepository, RhTmpRetencionesFaovRepository>();
+builder.Services.AddTransient<IRhTmpRetencionesFaovService, RhTmpRetencionesFaovService>();
+builder.Services.AddTransient<IRhTmpRetencionesIncesRepository, RhTmpRetencionesIncesRepository>();
+builder.Services.AddTransient<IRhTmpRetencionesIncesService, RhTmpRetencionesIncesService>();
+builder.Services.AddTransient<IRhTmpRetencionesFjpRepository, RhTmpRetencionesFjpRepository>();
+builder.Services.AddTransient<IRhTmpRetencionesFjpService, RhTmpRetencionesFjpService>();
+builder.Services.AddTransient<IRhTmpRetencionesCahRepository, RhTmpRetencionesCahRepository>();
+builder.Services.AddTransient<IRhTmpRetencionesCahService, RhTmpRetencionesCahService>();
+builder.Services.AddTransient<IRhTmpRetencionesSindRepository, RhTmpRetencionesSindRepository>();
+builder.Services.AddTransient<IRhTmpRetencionesSindService, RhTmpRetencionesSindService>();
+builder.Services.AddTransient<IRhHRetencionesSsoRepository, RhHRetencionesSsoRepository>();
+builder.Services.AddTransient<IRhHRetencionesSsoService, RhHRetencionesSsoService>();
+builder.Services.AddTransient<IRhHRetencionesFaovRepository, RhHRetencionesFaovRepository>();
+builder.Services.AddTransient<IRhHRetencionesFaovService, RhHRetencionesFaovService>();
+builder.Services.AddTransient<IRhHRetencionesFjpRepository, RhHRetencionesFjpRepository>();
+builder.Services.AddTransient<IRhHRetencionesFjpService, RhHRetencionesFjpService>();
+builder.Services.AddTransient<IRhHRetencionesIncesRepository, RhHRetencionesIncesRepository>();
+builder.Services.AddTransient<IRhHRetencionesIncesService, RhHRetencionesIncesService>();
+builder.Services.AddTransient<IRhHRetencionesCahRepository, RhHRetencionesCahRepository>();
+builder.Services.AddTransient<IRhHRetencionesCahService, RhHRetencionesCahService>();
+builder.Services.AddTransient<IRhHRetencionesSindRepository, RhHRetencionesSindRepository>();
+builder.Services.AddTransient<IRhHRetencionesSindService, RhHRetencionesSindService>();
 
 
 builder.Services.AddTransient<IRhTipoNominaRepository, RhTipoNominaRepository>();

@@ -9,6 +9,7 @@ namespace Convertidor.Services.Sis
 	{
 
         Task<ResultDto<List<OssConfigGetDto>>> GetListByClave(string clave);
+        Task<int> GetNextByClave(string clave);
 
     }
 }
