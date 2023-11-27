@@ -82,10 +82,20 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.TipoComunicacionId = dtos.TIPO_COMUNICACION_ID;          
               
                 itemResult.DescripcionTipoComunicacion = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dtos.TIPO_COMUNICACION_ID);
+
+                if (dtos.CODIGO_AREA == null) dtos.CODIGO_AREA = "";
                 itemResult.CodigoArea = dtos.CODIGO_AREA;
                 itemResult.LineaComunicacion = dtos.LINEA_COMUNICACION;
                 itemResult.Extencion = dtos.EXTENSION;
-                itemResult.Principal = dtos.PRINCIPAL;
+                if (dtos.PRINCIPAL == 1)
+                {
+                    itemResult.Principal = true;
+                }
+                else
+                {
+                    itemResult.Principal = false;
+                }
+               
 
                 return itemResult;
         }
@@ -156,7 +166,15 @@ namespace Convertidor.Data.Repository.Rh
                 comunicacion.CODIGO_PERSONA = dto.CodigoPersona;
                 comunicacion.LINEA_COMUNICACION = dto.LineaComunicacion;
                 comunicacion.EXTENSION = dto.Extencion;
-                comunicacion.PRINCIPAL = dto.Principal;
+                if (dto.Principal == true)
+                {
+                    comunicacion.PRINCIPAL = 1;
+                }
+                else
+                {
+                    comunicacion.PRINCIPAL = 0;
+                }
+              
                 comunicacion.FECHA_UPD = DateTime.Now;
               
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -208,8 +226,8 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 else
                 {
-                    var tipoComunicacion = tipoComunicaciones.Where(x => x.Id == dto.TipoComunicacionId);
-                    if (tipoComunicacion is null)
+                    var tipoComunicacion = tipoComunicaciones.Where(x => x.Id == dto.TipoComunicacionId).ToList();
+                    if (tipoComunicacion.Count==0)
                     {
                         result.Data = null;
                         result.IsValid = false;
@@ -225,7 +243,14 @@ namespace Convertidor.Data.Repository.Rh
                 entity.TIPO_COMUNICACION_ID= dto.TipoComunicacionId;
                 entity.LINEA_COMUNICACION = dto.LineaComunicacion;
                 entity.EXTENSION = dto.Extencion;
-                entity.PRINCIPAL = dto.Principal;
+                if (dto.Principal == true)
+                {
+                    entity.PRINCIPAL = 1;
+                }
+                else
+                {
+                    entity.PRINCIPAL = 0;
+                }
                 entity.FECHA_INS = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;

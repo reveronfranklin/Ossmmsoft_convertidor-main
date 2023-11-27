@@ -13,7 +13,7 @@ namespace Convertidor.Dtos.Rh
         public string CodigoArea { get; set; } = string.Empty;
         public string LineaComunicacion { get; set; } = string.Empty;
         public int Extencion { get; set; }
-        public int Principal { get; set; } 
+        public bool Principal { get; set; } 
      
     }
 
