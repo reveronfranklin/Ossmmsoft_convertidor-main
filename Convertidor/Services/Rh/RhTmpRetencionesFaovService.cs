@@ -86,15 +86,25 @@ namespace Convertidor.Data.Repository.Rh
 
 
 
-                var fileName = $"RetencionesFAOV desde {desdeFilter} Hasta {hastaFilter} Tipo Nomina {filter.TipoNomina}.xlsx";
+                var fileName = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.xlsx";
+                var fileNameTxt = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.txt";
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-
+                string newFileTxt = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileNameTxt);
 
                 mapper.Save(newFile, result.Data, $"RetencionesFAOV", true);
-
+                
+                using(TextWriter tw = new StreamWriter(newFileTxt))
+                {
+                    foreach (var s in result.Data)
+                        tw.WriteLine(s.RegistroConcat);
+                    tw.Close();
+                }
+          
+     
                 result.IsValid = true;
                 result.Message = "";
                 result.LinkData = $"/ExcelFiles/{fileName}";
+                result.LinkDataArlternative= $"/ExcelFiles/{fileNameTxt}";
                 return result;
             }
             catch (Exception ex)
@@ -134,7 +144,7 @@ namespace Convertidor.Data.Repository.Rh
                 resultItem.FECHA_DESDE = retencion.FECHA_DESDE;
                 resultItem.FECHA_HASTA = retencion.FECHA_HASTA;
                 resultItem.CODIGO_TIPO_NOMINA = retencion.CODIGO_TIPO_NOMINA;
-
+                resultItem.REGISTRO_CONCAT = retencion.REGISTRO_CONCAT;
 
                 result.Add(resultItem);
 
@@ -167,6 +177,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.FechaDesde = entity.FECHA_DESDE;
                 itemResult.FechaHasta = entity.FECHA_HASTA;
                 itemResult.CodigoTipoNomina = entity.CODIGO_TIPO_NOMINA;
+                itemResult.RegistroConcat = entity.REGISTRO_CONCAT;
 
             return itemResult;
 

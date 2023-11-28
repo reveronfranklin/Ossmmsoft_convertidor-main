@@ -76,6 +76,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.FechaDesde = entity.FECHA_DESDE;
                 itemResult.FechaHasta = entity.FECHA_HASTA;
                 itemResult.CodigoTipoNomina = entity.CODIGO_TIPO_NOMINA;
+                itemResult.RegistroConcat = entity.REGISTRO_CONCAT;
 
 
             return itemResult;
@@ -139,6 +140,7 @@ namespace Convertidor.Data.Repository.Rh
                     entity.FECHA_DESDE = item.FECHA_DESDE;
                     entity.FECHA_HASTA = item.FECHA_HASTA;
                     entity.CODIGO_TIPO_NOMINA = item.CODIGO_TIPO_NOMINA;
+                    entity.REGISTRO_CONCAT = item.REGISTRO_CONCAT;
                     
 
 
