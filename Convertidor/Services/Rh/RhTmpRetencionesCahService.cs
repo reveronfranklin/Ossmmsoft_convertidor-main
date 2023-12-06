@@ -56,11 +56,13 @@ namespace Convertidor.Data.Repository.Rh
                         await _repository.Delete(procesoId);
 
                     }
-                    result.Data = await MapListRhTmpRetencionesCahDto(retenciones);
+                    
+                    var historicoNew  = await _rrhservice.GetRetencionesHCah(filter);
+                    result.Data = historicoNew.OrderBy(x=>x.FechaNomina).ToList();
                 }
                 else
                 {
-                    result.Data = historico;
+                    result.Data = historico.OrderBy(x=>x.FechaNomina).ToList();;
 
                 }
                 ExcelMapper mapper = new ExcelMapper();

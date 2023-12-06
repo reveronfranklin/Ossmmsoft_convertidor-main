@@ -59,6 +59,7 @@ namespace Convertidor.Services.Presupuesto
 
 
 
+      
 
 
         public async Task<ResultDto<GetPRE_PRESUPUESTOSDto>> GetByCodigo(FilterPRE_PRESUPUESTOSDto filter)
@@ -155,7 +156,7 @@ namespace Convertidor.Services.Presupuesto
             try
             {
 
-
+                
 
 
                 var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
@@ -324,7 +325,25 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
+        public async Task<PRE_PRESUPUESTOS> GetUltimo()
+        {
+            try
+            {
 
+                var result = await _pRE_PRESUPUESTOSRepository.GetUltimo();
+                   
+                return (PRE_PRESUPUESTOS)result!;
+               
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+
+        }
 
         public async Task<ResultDto<GetPRE_PRESUPUESTOSDto>> Create(CreatePRE_PRESUPUESTOSDto dto)
         {

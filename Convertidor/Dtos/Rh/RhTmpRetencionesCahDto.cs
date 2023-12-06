@@ -18,5 +18,8 @@
         public DateTime FechaHasta { get; set; }
         public int CodigoTipoNomina { get; set; }
 
+        public string Avatar { get; set; } = string.Empty;
+        public string SearchText { get { return $"{UnidadEjecutora}-{CedulaTexto}-{NombresApellidos}-{UnidadEjecutora}--{DescripcionCargo}"; } }
+
     }
 }

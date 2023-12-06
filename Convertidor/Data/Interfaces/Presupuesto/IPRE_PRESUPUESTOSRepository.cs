@@ -20,7 +20,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<bool> ExisteEnPeriodo(int codigoEmpresa, DateTime desde, DateTime hasta);
 
         Task<int> GetNextKey();
-
+        Task<PRE_PRESUPUESTOS> GetUltimo();
 
         Task RecalcularSaldo(int codigo_presupuesto);
         Task<PRE_PRESUPUESTOS> GetLast();

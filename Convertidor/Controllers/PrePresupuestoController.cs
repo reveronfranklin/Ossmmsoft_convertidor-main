@@ -78,10 +78,16 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult>  GetAllFilter(FilterPRE_PRESUPUESTOSDto filter)
         {
+            if (filter.CodigoPresupuesto == 0)
+            {
+                var ultimoPresupuesto = await _prePresupuestoService.GetUltimo();
+                filter.CodigoPresupuesto = ultimoPresupuesto.CODIGO_PRESUPUESTO;
+            }
+            
                 ResultDto<List<GetPRE_PRESUPUESTOSDto>> result = new ResultDto<List<GetPRE_PRESUPUESTOSDto>>(null);
-                var cacheKey = $"GetAllFilterPresupuesto{filter.CodigoPresupuesto.ToString()}-{filter.FinanciadoId.ToString()}-{filter.FechaDesde.ToShortDateString()}-{filter.FechaHasta.ToShortDateString()}";
+                var cacheKey = $"List<GetPRE_PRESUPUESTOSDto>-{filter.CodigoPresupuesto.ToString()}-{filter.FinanciadoId.ToString()}-{filter.FechaDesde.ToShortDateString()}-{filter.FechaHasta.ToShortDateString()}";
                 var listPresupuesto= await _distributedCache.GetAsync(cacheKey);
-                if (listPresupuesto != null)
+                if (filter.CodigoPresupuesto> 0 &&  listPresupuesto!= null)
                 {
                     result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<GetPRE_PRESUPUESTOSDto>> > (listPresupuesto);
                 }
@@ -89,7 +95,7 @@ namespace Convertidor.Controllers
                 {
                     result = await _prePresupuestoService.GetAll(filter);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(1))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
                     var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
                     var redisListBytes = Encoding.UTF8.GetBytes(serializedList);

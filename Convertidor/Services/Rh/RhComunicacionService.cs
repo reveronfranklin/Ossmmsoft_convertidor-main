@@ -166,6 +166,7 @@ namespace Convertidor.Data.Repository.Rh
                 comunicacion.CODIGO_PERSONA = dto.CodigoPersona;
                 comunicacion.LINEA_COMUNICACION = dto.LineaComunicacion;
                 comunicacion.EXTENSION = dto.Extencion;
+                comunicacion.CODIGO_AREA = dto.CodigoArea;
                 if (dto.Principal == true)
                 {
                     comunicacion.PRINCIPAL = 1;
@@ -243,6 +244,7 @@ namespace Convertidor.Data.Repository.Rh
                 entity.TIPO_COMUNICACION_ID= dto.TipoComunicacionId;
                 entity.LINEA_COMUNICACION = dto.LineaComunicacion;
                 entity.EXTENSION = dto.Extencion;
+                entity.CODIGO_AREA = dto.CodigoArea;
                 if (dto.Principal == true)
                 {
                     entity.PRINCIPAL = 1;

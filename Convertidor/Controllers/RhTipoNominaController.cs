@@ -49,7 +49,7 @@ namespace Convertidor.Controllers
             var result = await _service.GetTipoNominaByCodigoPersona(filter.CodigoPersona,(DateTime)filter.Desde,(DateTime)filter.Hasta);
             return Ok(result);
         }
-
+      
         
 
 
