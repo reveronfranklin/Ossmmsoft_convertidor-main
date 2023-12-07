@@ -11,6 +11,7 @@ using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
 using Convertidor.Services.Sis;
+using Ganss.Excel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
@@ -22,17 +23,22 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IRhTmpRetencionesIncesRepository _repository;
         private readonly IOssConfigServices _ossConfigService;
         private readonly IRhHRetencionesIncesService _rrhservice;
+        private readonly IConfiguration _configuration;
 
-        public RhTmpRetencionesIncesService(IRhTmpRetencionesIncesRepository repository, IOssConfigServices ossConfigService,IRhHRetencionesIncesService rrhservice)
+        public RhTmpRetencionesIncesService(IRhTmpRetencionesIncesRepository repository,
+                                            IOssConfigServices ossConfigService,
+                                            IRhHRetencionesIncesService rrhservice,
+                                            IConfiguration configuration)
         {
             _repository = repository;
             _ossConfigService = ossConfigService;
             _rrhservice = rrhservice;
+            _configuration = configuration;
         }
 
-        public async Task<List<RhTmpRetencionesIncesDto>> GetRetencionesInces(FilterRetencionesDto filter)
+        public async Task<ResultDto<List<RhTmpRetencionesIncesDto>>> GetRetencionesInces(FilterRetencionesDto filter)
         {
-            List<RhTmpRetencionesIncesDto> result = new List<RhTmpRetencionesIncesDto>();
+            ResultDto<List<RhTmpRetencionesIncesDto>> result = new ResultDto<List<RhTmpRetencionesIncesDto>>(null);
             try
             {
                 var historico = await _rrhservice.GetRetencionesHInces(filter);
@@ -50,19 +56,57 @@ namespace Convertidor.Data.Repository.Rh
                         await _repository.Delete(procesoId);
 
                     }
-                    result = await MapListRhTmpRetencionesIncesDto(retenciones);
+                    result.Data = await MapListRhTmpRetencionesIncesDto(retenciones);
                 }
                 else
                 {
-                    result = historico;
+                    result.Data = historico;
 
                 }
-                return (List<RhTmpRetencionesIncesDto>)result;
+                var linkData= $"";
+                if (result.Data.Count > 0)
+                {
+                    ExcelMapper mapper = new ExcelMapper();
+
+
+                    var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+
+                    var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+                    DateTime desde = Convert.ToDateTime(filter.FechaDesde);
+                    var mesString = "00" + desde.Month.ToString();
+                    var diaString = "00" + desde.Day.ToString();
+                    string mes = mesString.Substring(mesString.Length - 2, 2);
+                    string dia = diaString.Substring(diaString.Length - 2, 2);
+                    var desdeFilter = desde.Year + mes + dia;
+
+                    DateTime hasta = Convert.ToDateTime(filter.FechaHasta);
+                    var mesHastaString = "00" + hasta.Month.ToString();
+                    var diaHastaString = "00" + hasta.Day.ToString();
+                    string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);
+                    string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
+                    var hastaFilter = hasta.Year + mesHasta + diaHasta;
+                    var fileName = $"RetencionesInce desde {desdeFilter} Hasta {hastaFilter} Tipo Nomina {filter.TipoNomina}.xlsx";
+                    string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+
+
+                    mapper.Save(newFile, result.Data, $"RetencionesCAH", true);
+                    linkData= $"/ExcelFiles/{fileName}";
+
+                }
+                result.IsValid = true;
+                result.Message = "";
+                result.LinkData = linkData;
+                return result;
+                
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                result.Data = null;
+                result.IsValid = true;
+                result.Message = "";
+                result.LinkData = "";
+                return result;
             }
 
         }

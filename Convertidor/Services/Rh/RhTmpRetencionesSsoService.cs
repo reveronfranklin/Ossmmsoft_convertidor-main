@@ -15,6 +15,7 @@ using Ganss.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NPOI.HPSF;
+using NPOI.HSSF.Record.Chart;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -68,41 +69,36 @@ namespace Convertidor.Data.Repository.Rh
                     result.Data = historico;
 
                 }
-
-                ExcelMapper mapper = new ExcelMapper();
-
-
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-
-
-                var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
-                DateTime desde = Convert.ToDateTime(filter.FechaDesde);
-                var mesString = "00" + desde.Month.ToString();
-                var diaString = "00" + desde.Day.ToString();
-                string mes = mesString.Substring(mesString.Length - 2, 2);
-                string dia = diaString.Substring(diaString.Length - 2, 2);
-                var desdeFilter = desde.Year + mes + dia;
-
-                DateTime hasta = Convert.ToDateTime(filter.FechaHasta);
-                var mesHastaString = "00" + hasta.Month.ToString();
-                var diaHastaString = "00" + hasta.Day.ToString();
-                string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);
-                string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
-                var hastaFilter = hasta.Year + mesHasta + diaHasta;
-
-
-
-
-
-                var fileName = $"RetencionesSSO desde {desdeFilter} Hasta {hastaFilter} Tipo Nomina {filter.TipoNomina}.xlsx";
-                string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-
-
-                mapper.Save(newFile, result.Data, $"RetencionesSSO", true);
-
+                var linkData=$"";
+                if (result.Data.Count > 0)
+                {
+                    ExcelMapper mapper = new ExcelMapper();
+                    var settings = _configuration.GetSection("Settings").Get<Settings>();
+                    var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+                    DateTime desde = Convert.ToDateTime(filter.FechaDesde);
+                    var mesString = "00" + desde.Month.ToString();
+                    var diaString = "00" + desde.Day.ToString();
+                    string mes = mesString.Substring(mesString.Length - 2, 2);
+                    string dia = diaString.Substring(diaString.Length - 2, 2);
+                    var desdeFilter = desde.Year + mes + dia;
+                    DateTime hasta = Convert.ToDateTime(filter.FechaHasta);
+                    var mesHastaString = "00" + hasta.Month.ToString();
+                    var diaHastaString = "00" + hasta.Day.ToString();
+                    string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);
+                    string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
+                    var hastaFilter = hasta.Year + mesHasta + diaHasta;
+                    var fileName = $"RetencionesSSO desde {desdeFilter} Hasta {hastaFilter} Tipo Nomina {filter.TipoNomina}.xlsx";
+                    string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+                    mapper.Save(newFile, result.Data, $"RetencionesSSO", true);
+                    linkData=$"/ExcelFiles/{fileName}";
+                }
+                
+               
+                
+                
                 result.IsValid = true;
                 result.Message = "";
-                result.LinkData = $"/ExcelFiles/{fileName}";
+                result.LinkData = linkData;
                 return result;
             }
             catch (Exception ex)

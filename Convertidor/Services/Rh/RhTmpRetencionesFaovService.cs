@@ -61,12 +61,13 @@ namespace Convertidor.Data.Repository.Rh
                     result.Data = historico;
 
                 }
-                ExcelMapper mapper = new ExcelMapper();
-
-
+                
+                var linkData = $"";
+                var linkDataArlternative= $"";
+                if (result.Data.Count > 0)
+                {
+                                    ExcelMapper mapper = new ExcelMapper();
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
-
-
                 var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
                 DateTime desde = Convert.ToDateTime(filter.FechaDesde);
                 var mesString = "00" + desde.Month.ToString();
@@ -81,13 +82,8 @@ namespace Convertidor.Data.Repository.Rh
                 string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);
                 string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
                 var hastaFilter = hasta.Year + mesHasta + diaHasta;
-
-
-
-
-
                 var fileName = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.xlsx";
-                var fileNameTxt = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.txt";
+                var fileNameTxt = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.csv";
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
                 string newFileTxt = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileNameTxt);
 
@@ -99,12 +95,16 @@ namespace Convertidor.Data.Repository.Rh
                         tw.WriteLine(s.RegistroConcat);
                     tw.Close();
                 }
-          
+                linkData = $"/ExcelFiles/{fileName}";
+                linkDataArlternative= $"/ExcelFiles/{fileNameTxt}";
      
+                }
+                
+
                 result.IsValid = true;
                 result.Message = "";
-                result.LinkData = $"/ExcelFiles/{fileName}";
-                result.LinkDataArlternative= $"/ExcelFiles/{fileNameTxt}";
+                result.LinkData = linkData;
+                result.LinkDataArlternative= linkDataArlternative;
                 return result;
             }
             catch (Exception ex)
