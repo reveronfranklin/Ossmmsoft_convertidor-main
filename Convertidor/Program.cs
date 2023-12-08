@@ -277,7 +277,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-//SeedData(app);
+SeedData(app);
 
 void SeedData(WebApplication app)
 {
