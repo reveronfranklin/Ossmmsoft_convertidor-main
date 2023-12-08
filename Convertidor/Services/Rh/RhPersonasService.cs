@@ -299,6 +299,7 @@ namespace Convertidor.Data.Repository.Rh
         {
                
                PersonasDto itemResult = new PersonasDto();
+               if (dtos == null) return itemResult;
                try
                {
                  
