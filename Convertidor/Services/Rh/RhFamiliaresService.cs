@@ -200,7 +200,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                     
                 }
-                var nivelEducativo = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dto.NivelEducativo);
+               /* var nivelEducativo = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dto.NivelEducativo);
                 if (String.IsNullOrEmpty(nivelEducativo))
                 {
                     result.Data = null;
@@ -208,13 +208,13 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Nivel Educativo Invalido";
                     return result;
                     
-                }
+                }*/
 
                 familiar.CEDULA_FAMILIAR = dto.CedulaFamiliar;
                 familiar.NACIONALIDAD = dto.Nacionalidad;
                 familiar.NOMBRE = dto.Nombre;
                 familiar.APELLIDO = dto.Apellido;
-                var fechaNacimiento = Convert.ToDateTime(dto.FechaNacimiento, CultureInfo.InvariantCulture);
+                var fechaNacimiento = Convert.ToDateTime(dto.FechaNacimientoString, CultureInfo.InvariantCulture);
                 familiar.FECHA_NACIMIENTO = fechaNacimiento;
                 familiar.PARIENTE_ID = dto.ParienteId;
                 familiar.SEXO = dto.Sexo;
@@ -302,17 +302,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                     
                 }
-                var nivelEducativo = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dto.NivelEducativo);
-                if (String.IsNullOrEmpty(nivelEducativo))
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Nivel Educativo Invalido";
-                    return result;
-                    
-                }
-
-
+              
 
                 RH_FAMILIARES entity = new RH_FAMILIARES();
                 entity.CODIGO_FAMILIAR = await _repository.GetNextKey();
@@ -321,7 +311,7 @@ namespace Convertidor.Data.Repository.Rh
                 entity.NACIONALIDAD = dto.Nacionalidad;
                 entity.NOMBRE = dto.Nombre;
                 entity.APELLIDO = dto.Apellido;
-                var fechaNacimiento = Convert.ToDateTime(dto.FechaNacimiento, CultureInfo.InvariantCulture);
+                var fechaNacimiento = Convert.ToDateTime(dto.FechaNacimientoString, CultureInfo.InvariantCulture);
                 entity.FECHA_NACIMIENTO = fechaNacimiento;
                 entity.PARIENTE_ID = dto.ParienteId;
                 entity.SEXO = dto.Sexo;
