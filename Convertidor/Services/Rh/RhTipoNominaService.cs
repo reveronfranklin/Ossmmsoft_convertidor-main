@@ -59,7 +59,7 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-
+   
 
 
         public List<ListTipoNominaDto> MapListTipoNominaDto(List<RH_TIPOS_NOMINA> dtos)

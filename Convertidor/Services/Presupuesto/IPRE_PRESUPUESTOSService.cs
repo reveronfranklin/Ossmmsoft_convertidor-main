@@ -1,4 +1,5 @@
 ﻿using System;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 
@@ -18,6 +19,7 @@ namespace Convertidor.Services.Presupuesto
 
         Task<ResultDto<List<ListPresupuestoDto>>> GetListPresupuesto();
         Task<ResultDto<List<GetPRE_PRESUPUESTOSDto>>> GetList(FilterPRE_PRESUPUESTOSDto filter);
-    }
+        Task<PRE_PRESUPUESTOS> GetUltimo();
+	}
 }
 

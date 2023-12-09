@@ -42,7 +42,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Update(RhComunicacionUpdate dto)
         {
-            var result = await _service.Update(dto);
+                var result = await _service.Update(dto);
             return Ok(result);
         }
 

@@ -41,7 +41,25 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<PRE_PRESUPUESTOS> GetUltimo()
+        {
+            try
+            {
 
+                var result = await _context.PRE_PRESUPUESTOS.DefaultIfEmpty()
+                    .OrderByDescending(x=>x.CODIGO_PRESUPUESTO).FirstOrDefaultAsync();
+                return (PRE_PRESUPUESTOS)result!;
+               
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+
+        }
         public async Task<PRE_PRESUPUESTOS> GetByCodigo(int codigoEmpresa ,int codigoPresupuesto)
         {
             try
