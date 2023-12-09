@@ -124,8 +124,6 @@ builder.Services.AddTransient<IPetroClientService, PetroClientService>();
 
 builder.Services.AddTransient<IRhPeriodoService, RhPeriodoService>();
 builder.Services.AddTransient<IRhHistoricoMovimientoService, RhHistoricoMovimientoService>();
-builder.Services.AddTransient<IRhEducacionRepository, RhEducacionRepository>();
-builder.Services.AddTransient<IRhEducacionService, RhEducacionService>();
 builder.Services.AddTransient<IRhTmpRetencionesSsoRepository, RhTmpRetencionesSsoRepository>(); 
 builder.Services.AddTransient<IRhTmpRetencionesSsoService, RhTmpRetencionesSsoService>();
 builder.Services.AddTransient<IRhTmpRetencionesFaovRepository, RhTmpRetencionesFaovRepository>();
@@ -181,6 +179,14 @@ builder.Services.AddTransient<IRhAdministrativosService, RhAdministrativosServic
 builder.Services.AddTransient<IRhComunicacionService, RhComunicacionService>();
 builder.Services.AddTransient<IRhFamiliaresRepository, RhFamiliaresRepository>();
 builder.Services.AddTransient<IRhFamiliaresService, RhFamiliaresService>();
+builder.Services.AddTransient<IRhEducacionRepository, RhEducacionRepository>();
+builder.Services.AddTransient<IRhEducacionService, RhEducacionService>();
+builder.Services.AddTransient<IRhDocumentosRepository, RhDocumentosRepository>();
+builder.Services.AddTransient<IRhDocumentosService, RhDocumentosService>();
+builder.Services.AddTransient<IRhDocumentosDetallesRepository, RhDocumentosDetallesRepository>();
+builder.Services.AddTransient<IRhDocumentosDetallesService, RhDocumentosDetallesService>();
+builder.Services.AddTransient<IRhExpLaboralRepository, RhExpLaboralRepository>();
+builder.Services.AddTransient<IRhExpLaboralService, RhExpLaboralService>();
 
 
 //BM Repository

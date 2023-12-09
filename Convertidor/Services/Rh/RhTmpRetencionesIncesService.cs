@@ -11,6 +11,7 @@ using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
 using Convertidor.Services.Sis;
+using Ganss.Excel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
@@ -23,16 +24,18 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IOssConfigServices _ossConfigService;
         private readonly IRhHRetencionesIncesService _rrhservice;
 
-        public RhTmpRetencionesIncesService(IRhTmpRetencionesIncesRepository repository, IOssConfigServices ossConfigService,IRhHRetencionesIncesService rrhservice)
+        public RhTmpRetencionesIncesService(IRhTmpRetencionesIncesRepository repository,
+                                                    IOssConfigServices ossConfigService,
+                                                  IRhHRetencionesIncesService rrhservice)
         {
             _repository = repository;
             _ossConfigService = ossConfigService;
             _rrhservice = rrhservice;
         }
 
-        public async Task<List<RhTmpRetencionesIncesDto>> GetRetencionesInces(FilterRetencionesDto filter)
+        public async Task< List<RhTmpRetencionesIncesDto>> GetRetencionesInces(FilterRetencionesDto filter)
         {
-            List<RhTmpRetencionesIncesDto> result = new List<RhTmpRetencionesIncesDto>();
+            List<RhTmpRetencionesIncesDto> result = new List<RhTmpRetencionesIncesDto>(null);
             try
             {
                 var historico = await _rrhservice.GetRetencionesHInces(filter);
@@ -55,14 +58,14 @@ namespace Convertidor.Data.Repository.Rh
                 else
                 {
                     result = historico;
-
+                    return result;
                 }
-                return (List<RhTmpRetencionesIncesDto>)result;
+                return result;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                
+                return result;
             }
 
         }

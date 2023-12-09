@@ -31,9 +31,12 @@ namespace Convertidor.Data
         public DbSet<RH_ADMINISTRATIVOS> RH_ADMINISTRATIVOS { get; set; }
 
         public DbSet<RH_FAMILIARES> RH_FAMILIARES { get; set; }
+        public DbSet<RH_DOCUMENTOS> RH_DOCUMENTOS { get; set; }
+        public DbSet<RH_DOCUMENTOS_DETALLES> RH_DOCUMENTOS_DETALLES { get; set; }
 
+        public DbSet<RH_EXP_LABORAL> RH_EXP_LABORAL { get; set; }
 
-
+        
         public DbSet<RH_TMP_RETENCIONES_SSO> RH_TMP_RETENCIONES_SSO { get; set; }
 
         public DbSet<RH_TMP_RETENCIONES_FAOV> RH_TMP_RETENCIONES_FAOV { get; set; }
@@ -212,8 +215,31 @@ namespace Convertidor.Data
             });
             modelBuilder.Entity<RH_EDUCACION>(builder =>
             {
-                builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_EDUCACION,
+
+                });
                 builder.ToTable("RH_EDUCACION");
+            });
+
+            modelBuilder.Entity<RH_DOCUMENTOS>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_DOCUMENTO,
+
+                });
+                builder.ToTable("RH_DOCUMENTOS");
+            });
+            modelBuilder.Entity<RH_DOCUMENTOS_DETALLES>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_DOCUMENTO_DETALLE,
+
+                });
+                builder.ToTable("RH_DOCUMENTOS_DETALLES");
             });
             modelBuilder.Entity<RH_DESCRIPTIVAS>(builder =>
             {
@@ -222,9 +248,24 @@ namespace Convertidor.Data
             });
             modelBuilder.Entity<RH_DIRECCIONES>(builder =>
             {
-                builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_DIRECCION,
+
+                }); 
                 builder.ToTable("RH_DIRECCIONES");
             });
+
+            modelBuilder.Entity<RH_EXP_LABORAL>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_EXP_LABORAL,
+
+                });
+                builder.ToTable("RH_EXP_LABORAL");
+            });
+
             modelBuilder.Entity<RH_RELACION_CARGOS>(builder =>
             {
                 builder.HasKey(table => new

@@ -53,6 +53,7 @@ namespace Convertidor.Data.Repository.Sis
         }
         public async Task<UserConectadoDto> GetConectado()
         {
+            
             UserConectadoDto dto = new UserConectadoDto();
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var empresString = @settings.EmpresaConfig;
@@ -60,15 +61,28 @@ namespace Convertidor.Data.Repository.Sis
             var userName = "";
             userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
             SIS_USUARIOS sisUsuario = await GetByLogin(userName);
-            dto.Empresa = empresa;
-            dto.Usuario = sisUsuario.CODIGO_USUARIO;
+            if(sisUsuario!=null) 
+            {
+                dto.Empresa = empresa;
+                dto.Usuario = sisUsuario.CODIGO_USUARIO;
+            }
+            else 
+            {
+                dto.Empresa = empresa;
+                dto.Usuario = 0;
+            }
             return dto;
 
         }
 
         public async Task<SIS_USUARIOS> GetByLogin(string login)
         {
+            if(login == null) 
+            {
+                login = "";
+            }
             string newlogin = login;
+
             if (login.Contains("@"))
             {
                 var listStrLineElements = login.Split('@').ToArray();

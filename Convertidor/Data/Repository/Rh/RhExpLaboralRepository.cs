@@ -1,28 +1,29 @@
-﻿using System;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Entities.Rh;
+﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhDireccionesRepository : IRhDireccionesRepository
+    public class RhExpLaboralRepository : IRhExpLaboralRepository
     {
 		
         private readonly DataContext _context;
 
-        public RhDireccionesRepository(DataContext context)
+        public RhExpLaboralRepository(DataContext context)
         {
             _context = context;
         }
-        public async Task<List<RH_DIRECCIONES>> GetByCodigoPersona(int codigoPersona)
+
+        public async Task<RH_EXP_LABORAL> GetByCodigo(int codigoExpLaboral)
         {
             try
             {
-                var result = await _context.RH_DIRECCIONES.DefaultIfEmpty().Where(e => e.CODIGO_PERSONA == codigoPersona).ToListAsync();
-        
-                return (List<RH_DIRECCIONES>)result; 
+                var result = await _context.RH_EXP_LABORAL.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_EXP_LABORAL == codigoExpLaboral)
+                    .OrderBy(x=>x.FECHA_INS).FirstOrDefaultAsync();
+
+                return (RH_EXP_LABORAL)result;
             }
             catch (Exception ex)
             {
@@ -32,15 +33,13 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<RH_DIRECCIONES> GetByCodigo(int codigoDireccion)
+        public async Task<List<RH_EXP_LABORAL>> GetByCodigoPersona(int codigoPersona)
         {
             try
             {
-                var result = await _context.RH_DIRECCIONES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_DIRECCION == codigoDireccion)
-                    .OrderBy(x => x.FECHA_INS).FirstOrDefaultAsync();
+                var result = await _context.RH_EXP_LABORAL.DefaultIfEmpty().Where(e => e.CODIGO_PERSONA == codigoPersona).ToListAsync();
 
-                return (RH_DIRECCIONES)result;
+                return (List<RH_EXP_LABORAL>)result;
             }
             catch (Exception ex)
             {
@@ -50,15 +49,13 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<ResultDto<RH_DIRECCIONES>> Add(RH_DIRECCIONES entity)
+        public async Task<ResultDto<RH_EXP_LABORAL>> Add(RH_EXP_LABORAL entity)
         {
-            ResultDto<RH_DIRECCIONES> result = new ResultDto<RH_DIRECCIONES>(null);
+            ResultDto<RH_EXP_LABORAL> result = new ResultDto<RH_EXP_LABORAL>(null);
             try
             {
 
-
-
-                await _context.RH_DIRECCIONES.AddAsync(entity);
+                await _context.RH_EXP_LABORAL.AddAsync(entity);
                 _context.SaveChanges();
 
 
@@ -77,22 +74,20 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
-
-
         }
 
-        public async Task<ResultDto<RH_DIRECCIONES>> Update(RH_DIRECCIONES entity)
+        public async Task<ResultDto<RH_EXP_LABORAL>> Update(RH_EXP_LABORAL entity)
         {
-            ResultDto<RH_DIRECCIONES> result = new ResultDto<RH_DIRECCIONES>(null);
+            ResultDto<RH_EXP_LABORAL> result = new ResultDto<RH_EXP_LABORAL>(null);
 
             try
             {
-                RH_DIRECCIONES entityUpdate = await GetByCodigo(entity.CODIGO_DIRECCION);
+                RH_EXP_LABORAL entityUpdate = await GetByCodigo(entity.CODIGO_EXP_LABORAL);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.RH_DIRECCIONES.Update(entity);
+                    _context.RH_EXP_LABORAL.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -109,22 +104,17 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
-
-
-
-
-
         }
 
-        public async Task<string> Delete(int codigoDireccion)
+        public async Task<string> Delete(int codigoExpLaboral)
         {
 
             try
             {
-                RH_DIRECCIONES entity = await GetByCodigo(codigoDireccion);
+                RH_EXP_LABORAL entity = await GetByCodigo(codigoExpLaboral);
                 if (entity != null)
                 {
-                    _context.RH_DIRECCIONES.Remove(entity);
+                    _context.RH_EXP_LABORAL.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -134,19 +124,15 @@ namespace Convertidor.Data.Repository.Rh
                 return ex.Message;
             }
 
-
-
         }
-
-
 
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.RH_DIRECCIONES.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_DIRECCION)
+                var last = await _context.RH_EXP_LABORAL.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_EXP_LABORAL)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -154,7 +140,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 else
                 {
-                    result = last.CODIGO_DIRECCION + 1;
+                    result = last.CODIGO_EXP_LABORAL+ 1;
                 }
 
                 return (int)result!;
@@ -166,10 +152,7 @@ namespace Convertidor.Data.Repository.Rh
                 return 0;
             }
 
-
-
         }
-
 
     }
 }
