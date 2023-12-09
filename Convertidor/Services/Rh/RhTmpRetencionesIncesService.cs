@@ -16,10 +16,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhTmpRetencionesIncesService : IRhTmpRetencionesIncesService
+    public class RhTmpRetencionesIncesService : IRhTmpRetencionesIncesService
     {
-        
-   
+
+
         private readonly IRhTmpRetencionesIncesRepository _repository;
         private readonly IOssConfigServices _ossConfigService;
         private readonly IRhHRetencionesIncesService _rrhservice;
@@ -63,7 +63,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.Data = historico;
 
                 }
-                var linkData= $"";
+                var linkData = $"";
                 if (result.Data.Count > 0)
                 {
                     ExcelMapper mapper = new ExcelMapper();
@@ -91,14 +91,14 @@ namespace Convertidor.Data.Repository.Rh
 
 
                     mapper.Save(newFile, result.Data, $"RetencionesCAH", true);
-                    linkData= $"/ExcelFiles/{fileName}";
+                    linkData = $"/ExcelFiles/{fileName}";
 
                 }
                 result.IsValid = true;
                 result.Message = "";
                 result.LinkData = linkData;
                 return result;
-                
+
             }
             catch (Exception ex)
             {
@@ -148,36 +148,37 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async  Task<RhTmpRetencionesIncesDto> MapRhTmpRetencionesIncesDto(RH_TMP_RETENCIONES_INCES entity)
+        public async Task<RhTmpRetencionesIncesDto> MapRhTmpRetencionesIncesDto(RH_TMP_RETENCIONES_INCES entity)
         {
 
 
-                RhTmpRetencionesIncesDto itemResult = new RhTmpRetencionesIncesDto();
-                itemResult.CodigoRetencionAporte = entity.CODIGO_RETENCION_APORTE;
-                itemResult.Secuencia = entity.SECUENCIA;
-                itemResult.UnidadEjecutora = entity.UNIDAD_EJECUTORA;
-                itemResult.CedulaTexto = entity.CEDULATEXTO;
-                itemResult.NombresApellidos = entity.NOMBRES_APELLIDOS;
-                itemResult.DescripcionCargo = entity.DESCRIPCION_CARGO;
-                itemResult.FechaIngreso = entity.FECHA_INGRESO;
-                itemResult.MontoIncesTrabajador = entity.MONTO_INCES_TRABAJADOR;
-                itemResult.MontoIncesPatrono = entity.MONTO_INCES_PATRONO;
-                itemResult.MontoTotalRetencion = entity.MONTO_TOTAL_RETENCION;
-                itemResult.FechaNomina = entity.FECHA_NOMINA;
-                itemResult.SiglasTipoNomina = entity.SIGLAS_TIPO_NOMINA;
-                itemResult.FechaDesde = entity.FECHA_DESDE;
-                itemResult.FechaHasta = entity.FECHA_HASTA;
-                itemResult.CodigoTipoNomina = entity.CODIGO_TIPO_NOMINA;
+            RhTmpRetencionesIncesDto itemResult = new RhTmpRetencionesIncesDto();
+            itemResult.CodigoRetencionAporte = entity.CODIGO_RETENCION_APORTE;
+            itemResult.Secuencia = entity.SECUENCIA;
+            itemResult.UnidadEjecutora = entity.UNIDAD_EJECUTORA;
+            itemResult.CedulaTexto = entity.CEDULATEXTO;
+            itemResult.NombresApellidos = entity.NOMBRES_APELLIDOS;
+            itemResult.DescripcionCargo = entity.DESCRIPCION_CARGO;
+            itemResult.FechaIngreso = entity.FECHA_INGRESO;
+            itemResult.MontoIncesTrabajador = entity.MONTO_INCES_TRABAJADOR;
+            itemResult.MontoIncesPatrono = entity.MONTO_INCES_PATRONO;
+            itemResult.MontoTotalRetencion = entity.MONTO_TOTAL_RETENCION;
+            itemResult.FechaNomina = entity.FECHA_NOMINA;
+            itemResult.SiglasTipoNomina = entity.SIGLAS_TIPO_NOMINA;
+            itemResult.FechaDesde = entity.FECHA_DESDE;
+            itemResult.FechaHasta = entity.FECHA_HASTA;
+            itemResult.CodigoTipoNomina = entity.CODIGO_TIPO_NOMINA;
 
             return itemResult;
 
         }
 
-        public async  Task<List<RhTmpRetencionesIncesDto>> MapListRhTmpRetencionesIncesDto(List<RH_TMP_RETENCIONES_INCES> entities)
+        public async Task<List<RhTmpRetencionesIncesDto>> MapListRhTmpRetencionesIncesDto(List<RH_TMP_RETENCIONES_INCES> entities)
         {
             List<RhTmpRetencionesIncesDto> result = new List<RhTmpRetencionesIncesDto>();
 
-            if (entities !=null) {
+            if (entities != null)
+            {
                 foreach (var item in entities)
                 {
 
@@ -188,17 +189,16 @@ namespace Convertidor.Data.Repository.Rh
                     result.Add(itemResult);
                 }
             }
-        
+
             return result;
 
 
 
         }
 
-        
-   
 
-          
+
+
+
     }
 }
-

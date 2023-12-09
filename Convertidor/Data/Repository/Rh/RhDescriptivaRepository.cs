@@ -49,8 +49,6 @@ namespace Convertidor.Data.Repository.Rh
 
         }
         
-        
-        
 
         public async Task<List<RH_DESCRIPTIVAS>> GetAll()
         {

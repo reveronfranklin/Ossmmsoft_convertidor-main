@@ -1,28 +1,29 @@
-﻿using System;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Entities.Rh;
+﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhDireccionesRepository : IRhDireccionesRepository
+    public class RhDocumentosDetallesRepository : IRhDocumentosDetallesRepository
     {
 		
         private readonly DataContext _context;
 
-        public RhDireccionesRepository(DataContext context)
+        public RhDocumentosDetallesRepository(DataContext context)
         {
             _context = context;
         }
-        public async Task<List<RH_DIRECCIONES>> GetByCodigoPersona(int codigoPersona)
+
+        public async Task<RH_DOCUMENTOS_DETALLES> GetByCodigo(int codigoDocumentoDetalle)
         {
             try
             {
-                var result = await _context.RH_DIRECCIONES.DefaultIfEmpty().Where(e => e.CODIGO_PERSONA == codigoPersona).ToListAsync();
-        
-                return (List<RH_DIRECCIONES>)result; 
+                var result = await _context.RH_DOCUMENTOS_DETALLES.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_DOCUMENTO_DETALLE == codigoDocumentoDetalle)
+                    .OrderBy(x=>x.FECHA_INS).FirstOrDefaultAsync();
+
+                return (RH_DOCUMENTOS_DETALLES)result;
             }
             catch (Exception ex)
             {
@@ -32,15 +33,15 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<RH_DIRECCIONES> GetByCodigo(int codigoDireccion)
+        public async Task<List<RH_DOCUMENTOS_DETALLES>> GetByCodigoDocumento(int codigoDocumento)
         {
             try
             {
-                var result = await _context.RH_DIRECCIONES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_DIRECCION == codigoDireccion)
-                    .OrderBy(x => x.FECHA_INS).FirstOrDefaultAsync();
+                var result = await _context.RH_DOCUMENTOS_DETALLES.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_DOCUMENTO == codigoDocumento)
+                    .OrderBy(x => x.FECHA_INS).ToListAsync();
 
-                return (RH_DIRECCIONES)result;
+                return (List<RH_DOCUMENTOS_DETALLES>)result;
             }
             catch (Exception ex)
             {
@@ -50,15 +51,13 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<ResultDto<RH_DIRECCIONES>> Add(RH_DIRECCIONES entity)
+        public async Task<ResultDto<RH_DOCUMENTOS_DETALLES>> Add(RH_DOCUMENTOS_DETALLES entity)
         {
-            ResultDto<RH_DIRECCIONES> result = new ResultDto<RH_DIRECCIONES>(null);
+            ResultDto<RH_DOCUMENTOS_DETALLES> result = new ResultDto<RH_DOCUMENTOS_DETALLES>(null);
             try
             {
 
-
-
-                await _context.RH_DIRECCIONES.AddAsync(entity);
+                await _context.RH_DOCUMENTOS_DETALLES.AddAsync(entity);
                 _context.SaveChanges();
 
 
@@ -77,22 +76,20 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
-
-
         }
 
-        public async Task<ResultDto<RH_DIRECCIONES>> Update(RH_DIRECCIONES entity)
+        public async Task<ResultDto<RH_DOCUMENTOS_DETALLES>> Update(RH_DOCUMENTOS_DETALLES entity)
         {
-            ResultDto<RH_DIRECCIONES> result = new ResultDto<RH_DIRECCIONES>(null);
+            ResultDto<RH_DOCUMENTOS_DETALLES> result = new ResultDto<RH_DOCUMENTOS_DETALLES>(null);
 
             try
             {
-                RH_DIRECCIONES entityUpdate = await GetByCodigo(entity.CODIGO_DIRECCION);
+                RH_DOCUMENTOS_DETALLES entityUpdate = await GetByCodigo(entity.CODIGO_DOCUMENTO_DETALLE);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.RH_DIRECCIONES.Update(entity);
+                    _context.RH_DOCUMENTOS_DETALLES.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -109,22 +106,17 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
-
-
-
-
-
         }
 
-        public async Task<string> Delete(int codigoDireccion)
+        public async Task<string> Delete(int codigoDocumentoDetalle)
         {
 
             try
             {
-                RH_DIRECCIONES entity = await GetByCodigo(codigoDireccion);
+                RH_DOCUMENTOS_DETALLES entity = await GetByCodigo(codigoDocumentoDetalle);
                 if (entity != null)
                 {
-                    _context.RH_DIRECCIONES.Remove(entity);
+                    _context.RH_DOCUMENTOS_DETALLES.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -134,19 +126,15 @@ namespace Convertidor.Data.Repository.Rh
                 return ex.Message;
             }
 
-
-
         }
-
-
 
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.RH_DIRECCIONES.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_DIRECCION)
+                var last = await _context.RH_DOCUMENTOS_DETALLES.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_DOCUMENTO_DETALLE)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -154,7 +142,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 else
                 {
-                    result = last.CODIGO_DIRECCION + 1;
+                    result = last.CODIGO_DOCUMENTO_DETALLE+ 1;
                 }
 
                 return (int)result!;
@@ -166,10 +154,7 @@ namespace Convertidor.Data.Repository.Rh
                 return 0;
             }
 
-
-
         }
-
 
     }
 }
