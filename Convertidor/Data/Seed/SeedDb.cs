@@ -103,7 +103,7 @@ namespace Convertidor.Data.Repository.Rh
 
                     resultData =await  MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(1))
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
                    var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
