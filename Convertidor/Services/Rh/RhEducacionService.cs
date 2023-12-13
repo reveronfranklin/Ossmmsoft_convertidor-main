@@ -40,7 +40,7 @@ namespace Convertidor.Data.Repository.Rh
            
         }
        
-        public async Task<List<ListEducacionDto>> GetByCodigoPersona(int codigoPersona)
+        public async Task<List<RhEducacionResponseDto>> GetByCodigoPersona(int codigoPersona)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace Convertidor.Data.Repository.Rh
                 var result = await MapListEducacionDto(educacion);
 
 
-                return (List<ListEducacionDto>)result;
+                return (List<RhEducacionResponseDto>)result;
             }
             catch (Exception ex)
             {
@@ -76,7 +76,17 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-
+        public FechaDto GetFechaDto(DateTime fecha)
+        {
+            var FechaDesdeObj = new FechaDto();
+            FechaDesdeObj.Year = fecha.Year.ToString();
+            string month = "00" + fecha.Month.ToString();
+            string day = "00" + fecha.Day.ToString();
+            FechaDesdeObj.Month = month.Substring(month.Length - 2);
+            FechaDesdeObj.Day = day.Substring(day.Length - 2);
+    
+            return FechaDesdeObj;
+        }
         public async Task<RhEducacionResponseDto> MapEducacionDto(RH_EDUCACION dtos)
         {
 
@@ -85,24 +95,22 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.CodigoEducacion = dtos.CODIGO_EDUCACION;
             itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
             itemResult.NivelId = dtos.NIVEL_ID;
+            itemResult.DescripcionNivel = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dtos.NIVEL_ID);
             itemResult.NombreInstituto = dtos.NOMBRE_INSTITUTO;
             itemResult.LocalidadInstituto =dtos.LOCALIDAD_INSTITUTO;
             itemResult.ProfesionID = dtos.PROFESION_ID;
             itemResult.FechaIni = dtos.FECHA_INI;
+            itemResult.FechaIniString = dtos.FECHA_INI.ToString("u"); 
             itemResult.FechaFin = dtos.FECHA_FIN;
+            itemResult.FechaFinString = dtos.FECHA_FIN.ToString("u"); 
             itemResult.UltimoAñoAprobado = dtos.ULTIMO_ANO_APROBADO;
             itemResult.Graduado = dtos.GRADUADO;
             itemResult.TituloId = dtos.TITULO_ID;
             itemResult.MencionEspecialidadId = dtos.MENCION_ESPECIALIDAD_ID;
-            itemResult.Extra1 =dtos.EXTRA1;
-            itemResult.Extra2 =dtos.EXTRA2;
-            itemResult.Extra3 =dtos.EXTRA3;
-            itemResult.USuarioIns = dtos.USUARIO_INS;
-            itemResult.FechaIns = dtos.FECHA_INS;
-            itemResult.UsuarioUpd = dtos.USUARIO_UPD;
-            itemResult.FechaUpd = dtos.FECHA_UPD;
-            itemResult.CodigoEmpresa = dtos.CODIGO_EMPRESA;
-            
+            FechaDto FechaIniObj = GetFechaDto(dtos.FECHA_INI);
+            itemResult.FechaIniObj = (FechaDto)FechaIniObj;
+            FechaDto FechaFinObj = GetFechaDto(dtos.FECHA_FIN);
+            itemResult.FechaFinObj = (FechaDto)FechaFinObj;
 
 
             return itemResult;
@@ -110,38 +118,17 @@ namespace Convertidor.Data.Repository.Rh
         }
 
 
-        public async  Task<List<ListEducacionDto>> MapListEducacionDto(List<RH_EDUCACION> dtos)
+        public async  Task<List<RhEducacionResponseDto>> MapListEducacionDto(List<RH_EDUCACION> dtos)
         {
-            List<ListEducacionDto> result = new List<ListEducacionDto>();
+            List<RhEducacionResponseDto> result = new List<RhEducacionResponseDto>();
 
             foreach (var item in dtos)
             {
 
-                ListEducacionDto itemResult = new ListEducacionDto();
-
-                itemResult.CodigoEducacion = item.CODIGO_EDUCACION;
-                itemResult.CodigoPersona = item.CODIGO_PERSONA;
-                itemResult.NivelId = item.NIVEL_ID;
-                itemResult.DescripcionNivel = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.NIVEL_ID);
-                itemResult.NombreInstituto = item.NOMBRE_INSTITUTO;
-                itemResult.LocalidadInstituto = item.LOCALIDAD_INSTITUTO;
-                itemResult.ProfesionId = item.PROFESION_ID;
-                itemResult.DescripcionProfesion = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.PROFESION_ID);
-                itemResult.FechaIni = item.FECHA_INI;
-                itemResult.FechaFin = item.FECHA_FIN;
-                itemResult.UltimoAnoAprobado = item.ULTIMO_ANO_APROBADO;
-                itemResult.Graduado = item.GRADUADO;
-                itemResult.TituloId = item.TITULO_ID;
-                itemResult.DescripcionTitulo = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.TITULO_ID);
-                itemResult.MencionEspecialidadId = item.MENCION_ESPECIALIDAD_ID;
-                itemResult.DescripcionMencionEspecialidad = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.MENCION_ESPECIALIDAD_ID);
-                itemResult.Extra1 = item.EXTRA1;
-                itemResult.Extra2 = item.EXTRA2;
-                itemResult.Extra3 = item.EXTRA3;
-                itemResult.CodigoEmpresa = item.CODIGO_EMPRESA;
-
-
-      
+              
+                var itemResult=await MapEducacionDto(item);
+              
+                
                 result.Add(itemResult);
 
 
@@ -174,11 +161,11 @@ namespace Convertidor.Data.Repository.Rh
                 }
 
               
-                var educaciones = await _descriptivaService.GetByTitulo(dto.TituloId);
+                var titulos = await _descriptivaService.GetByTitulo(dto.TituloId);
                 
                 {
-                    var educa = educaciones.Where(x => x.Id == dto.TituloId);
-                    if (educa is null)
+                    var titulo = titulos.Where(x => x.Id == 16);
+                    if (titulo is null)
                     {
                         result.Data = null;
                         result.IsValid = false;
@@ -187,7 +174,7 @@ namespace Convertidor.Data.Repository.Rh
                     }
                 }
 
-                var niveles = await _descriptivaService.GetByTitulo(dto.NivelId);
+                var niveles = await _descriptivaService.GetByTitulo(5);
 
                 {
                     var nivel = niveles.Where(x => x.Id == dto.NivelId);
@@ -200,7 +187,7 @@ namespace Convertidor.Data.Repository.Rh
                     }
                 }
 
-                var profesiones = await _descriptivaService.GetByTitulo(dto.ProfesionId);
+                var profesiones = await _descriptivaService.GetByTitulo(8);
 
                 {
                     var profesion = profesiones.Where(x => x.Id == dto.ProfesionId);
@@ -212,11 +199,11 @@ namespace Convertidor.Data.Repository.Rh
                         return result;
                     }
                 }
-                var mencionEspecialdades = await _descriptivaService.GetByTitulo(dto.MencionEspecialidadId);
+                var mencionEspecialdades = await _descriptivaService.GetByTitulo(25);
                 
                 {
                     var mencionEspecialdad = mencionEspecialdades.Where(x => x.Id == dto.MencionEspecialidadId);
-                    if (mencionEspecialdades is null)
+                    if (mencionEspecialdad is null)
                     {
                         result.Data = null;
                         result.IsValid = false;
@@ -273,7 +260,7 @@ namespace Convertidor.Data.Repository.Rh
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 educacion.CODIGO_EMPRESA = conectado.Empresa;
                 educacion.USUARIO_UPD = conectado.Usuario;
-
+                educacion.FECHA_UPD=DateTime.Now;
 
 
                 await _repository.Update(educacion);
@@ -348,7 +335,7 @@ namespace Convertidor.Data.Repository.Rh
 
                 {
                     var mencionEspecialdad = mencionEspecialdades.Where(x => x.Id == dto.MencionEspecialidadId);
-                    if (mencionEspecialdades is null)
+                    if (mencionEspecialdad is null)
                     {
                         result.Data = null;
                         result.IsValid = false;
@@ -407,8 +394,8 @@ namespace Convertidor.Data.Repository.Rh
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario;
-
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS=DateTime.Now;
 
                 var created = await _repository.Add(entity);
 

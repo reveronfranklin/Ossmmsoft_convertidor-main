@@ -48,7 +48,7 @@ namespace Convertidor.Data.Repository.Rh
             
         }
        
-        public async Task<List<ListDireccionesDto>> GetByCodigoPersona(int codigoPersona)
+        public async Task<List<RhDireccionesResponseDto>> GetByCodigoPersona(int codigoPersona)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Convertidor.Data.Repository.Rh
                 var result = await MapListDireccionesDto(Direccion);
 
 
-                return (List<ListDireccionesDto>)result;
+                return (List<RhDireccionesResponseDto>)result;
             }
             catch (Exception ex)
             {
@@ -123,52 +123,37 @@ namespace Convertidor.Data.Repository.Rh
 
 
 
-        public async  Task<List<ListDireccionesDto>> MapListDireccionesDto(List<RH_DIRECCIONES> dtos)
+        public async  Task<List<RhDireccionesResponseDto>> MapListDireccionesDto(List<RH_DIRECCIONES> dtos)
         {
-            List<ListDireccionesDto> result = new List<ListDireccionesDto>();
+            List<RhDireccionesResponseDto> result = new List<RhDireccionesResponseDto>();
 
             foreach (var item in dtos)
             {
 
-                ListDireccionesDto itemResult = new ListDireccionesDto();
+                RhDireccionesResponseDto itemResult = new RhDireccionesResponseDto();
 
                 itemResult.CodigoDireccion = item.CODIGO_DIRECCION;
                 itemResult.CodigoPersona = item.CODIGO_PERSONA;
-                itemResult.DireccionId = item.DIRECCION_ID;
-                itemResult.DescripcionDireccion = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.DIRECCION_ID);
+                itemResult.DireccionId = item.DIRECCION_ID; 
                 itemResult.PaisId = item.PAIS_ID;
-                itemResult.DescripcionPais = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.PAIS_ID);
                 itemResult.EstadoId = item.ESTADO_ID;
-                itemResult.DescripcionEsatado = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.ESTADO_ID);
                 itemResult.MunicipioId = item.MUNICIPIO_ID;
-                itemResult.DescripcionMunicipio = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.MUNICIPIO_ID);
                 itemResult.CiudadId = item.CIUDAD_ID;
-                itemResult.DescripcionCiudad = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.CIUDAD_ID);
                 itemResult.ParroquiaId = item.PARROQUIA_ID;
-                itemResult.DescripcionParroquia = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.PARROQUIA_ID);
                 itemResult.SectorId = item.SECTOR_ID;
-                itemResult.DescripcionSector = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.SECTOR_ID);
                 itemResult.UrbanizacionId = item.URBANIZACION_ID;
-                itemResult.DescripcionUrbanizacion = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.URBANIZACION_ID);
                 itemResult.ManzanaId = item.MANZANA_ID;
-                itemResult.DescripcionManzana = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.MANZANA_ID);
                 itemResult.ParcelaId = item.PARCELA_ID;
-                itemResult.DescripcionParcela = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.PARCELA_ID);
                 itemResult.VialidadId = item.VIALIDAD_ID;
-                itemResult.DescripcionVialidad = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.VIALIDAD_ID);
                 itemResult.Vialidad = item.VIALIDAD;
                 itemResult.TipoViviendaId = item.TIPO_VIVIENDA_ID;
-                itemResult.DescripcionTipovivienda = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.TIPO_VIVIENDA_ID);
                 itemResult.ViviendaId = item.VIVIENDA_ID;
-                itemResult.DescripcionVivienda = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.VIVIENDA_ID);
                 itemResult.Vivienda = item.VIVIENDA;
                 itemResult.TipoNivelId = item.TIPO_NIVEL_ID;
-                itemResult.DescripcionTipoNivel = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.TIPO_NIVEL_ID);
                 itemResult.Nivel = item.NIVEL;
                 itemResult.NroVivienda = item.NRO_VIVIENDA;
                 itemResult.ComplementoDir = item.COMPLEMENTO_DIR;
                 itemResult.TenenciaId = item.TENENCIA_ID;
-                itemResult.DescripcionTenencia = await _descriptivaService.GetDescripcionByCodigoDescriptiva(item.TENENCIA_ID);
                 itemResult.CodigoPostal = item.CODIGO_POSTAL;
                 itemResult.Principal = item.PRINCIPAL;
                 itemResult.Extra1 = item.EXTRA1;

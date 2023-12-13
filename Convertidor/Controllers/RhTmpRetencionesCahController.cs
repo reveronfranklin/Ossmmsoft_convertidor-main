@@ -25,7 +25,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetRetencionesCah(FilterRetencionesDto filter)
         {
-                var result = await _service.GetRetencionesCah(filter);
+            var result = await _service.GetRetencionesCah(filter);
             return Ok(result);
         }
 
