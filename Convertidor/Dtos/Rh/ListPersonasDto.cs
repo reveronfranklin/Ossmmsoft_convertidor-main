@@ -19,7 +19,12 @@ namespace Convertidor.Dtos.Rh
         public string Nacionalidad { get; set; } = string.Empty;
         public string Sexo { get; set; } = string.Empty;
         public int Edad { get; set; } 
-        public string FechaNacimiento { get; set; } = string.Empty;
+        public string FechaNacimientoString { get; set; } = string.Empty;
+        public DateTime FechaNacimiento { get; set; }
+        
+        public FechaDto FechaNacimientoObj { get; set; }
+        
+        
         public int PaisNacimientoId { get; set; }
         public int EstadoNacimientoId { get; set; }
         public string NumeroGacetaNacional { get; set; } = string.Empty;

@@ -244,7 +244,17 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
-        
+        public FechaDto GetFechaDto(DateTime fecha)
+        {
+            var FechaDesdeObj = new FechaDto();
+            FechaDesdeObj.Year = fecha.Year.ToString();
+            string month = "00" + fecha.Month.ToString();
+            string day = "00" + fecha.Day.ToString();
+            FechaDesdeObj.Month = month.Substring(month.Length - 2);
+            FechaDesdeObj.Day = day.Substring(day.Length - 2);
+    
+            return FechaDesdeObj;
+        }
         public async Task<PersonasDto> MapObjPersonasDto(RH_PERSONAS dtos)
         {
                
@@ -259,7 +269,13 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Nacionalidad = dtos.NACIONALIDAD;
                 itemResult.Sexo = dtos.SEXO;
             
-                itemResult.FechaNacimiento = dtos.FECHA_NACIMIENTO.ToShortDateString();
+             
+               
+                itemResult.FechaNacimiento = dtos.FECHA_NACIMIENTO; 
+                itemResult.FechaNacimientoString = dtos.FECHA_NACIMIENTO.ToString("u");
+                FechaDto FechaNacimientoObj = GetFechaDto(dtos.FECHA_NACIMIENTO);
+                itemResult.FechaNacimientoObj = (FechaDto)FechaNacimientoObj;
+                
                 var desdeEdad = dtos.FECHA_NACIMIENTO;
           
                 var hastaEdad = DateTime.Now;

@@ -12,8 +12,10 @@ public class RhPersonaUpdateDto
     public string FechaNacimiento { get; set; } = string.Empty;
     public int PaisNacimientoId { get; set; }
     public int EstadoNacimientoId { get; set; }
-    public string NumeroGacetaNacional { get; set; } = string.Empty;
-    public string FechaGacetaNacional { get; set; } = string.Empty;
+   
+    public string? NumeroGacetaNacional { get; set; } = string.Empty;
+    
+    public string? FechaGacetaNacional { get; set; } = string.Empty;
     public int EstadoCivilId { get; set; }
     public decimal Estatura { get; set; }
     public decimal Peso { get; set; }
