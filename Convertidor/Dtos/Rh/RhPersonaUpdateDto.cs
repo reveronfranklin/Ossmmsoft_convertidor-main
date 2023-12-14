@@ -1,6 +1,7 @@
 namespace Convertidor.Dtos.Rh;
 
-public class RhPersonaUpdateDto
+public class 
+    RhPersonaUpdateDto
 {
     public int CodigoPersona { get; set; }
     public int Cedula { get; set; }
@@ -23,5 +24,10 @@ public class RhPersonaUpdateDto
     public string Status { get; set; } = string.Empty;
     public int IdentificacionId { get; set; }
     public int NumeroIdentificacion { get; set; }
+
+    public string Data { get; set; } = string.Empty;
+    public string NombreArchivo { get; set; } = string.Empty;
+    public string Extension { get; set; } = string.Empty;
+    public string Ruta { get; set; } = string.Empty;
 
 }
