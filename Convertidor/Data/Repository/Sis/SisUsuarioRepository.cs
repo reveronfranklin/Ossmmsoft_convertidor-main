@@ -58,7 +58,7 @@ namespace Convertidor.Data.Repository.Sis
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var empresString = @settings.EmpresaConfig;
             var empresa = Int32.Parse(empresString);
-            var userName = "";
+            var userName ="";
             userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
             SIS_USUARIOS sisUsuario = await GetByLogin(userName);
             if(sisUsuario!=null) 
@@ -79,7 +79,7 @@ namespace Convertidor.Data.Repository.Sis
         {
             if(login == null) 
             {
-                login = "";
+                login ="";
             }
             string newlogin = login;
 

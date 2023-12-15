@@ -187,6 +187,8 @@ builder.Services.AddTransient<IRhDocumentosDetallesRepository, RhDocumentosDetal
 builder.Services.AddTransient<IRhDocumentosDetallesService, RhDocumentosDetallesService>();
 builder.Services.AddTransient<IRhExpLaboralRepository, RhExpLaboralRepository>();
 builder.Services.AddTransient<IRhExpLaboralService, RhExpLaboralService>();
+builder.Services.AddTransient<IRhPersonasMovControlRepository, RhPersonasMovControlRepository>();
+builder.Services.AddTransient<IRhPersonasMovControlService, RhPersonasMovControlService>();
 
 
 //BM Repository
@@ -283,7 +285,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-SeedData(app);
+//SeedData(app);
 
 void SeedData(WebApplication app)
 {

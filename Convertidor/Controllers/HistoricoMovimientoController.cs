@@ -30,14 +30,14 @@ namespace Convertidor.Controllers
         private readonly IRhHistoricoMovimientoService _historicoNominaService;
         private readonly IRhTipoNominaService    _tipoNominaService;
         private readonly IRhProcesoDetalleRepository _rhProcesoDetalleRepository;
-        private readonly IRhConceptosRepository _rhConceptosRepository;
+        private readonly IRhPersonasMovControlRepository _rhConceptosRepository;
 
         private readonly IConfiguration _configuration;
         public HistoricoMovimientoController(IRhHistoricoMovimientoService historicoNominaService,
                                              IRhTipoNominaService tipoNominaService,
                                              IConfiguration configuration,
                                              IRhProcesoDetalleRepository rhProcesoDetalleRepository,
-                                             IRhConceptosRepository rhConceptosRepository
+                                             IRhPersonasMovControlRepository rhConceptosRepository
                                          )
         {
           

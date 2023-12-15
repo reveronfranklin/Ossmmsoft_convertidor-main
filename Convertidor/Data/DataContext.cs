@@ -35,8 +35,9 @@ namespace Convertidor.Data
         public DbSet<RH_DOCUMENTOS_DETALLES> RH_DOCUMENTOS_DETALLES { get; set; }
 
         public DbSet<RH_EXP_LABORAL> RH_EXP_LABORAL { get; set; }
-
+        public DbSet<RH_PERSONAS_MOV_CONTROL> RH_PERSONAS_MOV_CONTROL { get; set; }
         
+
         public DbSet<RH_TMP_RETENCIONES_SSO> RH_TMP_RETENCIONES_SSO { get; set; }
 
         public DbSet<RH_TMP_RETENCIONES_FAOV> RH_TMP_RETENCIONES_FAOV { get; set; }
@@ -266,6 +267,17 @@ namespace Convertidor.Data
                 builder.ToTable("RH_EXP_LABORAL");
             });
 
+            modelBuilder.Entity<RH_PERSONAS_MOV_CONTROL>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_PERSONA_MOV_CTRL,
+
+                });
+                builder.ToTable("RH_PERSONAS_MOV_CONTROL");
+            });
+            
+
             modelBuilder.Entity<RH_RELACION_CARGOS>(builder =>
             {
                 builder.HasKey(table => new
@@ -323,7 +335,11 @@ namespace Convertidor.Data
             });
             modelBuilder.Entity<RH_CONCEPTOS>(builder =>
             {
-                builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_CONCEPTO,
+
+                });
                 builder.ToTable("RH_CONCEPTOS");
             });
 

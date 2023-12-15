@@ -2,6 +2,7 @@
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
+using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
@@ -51,6 +52,22 @@ namespace Convertidor.Data.Repository.Rh
             {
 
                 var result = await _context.RH_CONCEPTOS.DefaultIfEmpty().Where(tn => tn.CODIGO_CONCEPTO == codigoConcepto).FirstOrDefaultAsync();
+                return (RH_CONCEPTOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<RH_CONCEPTOS> GetCodigoString(string codigo)
+        {
+            try
+            {
+
+                var result = await _context.RH_CONCEPTOS.DefaultIfEmpty().Where(tn => tn.CODIGO == codigo).FirstOrDefaultAsync();
                 return (RH_CONCEPTOS)result;
             }
             catch (Exception ex)
@@ -142,6 +159,115 @@ namespace Convertidor.Data.Repository.Rh
             }
         }
 
+        public async Task<ResultDto<RH_CONCEPTOS>> Add(RH_CONCEPTOS entity)
+        {
+            ResultDto<RH_CONCEPTOS> result = new ResultDto<RH_CONCEPTOS>(null);
+            try
+            {
+
+                await _context.RH_CONCEPTOS.AddAsync(entity);
+                _context.SaveChanges();
+
+
+                result.Data = entity;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        public async Task<ResultDto<RH_CONCEPTOS>> Update(RH_CONCEPTOS entity)
+        {
+            ResultDto<RH_CONCEPTOS> result = new ResultDto<RH_CONCEPTOS>(null);
+
+            try
+            {
+                RH_CONCEPTOS entityUpdate = await GetByCodigo(entity.CODIGO_CONCEPTO);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.RH_CONCEPTOS.Update(entity);
+                    _context.SaveChanges();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        //public async Task<string> Delete(int CodigoConcepto)
+        //{
+
+        //    try
+        //    {
+        //        RH_CONCEPTOS entity = await GetByCodigo(CodigoConcepto);
+        //        if (entity != null)
+        //        {
+        //            _context.RH_CONCEPTOS.Remove(entity);
+        //            _context.SaveChanges();
+        //        }
+        //        return "";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.Message;
+        //    }
+
+        //}
+
+        public async Task<int> GetNextKey()
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.RH_CONCEPTOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_CONCEPTO)
+                    .FirstOrDefaultAsync();
+                if (last == null)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = last.CODIGO_CONCEPTO + 1;
+                }
+
+                return (int)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return 0;
+            }
+
+        }
+
     }
 }
+
+
+    
+
 

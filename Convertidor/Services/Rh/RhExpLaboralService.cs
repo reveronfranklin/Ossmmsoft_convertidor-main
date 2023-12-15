@@ -395,7 +395,6 @@ namespace Convertidor.Data.Repository.Rh
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_UPD = conectado.Usuario.ToString();
 
-
                 var created = await _repository.Add(entity);
 
                 if (created.IsValid && created.Data != null)

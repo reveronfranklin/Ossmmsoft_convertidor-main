@@ -51,6 +51,31 @@ namespace Convertidor.Controllers
             return Ok(result.OrderBy(x=>x.Denominacion));
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(RhConceptosUpdateDto dto)
+        {
+            var result = await _service.Create(dto);
+            return Ok(result);
+        }
+
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Update(RhConceptosUpdateDto dto)
+        {
+            var result = await _service.Update(dto);
+            return Ok(result);
+        }
+
+
+        //[HttpPost]
+        //[Route("[action]")]
+        //public async Task<IActionResult> Delete(RhConceptosDeleteDto dto)
+        //{
+        //    var result = await _service.Delete(dto);
+        //    return Ok(result);
+        //}
 
     }
 }
