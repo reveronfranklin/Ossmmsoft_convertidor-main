@@ -521,22 +521,25 @@ namespace Convertidor.Services.Presupuesto
             dto.Descripcion = entity.DESCRIPCION ?? "";
             dto.Ano = entity.ANO;
             dto.MontoPresupuesto = entity.MONTO_PRESUPUESTO;
-            dto.FechaDesde = entity.FECHA_DESDE.ToString("u");          
-            dto.FechaHasta = entity.FECHA_HASTA.ToString("u");  
-            dto.FechaAprobacion= entity.FECHA_APROBACION.ToString("u");
-            dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
-
-            dto.FechaOrdenanza = entity.FECHA_ORDENANZA.ToString("u");
-
+            dto.FechaDesde = entity.FECHA_DESDE;          
+            dto.FechaHasta = entity.FECHA_HASTA;  
+            dto.FechaDesdeString = entity.FECHA_DESDE.ToString("u");          
+            dto.FechaHastaString = entity.FECHA_HASTA.ToString("u");  
             FechaDto FechaDesdeObj = GetFechaDto(entity.FECHA_DESDE);
             dto.FechaDesdeObj = (FechaDto)FechaDesdeObj;
-
             FechaDto FechaHastaObj = GetFechaDto(entity.FECHA_HASTA);
             dto.FechaHastaObj = (FechaDto)FechaHastaObj;
-
+            
+            
+            dto.FechaAprobacion= entity.FECHA_APROBACION;
+            dto.FechaAprobacionString= entity.FECHA_APROBACION.ToString("u");
             FechaDto FechaAprobacionObj = GetFechaDto(entity.FECHA_APROBACION);
             dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
+            
+            dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
 
+            dto.FechaOrdenanza = entity.FECHA_ORDENANZA;
+            dto.FechaOrdenanzaString = entity.FECHA_ORDENANZA.ToString("u");
             FechaDto FechaOrdenanzaObj = GetFechaDto(entity.FECHA_ORDENANZA);
             dto.FechaOrdenanzaObj = (FechaDto)FechaOrdenanzaObj;
        
@@ -656,26 +659,27 @@ namespace Convertidor.Services.Presupuesto
             dto.Descripcion = entity.DESCRIPCION ?? "";
             dto.Ano = entity.ANO;
             dto.MontoPresupuesto = entity.MONTO_PRESUPUESTO;
-            dto.FechaDesde = entity.FECHA_DESDE.ToString("u");
-            dto.FechaHasta = entity.FECHA_HASTA.ToString("u");
-            dto.FechaAprobacion = entity.FECHA_APROBACION.ToString("u");
-            dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
-
-            dto.FechaOrdenanza = entity.FECHA_ORDENANZA.ToString("u");
-
+            dto.FechaDesde = entity.FECHA_DESDE;
+            dto.FechaDesdeString = entity.FECHA_DESDE.ToString("u");
             FechaDto FechaDesdeObj = GetFechaDto(entity.FECHA_DESDE);
             dto.FechaDesdeObj = (FechaDto)FechaDesdeObj;
-
+            
+            dto.FechaHasta = entity.FECHA_HASTA;
+            dto.FechaHastaString = entity.FECHA_HASTA.ToString("u");
             FechaDto FechaHastaObj = GetFechaDto(entity.FECHA_HASTA);
             dto.FechaHastaObj = (FechaDto)FechaHastaObj;
-
+            
+            dto.FechaAprobacion = entity.FECHA_APROBACION;
+            dto.FechaAprobacionString = entity.FECHA_APROBACION.ToString("u");
             FechaDto FechaAprobacionObj = GetFechaDto(entity.FECHA_APROBACION);
             dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
+            dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
 
+            dto.FechaOrdenanza = entity.FECHA_ORDENANZA;
+            dto.FechaOrdenanzaString = entity.FECHA_ORDENANZA.ToString("u");
             FechaDto FechaOrdenanzaObj = GetFechaDto(entity.FECHA_ORDENANZA);
             dto.FechaOrdenanzaObj = (FechaDto)FechaOrdenanzaObj;
-
-
+            
             dto.Extra1 = entity.EXTRA1;
             dto.Extra2 = entity.EXTRA2;
             dto.Extra2 = entity.EXTRA3;

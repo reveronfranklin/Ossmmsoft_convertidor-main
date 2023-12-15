@@ -39,6 +39,7 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IPRE_INDICE_CAT_PRGRepository _preIndiceCatPrg;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IDistributedCache _distributedCache;
+        private readonly IConfiguration _configuration;
 
         public RhPersonaService(IRhPersonasRepository repository,
                                 IRhHistoricoMovimientoService historicoMovimientoService,
@@ -54,7 +55,8 @@ namespace Convertidor.Data.Repository.Rh
                                 IPreCargosRepository preCargosRepository,
                                 IPRE_INDICE_CAT_PRGRepository preIndiceCatPrg, 
                                 ISisUsuarioRepository sisUsuarioRepository ,
-                                    IDistributedCache distributedCache)
+                                    IDistributedCache distributedCache,
+                                IConfiguration configuration)
         {
             
             _repository = repository;
@@ -72,6 +74,7 @@ namespace Convertidor.Data.Repository.Rh
             _preIndiceCatPrg = preIndiceCatPrg;
             _sisUsuarioRepository = sisUsuarioRepository;
             _distributedCache = distributedCache;
+            _configuration = configuration;
         }
        
         
@@ -118,7 +121,7 @@ namespace Convertidor.Data.Repository.Rh
 
                     resultData =await  MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(1))
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
                    var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
@@ -176,7 +179,7 @@ namespace Convertidor.Data.Repository.Rh
 
                     resultData =await MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddMinutes(20))
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
                     var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                     var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
@@ -294,7 +297,17 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
-        
+        public FechaDto GetFechaDto(DateTime fecha)
+        {
+            var FechaDesdeObj = new FechaDto();
+            FechaDesdeObj.Year = fecha.Year.ToString();
+            string month = "00" + fecha.Month.ToString();
+            string day = "00" + fecha.Day.ToString();
+            FechaDesdeObj.Month = month.Substring(month.Length - 2);
+            FechaDesdeObj.Day = day.Substring(day.Length - 2);
+    
+            return FechaDesdeObj;
+        }
         public async Task<PersonasDto> MapObjPersonasDto(RH_PERSONAS dtos)
         {
                
@@ -309,8 +322,10 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Apellido = dtos.APELLIDO;
                 itemResult.Nacionalidad = dtos.NACIONALIDAD;
                 itemResult.Sexo = dtos.SEXO;
-            
-                itemResult.FechaNacimiento = dtos.FECHA_NACIMIENTO.ToShortDateString();
+                itemResult.FechaNacimiento = dtos.FECHA_NACIMIENTO; 
+                itemResult.FechaNacimientoString = dtos.FECHA_NACIMIENTO.ToString("u");
+                FechaDto FechaNacimientoObj = GetFechaDto(dtos.FECHA_NACIMIENTO);
+                itemResult.FechaNacimientoObj = (FechaDto)FechaNacimientoObj;
                 var desdeEdad = dtos.FECHA_NACIMIENTO;
           
                 var hastaEdad = DateTime.Now;
@@ -611,6 +626,9 @@ namespace Convertidor.Data.Repository.Rh
           
             return result;
         }
+        
+        
+
         public async Task<ResultDto<PersonasDto>> Update(RhPersonaUpdateDto dto)
         {
 
@@ -750,9 +768,31 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 await _repository.Update(persona);
-
-        
+                if (dto.Data == "/images/avatars/1.png") dto.Data = "";
+                if (dto.Data.Length > 0)
+                {
+                    dto.Extension = ".JPG";
                 
+                    dto.NombreArchivo = $@"{persona.CEDULA}" + dto.Extension;
+                    var settings = _configuration.GetSection("Settings").Get<Settings>();
+                    var ruta = @settings.Images;  
+                    dto.Ruta = ruta;
+                    //
+
+                    //CREA EL ARCHIVO DE IMAGEN
+
+                    //Convert Base64 Encoded string to Byte Array.
+                    var dataArray = dto.Data.Split("/");
+                    //string base64 = dto.Data;
+                    byte[] imageBytes = Convert.FromBase64String(dto.Data);
+
+                    //Ruta y nombre de la imagen
+                    var imageFullName = dto.Ruta + dto.NombreArchivo;
+                    //creo el fichero
+                    await System.IO.File.WriteAllBytesAsync(imageFullName, imageBytes);
+                }
+               
+ 
                 var resultDto = await GetPersona(dto.CodigoPersona);
                 result.Data = resultDto;
                 result.IsValid = true;

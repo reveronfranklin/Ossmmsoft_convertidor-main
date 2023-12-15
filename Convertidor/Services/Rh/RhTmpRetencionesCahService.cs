@@ -89,7 +89,7 @@ namespace Convertidor.Data.Repository.Rh
                     string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);
                     string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
                     var hastaFilter = hasta.Year + mesHasta + diaHasta;
-                    var fileName = $"RetencionesCAH desde {desdeFilter} Hasta {hastaFilter} Tipo Nomina {filter.TipoNomina}.xlsx";
+                    var fileName = $"RetencionesCAH-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.xlsx";
                     string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
 
 

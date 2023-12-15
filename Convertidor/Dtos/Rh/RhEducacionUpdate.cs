@@ -10,7 +10,7 @@ public class RhEducacionUpdate
     public int ProfesionId { get; set; }
     public DateTime FechaIni { get; set; }
     public DateTime FechaFin { get; set; }
-    public int UltimoAñoAprobado { get; set; }
+    public int UltimoAÃ±oAprobado { get; set; }
     public string Graduado { get; set; }
     public int TituloId { get; set; }
     public int MencionEspecialidadId { get; set; } 

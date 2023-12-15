@@ -19,7 +19,12 @@ namespace Convertidor.Dtos.Rh
         public string Nacionalidad { get; set; } = string.Empty;
         public string Sexo { get; set; } = string.Empty;
         public int Edad { get; set; } 
-        public string FechaNacimiento { get; set; } = string.Empty;
+        public string FechaNacimientoString { get; set; } = string.Empty;
+        public DateTime FechaNacimiento { get; set; }
+        
+        public FechaDto FechaNacimientoObj { get; set; }
+        
+        
         public int PaisNacimientoId { get; set; }
         public int EstadoNacimientoId { get; set; }
         public string NumeroGacetaNacional { get; set; } = string.Empty;
@@ -142,8 +147,8 @@ namespace Convertidor.Dtos.Rh
         public int NumeroIdentificacion { get; set; }
         public TiempoServicioResponseDto? TiempoServicio { get; set; }
         public List<ListHistoricoMovimientoDto>? HistoricoMovimientoDto { get; set; }
-        public List<ListEducacionDto>? EducacionDto { get; set; }
-        public List<ListDireccionesDto>? DireccionesDto { get; set; }
+        public List<RhEducacionResponseDto>? EducacionDto { get; set; }
+        public List<RhDireccionesResponseDto>? DireccionesDto { get; set; }
         public string DercripcionStatus { get { return GetStatus(Status); } }
 
         private string GetStatus(string status)
