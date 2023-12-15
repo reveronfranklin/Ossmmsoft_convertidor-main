@@ -3,6 +3,7 @@ namespace Convertidor.Dtos.Rh
 {
 	public class RhExpLaboralResponseDto
     {
+        public int CodigoExpLaboral { get; set; }
         public int CodigoPersona { get; set; }
         public string NombreEmpresa { get; set; }
         public string TipoEmpresa { get; set; } 
@@ -10,16 +11,16 @@ namespace Convertidor.Dtos.Rh
         public string Cargo { get; set; } 
         public DateTime FechaDesde { get; set; }
         public DateTime FechaHasta { get; set; }
+        public string FechaDesdeString { get; set; }
+        public string FechaHastaString { get; set; }
+        public FechaDto FechaDesdeObj { get; set; }
+        public FechaDto FechaHastaObj { get; set; }
         public int UltimoSueldo { get; set; }
         public string Supervisor { get; set; } 
         public string CargoSupervisor { get; set; }
         public string Telefono { get; set; } 
         public string Descripcion { get; set; }
-        public string UsuarioIns { get; set; } 
-        public DateTime FechaIns { get; set; }
-        public string UsuarioUpd { get; set; } 
-        public DateTime FechaUpd { get; set; }
-        public int CodigoEmpresa { get; set; } 
+     
   
     }
 }

@@ -103,14 +103,15 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.FechaIniString = dtos.FECHA_INI.ToString("u"); 
             itemResult.FechaFin = dtos.FECHA_FIN;
             itemResult.FechaFinString = dtos.FECHA_FIN.ToString("u"); 
-            itemResult.UltimoAñoAprobado = dtos.ULTIMO_ANO_APROBADO;
-            itemResult.Graduado = dtos.GRADUADO;
-            itemResult.TituloId = dtos.TITULO_ID;
-            itemResult.MencionEspecialidadId = dtos.MENCION_ESPECIALIDAD_ID;
             FechaDto FechaIniObj = GetFechaDto(dtos.FECHA_INI);
             itemResult.FechaIniObj = (FechaDto)FechaIniObj;
             FechaDto FechaFinObj = GetFechaDto(dtos.FECHA_FIN);
             itemResult.FechaFinObj = (FechaDto)FechaFinObj;
+            itemResult.UltimoAñoAprobado = dtos.ULTIMO_ANO_APROBADO;
+            itemResult.Graduado = dtos.GRADUADO;
+            itemResult.TituloId = dtos.TITULO_ID;
+            itemResult.MencionEspecialidadId = dtos.MENCION_ESPECIALIDAD_ID;
+        
 
 
             return itemResult;

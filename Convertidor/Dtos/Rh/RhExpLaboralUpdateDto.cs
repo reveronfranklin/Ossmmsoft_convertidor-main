@@ -15,11 +15,7 @@ public class RhExpLaboralUpdateDto
     public string CargoSupervisor { get; set; }
     public string Telefono { get; set; }
     public string Descripcion { get; set; }
-    public string UsuarioIns { get; set; }
-    public DateTime FechaIns { get; set; }
-    public string UsuarioUpd { get; set; }
-    public DateTime FechaUpd { get; set; }
-    public int CodigoEmpresa { get; set; }
+  
 
 
 

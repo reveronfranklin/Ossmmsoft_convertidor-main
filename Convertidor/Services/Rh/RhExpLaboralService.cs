@@ -78,23 +78,32 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 RhExpLaboralResponseDto itemResult = new RhExpLaboralResponseDto();
+                itemResult.CodigoExpLaboral = dtos.CODIGO_EXP_LABORAL;
                 itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
                 itemResult.NombreEmpresa = dtos.NOMBRE_EMPRESA;
                 itemResult.TipoEmpresa = dtos.TIPO_EMPRESA;
+                if (dtos.RAMO_ID == null) dtos.RAMO_ID = 0;
                 itemResult.RamoId = dtos.RAMO_ID;
                 itemResult.Cargo = dtos.CARGO;
                 itemResult.FechaDesde = dtos.FECHA_DESDE;
                 itemResult.FechaHasta = dtos.FECHA_HASTA;
+                itemResult.FechaDesdeString = dtos.FECHA_DESDE.ToString("u"); 
+                itemResult.FechaHastaString = dtos.FECHA_HASTA.ToString("u"); 
+                FechaDto FechaDesdeObj = GetFechaDto(dtos.FECHA_DESDE);
+                itemResult.FechaDesdeObj = (FechaDto)FechaDesdeObj;
+                FechaDto FechaHastaObj = GetFechaDto(dtos.FECHA_HASTA);
+                itemResult.FechaHastaObj = FechaHastaObj;
                 itemResult.UltimoSueldo = dtos.ULTIMO_SUELDO;
+                if(dtos.SUPERVISOR == null)  dtos.SUPERVISOR = "";
                 itemResult.Supervisor = dtos.SUPERVISOR;
+                if (dtos.CARGO_SUPERVISOR == null) dtos.CARGO_SUPERVISOR = "";
                 itemResult.CargoSupervisor = dtos.CARGO_SUPERVISOR;
                 itemResult.Telefono = dtos.TELEFONO;
+                if (dtos.SUPERVISOR == null) dtos.SUPERVISOR = "";
+                itemResult.Supervisor = dtos.SUPERVISOR;
+                if (dtos.DESCRIPCION == null) dtos.DESCRIPCION = "";
                 itemResult.Descripcion = dtos.DESCRIPCION;
-                itemResult.UsuarioIns = dtos.USUARIO_INS;
-                itemResult.FechaIns = dtos.FECHA_INS; 
-                itemResult.UsuarioUpd = dtos.USUARIO_UPD;
-                itemResult.FechaUpd = dtos.FECHA_UPD;
-                itemResult.CodigoEmpresa = dtos.CODIGO_EMPRESA;
+             
 
 
             return itemResult;
@@ -240,11 +249,7 @@ namespace Convertidor.Data.Repository.Rh
                 codigoExpLaboral.CARGO_SUPERVISOR = dto.CargoSupervisor;
                 codigoExpLaboral.TELEFONO = dto.Telefono;
                 codigoExpLaboral.DESCRIPCION = dto.Descripcion;
-                codigoExpLaboral.USUARIO_INS = dto.UsuarioIns;
-                codigoExpLaboral.FECHA_INS = dto.FechaIns;
-                codigoExpLaboral.USUARIO_UPD = dto.UsuarioUpd;
-                codigoExpLaboral.FECHA_UPD = dto.FechaUpd;
-                codigoExpLaboral.CODIGO_EMPRESA = dto.CodigoEmpresa;
+
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -384,17 +389,14 @@ namespace Convertidor.Data.Repository.Rh
                 entity.CARGO_SUPERVISOR = dto.CargoSupervisor;
                 entity.TELEFONO = dto.Telefono;
                 entity.DESCRIPCION = dto.Descripcion;
-                entity.USUARIO_INS = dto.UsuarioIns;
-                entity.FECHA_INS = dto.FechaIns;
-                entity.FECHA_UPD = dto.FechaUpd;
-
+            
 
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario.ToString();
-
+                entity.USUARIO_INS = conectado.Usuario.ToString();
+                entity.FECHA_INS = DateTime.Now;
 
                 var created = await _repository.Add(entity);
 
