@@ -41,36 +41,19 @@ namespace Convertidor.Data.Repository.Rh
             _rhConceptosRepository = rhConceptosRepository;
         }
        
-        public async Task<List<ListPersonasMovControl>> GetAll()
-        {
-            try
-            {
-                var control = await _repository.GetAll();
+    
 
-                var result = MapListPersonasMovControlDto(control);
-
-
-                return (List<ListPersonasMovControl>)result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
-
-        public async Task<List<ListPersonasMovControl>> GetCodigoPersona(int codigoPersona)
+        public async Task<List<RhPersonasMovControlResponseDto>> GetCodigoPersona(int codigoPersona)
         {
             try
             {
 
                 var MovimientoControl = await _repository.GetCodigoPersona(codigoPersona);
 
-                var result = MapListPersonasMovControlDto(MovimientoControl);
+                var result = await MapListPersonasMovControlDto(MovimientoControl);
 
 
-                return (List<ListPersonasMovControl>)result;
+                return result;
             }
             catch (Exception ex)
             {
@@ -89,35 +72,59 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
             itemResult.CodigoConcepto = dtos.CODIGO_CONCEPTO;
             itemResult.ControlAplica = dtos.CONTROL_APLICA;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
-            itemResult.UsuarioIns = dtos.USUARIO_INS;
-            itemResult.FechaIns = dtos.FECHA_INS;
-            itemResult.UsuarioUpd = dtos.USUARIO_UPD;
-            itemResult.FechaUpd = dtos.FECHA_UPD;
-            itemResult.CodigoEmpresa = dtos.CODIGO_EMPRESA;
+            if (itemResult.ControlAplica == 1)
+            {
+                itemResult.DescripcionControlAplica = "SI";
+
+            }
+            else
+            {
+                itemResult.DescripcionControlAplica = "NO";
+            }
+               
+                
+            var concepto = await _rhConceptosRepository.GetByCodigo(itemResult.CodigoConcepto);
+            if (concepto != null)
+            {
+                itemResult.DescripcionConcepto = concepto.DESCRIPCION;
+            }
+
 
             return itemResult;
 
         }
 
 
-        public List<ListPersonasMovControl> MapListPersonasMovControlDto(List<RH_PERSONAS_MOV_CONTROL> dtos)
+        public async Task<List<RhPersonasMovControlResponseDto>> MapListPersonasMovControlDto(List<RH_PERSONAS_MOV_CONTROL> dtos)
         {
-            List<ListPersonasMovControl> result = new List<ListPersonasMovControl>();
+            List<RhPersonasMovControlResponseDto> result = new List<RhPersonasMovControlResponseDto>();
 
             foreach (var item in dtos)
             {
 
-                ListPersonasMovControl itemResult = new ListPersonasMovControl();
+                RhPersonasMovControlResponseDto itemResult = new RhPersonasMovControlResponseDto();
 
                 itemResult.CodigoPersonaMovCtrl = item.CODIGO_PERSONA_MOV_CTRL;
                 itemResult.CodigoPersona = item.CODIGO_PERSONA;
                 itemResult.CodigoConcepto =item.CODIGO_CONCEPTO;
                 itemResult.ControlAplica = item.CONTROL_APLICA;
-                
+                if (itemResult.ControlAplica == 1)
+                {
+                    itemResult.DescripcionControlAplica = "SI";
 
+                }
+                else
+                {
+                    itemResult.DescripcionControlAplica = "NO";
+                }
+
+                itemResult.DescripcionConcepto = "";
+                var concepto = await _rhConceptosRepository.GetByCodigo(itemResult.CodigoConcepto);
+                if (concepto != null)
+                {
+                    itemResult.DescripcionConcepto = concepto.DENOMINACION;
+                }
+                
                 result.Add(itemResult);
 
 
@@ -168,7 +175,7 @@ namespace Convertidor.Data.Repository.Rh
                 entity.CODIGO_PERSONA = dto.CodigoPersona;
                 entity.CODIGO_CONCEPTO = dto.CodigoConcepto;
                 entity.CONTROL_APLICA = dto.ControlAplica;
-                entity.CODIGO_EMPRESA = dto.CodigoEmpresa;
+             
                 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();

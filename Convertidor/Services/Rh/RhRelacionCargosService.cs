@@ -632,6 +632,9 @@ namespace Convertidor.Services.Presupuesto
 
         public async Task<RhRelacionCargoDto> MapRhRelacionCargo(RH_RELACION_CARGOS item)
         {
+            
+           
+            
             RhRelacionCargoDto dto = new RhRelacionCargoDto();
             dto.CodigoRelacionCargo = item.CODIGO_RELACION_CARGO;
             dto.CodigoRelacionCargoPre = item.CODIGO_RELACION_CARGO_PRE;
@@ -640,28 +643,17 @@ namespace Convertidor.Services.Presupuesto
             dto.CodigoCargo = item.CODIGO_CARGO;
             dto.DenominacionCargo = "";
             dto.Sueldo = item.SUELDO;
-         
-            if (item.FECHA_INI == null)
-            {
-                dto.FechaIni = "";
-            }
-            else
-            {
-                dto.FechaIni = item.FECHA_INI.Value.ToString("u");
-            }
-
+            dto.FechaIni = (DateTime)item.FECHA_INI;
             if (item.FECHA_FIN == null)
             {
-                dto.FechaFin = "";
+                item.FECHA_FIN = DateTime.MinValue;
             }
-            else
-            {
-                dto.FechaFin = item.FECHA_FIN.Value.ToString("u");
-            }
-          
-    
-
-        
+            dto.FechaFin = (DateTime)item.FECHA_FIN;
+            
+            
+            
+            dto.FechaIniString = item.FECHA_INI.Value.ToString("u");
+            dto.FechaFinString = item.FECHA_FIN.Value.ToString("u");
             FechaDto FechaIniObj = GetFechaDto(item.FECHA_INI);
             dto.FechaIniObj = (FechaDto)FechaIniObj;
             FechaDto FechaFinObj = GetFechaDto(item.FECHA_FIN);

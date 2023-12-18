@@ -13,8 +13,10 @@ namespace Convertidor.Dtos.Rh
         public string Apellido { get; set; } = string.Empty;
         public int Cedula { get; set; } 
         public decimal Sueldo { get; set; }
-        public string FechaIni { get; set; } = string.Empty;
-        public string FechaFin { get; set; } = string.Empty;
+        public DateTime FechaIni { get; set; } 
+        public DateTime FechaFin { get; set; } 
+        public string FechaIniString { get; set; } = string.Empty;
+        public string FechaFinString { get; set; } = string.Empty;
         public FechaDto FechaIniObj { get; set; }
         public FechaDto FechaFinObj { get; set; }
         public int CodigoRelacionCargoPre { get; set; }
