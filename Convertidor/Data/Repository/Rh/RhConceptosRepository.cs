@@ -119,7 +119,10 @@ namespace Convertidor.Data.Repository.Rh
                 if (codigoPersona > 0)
                 {
                     historico = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h => h.CODIGO_PERSONA == codigoPersona && h.FECHA_NOMINA_MOV >= desde && h.FECHA_NOMINA_MOV <= hasta).OrderByDescending(h => h.FECHA_NOMINA_MOV).ThenBy(h => h.CEDULA).ToListAsync();
-
+                    if (historico.Count <= 0)
+                    {
+                        historico = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h => h.CODIGO_PERSONA == codigoPersona ).OrderByDescending(h => h.FECHA_NOMINA_MOV).ThenBy(h => h.CEDULA).ToListAsync();
+                    }
                 }
                 else
                 {
