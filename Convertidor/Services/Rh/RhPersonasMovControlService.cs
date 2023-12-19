@@ -81,15 +81,13 @@ namespace Convertidor.Data.Repository.Rh
             {
                 itemResult.DescripcionControlAplica = "NO";
             }
-               
-                
+
             var concepto = await _rhConceptosRepository.GetByCodigo(itemResult.CodigoConcepto);
             if (concepto != null)
             {
-                itemResult.DescripcionConcepto = concepto.DESCRIPCION;
+                itemResult.DescripcionConcepto = concepto.DENOMINACION;
             }
-
-
+            
             return itemResult;
 
         }
