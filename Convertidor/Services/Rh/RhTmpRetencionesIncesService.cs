@@ -88,7 +88,10 @@ namespace Convertidor.Data.Repository.Rh
                     var hastaFilter = hasta.Year + mesHasta + diaHasta;
                     var fileName = $"RetencionesInce desde {desdeFilter} Hasta {hastaFilter} Tipo Nomina {filter.TipoNomina}.xlsx";
                     string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-
+                    if (File.Exists(newFile))
+                    {
+                        File.Delete(newFile);
+                    }
 
                     mapper.Save(newFile, result.Data, $"RetencionesCAH", true);
                     linkData = $"/ExcelFiles/{fileName}";

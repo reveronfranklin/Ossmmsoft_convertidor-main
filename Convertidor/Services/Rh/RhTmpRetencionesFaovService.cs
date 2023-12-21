@@ -83,10 +83,18 @@ namespace Convertidor.Data.Repository.Rh
                 string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
                 var hastaFilter = hasta.Year + mesHasta + diaHasta;
                 var fileName = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.xlsx";
-                var fileNameTxt = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.csv";
+                var fileNameTxt = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.txt";
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
                 string newFileTxt = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileNameTxt);
-
+                if (File.Exists(newFile))
+                {
+                    File.Delete(newFile);
+                }
+                if (File.Exists(newFileTxt))
+                {
+                    File.Delete(newFileTxt);
+                }
+                
                 mapper.Save(newFile, result.Data, $"RetencionesFAOV", true);
                 
                 using(TextWriter tw = new StreamWriter(newFileTxt))
