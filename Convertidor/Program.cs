@@ -189,8 +189,10 @@ builder.Services.AddTransient<IRhExpLaboralRepository, RhExpLaboralRepository>()
 builder.Services.AddTransient<IRhExpLaboralService, RhExpLaboralService>();
 builder.Services.AddTransient<IRhPersonasMovControlRepository, RhPersonasMovControlRepository>();
 builder.Services.AddTransient<IRhPersonasMovControlService, RhPersonasMovControlService>();
-
-
+builder.Services.AddTransient<IRhAriRepository, RhAriRepository>();
+builder.Services.AddTransient<IRhAriService, RhAriService>();
+builder.Services.AddTransient<IRhHPeriodoRepository, RhHPeriodoRepository>();
+builder.Services.AddTransient<IRhHPeriodoService, RhHPeriodoService>();
 //BM Repository
 builder.Services.AddTransient<IBM_V_BM1Repository, BM_V_BM1Repository>();
 //BM Services
