@@ -2,6 +2,7 @@
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
+using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
@@ -94,6 +95,126 @@ namespace Convertidor.Data.Repository.Rh
                 var res = ex.InnerException.Message;
                 return null;
             }
+        }
+
+        public async Task<ResultDto<RH_TIPOS_NOMINA>> Add(RH_TIPOS_NOMINA entity)
+        {
+            ResultDto<RH_TIPOS_NOMINA> result = new ResultDto<RH_TIPOS_NOMINA>(null);
+            try
+            {
+
+
+
+                await _context.RH_TIPOS_NOMINA.AddAsync(entity);
+                _context.SaveChanges();
+
+
+                result.Data = entity;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+
+
+        }
+
+        public async Task<ResultDto<RH_TIPOS_NOMINA>> Update(RH_TIPOS_NOMINA entity)
+        {
+            ResultDto<RH_TIPOS_NOMINA> result = new ResultDto<RH_TIPOS_NOMINA>(null);
+
+            try
+            {
+                RH_TIPOS_NOMINA entityUpdate = await GetByCodigo(entity.CODIGO_TIPO_NOMINA);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.RH_TIPOS_NOMINA.Update(entity);
+                    _context.SaveChanges();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+
+
+
+
+
+        }
+
+        public async Task<string> Delete(int codigoTipoNomina)
+        {
+
+            try
+            {
+                RH_TIPOS_NOMINA entity = await GetByCodigo(codigoTipoNomina);
+                if (entity != null)
+                {
+                    _context.RH_TIPOS_NOMINA.Remove(entity);
+                    _context.SaveChanges();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
+
+
+
+        public async Task<int> GetNextKey()
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.RH_TIPOS_NOMINA.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_TIPO_NOMINA)
+                    .FirstOrDefaultAsync();
+                if (last == null)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = last.CODIGO_TIPO_NOMINA + 1;
+                }
+
+                return (int)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return 0;
+            }
+
+
+
         }
 
 

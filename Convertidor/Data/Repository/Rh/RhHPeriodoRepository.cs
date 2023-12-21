@@ -10,16 +10,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhPeriodoRepository: IRhPeriodoRepository
+	public class RhHPeriodoRepository: IRhHPeriodoRepository
     {
 		
         private readonly DataContext _context;
 
-        public RhPeriodoRepository(DataContext context)
+        public RhHPeriodoRepository(DataContext context)
         {
             _context = context;
         }
-        public async Task<List<RH_PERIODOS>> GetAll(PeriodoFilterDto filter)
+        public async Task<List<RH_H_PERIODOS>> GetAll(PeriodoFilterDto filter)
         {
             
 
@@ -27,7 +27,7 @@ namespace Convertidor.Data.Repository.Rh
             {
                 if (filter.Year<=0  )
                 {
-                    var lastPeriodo = await _context.RH_PERIODOS.DefaultIfEmpty().OrderByDescending(p=>p.FECHA_NOMINA).FirstOrDefaultAsync();
+                    var lastPeriodo = await _context.RH_H_PERIODOS.DefaultIfEmpty().OrderByDescending(p=>p.FECHA_NOMINA).FirstOrDefaultAsync();
                     if (lastPeriodo != null)
                     {
                         filter.Year = lastPeriodo.FECHA_NOMINA.Year;
@@ -38,18 +38,18 @@ namespace Convertidor.Data.Repository.Rh
 
                 }
 
-                List<RH_PERIODOS> result = new List<RH_PERIODOS>();
+                List<RH_H_PERIODOS> result = new List<RH_H_PERIODOS>();
                 if (filter.Year>0 && filter.CodigoTipoNomina > 0)
                 {
-                    result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p=> p.FECHA_NOMINA.Year==filter.Year && p.CODIGO_TIPO_NOMINA==filter.CodigoTipoNomina).ToListAsync();
+                    result = await _context.RH_H_PERIODOS.DefaultIfEmpty().Where(p=> p.FECHA_NOMINA.Year==filter.Year && p.CODIGO_TIPO_NOMINA==filter.CodigoTipoNomina).ToListAsync();
                 }
                 if (filter.Year > 0 && filter.CodigoTipoNomina <= 0)
                 {
-                    result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p => p.FECHA_NOMINA.Year == filter.Year ).ToListAsync();
+                    result = await _context.RH_H_PERIODOS.DefaultIfEmpty().Where(p => p.FECHA_NOMINA.Year == filter.Year ).ToListAsync();
                 }
 
 
-                return (List<RH_PERIODOS>)result;
+                return (List<RH_H_PERIODOS>)result;
             }
             catch (Exception ex)
             {
@@ -58,13 +58,13 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<List<RH_PERIODOS>> GetByYear(int  ano)
+        public async Task<List<RH_H_PERIODOS>> GetByYear(int  ano)
         {
             try
             {
 
-                var result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p => p.FECHA_NOMINA.Year == ano).OrderByDescending(p=>p.FECHA_NOMINA).ToListAsync();
-                return (List<RH_PERIODOS>)result;
+                var result = await _context.RH_H_PERIODOS.DefaultIfEmpty().Where(p => p.FECHA_NOMINA.Year == ano).OrderByDescending(p=>p.FECHA_NOMINA).ToListAsync();
+                return (List<RH_H_PERIODOS>)result;
             }
             catch (Exception ex)
             {
@@ -74,13 +74,13 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<List<RH_PERIODOS>> GetByTipoNomina(int tipoNomina)
+        public async Task<List<RH_H_PERIODOS>> GetByTipoNomina(int tipoNomina)
         {
             try
             {
 
-                var result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p=> p.CODIGO_TIPO_NOMINA== tipoNomina).ToListAsync();
-                return (List<RH_PERIODOS>)result;
+                var result = await _context.RH_H_PERIODOS.DefaultIfEmpty().Where(p=> p.CODIGO_TIPO_NOMINA== tipoNomina).ToListAsync();
+                return (List<RH_H_PERIODOS>)result;
             }
             catch (Exception ex)
             {
@@ -89,15 +89,15 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<RH_PERIODOS> GetByCodigo(int codigoPeriodo)
+        public async Task<RH_H_PERIODOS> GetByCodigo(int codigoPeriodo)
         {
             try
             {
-                var result = await _context.RH_PERIODOS.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_PERIODO == codigoPeriodo)
+                var result = await _context.RH_H_PERIODOS.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_H_PERIODO == codigoPeriodo)
                     .OrderBy(x => x.FECHA_NOMINA).FirstOrDefaultAsync();
 
-                return (RH_PERIODOS)result;
+                return (RH_H_PERIODOS)result;
             }
             catch (Exception ex)
             {
@@ -106,15 +106,15 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<ResultDto<RH_PERIODOS>> Add(RH_PERIODOS entity)
+        public async Task<ResultDto<RH_H_PERIODOS>> Add(RH_H_PERIODOS entity)
         {
-            ResultDto<RH_PERIODOS> result = new ResultDto<RH_PERIODOS>(null);
+            ResultDto<RH_H_PERIODOS> result = new ResultDto<RH_H_PERIODOS>(null);
             try
             {
 
 
 
-                await _context.RH_PERIODOS.AddAsync(entity);
+                await _context.RH_H_PERIODOS.AddAsync(entity);
                 _context.SaveChanges();
 
 
@@ -137,18 +137,18 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<ResultDto<RH_PERIODOS>> Update(RH_PERIODOS entity)
+        public async Task<ResultDto<RH_H_PERIODOS>> Update(RH_H_PERIODOS entity)
         {
-            ResultDto<RH_PERIODOS> result = new ResultDto<RH_PERIODOS>(null);
+            ResultDto<RH_H_PERIODOS> result = new ResultDto<RH_H_PERIODOS>(null);
 
             try
             {
-                RH_PERIODOS entityUpdate = await GetByCodigo(entity.CODIGO_PERIODO);
+                RH_H_PERIODOS entityUpdate = await GetByCodigo(entity.CODIGO_H_PERIODO);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.RH_PERIODOS.Update(entity);
+                    _context.RH_H_PERIODOS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -172,15 +172,15 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<string> Delete(int codigoPeriodo)
+        public async Task<string> Delete(int codigoHPeriodo)
         {
 
             try
             {
-                RH_PERIODOS entity = await GetByCodigo(codigoPeriodo);
+                RH_H_PERIODOS entity = await GetByCodigo(codigoHPeriodo);
                 if (entity != null)
                 {
-                    _context.RH_PERIODOS.Remove(entity);
+                    _context.RH_H_PERIODOS.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -201,8 +201,8 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 int result = 0;
-                var last = await _context.RH_PERIODOS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_PERIODO)
+                var last = await _context.RH_H_PERIODOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_H_PERIODO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -210,7 +210,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 else
                 {
-                    result = last.CODIGO_PERIODO + 1;
+                    result = last.CODIGO_H_PERIODO + 1;
                 }
 
                 return (int)result!;

@@ -36,7 +36,7 @@ namespace Convertidor.Data
 
         public DbSet<RH_EXP_LABORAL> RH_EXP_LABORAL { get; set; }
         public DbSet<RH_PERSONAS_MOV_CONTROL> RH_PERSONAS_MOV_CONTROL { get; set; }
-        
+        public DbSet<RH_ARI> RH_ARI { get; set; }
 
         public DbSet<RH_TMP_RETENCIONES_SSO> RH_TMP_RETENCIONES_SSO { get; set; }
 
@@ -61,7 +61,7 @@ namespace Convertidor.Data
         public DbSet<RH_H_RETENCIONES_CAH> RH_H_RETENCIONES_CAH { get; set; }
 
         public DbSet<RH_H_RETENCIONES_SIND> RH_H_RETENCIONES_SIND { get; set; }
-
+        public DbSet<RH_H_PERIODOS> RH_H_PERIODOS { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -198,6 +198,17 @@ namespace Convertidor.Data
                 builder.HasNoKey();
                 builder.ToTable("RH_PERIODOS");
             });
+            modelBuilder.Entity<RH_H_PERIODOS>(builder =>
+            {
+
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_H_PERIODO,
+
+                });
+                builder.ToTable("RH_H_PERIODOS");
+            });
+
             modelBuilder.Entity<RH_TIPOS_NOMINA>(builder =>
             {
                 builder.HasNoKey();
@@ -276,7 +287,15 @@ namespace Convertidor.Data
                 });
                 builder.ToTable("RH_PERSONAS_MOV_CONTROL");
             });
-            
+            modelBuilder.Entity<RH_ARI>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_ARI,
+
+                });
+                builder.ToTable("RH_ARI");
+            });
 
             modelBuilder.Entity<RH_RELACION_CARGOS>(builder =>
             {

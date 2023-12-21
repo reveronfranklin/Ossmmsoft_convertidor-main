@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhPeriodoService: IRhPeriodoService
+	public class RhHPeriodoService: IRhHPeriodoService
     {
 		
         private readonly DataContext _context;
@@ -22,24 +22,29 @@ namespace Convertidor.Data.Repository.Rh
 
 
    
-        private readonly IRhPeriodoRepository _repository;
+        private readonly IRhHPeriodoRepository _repository;
         private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IRhPeriodoRepository _rhPeriodoRepository;
         private readonly IMapper _mapper;
 
-        public RhPeriodoService(IRhPeriodoRepository repository,IRhTipoNominaRepository rhTipoNominaRepository,ISisUsuarioRepository sisUsuarioRepository)
+        public RhHPeriodoService(IRhHPeriodoRepository repository,
+                                 IRhTipoNominaRepository rhTipoNominaRepository,
+                                 ISisUsuarioRepository sisUsuarioRepository,
+                                 IRhPeriodoRepository rhPeriodoService)
         {
             _repository = repository;
             _rhTipoNominaRepository = rhTipoNominaRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _rhPeriodoRepository = rhPeriodoService;
         }
        
-        public async Task<List<RH_PERIODOS>> GetAll(PeriodoFilterDto filter)
+        public async Task<List<RH_H_PERIODOS>> GetAll(PeriodoFilterDto filter)
         {
             try
             {
                 var result = await _repository.GetAll(filter);
-                return (List<RH_PERIODOS>)result;
+                return (List<RH_H_PERIODOS>)result;
             }
             catch (Exception ex)
             {
@@ -49,13 +54,13 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<List<RH_PERIODOS>> GetByTipoNomina(int tipoNomina)
+        public async Task<List<RH_H_PERIODOS>> GetByTipoNomina(int tipoNomina)
         {
             try
             {
 
                 var result = await _repository.GetByTipoNomina(tipoNomina);
-                return (List<RH_PERIODOS>)result;
+                return (List<RH_H_PERIODOS>)result;
             }
             catch (Exception ex)
             {
@@ -64,7 +69,7 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<List<ListPeriodoDto>> GetByYear(int ano)
+        public async Task<List<RhHPeriodosResponseDto>> GetByYear(int ano)
         {
             try
             {
@@ -93,12 +98,15 @@ namespace Convertidor.Data.Repository.Rh
             return FechaDesdeObj;
         }
 
-        public async Task<RhPeriodosResponseDto> MapPeriodosDto(RH_PERIODOS dtos)
+        public async Task<RhHPeriodosResponseDto> MapHPeriodosDto(RH_H_PERIODOS dtos)
         {
 
 
-            RhPeriodosResponseDto itemResult = new RhPeriodosResponseDto();
+            RhHPeriodosResponseDto itemResult = new RhHPeriodosResponseDto();
+            itemResult.CodigoHPeriodo = dtos.CODIGO_H_PERIODO;
             itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
+            itemResult.FechaInsH = dtos.FECHA_INS_H;
+            itemResult.UsuarioInsH = dtos.USUARIO_INS_H;
             itemResult.CodigoTipoNomina = dtos.CODIGO_TIPO_NOMINA;
             itemResult.FechaNomina = dtos.FECHA_NOMINA;
             itemResult.Periodo = dtos.PERIODO;
@@ -124,14 +132,15 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
-        public List<ListPeriodoDto> MapListPeriodoDto(List<RH_PERIODOS> dtos)
+        public List<RhHPeriodosResponseDto> MapListPeriodoDto(List<RH_H_PERIODOS> dtos)
         {
-            List<ListPeriodoDto> result = new List<ListPeriodoDto>();
+            List<RhHPeriodosResponseDto> result = new List<RhHPeriodosResponseDto>();
 
             foreach (var item in dtos)
             {
 
-                ListPeriodoDto itemResult = new ListPeriodoDto();
+                RhHPeriodosResponseDto itemResult = new RhHPeriodosResponseDto();
+                itemResult.CodigoHPeriodo = item.CODIGO_H_PERIODO;
                 itemResult.CodigoPeriodo = item.CODIGO_PERIODO;
                 itemResult.CodigoTipoNomina = item.CODIGO_TIPO_NOMINA;
                 itemResult.FechaNomina = item.FECHA_NOMINA;
@@ -147,23 +156,30 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<ResultDto<RhPeriodosResponseDto>> Update(RhPeriodosUpdate dto)
+        public async Task<ResultDto<RhHPeriodosResponseDto>> Update(RhHPeriodosUpdate dto)
         {
 
-            ResultDto<RhPeriodosResponseDto> result = new ResultDto<RhPeriodosResponseDto>(null);
+            ResultDto<RhHPeriodosResponseDto> result = new ResultDto<RhHPeriodosResponseDto>(null);
             try
             {
 
-                var periodos = await _repository.GetByCodigo(dto.CodigoPeriodo);
-                if (periodos == null)
+                var hPeriodos = await _repository.GetByCodigo(dto.CodigoHPeriodo);
+                if (hPeriodos == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Periodo no existe";
+                    result.Message = "Codigo Historico Periodo no existe";
                     return result;
                 }
 
-
+                var codigoPeriodos = await _rhPeriodoRepository.GetByCodigo(dto.CodigoPeriodo);
+                if (codigoPeriodos == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo invalido";
+                    return result;
+                }
                 var codigoTipoNomina = await _rhTipoNominaRepository.GetByCodigo(dto.CodigoTipoNomina);
                 if (codigoTipoNomina==null)
                 {
@@ -178,7 +194,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Fecha Invalida";
+                    result.Message = "Fecha Nomina Invalida";
                     return result;
                 }
                 
@@ -278,37 +294,39 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                periodos.CODIGO_PERIODO = dto.CodigoPeriodo;
-                periodos.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
-                periodos.FECHA_NOMINA = dto.FechaNomina;
-                periodos.PERIODO = dto.Periodo;
-                periodos.TIPO_NOMINA = dto.TipoNomina;
-                periodos.EXTRA1 = dto.EXTRA1;
-                periodos.EXTRA2 = dto.EXTRA2;
-                periodos.EXTRA3 = dto.EXTRA3;
-                periodos.USUARIO_CIERRE = dto.UsuarioCierre;
-                periodos.FECHA_CIERRE = dto.FechaCierre;
-                periodos.USUARIO_PRECIERRE = dto.UsuarioPreCierre;
-                periodos.FECHA_PRECIERRE=dto.FechaPreCierre;
-                periodos.CODIGO_CUENTA_EMPRESA = dto.CodigoCuentaEmpresa;
-                periodos.USUARIO_PRENOMINA = dto.UsuarioPreNomina;
-                periodos.FECHA_PRENOMINA = dto.FechaPrenomina;
-                periodos.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
-                periodos.DESCRIPCION = dto.Descripcion;
+                hPeriodos.CODIGO_H_PERIODO = dto.CodigoHPeriodo;
+                hPeriodos.CODIGO_PERIODO = dto.CodigoPeriodo;
+                hPeriodos.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
+                hPeriodos.FECHA_NOMINA = dto.FechaNomina;
+                hPeriodos.PERIODO = dto.Periodo;
+                hPeriodos.TIPO_NOMINA = dto.TipoNomina;
+                hPeriodos.EXTRA1 = dto.EXTRA1;
+                hPeriodos.EXTRA2 = dto.EXTRA2;
+                hPeriodos.EXTRA3 = dto.EXTRA3;
+                hPeriodos.USUARIO_CIERRE = dto.UsuarioCierre;
+                hPeriodos.FECHA_CIERRE = dto.FechaCierre;
+                hPeriodos.USUARIO_PRECIERRE = dto.UsuarioPreCierre;
+                hPeriodos.FECHA_PRECIERRE=dto.FechaPreCierre;
+                hPeriodos.CODIGO_CUENTA_EMPRESA = dto.CodigoCuentaEmpresa;
+                hPeriodos.USUARIO_PRENOMINA = dto.UsuarioPreNomina;
+                hPeriodos.FECHA_PRENOMINA = dto.FechaPrenomina;
+                hPeriodos.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                hPeriodos.DESCRIPCION = dto.Descripcion;
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                periodos.CODIGO_EMPRESA = conectado.Empresa;
-                periodos.USUARIO_UPD = conectado.Usuario;
-                periodos.FECHA_UPD = DateTime.Now;
+                hPeriodos.CODIGO_EMPRESA = conectado.Empresa;
+                hPeriodos.USUARIO_UPD = conectado.Usuario;
+                hPeriodos.FECHA_UPD = DateTime.Now;
+                
 
 
-                await _repository.Update(periodos);
+                await _repository.Update(hPeriodos);
 
 
                
 
-                var resultDto = await MapPeriodosDto(periodos);
+                var resultDto = await MapHPeriodosDto(hPeriodos);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -326,29 +344,35 @@ namespace Convertidor.Data.Repository.Rh
             return result;
         }
 
-        public async Task<ResultDto<RhPeriodosResponseDto>> Create(RhPeriodosUpdate dto)
+        public async Task<ResultDto<RhHPeriodosResponseDto>> Create(RhHPeriodosUpdate dto)
         {
 
-            ResultDto<RhPeriodosResponseDto> result = new ResultDto<RhPeriodosResponseDto>(null);
+            ResultDto<RhHPeriodosResponseDto> result = new ResultDto<RhHPeriodosResponseDto>(null);
             try
             {
 
-                var Periodos = await _repository.GetByCodigo(dto.CodigoPeriodo);
-                if (Periodos is not null)
+                var hPeriodos = await _repository.GetByCodigo(dto.CodigoHPeriodo);
+                if (hPeriodos is not null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Periodo invalido";
+                    result.Message = "Codigo historico Periodo invalido";
                     return result;
                 }
-
-
+                var codigoPeriodos = await _rhPeriodoRepository.GetByCodigo(dto.CodigoPeriodo);
+                if (codigoPeriodos == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo invalido";
+                    return result;
+                }
                 var codigoTipoNomina = await _rhTipoNominaRepository.GetByCodigo(dto.CodigoTipoNomina);
                 if (codigoTipoNomina == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Tipo Nomina  Invalido";
+                    result.Message = "Codigo Tipo Nomina Invalido";
                     return result;
                 }
 
@@ -458,8 +482,9 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                RH_PERIODOS entity = new RH_PERIODOS();
-                entity.CODIGO_PERIODO = await _repository.GetNextKey();
+                RH_H_PERIODOS entity = new RH_H_PERIODOS();
+                entity.CODIGO_H_PERIODO = await _repository.GetNextKey();
+                entity.CODIGO_PERIODO = dto.CodigoPeriodo;
                 entity.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
                 entity.FECHA_NOMINA = dto.FechaNomina;
                 entity.PERIODO = dto.Periodo;
@@ -480,15 +505,17 @@ namespace Convertidor.Data.Repository.Rh
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario;
-                entity.FECHA_UPD = DateTime.Now;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+                entity.USUARIO_INS_H = conectado.Usuario;
+                entity.FECHA_INS_H = DateTime.Now;
 
 
                 var created = await _repository.Add(entity);
 
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapPeriodosDto(created.Data);
+                    var resultDto = await MapHPeriodosDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -522,14 +549,14 @@ namespace Convertidor.Data.Repository.Rh
             return result;
         }
 
-        public async Task<ResultDto<RhPeriodosDeleteDto>> Delete(RhPeriodosDeleteDto dto)
+        public async Task<ResultDto<RhHPeriodosDeleteDto>> Delete(RhHPeriodosDeleteDto dto)
         {
 
-            ResultDto<RhPeriodosDeleteDto> result = new ResultDto<RhPeriodosDeleteDto>(null);
+            ResultDto<RhHPeriodosDeleteDto> result = new ResultDto<RhHPeriodosDeleteDto>(null);
             try
             {
 
-                var periodo = await _repository.GetByCodigo(dto.CodigoPeriodo);
+                var periodo = await _repository.GetByCodigo(dto.CodigoHPeriodo);
                 if (periodo == null)
                 {
                     result.Data = null;
@@ -539,7 +566,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
 
 
-                var deleted = await _repository.Delete(dto.CodigoPeriodo);
+                var deleted = await _repository.Delete(dto.CodigoHPeriodo);
 
                 if (deleted.Length > 0)
                 {
