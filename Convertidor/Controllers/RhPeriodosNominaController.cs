@@ -51,6 +51,31 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(RhPeriodosUpdate dto)
+        {
+            var result = await _service.Create(dto);
+            return Ok(result);
+        }
+
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Update(RhPeriodosUpdate dto)
+        {
+            var result = await _service.Update(dto);
+            return Ok(result);
+        }
+
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete(RhPeriodosDeleteDto dto)
+        {
+            var result = await _service.Delete(dto);
+            return Ok(result);
+        }
 
     }
 }

@@ -22,12 +22,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class RhTipoNominaController : ControllerBase
+    public class RhHPeriodosNominaController : ControllerBase
     {
        
-        private readonly IRhTipoNominaService _service;
+        private readonly IRhHPeriodoService _service;
 
-        public RhTipoNominaController(IRhTipoNominaService service)
+        public RhHPeriodosNominaController(IRhHPeriodoService service)
         {
 
             _service = service;
@@ -37,22 +37,23 @@ namespace Convertidor.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(PeriodoFilterDto filter)
         {
-            var result = await _service.GetAll();
-            return Ok(result);
-        }
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> GetTipoNominaByCodigoPersona(PersonaFilterDto filter)
-        {
-            var result = await _service.GetTipoNominaByCodigoPersona(filter.CodigoPersona,(DateTime)filter.Desde,(DateTime)filter.Hasta);
+            var result = await _service.GetAll(filter);
             return Ok(result);
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(RhTiposNominaUpdateDto dto)
+        public async Task<IActionResult> GetAllByYear(PeriodoFilterDto filter)
+        {
+            var result = await _service.GetByYear(filter.Year);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(RhHPeriodosUpdate dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -61,7 +62,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(RhTiposNominaUpdateDto dto)
+        public async Task<IActionResult> Update(RhHPeriodosUpdate dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -70,13 +71,11 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(RhTiposNominaDeleteDto dto)
+        public async Task<IActionResult> Delete(RhHPeriodosDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
         }
-
-
 
     }
 }
