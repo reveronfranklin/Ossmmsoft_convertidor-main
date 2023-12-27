@@ -18,11 +18,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Configuration;
 using System.Text;
+using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Bm;
 using Swashbuckle;
 using Swashbuckle.AspNetCore.Filters;
 using Convertidor.Data.Interfaces.RH;
+using Convertidor.Data.Repository.Adm;
 using Convertidor.Data.Repository.Rh;
+using Convertidor.Services.Adm;
 using Convertidor.Services.Rh;
 using Microsoft.AspNetCore.HttpOverrides;
 using StackExchange.Redis;
@@ -198,6 +201,21 @@ builder.Services.AddTransient<IBM_V_BM1Repository, BM_V_BM1Repository>();
 //BM Services
 builder.Services.AddTransient<IBM_V_BM1Service, BM_V_BM1Service>();
 
+//ADM Repository
+builder.Services.AddTransient<IAdmDescriptivaRepository, IAdmDescriptivaRepository>();
+builder.Services.AddTransient<IAdmTitulosRepository, IAdmTitulosRepository>();
+builder.Services.AddTransient<IAdmProveedoresRepository, AdmProveedoresRepository>();
+builder.Services.AddTransient<IAdmComunicacionProveedorRepository, AdmComunicacionProveedorRepository>();
+builder.Services.AddTransient<IAdmContactosProveedorRepository, AdmContactosProveedorRepository>();
+builder.Services.AddTransient<IAdmDireccionProveedorRepository, AdmDireccionProveedorRepository>();
+builder.Services.AddTransient<IAdmActividadProveedorRepository, AdmActividadProveedorRepository>();
+
+
+//ADM Services
+builder.Services.AddTransient<IAdmTituloService, AdmTituloService>();
+builder.Services.AddTransient<IAdmDescriptivasService, AdmDescriptivasService>();
+
+
 
 
 // Register AutoMapper
@@ -251,6 +269,10 @@ builder.Services.AddDbContext<DataContextSis>(options =>
 var bmConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionBM");
 builder.Services.AddDbContext<DataContextBm>(options =>
     options.UseOracle(bmConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
+var admConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionADM");
+builder.Services.AddDbContext<DataContextAdm>(options =>
+    options.UseOracle(admConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 
 
