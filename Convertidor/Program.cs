@@ -202,8 +202,8 @@ builder.Services.AddTransient<IBM_V_BM1Repository, BM_V_BM1Repository>();
 builder.Services.AddTransient<IBM_V_BM1Service, BM_V_BM1Service>();
 
 //ADM Repository
-builder.Services.AddTransient<IAdmDescriptivaRepository, IAdmDescriptivaRepository>();
-builder.Services.AddTransient<IAdmTitulosRepository, IAdmTitulosRepository>();
+builder.Services.AddTransient<IAdmDescriptivaRepository, AdmDescriptivaRepository>();
+builder.Services.AddTransient<IAdmTitulosRepository, AdmTitulosRepository>();
 builder.Services.AddTransient<IAdmProveedoresRepository, AdmProveedoresRepository>();
 builder.Services.AddTransient<IAdmComunicacionProveedorRepository, AdmComunicacionProveedorRepository>();
 builder.Services.AddTransient<IAdmContactosProveedorRepository, AdmContactosProveedorRepository>();
@@ -214,6 +214,7 @@ builder.Services.AddTransient<IAdmActividadProveedorRepository, AdmActividadProv
 //ADM Services
 builder.Services.AddTransient<IAdmTituloService, AdmTituloService>();
 builder.Services.AddTransient<IAdmDescriptivasService, AdmDescriptivasService>();
+builder.Services.AddTransient<IAdmProveedoresService, AdmProveedoresService>();
 
 
 

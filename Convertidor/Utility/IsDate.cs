@@ -1,4 +1,6 @@
 ﻿using System;
+using Convertidor.Dtos;
+
 namespace Convertidor.Utility
 {
 	public class DateValidate
@@ -16,6 +18,7 @@ namespace Convertidor.Utility
                 return false;
             }
         }
+     
 
 
     }
