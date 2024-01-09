@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Dtos
+﻿namespace Convertidor.Dtos
 {
 	public class Settings
 	{

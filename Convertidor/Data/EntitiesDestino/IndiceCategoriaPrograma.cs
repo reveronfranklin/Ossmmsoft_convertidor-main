@@ -1,5 +1,4 @@
-﻿using Convertidor.Data.Entities;
-namespace Convertidor.Data.EntitiesDestino
+﻿namespace Convertidor.Data.EntitiesDestino
 {
     public class IndiceCategoriaPrograma
     {

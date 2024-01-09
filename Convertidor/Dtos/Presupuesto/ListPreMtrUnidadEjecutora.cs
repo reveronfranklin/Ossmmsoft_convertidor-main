@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.NetworkInformation;
-
-namespace Convertidor.Dtos.Presupuesto
+﻿namespace Convertidor.Dtos.Presupuesto
 {
 	public class ListPreMtrUnidadEjecutora
 	{

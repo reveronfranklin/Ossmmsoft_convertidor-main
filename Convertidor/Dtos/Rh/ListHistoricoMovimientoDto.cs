@@ -1,7 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Util.HSSFColor;
-
-namespace Convertidor.Dtos.Rh
+﻿namespace Convertidor.Dtos.Rh
 {
 	public class ListHistoricoMovimientoDto
     {

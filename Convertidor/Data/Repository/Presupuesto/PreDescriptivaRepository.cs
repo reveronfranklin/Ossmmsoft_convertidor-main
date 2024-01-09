@@ -1,9 +1,5 @@
-﻿using System;
-using System;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Entities.Rh;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -100,7 +96,29 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
+        public async Task<bool> GetByIdAndTitulo(int tituloId,int id)
+        {
+            try
+            {
+                var descriptiva = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.TITULO_ID == tituloId && e.DESCRIPCION_ID==id).FirstOrDefaultAsync();
+                var result = false;
+                if (descriptiva != null)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return false;
+            }
 
+        }
 
         public async Task<List<PRE_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk)
         {

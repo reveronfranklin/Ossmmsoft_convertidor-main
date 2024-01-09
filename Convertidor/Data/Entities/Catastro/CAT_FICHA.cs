@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Data.Entities.Catastro
+﻿namespace Convertidor.Data.Entities.Catastro
 {
 	public class CAT_FICHA
 	{

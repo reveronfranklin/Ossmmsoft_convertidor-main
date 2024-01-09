@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Data.Entities.RentasMunicipales
+﻿namespace Convertidor.Data.Entities.RentasMunicipales
 {
 	public class RM_UNIDADES_CALCULOS
 	{

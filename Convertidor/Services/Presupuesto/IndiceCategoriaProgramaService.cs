@@ -1,21 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using AutoMapper;
+﻿using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto;
 using Convertidor.Utility;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
-using NPOI.POIFS.Properties;
-using NPOI.SS.Formula.Functions;
-using static NPOI.HSSF.Record.UnicodeString;
 
 namespace Convertidor.Services
 {

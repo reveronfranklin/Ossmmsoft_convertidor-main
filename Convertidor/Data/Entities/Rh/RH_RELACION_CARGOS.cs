@@ -1,7 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Record.UnicodeString;
-
-namespace Convertidor.Data.Entities.Rh
+﻿namespace Convertidor.Data.Entities.Rh
 {
 	public class RH_RELACION_CARGOS
 	{

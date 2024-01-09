@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using AutoMapper;
-using Convertidor.Data;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Entities.Rh;
+﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Dtos.Sis;
-using Convertidor.Utility;
-using Microsoft.EntityFrameworkCore;
-using NPOI.SS.Formula.Functions;
-using static NPOI.HSSF.Util.HSSFColor;
 
 namespace Convertidor.Services.Rh
 {

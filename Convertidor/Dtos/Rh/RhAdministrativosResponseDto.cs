@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.NetworkInformation;
-
-namespace Convertidor.Dtos.Rh
+﻿namespace Convertidor.Dtos.Rh
 {
 	public class RhAdministrativosResponseDto
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Adm;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Dtos;
 
 namespace Convertidor.Data.Interfaces.Adm
@@ -18,6 +16,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<int> GetNextKey();
         Task<ADM_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo);
         Task<List<ADM_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk);
-    }
+        Task<bool> GetByIdAndTitulo(int tituloId, int id);
+	}
 }
 

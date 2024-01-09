@@ -6,7 +6,6 @@ using Convertidor.Data.Interfaces;
 using Convertidor.Dtos;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-using NuGet.Protocol.Core.Types;
 
 namespace Convertidor.Services
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Record.UnicodeString;
-using static NPOI.HSSF.Util.HSSFColor;
-
-namespace Convertidor.Data.Entities.Presupuesto
+﻿namespace Convertidor.Data.Entities.Presupuesto
 {
 	public class PRE_DESCRIPTIVAS
     {

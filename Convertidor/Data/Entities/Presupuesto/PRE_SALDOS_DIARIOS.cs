@@ -1,7 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Record.UnicodeString;
-
-namespace Convertidor.Data.Entities.Presupuesto
+﻿namespace Convertidor.Data.Entities.Presupuesto
 {
 	public class PRE_SALDOS_DIARIOS
 	{

@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace Convertidor.Data.Entities.Rh
+﻿namespace Convertidor.Data.Entities.Rh
 {
 	public class RH_FAMILIARES
 	{

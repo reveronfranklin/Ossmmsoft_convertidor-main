@@ -1,14 +1,7 @@
-﻿using System;
-using Convertidor.Dtos;
+﻿using Convertidor.Dtos;
 using Convertidor.Data.Entities.Catastro;
-using Convertidor.Data.EntitiesDestino;
-using Convertidor.Data.Interfaces;
-
 using Convertidor.Data.Interfaces.Catastro;
-
-using Microsoft.CodeAnalysis;
 using Convertidor.Dtos.Catastro;
-using Convertidor.Enum;
 
 namespace Convertidor.Services.Catastro
 {

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Dtos.Adm
+﻿namespace Convertidor.Dtos.Adm
 {
     public class AdmDescriptivasUpdateDto
     {

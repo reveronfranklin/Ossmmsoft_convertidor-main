@@ -1,5 +1,4 @@
-﻿using System;
-using Convertidor.Dtos.Rh;
+﻿using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Dtos
 {

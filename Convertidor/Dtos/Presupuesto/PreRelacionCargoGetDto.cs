@@ -1,5 +1,4 @@
-﻿using System;
-using Convertidor.Utility;
+﻿using Convertidor.Utility;
 
 namespace Convertidor.Dtos.Presupuesto
 {

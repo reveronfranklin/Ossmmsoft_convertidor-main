@@ -1,13 +1,9 @@
-﻿
-using System.Security.Claims;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Data.Repository.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.EntityFrameworkCore;
-using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {

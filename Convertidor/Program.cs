@@ -16,11 +16,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Configuration;
 using System.Text;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Bm;
-using Swashbuckle;
 using Swashbuckle.AspNetCore.Filters;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Repository.Adm;
@@ -28,7 +26,6 @@ using Convertidor.Data.Repository.Rh;
 using Convertidor.Services.Adm;
 using Convertidor.Services.Rh;
 using Microsoft.AspNetCore.HttpOverrides;
-using StackExchange.Redis;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -209,12 +206,14 @@ builder.Services.AddTransient<IAdmComunicacionProveedorRepository, AdmComunicaci
 builder.Services.AddTransient<IAdmContactosProveedorRepository, AdmContactosProveedorRepository>();
 builder.Services.AddTransient<IAdmDireccionProveedorRepository, AdmDireccionProveedorRepository>();
 builder.Services.AddTransient<IAdmActividadProveedorRepository, AdmActividadProveedorRepository>();
-
+builder.Services.AddTransient<IAdmComunicacionProveedorRepository, AdmComunicacionProveedorRepository>();
 
 //ADM Services
 builder.Services.AddTransient<IAdmTituloService, AdmTituloService>();
 builder.Services.AddTransient<IAdmDescriptivasService, AdmDescriptivasService>();
 builder.Services.AddTransient<IAdmProveedoresService, AdmProveedoresService>();
+builder.Services.AddTransient<IAdmProveedoresActividadService, AdmProveedoresActividadService>();
+builder.Services.AddTransient<IAdmProveedoresComunicacionService, AdmProveedoresComunicacionService>();
 
 
 

@@ -1,5 +1,4 @@
-﻿using Convertidor.Data.Entities;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data

@@ -1,8 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Record.UnicodeString;
-using System.Net.NetworkInformation;
-
-namespace Convertidor.Data.Entities.Rh
+﻿namespace Convertidor.Data.Entities.Rh
 {
 	public class RH_CONCEPTOS
 	{

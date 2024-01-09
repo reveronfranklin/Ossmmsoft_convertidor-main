@@ -1,7 +1,4 @@
-﻿using System;
-using Convertidor.Dtos;
-
-namespace Convertidor.Utility
+﻿namespace Convertidor.Utility
 {
 	public class DateValidate
 	{

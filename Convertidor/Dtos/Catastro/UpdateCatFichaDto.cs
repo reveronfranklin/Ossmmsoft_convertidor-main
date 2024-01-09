@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Dtos.Catastro
+﻿namespace Convertidor.Dtos.Catastro
 {
 	public class UpdateCatFichaDto
 	{

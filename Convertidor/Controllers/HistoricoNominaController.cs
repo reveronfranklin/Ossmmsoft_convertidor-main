@@ -1,13 +1,8 @@
-﻿using AppService.Api.Utility;
-using System.Drawing.Imaging;
-using System.Drawing.Printing;
-using Convertidor.Data.Entities;
-using Convertidor.Data.Interfaces;
+﻿using Convertidor.Data.Interfaces;
 using Convertidor.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
-using IronPdf;
 using Convertidor.Dtos;
 using Convertidor.Services.Presupuesto;
 

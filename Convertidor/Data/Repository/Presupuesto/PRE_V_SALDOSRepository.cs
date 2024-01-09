@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq.Expressions;
-using System.Security.Policy;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
-using MathNet.Numerics.LinearAlgebra.Factorization;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using NPOI.OpenXmlFormats.Wordprocessing;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.UserModel;
-using NuGet.Protocol.Core.Types;
 using Oracle.ManagedDataAccess.Client;
-using StackExchange.Redis;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {

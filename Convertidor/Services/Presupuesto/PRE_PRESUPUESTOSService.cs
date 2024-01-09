@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using AutoMapper;
-using Convertidor.Data.Entities.Catastro;
 using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.EntitiesDestino;
-using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos;
-using Convertidor.Dtos.Catastro;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Utility;
-using static Convertidor.Dtos.PetroBsGetDto;
 
 namespace Convertidor.Services.Presupuesto
 {

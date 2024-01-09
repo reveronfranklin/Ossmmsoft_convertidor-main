@@ -1,15 +1,6 @@
-﻿using System;
-using Convertidor.Data.Entities.Bm;
-using Convertidor.Dtos;
-using Convertidor.Data.Entities.Catastro;
-using Convertidor.Data.EntitiesDestino;
-using Convertidor.Data.Interfaces;
+﻿using Convertidor.Dtos;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Interfaces.Catastro;
 using Convertidor.Dtos.Bm;
-using Microsoft.CodeAnalysis;
-using Convertidor.Dtos.Catastro;
-using Convertidor.Enum;
 using Ganss.Excel;
 namespace Convertidor.Services.Catastro
 {

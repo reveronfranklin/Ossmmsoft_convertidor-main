@@ -1,7 +1,5 @@
-﻿using Convertidor.Data.Entities;
-using Convertidor.Data.Entities.Adm;
+﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Entities.ADM;
-using Convertidor.Data.Entities.Catastro;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data

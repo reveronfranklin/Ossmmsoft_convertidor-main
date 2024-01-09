@@ -1,8 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Record.UnicodeString;
-using static NPOI.HSSF.Util.HSSFColor;
-
-namespace Convertidor.Data.Entities.Adm
+﻿namespace Convertidor.Data.Entities.Adm
 {
 	public class ADM_DESCRIPTIVAS
     {

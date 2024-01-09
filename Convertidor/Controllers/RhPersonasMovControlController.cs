@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Convertidor.Services.Rh;
 using Convertidor.Dtos.Rh;
-using Microsoft.AspNetCore.Authorization;
-using Convertidor.Data.Entities.Rh;
 
 namespace Convertidor.Controllers
 {

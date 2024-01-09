@@ -1,11 +1,5 @@
-﻿using System;
-using System;
-using Convertidor.Data.Entities.ADM;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Entities.Rh;
+﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
-using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Data.Entities.Presupuesto
+﻿namespace Convertidor.Data.Entities.Presupuesto
 {
 	public class PRE_V_MTR_DENOMINACION_PUC
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Catastro;
-using Convertidor.Data.EntitiesDestino;
+﻿using Convertidor.Data.Entities.Catastro;
 using Convertidor.Data.Interfaces.Catastro;
 using Microsoft.EntityFrameworkCore;
 

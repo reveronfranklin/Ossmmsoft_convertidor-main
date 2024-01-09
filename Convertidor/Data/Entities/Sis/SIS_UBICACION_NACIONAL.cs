@@ -1,7 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Record.UnicodeString;
-
-namespace Convertidor.Data.Entities.Sis
+﻿namespace Convertidor.Data.Entities.Sis
 {
 	public class SIS_UBICACION_NACIONAL
 	{

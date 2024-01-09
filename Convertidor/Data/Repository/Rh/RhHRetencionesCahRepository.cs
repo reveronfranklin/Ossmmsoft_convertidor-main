@@ -1,11 +1,7 @@
 ﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
 
 namespace Convertidor.Data.Repository.Rh
 {

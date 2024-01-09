@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using AutoMapper;
 using Convertidor.Data.Entities.Rh;
-using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
-using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
-using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {

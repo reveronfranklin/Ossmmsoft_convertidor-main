@@ -11,9 +11,6 @@
 namespace Convertidor
 {
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorTemplatePreprocessor", "2.6.0.0")]

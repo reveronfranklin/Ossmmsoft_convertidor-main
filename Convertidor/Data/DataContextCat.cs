@@ -1,5 +1,4 @@
-﻿using Convertidor.Data.Entities;
-using Convertidor.Data.Entities.Catastro;
+﻿using Convertidor.Data.Entities.Catastro;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data

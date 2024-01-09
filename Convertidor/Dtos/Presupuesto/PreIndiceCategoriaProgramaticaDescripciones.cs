@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Dtos.Presupuesto
+﻿namespace Convertidor.Dtos.Presupuesto
 {
 	public class PreIndiceCategoriaProgramaticaDescripciones
     {
