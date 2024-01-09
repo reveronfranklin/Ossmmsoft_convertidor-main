@@ -214,6 +214,7 @@ builder.Services.AddTransient<IAdmDescriptivasService, AdmDescriptivasService>()
 builder.Services.AddTransient<IAdmProveedoresService, AdmProveedoresService>();
 builder.Services.AddTransient<IAdmProveedoresActividadService, AdmProveedoresActividadService>();
 builder.Services.AddTransient<IAdmProveedoresComunicacionService, AdmProveedoresComunicacionService>();
+builder.Services.AddTransient<IAdmProveedoresContactoService, AdmProveedoresContactosService>();
 
 
 
