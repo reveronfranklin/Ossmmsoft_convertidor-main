@@ -38,7 +38,7 @@ namespace Convertidor.Data.Entities.ADM
         public int USUARIO_UPD { get; set; }
         public DateTime FECHA_UPD { get; set; }
         public int CODIGO_EMPRESA { get; set; }
-        public int CODIGO_PRESUPUESTO { get; set; }
+
 
     }
 }
