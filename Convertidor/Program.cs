@@ -26,6 +26,8 @@ using Convertidor.Data.Repository.Rh;
 using Convertidor.Services.Rh;
 using Microsoft.AspNetCore.HttpOverrides;
 using StackExchange.Redis;
+using Convertidor.Services.Bm;
+using Convertidor.Data.Repository.Bm;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -195,8 +197,29 @@ builder.Services.AddTransient<IRhHPeriodoRepository, RhHPeriodoRepository>();
 builder.Services.AddTransient<IRhHPeriodoService, RhHPeriodoService>();
 //BM Repository
 builder.Services.AddTransient<IBM_V_BM1Repository, BM_V_BM1Repository>();
+builder.Services.AddTransient<IBmTitulosRepository, BmTitulosRepository>();
+builder.Services.AddTransient<IBmDescriptivaRepository, BmDescriptivaRepository>();
+builder.Services.AddTransient<IBmArticulosRepository, BmArticulosRepository>();
+builder.Services.AddTransient<IBmBienesRepository, BmBienesRepository>();
+builder.Services.AddTransient<IBmClasificacionBienesRepository, BmClasificacionBienesRepository>();
+builder.Services.AddTransient<IBmDetalleBienesRepository, BmDetalleBienesRepository>();
+builder.Services.AddTransient<IBmDetalleArticulosRepository, BmDetalleArticulosRepository>();
+builder.Services.AddTransient<IBmDirBienRepository, BmDirBienRepository>();
+
+
+
 //BM Services
 builder.Services.AddTransient<IBM_V_BM1Service, BM_V_BM1Service>();
+builder.Services.AddTransient<IBmTituloService, BmTitulosService>();
+builder.Services.AddTransient<IBmDescriptivasService, BmDescriptivasService>();
+builder.Services.AddTransient<IBmArticulosService, BmArticulosService>();
+builder.Services.AddTransient<IBmBienesService, BmBienesService>();
+builder.Services.AddTransient<IBmClasificacionBienesService, BmClasificacionBienesService>();
+builder.Services.AddTransient<IBmDetalleBienesService, BmDetalleBienesService>();
+builder.Services.AddTransient<IBmDetalleArticulosService, BmDetalleArticulosService>();
+builder.Services.AddTransient<IBmDirBienService, BmDirBienService>();
+
+
 
 
 

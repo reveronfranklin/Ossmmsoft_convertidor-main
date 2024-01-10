@@ -206,6 +206,7 @@ namespace Convertidor.Data.Repository.Rh
                 administrativo.FECHA_UPD = DateTime.Now;
                 var fechaIngreso = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
                 administrativo.FECHA_INGRESO = fechaIngreso;
+
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 administrativo.CODIGO_EMPRESA = conectado.Empresa;
                 administrativo.USUARIO_UPD = conectado.Usuario;

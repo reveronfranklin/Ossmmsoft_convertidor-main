@@ -2,39 +2,37 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Presupuesto;
+using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Bm;
-using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Rh;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 
-namespace Convertidor.Services.Presupuesto
+namespace Convertidor.Services.Bm
 {
-    public class PreDescriptivasService: IPreDescriptivasService
+    public class BmDescriptivasService: IBmDescriptivasService
     {
 
       
-        private readonly IPreDescriptivaRepository _repository;
-        private readonly IPreTitulosRepository _preTitulosRepository;
+        private readonly IBmDescriptivaRepository _repository;
+        private readonly IBmTitulosRepository _bMTitulosRepository;
         private readonly IConfiguration _configuration;
-        public PreDescriptivasService(IPreDescriptivaRepository repository,
-                                      IPreTitulosRepository preTitulosRepository,
+        public BmDescriptivasService(IBmDescriptivaRepository repository,
+                                      IBmTitulosRepository bMTitulosRepository,
                                       IConfiguration configuration)
 		{
             _repository = repository;
             _configuration = configuration;
-            _preTitulosRepository = preTitulosRepository;
+            _bMTitulosRepository = bMTitulosRepository;
 
         }
 
-        public async Task<ResultDto<List<PreDescriptivasGetDto>>> GetAll()
+        public async Task<ResultDto<List<BmDescriptivasGetDto>>> GetAll()
         {
 
-            ResultDto<List<PreDescriptivasGetDto>> result = new ResultDto<List<PreDescriptivasGetDto>>(null);
+            ResultDto<List<BmDescriptivasGetDto>> result = new ResultDto<List<BmDescriptivasGetDto>>(null);
             try
             {
 
@@ -44,12 +42,12 @@ namespace Convertidor.Services.Presupuesto
 
                 if (titulos.Count() > 0)
                 {
-                    List<PreDescriptivasGetDto> listDto = new List<PreDescriptivasGetDto>();
+                    List<BmDescriptivasGetDto> listDto = new List<BmDescriptivasGetDto>();
 
                     foreach (var item in titulos)
                     {
-                        PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
-                        dto = await MapPreDecriptiva(item);
+                        BmDescriptivasGetDto dto = new BmDescriptivasGetDto();
+                        dto = await MapBmDescriptiva(item);
 
                         listDto.Add(dto);
                     }
@@ -79,27 +77,42 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
+        public async Task<bool> GetByIdAndTitulo(int tituloId, int id)
+        {
+            try
+            {
+                
+                var result = await _repository.GetByIdAndTitulo(tituloId, id);
 
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return false;
+            }
 
-        public async Task<ResultDto<List<PreDescriptivasGetDto>>> GetByTitulo(int tituloId)
+        }
+
+        public async Task<ResultDto<List<BmDescriptivasGetDto>>> GetByTitulo(int tituloId)
         {
 
-            ResultDto<List<PreDescriptivasGetDto>> result = new ResultDto<List<PreDescriptivasGetDto>>(null);
+            ResultDto<List<BmDescriptivasGetDto>> result = new ResultDto<List<BmDescriptivasGetDto>>(null);
             try
             {
 
-                var titulos = await _repository.GetByTitulo(tituloId);
+                var titulos = await _repository.GetByTituloId(tituloId);
 
 
 
                 if (titulos.Count() > 0)
                 {
-                    List<PreDescriptivasGetDto> listDto = new List<PreDescriptivasGetDto>();
+                    List<BmDescriptivasGetDto> listDto = new List<BmDescriptivasGetDto>();
 
                     foreach (var item in titulos)
                     {
-                        PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
-                        dto = await MapPreDecriptiva(item);
+                        BmDescriptivasGetDto dto = new BmDescriptivasGetDto();
+                        dto = await MapBmDescriptiva(item);
 
                         listDto.Add(dto);
                     }
@@ -129,25 +142,25 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
-        public async Task<ResultDto<List<PreDescriptivasGetDto>>> GetByCodigoTitulo(string codigo)
+        public async Task<ResultDto<List<BmDescriptivasGetDto>>> GetByCodigoTitulo(string codigo)
         {
 
-            ResultDto<List<PreDescriptivasGetDto>> result = new ResultDto<List<PreDescriptivasGetDto>>(null);
+            ResultDto<List<BmDescriptivasGetDto>> result = new ResultDto<List<BmDescriptivasGetDto>>(null);
             try
             {
 
 
 
 
-                var titulo = await _preTitulosRepository.GetByCodigoString(codigo);
+                var titulo = await _bMTitulosRepository.GetByCodigoString(codigo);
 
 
-                var titulos = await _repository.GetByTitulo(titulo.TITULO_ID);
+                var titulos = await _repository.GetByTituloId(titulo.TITULO_ID);
                 if (titulos.Count() > 0)
                 {
-                    List<PreDescriptivasGetDto> listDto = new List<PreDescriptivasGetDto>();
+                    List<BmDescriptivasGetDto> listDto = new List<BmDescriptivasGetDto>();
 
-                    PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
+                    BmDescriptivasGetDto itemDefault = new BmDescriptivasGetDto();
                     itemDefault.DescripcionId = 0;
                     itemDefault.DescripcionIdFk = 0;
                     itemDefault.Descripcion = "Seleccione";
@@ -158,7 +171,7 @@ namespace Convertidor.Services.Presupuesto
                     itemDefault.Extra2 = "";
                     itemDefault.Extra3 = "";
 
-                    List<PreDescriptivasGetDto> lista = new List<PreDescriptivasGetDto>();
+                    List<BmDescriptivasGetDto> lista = new List<BmDescriptivasGetDto>();
                     lista.Add(GetDefaultDecriptiva());
                     itemDefault.ListaDescriptiva = lista;
 
@@ -170,8 +183,8 @@ namespace Convertidor.Services.Presupuesto
 
                     foreach (var item in titulos)
                     {
-                        PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
-                        dto = await MapPreDecriptiva(item);
+                        BmDescriptivasGetDto dto = new BmDescriptivasGetDto();
+                        dto = await MapBmDescriptiva(item);
 
                         listDto.Add(dto);
                     }
@@ -202,14 +215,14 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public async Task<List<Item>> GetItems()
+        public async Task<List<BmItem>> GetItems()
         {
-            List<Item> result = new List<Item>();
+            List<BmItem> result = new List<BmItem>();
             var descriptivas = await _repository.GetAll();
 
             foreach (var item in descriptivas)
             {
-                Item itenNew = new Item();
+                BmItem itenNew = new BmItem();
                 itenNew.Id = item.DESCRIPCION_ID;
 
                 itenNew.ParentId = (int)item.DESCRIPCION_FK_ID;
@@ -229,7 +242,7 @@ namespace Convertidor.Services.Presupuesto
         {
 
             List<string> result = new List<string>();
-            List<Item> items = await GetItems();
+            List<BmItem> items = await GetItems();
 
 
             IEnumerable<string> resultingStrings = from parent in items.Where(x => x.ParentId == 0)
@@ -279,11 +292,11 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public async Task<ResultDto<List<TreePUC>>> GetTreeDecriptiva()
+        public async Task<ResultDto<List<BmTreePUC>>> GetTreeDecriptiva()
         {
 
-            List<TreePUC> listTreePUC = new List<TreePUC>();
-            ResultDto<List<TreePUC>> result = new ResultDto<List<TreePUC>>(null);
+            List<BmTreePUC> listTreePUC = new List<BmTreePUC>();
+            ResultDto<List<BmTreePUC>> result = new ResultDto<List<BmTreePUC>>(null);
             try
             {
 
@@ -309,11 +322,11 @@ namespace Convertidor.Services.Presupuesto
                     match = icpString.FirstOrDefault(stringToCheck => stringToCheck.Contains(arraIcp[3]));
                     if (match == null)
                         icpString.Add(arraIcp[3]);*/
-                
 
 
 
-                    TreePUC treePUC = new TreePUC();
+
+                    BmTreePUC treePUC = new BmTreePUC();
                     treePUC.Path = icpString;
                     treePUC.Id = Int32.Parse(id);
                     treePUC.Denominacion = arraIcp[4];
@@ -354,10 +367,10 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-        public async Task<ResultDto<PreDescriptivasGetDto>> Update(PreDescriptivasUpdateDto dto)
+        public async Task<ResultDto<BmDescriptivasGetDto>> Update(BmDescriptivasUpdateDto dto)
         {
 
-            ResultDto<PreDescriptivasGetDto> result = new ResultDto<PreDescriptivasGetDto>(null);
+            ResultDto<BmDescriptivasGetDto> result = new ResultDto<BmDescriptivasGetDto>(null);
             try
             {
 
@@ -377,7 +390,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var titulo = await _preTitulosRepository.GetByCodigo(dto.TituloId);
+                var titulo = await _bMTitulosRepository.GetByCodigo(dto.TituloId);
                 if (titulo == null)
                 {
                     result.Data = null;
@@ -427,7 +440,7 @@ namespace Convertidor.Services.Presupuesto
 
                 await _repository.Update(descriptiva);
 
-                var resultDto = await MapPreDecriptiva(descriptiva);
+                var resultDto = await MapBmDescriptiva(descriptiva);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -445,10 +458,10 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public async Task<ResultDto<PreDescriptivasGetDto>> Create(PreDescriptivasUpdateDto dto)
+        public async Task<ResultDto<BmDescriptivasGetDto>> Create(BmDescriptivasUpdateDto dto)
         {
 
-            ResultDto<PreDescriptivasGetDto> result = new ResultDto<PreDescriptivasGetDto>(null);
+            ResultDto<BmDescriptivasGetDto> result = new ResultDto<BmDescriptivasGetDto>(null);
             try
             {
 
@@ -468,7 +481,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var titulo = await _preTitulosRepository.GetByCodigo(dto.TituloId);
+                var titulo = await _bMTitulosRepository.GetByCodigo(dto.TituloId);
                 if (titulo == null)
                 {
                     result.Data = null;
@@ -498,7 +511,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                PRE_DESCRIPTIVAS entity = new PRE_DESCRIPTIVAS();        
+                BM_DESCRIPTIVAS entity = new BM_DESCRIPTIVAS();        
                 entity.DESCRIPCION_ID = await _repository.GetNextKey();
                 entity.DESCRIPCION_FK_ID = dto.DescripcionIdFk;
                 entity.TITULO_ID = dto.TituloId;
@@ -510,7 +523,7 @@ namespace Convertidor.Services.Presupuesto
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data!=null)
                 {
-                    var resultDto = await MapPreDecriptiva(created.Data);
+                    var resultDto = await MapBmDescriptiva(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -542,9 +555,9 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public PreDescriptivasGetDto GetDefaultDecriptiva()
+        public BmDescriptivasGetDto GetDefaultDecriptiva()
         {
-            PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
+            BmDescriptivasGetDto itemDefault = new BmDescriptivasGetDto();
             itemDefault.DescripcionId = 0;
             itemDefault.DescripcionIdFk = 0;
             itemDefault.Descripcion = "Seleccione";
@@ -558,9 +571,9 @@ namespace Convertidor.Services.Presupuesto
           
         }
 
-        public async Task<PreDescriptivasGetDto> MapPreDecriptiva(PRE_DESCRIPTIVAS entity)
+        public async Task<BmDescriptivasGetDto> MapBmDescriptiva(BM_DESCRIPTIVAS entity)
         {
-            PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
+            BmDescriptivasGetDto dto = new BmDescriptivasGetDto();
             dto.DescripcionId = entity.DESCRIPCION_ID;
             dto.DescripcionIdFk = entity.DESCRIPCION_FK_ID;
             dto.Descripcion = entity.DESCRIPCION;
@@ -568,7 +581,7 @@ namespace Convertidor.Services.Presupuesto
             dto.Codigo = entity.CODIGO;
             dto.TituloId = entity.TITULO_ID;
             dto.DescripcionTitulo = "";
-            var titulo = await _preTitulosRepository.GetByCodigo(entity.TITULO_ID);
+            var titulo = await _bMTitulosRepository.GetByCodigo(entity.TITULO_ID);
             if (titulo != null) dto.DescripcionTitulo = titulo.TITULO;
 
             if (entity.EXTRA1 == null) entity.EXTRA1 = "";
@@ -580,13 +593,13 @@ namespace Convertidor.Services.Presupuesto
 
 
 
-            List<PreDescriptivasGetDto> listDto = new List<PreDescriptivasGetDto>();
+            List<BmDescriptivasGetDto> listDto = new List<BmDescriptivasGetDto>();
             var hijos = await _repository.GetByFKID(entity.DESCRIPCION_ID);
             if (hijos.Count > 0)
             {
-                PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
+                BmDescriptivasGetDto itemDefault = new BmDescriptivasGetDto();
                 itemDefault = GetDefaultDecriptiva();
-                List<PreDescriptivasGetDto> lista = new List<PreDescriptivasGetDto>();
+                List<BmDescriptivasGetDto> lista = new List<BmDescriptivasGetDto>();
                 lista.Add(GetDefaultDecriptiva());
                 itemDefault.ListaDescriptiva= lista;
 
@@ -594,7 +607,7 @@ namespace Convertidor.Services.Presupuesto
                 listDto.Add(itemDefault);
                 foreach (var item in hijos)
                 {
-                    PreDescriptivasGetDto itemDto = new PreDescriptivasGetDto();
+                    BmDescriptivasGetDto itemDto = new BmDescriptivasGetDto();
                     itemDto.DescripcionId = item.DESCRIPCION_ID;
                     itemDto.DescripcionIdFk = item.DESCRIPCION_FK_ID;
                     itemDto.Descripcion = item.DESCRIPCION;
@@ -602,7 +615,7 @@ namespace Convertidor.Services.Presupuesto
                     itemDto.Codigo = item.CODIGO;
                     itemDto.TituloId = item.TITULO_ID;
                     itemDto.DescripcionTitulo = "";
-                    var tituloItem = await _preTitulosRepository.GetByCodigo(item.TITULO_ID);
+                    var tituloItem = await _bMTitulosRepository.GetByCodigo(item.TITULO_ID);
                     if (tituloItem != null) itemDto.DescripcionTitulo = tituloItem.TITULO;
 
                     if (item.EXTRA1 == null) item.EXTRA1 = "";
@@ -617,9 +630,9 @@ namespace Convertidor.Services.Presupuesto
             }
             else
             {
-                PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
+                BmDescriptivasGetDto itemDefault = new BmDescriptivasGetDto();
                 itemDefault = GetDefaultDecriptiva();
-                List<PreDescriptivasGetDto> lista = new List<PreDescriptivasGetDto>();
+                List<BmDescriptivasGetDto> lista = new List<BmDescriptivasGetDto>();
                 lista.Add(GetDefaultDecriptiva());
                 itemDefault.ListaDescriptiva = lista;
 
@@ -634,10 +647,10 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-        public async Task<ResultDto<PreDescriptivaDeleteDto>> Delete(PreDescriptivaDeleteDto dto)
+        public async Task<ResultDto<BmDescriptivaDeleteDto>> Delete(BmDescriptivaDeleteDto dto)
         {
 
-            ResultDto<PreDescriptivaDeleteDto> result = new ResultDto<PreDescriptivaDeleteDto>(null);
+            ResultDto<BmDescriptivaDeleteDto> result = new ResultDto<BmDescriptivaDeleteDto>(null);
             try
             {
 

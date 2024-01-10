@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
+using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
+using Convertidor.Dtos.Bm;
 using Convertidor.Dtos.Presupuesto;
-using Convertidor.Services.Presupuesto;
 using Convertidor.Services.Rh;
 using Convertidor.Utility;
 using NPOI.POIFS.Properties;
@@ -15,29 +17,29 @@ using NuGet.Packaging;
 
 namespace Convertidor.Services.Bm
 {
-	public class PreTituloService: IPreTituloService
+	public class BmTitulosService : IBmTituloService
     {
 
       
-        private readonly IPreTitulosRepository _repository;
-        private readonly IPreDescriptivaRepository _repositoryPreDescriptiva;
+        private readonly IBmTitulosRepository _repository;
+        private readonly IBmDescriptivaRepository _repositoryBmDescriptiva;
         private readonly IConfiguration _configuration;
-        public PreTituloService(IPreTitulosRepository repository,
+        public BmTitulosService(IBmTitulosRepository repository,
                                       IConfiguration configuration,
-                                      IPreDescriptivaRepository repositoryPreDescriptiva)
+                                      IBmDescriptivaRepository repositoryBmDescriptiva)
 		{
             _repository = repository;
             _configuration = configuration;
-            _repositoryPreDescriptiva = repositoryPreDescriptiva;
+            _repositoryBmDescriptiva = repositoryBmDescriptiva;
 
 
         }
 
 
-        public async Task<ResultDto<List<PreTitulosGetDto>>> GetAll()
+        public async Task<ResultDto<List<BmTitulosGetDto>>> GetAll()
         {
 
-            ResultDto<List<PreTitulosGetDto>> result = new ResultDto<List<PreTitulosGetDto>>(null);
+            ResultDto<List<BmTitulosGetDto>> result = new ResultDto<List<BmTitulosGetDto>>(null);
             try
             {
 
@@ -47,11 +49,11 @@ namespace Convertidor.Services.Bm
 
                 if (titulos.Count() > 0)
                 {
-                    List<PreTitulosGetDto> listDto = new List<PreTitulosGetDto>();
+                    List<BmTitulosGetDto> listDto = new List<BmTitulosGetDto>();
 
                     foreach (var item in titulos)
                     {
-                        PreTitulosGetDto dto = new PreTitulosGetDto();
+                        BmTitulosGetDto dto = new BmTitulosGetDto();
                         dto.TituloId = item.TITULO_ID;
                         dto.TituloIdFk = item.TITULO_FK_ID;
                         dto.Titulo = item.TITULO;
@@ -93,14 +95,14 @@ namespace Convertidor.Services.Bm
         }
 
 
-        public async Task<List<Item>> GetItems()
+        public async Task<List<BmItem>> GetItems()
         {
-            List<Item> result = new List<Item>();
+            List<BmItem> result = new List<BmItem>();
             var descriptivas = await _repository.GetAll();
 
             foreach (var item in descriptivas)
             {
-                Item itenNew = new Item();
+                BmItem itenNew = new BmItem();
                 itenNew.Id = item.TITULO_ID;
 
                 itenNew.ParentId = (int)item.TITULO_FK_ID;
@@ -120,7 +122,7 @@ namespace Convertidor.Services.Bm
         {
 
             List<string> result = new List<string>();
-            List<Item> items = await GetItems();
+            List<BmItem> items = await GetItems();
 
 
             IEnumerable<string> resultingStrings = from parent in items.Where(x => x.ParentId == 0)
@@ -172,13 +174,13 @@ namespace Convertidor.Services.Bm
 
       
 
-        public async Task<ResultDto<List<TreePUC>>> GetTreeTitulosRespaldo()
+        public async Task<ResultDto<List<BmTreePUC>>> GetTreeTitulosRespaldo()
         {
 
           
 
-            List<TreePUC> listTreePUC = new List<TreePUC>();
-            ResultDto<List<TreePUC>> result = new ResultDto<List<TreePUC>>(null);
+            List<BmTreePUC> listTreePUC = new List<BmTreePUC>();
+            ResultDto<List<BmTreePUC>> result = new ResultDto<List<BmTreePUC>>(null);
             try
             {
 
@@ -209,7 +211,7 @@ namespace Convertidor.Services.Bm
 
 
 
-                    TreePUC treePUC = new TreePUC();
+                    BmTreePUC treePUC = new BmTreePUC();
                     treePUC.Path = icpString;
                     treePUC.Id = Int32.Parse(id);
                     treePUC.Denominacion = arraIcp[4];
@@ -249,15 +251,15 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public async Task<ResultDto<PreTitulosGetDto>> Update(PreTitulosUpdateDto dto)
+        public async Task<ResultDto<BmTitulosGetDto>> Update(BmTitulosUpdateDto dto)
         {
 
-            ResultDto<PreTitulosGetDto> result = new ResultDto<PreTitulosGetDto>(null);
+            ResultDto<BmTitulosGetDto> result = new ResultDto<BmTitulosGetDto>(null);
             try
             {
 
-                var tituloUpdate = await _repository.GetByCodigo(dto.TituloId);
-                if (tituloUpdate == null)
+                var bmTituloUpdate = await _repository.GetByCodigo(dto.TituloId);
+                if (bmTituloUpdate == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -268,7 +270,7 @@ namespace Convertidor.Services.Bm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Titulo Invalida";
+                    result.Message = "Titulo Invalido";
                     return result;
                 }
 
@@ -302,20 +304,20 @@ namespace Convertidor.Services.Bm
                 //descriptiva.EXTRA1 = dto.Extra1;
                 //descriptiva.CODIGO = dto.Codigo;
 
-                tituloUpdate.TITULO = dto.Titulo;
-                tituloUpdate.TITULO_FK_ID = dto.TituloIdFk;
+                bmTituloUpdate.TITULO = dto.Titulo;
+                bmTituloUpdate.TITULO_FK_ID = dto.TituloIdFk;
 
 
-                tituloUpdate.EXTRA2 = dto.Extra2;
-                tituloUpdate.EXTRA3 = dto.Extra3;
-                tituloUpdate.FECHA_UPD = DateTime.Now;
+                bmTituloUpdate.EXTRA2 = dto.Extra2;
+                bmTituloUpdate.EXTRA3 = dto.Extra3;
+                bmTituloUpdate.FECHA_UPD = DateTime.Now;
 
 
 
 
-                await _repository.Update(tituloUpdate);
+                await _repository.Update(bmTituloUpdate);
 
-                var resultDto = MapPreTitulo(tituloUpdate);
+                var resultDto = MapBmTitulo(bmTituloUpdate);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -333,10 +335,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<PreTitulosGetDto>> Create(PreTitulosUpdateDto dto)
+        public async Task<ResultDto<BmTitulosGetDto>> Create(BmTitulosUpdateDto dto)
         {
 
-            ResultDto<PreTitulosGetDto> result = new ResultDto<PreTitulosGetDto>(null);
+            ResultDto<BmTitulosGetDto> result = new ResultDto<BmTitulosGetDto>(null);
             try
             {
 
@@ -379,10 +381,9 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-                PRE_TITULOS entity = new PRE_TITULOS();
+                BM_TITULOS entity = new BM_TITULOS();
                 entity.TITULO_ID = await _repository.GetNextKey();
                 entity.TITULO_FK_ID = dto.TituloIdFk;
-           
                 entity.CODIGO = dto.Codigo;
                 entity.TITULO = dto.Titulo;
                 entity.EXTRA1 = dto.Extra1;
@@ -391,7 +392,7 @@ namespace Convertidor.Services.Bm
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = MapPreTitulo(created.Data);
+                    var resultDto = MapBmTitulo(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -423,10 +424,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
  
-        public async Task<ResultDto<PreTitulosDeleteDto>> Delete(PreTitulosDeleteDto dto)
+        public async Task<ResultDto<BmTitulosDeleteDto>> Delete(BmTitulosDeleteDto dto)
         {
 
-            ResultDto<PreTitulosDeleteDto> result = new ResultDto<PreTitulosDeleteDto>(null);
+            ResultDto<BmTitulosDeleteDto> result = new ResultDto<BmTitulosDeleteDto>(null);
             try
             {
 
@@ -439,7 +440,7 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-                var descriptiva = await  _repositoryPreDescriptiva.GetByTitulo(dto.TituloId);
+                var descriptiva = await  _repositoryBmDescriptiva.GetByTituloId(dto.TituloId);
                 if (descriptiva != null && descriptiva.Count>0)
                 {
                     result.Data = dto;
@@ -479,9 +480,9 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public PreTitulosGetDto MapPreTitulo(PRE_TITULOS entity)
+        public BmTitulosGetDto MapBmTitulo(BM_TITULOS entity)
         {
-            PreTitulosGetDto dto = new PreTitulosGetDto();
+            BmTitulosGetDto dto = new BmTitulosGetDto();
             dto.TituloId = entity.TITULO_ID;
             dto.TituloIdFk = entity.TITULO_FK_ID;
             dto.Titulo = entity.TITULO;
@@ -501,25 +502,25 @@ namespace Convertidor.Services.Bm
 
 
 
-        public async Task<ResultDto<List<TreePUC>>> GetTreeTitulos()
+        public async Task<ResultDto<List<BmTreePUC>>> GetTreeTitulos()
         {
 
-            ResultDto<List<TreePUC>> result = new ResultDto<List<TreePUC>>(null);
+            ResultDto<List<BmTreePUC>> result = new ResultDto<List<BmTreePUC>>(null);
 
 
             try
             {
 
 
-                List<TreePUC> listTreePUC2 = new List<TreePUC>();
+                List<BmTreePUC> listTreePUC2 = new List<BmTreePUC>();
                 var titulosArbol = await BuscarArbol();
               
                 foreach (var item in titulosArbol)
                 {
                     var patch = getPatch(item);
-                  
 
-                    TreePUC treePUC = new TreePUC();
+
+                    BmTreePUC treePUC = new BmTreePUC();
                     treePUC.Path = patch;
                     treePUC.Id = item.Id;
                     treePUC.Denominacion = item.Text;

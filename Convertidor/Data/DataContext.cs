@@ -195,7 +195,11 @@ namespace Convertidor.Data
             });
             modelBuilder.Entity<RH_PERIODOS>(builder =>
             {
-                builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_PERIODO,
+
+                });
                 builder.ToTable("RH_PERIODOS");
             });
             modelBuilder.Entity<RH_H_PERIODOS>(builder =>

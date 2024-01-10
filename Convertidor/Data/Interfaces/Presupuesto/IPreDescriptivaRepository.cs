@@ -1,10 +1,11 @@
 ﻿using System;
+using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Dtos;
 
 namespace Convertidor.Data.Interfaces.Presupuesto
 {
-	public interface IPreDescriptivaRepository
+    public interface IPreDescriptivaRepository
 	{
 
         Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptiva(int descripcionId);

@@ -3,29 +3,33 @@ using System;
 using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
+using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
+using Convertidor.Dtos.Bm;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
 
-namespace Convertidor.Data.Repository.Rh
+namespace Convertidor.Data.Repository.Bm
 {
-    public class PreDescriptivaRepository: IPreDescriptivaRepository
+    public class BmClasificacionBienesRepository: IBmClasificacionBienesRepository
     {
 		
-        private readonly DataContextPre _context;
+        private readonly DataContextBm _context;
 
-        public PreDescriptivaRepository(DataContextPre context)
+        public BmClasificacionBienesRepository(DataContextBm context)
         {
             _context = context;
         }
-        public async Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptiva(int descripcionId)
+        public async Task<BM_CLASIFICACION_BIENES> GetByCodigoClasificacionBien(int codigoClasificacionBien)
         {
             try
             {
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.DESCRIPCION_ID == descripcionId).FirstOrDefaultAsync();
+                var result = await _context.BM_CLASIFICACION_BIENES.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_CLASIFICACION_BIEN == codigoClasificacionBien).FirstOrDefaultAsync();
         
-                return (PRE_DESCRIPTIVAS)result;
+                return (BM_CLASIFICACION_BIENES)result;
             }
             catch (Exception ex)
             {
@@ -34,13 +38,15 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo)
+
+        public async Task<BM_CLASIFICACION_BIENES> GetByCodigoGrupo(string codigoGrupo)
         {
             try
             {
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.CODIGO == codigo).FirstOrDefaultAsync();
+                var result = await _context.BM_CLASIFICACION_BIENES.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_GRUPO == codigoGrupo).FirstOrDefaultAsync();
 
-                return (PRE_DESCRIPTIVAS)result;
+                return (BM_CLASIFICACION_BIENES)result;
             }
             catch (Exception ex)
             {
@@ -49,26 +55,11 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<List<PRE_DESCRIPTIVAS>> GetByTitulo(int tituloId)
+        public async Task<List<BM_CLASIFICACION_BIENES>> GetAll()
         {
             try
             {
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.TITULO_ID == tituloId).ToListAsync();
-
-                return (List<PRE_DESCRIPTIVAS>)result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
-        public async Task<List<PRE_DESCRIPTIVAS>> GetAll()
-        {
-            try
-            {
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.BM_CLASIFICACION_BIENES.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -79,62 +70,52 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-
-
-        public async Task<PRE_DESCRIPTIVAS> GetByCodigo(int descripcionId)
+        public async Task<BM_CLASIFICACION_BIENES> GetByCodigoNivel1(string codigo)
         {
             try
             {
-
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty()
-                    .Where(x => x.DESCRIPCION_ID == descripcionId)
+                var result = await _context.BM_CLASIFICACION_BIENES.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_NIVEL1 == codigo)
                     .FirstOrDefaultAsync();
-                return (PRE_DESCRIPTIVAS)result!;
 
+                return (BM_CLASIFICACION_BIENES)result;
             }
             catch (Exception ex)
             {
-                var msg = ex.Message;
+                var res = ex.InnerException.Message;
                 return null;
             }
 
-
-
         }
 
-
-        public async Task<List<PRE_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk)
+        public async Task<BM_CLASIFICACION_BIENES> GetByCodigoNivel2(string codigo)
         {
             try
             {
+                var result = await _context.BM_CLASIFICACION_BIENES.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_NIVEL2 == codigo)
+                    .FirstOrDefaultAsync();
 
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty()
-                    .Where(x => x.DESCRIPCION_FK_ID== descripcionIdFk)
-                    .ToListAsync();
-                return (List<PRE_DESCRIPTIVAS>)result!;
-
+                return (BM_CLASIFICACION_BIENES)result;
             }
             catch (Exception ex)
             {
-                var msg = ex.Message;
+                var res = ex.InnerException.Message;
                 return null;
             }
-
-
 
         }
 
 
-
-        public async Task<ResultDto<PRE_DESCRIPTIVAS>> Add(PRE_DESCRIPTIVAS entity)
+        public async Task<ResultDto<BM_CLASIFICACION_BIENES>> Add(BM_CLASIFICACION_BIENES entity)
         {
-            ResultDto<PRE_DESCRIPTIVAS> result = new ResultDto<PRE_DESCRIPTIVAS>(null);
+            ResultDto<BM_CLASIFICACION_BIENES> result = new ResultDto<BM_CLASIFICACION_BIENES>(null);
             try
             {
 
 
 
-                await _context.PRE_DESCRIPTIVAS.AddAsync(entity);
+                await _context.BM_CLASIFICACION_BIENES.AddAsync(entity);
                 _context.SaveChanges();
 
 
@@ -157,18 +138,18 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<ResultDto<PRE_DESCRIPTIVAS>> Update(PRE_DESCRIPTIVAS entity)
+        public async Task<ResultDto<BM_CLASIFICACION_BIENES>> Update(BM_CLASIFICACION_BIENES entity)
         {
-            ResultDto<PRE_DESCRIPTIVAS> result = new ResultDto<PRE_DESCRIPTIVAS>(null);
+            ResultDto<BM_CLASIFICACION_BIENES> result = new ResultDto<BM_CLASIFICACION_BIENES>(null);
 
             try
             {
-                PRE_DESCRIPTIVAS entityUpdate = await GetByCodigo(entity.DESCRIPCION_ID);
+                BM_CLASIFICACION_BIENES entityUpdate = await GetByCodigoClasificacionBien(entity.CODIGO_CLASIFICACION_BIEN);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.PRE_DESCRIPTIVAS.Update(entity);
+                    _context.BM_CLASIFICACION_BIENES.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -192,15 +173,15 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<string> Delete(int descripcionId)
+        public async Task<string> Delete(int codigoClasificacionBien)
         {
 
             try
             {
-                PRE_DESCRIPTIVAS entity = await GetByCodigo(descripcionId);
+                BM_CLASIFICACION_BIENES entity = await GetByCodigoClasificacionBien(codigoClasificacionBien);
                 if (entity != null)
                 {
-                    _context.PRE_DESCRIPTIVAS.Remove(entity);
+                    _context.BM_CLASIFICACION_BIENES.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -221,8 +202,8 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 int result = 0;
-                var last = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.DESCRIPCION_ID)
+                var last = await _context.BM_CLASIFICACION_BIENES.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_CLASIFICACION_BIEN)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -230,7 +211,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 else
                 {
-                    result = last.DESCRIPCION_ID + 1;
+                    result = last.CODIGO_CLASIFICACION_BIEN + 1;
                 }
 
                 return (int)result!;
@@ -247,6 +228,9 @@ namespace Convertidor.Data.Repository.Rh
         }
 
 
+
+
+        }
     }
-}
+
 

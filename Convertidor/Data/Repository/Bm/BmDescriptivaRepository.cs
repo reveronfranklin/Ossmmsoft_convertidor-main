@@ -3,29 +3,30 @@ using System;
 using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
+using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 
-namespace Convertidor.Data.Repository.Rh
+namespace Convertidor.Data.Repository.Bm
 {
-    public class PreDescriptivaRepository: IPreDescriptivaRepository
+    public class BmDescriptivaRepository: IBmDescriptivaRepository
     {
 		
-        private readonly DataContextPre _context;
+        private readonly DataContextBm _context;
 
-        public PreDescriptivaRepository(DataContextPre context)
+        public BmDescriptivaRepository(DataContextBm context)
         {
             _context = context;
         }
-        public async Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptiva(int descripcionId)
+        public async Task<BM_DESCRIPTIVAS> GetByCodigoDescriptiva(int descripcionId)
         {
             try
             {
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.DESCRIPCION_ID == descripcionId).FirstOrDefaultAsync();
+                var result = await _context.BM_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.DESCRIPCION_ID == descripcionId).FirstOrDefaultAsync();
         
-                return (PRE_DESCRIPTIVAS)result;
+                return (BM_DESCRIPTIVAS)result;
             }
             catch (Exception ex)
             {
@@ -34,13 +35,13 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo)
+        public async Task<BM_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo)
         {
             try
             {
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.CODIGO == codigo).FirstOrDefaultAsync();
+                var result = await _context.BM_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.CODIGO == codigo).FirstOrDefaultAsync();
 
-                return (PRE_DESCRIPTIVAS)result;
+                return (BM_DESCRIPTIVAS)result;
             }
             catch (Exception ex)
             {
@@ -49,13 +50,13 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<List<PRE_DESCRIPTIVAS>> GetByTitulo(int tituloId)
+        public async Task<List<BM_DESCRIPTIVAS>> GetByTituloId(int tituloId)
         {
             try
             {
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.TITULO_ID == tituloId).ToListAsync();
+                var result = await _context.BM_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.TITULO_ID == tituloId).ToListAsync();
 
-                return (List<PRE_DESCRIPTIVAS>)result;
+                return (List<BM_DESCRIPTIVAS>)result;
             }
             catch (Exception ex)
             {
@@ -64,11 +65,36 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<List<PRE_DESCRIPTIVAS>> GetAll()
+
+        public async Task<bool> GetByIdAndTitulo(int tituloId, int id)
         {
             try
             {
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty().ToListAsync();
+                var descriptiva = await _context.BM_DESCRIPTIVAS.DefaultIfEmpty()
+                    .Where(e => e.TITULO_ID == tituloId && e.DESCRIPCION_ID == id).FirstOrDefaultAsync();
+                var result = false;
+                if (descriptiva != null)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return false;
+            }
+
+        }
+        public async Task<List<BM_DESCRIPTIVAS>> GetAll()
+        {
+            try
+            {
+                var result = await _context.BM_DESCRIPTIVAS.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -81,15 +107,15 @@ namespace Convertidor.Data.Repository.Rh
         }
 
 
-        public async Task<PRE_DESCRIPTIVAS> GetByCodigo(int descripcionId)
+        public async Task<BM_DESCRIPTIVAS> GetByCodigo(int descripcionId)
         {
             try
             {
 
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty()
+                var result = await _context.BM_DESCRIPTIVAS.DefaultIfEmpty()
                     .Where(x => x.DESCRIPCION_ID == descripcionId)
                     .FirstOrDefaultAsync();
-                return (PRE_DESCRIPTIVAS)result!;
+                return (BM_DESCRIPTIVAS)result!;
 
             }
             catch (Exception ex)
@@ -103,15 +129,15 @@ namespace Convertidor.Data.Repository.Rh
         }
 
 
-        public async Task<List<PRE_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk)
+        public async Task<List<BM_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk)
         {
             try
             {
 
-                var result = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty()
+                var result = await _context.BM_DESCRIPTIVAS.DefaultIfEmpty()
                     .Where(x => x.DESCRIPCION_FK_ID== descripcionIdFk)
                     .ToListAsync();
-                return (List<PRE_DESCRIPTIVAS>)result!;
+                return (List<BM_DESCRIPTIVAS>)result!;
 
             }
             catch (Exception ex)
@@ -126,15 +152,15 @@ namespace Convertidor.Data.Repository.Rh
 
 
 
-        public async Task<ResultDto<PRE_DESCRIPTIVAS>> Add(PRE_DESCRIPTIVAS entity)
+        public async Task<ResultDto<BM_DESCRIPTIVAS>> Add(BM_DESCRIPTIVAS entity)
         {
-            ResultDto<PRE_DESCRIPTIVAS> result = new ResultDto<PRE_DESCRIPTIVAS>(null);
+            ResultDto<BM_DESCRIPTIVAS> result = new ResultDto<BM_DESCRIPTIVAS>(null);
             try
             {
 
 
 
-                await _context.PRE_DESCRIPTIVAS.AddAsync(entity);
+                await _context.BM_DESCRIPTIVAS.AddAsync(entity);
                 _context.SaveChanges();
 
 
@@ -157,18 +183,18 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<ResultDto<PRE_DESCRIPTIVAS>> Update(PRE_DESCRIPTIVAS entity)
+        public async Task<ResultDto<BM_DESCRIPTIVAS>> Update(BM_DESCRIPTIVAS entity)
         {
-            ResultDto<PRE_DESCRIPTIVAS> result = new ResultDto<PRE_DESCRIPTIVAS>(null);
+            ResultDto<BM_DESCRIPTIVAS> result = new ResultDto<BM_DESCRIPTIVAS>(null);
 
             try
             {
-                PRE_DESCRIPTIVAS entityUpdate = await GetByCodigo(entity.DESCRIPCION_ID);
+                BM_DESCRIPTIVAS entityUpdate = await GetByCodigo(entity.DESCRIPCION_ID);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.PRE_DESCRIPTIVAS.Update(entity);
+                    _context.BM_DESCRIPTIVAS.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -197,10 +223,10 @@ namespace Convertidor.Data.Repository.Rh
 
             try
             {
-                PRE_DESCRIPTIVAS entity = await GetByCodigo(descripcionId);
+                BM_DESCRIPTIVAS entity = await GetByCodigo(descripcionId);
                 if (entity != null)
                 {
-                    _context.PRE_DESCRIPTIVAS.Remove(entity);
+                    _context.BM_DESCRIPTIVAS.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -221,7 +247,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 int result = 0;
-                var last = await _context.PRE_DESCRIPTIVAS.DefaultIfEmpty()
+                var last = await _context.BM_DESCRIPTIVAS.DefaultIfEmpty()
                     .OrderByDescending(x => x.DESCRIPCION_ID)
                     .FirstOrDefaultAsync();
                 if (last == null)
