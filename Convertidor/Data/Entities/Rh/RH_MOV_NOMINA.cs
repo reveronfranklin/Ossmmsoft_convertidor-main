@@ -1,7 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Record.UnicodeString;
-using System.Net.NetworkInformation;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Convertidor.Data.Entities.Rh
 {

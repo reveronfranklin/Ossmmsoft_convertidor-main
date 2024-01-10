@@ -2,7 +2,6 @@
 
 
 using CConvertidor.Data.Entities.Sis;
-using Convertidor.Data.Entities.RentasMunicipales;
 using Convertidor.Data.Entities.Sis;
 using Microsoft.EntityFrameworkCore;
 

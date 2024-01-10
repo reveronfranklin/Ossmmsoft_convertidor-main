@@ -1,10 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Catastro;
-using Convertidor.Data.EntitiesDestino;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Interfaces.Catastro;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Catastro

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Data.Interfaces.Presupuesto
+﻿namespace Convertidor.Data.Interfaces.Presupuesto
 {
 	public interface IPRE_ASIGNACIONESRepository
 	{

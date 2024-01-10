@@ -1,14 +1,8 @@
-﻿using System;
-using Convertidor.Data.Entities;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.EntitiesDestino;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
-using Convertidor.Dtos.Presupuesto;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using static Convertidor.Dtos.PetroBsGetDto;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {

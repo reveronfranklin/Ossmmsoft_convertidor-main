@@ -1,10 +1,4 @@
-﻿
-
-using Convertidor.Data.Entities;
-using CConvertidor.Data.Entities.Sis;
 using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.RentasMunicipales;
-using Convertidor.Data.Entities.Sis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data

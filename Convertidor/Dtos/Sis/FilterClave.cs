@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Dtos.Sis
+﻿namespace Convertidor.Dtos.Sis
 {
 	public class FilterClave
 	{

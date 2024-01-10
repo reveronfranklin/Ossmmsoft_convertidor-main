@@ -1,7 +1,5 @@
-﻿using System;
-using Convertidor.Data.Entities.Rh;
+﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Dtos;
-using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Data.Repository.Rh
 {

@@ -1,10 +1,7 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
-using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Services.Presupuesto
 {

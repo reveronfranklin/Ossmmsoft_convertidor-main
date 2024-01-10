@@ -1,5 +1,4 @@
 ﻿using Convertidor.Data.Entities.Catastro;
-using Convertidor.Data.EntitiesDestino;
 
 namespace Convertidor.Data.Interfaces.Catastro
 {

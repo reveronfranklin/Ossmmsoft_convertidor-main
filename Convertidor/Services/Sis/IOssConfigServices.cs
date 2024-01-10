@@ -1,6 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Sis;
-using Convertidor.Dtos;
+﻿using Convertidor.Dtos;
 using Convertidor.Dtos.Sis;
 
 namespace Convertidor.Services.Sis

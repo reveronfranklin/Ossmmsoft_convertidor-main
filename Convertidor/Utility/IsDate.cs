@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Utility
+﻿namespace Convertidor.Utility
 {
 	public class DateValidate
 	{
@@ -16,6 +15,7 @@ namespace Convertidor.Utility
                 return false;
             }
         }
+     
 
 
     }

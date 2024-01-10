@@ -1,6 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Catastro;
-using Convertidor.Dtos;
+﻿using Convertidor.Dtos;
 using Convertidor.Dtos.Catastro;
 
 namespace Convertidor.Services.Catastro

@@ -1,9 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-namespace Convertidor.Dtos
+﻿namespace Convertidor.Dtos
 {
     public class ResultDto<T>
     {

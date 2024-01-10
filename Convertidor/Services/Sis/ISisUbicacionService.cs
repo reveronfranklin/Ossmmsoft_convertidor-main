@@ -1,4 +1,3 @@
-using Convertidor.Data.Entities.Sis;
 using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Services.Sis;

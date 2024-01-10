@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using AutoMapper;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Entities.Rh;
-using Convertidor.Data.Interfaces.Presupuesto;
+﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
 using Convertidor.Services.Sis;
 using Ganss.Excel;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NPOI.HPSF;
-using NPOI.HSSF.Record.Chart;
 
 namespace Convertidor.Data.Repository.Rh
 {

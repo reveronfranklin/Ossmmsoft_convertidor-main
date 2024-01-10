@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Enum
+﻿namespace Convertidor.Enum
 {
 	public enum EstatusCatFicha
 	{

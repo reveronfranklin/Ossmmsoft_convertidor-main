@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
+
 using Convertidor.Services.Presupuesto;
-using Convertidor.Services.Rh;
+
 using Convertidor.Utility;
-using NPOI.POIFS.Properties;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.UserModel;
-using NuGet.Packaging;
 
 namespace Convertidor.Services.Bm
 {
-	public class PreTituloService: IPreTituloService
+    public class PreTituloService: IPreTituloService
     {
 
       

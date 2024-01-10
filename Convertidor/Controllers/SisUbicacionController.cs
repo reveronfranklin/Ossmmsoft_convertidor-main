@@ -1,10 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using Convertidor.Services.Rh;
-using Convertidor.Dtos.Rh;
 using Convertidor.Dtos.Sis;
 using Convertidor.Services.Sis;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Convertidor.Controllers
 {

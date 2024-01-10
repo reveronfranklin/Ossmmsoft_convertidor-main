@@ -68,7 +68,6 @@
     <Folder Include="Services\Catastro\" />
     <Folder Include="Dtos\Catastro\" />
     <Folder Include="Enum\" />
-    <Folder Include="Data\Entities\Presupuesto\" />
     <Folder Include="Data\Repository\Presupuesto\" />
     <Folder Include="Data\Interfaces\Presupuesto\" />
     <Folder Include="Services\Presupuesto\" />

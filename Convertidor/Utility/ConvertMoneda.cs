@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-
-namespace Convertidor.Utility
+﻿namespace Convertidor.Utility
 {
 	public class ConvertidorMoneda
 	{

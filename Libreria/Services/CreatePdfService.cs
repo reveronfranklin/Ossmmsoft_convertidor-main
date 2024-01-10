@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Libreria.Services
+﻿namespace Libreria.Services
 {
 	public class CreatePdfService
 	{

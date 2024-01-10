@@ -1,6 +1,5 @@
-﻿using System;
-using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
+
 using Convertidor.Dtos;
 
 namespace Convertidor.Data.Interfaces.Presupuesto
@@ -18,6 +17,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<int> GetNextKey();
         Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo);
         Task<List<PRE_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk);
-    }
+        Task<bool> GetByIdAndTitulo(int tituloId, int id);
+	}
 }
 

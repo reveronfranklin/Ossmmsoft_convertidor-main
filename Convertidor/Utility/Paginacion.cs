@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-
-namespace Convertidor.Utility
+﻿namespace Convertidor.Utility
 {
 	
         public class Paginacion<T> : List<T>

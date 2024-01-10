@@ -1,5 +1,4 @@
-﻿using System;
-namespace CConvertidor.Data.Entities.Sis
+﻿namespace CConvertidor.Data.Entities.Sis
 {
 	public class SIS_V_SISTEMA_USUARIO_PROGRAMA
 	{

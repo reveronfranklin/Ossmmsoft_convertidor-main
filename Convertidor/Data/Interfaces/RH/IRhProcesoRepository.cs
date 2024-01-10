@@ -1,5 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Rh;
+﻿using Convertidor.Data.Entities.Rh;
 
 namespace Convertidor.Data.Interfaces.RH
 {

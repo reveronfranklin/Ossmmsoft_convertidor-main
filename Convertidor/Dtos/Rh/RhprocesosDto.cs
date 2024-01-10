@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Dtos.Rh
+﻿namespace Convertidor.Dtos.Rh
 {
 	public class RhprocesosDto
 	{

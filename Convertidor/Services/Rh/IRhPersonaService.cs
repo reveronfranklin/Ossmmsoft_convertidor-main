@@ -1,5 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Rh;
+﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 
@@ -17,7 +16,7 @@ namespace Convertidor.Services.Rh
         Task<ResultDto<PersonasDto>> Update(RhPersonaUpdateDto dto);
         Task<ResultDto<PersonasDto>> Create(RhPersonaUpdateDto dto);
         Task<ResultDto<RhPersonaDeleteDto>> Delete(RhPersonaDeleteDto dto);
-        
+        List<string> GetListNacionalidad();
 	}
 }
 

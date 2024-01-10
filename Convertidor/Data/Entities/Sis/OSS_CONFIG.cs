@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Data.Entities.Sis
+﻿namespace Convertidor.Data.Entities.Sis
 {
 	public class OSS_CONFIG
 	{

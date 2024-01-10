@@ -1,6 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Sis;
-using Convertidor.Dtos.Rh;
+﻿using Convertidor.Data.Entities.Sis;
 
 namespace Convertidor.Data.Interfaces.Sis
 {

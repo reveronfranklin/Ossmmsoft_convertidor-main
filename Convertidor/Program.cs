@@ -1,33 +1,33 @@
 
 using Convertidor.Data;
 using Convertidor.Data.Interfaces;
+using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Interfaces.Catastro;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository;
+using Convertidor.Data.Repository.Adm;
+using Convertidor.Data.Repository.Bm;
 using Convertidor.Data.Repository.Catastro;
 using Convertidor.Data.Repository.Presupuesto;
+using Convertidor.Data.Repository.Rh;
 using Convertidor.Data.Repository.Sis;
 using Convertidor.Services;
+using Convertidor.Services.Adm;
+using Convertidor.Services.Bm;
 using Convertidor.Services.Catastro;
 using Convertidor.Services.Presupuesto;
+using Convertidor.Services.Rh;
 using Convertidor.Services.Sis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Configuration;
-using System.Text;
-using Convertidor.Data.Interfaces.Bm;
-using Swashbuckle;
 using Swashbuckle.AspNetCore.Filters;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Repository.Rh;
-using Convertidor.Services.Rh;
-using Microsoft.AspNetCore.HttpOverrides;
-using StackExchange.Redis;
-using Convertidor.Services.Bm;
-using Convertidor.Data.Repository.Bm;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -221,6 +221,25 @@ builder.Services.AddTransient<IBmDirBienService, BmDirBienService>();
 
 
 
+//ADM Repository
+builder.Services.AddTransient<IAdmDescriptivaRepository, AdmDescriptivaRepository>();
+builder.Services.AddTransient<IAdmTitulosRepository, AdmTitulosRepository>();
+builder.Services.AddTransient<IAdmProveedoresRepository, AdmProveedoresRepository>();
+builder.Services.AddTransient<IAdmComunicacionProveedorRepository, AdmComunicacionProveedorRepository>();
+builder.Services.AddTransient<IAdmContactosProveedorRepository, AdmContactosProveedorRepository>();
+builder.Services.AddTransient<IAdmDireccionProveedorRepository, AdmDireccionProveedorRepository>();
+builder.Services.AddTransient<IAdmActividadProveedorRepository, AdmActividadProveedorRepository>();
+builder.Services.AddTransient<IAdmComunicacionProveedorRepository, AdmComunicacionProveedorRepository>();
+
+//ADM Services
+builder.Services.AddTransient<IAdmTituloService, AdmTituloService>();
+builder.Services.AddTransient<IAdmDescriptivasService, AdmDescriptivasService>();
+builder.Services.AddTransient<IAdmProveedoresService, AdmProveedoresService>();
+builder.Services.AddTransient<IAdmProveedoresActividadService, AdmProveedoresActividadService>();
+builder.Services.AddTransient<IAdmProveedoresComunicacionService, AdmProveedoresComunicacionService>();
+builder.Services.AddTransient<IAdmProveedoresContactoService, AdmProveedoresContactosService>();
+builder.Services.AddTransient<IAdmProveedoresDireccionesService, AdmProveedoresDireccionesService>();
+
 
 
 // Register AutoMapper
@@ -274,6 +293,10 @@ builder.Services.AddDbContext<DataContextSis>(options =>
 var bmConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionBM");
 builder.Services.AddDbContext<DataContextBm>(options =>
     options.UseOracle(bmConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
+var admConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionADM");
+builder.Services.AddDbContext<DataContextAdm>(options =>
+    options.UseOracle(admConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 
 

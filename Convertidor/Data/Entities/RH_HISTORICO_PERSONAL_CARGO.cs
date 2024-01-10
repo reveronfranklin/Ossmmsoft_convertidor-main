@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Convertidor.Data.Entities
+﻿namespace Convertidor.Data.Entities
 {
     public class RH_HISTORICO_PERSONAL_CARGO
     {

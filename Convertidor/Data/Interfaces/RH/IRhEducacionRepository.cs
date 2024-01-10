@@ -1,6 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Rh;
-using Convertidor.Dtos.Rh;
+﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Dtos;
 
 namespace Convertidor.Data.Interfaces.RH

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Convertidor.Data.EntitiesDestino
+﻿namespace Convertidor.Data.EntitiesDestino
 {
     public class ConceptosRetenciones
     {

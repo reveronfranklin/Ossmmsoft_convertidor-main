@@ -1,12 +1,7 @@
-﻿using System;
-using System.Data;
-using System.Security.Policy;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Oracle.ManagedDataAccess.Client;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {

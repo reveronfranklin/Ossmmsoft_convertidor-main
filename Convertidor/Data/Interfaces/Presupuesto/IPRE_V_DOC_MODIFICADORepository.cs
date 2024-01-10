@@ -1,5 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
 
 namespace Convertidor.Data.Interfaces.Presupuesto

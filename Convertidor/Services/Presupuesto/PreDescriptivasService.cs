@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
+
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Presupuesto;
-using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
-using Convertidor.Dtos.Bm;
 using Convertidor.Dtos.Presupuesto;
-using Convertidor.Services.Rh;
-using NuGet.Packaging;
 
 namespace Convertidor.Services.Presupuesto
 {

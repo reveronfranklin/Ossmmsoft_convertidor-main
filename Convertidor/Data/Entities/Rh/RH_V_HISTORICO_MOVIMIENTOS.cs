@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Data.Entities.Rh
+﻿namespace Convertidor.Data.Entities.Rh
 {
 
     public class RH_V_HISTORICO_MOVIMIENTOS

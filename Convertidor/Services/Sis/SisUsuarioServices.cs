@@ -1,16 +1,8 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using AutoMapper;
+﻿using System.Security.Claims;
 using Convertidor.Data.Entities.Sis;
-using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Sis;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using NuGet.Protocol.Core.Types;
 
 namespace Convertidor.Services.Sis
 {

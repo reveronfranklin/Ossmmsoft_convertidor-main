@@ -1,8 +1,4 @@
-﻿using System;
-using MessagePack;
-using StackExchange.Redis;
-
-namespace Convertidor.Dtos.Presupuesto
+﻿namespace Convertidor.Dtos.Presupuesto
 {
 	public class PreDenominacionPorPartidaDto
 	{
