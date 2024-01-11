@@ -31,6 +31,15 @@ namespace Convertidor.Controllers
             var result = await _service.GetAll();
             return Ok(result);
         }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByCodigo(RhTiposNominaFilterDto filter)
+        {
+            var result = await _service.GetByCodigo(filter);
+            return Ok(result);
+        }
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GetTipoNominaByCodigoPersona(PersonaFilterDto filter)
