@@ -7,7 +7,7 @@ namespace Convertidor.Services.Rh
 	{
 
         Task<List<ListConceptosDto>> GetAll();
-
+        Task<RhConceptosResponseDto> GetByCodigo(RhConceptosFilterDto filter);
         Task<List<ListConceptosDto>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta);
         Task<ResultDto<RhConceptosResponseDto>> Create(RhConceptosUpdateDto dto);
         Task<ResultDto<RhConceptosResponseDto>> Update(RhConceptosUpdateDto dto);

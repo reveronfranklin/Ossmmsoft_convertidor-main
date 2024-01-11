@@ -32,6 +32,16 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByCodigo(RhConceptosFilterDto filter)
+        {   
+            var result = await _service.GetByCodigo(filter);
+            return Ok(result);
+        }
+
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GetConceptosByPersonas(PersonaFilterDto filter)
