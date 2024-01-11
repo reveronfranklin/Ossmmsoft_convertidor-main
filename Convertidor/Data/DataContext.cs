@@ -23,6 +23,8 @@ namespace Convertidor.Data
         public DbSet<RH_DESCRIPTIVAS> RH_DESCRIPTIVAS { get; set; }
         public DbSet<RH_DIRECCIONES> RH_DIRECCIONES { get; set; }
         public DbSet<RH_CONCEPTOS> RH_CONCEPTOS { get; set; }
+        public DbSet<RH_CONCEPTOS_ACUMULA> RH_CONCEPTOS_ACUMULA { get; set; }
+        
         public DbSet<RH_RELACION_CARGOS> RH_RELACION_CARGOS { get; set; }
         public DbSet<RH_PROCESOS> RH_PROCESOS { get; set; }
         public DbSet<RH_PROCESOS_DETALLES> RH_PROCESOS_DETALLES { get; set; }
@@ -365,6 +367,18 @@ namespace Convertidor.Data
                 });
                 builder.ToTable("RH_CONCEPTOS");
             });
+            
+            modelBuilder.Entity<RH_CONCEPTOS_ACUMULA>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_CONCEPTO_ACUMULA,
+
+                });
+                builder.ToTable("RH_CONCEPTOS_ACUMULA");
+            });
+
+            
 
             modelBuilder.Entity<RH_COMUNICACIONES>(builder =>
             {
