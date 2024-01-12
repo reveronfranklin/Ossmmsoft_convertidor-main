@@ -49,7 +49,23 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<List<RH_MOV_NOMINA>> GetByPersona(int codigoPersona)
+        {
+            try
+            {
+                var result = await _context.RH_MOV_NOMINA.DefaultIfEmpty()
+                    .Where(e =>  e.CODIGO_PERSONA==codigoPersona )
+                    .ToListAsync();
 
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
 
         public async Task<List<RH_MOV_NOMINA>> GetAll()
         {

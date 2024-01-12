@@ -201,6 +201,7 @@ builder.Services.AddTransient<IRhConceptosFormulaRepository, RhConceptosFormulaR
 builder.Services.AddTransient<IRhConceptosFormulaService, RhConceptosFormulaService>();
 builder.Services.AddTransient<IRhConceptosPUCRepository, RhConceptosPUCRepository>();
 builder.Services.AddTransient<IRhConceptosPUCService, RhConceptosPUCService>();
+builder.Services.AddTransient<IRhMovNominaService, RhMovNominaService>();
 
 
 

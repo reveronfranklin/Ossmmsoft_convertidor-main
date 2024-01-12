@@ -6,6 +6,7 @@ namespace Convertidor.Data.Interfaces.RH
 	public interface IRhMovNominaRepository
 	{
         Task<RH_MOV_NOMINA> GetByCodigo(int codigoMovNomina);
+        Task<List<RH_MOV_NOMINA>> GetByPersona(int codigoPersona);
         Task<List<RH_MOV_NOMINA>> GetAll();
         Task<ResultDto<RH_MOV_NOMINA>> Add(RH_MOV_NOMINA entity);
         Task<ResultDto<RH_MOV_NOMINA>> Update(RH_MOV_NOMINA entity);
