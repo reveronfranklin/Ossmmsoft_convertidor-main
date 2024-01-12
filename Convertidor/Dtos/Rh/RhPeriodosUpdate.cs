@@ -24,4 +24,9 @@ public class RhPeriodosUpdate
     public DateTime FechaPrenomina { get; set; }
     public int CodigoPresupuesto { get; set; }
     public string Descripcion { get; set; } = string.Empty;
+    
+    public bool UpdatePreNomina { get; set; }
+    public bool UpdatePreCierre { get; set; }
+    public bool UpdateCierre { get; set; }
+    
 }
