@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace  Convertidor.Data.Entities.Sis
 {
-    public partial class OssFuncione
+    public partial class OssFuncion
     {
         public int Id { get; set; }
         public string Funcion { get; set; } = null!;

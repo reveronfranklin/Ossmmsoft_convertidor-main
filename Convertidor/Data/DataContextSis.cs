@@ -22,7 +22,7 @@ namespace Convertidor.Data
         public virtual DbSet<OssCalculo> OssCalculos { get; set; } = null!;
         public virtual DbSet<OssCalculoHistorico> OssCalculoHistoricos { get; set; } = null!;
         public virtual DbSet<OssFormula> OssFormulas { get; set; } = null!;
-        public virtual DbSet<OssFuncione> OssFunciones { get; set; } = null!;
+        public virtual DbSet<OssFuncion> OssFunciones { get; set; } = null!;
         public virtual DbSet<OssModulo> OssModulos { get; set; } = null!;
         public virtual DbSet<OssVariable> OssVariables { get; set; } = null!;
 
@@ -323,7 +323,7 @@ namespace Convertidor.Data
                     .HasConstraintName("OSS_FORMULA_OSS_MODULO_FK");
             })
 
-            .Entity<OssFuncione>(entity =>
+            .Entity<OssFuncion>(entity =>
             {
                 entity.HasNoKey();
                 entity.HasKey(table => new
