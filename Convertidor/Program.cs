@@ -99,6 +99,7 @@ builder.Services.AddTransient<IUtilityService, UtilityService>();
 builder.Services.AddTransient<IOssModuloRepository, OssModuloRepository>();
 builder.Services.AddTransient<IOssVariableRepository, OssVariableRepository>();
 builder.Services.AddTransient<IOssFuncionRepository, OssFuncionRepository>();
+builder.Services.AddTransient<IOssFormulaRepository, OssFormulaRepository>();
 
 //Services Sis
 builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
@@ -107,7 +108,7 @@ builder.Services.AddTransient<IEmailServices, EmailServices>();
 builder.Services.AddTransient<IOssModuloService, OssModuloService>();
 builder.Services.AddTransient<IOssVariableService, OssVariableService>();
 builder.Services.AddTransient<IOssFuncionService, OssFuncionService>();
-
+builder.Services.AddTransient<IOssFormulaService, OssFormulaService>();
 
 
 

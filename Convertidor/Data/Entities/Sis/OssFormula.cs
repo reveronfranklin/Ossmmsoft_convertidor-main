@@ -13,7 +13,7 @@ namespace  Convertidor.Data.Entities.Sis
         public int? OrdenCalculo { get; set; }
         public string CodigoExterno { get; set; } = null!;
         public int? UsuarioIns { get; set; }
-        public int? FechaIns { get; set; }
+        public DateTime? FechaIns { get; set; }
         public int? UsuarioUpd { get; set; }
         public DateTime? FechaUpd { get; set; }
         public int? CodigoEmpresa { get; set; }
