@@ -121,3 +121,7 @@ Redis
 docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
 
 
+dotnet ef dbcontext scaffold "Data Source=10.211.55.4:1521/XE;User Id=SIS;Password=SIS;Validate Connection=true;" Oracle.EntityFrameworkCore --output-dir DataTmp
+
+
+

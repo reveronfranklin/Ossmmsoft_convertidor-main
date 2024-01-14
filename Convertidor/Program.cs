@@ -96,13 +96,14 @@ builder.Services.AddTransient<IOssConfigRepository, OssConfigRepository>();
 builder.Services.AddTransient<ISisUbicacionNacionalRepository, SisUbicacionNacionalRepository>();
 builder.Services.AddTransient<ISisUbicacionService, SisUbicacionService>();
 builder.Services.AddTransient<IUtilityService, UtilityService>();
-
+builder.Services.AddTransient<IOssModuloRepository, OssModuloRepository>();
 
 
 //Services Sis
 builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
 builder.Services.AddTransient<IOssConfigServices, OssServices>();
 builder.Services.AddTransient<IEmailServices, EmailServices>();
+builder.Services.AddTransient<IOssModuloService, OssModuloService>();
 
 
 
