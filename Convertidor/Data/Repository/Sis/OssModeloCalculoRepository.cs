@@ -10,22 +10,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Sis
 {
-	public class OssFormulaRepository: IOssFormulaRepository
+	public class OssModeloCalculoRepository: IOssModeloCalculoRepository
     {
 		
         private readonly DataContextSis _context;
 
-        public OssFormulaRepository(DataContextSis context)
+        public OssModeloCalculoRepository(DataContextSis context)
         {
             _context = context;
         }
-
       
-        public async Task<OssFormula> GetById(int id)
+        public async Task<OssModeloCalculo> GetByCodigo(int id)
         {
             try
             {
-                var result = await _context.OssFormulas.DefaultIfEmpty().Where(e => e.Id == id).FirstOrDefaultAsync();
+                var result = await _context.OssModeloCalculo.DefaultIfEmpty().Where(e => e.Id == id).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -36,28 +35,13 @@ namespace Convertidor.Data.Repository.Sis
             }
 
         }
-        
-        public async Task<List<OssFormula>> GetByIdModeloCalculo(int idModeloCalculo)
-        {
-            try
-            {
-                var result = await _context.OssFormulas.DefaultIfEmpty().Where(e => e.IdModeloCalculo == idModeloCalculo).ToListAsync();
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.Message;
-                return null;
-            }
-
-        }
+      
  
-        public async Task<List<OssFormula>> GetByAll()
+        public async Task<List<OssModeloCalculo>> GetByAll()
         {
             try
             {
-                var result = await _context.OssFormulas.DefaultIfEmpty().ToListAsync();
+                var result = await _context.OssModeloCalculo.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -70,15 +54,15 @@ namespace Convertidor.Data.Repository.Sis
         }
         
 
-        public async Task<ResultDto<OssFormula>> Add(OssFormula entity)
+        public async Task<ResultDto<OssModeloCalculo>> Add(OssModeloCalculo entity)
         {
-            ResultDto<OssFormula> result = new ResultDto<OssFormula>(null);
+            ResultDto<OssModeloCalculo> result = new ResultDto<OssModeloCalculo>(null);
             try
             {
 
 
 
-                await _context.OssFormulas.AddAsync(entity);
+                await _context.OssModeloCalculo.AddAsync(entity);
                 _context.SaveChanges();
 
 
@@ -101,18 +85,18 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-        public async Task<ResultDto<OssFormula>> Update(OssFormula entity)
+        public async Task<ResultDto<OssModeloCalculo>> Update(OssModeloCalculo entity)
         {
-            ResultDto<OssFormula> result = new ResultDto<OssFormula>(null);
+            ResultDto<OssModeloCalculo> result = new ResultDto<OssModeloCalculo>(null);
 
             try
             {
-                OssFormula entityUpdate = await GetById(entity.Id);
+                OssModeloCalculo entityUpdate = await GetByCodigo(entity.Id);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.OssFormulas.Update(entity);
+                    _context.OssModeloCalculo.Update(entity);
                     _context.SaveChanges();
                     result.Data = entity;
                     result.IsValid = true;
@@ -137,10 +121,10 @@ namespace Convertidor.Data.Repository.Sis
 
             try
             {
-                OssFormula entity = await GetById(id);
+                OssModeloCalculo entity = await GetByCodigo(id);
                 if (entity != null)
                 {
-                    _context.OssFormulas.Remove(entity);
+                    _context.OssModeloCalculo.Remove(entity);
                     _context.SaveChanges();
                 }
                 return "";
@@ -156,12 +140,12 @@ namespace Convertidor.Data.Repository.Sis
 
 
 
-        public async Task<int> GetNextKey()
+        public async Task<int> GetNextKey() 
         {
             try
             {
                 int result = 0;
-                var last = await _context.OssFormulas.DefaultIfEmpty()
+                var last = await _context.OssModeloCalculo.DefaultIfEmpty()
                     .OrderByDescending(x => x.Id)
                     .FirstOrDefaultAsync();
                 if (last == null)

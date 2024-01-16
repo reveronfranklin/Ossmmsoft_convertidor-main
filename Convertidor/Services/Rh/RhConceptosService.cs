@@ -112,6 +112,7 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.FechaIns = dtos.FECHA_INS;
             itemResult.UsuarioUpd = dtos.USUARIO_UPD;
             itemResult.CodigoEmpresa = dtos.CODIGO_EMPRESA;
+            itemResult.IdModeloCalculo = dtos.ID_MODELO_CALCULO;
 
             return itemResult;
 
@@ -286,6 +287,7 @@ namespace Convertidor.Data.Repository.Rh
                 entity.FRECUENCIA_ID = dto.FrecuenciaId;
                 entity.DEDUSIBLE = dto.Dedusible;
                 entity.AUTOMATICO = dto.Automatico;
+                entity.ID_MODELO_CALCULO = dto.IdModeloCalculo;
 
                 
 
@@ -478,7 +480,7 @@ namespace Convertidor.Data.Repository.Rh
                 concepto.FRECUENCIA_ID = dto.FrecuenciaId;
                 concepto.DEDUSIBLE = dto.Dedusible;
                 concepto.AUTOMATICO = dto.Automatico;
-
+                concepto.ID_MODELO_CALCULO = dto.IdModeloCalculo;
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 concepto.CODIGO_EMPRESA = conectado.Empresa;

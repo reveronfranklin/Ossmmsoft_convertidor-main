@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace  Convertidor.Data.Entities.Sis
+namespace Convertidor.Data.Entities.Sis
 {
     public partial class OssVariable
     {

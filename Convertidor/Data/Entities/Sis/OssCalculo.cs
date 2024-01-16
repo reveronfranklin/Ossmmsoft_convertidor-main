@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace  Convertidor.Data.Entities.Sis{
+namespace Convertidor.Data.Entities.Sis
+{
     public partial class OssCalculo
     {
         public int Id { get; set; }
@@ -23,7 +24,9 @@ namespace  Convertidor.Data.Entities.Sis{
         public DateTime? FechaUpd { get; set; }
         public int? CodigoEmpresa { get; set; }
         public int? ModuloId { get; set; }
+        public int? IdModeloCalculo { get; set; }
 
+        public virtual OssModeloCalculo? IdModeloCaculoNavigation { get; set; }
         public virtual OssModulo? Modulo { get; set; }
         public virtual OssVariable? ModuloNavigation { get; set; }
     }

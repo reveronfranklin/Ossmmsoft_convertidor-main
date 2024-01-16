@@ -45,6 +45,13 @@ namespace Convertidor.Controllers
         }
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> GetByModeloCalculo(OssFormulaFilterDto dto)
+        {
+            var result = await _service.GetByIdModeloCalculo(dto);
+            return Ok(result);
+        }
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> GetById(OssFormulaFilterDto dto)
         {
             var result = await _service.GetById(dto);

@@ -22,6 +22,8 @@
         public int FrecuenciaId { get; set; }
         public int Dedusible { get; set; } 
         public int Automatico { get; set; } 
+        public int IdModeloCalculo { get; set; } 
+        
         
         }
 

@@ -100,6 +100,8 @@ builder.Services.AddTransient<IOssModuloRepository, OssModuloRepository>();
 builder.Services.AddTransient<IOssVariableRepository, OssVariableRepository>();
 builder.Services.AddTransient<IOssFuncionRepository, OssFuncionRepository>();
 builder.Services.AddTransient<IOssFormulaRepository, OssFormulaRepository>();
+builder.Services.AddTransient<IOssModeloCalculoRepository, OssModeloCalculoRepository>();
+builder.Services.AddTransient<IOssCalculoRepository, OssCalculoRepository>();
 
 //Services Sis
 builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();

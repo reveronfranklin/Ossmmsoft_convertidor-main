@@ -10,5 +10,6 @@ public interface IOssFormulaService
     Task<ResultDto<OssFormulaDeleteDto>> Delete(OssFormulaDeleteDto dto);
     Task<ResultDto<OssFormulaResponseDto>> GetById(OssFormulaFilterDto dto);
     Task<ResultDto<List<OssFormulaResponseDto>>> GetAll();
+    Task<ResultDto<List<OssFormulaResponseDto>>> GetByIdModeloCalculo(OssFormulaFilterDto dto);
 
 }

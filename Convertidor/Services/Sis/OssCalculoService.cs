@@ -18,33 +18,38 @@ using NPOI.SS.Formula.Functions;
 namespace Convertidor.Services.Sis
 {
     
-	public class OssFormulaService: IOssFormulaService
+	public class OssCalculoService: IOssCalculoService
     {
 
       
-        private readonly IOssFormulaRepository _repository;
+        private readonly IOssCalculoRepository _repository;
         private readonly IOssVariableRepository _variableRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IOssModeloCalculoRepository _ossModeloCalculoRepository;
+        private readonly IOssConfigServices _ossConfigService;
+    
 
 
-        public OssFormulaService(IOssFormulaRepository repository,
+        public OssCalculoService(IOssCalculoRepository repository,
                                         IOssVariableRepository variableRepository,
                                         ISisUsuarioRepository sisUsuarioRepository,
-                                        IOssModeloCalculoRepository ossModeloCalculoRepository)
+                                        IOssModeloCalculoRepository ossModeloCalculoRepository,
+                                        IOssConfigServices ossConfigService)
 		{
             _repository = repository;
             _variableRepository = variableRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _ossModeloCalculoRepository = ossModeloCalculoRepository;
+            _ossConfigService = ossConfigService;
+           
         }
 
         
        
        
-        public  async Task<OssFormulaResponseDto> MapOssFormulaDto(OssFormula dtos)
+        public  async Task<OssCalculoResponseDto> MapOssCalculoDto(OssCalculo dtos)
         {
-            OssFormulaResponseDto itemResult = new OssFormulaResponseDto();
+            OssCalculoResponseDto itemResult = new OssCalculoResponseDto();
             
             try
             {
@@ -53,13 +58,19 @@ namespace Convertidor.Services.Sis
                     return itemResult;
                 }
                 itemResult.Id = dtos.Id;
+                itemResult.IdCalculo = dtos.IdCalculo;
                 itemResult.CodeVariable = dtos.CodeVariable;
                 itemResult.IdVariable = dtos.IdVariable;
                 itemResult.Formula = dtos.Formula;
                 itemResult.FormulaDescripcion = dtos.FormulaDescripcion;
+                itemResult.FormulaValor = dtos.FormulaValor;
                 itemResult.OrdenCalculo = dtos.OrdenCalculo;
-                itemResult.IdModeloCalculo = dtos.IdModeloCalculo;
+                itemResult.Valor = dtos.Valor;
+                itemResult.Query = dtos.Query;
+                itemResult.CodeVariableExterno = dtos.CodeVariableExterno;
+                itemResult.IdCalculoExterno = dtos.IdCalculoExterno;
                 itemResult.ModuloId = (int)dtos.ModuloId;
+                itemResult.IdModeloCaculo = (int)dtos.IdModeloCalculo;
                 return itemResult;
 
             }
@@ -72,9 +83,9 @@ namespace Convertidor.Services.Sis
           
         }
 
-        public async Task< List<OssFormulaResponseDto>> MapListOssFormulaDto(List<OssFormula> dtos)
+        public async Task< List<OssCalculoResponseDto>> MapListOssCalculoDto(List<OssCalculo> dtos)
         {
-            List<OssFormulaResponseDto> result = new List<OssFormulaResponseDto>();
+            List<OssCalculoResponseDto> result = new List<OssCalculoResponseDto>();
             if (dtos.Count > 0)
             {
                 foreach (var item in dtos)
@@ -85,7 +96,7 @@ namespace Convertidor.Services.Sis
                     }
                     else
                     {
-                        var itemResult =  await MapOssFormulaDto(item);
+                        var itemResult =  await MapOssCalculoDto(item);
                
                         result.Add(itemResult);
                     }
@@ -102,14 +113,14 @@ namespace Convertidor.Services.Sis
         }
       
       
-        public async Task<ResultDto<OssFormulaResponseDto?>> Update(OssFormulaUpdateDto dto)
+        public async Task<ResultDto<OssCalculoResponseDto?>> Update(OssCalculoUpdateDto dto)
         {
 
-            ResultDto<OssFormulaResponseDto?> result = new ResultDto<OssFormulaResponseDto?>(null);
+            ResultDto<OssCalculoResponseDto?> result = new ResultDto<OssCalculoResponseDto?>(null);
             try
             {
-                var formula = await _repository.GetById(dto.Id);
-                if (formula == null)
+                var calculo = await _repository.GetById(dto.Id);
+                if (calculo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -134,21 +145,7 @@ namespace Convertidor.Services.Sis
                     return result;
                 }
                 
-                if (String.IsNullOrEmpty(dto.Formula) )
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Formula Invalido";
-                    return result;
-                }
-                if (String.IsNullOrEmpty(dto.FormulaDescripcion) )
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Descripcion Invalida";
-                    return result;
-                }
-
+                
                 var modeloCalculo = await _ossModeloCalculoRepository.GetByCodigo(dto.IdModeloCalculo);
                 if (modeloCalculo==null)
                 {
@@ -165,19 +162,25 @@ namespace Convertidor.Services.Sis
                     result.Message = "Orden de Calculo Invalida";
                     return result;
                 }
-                formula.Formula = dto.Formula;
-                formula.FormulaDescripcion = dto.FormulaDescripcion;
-                formula.IdVariable = dto.Id;
-                formula.CodeVariable =dto.CodeVariable;
-                formula.IdModeloCalculo = dto.IdModeloCalculo;
-                formula.ModuloId = dto.ModuloId;
+                calculo.IdVariable = dto.Id;
+                calculo.CodeVariable =dto.CodeVariable;
+                calculo.Formula = dto.Formula;
+                calculo.FormulaDescripcion = dto.FormulaDescripcion;
+                calculo.FormulaValor = dto.FormulaValor;
+                calculo.Valor = dto.Valor;
+                calculo.Query = dto.Query;
+                calculo.OrdenCalculo = dto.OrdenCalculo;
+                calculo.CodeVariableExterno = dto.CodeVariableExterno;
+                calculo.IdCalculoExterno = dto.IdCalculoExterno;
+                calculo.IdModeloCalculo = dto.IdModeloCalculo;
+                calculo.ModuloId = dto.ModuloId;
                 
-                formula.FechaUpd = DateTime.Now;
+                calculo.FechaUpd = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                formula.CodigoEmpresa = conectado.Empresa;
-                formula.UsuarioUpd = conectado.Usuario;
-                await _repository.Update(formula);
-                var resultDto = await  MapOssFormulaDto(formula);
+                calculo.CodigoEmpresa = conectado.Empresa;
+                calculo.UsuarioUpd = conectado.Usuario;
+                await _repository.Update(calculo);
+                var resultDto = await  MapOssCalculoDto(calculo);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -194,10 +197,10 @@ namespace Convertidor.Services.Sis
             return result;
         }
 
-        public async Task<ResultDto<OssFormulaResponseDto>> Create(OssFormulaUpdateDto dto)
+        public async Task<ResultDto<OssCalculoResponseDto>> Create(OssCalculoUpdateDto dto,int idCalculo)
         {
 
-            ResultDto<OssFormulaResponseDto> result = new ResultDto<OssFormulaResponseDto>(null);
+            ResultDto<OssCalculoResponseDto> result = new ResultDto<OssCalculoResponseDto>(null);
             try
             {
                
@@ -218,20 +221,7 @@ namespace Convertidor.Services.Sis
                     return result;
                 }
                 
-                if (String.IsNullOrEmpty(dto.Formula) )
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Formula Invalido";
-                    return result;
-                }
-                if (String.IsNullOrEmpty(dto.FormulaDescripcion) )
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Descripcion Invalida";
-                    return result;
-                }
+                
                 var modeloCalculo = await _ossModeloCalculoRepository.GetByCodigo(dto.IdModeloCalculo);
                 if (modeloCalculo==null)
                 {
@@ -240,7 +230,6 @@ namespace Convertidor.Services.Sis
                     result.Message = "Modelo de Calculo Invalido";
                     return result;
                 }
-
                 if (dto.OrdenCalculo == null) dto.OrdenCalculo = 0;
                 if (dto.OrdenCalculo<0 )
                 {
@@ -249,13 +238,21 @@ namespace Convertidor.Services.Sis
                     result.Message = "Orden de Calculo Invalida";
                     return result;
                 }
+              
                 
-                OssFormula entity = new OssFormula();
+                OssCalculo entity = new OssCalculo();
                 entity.Id = await _repository.GetNextKey();
-                entity.Formula = dto.Formula;
-                entity.FormulaDescripcion = dto.FormulaDescripcion;
+                entity.IdCalculo = idCalculo;
                 entity.IdVariable = dto.Id;
                 entity.CodeVariable =dto.CodeVariable;
+                entity.Formula = dto.Formula;
+                entity.FormulaDescripcion = dto.FormulaDescripcion;
+                entity.FormulaValor = dto.FormulaValor;
+                entity.Valor = dto.Valor;
+                entity.Query = dto.Query;
+                entity.OrdenCalculo = dto.OrdenCalculo;
+                entity.CodeVariableExterno = dto.CodeVariableExterno;
+                entity.IdCalculoExterno = dto.IdCalculoExterno;
                 entity.IdModeloCalculo = dto.IdModeloCalculo;
                 entity.ModuloId = dto.ModuloId;
                 
@@ -268,7 +265,7 @@ namespace Convertidor.Services.Sis
                 
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapOssFormulaDto(created.Data);
+                    var resultDto = await MapOssCalculoDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -301,19 +298,19 @@ namespace Convertidor.Services.Sis
             return result;
         }
  
-        public async Task<ResultDto<OssFormulaDeleteDto>> Delete(OssFormulaDeleteDto dto)
+        public async Task<ResultDto<OssCalculoDeleteDto>> Delete(OssCalculoDeleteDto dto)
         {
 
-            ResultDto<OssFormulaDeleteDto> result = new ResultDto<OssFormulaDeleteDto>(null);
+            ResultDto<OssCalculoDeleteDto> result = new ResultDto<OssCalculoDeleteDto>(null);
             try
             {
 
-                var formula = await _repository.GetById(dto.Id);
-                if (formula == null)
+                var calculo = await _repository.GetById(dto.Id);
+                if (calculo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Formula No existe";
+                    result.Message = "Calculo No existe";
                     return result;
                 }
 
@@ -348,22 +345,22 @@ namespace Convertidor.Services.Sis
             return result;
         }
 
-        public async Task<ResultDto<OssFormulaResponseDto>> GetById(OssFormulaFilterDto dto)
+        public async Task<ResultDto<OssCalculoResponseDto>> GetById(OssFormulaFilterDto dto)
         { 
-            ResultDto<OssFormulaResponseDto> result = new ResultDto<OssFormulaResponseDto>(null);
+            ResultDto<OssCalculoResponseDto> result = new ResultDto<OssCalculoResponseDto>(null);
             try
             {
 
-                var formula = await _repository.GetById(dto.Id);
-                if (formula == null)
+                var calculo = await _repository.GetById(dto.Id);
+                if (calculo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Modulo no existe";
+                    result.Message = "Calculo no existe";
                     return result;
                 }
                 
-                var resultDto =  await MapOssFormulaDto(formula);
+                var resultDto =  await MapOssCalculoDto(calculo);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -379,69 +376,62 @@ namespace Convertidor.Services.Sis
             return result;
         }
 
-        public async Task<ResultDto<List<OssFormulaResponseDto>>> GetByIdModeloCalculo(OssFormulaFilterDto dto)
+        public async Task<ResultDto<List<OssCalculoResponseDto>>> GetByIdCalculo(OssFormulaFilterDto dto)
         { 
-            ResultDto<List<OssFormulaResponseDto>> result = new ResultDto<List<OssFormulaResponseDto>>(null);
+            ResultDto<List<OssCalculoResponseDto>> result = new ResultDto<List<OssCalculoResponseDto>>(null);
             try
             {
 
-                var formula = await _repository.GetByIdModeloCalculo(dto.IdModuloCalculo);
-                if (formula == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Modulo no existe";
-                    return result;
-                }
-                
-                var resultDto =  await MapListOssFormulaDto(formula);
-                result.Data = resultDto;
-                result.IsValid = true;
-                result.Message = "";
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-            }
-
-            return result;
-        }
-
-
-        public async Task<ResultDto<List<OssFormulaResponseDto>>> GetAll()
-        {
-            ResultDto<List<OssFormulaResponseDto>> result = new ResultDto<List<OssFormulaResponseDto>>(null);
-            try
-            {
-
-                var formulas = await _repository.GetByAll();
-                if (formulas == null)
+                var calculo = await _repository.GetByIdCalculo(dto.IdCalculo);
+                if (calculo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "No Data";
                     return result;
                 }
-                 
-                var resultDto = await  MapListOssFormulaDto(formulas);
+                
+                var resultDto =  await MapListOssCalculoDto(calculo);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
-                return result;
+
             }
             catch (Exception ex)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = ex.Message;
-                return result;
             }
-           
+
+            return result;
         }
 
+        
+
+        public async Task<int> GetNextCalculo()
+        {
+            try
+            {
+               
+                
+                var result = await _ossConfigService.GetNextByClave("IdCalculo");
+               
+
+                return (int)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return 0;
+            }
+
+
+
+        }
+
+       
         
     }
 }

@@ -8,6 +8,7 @@ public class OssFormulaUpdateDto
     public string? Formula { get; set; }
     public string? FormulaDescripcion { get; set; }
     public int? OrdenCalculo { get; set; }
-    public string CodigoExterno { get; set; } = null!;
+    public int  IdModeloCalculo { get; set; } 
+  
     public int ModuloId { get; set; }
 }
