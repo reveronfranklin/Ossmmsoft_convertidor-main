@@ -11,16 +11,12 @@ namespace Convertidor.Data.Repository.Rh
 	public class RhHPeriodoService: IRhHPeriodoService
     {
 		
-        private readonly DataContext _context;
-
-
-
-   
+        
         private readonly IRhHPeriodoRepository _repository;
         private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhPeriodoRepository _rhPeriodoRepository;
-        private readonly IMapper _mapper;
+      
 
         public RhHPeriodoService(IRhHPeriodoRepository repository,
                                  IRhTipoNominaRepository rhTipoNominaRepository,

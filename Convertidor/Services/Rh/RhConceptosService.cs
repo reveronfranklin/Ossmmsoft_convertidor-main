@@ -5,6 +5,7 @@ using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
+using NPOI.XSSF.Streaming;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -51,7 +52,44 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-      
+        public async Task<RhConceptosResponseDto> GetByCodigo(RhConceptosFilterDto filter)
+        {
+            try
+            {
+                var conceptos = await _repository.GetByCodigo(filter.CodigoConcepto);
+
+                var result = await MapConceptosDto(conceptos);
+
+
+                return (RhConceptosResponseDto)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+       
+        public async Task<RhConceptosResponseDto> GetByTipoNominaConcepto(int codigoTipoNomina,int codigoConcepto)
+        {
+            try
+            {
+                var conceptos = await _repository.GetByCodigoTipoNomina(codigoConcepto,codigoTipoNomina);
+
+                var result = await MapConceptosDto(conceptos);
+
+
+                return (RhConceptosResponseDto)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<List<ListConceptosDto>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta)
         {
             try
@@ -95,6 +133,7 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.FechaIns = dtos.FECHA_INS;
             itemResult.UsuarioUpd = dtos.USUARIO_UPD;
             itemResult.CodigoEmpresa = dtos.CODIGO_EMPRESA;
+            itemResult.IdModeloCalculo = dtos.ID_MODELO_CALCULO;
 
             return itemResult;
 
@@ -269,6 +308,7 @@ namespace Convertidor.Data.Repository.Rh
                 entity.FRECUENCIA_ID = dto.FrecuenciaId;
                 entity.DEDUSIBLE = dto.Dedusible;
                 entity.AUTOMATICO = dto.Automatico;
+                entity.ID_MODELO_CALCULO = dto.IdModeloCalculo;
 
                 
 
@@ -461,7 +501,7 @@ namespace Convertidor.Data.Repository.Rh
                 concepto.FRECUENCIA_ID = dto.FrecuenciaId;
                 concepto.DEDUSIBLE = dto.Dedusible;
                 concepto.AUTOMATICO = dto.Automatico;
-
+                concepto.ID_MODELO_CALCULO = dto.IdModeloCalculo;
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 concepto.CODIGO_EMPRESA = conectado.Empresa;

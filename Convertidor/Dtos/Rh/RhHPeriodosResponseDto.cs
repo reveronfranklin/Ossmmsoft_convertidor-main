@@ -8,6 +8,7 @@
         public int UsuarioInsH { get; set; }
         public int CodigoTipoNomina { get; set; }
         public DateTime FechaNomina { get; set; }
+       
         public int Periodo { get; set; }
         public string TipoNomina { get; set; }
         public string EXTRA1 { get; set; } = string.Empty;

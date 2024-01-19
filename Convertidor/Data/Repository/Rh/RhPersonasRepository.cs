@@ -75,7 +75,7 @@ namespace Convertidor.Data.Repository.Rh
                 var empresa = Int32.Parse(empresString);
                 entity.CODIGO_EMPRESA = empresa;
                 await _context.RH_PERSONAS.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -109,7 +109,7 @@ namespace Convertidor.Data.Repository.Rh
 
                     entity.CODIGO_EMPRESA = empresa;
                     _context.RH_PERSONAS.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -136,7 +136,7 @@ namespace Convertidor.Data.Repository.Rh
                 if (entity != null)
                 {
                     _context.RH_PERSONAS.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

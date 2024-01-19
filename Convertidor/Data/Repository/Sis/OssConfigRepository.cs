@@ -73,7 +73,7 @@ namespace Convertidor.Data.Repository.Sis
                 entity.ID = await GetNextKey();
 
                 await _context.OSS_CONFIG.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -107,7 +107,7 @@ namespace Convertidor.Data.Repository.Sis
 
 
                     _context.OSS_CONFIG.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";

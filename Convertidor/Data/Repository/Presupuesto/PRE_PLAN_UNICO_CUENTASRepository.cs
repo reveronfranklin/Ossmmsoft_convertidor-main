@@ -404,7 +404,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (entity != null)
                 {
                     _context.PRE_PLAN_UNICO_CUENTAS.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }
@@ -436,7 +436,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                     entity.USUARIO_UPD = conectado.Usuario;
                     entity.FECHA_UPD = DateTime.Now;
                     _context.PRE_PLAN_UNICO_CUENTAS.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";

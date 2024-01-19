@@ -23,6 +23,8 @@
         public int FRECUENCIA_ID { get; set; }
         public int DEDUSIBLE { get; set; }
         public int AUTOMATICO { get; set; }
+        
+        public int ID_MODELO_CALCULO { get; set; }
 
 
 

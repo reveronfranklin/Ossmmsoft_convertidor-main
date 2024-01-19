@@ -19,7 +19,7 @@ namespace Convertidor.Data.Repository
             try
             {
                 _context.IndiceCategoriaPrograma.Add(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -38,7 +38,7 @@ namespace Convertidor.Data.Repository
             try
             {
                 await _context.IndiceCategoriaPrograma.AddRangeAsync(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -106,7 +106,7 @@ namespace Convertidor.Data.Repository
             if (entity != null)
             {
                 _context.IndiceCategoriaPrograma.Remove(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
 
@@ -119,7 +119,7 @@ namespace Convertidor.Data.Repository
             if (entities != null)
             {
                 _context.IndiceCategoriaPrograma.RemoveRange(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
 
@@ -131,7 +131,7 @@ namespace Convertidor.Data.Repository
             if (entities != null && entities.Count>1)
             {
                 _context.IndiceCategoriaPrograma.RemoveRange(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
 

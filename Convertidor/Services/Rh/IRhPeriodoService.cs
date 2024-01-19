@@ -14,7 +14,10 @@ namespace Convertidor.Services.Rh
         Task<ResultDto<RhPeriodosResponseDto>> Create(RhPeriodosUpdate dto);
         Task<ResultDto<RhPeriodosResponseDto>> Update(RhPeriodosUpdate dto);
         Task<ResultDto<RhPeriodosDeleteDto>> Delete(RhPeriodosDeleteDto dto);
+        Task<ResultDto<RhPeriodosResponseDto>> UpdateDatosCierre(RhPeriodosUsuarioFechaUpdate dto);
+        Task<ResultDto<RhPeriodosResponseDto>> UpdateDatosPreCierre(RhPeriodosUsuarioFechaUpdate dto);
 
-    }
+        Task<ResultDto<RhPeriodosResponseDto>> UpdateDatosPrenomina(RhPeriodosUsuarioFechaUpdate dto);
+	}
 }
 

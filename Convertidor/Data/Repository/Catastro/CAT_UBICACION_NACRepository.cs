@@ -40,7 +40,7 @@ namespace Convertidor.Data.Repository.Catastro
             try
             {
                 _context.CAT_UBICACION_NAC.Add(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -61,7 +61,7 @@ namespace Convertidor.Data.Repository.Catastro
             {
 
                 _context.CAT_UBICACION_NAC.Update(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
 
@@ -125,7 +125,7 @@ namespace Convertidor.Data.Repository.Catastro
             if (entity != null)
             {
                 _context.CAT_UBICACION_NAC.Remove(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
 

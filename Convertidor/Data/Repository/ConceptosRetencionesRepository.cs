@@ -19,7 +19,7 @@ namespace Convertidor.Data.Repository
             try
             {
                 _context.ConceptosRetenciones.Add(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -37,7 +37,7 @@ namespace Convertidor.Data.Repository
             try
             {
                 await _context.ConceptosRetenciones.AddRangeAsync(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -81,7 +81,7 @@ namespace Convertidor.Data.Repository
             if (entities != null)
             {
                 _context.ConceptosRetenciones.RemoveRange(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
 
