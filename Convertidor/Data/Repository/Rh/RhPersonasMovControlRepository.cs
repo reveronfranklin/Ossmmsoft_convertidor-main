@@ -69,7 +69,7 @@ namespace Convertidor.Data.Repository.Rh
             {
 
                 await _context.RH_PERSONAS_MOV_CONTROL.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -101,7 +101,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                     _context.RH_PERSONAS_MOV_CONTROL.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -128,7 +128,7 @@ namespace Convertidor.Data.Repository.Rh
                 if (entity != null)
                 {
                     _context.RH_PERSONAS_MOV_CONTROL.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

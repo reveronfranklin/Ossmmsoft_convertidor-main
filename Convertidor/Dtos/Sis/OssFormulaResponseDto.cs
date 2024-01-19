@@ -10,4 +10,5 @@ public class OssFormulaResponseDto
     public int? OrdenCalculo { get; set; }
     public int IdModeloCalculo { get; set; } 
     public int ModuloId { get; set; }
+    public int AcumulaAlTotal { get; set; }
 }

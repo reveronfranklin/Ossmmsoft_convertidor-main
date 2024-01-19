@@ -14,10 +14,11 @@ namespace Convertidor.Data.Repository.Sis
     {
 		
         private readonly DataContextSis _context;
-
+   
         public OssCalculoRepository(DataContextSis context)
         {
             _context = context;
+           
         }
 
       
@@ -25,7 +26,7 @@ namespace Convertidor.Data.Repository.Sis
         {
             try
             {
-                var result = await _context.OssCalculos.DefaultIfEmpty().Where(e => e.Id == id).FirstOrDefaultAsync();
+                var result = await _context.OssCalculos.AsNoTracking().DefaultIfEmpty().Where(e => e.Id == id).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -41,7 +42,7 @@ namespace Convertidor.Data.Repository.Sis
         {
             try
             {
-                var result = await _context.OssCalculos.DefaultIfEmpty().Where(e => e.IdCalculo == idCalculo).ToListAsync();
+                var result = await _context.OssCalculos.AsNoTracking().DefaultIfEmpty().Where(e => e.IdCalculo == idCalculo).ToListAsync();
 
                 return result;
             }
@@ -52,8 +53,38 @@ namespace Convertidor.Data.Repository.Sis
             }
 
         }
-        
+        public async Task<OssCalculo> GetByIdCalculoCode(int idCalculo,string codeVariable)
+        {
+            try
+            {
+                var result = await _context.OssCalculos.AsNoTracking().DefaultIfEmpty().Where(e => e.IdCalculo == idCalculo && e.CodeVariable==codeVariable).FirstOrDefaultAsync();
 
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+        
+        public async Task<List<OssCalculo>> GetFormulasByIdCalculo(int idCalculo)
+        {
+            try
+            {
+                var result = await _context.OssCalculos.AsNoTracking().DefaultIfEmpty().Where(e => e.IdCalculo == idCalculo && e.Formula!=null && e.Formula.Length>0).OrderBy(e=>e.OrdenCalculo).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
         public async Task<ResultDto<OssCalculo>> Add(OssCalculo entity)
         {
             ResultDto<OssCalculo> result = new ResultDto<OssCalculo>(null);
@@ -63,7 +94,7 @@ namespace Convertidor.Data.Repository.Sis
 
 
                 await _context.OssCalculos.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -91,18 +122,14 @@ namespace Convertidor.Data.Repository.Sis
 
             try
             {
-                OssCalculo entityUpdate = await GetById(entity.Id);
-                if (entityUpdate != null)
-                {
-
-
+                  
                     _context.OssCalculos.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
+                    _context.Dispose();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
 
-                }
                 return result;
             }
             catch (Exception ex)
@@ -125,7 +152,7 @@ namespace Convertidor.Data.Repository.Sis
                 if (entity != null)
                 {
                     _context.OssCalculos.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }
@@ -145,7 +172,7 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                 int result = 0;
-                var last = await _context.OssCalculos.DefaultIfEmpty()
+                var last = await _context.OssCalculos.AsNoTracking().DefaultIfEmpty()
                     .OrderByDescending(x => x.Id)
                     .FirstOrDefaultAsync();
                 if (last == null)
@@ -170,7 +197,15 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+        public void ExecuteQueryUpdateValor(string valueFormula,int id,string tipoVariable)
+        {
+            var query = $"DECLARE \nBEGIN\n SIS.OSS_P_UPDATE_VALOR_CALCULO({ id.ToString()}, {valueFormula},{tipoVariable});\nEND;";
+            FormattableString xquery = $"DECLARE \nBEGIN\n SIS.OSS_P_UPDATE_VALOR_CALCULO({ id.ToString()}, {valueFormula},{tipoVariable});\nEND;";
+            //FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
+            var result = _context.Database.ExecuteSqlInterpolated(xquery);
 
+        }
+        
     }
 }
 

@@ -24,7 +24,7 @@ namespace Convertidor.Data.Repository.Sis
         {
             try
             {
-                var result = await _context.OssModeloCalculo.DefaultIfEmpty().Where(e => e.Id == id).FirstOrDefaultAsync();
+                var result = await _context.OssModeloCalculos.DefaultIfEmpty().Where(e => e.Id == id).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -41,7 +41,7 @@ namespace Convertidor.Data.Repository.Sis
         {
             try
             {
-                var result = await _context.OssModeloCalculo.DefaultIfEmpty().ToListAsync();
+                var result = await _context.OssModeloCalculos.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -62,8 +62,8 @@ namespace Convertidor.Data.Repository.Sis
 
 
 
-                await _context.OssModeloCalculo.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.OssModeloCalculos.AddAsync(entity);
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -96,8 +96,8 @@ namespace Convertidor.Data.Repository.Sis
                 {
 
 
-                    _context.OssModeloCalculo.Update(entity);
-                    _context.SaveChanges();
+                    _context.OssModeloCalculos.Update(entity);
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -124,8 +124,8 @@ namespace Convertidor.Data.Repository.Sis
                 OssModeloCalculo entity = await GetByCodigo(id);
                 if (entity != null)
                 {
-                    _context.OssModeloCalculo.Remove(entity);
-                    _context.SaveChanges();
+                    _context.OssModeloCalculos.Remove(entity);
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }
@@ -145,7 +145,7 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                 int result = 0;
-                var last = await _context.OssModeloCalculo.DefaultIfEmpty()
+                var last = await _context.OssModeloCalculos.DefaultIfEmpty()
                     .OrderByDescending(x => x.Id)
                     .FirstOrDefaultAsync();
                 if (last == null)

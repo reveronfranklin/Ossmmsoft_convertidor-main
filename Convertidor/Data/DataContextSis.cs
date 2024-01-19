@@ -18,12 +18,12 @@ namespace Convertidor.Data
     
         public DbSet<SIS_UBICACION_NACIONAL> SIS_UBICACION_NACIONAL { get; set; }
         public DbSet<OSS_CONFIG> OSS_CONFIG { get; set; }
-        
+
         public virtual DbSet<OssCalculo> OssCalculos { get; set; } = null!;
         public virtual DbSet<OssFormula> OssFormulas { get; set; } = null!;
         public virtual DbSet<OssFuncion> OssFunciones { get; set; } = null!;
+        public virtual DbSet<OssModeloCalculo> OssModeloCalculos { get; set; } = null!;
         public virtual DbSet<OssModulo> OssModulos { get; set; } = null!;
-        public virtual DbSet<OssModeloCalculo> OssModeloCalculo { get; set; } = null!;
         public virtual DbSet<OssVariable> OssVariables { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -58,9 +58,13 @@ namespace Convertidor.Data
                     });
                     builder.ToTable("OSS_CONFIG");
                 });
-           
-                   modelBuilder.Entity<OssCalculo>(entity =>
+            modelBuilder.Entity<OssCalculo>(entity =>
             {
+                entity.HasKey(table => new
+                {
+                    table.Id,
+
+                });
                 entity.ToTable("OSS_CALCULO");
 
                 entity.Property(e => e.Id)
@@ -97,10 +101,6 @@ namespace Convertidor.Data
                 entity.Property(e => e.Formula)
                     .IsUnicode(false)
                     .HasColumnName("FORMULA");
-
-                entity.Property(e => e.FormulaDescripcion)
-                    .IsUnicode(false)
-                    .HasColumnName("FORMULA_DESCRIPCION");
 
                 entity.Property(e => e.FormulaValor)
                     .IsUnicode(false)
@@ -144,47 +144,26 @@ namespace Convertidor.Data
                     .HasColumnName("USUARIO_UPD");
 
                 entity.Property(e => e.Valor)
-                    .HasColumnType("NUMBER")
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
                     .HasColumnName("VALOR");
-
-                entity.HasOne(d => d.IdModeloCaculoNavigation)
-                    .WithMany(p => p.OssCalculos)
-                    .HasForeignKey(d => d.IdModeloCalculo)
-                    .HasConstraintName("CALCULO_MODELO_CALCULO_FK");
-
-                entity.HasOne(d => d.Modulo)
-                    .WithMany(p => p.OssCalculos)
-                    .HasForeignKey(d => d.ModuloId)
-                    .HasConstraintName("OSS_CALCULO_OSS_MODULO_FK");
-
-                entity.HasOne(d => d.ModuloNavigation)
-                    .WithMany(p => p.OssCalculos)
-                    .HasForeignKey(d => d.ModuloId)
-                    .HasConstraintName("OSS_CALCULO_OSS_VARIABLES_FK");
-            });
-
-            modelBuilder.Entity<OssConfig>(entity =>
-            {
-                entity.ToTable("OSS_CONFIG");
-
-                entity.Property(e => e.Id)
+                entity.Property(e => e.AcumulaAlTotal)
                     .HasPrecision(10)
                     .ValueGeneratedNever()
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.Clave)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("CLAVE");
-
-                entity.Property(e => e.Valor)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("VALOR");
+                    .HasColumnName("ACUMULA_AL_TOTAL");
+               
+                
+                
             });
 
+       
             modelBuilder.Entity<OssFormula>(entity =>
             {
+                entity.HasKey(table => new
+                {
+                    table.Id,
+
+                });
                 entity.ToTable("OSS_FORMULA");
 
                 entity.Property(e => e.Id)
@@ -240,28 +219,20 @@ namespace Convertidor.Data
                 entity.Property(e => e.UsuarioUpd)
                     .HasPrecision(10)
                     .HasColumnName("USUARIO_UPD");
-
-                entity.HasOne(d => d.IdModeloCalculoNavigation)
-                    .WithMany(p => p.OssFormulas)
-                    .HasForeignKey(d => d.IdModeloCalculo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FORMULA_MODELO_CALCULO_FK");
-
-                entity.HasOne(d => d.IdVariableNavigation)
-                    .WithMany(p => p.OssFormulas)
-                    .HasForeignKey(d => d.IdVariable)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("OSS_FORMULA_OSS_VARIABLES_FK");
-
-                entity.HasOne(d => d.Modulo)
-                    .WithMany(p => p.OssFormulas)
-                    .HasForeignKey(d => d.ModuloId)
-                    .HasConstraintName("OSS_FORMULA_OSS_MODULO_FK");
+                
+                entity.Property(e => e.AcumulaAlTotal)
+                    .HasPrecision(10)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ACUMULA_AL_TOTAL");
             });
 
             modelBuilder.Entity<OssFuncion>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(table => new
+                {
+                    table.Id,
+
+                });
 
                 entity.ToTable("OSS_FUNCIONES");
 
@@ -292,13 +263,16 @@ namespace Convertidor.Data
                     .HasColumnName("FECHA_UPD");
 
                 entity.Property(e => e.Funcion)
-                    .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("FUNCION");
 
                 entity.Property(e => e.Id)
                     .HasPrecision(10)
                     .HasColumnName("ID");
+
+                entity.Property(e => e.IdVariable)
+                    .HasPrecision(10)
+                    .HasColumnName("ID_VARIABLE");
 
                 entity.Property(e => e.ModuloId)
                     .HasPrecision(10)
@@ -311,15 +285,15 @@ namespace Convertidor.Data
                 entity.Property(e => e.UsuarioUpd)
                     .HasPrecision(10)
                     .HasColumnName("USUARIO_UPD");
-
-                entity.HasOne(d => d.Modulo)
-                    .WithMany()
-                    .HasForeignKey(d => d.ModuloId)
-                    .HasConstraintName("OSS_FUNCIONES_OSS_MODULO_FK");
             });
 
             modelBuilder.Entity<OssModeloCalculo>(entity =>
             {
+                entity.HasKey(table => new
+                {
+                    table.Id,
+
+                });
                 entity.ToTable("OSS_MODELO_CALCULO");
 
                 entity.Property(e => e.Id)
@@ -355,6 +329,11 @@ namespace Convertidor.Data
 
             modelBuilder.Entity<OssModulo>(entity =>
             {
+                entity.HasKey(table => new
+                {
+                    table.Id,
+
+                });
                 entity.ToTable("OSS_MODULO");
 
                 entity.Property(e => e.Id)
@@ -395,6 +374,11 @@ namespace Convertidor.Data
 
             modelBuilder.Entity<OssVariable>(entity =>
             {
+                entity.HasKey(table => new
+                {
+                    table.Id,
+
+                });
                 entity.ToTable("OSS_VARIABLES");
 
                 entity.Property(e => e.Id)
@@ -451,12 +435,11 @@ namespace Convertidor.Data
                 entity.Property(e => e.UsuarioUpd)
                     .HasPrecision(10)
                     .HasColumnName("USUARIO_UPD");
-
-                entity.HasOne(d => d.Modulo)
-                    .WithMany(p => p.OssVariables)
-                    .HasForeignKey(d => d.ModuloId)
-                    .HasConstraintName("OSS_VARIABLES_OSS_MODULO_FK");
             })
+           
+              
+
+       
             
             .Entity<SIS_UBICACION_NACIONAL>(builder =>
             {

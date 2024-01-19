@@ -77,7 +77,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 await _context.PRE_CARGOS.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -111,7 +111,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                     _context.PRE_CARGOS.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -143,7 +143,7 @@ namespace Convertidor.Data.Repository.Rh
                 if (entity != null)
                 {
                     _context.PRE_CARGOS.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

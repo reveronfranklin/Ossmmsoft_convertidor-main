@@ -73,7 +73,7 @@ namespace Convertidor.Data.Repository.Rh
                 if (entity.Count>0)
                 {
                     _context.RH_TMP_RETENCIONES_FAOV.RemoveRange(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

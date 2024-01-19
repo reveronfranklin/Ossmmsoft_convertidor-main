@@ -181,7 +181,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var empresa = Int32.Parse(empresString);
                 entity.CODIGO_EMPRESA = empresa;
                 await _context.PRE_RELACION_CARGOS.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -219,7 +219,7 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                     entityUpdate.CODIGO_EMPRESA = empresa;
                     _context.PRE_RELACION_CARGOS.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -251,7 +251,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (entity != null)
                 {
                     _context.PRE_RELACION_CARGOS.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

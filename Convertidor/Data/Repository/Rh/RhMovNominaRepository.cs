@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
 using Convertidor.Dtos;
+using Convertidor.Dtos.Rh;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
@@ -39,6 +40,24 @@ namespace Convertidor.Data.Repository.Rh
                 var result = await _context.RH_MOV_NOMINA.DefaultIfEmpty()
                             .Where(e => e.CODIGO_TIPO_NOMINA== codigoTipoNomina && e.CODIGO_PERSONA==codigoPersona && e.CODIGO_CONCEPTO==codigoConcepto)
                             .FirstOrDefaultAsync();
+
+                return (RH_MOV_NOMINA)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+        
+        public async Task<RH_MOV_NOMINA> GetByTipoNominaPersonaConccepto(RhMovNominaFilterDto dto)
+        {
+            try
+            {
+                var result = await _context.RH_MOV_NOMINA.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_MOV_NOMINA == dto.CodigoMovNomina )
+                    .FirstOrDefaultAsync();
 
                 return (RH_MOV_NOMINA)result;
             }
@@ -98,7 +117,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 await _context.RH_MOV_NOMINA.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -132,7 +151,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                     _context.RH_MOV_NOMINA.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -164,7 +183,7 @@ namespace Convertidor.Data.Repository.Rh
                 if (entity != null)
                 {
                     _context.RH_MOV_NOMINA.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

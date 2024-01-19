@@ -11,17 +11,11 @@ namespace Convertidor.Data.Repository.Rh
 {
 	public class RhEducacionService: IRhEducacionService
     {
-		
-        private readonly DataContext _context;
-
-
-
-   
+        
         private readonly IRhEducacionRepository _repository;
         private readonly IRhDescriptivasService _descriptivaService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhPersonasRepository _personasRepository;
-        private readonly IMapper _mapper;
 
         public RhEducacionService(IRhEducacionRepository repository,
                            IRhDescriptivasService descriptivaService,
@@ -58,9 +52,8 @@ namespace Convertidor.Data.Repository.Rh
         {
             try
             {
-                var result = await _context.RH_EDUCACION.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_EDUCACION == codigoEducacion)
-                    .OrderBy(x => x.FECHA_INI).FirstOrDefaultAsync();
+               
+                var result =  await _repository.GetByCodigo(codigoEducacion);
 
                 return (RH_EDUCACION)result;
             }

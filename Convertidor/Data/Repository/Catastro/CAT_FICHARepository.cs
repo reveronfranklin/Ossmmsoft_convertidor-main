@@ -40,7 +40,7 @@ namespace Convertidor.Data.Repository.Catastro
             try
             {
                 _context.CAT_FICHA.Add(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -60,7 +60,7 @@ namespace Convertidor.Data.Repository.Catastro
             if (entityExist != null)
             {
                 _context.CAT_FICHA.Update(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
         }
@@ -111,7 +111,7 @@ namespace Convertidor.Data.Repository.Catastro
             if (entity != null)
             {
                 _context.CAT_FICHA.Remove(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
 

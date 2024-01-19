@@ -118,7 +118,7 @@ namespace Convertidor.Services.Adm
                    itemResult.DescripcionFrecuencia = frecuencia.DESCRIPCION;
                }
                itemResult.Monto = dtos.MONTO;
-       
+               itemResult.OssMonto = dtos.OSS_MONTO;
               
            
                 return itemResult;
@@ -162,7 +162,47 @@ namespace Convertidor.Services.Adm
 
         }
 
-        
+        public async Task<ResultDto<RhMovNominaResponseDto?>> UpdateCalculo(int codigoMovNomina,int calculoId,decimal monto)
+        {
+
+            ResultDto<RhMovNominaResponseDto?> result = new ResultDto<RhMovNominaResponseDto?>(null);
+            try
+            {
+
+                var movNomina = await _repository.GetByCodigo(codigoMovNomina);
+                if (movNomina == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Movimiento Nomina no existe";
+                    return result;
+                }
+                
+           
+                movNomina.CALCULO_ID = calculoId;
+                movNomina.OSS_MONTO = monto;
+                movNomina.FECHA_UPD = DateTime.Now;
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                movNomina.CODIGO_EMPRESA = conectado.Empresa;
+                movNomina.USUARIO_UPD = conectado.Usuario;
+                await _repository.Update(movNomina);
+                var resultDto = await  MapRhMovNominaDto(movNomina);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            
+            return result;
+        }
+           
         public async Task<ResultDto<RhMovNominaResponseDto?>> Update(RhMovNominaUpdateDto dto)
         {
 
@@ -444,6 +484,33 @@ namespace Convertidor.Services.Adm
             }
 
             return result;
+        }
+        public async Task<ResultDto<RhMovNominaResponseDto>>GetByTipoNominaPersonaConcepto(RhMovNominaFilterDto dto)
+        {
+            ResultDto<RhMovNominaResponseDto> result = new ResultDto<RhMovNominaResponseDto>(null);
+            try
+            {
+                var movNomina = await _repository.GetByTipoNominaPersonaConccepto(dto);
+                if (movNomina == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "NO DATA";
+                    return result;
+                }
+                
+                var resultDto =  await MapRhMovNominaDto(movNomina);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
         }
 
         public async Task<ResultDto<List<RhMovNominaResponseDto>>> GetAllByPersona(RhMovNominaFilterDto dto)

@@ -12,5 +12,8 @@ public interface IOssCalculoRepository
     Task<ResultDto<OssCalculo>> Update(OssCalculo entity);
     Task<string> Delete(int id);
     Task<int> GetNextKey();
+    Task<OssCalculo> GetByIdCalculoCode(int idCalculo, string codeVariable);
+    void ExecuteQueryUpdateValor(string valueFormula, int id,string tipoVariable);
+    Task<List<OssCalculo>> GetFormulasByIdCalculo(int idCalculo);
 
 }

@@ -7,14 +7,14 @@ public class OssCalculoUpdateDto
     public int IdVariable { get; set; }
     public string CodeVariable { get; set; }
     public string? Formula { get; set; }
-    public string? FormulaDescripcion { get; set; }
     public string? FormulaValor { get; set; }
-    public decimal? Valor { get; set; }
+    public string Valor { get; set; }
     public string? Query { get; set; }
     public int? OrdenCalculo { get; set; }
     public string? CodeVariableExterno { get; set; }
     public string? IdCalculoExterno { get; set; }
     public int ModuloId { get; set; }
     public int IdModeloCalculo { get; set; }
+    public int AcumulaAlTotal { get; set; }
 
 }

@@ -503,7 +503,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (entity != null)
                 {
                     _context.PRE_INDICE_CAT_PRG.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }
@@ -541,7 +541,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                     entity.FECHA_UPD = DateTime.Now;
                     entity.USUARIO_UPD = conectado.Usuario;
                     _context.PRE_INDICE_CAT_PRG.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";

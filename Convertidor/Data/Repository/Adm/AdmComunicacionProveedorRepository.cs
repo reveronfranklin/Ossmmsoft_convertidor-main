@@ -63,7 +63,7 @@ namespace Convertidor.Data.Repository.Adm
 
 
                 await _context.ADM_COM_PROVEEDOR.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -97,7 +97,7 @@ namespace Convertidor.Data.Repository.Adm
 
 
                     _context.ADM_COM_PROVEEDOR.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -129,7 +129,7 @@ namespace Convertidor.Data.Repository.Adm
                 if (entity != null)
                 {
                     _context.ADM_COM_PROVEEDOR.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

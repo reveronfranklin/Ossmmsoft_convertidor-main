@@ -5,6 +5,7 @@ using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
+using NPOI.XSSF.Streaming;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -69,6 +70,26 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+       
+        public async Task<RhConceptosResponseDto> GetByTipoNominaConcepto(int codigoTipoNomina,int codigoConcepto)
+        {
+            try
+            {
+                var conceptos = await _repository.GetByCodigoTipoNomina(codigoConcepto,codigoTipoNomina);
+
+                var result = await MapConceptosDto(conceptos);
+
+
+                return (RhConceptosResponseDto)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<List<ListConceptosDto>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta)
         {
             try

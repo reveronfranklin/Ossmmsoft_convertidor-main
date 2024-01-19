@@ -317,7 +317,7 @@ namespace Convertidor.Data.Repository.Sis
                 if (entityUpdate != null)
                 {
                     _context.SIS_USUARIOS.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";

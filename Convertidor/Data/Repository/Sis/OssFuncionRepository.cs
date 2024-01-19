@@ -77,7 +77,7 @@ namespace Convertidor.Data.Repository.Sis
 
 
                 await _context.OssFunciones.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -111,7 +111,7 @@ namespace Convertidor.Data.Repository.Sis
 
 
                     _context.OssFunciones.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -139,7 +139,7 @@ namespace Convertidor.Data.Repository.Sis
                 if (entity != null)
                 {
                     _context.OssFunciones.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

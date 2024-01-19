@@ -12,7 +12,7 @@ namespace Convertidor.Data.Repository.Rh
 	public class RhPeriodoService: IRhPeriodoService
     {
 		
-        private readonly DataContext _context;
+  
 
 
 

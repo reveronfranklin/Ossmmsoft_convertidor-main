@@ -101,7 +101,7 @@ builder.Services.AddTransient<IOssVariableRepository, OssVariableRepository>();
 builder.Services.AddTransient<IOssFuncionRepository, OssFuncionRepository>();
 builder.Services.AddTransient<IOssFormulaRepository, OssFormulaRepository>();
 builder.Services.AddTransient<IOssModeloCalculoRepository, OssModeloCalculoRepository>();
-builder.Services.AddTransient<IOssCalculoRepository, OssCalculoRepository>();
+builder.Services.AddTransient<IOssCalculoRepository,OssCalculoRepository>();
 
 //Services Sis
 builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
@@ -111,6 +111,8 @@ builder.Services.AddTransient<IOssModuloService, OssModuloService>();
 builder.Services.AddTransient<IOssVariableService, OssVariableService>();
 builder.Services.AddTransient<IOssFuncionService, OssFuncionService>();
 builder.Services.AddTransient<IOssFormulaService, OssFormulaService>();
+builder.Services.AddTransient<IOssCalculoService, OssCalculoService>();
+
 
 
 

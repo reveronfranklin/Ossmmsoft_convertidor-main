@@ -60,6 +60,7 @@ namespace Convertidor.Services.Sis
                 itemResult.OrdenCalculo = dtos.OrdenCalculo;
                 itemResult.IdModeloCalculo = dtos.IdModeloCalculo;
                 itemResult.ModuloId = (int)dtos.ModuloId;
+                itemResult.AcumulaAlTotal = dtos.AcumulaAlTotal;
                 return itemResult;
 
             }
@@ -171,6 +172,8 @@ namespace Convertidor.Services.Sis
                 formula.CodeVariable =dto.CodeVariable;
                 formula.IdModeloCalculo = dto.IdModeloCalculo;
                 formula.ModuloId = dto.ModuloId;
+                if (dto.AcumulaAlTotal == null) dto.AcumulaAlTotal = 0;
+                formula.AcumulaAlTotal = dto.AcumulaAlTotal;
                 
                 formula.FechaUpd = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -258,7 +261,8 @@ namespace Convertidor.Services.Sis
                 entity.CodeVariable =dto.CodeVariable;
                 entity.IdModeloCalculo = dto.IdModeloCalculo;
                 entity.ModuloId = dto.ModuloId;
-                
+                if (dto.AcumulaAlTotal == null) dto.AcumulaAlTotal = 0;
+                entity.AcumulaAlTotal = dto.AcumulaAlTotal;
                 entity.FechaUpd = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CodigoEmpresa = conectado.Empresa;
@@ -385,7 +389,7 @@ namespace Convertidor.Services.Sis
             try
             {
 
-                var formula = await _repository.GetByIdModeloCalculo(dto.IdModuloCalculo);
+                var formula = await _repository.GetByIdModeloCalculo(dto.ModeloCalculo);
                 if (formula == null)
                 {
                     result.Data = null;

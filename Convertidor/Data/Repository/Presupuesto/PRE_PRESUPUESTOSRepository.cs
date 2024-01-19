@@ -155,7 +155,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 //entity.USUARIO_INS = conectado.Usuario;
                 //entity.CODIGO_EMPRESA = conectado.Empresa;
                 await _context.PRE_PRESUPUESTOS.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -194,7 +194,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                     entity.FECHA_UPD = DateTime.Now;
                    
                     _context.PRE_PRESUPUESTOS.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -226,7 +226,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (entity != null)
                 {
                     _context.PRE_PRESUPUESTOS.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

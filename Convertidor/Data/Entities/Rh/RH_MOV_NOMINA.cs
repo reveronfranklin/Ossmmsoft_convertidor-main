@@ -22,7 +22,8 @@ namespace Convertidor.Data.Entities.Rh
         public int USUARIO_UPD { get; set; }
         public DateTime FECHA_UPD { get; set; }
         public int CODIGO_EMPRESA { get; set; }
-
+        public int CALCULO_ID { get; set; }
+        public decimal OSS_MONTO { get; set; }
         
     }
 }

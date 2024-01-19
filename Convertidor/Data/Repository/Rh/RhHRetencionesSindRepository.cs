@@ -88,7 +88,7 @@ namespace Convertidor.Data.Repository.Rh
             {
 
                 await _context.RH_H_RETENCIONES_SIND.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -117,7 +117,7 @@ namespace Convertidor.Data.Repository.Rh
                 if (entity.Count>0)
                 {
                     _context.RH_H_RETENCIONES_SIND.RemoveRange(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

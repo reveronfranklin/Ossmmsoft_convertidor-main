@@ -14,6 +14,7 @@
 		public int FrecuenciaId { get; set; }
 		public string DescripcionFrecuencia { get; set; } = string.Empty;
 		public decimal Monto { get; set; }
+		public decimal OssMonto { get; set; }
 		
 		
     

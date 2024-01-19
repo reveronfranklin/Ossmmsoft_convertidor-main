@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using System.ComponentModel.DataAnnotations;
 namespace Convertidor.Data.Entities.Sis
 {
     public partial class OssFuncion
     {
+        [Key]
         public int Id { get; set; }
         public string Funcion { get; set; } = null!;
         public string Descripcion { get; set; } = null!;
@@ -15,7 +14,6 @@ namespace Convertidor.Data.Entities.Sis
         public int? CodigoEmpresa { get; set; }
         public int? ModuloId { get; set; }
         public bool? EsSql { get; set; }
-
-        public virtual OssModulo? Modulo { get; set; }
+        public int IdVariable { get; set; }
     }
 }

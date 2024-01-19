@@ -133,7 +133,7 @@ namespace Convertidor.Data.Repository.Bm
 
 
                 await _context.BM_BIENES.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -167,7 +167,7 @@ namespace Convertidor.Data.Repository.Bm
 
 
                     _context.BM_BIENES.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -199,7 +199,7 @@ namespace Convertidor.Data.Repository.Bm
                 if (entity != null)
                 {
                     _context.BM_BIENES.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

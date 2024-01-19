@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using System.ComponentModel.DataAnnotations;
 namespace Convertidor.Data.Entities.Sis
 {
     public partial class OssModulo
     {
-        public OssModulo()
-        {
-            OssCalculos = new HashSet<OssCalculo>();
-            OssFormulas = new HashSet<OssFormula>();
-            OssVariables = new HashSet<OssVariable>();
-        }
-
+        [Key]
         public int Id { get; set; }
         public string? Codigo { get; set; }
         public string? Descripcion { get; set; }
@@ -20,9 +12,5 @@ namespace Convertidor.Data.Entities.Sis
         public int? UsuarioUpd { get; set; }
         public DateTime? FechaUpd { get; set; }
         public int? CodigoEmpresa { get; set; }
-
-        public virtual ICollection<OssCalculo> OssCalculos { get; set; }
-        public virtual ICollection<OssFormula> OssFormulas { get; set; }
-        public virtual ICollection<OssVariable> OssVariables { get; set; }
     }
 }

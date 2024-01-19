@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Convertidor.Data.Entities.Sis
 {
     public partial class OssFormula
     {
+        [Key]
         public int Id { get; set; }
         public int IdVariable { get; set; }
         public string CodeVariable { get; set; } = null!;
@@ -18,9 +18,7 @@ namespace Convertidor.Data.Entities.Sis
         public DateTime? FechaUpd { get; set; }
         public int? CodigoEmpresa { get; set; }
         public int? ModuloId { get; set; }
-
-        public virtual OssModeloCalculo IdModeloCalculoNavigation { get; set; } = null!;
-        public virtual OssVariable IdVariableNavigation { get; set; } = null!;
-        public virtual OssModulo? Modulo { get; set; }
+        public int AcumulaAlTotal { get; set; }
+        
     }
 }

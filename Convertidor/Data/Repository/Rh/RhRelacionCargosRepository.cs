@@ -92,7 +92,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
                 await _context.RH_RELACION_CARGOS.AddAsync(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
 
                 result.Data = entity;
@@ -131,7 +131,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                     entityUpdate.FECHA_UPD = DateTime.Now;
 
                     _context.RH_RELACION_CARGOS.Update(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -158,7 +158,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (entity != null)
                 {
                     _context.RH_RELACION_CARGOS.Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 return "";
             }

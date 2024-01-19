@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.Rh;
 using Convertidor.Dtos;
+using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Data.Interfaces.RH
 {
@@ -13,7 +14,7 @@ namespace Convertidor.Data.Interfaces.RH
         Task<string> Delete(int codigoMovNomina);
         Task<int> GetNextKey();
         Task<RH_MOV_NOMINA> GetByTipoNominaPersonaConcepto(int codigoTipoNomina, int codigoPersona, int codigoConcepto);
-
-    }
+        Task<RH_MOV_NOMINA> GetByTipoNominaPersonaConccepto(RhMovNominaFilterDto dto);
+	}
 }
 

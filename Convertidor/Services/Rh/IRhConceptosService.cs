@@ -11,8 +11,9 @@ namespace Convertidor.Services.Rh
         Task<List<ListConceptosDto>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta);
         Task<ResultDto<RhConceptosResponseDto>> Create(RhConceptosUpdateDto dto);
         Task<ResultDto<RhConceptosResponseDto>> Update(RhConceptosUpdateDto dto);
+        Task<RhConceptosResponseDto> GetByTipoNominaConcepto(int codigoTipoNomina, int codigoConcepto);
         //Task<ResultDto<RhConceptosDeleteDto>> Delete(RhConceptosDeleteDto dto);
 
-    }
+	}
 }
 

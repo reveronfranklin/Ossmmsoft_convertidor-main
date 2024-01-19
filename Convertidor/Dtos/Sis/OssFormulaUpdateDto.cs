@@ -11,4 +11,7 @@ public class OssFormulaUpdateDto
     public int  IdModeloCalculo { get; set; } 
   
     public int ModuloId { get; set; }
+    public int AcumulaAlTotal { get; set; }
+    
+    
 }

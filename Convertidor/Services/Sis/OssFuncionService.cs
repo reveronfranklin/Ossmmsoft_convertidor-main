@@ -50,6 +50,7 @@ namespace Convertidor.Services.Sis
                 itemResult.Id = dtos.Id;
                 itemResult.Funcion = dtos.Funcion;
                 itemResult.Descripcion = dtos.Descripcion;
+                itemResult.IdVariable = dtos.IdVariable;
                 
                 return itemResult;
 
