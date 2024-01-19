@@ -27,7 +27,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Bm
 {
-	public class BmDirBienService: IBmDirBienService
+	public class BmDirHBienService: IBmDirHBienService
     {
 		
         private readonly DataContext _context;
@@ -35,7 +35,7 @@ namespace Convertidor.Data.Repository.Bm
 
 
    
-        private readonly IBmDirBienRepository _repository;
+        private readonly IBmDirHBienRepository _repository;
         private readonly IBmDescriptivasService _bmDescriptivaService;
         private readonly IAdmDescriptivasService _admDescriptivasService;
         private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
@@ -43,7 +43,7 @@ namespace Convertidor.Data.Repository.Bm
         private readonly ISisUbicacionService _sisUbicacionService;
         private readonly IMapper _mapper;
 
-        public BmDirBienService(IBmDirBienRepository repository,
+        public BmDirHBienService(IBmDirHBienRepository repository,
                                     IBmDescriptivasService bmDescriptivaService,
                                     IAdmDescriptivasService admDescriptivasService,
                                     IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
@@ -61,16 +61,16 @@ namespace Convertidor.Data.Repository.Bm
             
         }
        
-        public async Task<BmDirBienResponseDto> GetByCodigoDirBien(int codigoDirBien)
+        public async Task<BmDirHBienResponseDto> GetByCodigoHDirBien(int codigoHDirBien)
         {
             try
             {
-                var DirBien = await _repository.GetByCodigoDirBien(codigoDirBien);
+                var DirBien = await _repository.GetByCodigoHDirBien(codigoHDirBien);
                 
-                var result = await MapDirBienDto(DirBien);
+                var result = await MapDirHBienDto(DirBien);
 
 
-                return (BmDirBienResponseDto)result;
+                return (BmDirHBienResponseDto)result;
             }
             catch (Exception ex)
             {
@@ -96,11 +96,12 @@ namespace Convertidor.Data.Repository.Bm
         }
 
 
-        public async Task<BmDirBienResponseDto> MapDirBienDto(BM_DIR_BIEN dtos)
+        public async Task<BmDirHBienResponseDto> MapDirHBienDto(BM_DIR_H_BIEN dtos)
         {
 
 
-            BmDirBienResponseDto itemResult = new BmDirBienResponseDto();
+            BmDirHBienResponseDto itemResult = new BmDirHBienResponseDto();
+            itemResult.CodigoHDirBien = dtos.CODIGO_H_DIR_BIEN;
             itemResult.CodigoDirBien = dtos.CODIGO_DIR_BIEN;
             itemResult.CodigoIcp = dtos.CODIGO_ICP;
             itemResult.PaisId = dtos.PAIS_ID;
@@ -129,7 +130,6 @@ namespace Convertidor.Data.Repository.Bm
             itemResult.Extra2 = dtos.EXTRA2;
             itemResult.Extra3 = dtos.EXTRA3;
             itemResult.UnidadTrabajoId = dtos.UNIDAD_TRABAJO_ID;
-       
 
             return itemResult;
 
@@ -137,16 +137,16 @@ namespace Convertidor.Data.Repository.Bm
 
 
 
-        public async  Task<List<BmDirBienResponseDto>> MapListDirBienDto(List<BM_DIR_BIEN> dtos)
+        public async  Task<List<BmDirHBienResponseDto>> MapListDirHBienDto(List<BM_DIR_H_BIEN> dtos)
         {
-            List<BmDirBienResponseDto> result = new List<BmDirBienResponseDto>();
+            List<BmDirHBienResponseDto> result = new List<BmDirHBienResponseDto>();
 
             foreach (var item in dtos)
             {
 
-                BmDirBienResponseDto itemResult = new BmDirBienResponseDto();
-                itemResult = await MapDirBienDto(item);
-
+                BmDirHBienResponseDto itemResult = new BmDirHBienResponseDto();
+                itemResult = await MapDirHBienDto(item);
+                
                 result.Add(itemResult);
 
 
@@ -157,13 +157,20 @@ namespace Convertidor.Data.Repository.Bm
 
         }
 
-        public async Task<ResultDto<BmDirBienResponseDto>> Update(BmDirBienUpdateDto dto)
+        public async Task<ResultDto<BmDirHBienResponseDto>> Update(BmDirHBienUpdateDto dto)
         {
 
-            ResultDto<BmDirBienResponseDto> result = new ResultDto<BmDirBienResponseDto>(null);
+            ResultDto<BmDirHBienResponseDto> result = new ResultDto<BmDirHBienResponseDto>(null);
             try
             {
-
+                var codigoHDirBien = await _repository.GetByCodigoHDirBien(dto.CodigoHDirBien);
+                if (codigoHDirBien == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo HDir Bien no existe";
+                    return result;
+                }
                 var codigoDirBien = await _repository.GetByCodigoDirBien(dto.CodigoDirBien);
                 if (codigoDirBien == null)
                 {
@@ -256,25 +263,16 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-                if (dto.Vialidad == string.Empty)
+                if(dto.Vialidad == string.Empty) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Vialidad invalida";
                     return result;
                 }
-                var vialidad = dto.Vialidad;
-                if (vialidad.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "vialidad invalida";
-                    return result;
-                }
-
 
                 var tipoViviendaId = await _admDescriptivasService.GetByTitulo(6);
-                if (tipoViviendaId == null)
+                if(tipoViviendaId==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -288,15 +286,6 @@ namespace Convertidor.Data.Repository.Bm
                     result.Message = "Vivienda invalida";
                     return result;
                 }
-                var vivienda = dto.Vivienda;
-                if (vivienda.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Vivienda invalida";
-                    return result;
-                }
-
 
                 if (dto.TipoNivelId > 0)
                 {
@@ -309,15 +298,7 @@ namespace Convertidor.Data.Repository.Bm
                         return result;
                     }
                 }
-                if (dto.Nivel == string.Empty)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Nivel invalido";
-                    return result;
-                }
-                var nivel = dto.Nivel;
-                if (nivel.Length > 20)
+                if(dto.Nivel==string.Empty) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -325,23 +306,13 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-
-                if (dto.ComplementoDir == string.Empty)
+                if (dto.ComplementoDir == string.Empty) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "ComplementoDir invalido";
                     return result;
                 }
-                var complementoDir = dto.ComplementoDir;
-                if (complementoDir.Length > 200)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "ComplementoDir invalido";
-                    return result;
-                }
-
 
                 if (dto.TenenciaId > 0)
                 {
@@ -355,7 +326,7 @@ namespace Convertidor.Data.Repository.Bm
                     }
                 }
 
-                if (dto.CodigoPostal == null)
+                if (dto.CodigoPostal == null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -363,14 +334,14 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-                if (dto.FechaIni == DateTime.Now)
+                if(dto.FechaIni==DateTime.MinValue) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Fecha ini invalida";
                     return result;
                 }
-                if (dto.FechaFin == DateTime.Today)
+                if (dto.FechaFin == DateTime.MaxValue)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -402,7 +373,7 @@ namespace Convertidor.Data.Repository.Bm
                 }
 
                 var unidadTrabajoId = await _bmDescriptivaService.GetByIdAndTitulo(6, dto.UnidadTrabajoId);
-                if (unidadTrabajoId == false)
+                if (unidadTrabajoId == false) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -410,48 +381,51 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-                codigoDirBien.CODIGO_DIR_BIEN = dto.CodigoDirBien;
-                codigoDirBien.CODIGO_ICP = dto.CodigoIcp;
-                codigoDirBien.PAIS_ID = dto.PaisId;
-                codigoDirBien.ESTADO_ID = dto.EstadoId;
-                codigoDirBien.MUNICIPIO_ID = dto.MunicipioId;
-                codigoDirBien.CIUDAD_ID = dto.CiudadId;
-                codigoDirBien.PARROQUIA_ID = dto.ParroquiaId;
-                codigoDirBien.SECTOR_ID = dto.SectorId;
-                codigoDirBien.URBANIZACION_ID = dto.UrbanizacionId;
-                codigoDirBien.MANZANA_ID = dto.ManzanaId;
-                codigoDirBien.PARCELA_ID = dto.ParcelaId;
-                codigoDirBien.VIALIDAD_ID = dto.VialidadId;
-                codigoDirBien.VIALIDAD = dto.Vialidad;
-                codigoDirBien.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
-                codigoDirBien.VIVIENDA = dto.Vivienda;
-                codigoDirBien.TIPO_NIVEL_ID = dto.TipoNivelId;
-                codigoDirBien.NIVEL = dto.Nivel;
-                codigoDirBien.TIPO_UNIDAD_ID = dto.TipoUnidadId;
-                codigoDirBien.NUMERO_UNIDAD = dto.NumeroUnidad;
-                codigoDirBien.COMPLEMENTO_DIR = dto.ComplementoDir;
-                codigoDirBien.TENENCIA_ID = dto.TenenciaId;
-                codigoDirBien.CODIGO_POSTAL = dto.CodigoPostal;
-                codigoDirBien.FECHA_INI=dto.FechaIni;
-                codigoDirBien.FECHA_FIN = dto.FechaFin;
-                codigoDirBien.EXTRA1=dto.Extra1;
-                codigoDirBien.EXTRA2 = dto.Extra2;
-                codigoDirBien.EXTRA3 = dto.Extra3;
-                codigoDirBien.UNIDAD_TRABAJO_ID = dto.UnidadTrabajoId;
+                codigoHDirBien.CODIGO_H_DIR_BIEN = dto.CodigoHDirBien;
+                codigoHDirBien.CODIGO_DIR_BIEN = dto.CodigoDirBien;
+                codigoHDirBien.CODIGO_ICP = dto.CodigoIcp;
+                codigoHDirBien.PAIS_ID = dto.PaisId;
+                codigoHDirBien.ESTADO_ID = dto.EstadoId;
+                codigoHDirBien.MUNICIPIO_ID = dto.MunicipioId;
+                codigoHDirBien.CIUDAD_ID = dto.CiudadId;
+                codigoHDirBien.PARROQUIA_ID = dto.ParroquiaId;
+                codigoHDirBien.SECTOR_ID = dto.SectorId;
+                codigoHDirBien.URBANIZACION_ID = dto.UrbanizacionId;
+                codigoHDirBien.MANZANA_ID = dto.ManzanaId;
+                codigoHDirBien.PARCELA_ID = dto.ParcelaId;
+                codigoHDirBien.VIALIDAD_ID = dto.VialidadId;
+                codigoHDirBien.VIALIDAD = dto.Vialidad;
+                codigoHDirBien.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
+                codigoHDirBien.VIVIENDA = dto.Vivienda;
+                codigoHDirBien.TIPO_NIVEL_ID = dto.TipoNivelId;
+                codigoHDirBien.NIVEL = dto.Nivel;
+                codigoHDirBien.TIPO_UNIDAD_ID = dto.TipoUnidadId;
+                codigoHDirBien.NUMERO_UNIDAD = dto.NumeroUnidad;
+                codigoHDirBien.COMPLEMENTO_DIR = dto.ComplementoDir;
+                codigoHDirBien.TENENCIA_ID = dto.TenenciaId;
+                codigoHDirBien.CODIGO_POSTAL = dto.CodigoPostal;
+                codigoHDirBien.FECHA_INI=dto.FechaIni;
+                codigoHDirBien.FECHA_FIN = dto.FechaFin;
+                codigoHDirBien.EXTRA1 = dto.Extra1;
+                codigoHDirBien.EXTRA2 = dto.Extra2; 
+                codigoHDirBien.EXTRA3 = dto.Extra3;
+                codigoHDirBien.UNIDAD_TRABAJO_ID=dto.UnidadTrabajoId;
+                codigoHDirBien.USUARIO_H_INS = dto.UsuarioHIns;
+                codigoHDirBien.FECHA_H_INS=dto.FechaHIns;
                 
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                codigoDirBien.CODIGO_EMPRESA = conectado.Empresa;
-                codigoDirBien.USUARIO_UPD = conectado.Usuario;
-                codigoDirBien.FECHA_INS = DateTime.Now;
+                codigoHDirBien.CODIGO_EMPRESA = conectado.Empresa;
+                codigoHDirBien.USUARIO_UPD = conectado.Usuario;
+                codigoHDirBien.FECHA_INS = DateTime.Now;
 
 
-                await _repository.Update(codigoDirBien);
+                await _repository.Update(codigoHDirBien);
 
 
 
-                var resultDto = await MapDirBienDto(codigoDirBien);
+                var resultDto = await MapDirHBienDto(codigoHDirBien);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -467,14 +441,22 @@ namespace Convertidor.Data.Repository.Bm
             return result;
         }
 
-        public async Task<ResultDto<BmDirBienResponseDto>> Create(BmDirBienUpdateDto dto)
+        public async Task<ResultDto<BmDirHBienResponseDto>> Create(BmDirHBienUpdateDto dto)
         {
 
-            ResultDto<BmDirBienResponseDto> result = new ResultDto<BmDirBienResponseDto>(null);
+            ResultDto<BmDirHBienResponseDto> result = new ResultDto<BmDirHBienResponseDto>(null);
             try
             {
+                var codigoHDirBien = await _repository.GetByCodigoHDirBien(dto.CodigoHDirBien);
+                if (codigoHDirBien != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo HDir Bien no existe";
+                    return result;
+                }
                 var codigoDirBien = await _repository.GetByCodigoDirBien(dto.CodigoDirBien);
-                if (codigoDirBien != null)
+                if (codigoDirBien == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -716,9 +698,11 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-                BM_DIR_BIEN entity = new BM_DIR_BIEN();
 
-                entity.CODIGO_DIR_BIEN = await _repository.GetNextKey();
+                BM_DIR_H_BIEN entity = new BM_DIR_H_BIEN();
+
+                entity.CODIGO_H_DIR_BIEN = await _repository.GetNextKey();
+                entity.CODIGO_DIR_BIEN = dto.CodigoDirBien;
                 entity.CODIGO_ICP = dto.CodigoIcp;
                 entity.PAIS_ID = dto.PaisId;
                 entity.ESTADO_ID = dto.EstadoId;
@@ -746,6 +730,9 @@ namespace Convertidor.Data.Repository.Bm
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
                 entity.UNIDAD_TRABAJO_ID = dto.UnidadTrabajoId;
+                entity.USUARIO_H_INS = dto.UsuarioHIns;
+                entity.FECHA_H_INS = dto.FechaHIns;
+                
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -753,11 +740,12 @@ namespace Convertidor.Data.Repository.Bm
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
 
+
                 var created = await _repository.Add(entity);
 
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapDirBienDto(created.Data);
+                    var resultDto = await MapDirHBienDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -790,24 +778,24 @@ namespace Convertidor.Data.Repository.Bm
             return result;
         }
 
-        public async Task<ResultDto<BmDirBienDeleteDto>> Delete(BmDirBienDeleteDto dto)
+        public async Task<ResultDto<BmDirHBienDeleteDto>> Delete(BmDirHBienDeleteDto dto)
         {
 
-            ResultDto<BmDirBienDeleteDto> result = new ResultDto<BmDirBienDeleteDto>(null);
+            ResultDto<BmDirHBienDeleteDto> result = new ResultDto<BmDirHBienDeleteDto>(null);
             try
             {
 
-                var codigoDirBien = await _repository.GetByCodigoDirBien(dto.CodigoDirBien);
-                if (codigoDirBien == null)
+                var codigoHDirBien = await _repository.GetByCodigoHDirBien(dto.CodigoHDirBien);
+                if (codigoHDirBien == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Dir Bien no existe";
+                    result.Message = "Codigo HDir Bien no existe";
                     return result;
                 }
 
 
-                var deleted = await _repository.Delete(dto.CodigoDirBien);
+                var deleted = await _repository.Delete(dto.CodigoHDirBien);
 
                 if (deleted.Length > 0)
                 {

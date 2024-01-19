@@ -5,13 +5,14 @@ using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
+using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {
 	public class RhPeriodoService: IRhPeriodoService
     {
 		
-        private readonly DataContext _context;
+       
 
 
 
@@ -43,8 +44,10 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+       
+
         public async Task<List<RH_PERIODOS>> GetByTipoNomina(int tipoNomina)
-        {
+           {
             try
             {
 
@@ -58,13 +61,13 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<List<ListPeriodoDto>> GetByYear(int ano)
+        public async Task<List<RhPeriodosResponseDto>> GetByYear(int ano)
         {
             try
             {
 
-                var result = await _repository.GetByYear(ano);
-                var resultDto = MapListPeriodoDto(result);
+                var fecha = await _repository.GetByYear(ano);
+                var resultDto = await MapListPeriodoDto(fecha);
                 return resultDto;
             }
             catch (Exception ex)
@@ -74,6 +77,8 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+
+       
 
         public FechaDto GetFechaDto(DateTime fecha)
         {
@@ -109,7 +114,7 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.FechaPrenomina = dtos.FECHA_PRENOMINA;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             itemResult.Descripcion = dtos.DESCRIPCION;
-           
+
 
 
 
@@ -118,19 +123,17 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
-        public List<ListPeriodoDto> MapListPeriodoDto(List<RH_PERIODOS> dtos)
+       
+        public async Task<List<RhPeriodosResponseDto>> MapListPeriodoDto(List<RH_PERIODOS> dtos)
         {
-            List<ListPeriodoDto> result = new List<ListPeriodoDto>();
+            List<RhPeriodosResponseDto> result = new List<RhPeriodosResponseDto>();
 
             foreach (var item in dtos)
             {
 
-                ListPeriodoDto itemResult = new ListPeriodoDto();
-                itemResult.CodigoPeriodo = item.CODIGO_PERIODO;
-                itemResult.CodigoTipoNomina = item.CODIGO_TIPO_NOMINA;
-                itemResult.FechaNomina = item.FECHA_NOMINA;
-                itemResult.Periodo = item.PERIODO;
-                itemResult.TipoNomina = item.TIPO_NOMINA;
+                RhPeriodosResponseDto itemResult = new RhPeriodosResponseDto();
+                itemResult = await MapPeriodosDto(item);
+                
                 result.Add(itemResult);
 
 
@@ -140,6 +143,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
+       
 
         public async Task<ResultDto<RhPeriodosResponseDto>> Update(RhPeriodosUpdate dto)
         {
@@ -562,6 +566,23 @@ namespace Convertidor.Data.Repository.Rh
 
             return result;
         }
+        public async Task<RhPeriodosResponseDto> GetPeriodoAbierto(int codigoTipoNomina, string tipoNomina)
+        {
+            try
+            {
+
+                var periodo = await _repository.GetPeriodoAbierto(codigoTipoNomina, tipoNomina);
+                var resulDto = await MapPeriodosDto(periodo);
+                return resulDto;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
     }
+
+
 }
 

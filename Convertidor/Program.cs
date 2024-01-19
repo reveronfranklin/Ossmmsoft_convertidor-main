@@ -195,6 +195,7 @@ builder.Services.AddTransient<IRhAriRepository, RhAriRepository>();
 builder.Services.AddTransient<IRhAriService, RhAriService>();
 builder.Services.AddTransient<IRhHPeriodoRepository, RhHPeriodoRepository>();
 builder.Services.AddTransient<IRhHPeriodoService, RhHPeriodoService>();
+
 //BM Repository
 builder.Services.AddTransient<IBM_V_BM1Repository, BM_V_BM1Repository>();
 builder.Services.AddTransient<IBmTitulosRepository, BmTitulosRepository>();
@@ -205,6 +206,11 @@ builder.Services.AddTransient<IBmClasificacionBienesRepository, BmClasificacionB
 builder.Services.AddTransient<IBmDetalleBienesRepository, BmDetalleBienesRepository>();
 builder.Services.AddTransient<IBmDetalleArticulosRepository, BmDetalleArticulosRepository>();
 builder.Services.AddTransient<IBmDirBienRepository, BmDirBienRepository>();
+builder.Services.AddTransient<IBmDirHBienRepository, BmDirHBienRepository>();
+builder.Services.AddTransient<IBmMovBienesRepository, BmMovBienesRepository>();
+builder.Services.AddTransient<IBmSolMovBienesRepository, BmSolMovBienesRepository>();
+
+
 
 
 
@@ -218,6 +224,11 @@ builder.Services.AddTransient<IBmClasificacionBienesService, BmClasificacionBien
 builder.Services.AddTransient<IBmDetalleBienesService, BmDetalleBienesService>();
 builder.Services.AddTransient<IBmDetalleArticulosService, BmDetalleArticulosService>();
 builder.Services.AddTransient<IBmDirBienService, BmDirBienService>();
+builder.Services.AddTransient<IBmDirHBienService, BmDirHBienService>();
+builder.Services.AddTransient<IBmMovBienesService, BmMovBienesService>();
+builder.Services.AddTransient<IBmSolMovBienesService, BmSolMovBienesService>();
+
+
 
 
 

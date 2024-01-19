@@ -49,11 +49,11 @@ namespace Convertidor.Services.Bm
 
             return FechaDesdeObj;
         }
-        public async Task<BmDetalleArticulosGetDto> MapBmDetalleArticulos(BM_DETALLE_ARTICULOS dtos)
+        public async Task<BmDetalleArticulosResponseDto> MapBmDetalleArticulos(BM_DETALLE_ARTICULOS dtos)
         {
 
 
-            BmDetalleArticulosGetDto itemResult = new BmDetalleArticulosGetDto();
+            BmDetalleArticulosResponseDto itemResult = new BmDetalleArticulosResponseDto();
             itemResult.CodigoDetalleArticulo = dtos.CODIGO_DETALLE_ARTICULO;
             itemResult.CodigoArticulo = dtos.CODIGO_ARTICULO;
             itemResult.TipoEspecificacionId = dtos.TIPO_ESPECIFICACION_ID;
@@ -65,15 +65,15 @@ namespace Convertidor.Services.Bm
             return itemResult;
 
         }
-        public async Task<List<BmDetalleArticulosGetDto>> MapListDetalleArticulosDto(List<BM_DETALLE_ARTICULOS> dtos)
+        public async Task<List<BmDetalleArticulosResponseDto>> MapListDetalleArticulosDto(List<BM_DETALLE_ARTICULOS> dtos)
         {
-            List<BmDetalleArticulosGetDto> result = new List<BmDetalleArticulosGetDto>();
+            List<BmDetalleArticulosResponseDto> result = new List<BmDetalleArticulosResponseDto>();
 
 
             foreach (var item in dtos)
             {
 
-                BmDetalleArticulosGetDto itemResult = new BmDetalleArticulosGetDto();
+                BmDetalleArticulosResponseDto itemResult = new BmDetalleArticulosResponseDto();
 
                 itemResult = await MapBmDetalleArticulos(item);
 
@@ -86,10 +86,10 @@ namespace Convertidor.Services.Bm
         }
 
        
-        public async Task<ResultDto<List<BmDetalleArticulosGetDto>>> GetAll()
+        public async Task<ResultDto<List<BmDetalleArticulosResponseDto>>> GetAll()
         {
 
-            ResultDto<List<BmDetalleArticulosGetDto>> result = new ResultDto<List<BmDetalleArticulosGetDto>>(null);
+            ResultDto<List<BmDetalleArticulosResponseDto>> result = new ResultDto<List<BmDetalleArticulosResponseDto>>(null);
             try
             {
 
@@ -99,11 +99,11 @@ namespace Convertidor.Services.Bm
 
                 if (titulos.Count() > 0)
                 {
-                    List<BmDetalleArticulosGetDto> listDto = new List<BmDetalleArticulosGetDto>();
+                    List<BmDetalleArticulosResponseDto> listDto = new List<BmDetalleArticulosResponseDto>();
 
                     foreach (var item in titulos)
                     {
-                        BmDetalleArticulosGetDto dto = new BmDetalleArticulosGetDto();
+                        BmDetalleArticulosResponseDto dto = new BmDetalleArticulosResponseDto();
                         dto = await MapBmDetalleArticulos(item);
 
                         listDto.Add(dto);
@@ -136,10 +136,10 @@ namespace Convertidor.Services.Bm
         }
 
 
-        public async Task<ResultDto<BmDetalleArticulosGetDto>> Update(BmDetalleArticulosUpdateDto dto)
+        public async Task<ResultDto<BmDetalleArticulosResponseDto>> Update(BmDetalleArticulosUpdateDto dto)
         {
 
-            ResultDto<BmDetalleArticulosGetDto> result = new ResultDto<BmDetalleArticulosGetDto>(null);
+            ResultDto<BmDetalleArticulosResponseDto> result = new ResultDto<BmDetalleArticulosResponseDto>(null);
             try
             {
                 var codigoDetalleArticulo = await _repository.GetByCodigoDetalleArticulo(dto.CodigoDetalleArticulo);
@@ -169,7 +169,29 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 invalido";
+                    return result;
+                }
 
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
+                    return result;
+                }
 
 
                 codigoDetalleArticulo.CODIGO_DETALLE_ARTICULO = dto.CodigoDetalleArticulo;
@@ -204,10 +226,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<BmDetalleArticulosGetDto>> Create(BmDetalleArticulosUpdateDto dto)
+        public async Task<ResultDto<BmDetalleArticulosResponseDto>> Create(BmDetalleArticulosUpdateDto dto)
         {
 
-            ResultDto<BmDetalleArticulosGetDto> result = new ResultDto<BmDetalleArticulosGetDto>(null);
+            ResultDto<BmDetalleArticulosResponseDto> result = new ResultDto<BmDetalleArticulosResponseDto>(null);
             try
             {
 
@@ -243,6 +265,30 @@ namespace Convertidor.Services.Bm
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Extra1 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 invalido";
+                    return result;
+                }
+
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
                     return result;
                 }
 

@@ -12,6 +12,7 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<PreIndiceCategoriaProgramaticaGetDto>> Create(PreIndiceCategoriaProgramaticaUpdateDto dto);
         Task<ResultDto<List<PreCodigosIcp>>> ListCodigosValidosIcp();
         Task<ResultDto<List<PreCodigosIcp>>> ListCodigosHistoricoIcp();
+        Task<PreIndiceCategoriaProgramaticaGetDto> GetByCodigo(int codigoIcp);
         Task<ResultDto<DeletePreIcpDto>> Delete(DeletePreIcpDto dto);
         Task<ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>> UpdateIcpPadre(int codigoPresupuesto);
         Task<ResultDto<List<TreeICP>>> GetTreeByPresupuesto(int codigoPresupuesto);

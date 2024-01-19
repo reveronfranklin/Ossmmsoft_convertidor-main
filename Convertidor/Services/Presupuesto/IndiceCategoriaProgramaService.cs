@@ -8,6 +8,7 @@ using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto;
 using Convertidor.Utility;
+using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Services
 {
@@ -39,7 +40,31 @@ namespace Convertidor.Services
             _mapper = mapper;
         }
 
+        public async Task<PreIndiceCategoriaProgramaticaGetDto> GetByCodigo(int codigoIcp)
+        {
+            try
+            {
+                PreIndiceCategoriaProgramaticaGetDto result = new PreIndiceCategoriaProgramaticaGetDto();
 
+                var codigo = await _repository.GetByCodigo(codigoIcp);
+                if(codigo!=null) 
+                {
+                     result = await MapIcpToDto(codigo);
+                }
+                
+
+                return (PreIndiceCategoriaProgramaticaGetDto)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+
+        }
         public async Task<ResultDto<IndiceCategoriaPrograma>> TransferirIndiceCategoriaProgramaPorCantidadDeDias(int dias)
         {
 

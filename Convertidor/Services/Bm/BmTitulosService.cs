@@ -4,6 +4,7 @@ using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Bm;
@@ -24,22 +25,26 @@ namespace Convertidor.Services.Bm
         private readonly IBmTitulosRepository _repository;
         private readonly IBmDescriptivaRepository _repositoryBmDescriptiva;
         private readonly IConfiguration _configuration;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+
         public BmTitulosService(IBmTitulosRepository repository,
                                       IConfiguration configuration,
+                                      ISisUsuarioRepository sisUsuarioRepository,
                                       IBmDescriptivaRepository repositoryBmDescriptiva)
 		{
             _repository = repository;
             _configuration = configuration;
+            _sisUsuarioRepository = sisUsuarioRepository;
             _repositoryBmDescriptiva = repositoryBmDescriptiva;
 
 
         }
 
 
-        public async Task<ResultDto<List<BmTitulosGetDto>>> GetAll()
+        public async Task<ResultDto<List<BmTitulosResponseDto>>> GetAll()
         {
 
-            ResultDto<List<BmTitulosGetDto>> result = new ResultDto<List<BmTitulosGetDto>>(null);
+            ResultDto<List<BmTitulosResponseDto>> result = new ResultDto<List<BmTitulosResponseDto>>(null);
             try
             {
 
@@ -49,11 +54,11 @@ namespace Convertidor.Services.Bm
 
                 if (titulos.Count() > 0)
                 {
-                    List<BmTitulosGetDto> listDto = new List<BmTitulosGetDto>();
+                    List<BmTitulosResponseDto> listDto = new List<BmTitulosResponseDto>();
 
                     foreach (var item in titulos)
                     {
-                        BmTitulosGetDto dto = new BmTitulosGetDto();
+                        BmTitulosResponseDto dto = new BmTitulosResponseDto();
                         dto.TituloId = item.TITULO_ID;
                         dto.TituloIdFk = item.TITULO_FK_ID;
                         dto.Titulo = item.TITULO;
@@ -251,15 +256,15 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public async Task<ResultDto<BmTitulosGetDto>> Update(BmTitulosUpdateDto dto)
+        public async Task<ResultDto<BmTitulosResponseDto>> Update(BmTitulosUpdateDto dto)
         {
 
-            ResultDto<BmTitulosGetDto> result = new ResultDto<BmTitulosGetDto>(null);
+            ResultDto<BmTitulosResponseDto> result = new ResultDto<BmTitulosResponseDto>(null);
             try
             {
 
-                var bmTituloUpdate = await _repository.GetByCodigo(dto.TituloId);
-                if (bmTituloUpdate == null)
+                var bmTitulo = await _repository.GetByCodigo(dto.TituloId);
+                if (bmTitulo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -304,20 +309,23 @@ namespace Convertidor.Services.Bm
                 //descriptiva.EXTRA1 = dto.Extra1;
                 //descriptiva.CODIGO = dto.Codigo;
 
-                bmTituloUpdate.TITULO = dto.Titulo;
-                bmTituloUpdate.TITULO_FK_ID = dto.TituloIdFk;
+                bmTitulo.TITULO = dto.Titulo;
+                bmTitulo.TITULO_FK_ID = dto.TituloIdFk;
 
 
-                bmTituloUpdate.EXTRA2 = dto.Extra2;
-                bmTituloUpdate.EXTRA3 = dto.Extra3;
-                bmTituloUpdate.FECHA_UPD = DateTime.Now;
+                bmTitulo.EXTRA2 = dto.Extra2;
+                bmTitulo.EXTRA3 = dto.Extra3;
+                bmTitulo.FECHA_UPD = DateTime.Now;
 
 
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                bmTitulo.CODIGO_EMPRESA = conectado.Empresa;
+                bmTitulo.USUARIO_UPD = conectado.Usuario;
+                bmTitulo.FECHA_UPD=DateTime.Now;
 
+                await _repository.Update(bmTitulo);
 
-                await _repository.Update(bmTituloUpdate);
-
-                var resultDto = MapBmTitulo(bmTituloUpdate);
+                var resultDto = MapBmTitulo(bmTitulo);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -335,10 +343,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<BmTitulosGetDto>> Create(BmTitulosUpdateDto dto)
+        public async Task<ResultDto<BmTitulosResponseDto>> Create(BmTitulosUpdateDto dto)
         {
 
-            ResultDto<BmTitulosGetDto> result = new ResultDto<BmTitulosGetDto>(null);
+            ResultDto<BmTitulosResponseDto> result = new ResultDto<BmTitulosResponseDto>(null);
             try
             {
 
@@ -389,7 +397,16 @@ namespace Convertidor.Services.Bm
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
+
+
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
                 var created = await _repository.Add(entity);
+
                 if (created.IsValid && created.Data != null)
                 {
                     var resultDto = MapBmTitulo(created.Data);
@@ -480,9 +497,9 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public BmTitulosGetDto MapBmTitulo(BM_TITULOS entity)
+        public BmTitulosResponseDto MapBmTitulo(BM_TITULOS entity)
         {
-            BmTitulosGetDto dto = new BmTitulosGetDto();
+            BmTitulosResponseDto dto = new BmTitulosResponseDto();
             dto.TituloId = entity.TITULO_ID;
             dto.TituloIdFk = entity.TITULO_FK_ID;
             dto.Titulo = entity.TITULO;

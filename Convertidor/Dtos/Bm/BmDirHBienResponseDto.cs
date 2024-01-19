@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net.NetworkInformation;
 
 namespace Convertidor.Dtos.Bm
 {
-	public class BmDirBienGetDto
+	public class BmDirHBienResponseDto
 	{
+        public int CodigoHDirBien { get; set; }
         public int CodigoDirBien { get; set; }
         public int CodigoIcp { get; set; }
         public int PaisId { get; set; }
@@ -33,6 +35,9 @@ namespace Convertidor.Dtos.Bm
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
         public int UnidadTrabajoId { get; set; }
+        public int UsuarioHIns { get; set; }
+        public DateTime FechaHIns { get; set; }
+
 
     }
 

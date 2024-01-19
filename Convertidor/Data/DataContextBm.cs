@@ -18,7 +18,11 @@ namespace Convertidor.Data
         public DbSet<BM_DETALLE_BIENES> BM_DETALLE_BIENES { get; set; }
         public DbSet<BM_DETALLE_ARTICULOS> BM_DETALLE_ARTICULOS { get; set; }
         public DbSet<BM_DIR_BIEN> BM_DIR_BIEN { get; set; }
-        
+        public DbSet<BM_DIR_H_BIEN> BM_DIR_H_BIEN { get; set; }
+        public DbSet<BM_MOV_BIENES> BM_MOV_BIENES { get; set; }
+        public DbSet<BM_SOL_MOV_BIENES> BM_SOL_MOV_BIENES { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -123,11 +127,47 @@ namespace Convertidor.Data
                   });
                   builder.ToTable("BM_DIR_BIEN");
               });
-           
+
+            modelBuilder
+             .Entity<BM_DIR_H_BIEN>(builder =>
+             {
+
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_H_DIR_BIEN,
+
+                 });
+                 builder.ToTable("BM_DIR_H_BIEN");
+             });
+
+            modelBuilder
+             .Entity<BM_MOV_BIENES>(builder =>
+             {
+
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_MOV_BIEN,
+
+                 });
+                 builder.ToTable("BM_MOV_BIENES");
+             });
+
+            modelBuilder
+            .Entity<BM_SOL_MOV_BIENES>(builder =>
+            {
+
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_MOV_BIEN,
+
+                });
+                builder.ToTable("BM_SOL_MOV_BIENES");
+            });
+            
         }
 
 
 
 
-}
+    }
 }

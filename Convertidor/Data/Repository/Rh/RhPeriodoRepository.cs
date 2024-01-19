@@ -223,7 +223,22 @@ namespace Convertidor.Data.Repository.Rh
         }
 
 
-
+        public async Task<RH_PERIODOS> GetPeriodoAbierto(int codigoTipoNomina, string tipoNomina)
+        {
+            try
+            {
+                
+                var result = await _context.RH_PERIODOS.DefaultIfEmpty()
+                 .Where(e => e.CODIGO_TIPO_NOMINA == codigoTipoNomina && e.TIPO_NOMINA == tipoNomina && e.FECHA_CIERRE==null)
+                        .OrderByDescending(x => x.FECHA_NOMINA).FirstOrDefaultAsync();
+                return (RH_PERIODOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
     }
 }
 

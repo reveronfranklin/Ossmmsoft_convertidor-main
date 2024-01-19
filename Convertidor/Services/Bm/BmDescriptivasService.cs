@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Bm;
@@ -18,21 +19,23 @@ namespace Convertidor.Services.Bm
       
         private readonly IBmDescriptivaRepository _repository;
         private readonly IBmTitulosRepository _bMTitulosRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IConfiguration _configuration;
         public BmDescriptivasService(IBmDescriptivaRepository repository,
                                       IBmTitulosRepository bMTitulosRepository,
+                                      ISisUsuarioRepository sisUsuarioRepository,
                                       IConfiguration configuration)
 		{
             _repository = repository;
             _configuration = configuration;
             _bMTitulosRepository = bMTitulosRepository;
-
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
-        public async Task<ResultDto<List<BmDescriptivasGetDto>>> GetAll()
+        public async Task<ResultDto<List<BmDescriptivasResponseDto>>> GetAll()
         {
 
-            ResultDto<List<BmDescriptivasGetDto>> result = new ResultDto<List<BmDescriptivasGetDto>>(null);
+            ResultDto<List<BmDescriptivasResponseDto>> result = new ResultDto<List<BmDescriptivasResponseDto>>(null);
             try
             {
 
@@ -42,11 +45,11 @@ namespace Convertidor.Services.Bm
 
                 if (titulos.Count() > 0)
                 {
-                    List<BmDescriptivasGetDto> listDto = new List<BmDescriptivasGetDto>();
+                    List<BmDescriptivasResponseDto> listDto = new List<BmDescriptivasResponseDto>();
 
                     foreach (var item in titulos)
                     {
-                        BmDescriptivasGetDto dto = new BmDescriptivasGetDto();
+                        BmDescriptivasResponseDto dto = new BmDescriptivasResponseDto();
                         dto = await MapBmDescriptiva(item);
 
                         listDto.Add(dto);
@@ -94,10 +97,10 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public async Task<ResultDto<List<BmDescriptivasGetDto>>> GetByTitulo(int tituloId)
+        public async Task<ResultDto<List<BmDescriptivasResponseDto>>> GetByTitulo(int tituloId)
         {
 
-            ResultDto<List<BmDescriptivasGetDto>> result = new ResultDto<List<BmDescriptivasGetDto>>(null);
+            ResultDto<List<BmDescriptivasResponseDto>> result = new ResultDto<List<BmDescriptivasResponseDto>>(null);
             try
             {
 
@@ -107,11 +110,11 @@ namespace Convertidor.Services.Bm
 
                 if (titulos.Count() > 0)
                 {
-                    List<BmDescriptivasGetDto> listDto = new List<BmDescriptivasGetDto>();
+                    List<BmDescriptivasResponseDto> listDto = new List<BmDescriptivasResponseDto>();
 
                     foreach (var item in titulos)
                     {
-                        BmDescriptivasGetDto dto = new BmDescriptivasGetDto();
+                        BmDescriptivasResponseDto dto = new BmDescriptivasResponseDto();
                         dto = await MapBmDescriptiva(item);
 
                         listDto.Add(dto);
@@ -142,10 +145,10 @@ namespace Convertidor.Services.Bm
 
             return result;
         }
-        public async Task<ResultDto<List<BmDescriptivasGetDto>>> GetByCodigoTitulo(string codigo)
+        public async Task<ResultDto<List<BmDescriptivasResponseDto>>> GetByCodigoTitulo(string codigo)
         {
 
-            ResultDto<List<BmDescriptivasGetDto>> result = new ResultDto<List<BmDescriptivasGetDto>>(null);
+            ResultDto<List<BmDescriptivasResponseDto>> result = new ResultDto<List<BmDescriptivasResponseDto>>(null);
             try
             {
 
@@ -158,9 +161,9 @@ namespace Convertidor.Services.Bm
                 var titulos = await _repository.GetByTituloId(titulo.TITULO_ID);
                 if (titulos.Count() > 0)
                 {
-                    List<BmDescriptivasGetDto> listDto = new List<BmDescriptivasGetDto>();
+                    List<BmDescriptivasResponseDto> listDto = new List<BmDescriptivasResponseDto>();
 
-                    BmDescriptivasGetDto itemDefault = new BmDescriptivasGetDto();
+                    BmDescriptivasResponseDto itemDefault = new BmDescriptivasResponseDto();
                     itemDefault.DescripcionId = 0;
                     itemDefault.DescripcionIdFk = 0;
                     itemDefault.Descripcion = "Seleccione";
@@ -171,7 +174,7 @@ namespace Convertidor.Services.Bm
                     itemDefault.Extra2 = "";
                     itemDefault.Extra3 = "";
 
-                    List<BmDescriptivasGetDto> lista = new List<BmDescriptivasGetDto>();
+                    List<BmDescriptivasResponseDto> lista = new List<BmDescriptivasResponseDto>();
                     lista.Add(GetDefaultDecriptiva());
                     itemDefault.ListaDescriptiva = lista;
 
@@ -183,7 +186,7 @@ namespace Convertidor.Services.Bm
 
                     foreach (var item in titulos)
                     {
-                        BmDescriptivasGetDto dto = new BmDescriptivasGetDto();
+                        BmDescriptivasResponseDto dto = new BmDescriptivasResponseDto();
                         dto = await MapBmDescriptiva(item);
 
                         listDto.Add(dto);
@@ -367,10 +370,10 @@ namespace Convertidor.Services.Bm
         }
 
 
-        public async Task<ResultDto<BmDescriptivasGetDto>> Update(BmDescriptivasUpdateDto dto)
+        public async Task<ResultDto<BmDescriptivasResponseDto>> Update(BmDescriptivasUpdateDto dto)
         {
 
-            ResultDto<BmDescriptivasGetDto> result = new ResultDto<BmDescriptivasGetDto>(null);
+            ResultDto<BmDescriptivasResponseDto> result = new ResultDto<BmDescriptivasResponseDto>(null);
             try
             {
 
@@ -433,8 +436,12 @@ namespace Convertidor.Services.Bm
                
                 descriptiva.EXTRA2 = dto.Extra2;
                 descriptiva.EXTRA3 = dto.Extra3;
-                descriptiva.FECHA_UPD = DateTime.Now;
 
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                descriptiva.CODIGO_EMPRESA = conectado.Empresa;
+                descriptiva.FECHA_UPD = DateTime.Now;
+                descriptiva.USUARIO_UPD = conectado.Usuario;
               
                 
 
@@ -458,10 +465,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<BmDescriptivasGetDto>> Create(BmDescriptivasUpdateDto dto)
+        public async Task<ResultDto<BmDescriptivasResponseDto>> Create(BmDescriptivasUpdateDto dto)
         {
 
-            ResultDto<BmDescriptivasGetDto> result = new ResultDto<BmDescriptivasGetDto>(null);
+            ResultDto<BmDescriptivasResponseDto> result = new ResultDto<BmDescriptivasResponseDto>(null);
             try
             {
 
@@ -520,6 +527,12 @@ namespace Convertidor.Services.Bm
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data!=null)
                 {
@@ -555,9 +568,9 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public BmDescriptivasGetDto GetDefaultDecriptiva()
+        public BmDescriptivasResponseDto GetDefaultDecriptiva()
         {
-            BmDescriptivasGetDto itemDefault = new BmDescriptivasGetDto();
+            BmDescriptivasResponseDto itemDefault = new BmDescriptivasResponseDto();
             itemDefault.DescripcionId = 0;
             itemDefault.DescripcionIdFk = 0;
             itemDefault.Descripcion = "Seleccione";
@@ -571,9 +584,9 @@ namespace Convertidor.Services.Bm
           
         }
 
-        public async Task<BmDescriptivasGetDto> MapBmDescriptiva(BM_DESCRIPTIVAS entity)
+        public async Task<BmDescriptivasResponseDto> MapBmDescriptiva(BM_DESCRIPTIVAS entity)
         {
-            BmDescriptivasGetDto dto = new BmDescriptivasGetDto();
+            BmDescriptivasResponseDto dto = new BmDescriptivasResponseDto();
             dto.DescripcionId = entity.DESCRIPCION_ID;
             dto.DescripcionIdFk = entity.DESCRIPCION_FK_ID;
             dto.Descripcion = entity.DESCRIPCION;
@@ -593,13 +606,13 @@ namespace Convertidor.Services.Bm
 
 
 
-            List<BmDescriptivasGetDto> listDto = new List<BmDescriptivasGetDto>();
+            List<BmDescriptivasResponseDto> listDto = new List<BmDescriptivasResponseDto>();
             var hijos = await _repository.GetByFKID(entity.DESCRIPCION_ID);
             if (hijos.Count > 0)
             {
-                BmDescriptivasGetDto itemDefault = new BmDescriptivasGetDto();
+                BmDescriptivasResponseDto itemDefault = new BmDescriptivasResponseDto();
                 itemDefault = GetDefaultDecriptiva();
-                List<BmDescriptivasGetDto> lista = new List<BmDescriptivasGetDto>();
+                List<BmDescriptivasResponseDto> lista = new List<BmDescriptivasResponseDto>();
                 lista.Add(GetDefaultDecriptiva());
                 itemDefault.ListaDescriptiva= lista;
 
@@ -607,7 +620,7 @@ namespace Convertidor.Services.Bm
                 listDto.Add(itemDefault);
                 foreach (var item in hijos)
                 {
-                    BmDescriptivasGetDto itemDto = new BmDescriptivasGetDto();
+                    BmDescriptivasResponseDto itemDto = new BmDescriptivasResponseDto();
                     itemDto.DescripcionId = item.DESCRIPCION_ID;
                     itemDto.DescripcionIdFk = item.DESCRIPCION_FK_ID;
                     itemDto.Descripcion = item.DESCRIPCION;
@@ -630,9 +643,9 @@ namespace Convertidor.Services.Bm
             }
             else
             {
-                BmDescriptivasGetDto itemDefault = new BmDescriptivasGetDto();
+                BmDescriptivasResponseDto itemDefault = new BmDescriptivasResponseDto();
                 itemDefault = GetDefaultDecriptiva();
-                List<BmDescriptivasGetDto> lista = new List<BmDescriptivasGetDto>();
+                List<BmDescriptivasResponseDto> lista = new List<BmDescriptivasResponseDto>();
                 lista.Add(GetDefaultDecriptiva());
                 itemDefault.ListaDescriptiva = lista;
 

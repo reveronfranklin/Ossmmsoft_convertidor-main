@@ -6,10 +6,10 @@ namespace Convertidor.Services.Bm
 {
 	public interface IBmDirBienService
     {
-        
-        
-        Task<ResultDto<BmDirBienGetDto>> Update(BmDirBienUpdateDto dto);
-        Task<ResultDto<BmDirBienGetDto>> Create(BmDirBienUpdateDto dto);
+
+        Task<BmDirBienResponseDto> GetByCodigoDirBien(int codigoDirBien);
+        Task<ResultDto<BmDirBienResponseDto>> Update(BmDirBienUpdateDto dto);
+        Task<ResultDto<BmDirBienResponseDto>> Create(BmDirBienUpdateDto dto);
         Task<ResultDto<BmDirBienDeleteDto>> Delete(BmDirBienDeleteDto dto);
 
     }

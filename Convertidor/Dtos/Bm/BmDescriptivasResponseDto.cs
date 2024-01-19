@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Convertidor.Dtos.Bm
 {
-	public class BmDescriptivasGetDto
+	public class BmDescriptivasResponseDto
 	{
 
         public int DescripcionId { get; set; }
@@ -14,7 +14,7 @@ namespace Convertidor.Dtos.Bm
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
 
-        public List<BmDescriptivasGetDto>? ListaDescriptiva { get; set; }
+        public List<BmDescriptivasResponseDto>? ListaDescriptiva { get; set; }
 
     }
 }

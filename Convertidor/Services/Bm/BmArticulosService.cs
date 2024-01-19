@@ -32,11 +32,11 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public async Task<BmArticulosGetDto> MapBmArticulos(BM_ARTICULOS dtos)
+        public async Task<BmArticulosResponseDto> MapBmArticulos(BM_ARTICULOS dtos)
         {
 
 
-            BmArticulosGetDto itemResult = new BmArticulosGetDto();
+            BmArticulosResponseDto itemResult = new BmArticulosResponseDto();
             itemResult.CodigoArticulo = dtos.CODIGO_ARTICULO;
             itemResult.CodigoClasificacionBien = dtos.CODIGO_CLASIFICACION_BIEN;
             itemResult.Codigo = dtos.CODIGO;
@@ -47,15 +47,15 @@ namespace Convertidor.Services.Bm
             return itemResult;
 
         }
-        public async Task<List<BmArticulosGetDto>> MapListArticulosDto(List<BM_ARTICULOS> dtos)
+        public async Task<List<BmArticulosResponseDto>> MapListArticulosDto(List<BM_ARTICULOS> dtos)
         {
-            List<BmArticulosGetDto> result = new List<BmArticulosGetDto>();
+            List<BmArticulosResponseDto> result = new List<BmArticulosResponseDto>();
 
 
             foreach (var item in dtos)
             {
 
-                BmArticulosGetDto itemResult = new BmArticulosGetDto();
+                BmArticulosResponseDto itemResult = new BmArticulosResponseDto();
 
                 itemResult = await MapBmArticulos(item);
 
@@ -66,10 +66,10 @@ namespace Convertidor.Services.Bm
 
 
         }
-        public async Task<ResultDto<List<BmArticulosGetDto>>> GetAll()
+        public async Task<ResultDto<List<BmArticulosResponseDto>>> GetAll()
         {
 
-            ResultDto<List<BmArticulosGetDto>> result = new ResultDto<List<BmArticulosGetDto>>(null);
+            ResultDto<List<BmArticulosResponseDto>> result = new ResultDto<List<BmArticulosResponseDto>>(null);
             try
             {
 
@@ -79,11 +79,11 @@ namespace Convertidor.Services.Bm
 
                 if (titulos.Count() > 0)
                 {
-                    List<BmArticulosGetDto> listDto = new List<BmArticulosGetDto>();
+                    List<BmArticulosResponseDto> listDto = new List<BmArticulosResponseDto>();
 
                     foreach (var item in titulos)
                     {
-                        BmArticulosGetDto dto = new BmArticulosGetDto();
+                        BmArticulosResponseDto dto = new BmArticulosResponseDto();
                         dto = await MapBmArticulos(item);
 
                         listDto.Add(dto);
@@ -115,10 +115,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<List<BmArticulosGetDto>>> GetByCodigoArticulo(int codigoArticulo)
+        public async Task<ResultDto<List<BmArticulosResponseDto>>> GetByCodigoArticulo(int codigoArticulo)
         {
 
-            ResultDto<List<BmArticulosGetDto>> result = new ResultDto<List<BmArticulosGetDto>>(null);
+            ResultDto<List<BmArticulosResponseDto>> result = new ResultDto<List<BmArticulosResponseDto>>(null);
             try
             {
 
@@ -131,9 +131,9 @@ namespace Convertidor.Services.Bm
                 var articulos = await _repository.GetByCodigo(articulo.CODIGO);
                 if (articulos.CODIGO != string.Empty)
                 {
-                    List<BmArticulosGetDto> listDto = new List<BmArticulosGetDto>();
+                    List<BmArticulosResponseDto> listDto = new List<BmArticulosResponseDto>();
 
-                    BmArticulosGetDto itemDefault = new BmArticulosGetDto();
+                    BmArticulosResponseDto itemDefault = new BmArticulosResponseDto();
                     itemDefault.CodigoArticulo = 0;
                     itemDefault.CodigoClasificacionBien = 0;
                     itemDefault.Codigo = "";
@@ -143,7 +143,7 @@ namespace Convertidor.Services.Bm
                     itemDefault.Extra2 = "";
                     itemDefault.Extra3 = "";
 
-                    List<BmArticulosGetDto> lista = new List<BmArticulosGetDto>();
+                    List<BmArticulosResponseDto> lista = new List<BmArticulosResponseDto>();
                     lista.Add(GetDefaultArticulo());
 
                     result.Data = listDto;
@@ -171,10 +171,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<List<BmArticulosGetDto>>> GetByCodigo(string codigo)
+        public async Task<ResultDto<List<BmArticulosResponseDto>>> GetByCodigo(string codigo)
             {
 
-            ResultDto<List<BmArticulosGetDto>> result = new ResultDto<List<BmArticulosGetDto>>(null);
+            ResultDto<List<BmArticulosResponseDto>> result = new ResultDto<List<BmArticulosResponseDto>>(null);
             try
             {
 
@@ -187,9 +187,9 @@ namespace Convertidor.Services.Bm
                 var articulos = await _repository.GetByCodigo(articulo.CODIGO);
                 if (articulos.CODIGO!=string.Empty)
                 {
-                    List<BmArticulosGetDto> listDto = new List<BmArticulosGetDto>();
+                    List<BmArticulosResponseDto> listDto = new List<BmArticulosResponseDto>();
 
-                    BmArticulosGetDto itemDefault = new BmArticulosGetDto();
+                    BmArticulosResponseDto itemDefault = new BmArticulosResponseDto();
                     itemDefault.CodigoArticulo = 0;
                     itemDefault.CodigoClasificacionBien = 0;
                     itemDefault.Codigo = "";
@@ -199,7 +199,7 @@ namespace Convertidor.Services.Bm
                     itemDefault.Extra2 = "";
                     itemDefault.Extra3 = "";
 
-                    List<BmArticulosGetDto> lista = new List<BmArticulosGetDto>();
+                    List<BmArticulosResponseDto> lista = new List<BmArticulosResponseDto>();
                     lista.Add(GetDefaultArticulo());
                    
                     result.Data = listDto;
@@ -231,10 +231,10 @@ namespace Convertidor.Services.Bm
         
 
 
-        public async Task<ResultDto<BmArticulosGetDto>> Update(BmArticulosUpdateDto dto)
+        public async Task<ResultDto<BmArticulosResponseDto>> Update(BmArticulosUpdateDto dto)
         {
 
-            ResultDto<BmArticulosGetDto> result = new ResultDto<BmArticulosGetDto>(null);
+            ResultDto<BmArticulosResponseDto> result = new ResultDto<BmArticulosResponseDto>(null);
             try
             {
 
@@ -268,7 +268,29 @@ namespace Convertidor.Services.Bm
                     result.Message = "Descripcion Invalida";
                     return result;
                 }
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 invalido";
+                    return result;
+                }
 
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
+                    return result;
+                }
 
 
 
@@ -307,10 +329,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<BmArticulosGetDto>> Create(BmArticulosUpdateDto dto)
+        public async Task<ResultDto<BmArticulosResponseDto>> Create(BmArticulosUpdateDto dto)
         {
 
-            ResultDto<BmArticulosGetDto> result = new ResultDto<BmArticulosGetDto>(null);
+            ResultDto<BmArticulosResponseDto> result = new ResultDto<BmArticulosResponseDto>(null);
             try
             {
 
@@ -352,8 +374,30 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-              
-                
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 invalido";
+                    return result;
+                }
+
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
+                    return result;
+                }
+
 
                 BM_ARTICULOS entity = new BM_ARTICULOS();        
                 entity.CODIGO_ARTICULO = await _repository.GetNextKey();
@@ -405,9 +449,9 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public BmArticulosGetDto GetDefaultArticulo()
+        public BmArticulosResponseDto GetDefaultArticulo()
         {
-            BmArticulosGetDto itemDefault = new BmArticulosGetDto();
+            BmArticulosResponseDto itemDefault = new BmArticulosResponseDto();
             itemDefault.CodigoArticulo = 0;
             itemDefault.CodigoClasificacionBien = 0;
             itemDefault.Codigo = "";

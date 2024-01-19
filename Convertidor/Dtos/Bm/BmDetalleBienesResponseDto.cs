@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Convertidor.Dtos.Bm
 {
-	public class BmDetalleBienesGetDto
+	public class BmDetalleBienesResponseDto
 	{
 
         public int CodigoDetalleBien { get; set; }

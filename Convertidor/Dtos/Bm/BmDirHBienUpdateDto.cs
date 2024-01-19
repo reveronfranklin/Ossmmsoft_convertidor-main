@@ -4,8 +4,9 @@ using System.Net.NetworkInformation;
 
 namespace Convertidor.Dtos.Bm
 {
-	public class BmDirBienUpdateDto
+	public class BmDirHBienUpdateDto
 	{
+        public int CodigoHDirBien { get; set; }
         public int CodigoDirBien { get; set; }
         public int CodigoIcp { get; set; }
         public int PaisId { get; set; }
@@ -18,18 +19,13 @@ namespace Convertidor.Dtos.Bm
         public int ManzanaId { get; set; }
         public int ParcelaId { get; set; }
         public int VialidadId { get; set; }
-        
         public string Vialidad { get; set; } = string.Empty;
         public int TipoViviendaId { get; set; }
-        
         public string Vivienda { get; set; } = string.Empty;
         public int TipoNivelId { get; set; }
-       
         public string Nivel { get; set; } = string.Empty;
-        public int TipoUnidadId { get; set; }
-        
+        public int TipoUnidadId { get; set; } 
         public string NumeroUnidad { get; set; } = string.Empty;
-        
         public string ComplementoDir { get; set; } = string.Empty;
         public int TenenciaId { get; set; }
         public int CodigoPostal { get; set; }
@@ -39,7 +35,8 @@ namespace Convertidor.Dtos.Bm
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
         public int UnidadTrabajoId { get; set; }
-
+        public int UsuarioHIns { get; set; }
+        public DateTime FechaHIns { get; set; }
     }
 
     }

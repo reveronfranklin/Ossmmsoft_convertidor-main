@@ -24,9 +24,6 @@ namespace Convertidor.Controllers
             _service = service;
            
         }
-        
-
-   
 
 
         [HttpPost]

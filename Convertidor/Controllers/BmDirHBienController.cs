@@ -5,35 +5,30 @@ using Convertidor.Dtos.Rh;
 using Microsoft.AspNetCore.Authorization;
 using Convertidor.Services.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Data.Entities.Bm;
+using Convertidor.Dtos;
 
 namespace Convertidor.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class BmArticulosController : ControllerBase
+    public class BmDirHBienController : ControllerBase
     {
        
-        private readonly IBmArticulosService _service;
+        private readonly IBmDirHBienService _service;
 
-        public BmArticulosController(IBmArticulosService service)
+        public BmDirHBienController(IBmDirHBienService service)
         {
 
             _service = service;
            
         }
 
+
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetByCodigo(BmArticulosResponseDto dto)
-        {
-                var result = await _service.GetByCodigoArticulo(dto.CodigoArticulo);
-            return Ok(result);
-        }
-        
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Create(BmArticulosUpdateDto dto)
+        public async Task<IActionResult> Create(BmDirHBienUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -42,7 +37,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(BmArticulosUpdateDto dto)
+        public async Task<IActionResult> Update(BmDirHBienUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -51,7 +46,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(BmArticulosDeleteDto dto)
+        public async Task<IActionResult> Delete(BmDirHBienDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);

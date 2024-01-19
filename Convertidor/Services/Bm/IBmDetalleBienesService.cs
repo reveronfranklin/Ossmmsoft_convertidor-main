@@ -6,10 +6,10 @@ namespace Convertidor.Services.Bm
 {
 	public interface IBmDetalleBienesService
     {
-        Task<ResultDto<List<BmDetalleBienesGetDto>>> GetAll();
+        Task<ResultDto<List<BmDetalleBienesResponseDto>>> GetAll();
         
-        Task<ResultDto<BmDetalleBienesGetDto>> Update(BmDetalleBienesUpdateDto dto);
-        Task<ResultDto<BmDetalleBienesGetDto>> Create(BmDetalleBienesUpdateDto dto);
+        Task<ResultDto<BmDetalleBienesResponseDto>> Update(BmDetalleBienesUpdateDto dto);
+        Task<ResultDto<BmDetalleBienesResponseDto>> Create(BmDetalleBienesUpdateDto dto);
         Task<ResultDto<BmDetalleBienesDeleteDto>> Delete(BmDetalleBienesDeleteDto dto);
 
     }

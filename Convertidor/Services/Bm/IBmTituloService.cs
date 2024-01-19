@@ -9,10 +9,10 @@ namespace Convertidor.Services.Bm
 	{
 
 
-        Task<ResultDto<List<BmTitulosGetDto>>> GetAll();
+        Task<ResultDto<List<BmTitulosResponseDto>>> GetAll();
         Task<ResultDto<List<BmTreePUC>>> GetTreeTitulos();
-        Task<ResultDto<BmTitulosGetDto>> Update(BmTitulosUpdateDto dto);
-        Task<ResultDto<BmTitulosGetDto>> Create(BmTitulosUpdateDto dto);
+        Task<ResultDto<BmTitulosResponseDto>> Update(BmTitulosUpdateDto dto);
+        Task<ResultDto<BmTitulosResponseDto>> Create(BmTitulosUpdateDto dto);
         Task<ResultDto<BmTitulosDeleteDto>> Delete(BmTitulosDeleteDto dto);
 
 

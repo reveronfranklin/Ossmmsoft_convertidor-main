@@ -16,6 +16,7 @@ namespace Convertidor.Data.Interfaces.RH
         Task<ResultDto<RH_PERIODOS>> Update(RH_PERIODOS entity);
         Task<string> Delete(int codigoPeriodo);
         Task<int> GetNextKey();
+        Task<RH_PERIODOS> GetPeriodoAbierto(int codigoTipoNomina, string tipoNomina);
     }
 }
 

@@ -13,6 +13,8 @@ namespace Convertidor.Dtos.Bm
         public string Descripcion { get; set; } = string.Empty;
         public DateTime FechaIni { get; set; } 
         public DateTime FechaFin { get; set; }
+        public string Extra1 { get; set; } = string.Empty;
+        public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
         public int UsuarioIns { get; set; }
         public DateTime FechaIns { get; set; }

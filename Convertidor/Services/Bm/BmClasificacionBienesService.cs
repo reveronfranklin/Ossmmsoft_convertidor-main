@@ -47,11 +47,11 @@ namespace Convertidor.Services.Bm
 
             return FechaDesdeObj;
         }
-        public async Task<BmClasificacionBienesGetDto> MapBmClasificacionBienes(BM_CLASIFICACION_BIENES dtos)
+        public async Task<BmClasificacionBienesResponseDto> MapBmClasificacionBienes(BM_CLASIFICACION_BIENES dtos)
         {
 
 
-            BmClasificacionBienesGetDto itemResult = new BmClasificacionBienesGetDto();
+            BmClasificacionBienesResponseDto itemResult = new BmClasificacionBienesResponseDto();
             itemResult.CodigoClasificacionBien = dtos.CODIGO_CLASIFICACION_BIEN;
             itemResult.CodigoGrupo = dtos.CODIGO_GRUPO;
             itemResult.CodigoNivel1 = dtos.CODIGO_NIVEL1;
@@ -67,15 +67,15 @@ namespace Convertidor.Services.Bm
             return itemResult;
 
         }
-        public async Task<List<BmClasificacionBienesGetDto>> MapListClasificacionBienesDto(List<BM_CLASIFICACION_BIENES> dtos)
+        public async Task<List<BmClasificacionBienesResponseDto>> MapListClasificacionBienesDto(List<BM_CLASIFICACION_BIENES> dtos)
         {
-            List<BmClasificacionBienesGetDto> result = new List<BmClasificacionBienesGetDto>();
+            List<BmClasificacionBienesResponseDto> result = new List<BmClasificacionBienesResponseDto>();
 
 
             foreach (var item in dtos)
             {
 
-                BmClasificacionBienesGetDto itemResult = new BmClasificacionBienesGetDto();
+                BmClasificacionBienesResponseDto itemResult = new BmClasificacionBienesResponseDto();
 
                 itemResult = await MapBmClasificacionBienes(item);
 
@@ -88,10 +88,10 @@ namespace Convertidor.Services.Bm
         }
 
        
-        public async Task<ResultDto<List<BmClasificacionBienesGetDto>>> GetAll()
+        public async Task<ResultDto<List<BmClasificacionBienesResponseDto>>> GetAll()
         {
 
-            ResultDto<List<BmClasificacionBienesGetDto>> result = new ResultDto<List<BmClasificacionBienesGetDto>>(null);
+            ResultDto<List<BmClasificacionBienesResponseDto>> result = new ResultDto<List<BmClasificacionBienesResponseDto>>(null);
             try
             {
 
@@ -101,11 +101,11 @@ namespace Convertidor.Services.Bm
 
                 if (titulos.Count() > 0)
                 {
-                    List<BmClasificacionBienesGetDto> listDto = new List<BmClasificacionBienesGetDto>();
+                    List<BmClasificacionBienesResponseDto> listDto = new List<BmClasificacionBienesResponseDto>();
 
                     foreach (var item in titulos)
                     {
-                        BmClasificacionBienesGetDto dto = new BmClasificacionBienesGetDto();
+                        BmClasificacionBienesResponseDto dto = new BmClasificacionBienesResponseDto();
                         dto = await MapBmClasificacionBienes(item);
 
                         listDto.Add(dto);
@@ -138,10 +138,10 @@ namespace Convertidor.Services.Bm
         }
 
 
-        public async Task<ResultDto<BmClasificacionBienesGetDto>> Update(BmClasificacionBienesUpdateDto dto)
+        public async Task<ResultDto<BmClasificacionBienesResponseDto>> Update(BmClasificacionBienesUpdateDto dto)
         {
 
-            ResultDto<BmClasificacionBienesGetDto> result = new ResultDto<BmClasificacionBienesGetDto>(null);
+            ResultDto<BmClasificacionBienesResponseDto> result = new ResultDto<BmClasificacionBienesResponseDto>(null);
             try
             {
                 var codigoClasificacionBien = await _repository.GetByCodigoClasificacionBien(dto.CodigoClasificacionBien);
@@ -219,16 +219,29 @@ namespace Convertidor.Services.Bm
                     result.Message = "Fecha Fin Invalida";
                     return result;
                 }
-                var extra3 = dto.Extra3;
-                if (extra3 == string.Empty)
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
+                    result.Message = "Extra1 invalido";
                     return result;
                 }
 
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
 
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
+                    return result;
+                }
 
 
 
@@ -270,10 +283,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<BmClasificacionBienesGetDto>> Create(BmClasificacionBienesUpdateDto dto)
+        public async Task<ResultDto<BmClasificacionBienesResponseDto>> Create(BmClasificacionBienesUpdateDto dto)
         {
 
-            ResultDto<BmClasificacionBienesGetDto> result = new ResultDto<BmClasificacionBienesGetDto>(null);
+            ResultDto<BmClasificacionBienesResponseDto> result = new ResultDto<BmClasificacionBienesResponseDto>(null);
             try
             {
 
@@ -352,16 +365,30 @@ namespace Convertidor.Services.Bm
                     result.Message = "Fecha Fin Invalida";
                     return result;
                 }
-                var extra3 = dto.Extra3;
-                if (extra3 == string.Empty)
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
+                    result.Message = "Extra1 invalido";
                     return result;
                 }
 
-               
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
+                    return result;
+                }
+
 
 
 

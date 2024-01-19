@@ -150,8 +150,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Extra1 = item.EXTRA1;
                 itemResult.Extra2 = item.EXTRA2;
                 itemResult.Extra3 = item.EXTRA3;
-                itemResult.CodigoEmpresa = item.CODIGO_EMPRESA;
-      
+               
                 result.Add(itemResult);
 
 
@@ -289,6 +288,7 @@ namespace Convertidor.Data.Repository.Rh
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 direccion.CODIGO_EMPRESA = conectado.Empresa;
                 direccion.USUARIO_UPD = conectado.Usuario;
+                direccion.FECHA_UPD = DateTime.Now; 
 
 
                 await _repository.Update(direccion);
@@ -420,7 +420,8 @@ namespace Convertidor.Data.Repository.Rh
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;    
 
 
                 var created = await _repository.Add(entity);

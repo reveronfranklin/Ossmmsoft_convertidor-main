@@ -52,11 +52,11 @@ namespace Convertidor.Services.Bm
 
             return FechaDesdeObj;
         }
-        public async Task<BmBienesGetDto> MapBmBienes(BM_BIENES dtos)
+        public async Task<BmBienesResponseDto> MapBmBienes(BM_BIENES dtos)
         {
 
 
-            BmBienesGetDto itemResult = new BmBienesGetDto();
+            BmBienesResponseDto itemResult = new BmBienesResponseDto();
             itemResult.CodigoBien = dtos.CODIGO_BIEN;
             itemResult.CodigoArticulo = dtos.CODIGO_ARTICULO;
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
@@ -79,15 +79,15 @@ namespace Convertidor.Services.Bm
             return itemResult;
 
         }
-        public async Task<List<BmBienesGetDto>> MapListBienesDto(List<BM_BIENES> dtos)
+        public async Task<List<BmBienesResponseDto>> MapListBienesDto(List<BM_BIENES> dtos)
         {
-            List<BmBienesGetDto> result = new List<BmBienesGetDto>();
+            List<BmBienesResponseDto> result = new List<BmBienesResponseDto>();
 
 
             foreach (var item in dtos)
             {
 
-                BmBienesGetDto itemResult = new BmBienesGetDto();
+                BmBienesResponseDto itemResult = new BmBienesResponseDto();
 
                 itemResult = await MapBmBienes(item);
 
@@ -100,10 +100,10 @@ namespace Convertidor.Services.Bm
         }
 
        
-        public async Task<ResultDto<List<BmBienesGetDto>>> GetAll()
+        public async Task<ResultDto<List<BmBienesResponseDto>>> GetAll()
         {
 
-            ResultDto<List<BmBienesGetDto>> result = new ResultDto<List<BmBienesGetDto>>(null);
+            ResultDto<List<BmBienesResponseDto>> result = new ResultDto<List<BmBienesResponseDto>>(null);
             try
             {
 
@@ -113,11 +113,11 @@ namespace Convertidor.Services.Bm
 
                 if (titulos.Count() > 0)
                 {
-                    List<BmBienesGetDto> listDto = new List<BmBienesGetDto>();
+                    List<BmBienesResponseDto> listDto = new List<BmBienesResponseDto>();
 
                     foreach (var item in titulos)
                     {
-                        BmBienesGetDto dto = new BmBienesGetDto();
+                        BmBienesResponseDto dto = new BmBienesResponseDto();
                         dto = await MapBmBienes(item);
 
                         listDto.Add(dto);
@@ -150,10 +150,10 @@ namespace Convertidor.Services.Bm
         }
 
 
-        public async Task<ResultDto<BmBienesGetDto>> Update(BmBienesUpdateDto dto)
+        public async Task<ResultDto<BmBienesResponseDto>> Update(BmBienesUpdateDto dto)
         {
 
-            ResultDto<BmBienesGetDto> result = new ResultDto<BmBienesGetDto>(null);
+            ResultDto<BmBienesResponseDto> result = new ResultDto<BmBienesResponseDto>(null);
             try
             {
                 var codigoBien = await _repository.GetByCodigoBien(dto.CodigoBien);
@@ -247,6 +247,29 @@ namespace Convertidor.Services.Bm
                     result.Message = "Valor Actual Invalido";
                     return result;
                 }
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 invalido";
+                    return result;
+                }
+
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
+                    return result;
+                }
                 if (dto.NumeroFactura == null)
                 {
                     result.Data = null;
@@ -314,10 +337,10 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public async Task<ResultDto<BmBienesGetDto>> Create(BmBienesUpdateDto dto)
+        public async Task<ResultDto<BmBienesResponseDto>> Create(BmBienesUpdateDto dto)
         {
 
-            ResultDto<BmBienesGetDto> result = new ResultDto<BmBienesGetDto>(null);
+            ResultDto<BmBienesResponseDto> result = new ResultDto<BmBienesResponseDto>(null);
             try
             {
 
@@ -411,6 +434,29 @@ namespace Convertidor.Services.Bm
                     result.Message = "Valor Actual Invalido";
                     return result;
                 }
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 invalido";
+                    return result;
+                }
+
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
+                    return result;
+                }
                 var numeroPlaca = await _repository.GetByNumeroPlaca(dto.NumeroPlaca);
                 if (numeroPlaca != null)
                 {
@@ -496,9 +542,9 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-        public BmBienesGetDto GetDefaultBien()
+        public BmBienesResponseDto GetDefaultBien()
         {
-            BmBienesGetDto itemDefault = new BmBienesGetDto();
+            BmBienesResponseDto itemDefault = new BmBienesResponseDto();
             itemDefault.CodigoBien = 0;
             itemDefault.CodigoArticulo=0;
             itemDefault.CodigoProveedor = 0;
