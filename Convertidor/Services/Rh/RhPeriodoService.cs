@@ -594,12 +594,12 @@ namespace Convertidor.Data.Repository.Rh
 
             return result;
         }
-        public async Task<RhPeriodosResponseDto> GetPeriodoAbierto(int codigoTipoNomina, string tipoNomina)
+        public async Task<RhPeriodosResponseDto> GetPeriodoAbierto(RhTiposNominaFilterDto dto)
         {
             try
             {
 
-                var periodo = await _repository.GetPeriodoAbierto(codigoTipoNomina, tipoNomina);
+                var periodo = await _repository.GetPeriodoAbierto(dto.CodigoTipoNomina, dto.TipoNomina);
                 var resulDto = await MapPeriodosDto(periodo);
                 return resulDto;
             }

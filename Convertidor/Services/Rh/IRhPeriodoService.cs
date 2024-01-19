@@ -18,6 +18,8 @@ namespace Convertidor.Services.Rh
         Task<ResultDto<RhPeriodosResponseDto>> UpdateDatosPreCierre(RhPeriodosUsuarioFechaUpdate dto);
 
         Task<ResultDto<RhPeriodosResponseDto>> UpdateDatosPrenomina(RhPeriodosUsuarioFechaUpdate dto);
-	}
+        Task<RhPeriodosResponseDto> GetPeriodoAbierto(RhTiposNominaFilterDto dto);
+
+    }
 }
 
