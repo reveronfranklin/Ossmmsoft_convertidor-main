@@ -24,9 +24,9 @@ public class PrePresupuestoTest
 
   
 
-    private async Task<ResultDto<List<ListPresupuestoDto>>> GetPresupuestos()
+    private  ResultDto<List<ListPresupuestoDto>> GetPresupuestos()
     {
-        ResultDto<List<ListPresupuestoDto>> result = new ResultDto<List<ListPresupuestoDto>>(null);
+        ResultDto<List<ListPresupuestoDto>> result = new ResultDto<List<ListPresupuestoDto>>(null!);
         List<ListPresupuestoDto> data = new List<ListPresupuestoDto>
         {
             new ListPresupuestoDto
