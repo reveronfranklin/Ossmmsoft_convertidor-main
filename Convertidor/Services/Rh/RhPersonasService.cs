@@ -92,16 +92,20 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<List<ListSimplePersonaDto>> result = new ResultDto<List<ListSimplePersonaDto>>(null);
             try
             {
+              
                 var cacheKey = "GetAllListSimplePersonaDto";
                 List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
+                personas = await _repository.GetAll();
+
                 List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
                 //personas = await _repository.GetAll();
 
                 // =await  MapListSimplePersonasDto(personas);
                 var listPersonas= await _distributedCache.GetAsync(cacheKey);
-                if (listPersonas != null)
+                resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                if (resultData != null && resultData.Count == personas.Count)
                 {
-                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                    
                     result.Data =resultData;
 
                     result.IsValid = true;
@@ -110,11 +114,11 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 else
                 {
-                    personas = await _repository.GetAll();
+                    
 
                     resultData =await  MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(2))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
                    var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);

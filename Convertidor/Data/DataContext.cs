@@ -221,7 +221,10 @@ namespace Convertidor.Data
 
             modelBuilder.Entity<RH_TIPOS_NOMINA>(builder =>
             {
-                builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_TIPO_NOMINA,
+                });
                 builder.ToTable("RH_TIPOS_NOMINA");
             });
             

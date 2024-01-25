@@ -16,6 +16,6 @@ public class RH_CONCEPTOS_ACUMULA
     public int CODIGO_EMPRESA { get; set; }
     public int CODIGO_CONCEPTO_ASOCIADO { get; set; }
     public DateTime FECHA_DESDE { get; set; }
-    public DateTime FECHA_HASTA { get; set; }
+    public DateTime? FECHA_HASTA { get; set; }
     
 }

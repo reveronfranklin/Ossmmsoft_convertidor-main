@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.ADM;
+﻿using System.Globalization;
+using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.RH;
@@ -77,13 +78,30 @@ namespace Convertidor.Services.Adm
                 itemResult.FechaDesdeString = dtos.FECHA_DESDE.ToString("u"); 
                 FechaDto FechaDesdeObj = GetFechaDto(dtos.FECHA_DESDE);
                 itemResult.FechaDesdeObj = FechaDesdeObj;
-                itemResult.FechaHasta = dtos.FECHA_HASTA;
-                itemResult.FechaHastaString = dtos.FECHA_HASTA.ToString("u"); 
-                FechaDto FechaHastaObj = GetFechaDto(dtos.FECHA_HASTA);
-                itemResult.FechaHastaObj = FechaHastaObj;
+                if (dtos.FECHA_HASTA != null)
+                {
+                    itemResult.FechaHasta = (DateTime)dtos.FECHA_HASTA;
+                    itemResult.FechaHastaString =  itemResult.FechaHasta.ToString("u"); 
+                    FechaDto FechaHastaObj = GetFechaDto((DateTime)dtos.FECHA_HASTA);
+                    itemResult.FechaHastaObj = FechaHastaObj;
+                }
+            
                 itemResult.TipoAcumuladoId = dtos.TIPO_ACUMULADO_ID;
+                itemResult.TipoAcumuladoDescripcion = "";
+                int tipoAcumuladoId = Int32.Parse(dtos.TIPO_ACUMULADO_ID);
+                var tipoAcumulado = await _repositoryRhDescriptiva.GetByCodigoDescriptiva(tipoAcumuladoId);
+                if (tipoAcumulado != null)
+                {
+                    itemResult.TipoAcumuladoDescripcion = tipoAcumulado.DESCRIPCION;
+                }
+                
                 itemResult.CodigoConceptoAsociado = dtos.CODIGO_CONCEPTO_ASOCIADO;
-           
+                itemResult.CodigoConceptoAsociadoDescripcion = "";
+                var conceptoAsociado = await _rhConceptosRepository.GetByCodigo(dtos.CODIGO_CONCEPTO_ASOCIADO);
+                if (conceptoAsociado != null)
+                {
+                    itemResult.CodigoConceptoAsociadoDescripcion = conceptoAsociado.DESCRIPCION;
+                }
                 return itemResult;
 
             }
@@ -174,8 +192,20 @@ namespace Convertidor.Services.Adm
                 }
 
                 conceptoAcumula.TIPO_ACUMULADO_ID = dto.TipoAcumuladoId;
-                conceptoAcumula.FECHA_DESDE = dto.FechaDesde;
-                conceptoAcumula.FECHA_HASTA = dto.FechaHasta;
+                
+                var fechaDesde = Convert.ToDateTime(dto.FechaDesdeString, CultureInfo.InvariantCulture);
+                var fechaHasta = Convert.ToDateTime(dto.FechaHastaString, CultureInfo.InvariantCulture);
+                
+                conceptoAcumula.FECHA_DESDE = fechaDesde;
+                if (fechaHasta.Year <= 1900)
+                {
+                    conceptoAcumula.FECHA_HASTA = null;
+                }
+                else
+                {
+                    conceptoAcumula.FECHA_HASTA = fechaHasta;
+                }
+                
                 conceptoAcumula.CODIGO_CONCEPTO_ASOCIADO = dto.CodigoConceptoAsociado;
                
               
@@ -246,8 +276,18 @@ namespace Convertidor.Services.Adm
                 entity.CODIGO_CONCEPTO = dto.CodigoConcepto;
                 entity.CODIGO_CONCEPTO_ACUMULA = await _repository.GetNextKey();
                 entity.TIPO_ACUMULADO_ID = dto.TipoAcumuladoId;
-                entity.FECHA_DESDE = dto.FechaDesde;
-                entity.FECHA_HASTA = dto.FechaHasta;
+                var fechaDesde = Convert.ToDateTime(dto.FechaDesdeString, CultureInfo.InvariantCulture);
+                var fechaHasta = Convert.ToDateTime(dto.FechaHastaString, CultureInfo.InvariantCulture);
+                entity.FECHA_DESDE = fechaDesde;
+                if (fechaHasta.Year <= 1900)
+                {
+                    entity.FECHA_HASTA = null;
+                }
+                else
+                {
+                    entity.FECHA_HASTA = fechaHasta;
+                }
+                entity.FECHA_HASTA = fechaHasta;
                 entity.CODIGO_CONCEPTO_ASOCIADO = dto.CodigoConceptoAsociado;
                 
                 entity.FECHA_UPD = DateTime.Now;
@@ -376,7 +416,7 @@ namespace Convertidor.Services.Adm
             try
             {
 
-                var conceptoAcumula = await _repository.GetByCodigoConcepto(dto.CodigoConceptoAcumula);
+                var conceptoAcumula = await _repository.GetByCodigoConcepto(dto.CodigoConcepto);
                 if (conceptoAcumula == null)
                 {
                     result.Data = null;

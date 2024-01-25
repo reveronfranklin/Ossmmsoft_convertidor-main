@@ -112,6 +112,8 @@ builder.Services.AddTransient<IOssVariableService, OssVariableService>();
 builder.Services.AddTransient<IOssFuncionService, OssFuncionService>();
 builder.Services.AddTransient<IOssFormulaService, OssFormulaService>();
 builder.Services.AddTransient<IOssCalculoService, OssCalculoService>();
+builder.Services.AddTransient<IOssModeloCalculoService, OssModeloCalculoService>();
+
 
 
 

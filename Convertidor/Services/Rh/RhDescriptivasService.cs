@@ -23,7 +23,23 @@ namespace Convertidor.Data.Repository.Rh
             _repository = repository;
           
         }
-       
+        public async Task<RH_DESCRIPTIVAS> GetByCodigoDescriptiva(int descripcionId)
+        {
+            try
+            {
+                var descriptiva = await _repository.GetByCodigoDescriptiva(descripcionId);
+              
+
+
+                return descriptiva;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<string> GetDescripcionByCodigoDescriptiva(int descripcionId)
         {
             try

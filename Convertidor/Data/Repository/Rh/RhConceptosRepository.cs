@@ -18,7 +18,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var result = await _context.RH_CONCEPTOS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.RH_CONCEPTOS.DefaultIfEmpty().OrderBy(x=>x.CODIGO_TIPO_NOMINA).ThenBy(x=>x.CODIGO).ToListAsync();
                 return (List<RH_CONCEPTOS>)result;
             }
             catch (Exception ex)
@@ -33,7 +33,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var result = await _context.RH_CONCEPTOS.DefaultIfEmpty().Where(tn=>tn.CODIGO_TIPO_NOMINA== codTipoNomina).ToListAsync();
+                var result = await _context.RH_CONCEPTOS.DefaultIfEmpty().Where(tn=>tn.CODIGO_TIPO_NOMINA== codTipoNomina).OrderBy(x=>x.CODIGO).ToListAsync();
                 return (List<RH_CONCEPTOS>)result;
             }
             catch (Exception ex)

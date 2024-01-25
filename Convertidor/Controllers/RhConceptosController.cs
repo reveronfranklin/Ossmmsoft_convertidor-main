@@ -28,7 +28,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetAll()
         {   
-            var result = await _service.GetAll();
+                var result = await _service.GetAll();
             return Ok(result);
         }
 
@@ -40,7 +40,15 @@ namespace Convertidor.Controllers
             var result = await _service.GetByCodigo(filter);
             return Ok(result);
         }
-
+        
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByTipoNomina(RhTiposNominaFilterDto filter)
+        {
+            var result = await _service.GetByTipoNomina(filter.CodigoTipoNomina);
+            return Ok(result.OrderBy(x=>x.Denominacion));
+        }
         
         [HttpPost]
         [Route("[action]")]
