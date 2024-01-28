@@ -160,6 +160,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
                 
+                    
                 var concepto = await _rhConceptosRepository.GetByCodigo(dto.CodigoConcepto);
                 if (concepto == null)
                 {
@@ -169,7 +170,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                int tipoAcumuladoId = Int32.Parse(dto.TipoAcumuladoId);
+                int tipoAcumuladoId = dto.TipoAcumuladoId;
                 var tipoAcumulado = await _repositoryRhDescriptiva.GetByIdAndTitulo(36,tipoAcumuladoId);
                 if (tipoAcumulado==false)
                 {
@@ -190,20 +191,40 @@ namespace Convertidor.Services.Adm
                         return result;
                     }
                 }
-
-                conceptoAcumula.TIPO_ACUMULADO_ID = dto.TipoAcumuladoId;
-                
-                var fechaDesde = Convert.ToDateTime(dto.FechaDesdeString, CultureInfo.InvariantCulture);
-                var fechaHasta = Convert.ToDateTime(dto.FechaHastaString, CultureInfo.InvariantCulture);
-                
-                conceptoAcumula.FECHA_DESDE = fechaDesde;
-                if (fechaHasta.Year <= 1900)
+                if (!DateValidate.IsDate(dto.FechaDesdeString))
                 {
-                    conceptoAcumula.FECHA_HASTA = null;
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha desde No VAlida";
+                    return result;
+                }
+                conceptoAcumula.TIPO_ACUMULADO_ID = dto.TipoAcumuladoId.ToString();
+                
+            
+       
+                if (DateValidate.IsDate(dto.FechaDesdeString))
+                {
+                    var fechaDesde = Convert.ToDateTime(dto.FechaDesdeString, CultureInfo.InvariantCulture);
+              
+                    conceptoAcumula.FECHA_DESDE = fechaDesde;
+                }
+                
+                if (DateValidate.IsDate(dto.FechaHastaString))
+                {
+                    var fechaHasta = Convert.ToDateTime(dto.FechaHastaString, CultureInfo.InvariantCulture);
+                    if (fechaHasta.Year <= 1900)
+                    {
+                        conceptoAcumula.FECHA_HASTA = null;
+                    }
+                    else
+                    {
+                        conceptoAcumula.FECHA_HASTA = fechaHasta;
+                    }
+                    conceptoAcumula.FECHA_HASTA = fechaHasta;
                 }
                 else
                 {
-                    conceptoAcumula.FECHA_HASTA = fechaHasta;
+                    conceptoAcumula.FECHA_HASTA = null;
                 }
                 
                 conceptoAcumula.CODIGO_CONCEPTO_ASOCIADO = dto.CodigoConceptoAsociado;
@@ -250,7 +271,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                int tipoAcumuladoId = Int32.Parse(dto.TipoAcumuladoId);
+                int tipoAcumuladoId = dto.TipoAcumuladoId;
                 var tipoAcumulado = await _repositoryRhDescriptiva.GetByIdAndTitulo(36,tipoAcumuladoId);
                 if (tipoAcumulado==false)
                 {
@@ -271,23 +292,45 @@ namespace Convertidor.Services.Adm
                         return result;
                     }
                 }
+                if (!DateValidate.IsDate(dto.FechaDesdeString))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha desde No VAlida";
+                    return result;
+                }
+                
                 
                 RH_CONCEPTOS_ACUMULA entity = new RH_CONCEPTOS_ACUMULA();
                 entity.CODIGO_CONCEPTO = dto.CodigoConcepto;
                 entity.CODIGO_CONCEPTO_ACUMULA = await _repository.GetNextKey();
-                entity.TIPO_ACUMULADO_ID = dto.TipoAcumuladoId;
-                var fechaDesde = Convert.ToDateTime(dto.FechaDesdeString, CultureInfo.InvariantCulture);
-                var fechaHasta = Convert.ToDateTime(dto.FechaHastaString, CultureInfo.InvariantCulture);
-                entity.FECHA_DESDE = fechaDesde;
-                if (fechaHasta.Year <= 1900)
+                entity.TIPO_ACUMULADO_ID = dto.TipoAcumuladoId.ToString();
+                if (DateValidate.IsDate(dto.FechaDesdeString))
                 {
-                    entity.FECHA_HASTA = null;
+                    var fechaDesde = Convert.ToDateTime(dto.FechaDesdeString, CultureInfo.InvariantCulture);
+              
+                    entity.FECHA_DESDE = fechaDesde;
+                }
+                if (DateValidate.IsDate(dto.FechaHastaString))
+                {
+                    var fechaHasta = Convert.ToDateTime(dto.FechaHastaString, CultureInfo.InvariantCulture);
+                    if (fechaHasta.Year <= 1900)
+                    {
+                        entity.FECHA_HASTA = null;
+                    }
+                    else
+                    {
+                        entity.FECHA_HASTA = fechaHasta;
+                    }
+                    entity.FECHA_HASTA = fechaHasta;
                 }
                 else
                 {
-                    entity.FECHA_HASTA = fechaHasta;
+                    entity.FECHA_HASTA = null;
                 }
-                entity.FECHA_HASTA = fechaHasta;
+            
+                
+              
                 entity.CODIGO_CONCEPTO_ASOCIADO = dto.CodigoConceptoAsociado;
                 
                 entity.FECHA_UPD = DateTime.Now;

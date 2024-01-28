@@ -71,23 +71,8 @@ namespace Convertidor.Data.Repository.Rh
         }
        
         
-        /*public async Task AddRedis(string key, string value)
-        {
-            var db = _connectionMultiplexer.GetDatabase();
-            await db.StringSetAsync(key, value,TimeSpan.FromHours(2));
-        }
-        public void DeleteRedis(string key)
-        {
-            var db = _connectionMultiplexer.GetDatabase();
-            db.KeyDelete(key);
-        }
-        public async Task<string> GetRedis(string key)
-        {
-            var db = _connectionMultiplexer.GetDatabase();
-            //db.KeyDelete("ListProducts");
-            return await db.StringGetAsync(key);
-        }*/
-        public async  Task<ResultDto<List<ListSimplePersonaDto>>> GetAll()
+      
+         public async  Task<ResultDto<List<ListSimplePersonaDto>>> GetAll()
         {
             ResultDto<List<ListSimplePersonaDto>> result = new ResultDto<List<ListSimplePersonaDto>>(null);
             try
@@ -98,12 +83,13 @@ namespace Convertidor.Data.Repository.Rh
                 personas = await _repository.GetAll();
 
                 List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
-                //personas = await _repository.GetAll();
-
-                // =await  MapListSimplePersonasDto(personas);
+             
                 var listPersonas= await _distributedCache.GetAsync(cacheKey);
-                resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
-                if (resultData != null && resultData.Count == personas.Count)
+                if (listPersonas != null)
+                {
+                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>>(listPersonas);
+                }
+                if (listPersonas != null && resultData != null && resultData.Count == personas.Count)
                 {
                     
                     result.Data =resultData;
@@ -154,11 +140,7 @@ namespace Convertidor.Data.Repository.Rh
                 List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
                 List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
                 
-                //personas = await _repository.GetAll();
 
-                //result =await MapListSimplePersonasDto(personas);
-                
-               
                 var listPersonas= await _distributedCache.GetAsync(cacheKey);
                 
                 if (listPersonas != null)
