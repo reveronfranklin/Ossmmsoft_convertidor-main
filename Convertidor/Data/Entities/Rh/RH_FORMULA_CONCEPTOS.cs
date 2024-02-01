@@ -8,8 +8,8 @@ public class RH_FORMULA_CONCEPTOS
     public decimal PORCENTAJE { get; set; }
     public decimal MONTO_TOPE { get; set; }
     public string TIPO_SUELDO { get; set; } = string.Empty;
-    public DateTime FECHA_DESDE { get; set; }
-    public DateTime FECHA_HASTA { get; set; }
+    public DateTime? FECHA_DESDE { get; set; }
+    public DateTime? FECHA_HASTA { get; set; }
     public string EXTRA1 { get; set; } = string.Empty;
     public string EXTRA2 { get; set; } = string.Empty;
     public string EXTRA3 { get; set; } = string.Empty;

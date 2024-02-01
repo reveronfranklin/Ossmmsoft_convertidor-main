@@ -9,6 +9,7 @@
 		public decimal Porcentaje { get; set; }
 		public decimal MontoTope { get; set; }
 		public string TipoSueldo { get; set; } = string.Empty;
+		public string TipoSueldoDescripcion { get; set; } = string.Empty;
 		public DateTime FechaDesde { get; set; }
 		public string FechaDesdeString { get; set; }
 		public FechaDto FechaDesdeObj { get; set; }
