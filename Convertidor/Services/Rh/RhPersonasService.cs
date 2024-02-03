@@ -43,7 +43,7 @@ namespace Convertidor.Data.Repository.Rh
                                 IRhComunicacionesRepository rhComunicacionessRepository,
                                 IRH_HISTORICO_PERSONAL_CARGORepository rhHistoricoPersonalCargorepository,
                                 IRhDescriptivasService rhDescriptivasServices,
-                                 IRhAdministrativosService rhAdministrativosServices,
+                                IRhAdministrativosService rhAdministrativosServices,
                                 IRhRelacionCargosRepository rhRelacionCargosRepository, 
                                 IPreCargosRepository preCargosRepository,
                                 IPRE_INDICE_CAT_PRGRepository preIndiceCatPrg, 
@@ -69,8 +69,36 @@ namespace Convertidor.Data.Repository.Rh
             _distributedCache = distributedCache;
             _configuration = configuration;
         }
-       
-        
+
+        public async Task<ResultDto<List<ListSimplePersonaDto>>> AddPersonaCache(int codigoPersona)
+        {
+            List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
+            var persona = await GetPersona(codigoPersona);
+            if (persona != null)
+            {
+                var cacheKey = "GetAllListSimplePersonaDto";
+                var listPersonas= await _distributedCache.GetAsync(cacheKey);
+                if (listPersonas != null)
+                {
+                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>>(listPersonas);
+                    var personaFind = resultData.Where(x => x.CodigoPersona == codigoPersona).FirstOrDefault();
+                    if (personaFind == null)
+                    {
+                        resultData.Add(personaFind);
+                        var options = new DistributedCacheEntryOptions()
+                            .SetAbsoluteExpiration(DateTime.Now.AddDays(2))
+                            .SetSlidingExpiration(TimeSpan.FromDays(1));
+                        var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
+                        var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                        await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                    }
+                }
+                
+            }
+
+            var result = await GetAll();
+            return result;
+        }
       
          public async  Task<ResultDto<List<ListSimplePersonaDto>>> GetAll()
         {
@@ -907,7 +935,7 @@ namespace Convertidor.Data.Repository.Rh
                 persona.ESTATURA = dto.Estatura;
                 persona.PESO = dto.Peso;
                 persona.MANO_HABIL = dto.ManoHabil;
-                persona.STATUS = dto.Status;
+                persona.STATUS = "A";//dto.Status;
                 persona.IDENTIFICACION_ID = dto.IdentificacionId;
                 persona.NUMERO_IDENTIFICACION = dto.NumeroIdentificacion;
            
@@ -924,7 +952,9 @@ namespace Convertidor.Data.Repository.Rh
                 
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await GetPersona(dto.CodigoPersona);
+                    await AddPersonaCache(persona.CODIGO_PERSONA);
+                    
+                    var resultDto = await GetPersona(persona.CODIGO_PERSONA );
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
