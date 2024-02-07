@@ -11,12 +11,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class RhProcesosController : ControllerBase
+    public class RhProcesosDetalleController : ControllerBase
     {
        
-        private readonly IRhProcesosService _service;
+        private readonly IRhProcesosDetalleService _service;
 
-        public RhProcesosController(IRhProcesosService service)
+        public RhProcesosDetalleController(IRhProcesosDetalleService service)
         {
 
             _service = service;
@@ -32,25 +32,28 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
       
-        [HttpGet]
+        
+        
+        [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllRhProcesoResponseDto( )
+        public async Task<IActionResult> GetByCodigo(RhProcesosDetalleFilterDtoDto filter)
         {
-            var result = await _service.GetAllRhProcesoResponseDto();
+            var result = await _service.GetByCodigo(filter.CodigoDetalleProceso);
             return Ok(result);
         }
         
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetByCodigo(RhProcesosFilterDtoDto filter)
+        public async Task<IActionResult> GetByProceso(RhProcesosDetalleFilterDtoDto filter)
         {
-            var result = await _service.GetByCodigo(filter.CodigoProceso);
+            var result = await _service.GetByProceso(filter);
             return Ok(result);
         }
         
+        
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(RhProcesosUpdateDtoDto dto)
+        public async Task<IActionResult> Create(RhProcesosDetalleUpdateDtoDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -59,7 +62,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(RhProcesosUpdateDtoDto dto)
+        public async Task<IActionResult> Update(RhProcesosDetalleUpdateDtoDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -68,7 +71,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(RhProcesosDeleteDtoDto dto)
+        public async Task<IActionResult> Delete(RhProcesosDetalleDeleteDtoDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);

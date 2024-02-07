@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.RH;
+using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
@@ -18,17 +19,19 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IRhProcesoRepository _repository;
         private readonly IRhProcesoDetalleRepository _rhProcesoDetalleRepository;
         private readonly IRhConceptosRepository _rhConceptosRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
         private readonly IMapper _mapper;
 
         public RhProcesosService(IRhProcesoRepository repository,
-                                 IRhProcesoDetalleRepository rhProcesoDetalleRepository, IRhConceptosRepository rhConceptosRepository)
+                                 IRhProcesoDetalleRepository rhProcesoDetalleRepository,
+                                 IRhConceptosRepository rhConceptosRepository,
+                                 ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
             _rhProcesoDetalleRepository = rhProcesoDetalleRepository;
             _rhConceptosRepository = rhConceptosRepository;
-
-
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
        
         public async Task<RH_PROCESOS> GetByCodigo(int codigoProcesso)
@@ -48,10 +51,10 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<ResultDto<List<RhprocesosDto>>> GetAll()
+        public async Task<ResultDto<List<RhProcesosDto>>> GetAll()
         {
 
-            ResultDto<List<RhprocesosDto>> result = new ResultDto<List<RhprocesosDto>>(null);
+            ResultDto<List<RhProcesosDto>> result = new ResultDto<List<RhProcesosDto>>(null);
             try
             {
                 var procesos = await _repository.GetAll();
@@ -73,20 +76,43 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        
 
-
-
-
-        private async Task<List<RhprocesosDto>> MapListProceso(List<RH_PROCESOS> dto)
+        public async Task<ResultDto<List<RhProcesosResponseDtoDto>>> GetAllRhProcesoResponseDto()
         {
 
-            List<RhprocesosDto> result = new List<RhprocesosDto>();
+            ResultDto<List<RhProcesosResponseDtoDto>> result = new ResultDto<List<RhProcesosResponseDtoDto>>(null);
+            try
+            {
+                var procesos = await _repository.GetAll();
+                var listDto = await MapListRhProcesoResponsesDto(procesos);
+
+                result.Data = listDto;
+                result.IsValid = true;
+                result.Message = "";
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+        private async Task<List<RhProcesosDto>> MapListProceso(List<RH_PROCESOS> dto)
+        {
+
+            List<RhProcesosDto> result = new List<RhProcesosDto>();
          
             try
             {
                 var resultNew = dto
 
-                 .Select(e => new RhprocesosDto
+                 .Select(e => new RhProcesosDto
                  {
                      CodigoProceso = e.CODIGO_PROCESO,
                      Descripcion = e.DESCRIPCION,
@@ -136,6 +162,214 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        
+        
+          public async  Task<RhProcesosResponseDtoDto> MapRhProcesoResponseDto(RH_PROCESOS dtos)
+        {
+ 
+
+                RhProcesosResponseDtoDto itemResult = new RhProcesosResponseDtoDto();
+                itemResult.CodigoProceso = dtos.CODIGO_PROCESO;
+                itemResult.Descripcion = dtos.DESCRIPCION;
+              
+             
+          
+            return itemResult;
+
+
+
+        }
+
+        public async  Task<List<RhProcesosResponseDtoDto>> MapListRhProcesoResponsesDto(List<RH_PROCESOS> dtos)
+        {
+            List<RhProcesosResponseDtoDto> result = new List<RhProcesosResponseDtoDto>();
+           
+            
+            foreach (var item in dtos)
+            {
+
+                RhProcesosResponseDtoDto itemResult = new RhProcesosResponseDtoDto();
+
+                itemResult = await MapRhProcesoResponseDto(item);
+               
+                result.Add(itemResult);
+            }
+            return result;
+
+
+
+        }
+
+        
+        public async Task<ResultDto<RhProcesosResponseDtoDto>> Update(RhProcesosUpdateDtoDto dto)
+        {
+
+            ResultDto<RhProcesosResponseDtoDto> result = new ResultDto<RhProcesosResponseDtoDto>(null);
+            try
+            {
+
+                var proceso = await _repository.GetByCodigo(dto.CodigoProceso);
+                if (proceso == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proceso no existe";
+                    return result;
+                }
+                if (dto.Descripcion.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+                }
+
+                
+              
+              
+              
+
+                proceso.DESCRIPCION= dto.Descripcion;
+              
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                proceso.CODIGO_EMPRESA = conectado.Empresa;
+                proceso.USUARIO_UPD = conectado.Usuario;
+                proceso.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(proceso);
+
+        
+                
+                var resultDto = await MapRhProcesoResponseDto(proceso);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        public async Task<ResultDto<RhProcesosResponseDtoDto>> Create(RhProcesosUpdateDtoDto dto)
+        {
+
+            ResultDto<RhProcesosResponseDtoDto> result = new ResultDto<RhProcesosResponseDtoDto>(null);
+            try
+            {
+                if (dto.Descripcion.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+                }
+
+            
+                RH_PROCESOS entity = new RH_PROCESOS();
+                entity.CODIGO_PROCESO = await _repository.GetNextKey();
+                entity.DESCRIPCION = dto.Descripcion;
+                entity.FECHA_INS = DateTime.Now;
+             
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_UPD = conectado.Usuario;
+
+
+                var created=await _repository.Add(entity);
+                
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapRhProcesoResponseDto(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;  
+
+              
+
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+ 
+        public async Task<ResultDto<RhProcesosDeleteDtoDto>> Delete(RhProcesosDeleteDtoDto dto)
+        {
+
+            ResultDto<RhProcesosDeleteDtoDto> result = new ResultDto<RhProcesosDeleteDtoDto>(null);
+            try
+            {
+
+                var proceso = await _repository.GetByCodigo(dto.CodigoProceso);
+                if (proceso == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proceso no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoProceso);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        
+        
     }
 }
 

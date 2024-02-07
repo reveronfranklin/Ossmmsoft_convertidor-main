@@ -21,7 +21,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var result = await _context.RH_PERSONAS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p=> p.CODIGO_PERSONA>0).ToListAsync();
                 return (List<RH_PERSONAS>)result;
             }
             catch (Exception ex)

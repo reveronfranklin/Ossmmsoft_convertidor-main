@@ -86,8 +86,8 @@ namespace Convertidor.Data.Repository.Rh
                     {
                         resultData.Add(personaFind);
                         var options = new DistributedCacheEntryOptions()
-                            .SetAbsoluteExpiration(DateTime.Now.AddDays(2))
-                            .SetSlidingExpiration(TimeSpan.FromDays(1));
+                            .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
+                            .SetSlidingExpiration(TimeSpan.FromDays(10));
                         var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                         var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
                         await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
@@ -119,7 +119,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 if (listPersonas != null && resultData != null && resultData.Count == personas.Count)
                 {
-                    
+                
                     result.Data =resultData;
 
                     result.IsValid = true;
@@ -132,13 +132,13 @@ namespace Convertidor.Data.Repository.Rh
 
                     resultData =await  MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(2))
-                        .SetSlidingExpiration(TimeSpan.FromDays(1));
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
+                        .SetSlidingExpiration(TimeSpan.FromDays(10));
                    var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
                     await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
-                    result.Data =resultData;
-
+                  
+                    result.Data = resultData;
                     result.IsValid = true;
                     result.Message = "";
                     return result;
@@ -488,7 +488,10 @@ namespace Convertidor.Data.Repository.Rh
 
                 ListSimplePersonaDto itemResult = new ListSimplePersonaDto();
 
-
+                if (item.CODIGO_PERSONA == null)
+                {
+                    var detener = 1;
+                }
 
                 itemResult.CodigoPersona = item.CODIGO_PERSONA;
                 itemResult.Cedula = item.CEDULA;
