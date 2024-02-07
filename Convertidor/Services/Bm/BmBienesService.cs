@@ -63,8 +63,14 @@ namespace Convertidor.Services.Bm
             itemResult.CodigoOrdenCompra = dtos.CODIGO_ORDEN_COMPRA;
             itemResult.OrigenId = dtos.ORIGEN_ID;
             itemResult.FechaFabricacion = dtos.FECHA_FABRICACION;
+            itemResult.FechaFabricacionString = dtos.FECHA_FABRICACION.ToString("u");
+            FechaDto fechaFabricacionObj = GetFechaDto(dtos.FECHA_FABRICACION);
+            itemResult.FechaFabricacionObj = (FechaDto)fechaFabricacionObj;
             itemResult.NumeroOrdenCompra = dtos.NUMERO_ORDEN_COMPRA;
             itemResult.FechaCompra = dtos.FECHA_COMPRA;
+            itemResult.FechaCompraString = dtos.FECHA_COMPRA.ToString("u");
+            FechaDto fechaCompraObj = GetFechaDto(dtos.FECHA_COMPRA);
+            itemResult.FechaCompraObj = (FechaDto)fechaFabricacionObj;
             itemResult.NumeroPlaca = dtos.NUMERO_PLACA;
             itemResult.NumeroLote = dtos.NUMERO_LOTE;
             itemResult.ValorInicial = dtos.VALOR_INICIAL;
@@ -199,8 +205,8 @@ namespace Convertidor.Services.Bm
                     result.Message = "Origen Id Invalido";
                     return result;
                 }
-                FechaDto fechaFabricacion = GetFechaDto(dto.FechaFabricacion);
-                if (fechaFabricacion == null) 
+                
+                if (dto.FechaFabricacion == null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -215,8 +221,8 @@ namespace Convertidor.Services.Bm
                     result.Message = "Numero Orden Compra Invalido";
                     return result;
                 }
-                FechaDto fechaCompra = GetFechaDto(dto.FechaCompra);
-                if (fechaCompra == null)
+                
+                if (dto.FechaCompra == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -278,14 +284,7 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-                FechaDto fechaFactura = GetFechaDto(dto.FechaFactura);
-                if (fechaCompra == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha compra Invalida";
-                    return result;
-                }
+                
                 if (dto.TipoImpuestoId == null)
                 {
                     result.Data = null;
@@ -387,8 +386,8 @@ namespace Convertidor.Services.Bm
                     result.Message = "Origen Id Invalido";
                     return result;
                 }
-                FechaDto fechaFabricacion = GetFechaDto(dto.FechaFabricacion);
-                if (fechaFabricacion == null)
+                
+                if (dto.FechaFabricacion == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -403,15 +402,15 @@ namespace Convertidor.Services.Bm
                     result.Message = "Numero Orden Compra Invalido";
                     return result;
                 }
-                FechaDto fechaCompra = GetFechaDto(dto.FechaCompra);
-                if (fechaCompra == null)
+
+                if (dto.FechaCompra == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Fecha compra Invalida";
                     return result;
                 }
-               
+
                 if (dto.NumeroLote == null)
                 {
                     result.Data = null;
@@ -419,6 +418,15 @@ namespace Convertidor.Services.Bm
                     result.Message = "Numero Lote Invalido";
                     return result;
                 }
+                var numeroPlaca = await _repository.GetByNumeroPlaca(dto.NumeroPlaca);
+                if (numeroPlaca != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero placa Invalido";
+                    return result;
+                }
+
 
                 if (dto.ValorInicial == null)
                 {
@@ -457,23 +465,8 @@ namespace Convertidor.Services.Bm
                     result.Message = "Extra3 invalido";
                     return result;
                 }
-                var numeroPlaca = await _repository.GetByNumeroPlaca(dto.NumeroPlaca);
-                if (numeroPlaca != null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero placa Invalido";
-                    return result;
-                }
+               
                 
-                FechaDto fechaFactura = GetFechaDto(dto.FechaFactura);
-                if (fechaCompra == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha compra Invalida";
-                    return result;
-                }
                 if (dto.TipoImpuestoId == null)
                 {
                     result.Data = null;

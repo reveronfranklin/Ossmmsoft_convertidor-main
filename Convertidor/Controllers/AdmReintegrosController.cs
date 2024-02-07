@@ -1,0 +1,53 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+// HTML to PDF
+using Convertidor.Dtos.Adm;
+using Convertidor.Services.Adm;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace Convertidor.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    //[Authorize]
+    public class AdmReintegrosController : ControllerBase
+    {
+       
+        private readonly IAdmReintegrosService _service;
+
+        public AdmReintegrosController(IAdmReintegrosService service)
+        {
+
+            _service = service;
+
+
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Update(AdmReintegrosUpdateDto dto)
+        {
+            var result = await _service.Update(dto);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(AdmReintegrosUpdateDto dto)
+        {
+            var result = await _service.Create(dto);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete(AdmReintegrosDeleteDto dto)
+        {
+            var result = await _service.Delete(dto);
+            return Ok(result);
+
+        }
+
+    }
+}

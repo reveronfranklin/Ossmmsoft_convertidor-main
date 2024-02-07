@@ -13,9 +13,7 @@
         public string FechaIniString { get; set; }
         public DateTime FechaFin { get; set; }
         public string FechaFinString { get; set; }
-        
         public FechaDto FechaIniObj { get; set; }
-        
         public FechaDto FechaFinObj { get; set; }
         public int UltimoAñoAprobado{ get; set; }
         public string Graduado { get; set; } 

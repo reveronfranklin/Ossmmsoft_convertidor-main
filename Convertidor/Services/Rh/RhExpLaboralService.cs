@@ -134,7 +134,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "No existe el empleado";
+                    result.Message = "Codigo exp laboral no existe";
                     return result;
                 }
 
@@ -144,31 +144,25 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "No existe La persona";
+                    result.Message = "Codigo persona no existe";
                     return result;
                 }
-                if (dto.NombreEmpresa == string.Empty)
+                if (dto.NombreEmpresa is not null && dto.NombreEmpresa.Length>50)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Nombre Empresa Invalido";
                     return result;
                 }
-                if (dto.TipoEmpresa == string.Empty)
+                if (dto.TipoEmpresa is not null &&dto.TipoEmpresa.Length>1)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo Empresa Invalido";
                     return result;
                 }
-                if (dto.RamoId == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Ramo Invalido";
-                    return result;
-                }
-                if (dto.Cargo == string.Empty)
+               
+                if (dto.Cargo is not null && dto.Cargo.Length>50)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -199,32 +193,53 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Ultimo sueldo Invalido";
                     return result;
                 }
-                if (dto.Supervisor == string.Empty)
+                if (dto.Supervisor is not null && dto.Supervisor.Length > 50)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Supervisor Invalido";
                     return result;
                 }
-                if (dto.CargoSupervisor == string.Empty)
+                if (dto.CargoSupervisor is not null && dto.CargoSupervisor.Length>50)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Cargo Supervisor Invalido";
                     return result;
                 }
-                if (dto.Telefono == string.Empty)
+                if (dto.Telefono is not null && dto.Telefono.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Telefono Invalido";
                     return result;
                 }
-                if (dto.Descripcion == string.Empty)
+                if (dto.Descripcion is not null && dto.Descripcion.Length>1000)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Descripcion Invalida";
+                    return result;
+                }
+                if(dto.Extra1 is not null&& dto.Extra1.Length>100) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
                     return result;
                 }
 
@@ -247,6 +262,7 @@ namespace Convertidor.Data.Repository.Rh
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 codigoExpLaboral.CODIGO_EMPRESA = conectado.Empresa;
                 codigoExpLaboral.USUARIO_UPD = conectado.Usuario.ToString();
+                codigoExpLaboral.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoExpLaboral);
 
@@ -276,36 +292,39 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<RhExpLaboralResponseDto> result = new ResultDto<RhExpLaboralResponseDto>(null);
             try
             {
+                var codigoExpLaboral = await _repository.GetByCodigo(dto.CodigoExpLaboral);
+                if(codigoExpLaboral != null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Ya existe el Codigo ExpLaboral";
+                    return result;
+                }
                 var codigoPersona = await _rhPersonasRepository.GetCodigoPersona(dto.CodigoPersona);
                 if (codigoPersona == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "No existe La persona";
+                    result.Message = "Codigo persona no existe";
                     return result;
                 }
-                if(dto.NombreEmpresa==string.Empty) 
+          
+                if (dto.NombreEmpresa is not null && dto.NombreEmpresa.Length > 50)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Nombre Empresa Invalido";
                     return result;
                 }
-                if (dto.TipoEmpresa == string.Empty)
+                if (dto.TipoEmpresa is not null && dto.TipoEmpresa.Length > 1)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo Empresa Invalido";
                     return result;
                 }
-                if (dto.RamoId == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Ramo Invalido";
-                    return result;
-                }
-                if (dto.Cargo == string.Empty)
+                
+                if (dto.Cargo == string.Empty && dto.Cargo.Length > 50)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -336,36 +355,58 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Ultimo sueldo Invalido";
                     return result;
                 }
-                if (dto.Supervisor == string.Empty)
+                if (dto.Supervisor == string.Empty && dto.Supervisor.Length > 50)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Supervisor Invalido";
                     return result;
                 }
-                if (dto.CargoSupervisor == string.Empty)
+                if (dto.CargoSupervisor == string.Empty && dto.CargoSupervisor.Length > 50)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Cargo Supervisor Invalido";
                     return result;
                 }
-                if (dto.Telefono == string.Empty)
+                if (dto.Telefono == string.Empty && dto.Telefono.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Telefono Invalido";
                     return result;
                 }
-                if (dto.Descripcion == string.Empty)
+                if (dto.Descripcion == string.Empty && dto.Descripcion.Length > 1000)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Descripcion Invalida";
                     return result;
                 }
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
 
-                
+
+
 
                 RH_EXP_LABORAL entity = new RH_EXP_LABORAL();
                 entity.CODIGO_EXP_LABORAL = await _repository.GetNextKey();
@@ -432,12 +473,12 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var ExpLaboral = await _repository.GetByCodigo(dto.CodigoExpLaboral);
-                if (ExpLaboral == null)
+                var codigoExpLaboral = await _repository.GetByCodigo(dto.CodigoExpLaboral);
+                if (codigoExpLaboral == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Persona no existe";
+                    result.Message = "Codigo Explaboral no existe";
                     return result;
                 }
 

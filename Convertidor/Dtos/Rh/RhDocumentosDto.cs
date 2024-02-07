@@ -7,15 +7,13 @@
         public int TipodocumentoId { get; set; }
         public int NumeroDocumento { get; set; }
         public DateTime FechaVencimiento { get; set; }
+        public string FechaVencimientoString { get; set; }
+        public FechaDto FechaVencimientoObj { get; set; }
         public int TipoGradoid { get; set; }
         public int GradoId { get; set; }
         public string Extra1 { get; set; }
         public string Extra2 { get; set; }
         public string Extra3 { get; set; }
-        public int Usuarioins { get; set; }
-        public DateTime FechaIns { get; set; }
-        public int UsuarioUpd { get; set; }
-        public DateTime FechaUpd { get; set; }
-        public int CodigoEmpresa { get; set; }
+        
     }
 }

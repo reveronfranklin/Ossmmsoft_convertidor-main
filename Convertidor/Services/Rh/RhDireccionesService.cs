@@ -103,10 +103,7 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;
             itemResult.Extra3 = dtos.EXTRA3;
-            itemResult.UsuarioIns = dtos.USUARIO_INS;
-            itemResult.FechaIns = dtos.FECHA_INS;
-            itemResult.UsuarioUpd = dtos.USUARIO_UPD;
-            itemResult.CodigoEmpresa = dtos.CODIGO_EMPRESA;
+            
 
             return itemResult;
 

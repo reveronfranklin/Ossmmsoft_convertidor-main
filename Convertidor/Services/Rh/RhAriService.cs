@@ -62,6 +62,9 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.CodigoAri = dtos.CODIGO_ARI;
             itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
             itemResult.FechaAri = dtos.FECHA_ARI;
+            itemResult.FechaAriString = dtos.FECHA_ARI.ToString("u");
+            FechaDto fechaAriObj = GetFechaDto(dtos.FECHA_ARI);
+            itemResult.FechaAriObj = (FechaDto)fechaAriObj;
             itemResult.Mes = dtos.MES;
             itemResult.Ano = dtos.ANO;
             itemResult.EmpresaA = dtos.EMPRESA_A;
@@ -119,6 +122,14 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
+                var codigoAri = await _repository.GetByCodigo(dto.CodigoAri);
+                if (codigoAri != null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Ari invalido";
+                    return result;
+                }
 
 
                 var persona = await _rhPersonasRepository.GetCodigoPersona(dto.CodigoPersona);
@@ -141,8 +152,8 @@ namespace Convertidor.Data.Repository.Rh
                 }
             
 
-            var mes = dto.Mes;
-            if (mes < 1)
+            
+            if (dto.Mes < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
@@ -150,7 +161,7 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
-            else if (mes > 12)
+            else if (dto.Mes > 12)
             {
                 result.Data = null;
                 result.IsValid = false;
@@ -158,14 +169,14 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
-            if (dto.Ano == null)
+            if (dto.Ano <= 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "Ano ari Invalido";
                 return result;
             }
-            if (dto.Ut == null)
+            if (dto.Ut <0)
             {
                 result.Data = null;
                 result.IsValid = false;
@@ -173,78 +184,77 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
-            if (dto.EmpresaA == string.Empty)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = "Empresa A Invalida";
-                return result;
-            }
-            if (dto.EmpresaB == string.Empty)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = "Empresa B Invalida";
-                return result;
-            }
-            if (dto.EmpresaC == string.Empty)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = "Empresa C Invalida";
-                return result;
-            }
-           
-            if (dto.AaBs == null)
-            {
+                if (dto.EmpresaA is not null && dto.EmpresaA.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Empresa A Invalida";
+                    return result;
+                }
+                if (dto.EmpresaB is not null && dto.EmpresaB.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Empresa B Invalida";
+                    return result;
+                }
+                if (dto.EmpresaC is not null && dto.EmpresaC.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Empresa C Invalida";
+                    return result;
+                }
+                if (dto.AaBs <0)
+                {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "AaBs Invalido";
                 return result;
             }
-            if (dto.AbBs == null)
+            if (dto.AbBs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "AbBs Invalido";
                 return result;
             }
-            if (dto.AcBs == null)
+            if (dto.AcBs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "AcBs Invalido";
                 return result;
             }
-            if (dto.AdBs == null)
+            if (dto.AdBs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "AdBs Invalido";
                 return result;
             }
-            if (dto.C1Bs == null)
+            if (dto.C1Bs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "C1Bs Invalido";
                 return result;
             }
-            if (dto.C2Bs == null)
+            if (dto.C2Bs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "C2Bs Invalido";
                 return result;
             }
-            if (dto.C3Bs == null)
+            if (dto.C3Bs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "C3Bs Invalido";
                 return result;
             }
-            if (dto.C4Bs == null)
+            if (dto.C4Bs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
@@ -252,49 +262,70 @@ namespace Convertidor.Data.Repository.Rh
                 return result;
             }
 
-            if (dto.EuT == null)
+            if (dto.EuT < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "EuT Invalido";
                 return result;
             }
-            if (dto.H1Ut == null)
+            if (dto.H1Ut < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "H1Ut Invalido";
                 return result;
             }
-            if (dto.CargaFamiliar == null)
+            if (dto.CargaFamiliar < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "CargaFamiliar Invalida";
                 return result;
             }
-            if (dto.H3Bs == null)
+            if (dto.H3Bs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "H3Bs Invalida";
                 return result;
             }
-            if (dto.K1Bs == null)
+            if (dto.K1Bs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "k1Bs Invalida";
                 return result;
             }
-            if (dto.K2Bs == null)
+            if (dto.K2Bs < 0)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "k2Bs Invalida";
                 return result;
             }
-            if (dto.JpOr == null)
+            if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "Extra2 invalido";
+                return result;
+            }
+            if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "Extra2 invalido";
+                return result;
+            }
+            if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "Extra3 invalido";
+                return result;
+            }
+                if (dto.JpOr == null)
             {
                 result.Data = null;
                 result.IsValid = false;
@@ -335,12 +366,15 @@ namespace Convertidor.Data.Repository.Rh
                 entity.H_3_BS = dto.H3Bs;
                 entity.K_1_BS = dto.K1Bs;
                 entity.K_2_BS = dto.K2Bs;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
                 entity.J_POR = dto.JpOr;
                 entity.K_POR = dto.KpOr;
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario;
+                entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
 
 
@@ -385,12 +419,12 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var personaAri = await _repository.GetByCodigo(dto.CodigoAri);
-                if (personaAri is null)
+                var codigoAri = await _repository.GetByCodigo(dto.CodigoAri);
+                if (codigoAri is null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Ari invalido";
+                    result.Message = "Codigo Ari invalido";
                     return result;
                 }
 
@@ -448,21 +482,21 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                if (dto.EmpresaA == string.Empty)
+                if (dto.EmpresaA == string.Empty && dto.EmpresaA.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Empresa A Invalida";
                     return result;
                 }
-                if (dto.EmpresaB == string.Empty)
+                if (dto.EmpresaB == string.Empty&&dto.EmpresaB.Length>100)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Empresa B Invalida";
                     return result;
                 }
-                if (dto.EmpresaC == string.Empty)
+                if (dto.EmpresaC == string.Empty && dto.EmpresaC.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -569,6 +603,20 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "k2Bs Invalida";
                     return result;
                 }
+                if (dto.Extra2 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 invalido";
+                    return result;
+                }
+                if (dto.Extra3 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 invalido";
+                    return result;
+                }
                 if (dto.JpOr == null)
                 {
                     result.Data = null;
@@ -584,44 +632,47 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                personaAri.CODIGO_ARI = dto.CodigoAri;
-                personaAri.CODIGO_PERSONA = dto.CodigoPersona;
-                personaAri.FECHA_ARI = dto.FechaAri;
-                personaAri.MES = dto.Mes;
-                personaAri.ANO = dto.Ano;
-                personaAri.UT = dto.Ut;
-                personaAri.EMPRESA_A = dto.EmpresaA;
-                personaAri.EMPRESA_B = dto.EmpresaB;
-                personaAri.EMPRESA_C = dto.EmpresaC;
-                personaAri.EMPRESA_D = dto.EmpresaD;
-                personaAri.A_A_BS = dto.AaBs;
-                personaAri.A_B_BS = dto.AbBs;
-                personaAri.A_C_BS = dto.AcBs;
-                personaAri.A_D_BS = dto.AdBs;
-                personaAri.C_1_BS = dto.AdBs;
-                personaAri.C_2_BS = dto.AdBs;
-                personaAri.C_3_BS = dto.AdBs;
-                personaAri.C_4_BS = dto.AdBs;
-                personaAri.E_UT = dto.EuT;
-                personaAri.H_1_UT = dto.H1Ut;
-                personaAri.CARGA_FAMILIAR = dto.CargaFamiliar;
-                personaAri.H_3_BS = dto.H3Bs;
-                personaAri.K_1_BS = dto.K1Bs;
-                personaAri.K_2_BS = dto.K2Bs;
-                personaAri.J_POR = dto.JpOr;
-                personaAri.K_POR = dto.KpOr;
+                codigoAri.CODIGO_ARI = dto.CodigoAri;
+                codigoAri.CODIGO_PERSONA = dto.CodigoPersona;
+                codigoAri.FECHA_ARI = dto.FechaAri;
+                codigoAri.MES = dto.Mes;
+                codigoAri.ANO = dto.Ano;
+                codigoAri.UT = dto.Ut;
+                codigoAri.EMPRESA_A = dto.EmpresaA;
+                codigoAri.EMPRESA_B = dto.EmpresaB;
+                codigoAri.EMPRESA_C = dto.EmpresaC;
+                codigoAri.EMPRESA_D = dto.EmpresaD;
+                codigoAri.A_A_BS = dto.AaBs;
+                codigoAri.A_B_BS = dto.AbBs;
+                codigoAri.A_C_BS = dto.AcBs;
+                codigoAri.A_D_BS = dto.AdBs;
+                codigoAri.C_1_BS = dto.AdBs;
+                codigoAri.C_2_BS = dto.AdBs;
+                codigoAri.C_3_BS = dto.AdBs;
+                codigoAri.C_4_BS = dto.AdBs;
+                codigoAri.E_UT = dto.EuT;
+                codigoAri.H_1_UT = dto.H1Ut;
+                codigoAri.CARGA_FAMILIAR = dto.CargaFamiliar;
+                codigoAri.H_3_BS = dto.H3Bs;
+                codigoAri.K_1_BS = dto.K1Bs;
+                codigoAri.K_2_BS = dto.K2Bs;
+                codigoAri.EXTRA1 = dto.Extra1;
+                codigoAri.EXTRA2 = dto.Extra2;
+                codigoAri.EXTRA3 = dto.Extra3;
+                codigoAri.J_POR = dto.JpOr;
+                codigoAri.K_POR = dto.KpOr;
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                personaAri.CODIGO_EMPRESA = conectado.Empresa;
-                personaAri.USUARIO_UPD = conectado.Usuario;
-                personaAri.FECHA_UPD = DateTime.Now;
+                codigoAri.CODIGO_EMPRESA = conectado.Empresa;
+                codigoAri.USUARIO_UPD = conectado.Usuario;
+                codigoAri.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(personaAri);
+                await _repository.Update(codigoAri);
 
 
 
-                var resultDto = await MapAriDto(personaAri);
+                var resultDto = await MapAriDto(codigoAri);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";

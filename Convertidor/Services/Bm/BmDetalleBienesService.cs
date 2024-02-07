@@ -38,17 +38,6 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
         public async Task<BmDetalleBienesResponseDto> MapBmDetalleBienes(BM_DETALLE_BIENES dtos)
         {
 

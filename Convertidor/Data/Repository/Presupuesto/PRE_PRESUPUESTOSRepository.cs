@@ -75,6 +75,27 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<PRE_PRESUPUESTOS> GetByCodigoPresupuesto(int codigoPresupuesto)
+        {
+            try
+            {
+
+                var result = await _context.PRE_PRESUPUESTOS.DefaultIfEmpty()
+                    .Where(x =>x.CODIGO_PRESUPUESTO == codigoPresupuesto)
+                    .FirstOrDefaultAsync();
+                return (PRE_PRESUPUESTOS)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+
+        }
+
         public async Task<ResultDto<PRE_PRESUPUESTOS>> GetByCodigoEmpresaPeriodo(int codigoEmpresa, int periodo)
         {
 

@@ -14,14 +14,5 @@ public class RhEducacionUpdate
     public string Graduado { get; set; }
     public int TituloId { get; set; }
     public int MencionEspecialidadId { get; set; } 
-    public int UsuarioIns { get; set; }
-    public DateTime FechaIns { get; set; }
-    public int UsuarioUpd { get; set; }
-    public DateTime FechaUpd { get; set; }
-    public int CodigoEmpresa { get; set; }
-
-
-
-
-
+    
 }

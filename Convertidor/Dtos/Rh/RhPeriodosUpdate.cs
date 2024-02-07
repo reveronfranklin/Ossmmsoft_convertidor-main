@@ -7,9 +7,9 @@ public class RhPeriodosUpdate
     public DateTime FechaNomina { get; set; }
     public int Periodo { get; set; }
     public string TipoNomina { get; set; }
-    public string EXTRA1 { get; set; } = string.Empty;
-    public string EXTRA2 { get; set; } = string.Empty;
-    public string EXTRA3 { get; set; } = string.Empty;
+    public string Extra1 { get; set; } = string.Empty;
+    public string Extra2 { get; set; } = string.Empty;
+    public string Extra3 { get; set; } = string.Empty;
     public int UsuarioIns { get; set; }
     public DateTime FechaIns { get; set; }
     public int UsuarioUpd { get; set; }

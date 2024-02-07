@@ -9,6 +9,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<IEnumerable<PRE_PRESUPUESTOS>> GetAll();
 
         Task<PRE_PRESUPUESTOS> GetByCodigo(int codigoEmpresa, int codigoPresupuesto);
+        Task<PRE_PRESUPUESTOS> GetByCodigoPresupuesto(int codigoPresupuesto);
 
         Task<ResultDto<PRE_PRESUPUESTOS>> GetByCodigoEmpresaPeriodo(int codigoEmpresa, int periodo);
         Task<ResultDto<PRE_PRESUPUESTOS>> Add(PRE_PRESUPUESTOS entity);

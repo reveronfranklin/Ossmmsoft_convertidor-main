@@ -8,13 +8,12 @@
         public string Extra1 { get; set; }
         public string Extra2 { get; set; }
         public string Extra3 { get; set; }
-        public int UsuarioIns { get; set; }
-        public DateTime FechaIns { get; set; }
-        public int UsuarioUpd { get; set; }
-        public DateTime FechaUpd { get; set; }
-        public int CodigoEmpresa { get; set; }
         public DateTime FechaFinal { get; set; }
+        public string FechaFinalString { get; set; }
+        public FechaDto FechaFinalObj { get; set; }
         public DateTime FechaInicial { get; set; }
+        public string FechaInicialString { get; set; }
+        public FechaDto FechaInicialObj { get; set; }
 
 
     }

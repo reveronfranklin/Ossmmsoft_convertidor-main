@@ -129,11 +129,7 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.FrecuenciaId = dtos.FRECUENCIA_ID;
             itemResult.Dedusible = dtos.DEDUSIBLE;
             itemResult.Automatico = dtos.AUTOMATICO;
-            itemResult.UsuarioIns = dtos.USUARIO_INS;
-            itemResult.FechaIns = dtos.FECHA_INS;
-            itemResult.UsuarioUpd = dtos.USUARIO_UPD;
-            itemResult.CodigoEmpresa = dtos.CODIGO_EMPRESA;
-            itemResult.IdModeloCalculo = dtos.ID_MODELO_CALCULO;
+            
 
             return itemResult;
 
@@ -174,7 +170,7 @@ namespace Convertidor.Data.Repository.Rh
             {
 
                 var codigo = await _repository.GetCodigoString(dto.Codigo);
-                if (codigo is not null)
+                if (codigo != null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -183,16 +179,16 @@ namespace Convertidor.Data.Repository.Rh
                 }
 
                 
-                if (dto.CodigoTipoNomina == Int32.MinValue)
+                if (dto.CodigoTipoNomina <0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Nomina Invalido";
+                    result.Message = "Codigo Tipo Nomina Invalido";
                     return result;
                 }
 
 
-                if (dto.Denominacion == string.Empty)
+                if (dto.Denominacion is not null && dto.Denominacion.Length>100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -200,7 +196,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                if (dto.Descripcion == string.Empty)
+                if (dto.Descripcion is not null && dto.Denominacion.Length>1000)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -208,7 +204,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                if (dto.TipoConcepto == string.Empty)
+                if (dto.TipoConcepto is not null && dto.TipoConcepto.Length>1&&dto.TipoConcepto.Length<0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -221,7 +217,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Modulo Invalido";
+                    result.Message = "Modulo Id Invalido";
                     return result;
                 }
 
@@ -230,32 +226,32 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Modulo Invalido";
+                    result.Message = "Codigo Puc Invalido";
                     return result;
                 }
 
-                if (dto.Status == string.Empty)
+                if (dto.Status is not null && dto.Status.Length > 1 && dto.Status.Length < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Status concepto invalido";
                     return result;
                 }
-                if (dto.Extra1 == string.Empty)
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Extra1 invalido";
                     return result;
                 }
-                if (dto.Extra2 == string.Empty)
+                if (dto.Extra2 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Extra2 invalido";
                     return result;
                 }
-                if (dto.Extra3 == string.Empty)
+                if (dto.Extra3 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -268,12 +264,12 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Frecuencia Invalida";
+                    result.Message = "Frecuencia Id Invalida";
                     return result;
                 }
 
-                var dedusible = dto.Dedusible;
-                if (dedusible == null)
+                
+                if (dto.Dedusible <0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -281,8 +277,8 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                var automatico = dto.Automatico;
-                if (automatico == null)
+               
+                if (dto.Automatico <0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -308,7 +304,7 @@ namespace Convertidor.Data.Repository.Rh
                 entity.FRECUENCIA_ID = dto.FrecuenciaId;
                 entity.DEDUSIBLE = dto.Dedusible;
                 entity.AUTOMATICO = dto.Automatico;
-                entity.ID_MODELO_CALCULO = dto.IdModeloCalculo;
+                
 
                 
 
@@ -357,35 +353,25 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<RhConceptosResponseDto> result = new ResultDto<RhConceptosResponseDto>(null);
             try
             {
-                var concepto = await _repository.GetByCodigo(dto.CodigoConcepto);
-                if (concepto is null)
+                var CodigoConcepto = await _repository.GetByCodigo(dto.CodigoConcepto);
+                if (CodigoConcepto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message ="Concepto  Invalido";
+                    result.Message ="Codigo Concepto  Invalido";
                     return result;
                 }
 
-                var codigo = await _repository.GetCodigoString(dto.Codigo);
-                if (codigo is null)
+                if (dto.CodigoTipoNomina <0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message ="Concepto  Invalido";
-                    return result;
-                }
-
-                var codigoTipoNomina = await _repository.GetByCodigoTipoNomina(dto.CodigoConcepto, dto.CodigoTipoNomina);
-                if (codigoTipoNomina == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Nomina Invalido";
+                    result.Message = "Codigo Tipo Nomina Invalido";
                     return result;
                 }
 
 
-                if (dto.Denominacion == string.Empty)
+                if (dto.Denominacion is not null && dto.Denominacion.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -393,7 +379,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                if (dto.Descripcion == string.Empty)
+                if (dto.Descripcion is not null && dto.Denominacion.Length > 1000)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -401,7 +387,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                if (dto.TipoConcepto == string.Empty)
+                if (dto.TipoConcepto is not null && dto.TipoConcepto.Length > 1 && dto.TipoConcepto.Length < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -414,7 +400,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Modulo Invalido";
+                    result.Message = "Modulo Id Invalido";
                     return result;
                 }
 
@@ -423,36 +409,36 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Modulo Invalido";
+                    result.Message = "Codigo puc Invalido";
                     return result;
                 }
 
-                if (dto.Status == string.Empty)
+                if (dto.Status is not null && dto.Status.Length > 1 && dto.Status.Length < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Status concepto invalido";
                     return result;
                 }
-                if (dto.Extra1 == string.Empty)
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Concepto invalido";
+                    result.Message = "Extra1 invalido";
                     return result;
                 }
-                if (dto.Extra2 == string.Empty)
+                if (dto.Extra2 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Concepto invalido";
+                    result.Message = "Extra2 invalido";
                     return result;
                 }
-                if (dto.Extra3 == string.Empty)
+                if (dto.Extra3 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Concepto invalido";
+                    result.Message = "Extra3 invalido";
                     return result;
                 }
 
@@ -461,12 +447,11 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Frecuencia Invalida";
+                    result.Message = "Frecuencia Id Invalida";
                     return result;
                 }
 
-                var dedusible = dto.Dedusible;
-                if (dedusible == null)
+                if (dto.Dedusible < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -474,8 +459,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                var automatico = dto.Automatico;
-                if (automatico == null)
+                if (dto.Automatico < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -485,34 +469,34 @@ namespace Convertidor.Data.Repository.Rh
 
 
 
+
                 RH_CONCEPTOS entity = new RH_CONCEPTOS();
-                concepto.CODIGO_CONCEPTO = dto.CodigoConcepto;
-                concepto.CODIGO = dto.Codigo;
-                concepto.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
-                concepto.DENOMINACION = dto.Denominacion;
-                concepto.DESCRIPCION = dto.Descripcion;
-                concepto.TIPO_CONCEPTO = dto.TipoConcepto;
-                concepto.MODULO_ID = dto.ModuloId;
-                concepto.CODIGO_PUC = dto.CodigoPuc;
-                concepto.STATUS = dto.Status;
-                concepto.EXTRA1 = dto.Extra1;
-                concepto.EXTRA2 = dto.Extra2;
-                concepto.EXTRA3 = dto.Extra3;
-                concepto.FRECUENCIA_ID = dto.FrecuenciaId;
-                concepto.DEDUSIBLE = dto.Dedusible;
-                concepto.AUTOMATICO = dto.Automatico;
-                concepto.ID_MODELO_CALCULO = dto.IdModeloCalculo;
-
+                CodigoConcepto.CODIGO_CONCEPTO = dto.CodigoConcepto;
+                CodigoConcepto.CODIGO = dto.Codigo;
+                CodigoConcepto.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
+                CodigoConcepto.DENOMINACION = dto.Denominacion;
+                CodigoConcepto.DESCRIPCION = dto.Descripcion;
+                CodigoConcepto.TIPO_CONCEPTO = dto.TipoConcepto;
+                CodigoConcepto.MODULO_ID = dto.ModuloId;
+                CodigoConcepto.CODIGO_PUC = dto.CodigoPuc;
+                CodigoConcepto.STATUS = dto.Status;
+                CodigoConcepto.EXTRA1 = dto.Extra1;
+                CodigoConcepto.EXTRA2 = dto.Extra2;
+                CodigoConcepto.EXTRA3 = dto.Extra3;
+                CodigoConcepto.FRECUENCIA_ID = dto.FrecuenciaId;
+                CodigoConcepto.DEDUSIBLE = dto.Dedusible;
+                CodigoConcepto.AUTOMATICO = dto.Automatico;
+                
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                concepto.CODIGO_EMPRESA = conectado.Empresa;
-                concepto.USUARIO_UPD = conectado.Usuario;
-                concepto.FECHA_UPD = DateTime.Now;
+                CodigoConcepto.CODIGO_EMPRESA = conectado.Empresa;
+                CodigoConcepto.USUARIO_UPD = conectado.Usuario;
+                CodigoConcepto.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(concepto);
+                await _repository.Update(CodigoConcepto);
 
 
 
-                var resultDto = await MapConceptosDto(concepto);
+                var resultDto = await MapConceptosDto(CodigoConcepto);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";

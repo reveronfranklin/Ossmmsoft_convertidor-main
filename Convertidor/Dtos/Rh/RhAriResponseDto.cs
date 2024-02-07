@@ -8,6 +8,8 @@
         public int CodigoAri { get; set; }
         public int CodigoPersona { get; set; } 
         public DateTime FechaAri { get; set; }
+        public string FechaAriString { get; set; }
+        public FechaDto FechaAriObj { get; set; }
         public int Mes { get; set; }
         public int Ano { get; set; }
         public int Ut { get; set; }

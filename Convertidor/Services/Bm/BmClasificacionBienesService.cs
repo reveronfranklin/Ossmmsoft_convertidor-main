@@ -59,7 +59,14 @@ namespace Convertidor.Services.Bm
             itemResult.CodigoNivel3 = dtos.CODIGO_NIVEL3;
             itemResult.Denominacion = dtos.DENOMINACION;
             itemResult.Descripcion = dtos.DESCRIPCION;
-            itemResult.FechaIni = dtos.FECHA_FIN;
+            itemResult.FechaIni = dtos.FECHA_INI;
+            itemResult.FechaIniString = dtos.FECHA_INI.ToString("u");
+            FechaDto fechaIniObj = GetFechaDto(dtos.FECHA_INI);
+            itemResult.FechaIniObj = (FechaDto)fechaIniObj;
+            itemResult.FechaFin = dtos.FECHA_FIN;
+            itemResult.FechaFinString = dtos.FECHA_FIN.ToString("u");
+            FechaDto fechaFinObj = GetFechaDto(dtos.FECHA_FIN);
+            itemResult.FechaFinObj = (FechaDto)fechaFinObj;
             itemResult.Extra3 = dtos.EXTRA3;
             
 
@@ -203,16 +210,16 @@ namespace Convertidor.Services.Bm
                     result.Message = "Descripcion Invalida";
                     return result;
                 }
-                FechaDto fechaIni = GetFechaDto(dto.FechaIni);
-                if (fechaIni == null) 
+                
+                if (dto.FechaIni == null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Fecha Ini Invalida";
                     return result;
                 }
-                FechaDto fechaFin = GetFechaDto(dto.FechaFin);
-                if (fechaFin == null)
+                
+                if (dto.FechaFin == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -349,16 +356,16 @@ namespace Convertidor.Services.Bm
                     result.Message = "Descripcion Invalida";
                     return result;
                 }
-                FechaDto fechaIni = GetFechaDto(dto.FechaIni);
-                if (fechaIni == null)
+                
+                if (dto.FechaIni == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Fecha Ini Invalida";
                     return result;
                 }
-                FechaDto fechaFin = GetFechaDto(dto.FechaFin);
-                if (fechaFin == null)
+                
+                if (dto.FechaFin == null)
                 {
                     result.Data = null;
                     result.IsValid = false;

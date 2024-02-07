@@ -95,30 +95,9 @@ namespace Convertidor.Data.Repository.Rh
             {
 
                 RhPersonasMovControlResponseDto itemResult = new RhPersonasMovControlResponseDto();
-
-                itemResult.CodigoPersonaMovCtrl = item.CODIGO_PERSONA_MOV_CTRL;
-                itemResult.CodigoPersona = item.CODIGO_PERSONA;
-                itemResult.CodigoConcepto =item.CODIGO_CONCEPTO;
-                itemResult.ControlAplica = item.CONTROL_APLICA;
-                if (itemResult.ControlAplica == 1)
-                {
-                    itemResult.DescripcionControlAplica = "SI";
-
-                }
-                else
-                {
-                    itemResult.DescripcionControlAplica = "NO";
-                }
-
-                itemResult.DescripcionConcepto = "";
-                var concepto = await _rhConceptosRepository.GetByCodigo(itemResult.CodigoConcepto);
-                if (concepto != null)
-                {
-                    itemResult.DescripcionConcepto = concepto.DENOMINACION;
-                }
+                itemResult = await MapPersonasMovControlDto(item);
                 
                 result.Add(itemResult);
-
 
             }
             return result;
@@ -139,7 +118,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Persona Invalida";
+                    result.Message = "Codigo persona Invalida";
                     return result;
                 }
 
@@ -228,7 +207,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message ="Concepto  Invalido";
+                    result.Message ="Codigo Concepto  Invalido";
                     return result;
                 }
 
@@ -294,7 +273,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Concepto no existe";
+                    result.Message = "Codigo Concepto no existe";
                     return result;
                 }
 

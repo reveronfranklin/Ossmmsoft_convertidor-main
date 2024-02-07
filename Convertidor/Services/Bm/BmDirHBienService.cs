@@ -8,6 +8,7 @@ using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces;
+using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Interfaces.RH;
@@ -37,7 +38,7 @@ namespace Convertidor.Data.Repository.Bm
    
         private readonly IBmDirHBienRepository _repository;
         private readonly IBmDescriptivasService _bmDescriptivaService;
-        private readonly IAdmDescriptivasService _admDescriptivasService;
+        private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly ISisUbicacionService _sisUbicacionService;
@@ -45,7 +46,7 @@ namespace Convertidor.Data.Repository.Bm
 
         public BmDirHBienService(IBmDirHBienRepository repository,
                                     IBmDescriptivasService bmDescriptivaService,
-                                    IAdmDescriptivasService admDescriptivasService,
+                                    IAdmDescriptivaRepository admDescriptivaRepository,
                                     IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
                                     ISisUsuarioRepository sisUsuarioRepository,
                                     ISisUbicacionService sisUbicacionService
@@ -53,7 +54,7 @@ namespace Convertidor.Data.Repository.Bm
         {
             _repository = repository;
             _bmDescriptivaService = bmDescriptivaService;
-            _admDescriptivasService = admDescriptivasService;
+            _admDescriptivaRepository = admDescriptivaRepository;
             _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
             _sisUsuarioRepository = sisUsuarioRepository;
             _sisUbicacionService = sisUbicacionService;
@@ -125,7 +126,13 @@ namespace Convertidor.Data.Repository.Bm
             itemResult.TenenciaId = dtos.TENENCIA_ID;
             itemResult.CodigoPostal = dtos.CODIGO_POSTAL;
             itemResult.FechaIni = dtos.FECHA_INI;
-            itemResult.FechaFin= dtos.FECHA_FIN;
+            itemResult.FechaIniString = dtos.FECHA_INI.ToString("u");
+            FechaDto fechaIniObj = GetFechaDto(dtos.FECHA_INI);
+            itemResult.FechaIniObj = (FechaDto)fechaIniObj;
+            itemResult.FechaFin = dtos.FECHA_FIN;
+            itemResult.FechaFinString = dtos.FECHA_FIN.ToString("u");
+            FechaDto fechaFIn = GetFechaDto(dtos.FECHA_FIN);
+            itemResult.FechaFinObj = (FechaDto)fechaFIn;
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;
             itemResult.Extra3 = dtos.EXTRA3;
@@ -263,7 +270,7 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-                if(dto.Vialidad == string.Empty) 
+                if(dto.Vialidad is not null && dto.Vialidad.Length>100) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -271,15 +278,15 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-                var tipoViviendaId = await _admDescriptivasService.GetByTitulo(6);
-                if(tipoViviendaId==null)
+                var tipoViviendaId = await _admDescriptivaRepository.GetByIdAndTitulo(6,dto.TipoViviendaId);
+                if(tipoViviendaId==false)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo vivienda Id invalido";
                     return result;
                 }
-                if (dto.Vivienda == string.Empty)
+                if (dto.Vivienda is not null && dto.Vivienda.Length>100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -289,8 +296,8 @@ namespace Convertidor.Data.Repository.Bm
 
                 if (dto.TipoNivelId > 0)
                 {
-                    var tipoNivelId = await _admDescriptivasService.GetByTitulo(7);
-                    if (tipoNivelId == null)
+                    var tipoNivelId = await _admDescriptivaRepository.GetByIdAndTitulo(7,dto.TipoNivelId);
+                    if (tipoNivelId == false)
                     {
                         result.Data = null;
                         result.IsValid = false;
@@ -298,15 +305,24 @@ namespace Convertidor.Data.Repository.Bm
                         return result;
                     }
                 }
-                if(dto.Nivel==string.Empty) 
+                if(dto.Nivel is not null && dto.Nivel.Length<20) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Nivel invalido";
                     return result;
                 }
+                if (dto.TipoUnidadId < 0)
+                {
 
-                if (dto.ComplementoDir == string.Empty) 
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo unidad Id invalido";
+                    return result;
+
+                }
+
+                if (dto.ComplementoDir is not null && dto.ComplementoDir.Length>200) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -316,7 +332,7 @@ namespace Convertidor.Data.Repository.Bm
 
                 if (dto.TenenciaId > 0)
                 {
-                    var tipoNivelId = await _admDescriptivasService.GetByTitulo(8);
+                    var tipoNivelId = await _admDescriptivaRepository.GetByIdAndTitulo(8, dto.TenenciaId);
                     if (tipoNivelId == null)
                     {
                         result.Data = null;
@@ -326,7 +342,7 @@ namespace Convertidor.Data.Repository.Bm
                     }
                 }
 
-                if (dto.CodigoPostal == null) 
+                if (dto.CodigoPostal <0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -372,15 +388,17 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-                var unidadTrabajoId = await _bmDescriptivaService.GetByIdAndTitulo(6, dto.UnidadTrabajoId);
-                if (unidadTrabajoId == false) 
+                if (dto.UnidadTrabajoId > 0)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Unidad trabajo invalido";
-                    return result;
+                    var unidadTrabajoId = await _bmDescriptivaService.GetByIdAndTitulo(6, dto.UnidadTrabajoId);
+                    if (unidadTrabajoId == false)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Unidad trabajo invalido";
+                        return result;
+                    }
                 }
-
                 codigoHDirBien.CODIGO_H_DIR_BIEN = dto.CodigoHDirBien;
                 codigoHDirBien.CODIGO_DIR_BIEN = dto.CodigoDirBien;
                 codigoHDirBien.CODIGO_ICP = dto.CodigoIcp;
@@ -418,7 +436,7 @@ namespace Convertidor.Data.Repository.Bm
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 codigoHDirBien.CODIGO_EMPRESA = conectado.Empresa;
                 codigoHDirBien.USUARIO_UPD = conectado.Usuario;
-                codigoHDirBien.FECHA_INS = DateTime.Now;
+                codigoHDirBien.FECHA_UPD = DateTime.Now;
 
 
                 await _repository.Update(codigoHDirBien);
@@ -544,15 +562,8 @@ namespace Convertidor.Data.Repository.Bm
                     result.Message = "Urbanizacion Invalida";
                     return result;
                 }
-                if (dto.Vialidad == string.Empty)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Vialidad invalida";
-                    return result;
-                }
-                var vialidad = dto.Vialidad;
-                if (vialidad.Length > 20)
+            
+                if (dto.Vialidad is not null && dto.Vialidad.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -561,7 +572,7 @@ namespace Convertidor.Data.Repository.Bm
                 }
 
 
-                var tipoViviendaId = await _admDescriptivasService.GetByTitulo(6);
+                var tipoViviendaId = await _admDescriptivaRepository.GetByIdAndTitulo(6,dto.TipoViviendaId);
                 if (tipoViviendaId == null)
                 {
                     result.Data = null;
@@ -569,15 +580,8 @@ namespace Convertidor.Data.Repository.Bm
                     result.Message = "Tipo vivienda Id invalido";
                     return result;
                 }
-                if (dto.Vivienda == string.Empty)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Vivienda invalida";
-                    return result;
-                }
-                var vivienda = dto.Vivienda;
-                if (vivienda.Length > 20)
+              
+                if (dto.Vivienda is not null && dto.Vivienda.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -588,7 +592,7 @@ namespace Convertidor.Data.Repository.Bm
 
                 if (dto.TipoNivelId > 0)
                 {
-                    var tipoNivelId = await _admDescriptivasService.GetByTitulo(7);
+                    var tipoNivelId = await _admDescriptivaRepository.GetByIdAndTitulo(7,dto.TipoNivelId);
                     if (tipoNivelId == null)
                     {
                         result.Data = null;
@@ -597,43 +601,34 @@ namespace Convertidor.Data.Repository.Bm
                         return result;
                     }
                 }
-                if (dto.Nivel == string.Empty)
+                if (dto.Nivel is not null && dto.Nivel.Length>20)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Nivel invalido";
                     return result;
                 }
-                var nivel = dto.Nivel;
-                if (nivel.Length > 20)
+                if(dto.TipoUnidadId < 0) 
                 {
+                    
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Nivel invalido";
+                    result.Message = "Tipo unidad Id invalido";
                     return result;
+                    
                 }
-
-
-                if (dto.ComplementoDir == string.Empty)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "ComplementoDir invalido";
-                    return result;
-                }
-                var complementoDir = dto.ComplementoDir;
-                if (complementoDir.Length > 200)
+                if (dto.ComplementoDir is not null && dto.ComplementoDir.Length>200)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "ComplementoDir invalido";
                     return result;
                 }
+                
 
-
-                if (dto.TenenciaId > 0)
+                if (dto.TenenciaId < 0)
                 {
-                    var tipoNivelId = await _admDescriptivasService.GetByTitulo(8);
+                    var tipoNivelId = await _admDescriptivaRepository.GetByIdAndTitulo(8,dto.TenenciaId);
                     if (tipoNivelId == null)
                     {
                         result.Data = null;
@@ -643,7 +638,7 @@ namespace Convertidor.Data.Repository.Bm
                     }
                 }
 
-                if (dto.CodigoPostal == null)
+                if (dto.CodigoPostal < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -689,16 +684,18 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-                var unidadTrabajoId = await _bmDescriptivaService.GetByIdAndTitulo(6, dto.UnidadTrabajoId);
-                if (unidadTrabajoId == false)
+                if (dto.UnidadTrabajoId < 0)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Unidad trabajo invalido";
-                    return result;
+                    var unidadTrabajoId = await _bmDescriptivaService.GetByIdAndTitulo(6, dto.UnidadTrabajoId);
+                    if (unidadTrabajoId == false)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Unidad trabajo invalido";
+                        return result;
+                    }
+
                 }
-
-
                 BM_DIR_H_BIEN entity = new BM_DIR_H_BIEN();
 
                 entity.CODIGO_H_DIR_BIEN = await _repository.GetNextKey();

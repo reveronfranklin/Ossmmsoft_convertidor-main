@@ -261,6 +261,14 @@ builder.Services.AddTransient<IAdmContactosProveedorRepository, AdmContactosProv
 builder.Services.AddTransient<IAdmDireccionProveedorRepository, AdmDireccionProveedorRepository>();
 builder.Services.AddTransient<IAdmActividadProveedorRepository, AdmActividadProveedorRepository>();
 builder.Services.AddTransient<IAdmComunicacionProveedorRepository, AdmComunicacionProveedorRepository>();
+builder.Services.AddTransient<IAdmSolicitudesRepository, AdmSolicitudesRepository>();
+builder.Services.AddTransient<IAdmDetalleSolicitudRepository, AdmDetalleSolicitudRepository>();
+builder.Services.AddTransient<IAdmPucSolicitudRepository, AdmPucSolicitudRepository>();
+builder.Services.AddTransient<IAdmReintegrosRepository, AdmReintegrosRepository>();
+builder.Services.AddTransient<IAdmPucReintegroRepository, AdmPucReintegroRepository>();
+builder.Services.AddTransient<IAdmOrdenPagoRepository, AdmOrdenPagoRepository>();
+builder.Services.AddTransient<IAdmCompromisoOpRepository, AdmCompromisoOpRepository>();
+
 
 //ADM Services
 builder.Services.AddTransient<IAdmTituloService, AdmTituloService>();
@@ -270,6 +278,16 @@ builder.Services.AddTransient<IAdmProveedoresActividadService, AdmProveedoresAct
 builder.Services.AddTransient<IAdmProveedoresComunicacionService, AdmProveedoresComunicacionService>();
 builder.Services.AddTransient<IAdmProveedoresContactoService, AdmProveedoresContactosService>();
 builder.Services.AddTransient<IAdmProveedoresDireccionesService, AdmProveedoresDireccionesService>();
+builder.Services.AddTransient<IAdmSolicitudesService, AdmSolicitudesService>();
+builder.Services.AddTransient<IAdmDetalleSolicitudService, AdmDetalleSolicitudService>();
+builder.Services.AddTransient<IAdmPucSolicitudService, AdmPucSolicitudService>();
+builder.Services.AddTransient<IAdmReintegrosService, AdmReintegrosService>();
+builder.Services.AddTransient<IAdmPucReintegroService, AdmPucReintegroService>();
+builder.Services.AddTransient<IAdmOrdenPagoService, AdmOrdenPagoService>();
+builder.Services.AddTransient<IAdmCompromisoOpService, AdmCompromisoOpService>();
+
+
+
 
 
 

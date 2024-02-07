@@ -70,15 +70,15 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.TipodocumentoId = dtos.TIPO_DOCUMENTO_ID;
                 itemResult.NumeroDocumento = dtos.NUMERO_DOCUMENTO;
                 itemResult.FechaVencimiento = dtos.FECHA_VENCIMIENTO;
+                itemResult.FechaVencimientoString = dtos.FECHA_VENCIMIENTO.ToString("u");
+                FechaDto fechaVencimientoObj = GetFechaDto(dtos.FECHA_VENCIMIENTO);
+                itemResult.FechaVencimientoObj = (FechaDto)fechaVencimientoObj;
                 itemResult.TipoGradoid = dtos.TIPO_GRADO_ID;
                 itemResult.GradoId = dtos.GRADO_ID;
                 itemResult.Extra1 = dtos.EXTRA1;
                 itemResult.Extra2 = dtos.EXTRA2;
                 itemResult.Extra3 = dtos.EXTRA3; 
-                itemResult.Usuarioins = dtos.USUARIO_INS;
-                itemResult.FechaIns = dtos.FECHA_INS;
-                itemResult.UsuarioUpd = dtos.USUARIO_UPD;
-                itemResult.FechaUpd = dtos.FECHA_UPD;
+                
              
           
             return itemResult;
@@ -147,23 +147,46 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                var tipoGrado = await _descriptivaService.GetByTitulo(30);
-                if (tipoGrado == null)
+                var tipoGradoId = await _descriptivaService.GetByTitulo(30);
+                if (tipoGradoId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Grado Documento Invalido";
+                    result.Message = "Tipo Grado Id Documento Invalido";
                     return result;
                 }
 
-                var Grado = await _descriptivaService.GetByTitulo(31);
-                if (Grado == null)
+                var GradoId = await _descriptivaService.GetByTitulo(31);
+                if (GradoId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Grado Documento Invalido";
+                    result.Message = "Grado Id Invalido";
                     return result;
                 }
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
 
 
 
@@ -174,15 +197,13 @@ namespace Convertidor.Data.Repository.Rh
                 documento.FECHA_VENCIMIENTO = dto.FechaVencimiento;
                 documento.TIPO_GRADO_ID = dto.TipoGradoId;
                 documento.GRADO_ID = dto.GradoId;
-                documento.USUARIO_INS = dto.UsuarioIns;
-                documento.FECHA_INS = dto.FechaIns;
-                documento.USUARIO_UPD = dto.UsuarioUpd;
-                documento.FECHA_UPD = dto.FechaUpd;
-                documento.CODIGO_EMPRESA = dto.CodigoEmpresa;
+              
+          
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 documento.CODIGO_EMPRESA = conectado.Empresa;
                 documento.USUARIO_UPD = conectado.Usuario;
+                documento.FECHA_UPD = DateTime.Now; 
 
 
                 await _repository.Update(documento);
@@ -239,12 +260,12 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                var tipoGrado = await _descriptivaService.GetByTitulo(30);
-                if (tipoGrado == null)
+                var tipoGradoId = await _descriptivaService.GetByTitulo(30);
+                if (tipoGradoId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Grado Documento Invalido";
+                    result.Message = "Tipo Grado Id Documento Invalido";
                     return result;
                 }
 
@@ -253,10 +274,31 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Grado Documento Invalido";
+                    result.Message = "Grado Id Documento Invalido";
+                    return result;
+                }
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
                     return result;
                 }
 
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
 
                 RH_DOCUMENTOS entity = new RH_DOCUMENTOS();
                 entity.CODIGO_DOCUMENTO = await _repository.GetNextKey();
@@ -266,17 +308,14 @@ namespace Convertidor.Data.Repository.Rh
                 entity.FECHA_VENCIMIENTO = dto.FechaVencimiento;
                 entity.TIPO_GRADO_ID = dto.TipoGradoId;
                 entity.GRADO_ID = dto.GradoId;
-                entity.USUARIO_INS = dto.UsuarioIns;
-                entity.FECHA_INS = dto.FechaIns;
-                entity.USUARIO_UPD = dto.UsuarioUpd;
-                entity.FECHA_UPD = dto.FechaUpd;
-                entity.CODIGO_EMPRESA = dto.CodigoEmpresa;
+                
 
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
 
 
                 var created = await _repository.Add(entity);
@@ -329,7 +368,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Documento no existe";
+                    result.Message = "Codigo Documento no existe";
                     return result;
                 }
 

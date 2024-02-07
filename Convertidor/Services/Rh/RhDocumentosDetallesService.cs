@@ -56,13 +56,15 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Extra1 = dtos.EXTRA1;
                 itemResult.Extra2 = dtos.EXTRA2;
                 itemResult.Extra3 = dtos.EXTRA3;
-                itemResult.UsuarioIns = dtos.USUARIO_INS;
-                itemResult.FechaIns = dtos.FECHA_INS;
-                itemResult.UsuarioUpd = dtos.USUARIO_UPD;
-                itemResult.FechaUpd = dtos.FECHA_UPD;
-                itemResult.CodigoEmpresa = dtos.CODIGO_EMPRESA;
                 itemResult.FechaFinal = dtos.FECHA_FINAL;
+                itemResult.FechaFinalString = dtos.FECHA_FINAL.ToString("u");
+                FechaDto fechaFinalObj = GetFechaDto(dtos.FECHA_FINAL);
+                itemResult.FechaFinalObj = (FechaDto)fechaFinalObj;
                 itemResult.FechaInicial = dtos.FECHA_INICIAL;
+                itemResult.FechaInicialString = dtos.FECHA_INICIAL.ToString("u");
+                FechaDto fechaInicialObj = GetFechaDto(dtos.FECHA_INICIAL);
+                itemResult.FechaInicialObj = (FechaDto)fechaInicialObj;
+
 
 
             return itemResult;
@@ -115,7 +117,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
 
                 
-                if (dto.Descripcion == string.Empty)
+                if (dto.Descripcion is not null && dto.Descripcion.Length>1000)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -143,11 +145,6 @@ namespace Convertidor.Data.Repository.Rh
                 documentoDetalle.CODIGO_DOCUMENTO_DETALLE = dto.CodigoDocumentoDetalle;
                 documentoDetalle.CODIGO_DOCUMENTO = dto.CodigoDocumento;
                 documentoDetalle.DESCRIPCION = dto.Descripcion;
-                documentoDetalle.USUARIO_INS = dto.UsuarioIns;
-                documentoDetalle.FECHA_INS = dto.FechaIns;
-                documentoDetalle.USUARIO_UPD = dto.UsuarioUpd;
-                documentoDetalle.FECHA_UPD = dto.FechaUpd;
-                documentoDetalle.CODIGO_EMPRESA = dto.CodigoEmpresa;
                 documentoDetalle.FECHA_FINAL= dto.FechaFinal;
                 documentoDetalle.FECHA_INICIAL = dto.FechaInicial;
 
@@ -155,6 +152,7 @@ namespace Convertidor.Data.Repository.Rh
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 documentoDetalle.CODIGO_EMPRESA = conectado.Empresa;
                 documentoDetalle.USUARIO_UPD = conectado.Usuario;
+                documentoDetalle.FECHA_UPD =DateTime.Now;
 
                 await _repository.Update(documentoDetalle);
 
@@ -185,14 +183,14 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 var codigoDocumento = await _rhDocumentosRepository.GetByCodigo(dto.CodigoDocumento);
-                if (codigoDocumento == null)
+                if (codigoDocumento != null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "No existe el Documento";
+                    result.Message = "ya existe el Documento";
                     return result;
                 }
-                if (dto.Descripcion == string.Empty)
+                if (dto.Descripcion is not null && dto.Descripcion.Length>1000)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -221,11 +219,6 @@ namespace Convertidor.Data.Repository.Rh
                 entity.CODIGO_DOCUMENTO_DETALLE = await _repository.GetNextKey();
                 entity.CODIGO_DOCUMENTO = dto.CodigoDocumento;
                 entity.DESCRIPCION = dto.Descripcion;
-                entity.USUARIO_INS = dto.UsuarioIns;
-                entity.FECHA_INS = dto.FechaIns;
-                entity.USUARIO_UPD = dto.UsuarioUpd;
-                entity.FECHA_UPD = dto.FechaUpd;
-                entity.CODIGO_EMPRESA = dto.CodigoEmpresa;
                 entity.FECHA_FINAL = dto.FechaFinal; 
                 entity.FECHA_INICIAL = dto.FechaInicial;
 

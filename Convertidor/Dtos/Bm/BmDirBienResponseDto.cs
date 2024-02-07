@@ -29,7 +29,11 @@ namespace Convertidor.Dtos.Bm
         public int TenenciaId { get; set; }
         public int CodigoPostal { get; set; }
         public DateTime FechaIni { get; set; }
+        public string FechaIniString { get; set; }
+        public FechaDto FechaIniObj { get; set; }
         public DateTime FechaFin { get; set; }
+        public string FechaFinString { get; set; }
+        public FechaDto FechaFinObj { get; set; }
         public string Extra1 { get; set; } = string.Empty;
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;

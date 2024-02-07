@@ -22,6 +22,14 @@ namespace Convertidor.Data
         public DbSet<ADM_CONTACTO_PROVEEDOR> ADM_CONTACTO_PROVEEDOR { get; set; }
         public DbSet<ADM_DIR_PROVEEDOR> ADM_DIR_PROVEEDOR { get; set; }
         public DbSet<ADM_COM_PROVEEDOR> ADM_COM_PROVEEDOR { get; set; }
+        public DbSet<ADM_SOLICITUDES> ADM_SOLICITUDES { get; set; }
+        public DbSet<ADM_DETALLE_SOLICITUD> ADM_DETALLE_SOLICITUD { get; set; }
+        public DbSet<ADM_PUC_SOLICITUD> ADM_PUC_SOLICITUD { get; set; }
+        public DbSet<ADM_REINTEGROS> ADM_REINTEGROS { get; set; }
+        public DbSet<ADM_PUC_REINTEGRO> ADM_PUC_REINTEGRO { get; set; }
+        public DbSet<ADM_ORDEN_PAGO> ADM_ORDEN_PAGO { get; set; }
+        public DbSet<ADM_COMPROMISO_OP> ADM_COMPROMISO_OP { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -111,10 +119,87 @@ namespace Convertidor.Data
                     });
                     builder.ToTable("ADM_COM_PROVEEDOR");
                 });
-            
-            
-            
 
+            modelBuilder
+                .Entity<ADM_SOLICITUDES>(builder =>
+                {
+                    //builder.HasNoKey();
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_SOLICITUD,
+
+                    });
+                    builder.ToTable("ADM_SOLICITUDES");
+                });
+
+            modelBuilder
+                .Entity<ADM_DETALLE_SOLICITUD>(builder =>
+                {
+                    //builder.HasNoKey();
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_DETALLE_SOLICITUD,
+
+                    });
+                    builder.ToTable("ADM_DETALLE_SOLICITUD");
+                });
+
+            modelBuilder
+                .Entity<ADM_PUC_SOLICITUD>(builder =>
+                {
+                    //builder.HasNoKey();
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_PUC_SOLICITUD,
+
+                    });
+                    builder.ToTable("ADM_PUC_SOLICITUD");
+                });
+            modelBuilder
+                .Entity<ADM_REINTEGROS>(builder =>
+                {
+                    //builder.HasNoKey();
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_REINTEGRO,
+
+                    });
+                    builder.ToTable("ADM_REINTEGROS");
+                });
+            modelBuilder
+                .Entity<ADM_PUC_REINTEGRO>(builder =>
+                {
+                    //builder.HasNoKey();
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_PUC_REINTEGRO,
+
+                    });
+                    builder.ToTable("ADM_PUC_REINTEGRO");
+                });
+            modelBuilder
+               .Entity<ADM_ORDEN_PAGO>(builder =>
+               {
+                   //builder.HasNoKey();
+                   builder.HasKey(table => new
+                   {
+                       table.CODIGO_ORDEN_PAGO,
+
+                   });
+                   builder.ToTable("ADM_ORDEN_PAGO");
+               });
+            modelBuilder
+              .Entity<ADM_COMPROMISO_OP>(builder =>
+              {
+                  //builder.HasNoKey();
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_COMPROMISO_OP,
+
+                  });
+                  builder.ToTable("ADM_COMPROMISO_OP");
+              });
+            
         }
 
 

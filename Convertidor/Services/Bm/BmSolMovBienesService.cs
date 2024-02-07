@@ -35,6 +35,17 @@ namespace Convertidor.Services.Bm
 
         }
 
+        public FechaDto GetFechaDto(DateTime fecha)
+        {
+            var FechaDesdeObj = new FechaDto();
+            FechaDesdeObj.Year = fecha.Year.ToString();
+            string month = "00" + fecha.Month.ToString();
+            string day = "00" + fecha.Day.ToString();
+            FechaDesdeObj.Month = month.Substring(month.Length - 2);
+            FechaDesdeObj.Day = day.Substring(day.Length - 2);
+
+            return FechaDesdeObj;
+        }
         public async Task<BmSolMovBienesResponseDto> MapBmMovBienesDto(BM_SOL_MOV_BIENES dtos)
         {
 
@@ -44,6 +55,9 @@ namespace Convertidor.Services.Bm
             itemResult.CodigoBien = dtos.CODIGO_BIEN;
             itemResult.TipoMovimiento = dtos.TIPO_MOVIMIENTO;
             itemResult.FechaMovimiento = dtos.FECHA_MOVIMIENTO;
+            itemResult.FechaMovimientoString = dtos.FECHA_MOVIMIENTO.ToString("u");
+            FechaDto fechaMovimientoObj = GetFechaDto(dtos.FECHA_MOVIMIENTO);
+            itemResult.FechaMovimientoObj = (FechaDto)fechaMovimientoObj;
             itemResult.CodigoDirBien = dtos.CODIGO_DIR_BIEN;
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;    
@@ -54,6 +68,9 @@ namespace Convertidor.Services.Bm
             itemResult.Aprobado = dtos.APROBADO;
             itemResult.UsuarioSolicita = dtos.USUARIO_SOLICITA;
             itemResult.FechaSolicita = dtos.FECHA_SOLICITA;
+            itemResult.FechaSolicitaString = dtos.FECHA_SOLICITA.ToString("u");
+            FechaDto fechaSolicitaObj = GetFechaDto(dtos.FECHA_SOLICITA);
+            itemResult.FechaSolicitaObj = (FechaDto)fechaSolicitaObj;
 
 
             return itemResult;
@@ -164,7 +181,9 @@ namespace Convertidor.Services.Bm
                     result.Message = "Codigo bien invalido";
                     return result;
                 }
-                if (dto.TipoMovimiento==null)
+                if (dto.TipoMovimiento is not null && 
+                    dto.TipoMovimiento.Length<0 &&
+                    dto.TipoMovimiento.Length>1)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -178,7 +197,7 @@ namespace Convertidor.Services.Bm
                     result.Message = "Fecha movimiento Invalido";
                     return result;
                 }
-                if (dto.CodigoDirBien == null) 
+                if (dto.CodigoDirBien <0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -227,7 +246,7 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-                if (dto.NumeroSolicitud == string.Empty)
+                if (dto.NumeroSolicitud is not null && dto.NumeroSolicitud.Length>20)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -235,21 +254,14 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-                if (dto.Aprobado < 0)
+                if (dto.Aprobado < 0 && dto.Aprobado>1)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Aprobado invalido";
                     return result;
                 }
-                else if (dto.Aprobado > 1)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Aprobado invalido";
-                    return result;
-                }
-
+               
                 if (dto.UsuarioSolicita < 0)
                 {
                     result.Data = null;
@@ -324,36 +336,36 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
                 var codigoBien = await _repository.GetByCodigoBien(dto.CodigoBien);
-                if (dto.CodigoBien == null) 
+                if (codigoBien == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Bien Invalido";
+                    result.Message = "Codigo bien invalido";
                     return result;
                 }
-                
-                if (dto.TipoMovimiento == string.Empty)
+                if (dto.TipoMovimiento is not null 
+                    && dto.TipoMovimiento.Length < 0 
+                    && dto.TipoMovimiento.Length > 1)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Movimiento invalido";
+                    result.Message = "Tipo Movimiento Invalido";
                     return result;
                 }
-                if (dto.FechaMovimiento==null)
+                if (dto.FechaMovimiento == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Fecha Movimiento Invalido";
+                    result.Message = "Fecha movimiento Invalido";
                     return result;
                 }
-                if (dto.CodigoDirBien==null)
+                if (dto.CodigoDirBien < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo dir bien Invalido";
                     return result;
                 }
-
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -387,7 +399,8 @@ namespace Convertidor.Services.Bm
                     result.Message = "Concepto movimiento Id invalido";
                     return result;
                 }
-                if (dto.CodigoSolMovBien < 0) 
+
+                if (dto.CodigoSolMovBien < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -395,28 +408,23 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-                if(dto.NumeroSolicitud==string.Empty) 
+                if (dto.NumeroSolicitud is not null && dto.NumeroSolicitud.Length < 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Numero Solicitud invalido";
                     return result;
                 }
-                if (dto.Aprobado < 0) 
+
+                if (dto.Aprobado < 0 && dto.Aprobado>1)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Aprobado invalido";
                     return result;
                 }
-                else if(dto.Aprobado > 1) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Aprobado invalido";
-                    return result;
-                }
-                if (dto.UsuarioSolicita < 0) 
+                
+                if (dto.UsuarioSolicita < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -424,6 +432,13 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
+                if (dto.FechaSolicita == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Solicita invalida";
+                    return result;
+                }
 
                 BM_SOL_MOV_BIENES entity = new BM_SOL_MOV_BIENES();        
                 entity.CODIGO_MOV_BIEN = await _repository.GetNextKey();

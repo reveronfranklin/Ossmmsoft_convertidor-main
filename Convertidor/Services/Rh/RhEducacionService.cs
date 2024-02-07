@@ -132,35 +132,13 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var educacion = await _repository.GetByCodigo(dto.CodigoEducacion);
-                if (educacion == null)
+                var codigoEducacion = await _repository.GetByCodigo(dto.CodigoEducacion);
+                if (codigoEducacion == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Educacion no existe";
+                    result.Message = "Codigo educacion invalido";
                     return result;
-                }
-                var persona = await _personasRepository.GetCodigoPersona(dto.CodigoPersona);
-                if (persona == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Persona no existe";
-                    return result;
-                }
-
-              
-                var titulos = await _descriptivaService.GetByTitulo(dto.TituloId);
-                
-                {
-                    var titulo = titulos.Where(x => x.Id == 16);
-                    if (titulo is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Titulo invalido";
-                        return result;
-                    }
                 }
 
                 var niveles = await _descriptivaService.GetByTitulo(5);
@@ -171,11 +149,10 @@ namespace Convertidor.Data.Repository.Rh
                     {
                         result.Data = null;
                         result.IsValid = false;
-                        result.Message = "Nivel Invalido";
+                        result.Message = "Nivel id Invalido";
                         return result;
                     }
                 }
-
                 var profesiones = await _descriptivaService.GetByTitulo(8);
 
                 {
@@ -184,79 +161,96 @@ namespace Convertidor.Data.Repository.Rh
                     {
                         result.Data = null;
                         result.IsValid = false;
-                        result.Message = "Profesion Invalida";
-                        return result;
-                    }
-                }
-                var mencionEspecialdades = await _descriptivaService.GetByTitulo(25);
-                
-                {
-                    var mencionEspecialdad = mencionEspecialdades.Where(x => x.Id == dto.MencionEspecialidadId);
-                    if (mencionEspecialdad is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Mencion Invalida";
+                        result.Message = "Profesion Id Invalido";
                         return result;
                     }
                 }
 
-                if (dto.LocalidadInstituto == string.Empty)
+                
+
+                if (dto.LocalidadInstituto is not null && dto.LocalidadInstituto.Length < 50)
                 {
-                    result.Message = "Localidad instituto invalida";
+                    result.Message = "Localidad invalida";
                     result.IsValid = false;
                     return result;
                 }
 
 
-                if (dto.NombreInstituto == string.Empty)
+                if (dto.NombreInstituto is not null && dto.NombreInstituto.Length < 50)
                 {
                     result.Message = "Instituto invalido";
                     result.IsValid = false;
                     return result;
                 }
-                if (dto.UltimoAñoAprobado == null)
+                if (dto.UltimoAñoAprobado == null && dto.UltimoAñoAprobado < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Año aprobado invalido";
                 }
 
-                if (dto.Graduado == null)
+                if (dto.Graduado is not null && dto.Graduado.Length > 1)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Graduado invalido";
                 }
 
+                var titulos = await _descriptivaService.GetByTitulo(16);
+
+                {
+                    var titulo = titulos.Where(x => x.Id == dto.TituloId);
+                    if (titulo is null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Titulo Id invalido";
+                        return result;
+                    }
+                }
 
 
-                educacion.CODIGO_EDUCACION = dto.CodigoEducacion;
-                educacion.CODIGO_PERSONA = dto.CodigoPersona;
-                educacion.NIVEL_ID = dto.NivelId;
-                educacion.NOMBRE_INSTITUTO = dto.NombreInstituto;
-                educacion.LOCALIDAD_INSTITUTO = dto.LocalidadInstituto;
-                educacion.PROFESION_ID = dto.ProfesionId;
-                educacion.FECHA_INI = dto.FechaIni;
-                educacion.FECHA_FIN = dto.FechaFin;
-                educacion.ULTIMO_ANO_APROBADO = dto.UltimoAñoAprobado;
-                educacion.GRADUADO = dto.Graduado;
-                educacion.TITULO_ID = dto.TituloId;
-                educacion.MENCION_ESPECIALIDAD_ID = dto.MencionEspecialidadId;
-                educacion.CODIGO_EMPRESA = dto.CodigoEmpresa;
+                var mencionEspecialdades = await _descriptivaService.GetByTitulo(25);
+
+                {
+                    var mencionEspecialdad = mencionEspecialdades.Where(x => x.Id == dto.MencionEspecialidadId);
+                    if (mencionEspecialdad is null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Mencion especialidad Id Invalida";
+                        return result;
+                    }
+                }
+
+
+
+                codigoEducacion.CODIGO_EDUCACION = dto.CodigoEducacion;
+                codigoEducacion.CODIGO_PERSONA = dto.CodigoPersona;
+                codigoEducacion.NIVEL_ID = dto.NivelId;
+                codigoEducacion.NOMBRE_INSTITUTO = dto.NombreInstituto;
+                codigoEducacion.LOCALIDAD_INSTITUTO = dto.LocalidadInstituto;
+                codigoEducacion.PROFESION_ID = dto.ProfesionId;
+                codigoEducacion.FECHA_INI = dto.FechaIni;
+                codigoEducacion.FECHA_FIN = dto.FechaFin;
+                codigoEducacion.ULTIMO_ANO_APROBADO = dto.UltimoAñoAprobado;
+                codigoEducacion.GRADUADO = dto.Graduado;
+                codigoEducacion.TITULO_ID = dto.TituloId;
+                codigoEducacion.MENCION_ESPECIALIDAD_ID = dto.MencionEspecialidadId;
+               
                 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                educacion.CODIGO_EMPRESA = conectado.Empresa;
-                educacion.USUARIO_UPD = conectado.Usuario;
-                educacion.FECHA_UPD=DateTime.Now;
+                codigoEducacion.CODIGO_EMPRESA = conectado.Empresa;
+                codigoEducacion.USUARIO_UPD = conectado.Usuario;
+                codigoEducacion.FECHA_UPD=DateTime.Now;
 
 
-                await _repository.Update(educacion);
+                await _repository.Update(codigoEducacion);
 
 
 
-                var resultDto = await MapEducacionDto(educacion);
+                var resultDto = await MapEducacionDto(codigoEducacion);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -280,6 +274,14 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<RhEducacionResponseDto> result = new ResultDto<RhEducacionResponseDto>(null);
             try
             {
+                var codigoEducacion = await _repository.GetByCodigo(dto.CodigoEducacion);
+                if (codigoEducacion != null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo educacion invalido";
+                    return result;
+                }
 
                 var niveles = await _descriptivaService.GetByTitulo(5);
 
@@ -289,7 +291,7 @@ namespace Convertidor.Data.Repository.Rh
                     {
                         result.Data = null;
                         result.IsValid = false;
-                        result.Message = "Nivel Invalido";
+                        result.Message = "Nivel id Invalido";
                         return result;
                     }
                 }
@@ -301,25 +303,56 @@ namespace Convertidor.Data.Repository.Rh
                     {
                         result.Data = null;
                         result.IsValid = false;
-                        result.Message = "Profesion Invalida";
+                        result.Message = "Profesion Id Invalido";
                         return result;
                     }
                 }
 
-                var educaciones = await _descriptivaService.GetByTitulo(16);
+               
+
+                if(dto.LocalidadInstituto is not null && dto.LocalidadInstituto.Length<50) 
+                {
+                    result.Message = "Localidad invalida";
+                    result.IsValid = false;
+                    return result;
+                }
+                
+                
+                if(dto.NombreInstituto is not null && dto.NombreInstituto.Length<50) 
+                {
+                    result.Message = "Instituto invalido";
+                    result.IsValid = false;
+                    return result;
+                }
+
+                if (dto.UltimoAñoAprobado == null && dto.UltimoAñoAprobado<0) 
+                {
+                  result.Data= null;
+                  result.IsValid = false;
+                  result.Message = "Año aprobado invalido";
+                }
+
+                if (dto.Graduado is not null && dto.Graduado.Length>1)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Graduado invalido";
+                }
+
+                var titulos = await _descriptivaService.GetByTitulo(16);
 
                 {
-                    var educa = educaciones.Where(x => x.Id == dto.TituloId);
-                    if (educa is null)
+                    var titulo = titulos.Where(x => x.Id == dto.TituloId);
+                    if (titulo is null)
                     {
                         result.Data = null;
                         result.IsValid = false;
-                        result.Message = "Titulo invalido";
+                        result.Message = "Titulo Id invalido";
                         return result;
                     }
                 }
 
-                
+
                 var mencionEspecialdades = await _descriptivaService.GetByTitulo(25);
 
                 {
@@ -328,37 +361,9 @@ namespace Convertidor.Data.Repository.Rh
                     {
                         result.Data = null;
                         result.IsValid = false;
-                        result.Message = "Mencion Invalida";
+                        result.Message = "Mencion especialidad Id Invalida";
                         return result;
                     }
-                }
-
-                if(dto.LocalidadInstituto == string.Empty) 
-                {
-                    result.Message = "Localidad invalida";
-                    result.IsValid = false;
-                    return result;
-                }
-                
-                
-                if(dto.NombreInstituto== string.Empty) 
-                {
-                    result.Message = "Instituto invalido";
-                    result.IsValid = false;
-                    return result;
-                }
-                if (dto.UltimoAñoAprobado == null) 
-                {
-                  result.Data= null;
-                  result.IsValid = false;
-                  result.Message = "Año aprobado invalido";
-                }
-
-                if (dto.Graduado == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Graduado invalido";
                 }
 
 
@@ -375,7 +380,7 @@ namespace Convertidor.Data.Repository.Rh
                 entity.GRADUADO = dto.Graduado;
                 entity.TITULO_ID = dto.TituloId;
                 entity.MENCION_ESPECIALIDAD_ID = dto.MencionEspecialidadId;
-                entity.CODIGO_EMPRESA = dto.CodigoEmpresa;
+           
 
 
 

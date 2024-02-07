@@ -124,7 +124,13 @@ namespace Convertidor.Data.Repository.Bm
             itemResult.TenenciaId = dtos.TENENCIA_ID;
             itemResult.CodigoPostal = dtos.CODIGO_POSTAL;
             itemResult.FechaIni = dtos.FECHA_INI;
+            itemResult.FechaIniString = dtos.FECHA_INI.ToString("u");
+            FechaDto fechaIniObj = GetFechaDto(dtos.FECHA_INI);
+            itemResult.FechaIniObj = (FechaDto)fechaIniObj;
             itemResult.FechaFin= dtos.FECHA_FIN;
+            itemResult.FechaFinString = dtos.FECHA_FIN.ToString("u");
+            FechaDto fechaFIn = GetFechaDto(dtos.FECHA_FIN);
+            itemResult.FechaFinObj = (FechaDto)fechaFIn;
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;
             itemResult.Extra3 = dtos.EXTRA3;
@@ -180,26 +186,24 @@ namespace Convertidor.Data.Repository.Bm
                     result.Message = "Codigo Icp no existe";
                     return result;
                 }
-
-
-
                 var pais = await _sisUbicacionService.GetPais(dto.PaisId);
-                if (pais == null)
+
+                if (pais is null)
                 {
                     pais.Id = dto.PaisId;
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Pais invalido";
+                    result.Message = "Pais  Invalido";
                     return result;
                 }
 
                 var estado = await _sisUbicacionService.GetEstado(dto.PaisId, dto.EstadoId);
-                if (estado == null)
+                if (estado is null)
                 {
                     estado.Id = dto.EstadoId;
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Estado invalido";
+                    result.Message = "Estado Invalido";
                     return result;
                 }
 
@@ -255,8 +259,7 @@ namespace Convertidor.Data.Repository.Bm
                     result.Message = "Urbanizacion Invalida";
                     return result;
                 }
-
-                if (dto.Vialidad == string.Empty)
+                if (dto.Vialidad is not null && dto.Vialidad.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -281,7 +284,7 @@ namespace Convertidor.Data.Repository.Bm
                     result.Message = "Tipo vivienda Id invalido";
                     return result;
                 }
-                if (dto.Vivienda == string.Empty)
+                if (dto.Vivienda is not null && dto.Vivienda.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -309,15 +312,7 @@ namespace Convertidor.Data.Repository.Bm
                         return result;
                     }
                 }
-                if (dto.Nivel == string.Empty)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Nivel invalido";
-                    return result;
-                }
-                var nivel = dto.Nivel;
-                if (nivel.Length > 20)
+                if (dto.Nivel is not null && dto.Nivel.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -325,23 +320,13 @@ namespace Convertidor.Data.Repository.Bm
                     return result;
                 }
 
-
-                if (dto.ComplementoDir == string.Empty)
+                if (dto.ComplementoDir is not null && dto.ComplementoDir.Length > 200)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "ComplementoDir invalido";
                     return result;
                 }
-                var complementoDir = dto.ComplementoDir;
-                if (complementoDir.Length > 200)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "ComplementoDir invalido";
-                    return result;
-                }
-
 
                 if (dto.TenenciaId > 0)
                 {
@@ -444,7 +429,7 @@ namespace Convertidor.Data.Repository.Bm
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 codigoDirBien.CODIGO_EMPRESA = conectado.Empresa;
                 codigoDirBien.USUARIO_UPD = conectado.Usuario;
-                codigoDirBien.FECHA_INS = DateTime.Now;
+                codigoDirBien.FECHA_UPD = DateTime.Now;
 
 
                 await _repository.Update(codigoDirBien);
@@ -562,7 +547,7 @@ namespace Convertidor.Data.Repository.Bm
                     result.Message = "Urbanizacion Invalida";
                     return result;
                 }
-                if (dto.Vialidad == string.Empty)
+                if (dto.Vialidad is not null && dto.Vialidad.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -587,7 +572,7 @@ namespace Convertidor.Data.Repository.Bm
                     result.Message = "Tipo vivienda Id invalido";
                     return result;
                 }
-                if (dto.Vivienda == string.Empty)
+                if (dto.Vivienda is not null && dto.Vivienda.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -615,40 +600,22 @@ namespace Convertidor.Data.Repository.Bm
                         return result;
                     }
                 }
-                if (dto.Nivel == string.Empty)
+                if (dto.Nivel is not null && dto.Nivel.Length>20)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Nivel invalido";
                     return result;
                 }
-                var nivel = dto.Nivel;
-                if (nivel.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Nivel invalido";
-                    return result;
-                }
-
-
-                if (dto.ComplementoDir == string.Empty)
+                
+                if (dto.ComplementoDir is not null && dto.ComplementoDir.Length > 200)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "ComplementoDir invalido";
                     return result;
                 }
-                var complementoDir = dto.ComplementoDir;
-                if (complementoDir.Length > 200)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "ComplementoDir invalido";
-                    return result;
-                }
-
-
+               
                 if (dto.TenenciaId > 0)
                 {
                     var tipoNivelId = await _admDescriptivasService.GetByTitulo(8);

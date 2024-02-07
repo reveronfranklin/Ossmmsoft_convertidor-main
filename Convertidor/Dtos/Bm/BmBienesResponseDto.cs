@@ -10,8 +10,12 @@ namespace Convertidor.Dtos.Bm
         public int CodigoOrdenCompra { get; set; }
         public int OrigenId { get; set; }
         public DateTime FechaFabricacion { get; set; }
+        public string FechaFabricacionString { get; set; }
+        public FechaDto FechaFabricacionObj { get; set; }
         public string NumeroOrdenCompra { get; set; } = string.Empty;
         public DateTime FechaCompra { get; set; }
+        public string FechaCompraString { get; set; }
+        public FechaDto FechaCompraObj { get; set; }
         public string NumeroPlaca { get; set; } = string.Empty;
         public string NumeroLote { get; set; } = string.Empty;
         public int ValorInicial { get; set; }
@@ -21,6 +25,8 @@ namespace Convertidor.Dtos.Bm
         public string Extra3 { get; set; } = string.Empty;
         public string NumeroFactura { get; set; } = string.Empty;
         public DateTime FechaFactura { get; set; }
+        public string FechaFacturaString { get; set; }
+        public FechaDto FechaFacturaObj { get; set; }
         public int TipoImpuestoId { get; set; }
 
     }
