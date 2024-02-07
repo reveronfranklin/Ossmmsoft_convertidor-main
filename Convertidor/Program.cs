@@ -206,6 +206,7 @@ builder.Services.AddTransient<IRhAriRepository, RhAriRepository>();
 builder.Services.AddTransient<IRhAriService, RhAriService>();
 builder.Services.AddTransient<IRhHPeriodoRepository, RhHPeriodoRepository>();
 builder.Services.AddTransient<IRhHPeriodoService, RhHPeriodoService>();
+builder.Services.AddTransient<IRhProcesosDetalleService, RhProcesosDetalleService>();
 
 builder.Services.AddTransient<IRhConceptosAcumulaRepository, RhConceptosAcumulaRepository>();
 builder.Services.AddTransient<IRhConceptosAcumuladoService, RhConceptosAcumuladoService>();
