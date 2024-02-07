@@ -593,11 +593,11 @@ namespace Convertidor.Services.Sis
             {
                 var calculoId = await GetNextCalculo();
                 var movNomina = await _rhMovNominaService.GetByTipoNominaPersonaConcepto(dto);
-                if (movNomina.Data != null)
+                if (movNomina.Data != null)     
                 {
                     var concepto = await _rhConceptosService.GetByTipoNominaConcepto(dto.CodigoTipoNomina, dto.CodigoConcepto);
                     OssFormulaFilterDto formulaFilter = new OssFormulaFilterDto();
-                    formulaFilter.ModeloCalculo = concepto.IdModeloCalculo;
+                    formulaFilter.ModeloCalculo = 1;
                     var formula = await _ossFormulaService.GetByIdModeloCalculo(formulaFilter);
                     if (formula.Data.Count > 0)
                     {

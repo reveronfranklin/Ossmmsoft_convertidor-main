@@ -85,6 +85,7 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.SiglasTipoNomina = dtos.SIGLAS_TIPO_NOMINA;
             itemResult.FrecuenciaPagoId = dtos.FRECUENCIA_PAGO_ID;
+            itemResult.FrecuenciaPago = await _descriptivasService.GetDescripcionByCodigoDescriptiva(dtos.FRECUENCIA_PAGO_ID);
             itemResult.SueldoMinimo = dtos.SUELDO_MINIMO;
             
 
@@ -167,8 +168,8 @@ namespace Convertidor.Data.Repository.Rh
                 }
 
                 codigoTipoNomina.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
-                codigoTipoNomina.DESCRIPCION = dto.Descripcion;
-                codigoTipoNomina.SIGLAS_TIPO_NOMINA = dto.SiglasTipoNomina;
+                codigoTipoNomina.DESCRIPCION = dto.Descripcion.ToUpper();
+                codigoTipoNomina.SIGLAS_TIPO_NOMINA = dto.SiglasTipoNomina.ToUpper();
                 codigoTipoNomina.FRECUENCIA_PAGO_ID = dto.FrecuenciaPagoId;
                 codigoTipoNomina.SUELDO_MINIMO = dto.SueldoMinimo;
 
@@ -251,8 +252,8 @@ namespace Convertidor.Data.Repository.Rh
 
                 RH_TIPOS_NOMINA entity = new RH_TIPOS_NOMINA();
                 entity.CODIGO_TIPO_NOMINA = await _repository.GetNextKey();
-                entity.DESCRIPCION = dto.Descripcion;
-                entity.SIGLAS_TIPO_NOMINA = dto.SiglasTipoNomina;
+                entity.DESCRIPCION = dto.Descripcion.ToUpper();
+                entity.SIGLAS_TIPO_NOMINA = dto.SiglasTipoNomina.ToUpper();
                 entity.FRECUENCIA_PAGO_ID = dto.FrecuenciaPagoId;
                 entity.SUELDO_MINIMO = dto.SueldoMinimo;
                

@@ -19,7 +19,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var result = await _context.RH_TIPOS_NOMINA.DefaultIfEmpty().Where(t=>t.DESCRIPCION!= null).ToListAsync();
+                var result = await _context.RH_TIPOS_NOMINA.DefaultIfEmpty().Where(t=>t.DESCRIPCION!= null).OrderBy(t=>t.DESCRIPCION).ToListAsync();
                 return (List<RH_TIPOS_NOMINA>)result;
             }
             catch (Exception ex)

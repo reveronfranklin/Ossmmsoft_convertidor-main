@@ -4,7 +4,7 @@
 	{
 		
 		public int CodigoConceptoAcumula { get; set; }
-	
+		public int CodigoConcepto { get; set; }
     
         
         }

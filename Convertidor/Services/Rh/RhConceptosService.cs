@@ -4,46 +4,54 @@ using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Rh;
+using Convertidor.Services.Presupuesto;
 using Convertidor.Services.Rh;
 using NPOI.XSSF.Streaming;
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhConceptosService: IRhConceptosService
+    public class RhConceptosService : IRhConceptosService
     {
-		
+
         private readonly DataContext _context;
 
 
 
-   
+
         private readonly IRhConceptosRepository _repository;
         private readonly IRhDescriptivasService _descriptivaService;
         private readonly IRhPersonasRepository _rhPersonasRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IPrePlanUnicoCuentasService _prePlanUnicoCuentasService;
+        private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
+
         private readonly IMapper _mapper;
 
         public RhConceptosService(IRhConceptosRepository repository,
                           IRhDescriptivasService descriptivaService,
                           IRhPersonasRepository rhPersonasRepository,
-                          ISisUsuarioRepository sisUsuarioRepository)
+                          ISisUsuarioRepository sisUsuarioRepository,
+                          IPrePlanUnicoCuentasService prePlanUnicoCuentasService,
+                          IRhTipoNominaRepository rhTipoNominaRepository)
         {
             _repository = repository;
             _descriptivaService = descriptivaService;
             _rhPersonasRepository = rhPersonasRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
+            _rhTipoNominaRepository = rhTipoNominaRepository;
         }
-       
-        public async Task<List<ListConceptosDto>> GetAll()
+
+        public async Task<List<RhConceptosResponseDto>> GetAll()
         {
             try
             {
                 var conceptos = await _repository.GetAll();
 
-                var result = MapListConceptosDto(conceptos);
+                var result = await MapListConceptosDto(conceptos);
 
 
-                return (List<ListConceptosDto>)result;
+                return (List<RhConceptosResponseDto>)result;
             }
             catch (Exception ex)
             {
@@ -70,12 +78,13 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-       
-        public async Task<RhConceptosResponseDto> GetByTipoNominaConcepto(int codigoTipoNomina,int codigoConcepto)
+
+        public async Task<RhConceptosResponseDto> GetByTipoNominaConcepto(int codigoTipoNomina, int codigoConcepto)
         {
             try
             {
-                var conceptos = await _repository.GetByCodigoTipoNomina(codigoConcepto,codigoTipoNomina);
+                var conceptos = await _repository.GetByCodigoTipoNomina(codigoConcepto, codigoTipoNomina);
+
 
                 var result = await MapConceptosDto(conceptos);
 
@@ -90,16 +99,21 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<List<ListConceptosDto>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta)
+        public async Task<List<RhConceptosResponseDto>> GetByTipoNomina(int codigoTipoNomina)
         {
+            string descripcon = "";
             try
             {
-                var conceptos = await _repository.GetConceptosByCodigoPersona(codigoPersona,desde,hasta);
+                var conceptos = await _repository.GeTByTipoNomina(codigoTipoNomina);
+                var tipoNomina = await _rhTipoNominaRepository.GetByCodigo(codigoTipoNomina);
+                if (tipoNomina != null)
+                {
+                    descripcon = tipoNomina.DESCRIPCION;
+                }
+                var result = await MapListConceptosDto(conceptos, descripcon);
 
-                var result = MapListConceptosDto(conceptos);
 
-
-                return (List<ListConceptosDto>)result;
+                return result;
             }
             catch (Exception ex)
             {
@@ -109,7 +123,26 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task<RhConceptosResponseDto> MapConceptosDto(RH_CONCEPTOS dtos)
+        public async Task<List<RhConceptosResponseDto>> GetConceptosByCodigoPersona(int codigoPersona, DateTime desde, DateTime hasta)
+        {
+            try
+            {
+                var conceptos = await _repository.GetConceptosByCodigoPersona(codigoPersona, desde, hasta);
+
+                var result = await MapListConceptosDto(conceptos);
+
+
+                return (List<RhConceptosResponseDto>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<RhConceptosResponseDto> MapConceptosDto(RH_CONCEPTOS dtos, string tipoNominaDescripcion = "")
         {
 
 
@@ -117,51 +150,87 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.CodigoConcepto = dtos.CODIGO_CONCEPTO;
             itemResult.Codigo = dtos.CODIGO;
             itemResult.CodigoTipoNomina = dtos.CODIGO_TIPO_NOMINA;
+            itemResult.TipoNominaDescripcion = "";
+            if (tipoNominaDescripcion.Length > 0)
+            {
+                itemResult.TipoNominaDescripcion = tipoNominaDescripcion;
+            }
+            else
+            {
+                var tipoNomina = await _rhTipoNominaRepository.GetByCodigo(dtos.CODIGO_TIPO_NOMINA);
+                if (tipoNomina != null)
+                {
+                    itemResult.TipoNominaDescripcion = tipoNomina.DESCRIPCION;
+                }
+            }
+
+            if (dtos.DENOMINACION == null) dtos.DENOMINACION = "";
             itemResult.Denominacion = dtos.DENOMINACION;
+            if (dtos.DESCRIPCION == null) dtos.DESCRIPCION = "";
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.TipoConcepto = dtos.TIPO_CONCEPTO;
             itemResult.ModuloId = dtos.MODULO_ID;
+            itemResult.ModuloDescripcion = "";
+            if (dtos.MODULO_ID > 0)
+            {
+                var desriptivaModulo = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dtos.MODULO_ID);
+                itemResult.ModuloDescripcion = desriptivaModulo;
+            }
+
+            itemResult.CodigoPucConcat = "";
             itemResult.CodigoPuc = dtos.CODIGO_PUC;
+            if (dtos.CODIGO_PUC > 0)
+            {
+                var puc = await _prePlanUnicoCuentasService.GetById(dtos.CODIGO_PUC);
+                if (puc.Data != null)
+                {
+                    itemResult.CodigoPucConcat = puc.Data.CodigoPucConcat;
+                }
+            }
+
             itemResult.Status = dtos.STATUS;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
             itemResult.FrecuenciaId = dtos.FRECUENCIA_ID;
+            var desrcriptivaFrecuencia = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dtos.FRECUENCIA_ID);
+            itemResult.FrecuenciaDescripcion = desrcriptivaFrecuencia;
             itemResult.Dedusible = dtos.DEDUSIBLE;
             itemResult.Automatico = dtos.AUTOMATICO;
-            
+            if (dtos.ID_MODELO_CALCULO == null) dtos.ID_MODELO_CALCULO = 0;
+            itemResult.IdModeloCalculo = dtos.ID_MODELO_CALCULO;
+            if (dtos.EXTRA1 == null) dtos.EXTRA1 = "";
+            itemResult.Extra1 = dtos.EXTRA1;
+
 
             return itemResult;
 
         }
 
 
-        public List<ListConceptosDto> MapListConceptosDto(List<RH_CONCEPTOS> dtos)
+        public async Task<List<RhConceptosResponseDto>> MapListConceptosDto(List<RH_CONCEPTOS> dtos, string tipoNominaDescripcion = "")
         {
-            List<ListConceptosDto> result = new List<ListConceptosDto>();
+            List<RhConceptosResponseDto> result = new List<RhConceptosResponseDto>();
 
             foreach (var item in dtos)
             {
-
-                ListConceptosDto itemResult = new ListConceptosDto();
-
-                itemResult.CodigoConcepto = item.CODIGO_CONCEPTO;
-                itemResult.Codigo = item.CODIGO;
-                itemResult.CodigoTipoNomina =item.CODIGO_TIPO_NOMINA;
-                itemResult.Denominacion = item.DENOMINACION;
-
-     
-             
+                var itemResult = await MapConceptosDto(item, tipoNominaDescripcion);
                 result.Add(itemResult);
-
-
             }
             return result;
-
-
-
         }
 
+        public List<string> GetListTipoConcepto()
+        {
+            List<string> result = new List<string>();
+            result.Add("A");
+            result.Add("D");
+            return result;
+        }
+        public List<string> GetListStatus()
+        {
+            List<string> result = new List<string>();
+            result.Add("A");
+            result.Add("I");
+            return result;
+        }
         public async Task<ResultDto<RhConceptosResponseDto>> Create(RhConceptosUpdateDto dto)
         {
 
@@ -170,7 +239,7 @@ namespace Convertidor.Data.Repository.Rh
             {
 
                 var codigo = await _repository.GetCodigoString(dto.Codigo);
-                if (codigo != null)
+                if (codigo is not null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -178,17 +247,17 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                
-                if (dto.CodigoTipoNomina <0)
+                var tipoNomina = await _rhTipoNominaRepository.GetByCodigo(dto.CodigoTipoNomina);
+                if (tipoNomina == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Tipo Nomina Invalido";
+                    result.Message = "Tipo Nomina Invalido";
                     return result;
                 }
 
 
-                if (dto.Denominacion is not null && dto.Denominacion.Length>100)
+                if (dto.Denominacion == string.Empty)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -196,80 +265,64 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                if (dto.Descripcion is not null && dto.Denominacion.Length>1000)
+                var tipoConcepto = GetListTipoConcepto().Where(x => x == dto.TipoConcepto).FirstOrDefault();
+                if (String.IsNullOrEmpty(tipoConcepto))
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Descripcion invalida";
+                    result.Message = "Tipo Concepto Invalido";
                     return result;
+
                 }
 
-                if (dto.TipoConcepto is not null && dto.TipoConcepto.Length>1&&dto.TipoConcepto.Length<0)
+
+                if (dto.ModuloId > 0)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo concepto invalido";
-                    return result;
+                    var moduloId = await _descriptivaService.GetByCodigoDescriptiva(dto.ModuloId);
+                    if (moduloId == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Modulo Invalido";
+                        return result;
+                    }
                 }
 
-                var moduloId = await _descriptivaService.GetByTitulo(37);
-                if (moduloId == null)
+                if (dto.CodigoPuc > 0)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Modulo Id Invalido";
-                    return result;
+                    var puc = _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
+                    if (puc == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "PUC Invalido";
+                        return result;
+                    }
+
                 }
 
-                var codigoPuc = dto.CodigoPuc;
-                if (codigoPuc == null)
+                var status = GetListStatus().Where(x => x == dto.Status).FirstOrDefault();
+                if (String.IsNullOrEmpty(status))
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Puc Invalido";
+                    result.Message = "Estatus Invalido";
                     return result;
+
                 }
 
-                if (dto.Status is not null && dto.Status.Length > 1 && dto.Status.Length < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status concepto invalido";
-                    return result;
-                }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 invalido";
-                    return result;
-                }
-                if (dto.Extra3 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 invalido";
-                    return result;
-                }
 
-                var frecuenciaId = await _descriptivaService.GetByTitulo(49);
+                var frecuenciaId = await _descriptivaService.GetByCodigoDescriptiva(dto.FrecuenciaId);
                 if (frecuenciaId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Frecuencia Id Invalida";
+                    result.Message = "Frecuencia Invalida";
                     return result;
                 }
 
-                
-                if (dto.Dedusible <0)
+                var dedusible = dto.Dedusible;
+                if (dedusible == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -277,8 +330,8 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-               
-                if (dto.Automatico <0)
+                var automatico = dto.Automatico;
+                if (automatico == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -299,14 +352,13 @@ namespace Convertidor.Data.Repository.Rh
                 entity.CODIGO_PUC = dto.CodigoPuc;
                 entity.STATUS = dto.Status;
                 entity.EXTRA1 = dto.Extra1;
-                entity.EXTRA2 = dto.Extra2;
-                entity.EXTRA3 = dto.Extra3;
                 entity.FRECUENCIA_ID = dto.FrecuenciaId;
                 entity.DEDUSIBLE = dto.Dedusible;
                 entity.AUTOMATICO = dto.Automatico;
-                
+                if (dto.IdModeloCalculo == null) dto.IdModeloCalculo = 0;
+                entity.ID_MODELO_CALCULO = dto.IdModeloCalculo;
 
-                
+
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
@@ -353,25 +405,36 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<RhConceptosResponseDto> result = new ResultDto<RhConceptosResponseDto>(null);
             try
             {
-                var CodigoConcepto = await _repository.GetByCodigo(dto.CodigoConcepto);
-                if (CodigoConcepto == null)
+                var concepto = await _repository.GetByCodigo(dto.CodigoConcepto);
+                if (concepto is null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message ="Codigo Concepto  Invalido";
-                    return result;
-                }
-
-                if (dto.CodigoTipoNomina <0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Tipo Nomina Invalido";
+                    result.Message = "Concepto  Invalido";
                     return result;
                 }
 
 
-                if (dto.Denominacion is not null && dto.Denominacion.Length > 100)
+                var codigo = await _repository.GetCodigoString(dto.Codigo);
+                if (codigo is null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Concepto  Invalido";
+                    return result;
+                }
+
+                var tipoNomina = await _rhTipoNominaRepository.GetByCodigo(dto.CodigoTipoNomina);
+                if (tipoNomina == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Nomina Invalido";
+                    return result;
+                }
+
+
+                if (dto.Denominacion == string.Empty)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -379,79 +442,65 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                if (dto.Descripcion is not null && dto.Denominacion.Length > 1000)
+                var tipoConcepto = GetListTipoConcepto().Where(x => x == dto.TipoConcepto).FirstOrDefault();
+                if (String.IsNullOrEmpty(tipoConcepto))
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Descripcion invalida";
+                    result.Message = "Tipo Concepto Invalido";
                     return result;
+
                 }
 
-                if (dto.TipoConcepto is not null && dto.TipoConcepto.Length > 1 && dto.TipoConcepto.Length < 0)
+
+                if (dto.ModuloId > 0)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo concepto invalido";
-                    return result;
+                    var moduloId = await _descriptivaService.GetByCodigoDescriptiva(dto.ModuloId);
+                    if (moduloId == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Modulo Invalido";
+                        return result;
+                    }
                 }
 
-                var moduloId = await _descriptivaService.GetByTitulo(37);
-                if (moduloId == null)
+                if (dto.CodigoPuc > 0)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Modulo Id Invalido";
-                    return result;
+                    var puc = _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
+                    if (puc == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "PUC Invalido";
+                        return result;
+                    }
+
                 }
 
-                var codigoPuc = dto.CodigoPuc;
-                if (codigoPuc == null)
+                var status = GetListStatus().Where(x => x == dto.Status).FirstOrDefault();
+                if (String.IsNullOrEmpty(status))
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo puc Invalido";
+                    result.Message = "Estatus Invalido";
                     return result;
+
                 }
 
-                if (dto.Status is not null && dto.Status.Length > 1 && dto.Status.Length < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status concepto invalido";
-                    return result;
-                }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 invalido";
-                    return result;
-                }
-                if (dto.Extra3 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 invalido";
-                    return result;
-                }
 
-                var frecuenciaId = await _descriptivaService.GetByTitulo(49);
+
+                var frecuenciaId = await _descriptivaService.GetByCodigoDescriptiva(dto.FrecuenciaId);
                 if (frecuenciaId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Frecuencia Id Invalida";
+                    result.Message = "Frecuencia Invalida";
                     return result;
                 }
 
-                if (dto.Dedusible < 0)
+                var dedusible = dto.Dedusible;
+                if (dedusible == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -459,7 +508,8 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                if (dto.Automatico < 0)
+                var automatico = dto.Automatico;
+                if (automatico == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -467,36 +517,27 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
+                concepto.CODIGO_CONCEPTO = dto.CodigoConcepto;
+                concepto.CODIGO = dto.Codigo;
+                concepto.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
+                concepto.DENOMINACION = dto.Denominacion;
+                concepto.DESCRIPCION = dto.Descripcion;
+                concepto.TIPO_CONCEPTO = dto.TipoConcepto;
+                concepto.MODULO_ID = dto.ModuloId;
+                concepto.CODIGO_PUC = dto.CodigoPuc;
+                concepto.STATUS = dto.Status;
+                concepto.EXTRA1 = dto.Extra1;
+                concepto.FRECUENCIA_ID = dto.FrecuenciaId;
+                concepto.DEDUSIBLE = dto.Dedusible;
+                concepto.AUTOMATICO = dto.Automatico;
+                concepto.ID_MODELO_CALCULO = dto.IdModeloCalculo;
 
-
-
-                RH_CONCEPTOS entity = new RH_CONCEPTOS();
-                CodigoConcepto.CODIGO_CONCEPTO = dto.CodigoConcepto;
-                CodigoConcepto.CODIGO = dto.Codigo;
-                CodigoConcepto.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
-                CodigoConcepto.DENOMINACION = dto.Denominacion;
-                CodigoConcepto.DESCRIPCION = dto.Descripcion;
-                CodigoConcepto.TIPO_CONCEPTO = dto.TipoConcepto;
-                CodigoConcepto.MODULO_ID = dto.ModuloId;
-                CodigoConcepto.CODIGO_PUC = dto.CodigoPuc;
-                CodigoConcepto.STATUS = dto.Status;
-                CodigoConcepto.EXTRA1 = dto.Extra1;
-                CodigoConcepto.EXTRA2 = dto.Extra2;
-                CodigoConcepto.EXTRA3 = dto.Extra3;
-                CodigoConcepto.FRECUENCIA_ID = dto.FrecuenciaId;
-                CodigoConcepto.DEDUSIBLE = dto.Dedusible;
-                CodigoConcepto.AUTOMATICO = dto.Automatico;
-                
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                CodigoConcepto.CODIGO_EMPRESA = conectado.Empresa;
-                CodigoConcepto.USUARIO_UPD = conectado.Usuario;
-                CodigoConcepto.FECHA_UPD = DateTime.Now;
-
-                await _repository.Update(CodigoConcepto);
-
-
-
-                var resultDto = await MapConceptosDto(CodigoConcepto);
+                concepto.CODIGO_EMPRESA = conectado.Empresa;
+                concepto.USUARIO_UPD = conectado.Usuario;
+                concepto.FECHA_UPD = DateTime.Now;
+                await _repository.Update(concepto);
+                var resultDto = await MapConceptosDto(concepto);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -512,52 +553,6 @@ namespace Convertidor.Data.Repository.Rh
             return result;
         }
 
-        //public async Task<ResultDto<RhConceptosDeleteDto>> Delete(RhConceptosDeleteDto dto)
-        //{
 
-        //    ResultDto<RhConceptosDeleteDto> result = new ResultDto<RhConceptosDeleteDto>(null);
-        //    try
-        //    {
-
-        //        var Direccion = await _repository.GetByCodigo(dto.CodigoConcepto);
-        //        if (Direccion == null)
-        //        {
-        //            result.Data = null;
-        //            result.IsValid = false;
-        //            result.Message = "Concepto no existe";
-        //            return result;
-        //        }
-
-
-        //        var deleted = await _repository.Delete(dto.CodigoConcepto);
-
-        //        if (deleted.Length > 0)
-        //        {
-        //            result.Data = dto;
-        //            result.IsValid = false;
-        //            result.Message = deleted;
-        //        }
-        //        else
-        //        {
-        //            result.Data = dto;
-        //            result.IsValid = true;
-        //            result.Message = deleted;
-
-        //        }
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result.Data = dto;
-        //        result.IsValid = false;
-        //        result.Message = ex.Message;
-        //    }
-
-
-
-        //    return result;
-        //}
     }
 }
-

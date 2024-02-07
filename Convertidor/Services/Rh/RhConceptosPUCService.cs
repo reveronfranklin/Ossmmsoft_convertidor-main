@@ -80,10 +80,37 @@ namespace Convertidor.Services.Adm
                 }
                 itemResult.CodigoConcepto = dtos.CODIGO_CONCEPTO;
                 itemResult.CodigoConceptoPUC = dtos.CODIGO_CONCEPTO_PUC;
-                itemResult.CodigoPUC = dtos.CODIGO_PUC;
-                itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+                if (dtos.ESTATUS == null) dtos.CODIGO_PUC = 0;
                 itemResult.Status = dtos.ESTATUS;
-             
+                itemResult.DescripcionStatus = "";
+                if (dtos.ESTATUS == 1)
+                {
+                    itemResult.DescripcionStatus = "Activo";
+                }
+                else
+                {
+                    itemResult.DescripcionStatus = "Inactivo";
+                }
+                itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+                itemResult.PresupuestoDescripcion = "";
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var presupuesto = await _prePresupuestosRepository.GetByCodigo( conectado.Empresa,dtos.CODIGO_PRESUPUESTO);
+                if (presupuesto != null)
+                {
+                    itemResult.PresupuestoDescripcion = presupuesto.DENOMINACION;
+                }
+                itemResult.CodigoPUC = dtos.CODIGO_PUC;
+                itemResult.CodigoPUCDenominacion = "";
+                itemResult.CodigoPUCConcat = "";
+                var puc = await _prePlanUnicoCuentasRepository.GetByCodigo( dtos.CODIGO_PUC);
+                if (puc != null)
+                {
+                    itemResult.CodigoPUCDenominacion = puc.DENOMINACION;
+                    var pucConcat = puc.CODIGO_GRUPO + "-" + puc.CODIGO_NIVEL1 + "-" +  puc.CODIGO_NIVEL2 + "-" + puc.CODIGO_NIVEL3 + "-" + puc.CODIGO_NIVEL4 + "-" + puc.CODIGO_NIVEL5 + "-" + puc.CODIGO_NIVEL6;
+                    itemResult.CodigoPUCConcat = pucConcat;
+                }
+                
+                
                 
                 return itemResult;
 
@@ -145,7 +172,7 @@ namespace Convertidor.Services.Adm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Concepto Formula no existe";
+                    result.Message = "Concepto PUC no existe";
                     return result;
                 }
                 
@@ -220,15 +247,7 @@ namespace Convertidor.Services.Adm
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
               
-                var conceptoPUC = await _repository.GetByCodigo(dto.CodigoConceptoPUC);
-                if (conceptoPUC == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Concepto Formula no existe";
-                    return result;
-                }
-                
+              
                 var concepto = await _rhConceptosRepository.GetByCodigo(dto.CodigoConcepto);
                 if (concepto == null)
                 {

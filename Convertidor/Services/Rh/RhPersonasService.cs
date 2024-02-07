@@ -43,7 +43,7 @@ namespace Convertidor.Data.Repository.Rh
                                 IRhComunicacionesRepository rhComunicacionessRepository,
                                 IRH_HISTORICO_PERSONAL_CARGORepository rhHistoricoPersonalCargorepository,
                                 IRhDescriptivasService rhDescriptivasServices,
-                                 IRhAdministrativosService rhAdministrativosServices,
+                                IRhAdministrativosService rhAdministrativosServices,
                                 IRhRelacionCargosRepository rhRelacionCargosRepository, 
                                 IPreCargosRepository preCargosRepository,
                                 IPRE_INDICE_CAT_PRGRepository preIndiceCatPrg, 
@@ -69,39 +69,57 @@ namespace Convertidor.Data.Repository.Rh
             _distributedCache = distributedCache;
             _configuration = configuration;
         }
-       
-        
-        /*public async Task AddRedis(string key, string value)
+
+        public async Task<ResultDto<List<ListSimplePersonaDto>>> AddPersonaCache(int codigoPersona)
         {
-            var db = _connectionMultiplexer.GetDatabase();
-            await db.StringSetAsync(key, value,TimeSpan.FromHours(2));
+            List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
+            var persona = await GetPersona(codigoPersona);
+            if (persona != null)
+            {
+                var cacheKey = "GetAllListSimplePersonaDto";
+                var listPersonas= await _distributedCache.GetAsync(cacheKey);
+                if (listPersonas != null)
+                {
+                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>>(listPersonas);
+                    var personaFind = resultData.Where(x => x.CodigoPersona == codigoPersona).FirstOrDefault();
+                    if (personaFind == null)
+                    {
+                        resultData.Add(personaFind);
+                        var options = new DistributedCacheEntryOptions()
+                            .SetAbsoluteExpiration(DateTime.Now.AddDays(2))
+                            .SetSlidingExpiration(TimeSpan.FromDays(1));
+                        var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
+                        var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                        await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                    }
+                }
+                
+            }
+
+            var result = await GetAll();
+            return result;
         }
-        public void DeleteRedis(string key)
-        {
-            var db = _connectionMultiplexer.GetDatabase();
-            db.KeyDelete(key);
-        }
-        public async Task<string> GetRedis(string key)
-        {
-            var db = _connectionMultiplexer.GetDatabase();
-            //db.KeyDelete("ListProducts");
-            return await db.StringGetAsync(key);
-        }*/
-        public async  Task<ResultDto<List<ListSimplePersonaDto>>> GetAll()
+      
+         public async  Task<ResultDto<List<ListSimplePersonaDto>>> GetAll()
         {
             ResultDto<List<ListSimplePersonaDto>> result = new ResultDto<List<ListSimplePersonaDto>>(null);
             try
             {
+              
                 var cacheKey = "GetAllListSimplePersonaDto";
                 List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
-                List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
-                //personas = await _repository.GetAll();
+                personas = await _repository.GetAll();
 
-                // =await  MapListSimplePersonasDto(personas);
+                List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
+             
                 var listPersonas= await _distributedCache.GetAsync(cacheKey);
                 if (listPersonas != null)
                 {
-                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
+                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>>(listPersonas);
+                }
+                if (listPersonas != null && resultData != null && resultData.Count == personas.Count)
+                {
+                    
                     result.Data =resultData;
 
                     result.IsValid = true;
@@ -110,11 +128,11 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 else
                 {
-                    personas = await _repository.GetAll();
+                    
 
                     resultData =await  MapListSimplePersonasDto(personas);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(2))
                         .SetSlidingExpiration(TimeSpan.FromDays(1));
                    var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
@@ -150,11 +168,7 @@ namespace Convertidor.Data.Repository.Rh
                 List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
                 List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
                 
-                //personas = await _repository.GetAll();
 
-                //result =await MapListSimplePersonasDto(personas);
-                
-               
                 var listPersonas= await _distributedCache.GetAsync(cacheKey);
                 
                 if (listPersonas != null)
@@ -921,7 +935,7 @@ namespace Convertidor.Data.Repository.Rh
                 persona.ESTATURA = dto.Estatura;
                 persona.PESO = dto.Peso;
                 persona.MANO_HABIL = dto.ManoHabil;
-                persona.STATUS = dto.Status;
+                persona.STATUS = "A";//dto.Status;
                 persona.IDENTIFICACION_ID = dto.IdentificacionId;
                 persona.NUMERO_IDENTIFICACION = dto.NumeroIdentificacion;
            
@@ -938,7 +952,9 @@ namespace Convertidor.Data.Repository.Rh
                 
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await GetPersona(dto.CodigoPersona);
+                    await AddPersonaCache(persona.CODIGO_PERSONA);
+                    
+                    var resultDto = await GetPersona(persona.CODIGO_PERSONA );
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";

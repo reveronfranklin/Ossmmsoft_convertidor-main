@@ -24,7 +24,7 @@
         public int DEDUSIBLE { get; set; }
         public int AUTOMATICO { get; set; }
         
-        //public int ID_MODELO_CALCULO { get; set; }
+        public int ID_MODELO_CALCULO { get; set; }
 
 
 

@@ -12,12 +12,10 @@ public class RhConceptosUpdateDto
     public int CodigoPuc { get; set; }
     public string Status { get; set; }
     public string Extra1 { get; set; } = string.Empty;
-    public string Extra2 { get; set; } = string.Empty;
-    public string Extra3 { get; set; } = string.Empty;
     public int FrecuenciaId { get; set; }
     public int Dedusible { get; set; }
     public int Automatico { get; set; }
-    //public int IdModeloCalculo { get; set; }
-    
+    public int IdModeloCalculo { get; set; }
+
 
 }

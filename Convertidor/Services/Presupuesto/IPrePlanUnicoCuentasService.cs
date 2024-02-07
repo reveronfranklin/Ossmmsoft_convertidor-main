@@ -19,6 +19,7 @@ namespace Convertidor.Services.Presupuesto
         Task<List<int>> ListarHijos(List<PRE_PLAN_UNICO_CUENTAS> listDto, int codPuc);
         Task<ResultDto<PrePlanUnicoCuentasGetDto>> ValidateDto(PrePlanUnicoCuentaUpdateDto dto);
         Task<ResultDto<List<PreCodigosPuc>>> ListCodigosHistoricoPuc();
-    }
+        Task<ResultDto<PrePlanUnicoCuentasGetDto>> GetById(int codigoPuc);
+	}
 }
 

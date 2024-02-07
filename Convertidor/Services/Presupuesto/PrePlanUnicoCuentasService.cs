@@ -733,6 +733,31 @@ namespace Convertidor.Services
         }
 
 
+        public async Task<ResultDto<PrePlanUnicoCuentasGetDto>> GetById(int codigoPuc)
+        {
+            ResultDto<PrePlanUnicoCuentasGetDto> result = new ResultDto<PrePlanUnicoCuentasGetDto>(null);
+          
+
+            var puc = await _repository.GetByCodigo(codigoPuc);
+
+            if (puc != null)
+            {
+                result.Data = MapPucToDto(puc);
+                result.IsValid = true;
+                result.Message = "";
+            }
+            else
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "Puc No Existe";
+            }
+            
+
+            return result;
+        }
+
+        
         public async Task DeleteByCodigoPresupuesto(int codigoPresupuesto)
         {
             var icps= await  GetAllByCodigoPresupuesto(codigoPresupuesto);
@@ -1177,57 +1202,7 @@ namespace Convertidor.Services
             return result;
         }
 
-        /*public async Task<ResultDto<List<PreCodigosPuc>>> ListCodigosValidosPuc()
-        {
-            ResultDto<List<PreCodigosPuc>> result = new ResultDto<List<PreCodigosPuc>>(null);
 
-            List<PreCodigosPuc> resultList = new List<PreCodigosPuc>();
-            var listSector = await _ossConfigRepository.GetListByClave("CODIGO_GRUPO");
-            //listSector = listSector.Where(x => x.VALOR == "01" ).ToList();
-            var listPrograma= await _ossConfigRepository.GetListByClave("CODIGO_PROGRAMA");
-            var listSubPrograma = await _ossConfigRepository.GetListByClave("CODIGO_SUBPROGRAMA");
-            var listProyecto = await _ossConfigRepository.GetListByClave("CODIGO_PROYECTO");
-            var listActividad = await _ossConfigRepository.GetListByClave("CODIGO_ACTIVIDAD");
-            listActividad = listActividad.Where(x => Int32.Parse(x.VALOR) <= 60).ToList();
-            var listOficina = await _ossConfigRepository.GetListByClave("CODIGO_OFICINA");
-
-            foreach (var itemSector in listSector)
-            {
-                
-                foreach (var itemPrograma in listPrograma)
-                {
-                    foreach (var itemSubPrograma in listSubPrograma)
-                    {
-                        foreach (var itemProyecto in listProyecto)
-                        {
-                            foreach (var itemActividad in listActividad)
-                            {
-                                foreach (var itemOficina in listOficina)
-                                {
-                                    PreCodigosPuc itemNew = new PreCodigosPuc();
-                                    itemNew.CodigoSector = itemSector.VALOR;
-                                    itemNew.CodigoPrograma = itemPrograma.VALOR;
-                                    itemNew.CodigoSubPrograma = itemSubPrograma.VALOR;
-                                    itemNew.CodigoProyecto = itemProyecto.VALOR;
-                                    itemNew.CodigoActividad = itemActividad.VALOR;
-                                    itemNew.CodigoOficina = itemOficina.VALOR;
-                                    resultList.Add(itemNew);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            result.Data = resultList;
-            result.IsValid = true;
-            result.Message = "";
-
-
-            return result;
-        }
-        */
         public async Task<ResultDto<List<PreCodigosPuc>>> ListCodigosHistoricoPuc()
         {
             ResultDto<List<PreCodigosPuc>> result = new ResultDto<List<PreCodigosPuc>>(null);

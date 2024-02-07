@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.ADM;
+﻿using System.Globalization;
+using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.RH;
@@ -6,6 +7,7 @@ using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Rh;
 using Convertidor.Services.Rh;
 using Convertidor.Utility;
@@ -60,7 +62,7 @@ namespace Convertidor.Services.Adm
           
         }
        
-       
+      
         public  async Task<RhConceptosFormulaResponseDto> MapRhConceptosFormulaDto(RH_FORMULA_CONCEPTOS dtos)
         {
             RhConceptosFormulaResponseDto itemResult = new RhConceptosFormulaResponseDto();
@@ -73,19 +75,27 @@ namespace Convertidor.Services.Adm
                 }
                 itemResult.CodigoConcepto = dtos.CODIGO_CONCEPTO;
                 itemResult.CodigoFormulaConcepto = dtos.CODIGO_FORMULA_CONCEPTO;
-                itemResult.FechaDesde = dtos.FECHA_DESDE;
-                itemResult.FechaDesdeString = dtos.FECHA_DESDE.ToString("u"); 
-                FechaDto FechaDesdeObj = GetFechaDto(dtos.FECHA_DESDE);
+                itemResult.FechaDesde = (DateTime)dtos.FECHA_DESDE;
+                itemResult.FechaDesdeString =  itemResult.FechaDesde.ToString("u"); 
+                FechaDto FechaDesdeObj = GetFechaDto((DateTime)dtos.FECHA_DESDE);
                 itemResult.FechaDesdeObj = FechaDesdeObj;
-                itemResult.FechaHasta = dtos.FECHA_HASTA;
-                itemResult.FechaHastaString = dtos.FECHA_HASTA.ToString("u"); 
-                FechaDto FechaHastaObj = GetFechaDto(dtos.FECHA_HASTA);
+                itemResult.FechaHasta = (DateTime)dtos.FECHA_HASTA;
+                itemResult.FechaHastaString =    itemResult.FechaHasta.ToString("u"); 
+                FechaDto FechaHastaObj = GetFechaDto((DateTime)dtos.FECHA_HASTA);
                 itemResult.FechaHastaObj = FechaHastaObj;
+                if (dtos.PORCENTAJE == null) dtos.PORCENTAJE = 0;
                 itemResult.Porcentaje = dtos.PORCENTAJE;
+                if (dtos.PORCENTAJE_PATRONAL == null) dtos.PORCENTAJE_PATRONAL = 0;
                 itemResult.PorcentajePatronal = dtos.PORCENTAJE_PATRONAL;
-                itemResult.Porcentaje = dtos.PORCENTAJE;
+                if (dtos.MONTO_TOPE == null) dtos.MONTO_TOPE = 0;
                 itemResult.MontoTope = dtos.MONTO_TOPE;
                 itemResult.TipoSueldo = dtos.TIPO_SUELDO;
+                itemResult.TipoSueldoDescripcion = "";
+                var tipoSueldoDescripcion = GetListTipoSueldo().Where(x => x.Codigo== dtos.TIPO_SUELDO).FirstOrDefault();
+                if (tipoSueldoDescripcion != null)
+                {
+                    itemResult.TipoSueldoDescripcion = tipoSueldoDescripcion.Decripcion;
+                }
                 
                 return itemResult;
 
@@ -128,11 +138,17 @@ namespace Convertidor.Services.Adm
 
         }
       
-        public List<string> GetListTipoSueldo()
+        public List<ListTipoSueldo> GetListTipoSueldo()
         {
-            List<string> result = new List<string>();
-            result.Add("SB"); //SUELDO BASICO
-            result.Add("SI"); // SUELDO INTEGRAL
+            List<ListTipoSueldo> result = new List<ListTipoSueldo>();
+            ListTipoSueldo result1 = new ListTipoSueldo();
+            result1.Codigo = "SB";
+            result1.Decripcion = "Sueldo Basico";
+            ListTipoSueldo result2 = new ListTipoSueldo();
+            result2.Codigo = "SI";
+            result2.Decripcion = "Sueldo Integral";
+            result.Add(result1); //SUELDO BASICO
+            result.Add(result2); // SUELDO INTEGRAL
             return result;
         }
         public async Task<ResultDto<RhConceptosFormulaResponseDto?>> Update(RhConceptosFormulaUpdateDto dto)
@@ -159,8 +175,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Concepto no existe";
                     return result;
                 }
-                var sexo = GetListTipoSueldo().Where(x => x== dto.TipoSueldo).FirstOrDefault();
-                if (String.IsNullOrEmpty(sexo))
+                var tipoSueldo = GetListTipoSueldo().Where(x => x.Codigo== dto.TipoSueldo).FirstOrDefault();
+                if (tipoSueldo==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -168,9 +184,43 @@ namespace Convertidor.Services.Adm
                     return result;
                     
                 }
+                
+                if (!DateValidate.IsDate(dto.FechaDesdeString))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha desde No VAlida";
+                    return result;
+                }
+                
+            
+                if (DateValidate.IsDate(dto.FechaDesdeString))
+                {
+                    var fechaDesde = Convert.ToDateTime(dto.FechaDesdeString, CultureInfo.InvariantCulture);
+              
+                    conceptoFormula.FECHA_DESDE = fechaDesde;
+                }
+                
+                if (DateValidate.IsDate(dto.FechaHastaString))
+                {
+                    var fechaHasta = Convert.ToDateTime(dto.FechaHastaString, CultureInfo.InvariantCulture);
+                    if (fechaHasta.Year <= 1900)
+                    {
+                        conceptoFormula.FECHA_HASTA = null;
+                    }
+                    else
+                    {
+                        conceptoFormula.FECHA_HASTA = fechaHasta;
+                    }
+                    conceptoFormula.FECHA_HASTA = fechaHasta;
+                }
+                else
+                {
+                    conceptoFormula.FECHA_HASTA = null;
+                }
+                
                 conceptoFormula.TIPO_SUELDO = dto.TipoSueldo;
-                conceptoFormula.FECHA_DESDE = dto.FechaDesde;
-                conceptoFormula.FECHA_HASTA = dto.FechaHasta;
+              
                 conceptoFormula.PORCENTAJE = dto.Porcentaje;
                 conceptoFormula.PORCENTAJE_PATRONAL = dto.PorcentajePatronal;
                 conceptoFormula.MONTO_TOPE = dto.MontoTope;
@@ -214,8 +264,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Concepto no existe";
                     return result;
                 }
-                var sexo = GetListTipoSueldo().Where(x => x== dto.TipoSueldo).FirstOrDefault();
-                if (String.IsNullOrEmpty(sexo))
+                var tipoSueldo = GetListTipoSueldo().Where(x => x.Codigo== dto.TipoSueldo).FirstOrDefault();
+                if (tipoSueldo==null)
                 {
                     result.Data = null;
                     result.IsValid = false;

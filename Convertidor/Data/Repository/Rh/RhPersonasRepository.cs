@@ -70,10 +70,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var settings = _configuration.GetSection("urlReport").Get<Settings>();
-                var empresString = @settings.EmpresaConfig;
-                var empresa = Int32.Parse(empresString);
-                entity.CODIGO_EMPRESA = empresa;
+          
                 await _context.RH_PERSONAS.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
