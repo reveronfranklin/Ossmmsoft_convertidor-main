@@ -69,6 +69,40 @@ namespace Convertidor.Services.Catastro
 
                                   };
                 
+                       var listaExcel = from s in result
+                                  group s by new
+                                  {
+                                      UnidadTrabajo = s.UNIDAD_TRABAJO,
+                                      CodigoGrupo = s.CODIGO_GRUPO,
+                                      CodigoNivel1 = s.CODIGO_NIVEL1,
+                                      CodigoNivel2 = s.CODIGO_NIVEL2,
+                                      NumeroLote = s.NUMERO_LOTE,
+                                      Cantidad = s.CANTIDAD,
+                                      NumeroPlaca = s.NUMERO_PLACA,
+                                      Articulo = s.ARTICULO,
+                                      Especificacion = s.ESPECIFICACION,
+                                      Servicio = s.SERVICIO,
+                                      ResponsableBien = s.RESPONSABLE_BIEN,
+                                      CodigoBien = s.CODIGO_BIEN,
+                                      CodigoMovBien=s.CODIGO_MOV_BIEN
+                 
+                                      
+                                  } into g
+                                  select new Bm1ExcelGetDto()
+                                  {
+
+                                  
+                                      UnidadTrabajo = g.Key.UnidadTrabajo,
+                                    
+                                      Cantidad = g.Key.Cantidad,
+                                      NumeroPlaca = g.Key.CodigoGrupo + "-" + g.Key.CodigoNivel1 +"-" +  g.Key.CodigoNivel2 + "-"+g.Key.NumeroPlaca,
+                                      Articulo = g.Key.Articulo,
+                                      Especificacion = g.Key.Especificacion,   
+                                      Servicio = g.Key.Servicio,
+                                      ResponsableBien = g.Key.ResponsableBien,
+                                    
+
+                                  };
                     ExcelMapper mapper = new ExcelMapper();
 
 
@@ -79,7 +113,7 @@ namespace Convertidor.Services.Catastro
                     var fileName = $"BM1.xlsx";
                     string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
 
-                    var excelData = lista.ToList();
+                    var excelData = listaExcel.ToList();
                     mapper.Save(newFile, excelData, $"BM1", true);
                   
                     
