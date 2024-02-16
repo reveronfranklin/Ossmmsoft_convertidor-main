@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
-using Convertidor.Dtos;
-using Convertidor.Services.Rh;
-using Convertidor.Dtos.Rh;
 using Microsoft.AspNetCore.StaticFiles;
 
 using Ganss.Excel;
 using Convertidor.Utility;
 using Convertidor.Data.Repository.Rh;
-using Convertidor.Data.Interfaces.RH;
 
 namespace Convertidor.Controllers
 {

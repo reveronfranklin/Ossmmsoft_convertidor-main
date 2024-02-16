@@ -1,12 +1,7 @@
 ﻿using System.Globalization;
-using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Interfaces.RH;
 using Convertidor.Data.Repository.Rh;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
-using Convertidor.Dtos.Rh;
-using Convertidor.Services.Rh;
 
 namespace Convertidor.Services.Presupuesto
 {

@@ -1,5 +1,4 @@
-﻿using Convertidor.Dtos;
-using Convertidor.Data.Interfaces.Bm;
+﻿using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
 using Ganss.Excel;
 namespace Convertidor.Services.Catastro
@@ -60,7 +59,7 @@ namespace Convertidor.Services.Catastro
                                       CodigoNivel2 = g.Key.CodigoNivel2,
                                       NumeroLote = g.Key.NumeroLote,
                                       Cantidad = g.Key.Cantidad,
-                                      NumeroPlaca = g.Key.NumeroPlaca,
+                                      NumeroPlaca = g.Key.CodigoGrupo + "-" + g.Key.CodigoNivel1 +"-" +  g.Key.CodigoNivel2 + "-"+g.Key.NumeroPlaca,
                                       Articulo = g.Key.Articulo,
                                       Especificacion = g.Key.Especificacion,   
                                       Servicio = g.Key.Servicio,

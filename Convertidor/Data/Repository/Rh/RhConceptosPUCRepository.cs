@@ -1,9 +1,5 @@
 ﻿using Convertidor.Data.Entities.ADM;
-using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.Adm;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Dtos;
-using Convertidor.Dtos.Rh;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Adm

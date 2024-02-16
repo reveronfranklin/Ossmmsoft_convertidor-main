@@ -1,6 +1,5 @@
 ﻿
 using Convertidor.Data.Entities;
-using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

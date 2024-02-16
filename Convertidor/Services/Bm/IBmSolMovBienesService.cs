@@ -1,6 +1,5 @@
 ﻿using System;
 using Convertidor.Data.Entities.Bm;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Bm;
 namespace Convertidor.Services.Bm
 {

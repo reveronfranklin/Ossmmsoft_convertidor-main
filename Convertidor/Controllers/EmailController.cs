@@ -1,5 +1,4 @@
-﻿using Convertidor.Dtos;
-using Convertidor.Services.Sis;
+﻿using Convertidor.Services.Sis;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppService.Api.Controllers

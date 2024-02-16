@@ -1,9 +1,6 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Adm;
-using Convertidor.Services.Rh;
 using Convertidor.Services.Sis;
 using Convertidor.Utility;
 using NPOI.SS.Formula.Functions;

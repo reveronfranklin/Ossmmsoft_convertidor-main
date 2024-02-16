@@ -1,6 +1,4 @@
-﻿using Convertidor.Dtos.Rh;
-
-namespace Convertidor.Dtos
+﻿namespace Convertidor.Dtos
 {
 	public class FilterHistoricoNominaPeriodo
 	{

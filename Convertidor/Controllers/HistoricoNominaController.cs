@@ -3,8 +3,6 @@ using Convertidor.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
-using Convertidor.Dtos;
-using Convertidor.Services.Presupuesto;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

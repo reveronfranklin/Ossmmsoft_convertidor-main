@@ -1,6 +1,4 @@
-﻿using Convertidor.Data.Entities.Rh;
-using Convertidor.Dtos;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {

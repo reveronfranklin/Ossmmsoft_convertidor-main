@@ -5,8 +5,6 @@ using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Interfaces.Catastro;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository;
 using Convertidor.Data.Repository.Adm;
 using Convertidor.Data.Repository.Bm;
@@ -18,8 +16,6 @@ using Convertidor.Services;
 using Convertidor.Services.Adm;
 using Convertidor.Services.Bm;
 using Convertidor.Services.Catastro;
-using Convertidor.Services.Presupuesto;
-using Convertidor.Services.Rh;
 using Convertidor.Services.Sis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -232,7 +228,7 @@ builder.Services.AddTransient<IBmDirBienRepository, BmDirBienRepository>();
 builder.Services.AddTransient<IBmDirHBienRepository, BmDirHBienRepository>();
 builder.Services.AddTransient<IBmMovBienesRepository, BmMovBienesRepository>();
 builder.Services.AddTransient<IBmSolMovBienesRepository, BmSolMovBienesRepository>();
-
+builder.Services.AddTransient<IBmBienesFotoRepository, BmBienesFotoRepository>();
 
 
 
@@ -250,7 +246,7 @@ builder.Services.AddTransient<IBmDirBienService, BmDirBienService>();
 builder.Services.AddTransient<IBmDirHBienService, BmDirHBienService>();
 builder.Services.AddTransient<IBmMovBienesService, BmMovBienesService>();
 builder.Services.AddTransient<IBmSolMovBienesService, BmSolMovBienesService>();
-
+builder.Services.AddTransient<IBmBienesFotoService, BmBienesFotoService>();
 
 
 

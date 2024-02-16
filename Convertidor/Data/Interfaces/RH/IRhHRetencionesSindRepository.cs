@@ -1,7 +1,4 @@
-﻿using Convertidor.Data.Entities.Rh;
-using Convertidor.Dtos;
-
-namespace Convertidor.Data.Interfaces.RH
+﻿namespace Convertidor.Data.Interfaces.RH
 {
     public interface IRhHRetencionesSindRepository
     {

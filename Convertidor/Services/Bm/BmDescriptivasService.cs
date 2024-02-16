@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository.Rh;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Bm;
-using Convertidor.Services.Rh;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 

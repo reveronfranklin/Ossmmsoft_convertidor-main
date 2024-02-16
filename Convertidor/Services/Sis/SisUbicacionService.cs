@@ -1,6 +1,3 @@
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos.Rh;
-
 namespace Convertidor.Services.Sis;
 
 public class SisUbicacionService : ISisUbicacionService

@@ -1,6 +1,4 @@
-﻿using Convertidor.Data.Entities.Rh;
-using Convertidor.Data.Interfaces.RH;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Convertidor.Data.Repository.Rh

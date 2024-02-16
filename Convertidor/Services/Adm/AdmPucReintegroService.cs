@@ -1,7 +1,5 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Bm;
 using MathNet.Numerics.RootFinding;
