@@ -13,5 +13,6 @@ public interface IBmBienesFotoRepository
     Task<int> GetNextKey();
     Task<BM_BIENES_FOTO> GetByNumeroPlacaFoto(string numeroPlaca, string foto);
     Task<int> CantidadFotosPorPlaca(string numeroPlaca);
+    IQueryable<BM_BIENES> BienesConFoto();
 
 }

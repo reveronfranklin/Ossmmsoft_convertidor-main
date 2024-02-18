@@ -68,9 +68,22 @@ namespace Convertidor.Data.Repository.Bm
 
         }
 
-
+        public IQueryable<BM_BIENES> BienesConFoto()
+        {
+            var consulta = from bienes in  _context.BM_BIENES
+                join fotos in _context.BM_BIENES_FOTO
+                    on bienes.NUMERO_PLACA equals fotos.NUMERO_PLACA
+               
+                select bienes;
+            
+          
+            return consulta;
+        }
         public async Task<int> CantidadFotosPorPlaca(string numeroPlaca)
         {
+            
+
+           
             
             var cont = (from d in _context.BM_BIENES_FOTO.DefaultIfEmpty() 
                

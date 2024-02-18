@@ -28,6 +28,9 @@ namespace Convertidor.Services.Catastro
             ResultDto<List<Bm1GetDto>> response = new ResultDto<List<Bm1GetDto>>(null);
             try
             {
+
+                //var bienesFoto =  _bmBienesFotoRepository.BienesConFoto();
+                
                 var result = await _repository.GetAll();
           
                     var lista = from s in result
