@@ -9,13 +9,14 @@ namespace Convertidor.Services.Catastro
 
         private readonly IBM_V_BM1Repository _repository;
         private readonly IConfiguration _configuration;
+        private readonly IBmBienesFotoRepository _bmBienesFotoRepository;
 
-        public BM_V_BM1Service(IBM_V_BM1Repository repository,IConfiguration configuration)
+        public BM_V_BM1Service(IBM_V_BM1Repository repository,IConfiguration configuration,IBmBienesFotoRepository bmBienesFotoRepository)
 
         {
             _repository = repository;
             _configuration = configuration;
-
+            _bmBienesFotoRepository = bmBienesFotoRepository;
         }
 
       
@@ -28,8 +29,7 @@ namespace Convertidor.Services.Catastro
             try
             {
                 var result = await _repository.GetAll();
-                
-               
+          
                     var lista = from s in result
                                   group s by new
                                   {
@@ -68,6 +68,7 @@ namespace Convertidor.Services.Catastro
                                       CodigoMovBien = g.Key.CodigoMovBien
 
                                   };
+                    
                 
                        var listaExcel = from s in result
                                   group s by new

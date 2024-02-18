@@ -11,5 +11,7 @@ public interface IBmBienesFotoRepository
     Task<ResultDto<BM_BIENES_FOTO>> Update(BM_BIENES_FOTO entity);
     Task<string> Delete(int codigoBien);
     Task<int> GetNextKey();
-    
+    Task<BM_BIENES_FOTO> GetByNumeroPlacaFoto(string numeroPlaca, string foto);
+    Task<int> CantidadFotosPorPlaca(string numeroPlaca);
+
 }

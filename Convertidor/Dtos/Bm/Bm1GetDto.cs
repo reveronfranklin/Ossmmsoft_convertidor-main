@@ -19,7 +19,8 @@ public class Bm1GetDto
     
     public int CodigoBien { get; set; }
     public int CodigoMovBien { get; set; }
-
+    
+    public int CantidadFotos { get; set; }
   
     
 }

@@ -67,7 +67,34 @@ namespace Convertidor.Data.Repository.Bm
             }
 
         }
-     
+
+
+        public async Task<int> CantidadFotosPorPlaca(string numeroPlaca)
+        {
+            
+            var cont = (from d in _context.BM_BIENES_FOTO.DefaultIfEmpty() 
+               
+                where d.NUMERO_PLACA == numeroPlaca
+                select d).Count();
+            if (cont == null) cont = 0;
+            return cont;
+        }
+        public async Task<BM_BIENES_FOTO> GetByNumeroPlacaFoto(string numeroPlaca,string foto)
+        {
+            try
+            {
+                var result = await _context.BM_BIENES_FOTO.DefaultIfEmpty()
+                    .Where(e => e.NUMERO_PLACA == numeroPlaca && e.FOTO == foto).FirstOrDefaultAsync();
+        
+                return (BM_BIENES_FOTO)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         
 
         public async Task<ResultDto<BM_BIENES_FOTO>> Add(BM_BIENES_FOTO entity)
