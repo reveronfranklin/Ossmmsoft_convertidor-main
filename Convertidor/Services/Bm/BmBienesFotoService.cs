@@ -9,7 +9,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using NuGet.Packaging;
-
+using System;
+using System.IO;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using iText.Barcodes;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf.Xobject;
 namespace Convertidor.Services.Bm
 {
     public class BmBienesFotoService: IBmBienesFotoService
@@ -423,7 +431,7 @@ namespace Convertidor.Services.Bm
             return result;
         }
 
-          public async Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImageModel(BmBienesimageUpdateDto dto)
+        public async Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImageModel(BmBienesimageUpdateDto dto)
         {
             var numeroPlaca = "2-01-00-00315";
            
@@ -484,8 +492,6 @@ namespace Convertidor.Services.Bm
             
             return result;
         }
-
-        
         
         public async Task<string> CopiarArchivos()
         {
@@ -574,7 +580,93 @@ namespace Convertidor.Services.Bm
 
 
         }
+        
+        protected void ManipulatePdf(String dest,String code)
+        {
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+           
+            Document doc = new Document(pdfDoc,PageSize.A5);
+           
+       
+            //String code = "675-FH-A12";
 
+            Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
+            table.AddCell("ENCABEZADO");
+
+            Barcode128 code128 = new Barcode128(pdfDoc);
+
+            // If value is positive, the text distance under the bars. If zero or negative,
+            // the text distance above the bars.
+            code128.SetBaseline(-1);
+            code128.SetSize(12);
+            code128.SetCode(code);
+            code128.SetCodeType(Barcode128.CODE128);
+            Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
+
+            // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
+            // this image does not fit the cell, but it does in addCell().
+            // In iText7 there is no constructor (new Cell(Image img)),
+            // so the image adding to the cell can be done only using method add().
+            Cell cell = new Cell().Add(code128Image);
+            table.AddCell(cell);
+            
+            table.AddCell("PIE");
+            /*table.AddCell("Add text and bar code separately:");
+
+            code128 = new Barcode128(pdfDoc);
+            
+            // Suppress the barcode text
+            code128.SetFont(null);
+            code128.SetCode(code);
+            code128.SetCodeType(Barcode128.CODE128);
+
+            // Let the image resize automatically by setting it to be autoscalable.
+            code128Image = new Image(code128.CreateFormXObject(pdfDoc)).SetAutoScale(true);
+            cell = new Cell();
+            cell.Add(new Paragraph("PO #: " + code));
+            cell.Add(code128Image);
+            table.AddCell(cell);*/
+
+            doc.Add(table);
+
+            doc.Close();
+        }
+
+   
+         public async Task CreateBardCode()
+        {
+
+        
+            try
+            {
+                var _env = "development";
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+              
+             
+                var bienes = await _bienesRepository.GetAll();
+                foreach (var item in bienes)
+                {
+                    var destino = @settings.BmFiles;
+                    FileInfo file = new FileInfo(destino);
+                    file.Directory.Create();
+                    destino = $"{destino}{item.NUMERO_PLACA}.pdf";
+                    ManipulatePdf(destino,item.NUMERO_PLACA);
+                      
+                        
+                }
+               
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+               
+            }
+
+
+        }
+
+        
 
     }
 }
