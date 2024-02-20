@@ -34,17 +34,7 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+        
         public async Task<AdmCompromisoOpResponseDto> MapCompromisoOpDto(ADM_COMPROMISO_OP dtos)
         {
             AdmCompromisoOpResponseDto itemResult = new AdmCompromisoOpResponseDto();
@@ -213,11 +203,11 @@ namespace Convertidor.Services.Adm
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
                 var codigoCompromisoOp = await _repository.GetCodigoCompromisoOp(dto.CodigoCompromisoOp);
-                if (codigoCompromisoOp == null)
+                if (codigoCompromisoOp != null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo compromiso op no existe";
+                    result.Message = "Codigo compromiso op ya existe";
                     return result;
                 }
                 var origenCompromisoId = await _admDescriptivaRepository.GetByIdAndTitulo(3, dto.OrigenCompromisoId);

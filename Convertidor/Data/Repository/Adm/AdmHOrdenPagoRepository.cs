@@ -1,27 +1,28 @@
 ﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
 namespace Convertidor.Data.Repository.Adm
 {
-    public class AdmCompromisoOpRepository : IAdmCompromisoOpRepository
+    public class AdmHOrdenPagoRepository: IAdmHOrdenPagoRepository
     {
         private readonly DataContextAdm _context;
-        public AdmCompromisoOpRepository(DataContextAdm context)
+        public AdmHOrdenPagoRepository(DataContextAdm context)
         {
             _context = context;
         }
 
-        public async Task<ADM_COMPROMISO_OP> GetCodigoCompromisoOp(int codigoCompromisoOp)
+        public async Task<ADM_H_ORDEN_PAGO> GetCodigoHOrdenPago(int codigoHOrdenPago)
         {
             try
             {
-                var result = await _context.ADM_COMPROMISO_OP
-                    .Where(e => e.CODIGO_COMPROMISO_OP == codigoCompromisoOp).FirstOrDefaultAsync();
+                var result = await _context.ADM_H_ORDEN_PAGO
+                    .Where(e => e.CODIGO_H_ORDEN_PAGO == codigoHOrdenPago).FirstOrDefaultAsync();
 
-                return (ADM_COMPROMISO_OP)result;
+                return (ADM_H_ORDEN_PAGO)result;
             }
             catch (Exception ex)
             {
@@ -31,11 +32,11 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
-        public async Task<List<ADM_COMPROMISO_OP>> GetAll() 
+        public async Task<List<ADM_H_ORDEN_PAGO>> GetAll() 
         {
             try
             {
-                var result = await _context.ADM_COMPROMISO_OP.DefaultIfEmpty().ToListAsync();
+                var result = await _context.ADM_H_ORDEN_PAGO.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex) 
@@ -45,13 +46,13 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
-        public async Task<ResultDto<ADM_COMPROMISO_OP>>Add(ADM_COMPROMISO_OP entity) 
+        public async Task<ResultDto<ADM_H_ORDEN_PAGO>>Add(ADM_H_ORDEN_PAGO entity) 
         {
 
-            ResultDto<ADM_COMPROMISO_OP> result = new ResultDto<ADM_COMPROMISO_OP>(null);
+            ResultDto<ADM_H_ORDEN_PAGO> result = new ResultDto<ADM_H_ORDEN_PAGO>(null);
             try 
             {
-                await _context.ADM_COMPROMISO_OP.AddAsync(entity);
+                await _context.ADM_H_ORDEN_PAGO.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -69,16 +70,16 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
-        public async Task<ResultDto<ADM_COMPROMISO_OP>>Update(ADM_COMPROMISO_OP entity) 
+        public async Task<ResultDto<ADM_H_ORDEN_PAGO>>Update(ADM_H_ORDEN_PAGO entity) 
         {
-            ResultDto<ADM_COMPROMISO_OP> result = new ResultDto<ADM_COMPROMISO_OP>(null);
+            ResultDto<ADM_H_ORDEN_PAGO> result = new ResultDto<ADM_H_ORDEN_PAGO>(null);
 
             try
             {
-                ADM_COMPROMISO_OP entityUpdate = await GetCodigoCompromisoOp(entity.CODIGO_COMPROMISO_OP);
+                ADM_H_ORDEN_PAGO entityUpdate = await GetCodigoHOrdenPago(entity.CODIGO_H_ORDEN_PAGO);
                 if (entityUpdate != null)
                 {
-                    _context.ADM_COMPROMISO_OP.Update(entity);
+                    _context.ADM_H_ORDEN_PAGO.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -95,14 +96,14 @@ namespace Convertidor.Data.Repository.Adm
                 return result;
             }
         }
-        public async Task<string>Delete(int codigoCompromisoOp) 
+        public async Task<string>Delete(int codigoHOrdenPago) 
         {
             try
             {
-                ADM_COMPROMISO_OP entity = await GetCodigoCompromisoOp(codigoCompromisoOp);
+                ADM_H_ORDEN_PAGO entity = await GetCodigoHOrdenPago(codigoHOrdenPago);
                 if (entity != null)
                 {
-                    _context.ADM_COMPROMISO_OP.Remove(entity);
+                    _context.ADM_H_ORDEN_PAGO.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -117,8 +118,8 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
                 int result = 0;
-                var last = await _context.ADM_COMPROMISO_OP.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_COMPROMISO_OP)
+                var last = await _context.ADM_H_ORDEN_PAGO.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_H_ORDEN_PAGO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -126,7 +127,7 @@ namespace Convertidor.Data.Repository.Adm
                 }
                 else
                 {
-                    result = last.CODIGO_COMPROMISO_OP + 1;
+                    result = last.CODIGO_H_ORDEN_PAGO + 1;
                 }
 
                 return (int)result!;

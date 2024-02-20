@@ -29,6 +29,16 @@ namespace Convertidor.Data
         public DbSet<ADM_PUC_REINTEGRO> ADM_PUC_REINTEGRO { get; set; }
         public DbSet<ADM_ORDEN_PAGO> ADM_ORDEN_PAGO { get; set; }
         public DbSet<ADM_COMPROMISO_OP> ADM_COMPROMISO_OP { get; set; }
+        public DbSet<ADM_PUC_ORDEN_PAGO> ADM_PUC_ORDEN_PAGO { get; set; }
+        public DbSet<ADM_RETENCIONES_OP> ADM_RETENCIONES_OP { get; set; }
+        public DbSet<ADM_DOCUMENTOS_OP> ADM_DOCUMENTOS_OP { get; set; }
+        public DbSet<ADM_COMPROBANTES_DOCUMENTOS_OP> ADM_COMPROBANTES_DOCUMENTOS_OP { get; set; }
+        public DbSet<ADM_IMPUESTOS_DOCUMENTOS_OP> ADM_IMPUESTOS_DOCUMENTOS_OP { get; set; }
+        public DbSet<ADM_IMPUESTOS_OP> ADM_IMPUESTOS_OP { get; set; }
+        public DbSet<ADM_BENEFICIARIOS_OP> ADM_BENEFICIARIOS_OP { get; set; }
+        public DbSet<ADM_PERIODICO_OP> ADM_PERIODICO_OP { get; set; }
+        public DbSet<ADM_H_ORDEN_PAGO> ADM_H_ORDEN_PAGO { get; set; }
+
 
 
 
@@ -199,10 +209,109 @@ namespace Convertidor.Data
                   });
                   builder.ToTable("ADM_COMPROMISO_OP");
               });
-            
+            modelBuilder
+           .Entity<ADM_PUC_ORDEN_PAGO>(builder =>
+           {
+               //builder.HasNoKey();
+               builder.HasKey(table => new
+               {
+                   table.CODIGO_PUC_ORDEN_PAGO,
+
+               });
+               builder.ToTable("ADM_PUC_ORDEN_PAGO");
+           });
+
+            modelBuilder
+          .Entity<ADM_RETENCIONES_OP>(builder =>
+          {
+              //builder.HasNoKey();
+              builder.HasKey(table => new
+              {
+                  table.CODIGO_RETENCION_OP,
+
+              });
+              builder.ToTable("ADM_RETENCIONES_OP");
+          });
+            modelBuilder
+        .Entity<ADM_DOCUMENTOS_OP>(builder =>
+        {
+            //builder.HasNoKey();
+            builder.HasKey(table => new
+            {
+                table.CODIGO_DOCUMENTO_OP,
+
+            });
+            builder.ToTable("ADM_DOCUMENTOS_OP");
+        });
+            modelBuilder
+        .Entity<ADM_COMPROBANTES_DOCUMENTOS_OP>(builder =>
+        {
+            //builder.HasNoKey();
+            builder.HasKey(table => new
+            {
+                table.CODIGO_COMPROBANTE_DOC_OP,
+
+            });
+            builder.ToTable("ADM_COMPROBANTES_DOCUMENTOS_OP");
+        });
+            modelBuilder
+       .Entity<ADM_IMPUESTOS_DOCUMENTOS_OP>(builder =>
+       {
+           //builder.HasNoKey();
+           builder.HasKey(table => new
+           {
+               table.CODIGO_IMPUESTO_DOCUMENTO_OP,
+
+           });
+           builder.ToTable("ADM_IMPUESTOS_DOCUMENTOS_OP");
+       });
+            modelBuilder
+       .Entity<ADM_IMPUESTOS_OP>(builder =>
+       {
+           //builder.HasNoKey();
+           builder.HasKey(table => new
+           {
+               table.CODIGO_IMPUESTO_OP,
+
+           });
+           builder.ToTable("ADM_IMPUESTOS_OP");
+       });
+            modelBuilder
+      .Entity<ADM_BENEFICIARIOS_OP>(builder =>
+      {
+          //builder.HasNoKey();
+          builder.HasKey(table => new
+          {
+              table.CODIGO_BENEFICIARIO_OP,
+
+          });
+          builder.ToTable("ADM_BENEFICIARIOS_OP");
+      });
+            modelBuilder
+     .Entity<ADM_PERIODICO_OP>(builder =>
+     {
+         //builder.HasNoKey();
+         builder.HasKey(table => new
+         {
+             table.CODIGO_PERIODICO_OP,
+
+         });
+         builder.ToTable("ADM_PERIODICO_OP");
+     });
+            modelBuilder
+    .Entity<ADM_H_ORDEN_PAGO>(builder =>
+    {
+        //builder.HasNoKey();
+        builder.HasKey(table => new
+        {
+            table.CODIGO_H_ORDEN_PAGO,
+
+        });
+        builder.ToTable("ADM_H_ORDEN_PAGO");
+    });
+
         }
 
-
-
+        
     }
 }
