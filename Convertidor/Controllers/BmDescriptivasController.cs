@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
 using IronPdf;
-using Convertidor.Dtos;
 using Convertidor.Services.Bm;
 using Convertidor.Dtos.Bm;
 using Microsoft.AspNetCore.Authorization;

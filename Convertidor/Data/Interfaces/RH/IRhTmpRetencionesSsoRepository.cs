@@ -1,6 +1,4 @@
-﻿using Convertidor.Data.Entities.Rh;
-
-namespace Convertidor.Data.Interfaces.RH
+﻿namespace Convertidor.Data.Interfaces.RH
 {
     public interface IRhTmpRetencionesSsoRepository
     {

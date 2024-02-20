@@ -1,7 +1,4 @@
-﻿using Convertidor.Data.Entities.Rh;
-using Convertidor.Dtos;
-
-namespace Convertidor.Data.Repository.Rh
+﻿namespace Convertidor.Data.Repository.Rh
 {
 	public interface IRhPersonasMovControlRepository
 	{

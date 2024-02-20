@@ -1,8 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Convertidor.Data.Entities.Sis;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Sis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

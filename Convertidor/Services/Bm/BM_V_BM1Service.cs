@@ -1,5 +1,4 @@
-﻿using Convertidor.Dtos;
-using Convertidor.Data.Interfaces.Bm;
+﻿using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
 using Ganss.Excel;
 namespace Convertidor.Services.Catastro
@@ -10,13 +9,14 @@ namespace Convertidor.Services.Catastro
 
         private readonly IBM_V_BM1Repository _repository;
         private readonly IConfiguration _configuration;
+        private readonly IBmBienesFotoRepository _bmBienesFotoRepository;
 
-        public BM_V_BM1Service(IBM_V_BM1Repository repository,IConfiguration configuration)
+        public BM_V_BM1Service(IBM_V_BM1Repository repository,IConfiguration configuration,IBmBienesFotoRepository bmBienesFotoRepository)
 
         {
             _repository = repository;
             _configuration = configuration;
-
+            _bmBienesFotoRepository = bmBienesFotoRepository;
         }
 
       
@@ -28,9 +28,11 @@ namespace Convertidor.Services.Catastro
             ResultDto<List<Bm1GetDto>> response = new ResultDto<List<Bm1GetDto>>(null);
             try
             {
-                var result = await _repository.GetAll();
+
+                //var bienesFoto =  _bmBienesFotoRepository.BienesConFoto();
                 
-               
+                var result = await _repository.GetAll();
+          
                     var lista = from s in result
                                   group s by new
                                   {
@@ -60,7 +62,7 @@ namespace Convertidor.Services.Catastro
                                       CodigoNivel2 = g.Key.CodigoNivel2,
                                       NumeroLote = g.Key.NumeroLote,
                                       Cantidad = g.Key.Cantidad,
-                                      NumeroPlaca = g.Key.NumeroPlaca,
+                                      NumeroPlaca = g.Key.CodigoGrupo + "-" + g.Key.CodigoNivel1 +"-" +  g.Key.CodigoNivel2 + "-"+g.Key.NumeroPlaca,
                                       Articulo = g.Key.Articulo,
                                       Especificacion = g.Key.Especificacion,   
                                       Servicio = g.Key.Servicio,
@@ -69,7 +71,42 @@ namespace Convertidor.Services.Catastro
                                       CodigoMovBien = g.Key.CodigoMovBien
 
                                   };
+                    
                 
+                       var listaExcel = from s in result
+                                  group s by new
+                                  {
+                                      UnidadTrabajo = s.UNIDAD_TRABAJO,
+                                      CodigoGrupo = s.CODIGO_GRUPO,
+                                      CodigoNivel1 = s.CODIGO_NIVEL1,
+                                      CodigoNivel2 = s.CODIGO_NIVEL2,
+                                      NumeroLote = s.NUMERO_LOTE,
+                                      Cantidad = s.CANTIDAD,
+                                      NumeroPlaca = s.NUMERO_PLACA,
+                                      Articulo = s.ARTICULO,
+                                      Especificacion = s.ESPECIFICACION,
+                                      Servicio = s.SERVICIO,
+                                      ResponsableBien = s.RESPONSABLE_BIEN,
+                                      CodigoBien = s.CODIGO_BIEN,
+                                      CodigoMovBien=s.CODIGO_MOV_BIEN
+                 
+                                      
+                                  } into g
+                                  select new Bm1ExcelGetDto()
+                                  {
+
+                                  
+                                      UnidadTrabajo = g.Key.UnidadTrabajo,
+                                    
+                                      Cantidad = g.Key.Cantidad,
+                                      NumeroPlaca = g.Key.CodigoGrupo + "-" + g.Key.CodigoNivel1 +"-" +  g.Key.CodigoNivel2 + "-"+g.Key.NumeroPlaca,
+                                      Articulo = g.Key.Articulo,
+                                      Especificacion = g.Key.Especificacion,   
+                                      Servicio = g.Key.Servicio,
+                                      ResponsableBien = g.Key.ResponsableBien,
+                                    
+
+                                  };
                     ExcelMapper mapper = new ExcelMapper();
 
 
@@ -80,7 +117,7 @@ namespace Convertidor.Services.Catastro
                     var fileName = $"BM1.xlsx";
                     string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
 
-                    var excelData = lista.ToList();
+                    var excelData = listaExcel.ToList();
                     mapper.Save(newFile, excelData, $"BM1", true);
                   
                     

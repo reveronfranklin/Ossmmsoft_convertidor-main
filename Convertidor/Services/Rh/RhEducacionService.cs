@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Convertidor.Data.Entities.Rh;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
-using Convertidor.Dtos.Rh;
-using Convertidor.Services.Rh;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
 {

@@ -1,7 +1,4 @@
-﻿using Convertidor.Data.Entities.Rh;
-using Convertidor.Dtos.Rh;
-
-namespace Convertidor.Services.Rh
+﻿namespace Convertidor.Services.Rh
 {
 	public interface IRhDescriptivasService
 	{

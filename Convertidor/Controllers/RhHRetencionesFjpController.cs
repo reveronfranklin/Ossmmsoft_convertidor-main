@@ -1,7 +1,5 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using Convertidor.Services.Rh;
-using Convertidor.Dtos.Rh;
 
 namespace Convertidor.Controllers
 {

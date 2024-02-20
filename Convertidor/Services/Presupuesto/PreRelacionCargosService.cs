@@ -1,10 +1,7 @@
 ﻿using System.Globalization;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Presupuesto;
-using Convertidor.Dtos.Rh;
-using Convertidor.Services.Rh;
 using Ganss.Excel;
 
 namespace Convertidor.Services.Presupuesto

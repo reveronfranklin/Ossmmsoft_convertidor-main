@@ -1,5 +1,4 @@
-﻿using Convertidor.Dtos;
-using Convertidor.Dtos.Catastro;
+﻿using Convertidor.Dtos.Catastro;
 
 namespace Convertidor.Services.Catastro
 {

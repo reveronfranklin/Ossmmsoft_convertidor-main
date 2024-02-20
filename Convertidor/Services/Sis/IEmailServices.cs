@@ -1,5 +1,3 @@
-using Convertidor.Dtos;
-
 namespace Convertidor.Services.Sis;
 
 public interface IEmailServices

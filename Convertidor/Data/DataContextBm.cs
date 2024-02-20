@@ -21,8 +21,8 @@ namespace Convertidor.Data
         public DbSet<BM_DIR_H_BIEN> BM_DIR_H_BIEN { get; set; }
         public DbSet<BM_MOV_BIENES> BM_MOV_BIENES { get; set; }
         public DbSet<BM_SOL_MOV_BIENES> BM_SOL_MOV_BIENES { get; set; }
-
-
+        public DbSet<BM_BIENES_FOTO> BM_BIENES_FOTO { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -81,7 +81,17 @@ namespace Convertidor.Data
                 });
                 builder.ToTable("BM_BIENES");
             });
+           modelBuilder
+               .Entity<BM_BIENES_FOTO>(builder =>
+               {
 
+                   builder.HasKey(table => new
+                   {
+                       table.CODIGO_BIEN_FOTO,
+
+                   });
+                   builder.ToTable("BM_BIENES_FOTO");
+               });
             modelBuilder
                .Entity<BM_CLASIFICACION_BIENES>(builder =>
                {

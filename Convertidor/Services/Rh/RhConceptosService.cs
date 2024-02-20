@@ -1,22 +1,9 @@
-﻿using AutoMapper;
-using Convertidor.Data.Entities.Rh;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
-using Convertidor.Dtos.Rh;
-using Convertidor.Services.Presupuesto;
-using Convertidor.Services.Rh;
-using NPOI.XSSF.Streaming;
-
-namespace Convertidor.Data.Repository.Rh
+﻿namespace Convertidor.Data.Repository.Rh
 {
     public class RhConceptosService : IRhConceptosService
     {
 
         private readonly DataContext _context;
-
-
-
 
         private readonly IRhConceptosRepository _repository;
         private readonly IRhDescriptivasService _descriptivaService;
@@ -141,7 +128,15 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        /*public static explicit operator CreateOrderDto(
+            CreateOrderViewModel model) =>
+            new CreateOrderDto(
+                model.CustomerId, model.ShipAddress, model.ShipCity,
+                model.ShipCountry, model.ShipPostalCode,
+                model.OrderDetails.Select(d => new CreateOrderDetailDto(
+                    d.ProductId, d.UnitPrice, d.Quantity)));
 
+        }*/
         public async Task<RhConceptosResponseDto> MapConceptosDto(RH_CONCEPTOS dtos, string tipoNominaDescripcion = "")
         {
 

@@ -1,8 +1,4 @@
-﻿using Convertidor.Data.Entities.Rh;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Repository.Rh;
-using Convertidor.Dtos;
-using Convertidor.Dtos.Rh;
+﻿using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos.Sis;
 
 namespace Convertidor.Services.Rh

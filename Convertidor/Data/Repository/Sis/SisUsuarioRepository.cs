@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Convertidor.Data.Entities.Sis;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Sis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -131,6 +130,7 @@ namespace Convertidor.Data.Repository.Sis
                new UserRole { Role="sis" },
                new UserRole { Role="pre" },
                new UserRole { Role="rh" },
+               new UserRole { Role="bm" },
                 new UserRole { Role="DEV" },
             };
 

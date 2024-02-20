@@ -1,6 +1,4 @@
-﻿using Convertidor.Dtos;
-using Convertidor.Dtos.Presupuesto;
-using Convertidor.Dtos.Rh;
+﻿using Convertidor.Dtos.Presupuesto;
 
 namespace Convertidor.Services.Rh
 {

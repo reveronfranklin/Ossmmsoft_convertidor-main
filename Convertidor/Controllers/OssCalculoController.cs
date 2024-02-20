@@ -2,7 +2,6 @@
 
 // HTML to PDF
 using Convertidor.Dtos.Adm;
-using Convertidor.Dtos.Rh;
 using Convertidor.Dtos.Sis;
 using Convertidor.Services.Adm;
 using Convertidor.Services.Sis;

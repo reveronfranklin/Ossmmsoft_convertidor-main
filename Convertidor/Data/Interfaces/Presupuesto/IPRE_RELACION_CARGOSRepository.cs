@@ -1,5 +1,4 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Dtos;
 
 namespace Convertidor.Data.Interfaces.Presupuesto
 {

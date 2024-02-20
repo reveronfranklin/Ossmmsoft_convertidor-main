@@ -1,7 +1,5 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using Convertidor.Services.Rh;
-using Convertidor.Dtos.Rh;
 using Microsoft.AspNetCore.Authorization;
 using Convertidor.Services.Bm;
 using Convertidor.Dtos.Bm;

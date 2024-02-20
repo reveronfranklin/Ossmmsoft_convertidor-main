@@ -1,11 +1,4 @@
-﻿using Convertidor.Data.Entities.Rh;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
-using Convertidor.Dtos.Rh;
-using Convertidor.Services.Rh;
-
-namespace Convertidor.Data.Repository.Rh
+﻿namespace Convertidor.Data.Repository.Rh
 {
 	public class RhTipoNominaService: IRhTipoNominaService
     {

@@ -10,10 +10,16 @@ namespace Convertidor.Data.Repository.Catastro
 
         private readonly DataContextBm _context;
         private readonly IConfiguration _configuration;
-        public BM_V_BM1Repository(DataContextBm context, IConfiguration configuration)
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+
+        public BM_V_BM1Repository(DataContextBm context,
+            IConfiguration configuration,  
+            ISisUsuarioRepository sisUsuarioRepository
+            )
         {
             _context = context;
             _configuration = configuration;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
      
@@ -21,9 +27,11 @@ namespace Convertidor.Data.Repository.Catastro
 
         public async Task<List<BM_V_BM1>> GetAll()
         {
-            try
-            {
-                var result = await _context.BM_V_BM1.DefaultIfEmpty().ToListAsync();
+            try{
+            
+            
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.BM_V_BM1.DefaultIfEmpty().Where(b=>b.CODIGO_EMPRESA==conectado.Empresa).ToListAsync();
                 return result;
             }
             catch (Exception ex)

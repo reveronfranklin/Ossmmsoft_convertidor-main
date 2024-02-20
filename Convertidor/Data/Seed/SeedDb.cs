@@ -1,12 +1,6 @@
 ﻿using System.Text;
-using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
-using Convertidor.Dtos.Rh;
-using Convertidor.Services.Rh;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Convertidor.Data.Repository.Rh

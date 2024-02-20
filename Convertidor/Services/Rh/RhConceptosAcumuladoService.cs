@@ -1,14 +1,8 @@
 ﻿using System.Globalization;
 using Convertidor.Data.Entities.ADM;
-using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.Adm;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Data.Interfaces.Sis;
 using Convertidor.Data.Repository.Rh;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Adm;
-using Convertidor.Dtos.Rh;
-using Convertidor.Services.Rh;
 using Convertidor.Utility;
 using NPOI.SS.Formula.Functions;
 

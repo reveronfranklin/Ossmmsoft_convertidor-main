@@ -1,5 +1,4 @@
 ﻿using Convertidor.Data.Entities.Sis;
-using Convertidor.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Sis

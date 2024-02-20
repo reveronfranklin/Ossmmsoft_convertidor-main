@@ -1,9 +1,5 @@
-﻿using AutoMapper;
-using Convertidor.Data.EntitiesDestino;
+﻿using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
-using Convertidor.Dtos;
-using Convertidor.Dtos.Rh;
-using Convertidor.Services.Rh;
 
 namespace Convertidor.Services
 {

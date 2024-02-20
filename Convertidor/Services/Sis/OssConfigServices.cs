@@ -1,6 +1,4 @@
 ﻿using Convertidor.Data.Entities.Sis;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Sis;
 
 namespace Convertidor.Services.Sis

@@ -2,11 +2,8 @@
 using System;
 using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Entities.Rh;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Interfaces.RH;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Bm;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;

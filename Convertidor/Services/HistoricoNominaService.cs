@@ -1,9 +1,7 @@
 ﻿using System.Text;
-using AutoMapper;
 using Convertidor.Data.Entities;
 using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
-using Convertidor.Dtos;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 

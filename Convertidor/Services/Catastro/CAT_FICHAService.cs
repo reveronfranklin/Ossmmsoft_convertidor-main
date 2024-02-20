@@ -1,5 +1,4 @@
-﻿using Convertidor.Dtos;
-using Convertidor.Data.Entities.Catastro;
+﻿using Convertidor.Data.Entities.Catastro;
 using Convertidor.Data.Interfaces.Catastro;
 using Convertidor.Dtos.Catastro;
 

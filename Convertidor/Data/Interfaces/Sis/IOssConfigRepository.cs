@@ -1,5 +1,4 @@
 ﻿using Convertidor.Data.Entities.Sis;
-using Convertidor.Dtos;
 
 namespace Convertidor.Data.Interfaces.Sis
 {

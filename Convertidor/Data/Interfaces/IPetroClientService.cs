@@ -1,6 +1,4 @@
-﻿using Convertidor.Dtos;
-
-namespace Convertidor.Data.Interfaces
+﻿namespace Convertidor.Data.Interfaces
 {
 	public interface IPetroClientService
 	{
