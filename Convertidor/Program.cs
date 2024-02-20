@@ -271,6 +271,17 @@ builder.Services.AddTransient<IAdmReintegrosRepository, AdmReintegrosRepository>
 builder.Services.AddTransient<IAdmPucReintegroRepository, AdmPucReintegroRepository>();
 builder.Services.AddTransient<IAdmOrdenPagoRepository, AdmOrdenPagoRepository>();
 builder.Services.AddTransient<IAdmCompromisoOpRepository, AdmCompromisoOpRepository>();
+builder.Services.AddTransient<IAdmPucOrdenPagoRepository, AdmPucOrdenPagoRepository>();
+builder.Services.AddTransient<IAdmRetencionesOpRepository, AdmRetencionesOpRepository>();
+builder.Services.AddTransient<IAdmDocumentosOpRepository, AdmDocumentosOpRepository>();
+builder.Services.AddTransient<IAdmComprobantesDocumentosOpRepository, AdmComprobantesDocumentosOpRepository>();
+builder.Services.AddTransient<IAdmImpuestosDocumentosOpRepository, AdmImpuestosDocumentosOpRepository>();
+builder.Services.AddTransient<IAdmImpuestosOpRepository, AdmImpuestosOpRepository>();
+builder.Services.AddTransient<IAdmBeneficiariosOpRepository, AdmBeneficiariosOpRepository>();
+builder.Services.AddTransient<IAdmPeriodicoOpRepository, AdmPeriodicoOpRepository>();
+
+
+
 
 
 //ADM Services
@@ -288,6 +299,17 @@ builder.Services.AddTransient<IAdmReintegrosService, AdmReintegrosService>();
 builder.Services.AddTransient<IAdmPucReintegroService, AdmPucReintegroService>();
 builder.Services.AddTransient<IAdmOrdenPagoService, AdmOrdenPagoService>();
 builder.Services.AddTransient<IAdmCompromisoOpService, AdmCompromisoOpService>();
+builder.Services.AddTransient<IAdmPucOrdenPagoService, AdmPucOrdenPagoService>();
+builder.Services.AddTransient<IAdmRetencionesOpService, AdmRetencionesOpService>();
+builder.Services.AddTransient<IAdmDocumentosOpService, AdmDocumentosOpService>();
+builder.Services.AddTransient<IAdmComprobantesDocumentosOpService, AdmComprobantesDocumentosOpService>();
+builder.Services.AddTransient<IAdmImpuestosDocumentosOpService, AdmImpuestosDocumentosOpService>();
+builder.Services.AddTransient<IAdmImpuestosOpService, AdmImpuestosOpService>();
+builder.Services.AddTransient<IAdmBeneficariosOpService, AdmBeneficiariosOpService>();
+builder.Services.AddTransient<IAdmPeriodicoOpService, AdmPeriodicoOpService>();
+
+
+
 
 
 

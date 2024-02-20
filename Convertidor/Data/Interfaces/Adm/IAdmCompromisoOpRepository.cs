@@ -5,11 +5,11 @@ namespace Convertidor.Data.Interfaces.Adm
 {
     public interface IAdmCompromisoOpRepository
     {
-        Task<ADM_COMPROMISO_OP> GetCodigoCompromisoOp(int CodigoCompromisoOp);
+        Task<ADM_COMPROMISO_OP> GetCodigoCompromisoOp(int codigoCompromisoOp);
         Task<List<ADM_COMPROMISO_OP>> GetAll();
         Task<ResultDto<ADM_COMPROMISO_OP>> Add(ADM_COMPROMISO_OP entity);
         Task<ResultDto<ADM_COMPROMISO_OP>> Update(ADM_COMPROMISO_OP entity);
-        Task<string> Delete(int CodigoCompromisoOp);
+        Task<string> Delete(int codigoCompromisoOp);
         Task<int> GetNextKey();
     }
 }

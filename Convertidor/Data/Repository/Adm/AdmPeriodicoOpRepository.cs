@@ -7,22 +7,22 @@ using System.Runtime.CompilerServices;
 
 namespace Convertidor.Data.Repository.Adm
 {
-    public class AdmCompromisoOpRepository : IAdmCompromisoOpRepository
+    public class AdmPeriodicoOpRepository : IAdmPeriodicoOpRepository
     {
         private readonly DataContextAdm _context;
-        public AdmCompromisoOpRepository(DataContextAdm context)
+        public AdmPeriodicoOpRepository(DataContextAdm context)
         {
             _context = context;
         }
 
-        public async Task<ADM_COMPROMISO_OP> GetCodigoCompromisoOp(int codigoCompromisoOp)
+        public async Task<ADM_PERIODICO_OP> GetCodigoPeriodicoOp(int codigoPeriodicoOp)
         {
             try
             {
-                var result = await _context.ADM_COMPROMISO_OP
-                    .Where(e => e.CODIGO_COMPROMISO_OP == codigoCompromisoOp).FirstOrDefaultAsync();
+                var result = await _context.ADM_PERIODICO_OP
+                    .Where(e => e.CODIGO_PERIODICO_OP == codigoPeriodicoOp).FirstOrDefaultAsync();
 
-                return (ADM_COMPROMISO_OP)result;
+                return (ADM_PERIODICO_OP)result;
             }
             catch (Exception ex)
             {
@@ -32,27 +32,45 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
-        public async Task<List<ADM_COMPROMISO_OP>> GetAll() 
+        public async Task<ADM_PERIODICO_OP> GetFechaPago(DateTime fechaPago)
         {
             try
             {
-                var result = await _context.ADM_COMPROMISO_OP.DefaultIfEmpty().ToListAsync();
+                var result = await _context.ADM_PERIODICO_OP
+                    .Where(e => e.FECHA_PAGO == fechaPago).FirstOrDefaultAsync();
+
+                return (ADM_PERIODICO_OP)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+
+        public async Task<List<ADM_PERIODICO_OP>> GetAll()
+        {
+            try
+            {
+                var result = await _context.ADM_PERIODICO_OP.DefaultIfEmpty().ToListAsync();
                 return result;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 var res = ex.InnerException.Message;
                 return null;
             }
         }
 
-        public async Task<ResultDto<ADM_COMPROMISO_OP>>Add(ADM_COMPROMISO_OP entity) 
+        public async Task<ResultDto<ADM_PERIODICO_OP>> Add(ADM_PERIODICO_OP entity)
         {
 
-            ResultDto<ADM_COMPROMISO_OP> result = new ResultDto<ADM_COMPROMISO_OP>(null);
-            try 
+            ResultDto<ADM_PERIODICO_OP> result = new ResultDto<ADM_PERIODICO_OP>(null);
+            try
             {
-                await _context.ADM_COMPROMISO_OP.AddAsync(entity);
+                await _context.ADM_PERIODICO_OP.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -70,21 +88,21 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
-        public async Task<ResultDto<ADM_COMPROMISO_OP>>Update(ADM_COMPROMISO_OP entity) 
+        public async Task<ResultDto<ADM_PERIODICO_OP>> Update(ADM_PERIODICO_OP entity)
         {
-            ResultDto<ADM_COMPROMISO_OP> result = new ResultDto<ADM_COMPROMISO_OP>(null);
+            ResultDto<ADM_PERIODICO_OP> result = new ResultDto<ADM_PERIODICO_OP>(null);
 
             try
             {
-                ADM_COMPROMISO_OP entityUpdate = await GetCodigoCompromisoOp(entity.CODIGO_COMPROMISO_OP);
+                ADM_PERIODICO_OP entityUpdate = await GetCodigoPeriodicoOp(entity.CODIGO_PERIODICO_OP);
                 if (entityUpdate != null)
                 {
-                    _context.ADM_COMPROMISO_OP.Update(entity);
+                    _context.ADM_PERIODICO_OP.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
-                    
+
                 }
                 return result;
             }
@@ -96,14 +114,14 @@ namespace Convertidor.Data.Repository.Adm
                 return result;
             }
         }
-        public async Task<string>Delete(int codigoCompromisoOp) 
+        public async Task<string> Delete(int codigoPeriodicoOp)
         {
             try
             {
-                ADM_COMPROMISO_OP entity = await GetCodigoCompromisoOp(codigoCompromisoOp);
+                ADM_PERIODICO_OP entity = await GetCodigoPeriodicoOp (codigoPeriodicoOp);
                 if (entity != null)
                 {
-                    _context.ADM_COMPROMISO_OP.Remove(entity);
+                    _context.ADM_PERIODICO_OP.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -118,8 +136,8 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
                 int result = 0;
-                var last = await _context.ADM_COMPROMISO_OP.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_COMPROMISO_OP)
+                var last = await _context.ADM_PERIODICO_OP.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_PERIODICO_OP)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -127,7 +145,7 @@ namespace Convertidor.Data.Repository.Adm
                 }
                 else
                 {
-                    result = last.CODIGO_COMPROMISO_OP + 1;
+                    result = last.CODIGO_PERIODICO_OP + 1;
                 }
 
                 return (int)result!;

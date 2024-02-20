@@ -7,22 +7,22 @@ using System.Runtime.CompilerServices;
 
 namespace Convertidor.Data.Repository.Adm
 {
-    public class AdmCompromisoOpRepository : IAdmCompromisoOpRepository
+    public class AdmPucOrdenPagoRepository : IAdmPucOrdenPagoRepository
     {
         private readonly DataContextAdm _context;
-        public AdmCompromisoOpRepository(DataContextAdm context)
+        public AdmPucOrdenPagoRepository(DataContextAdm context)
         {
             _context = context;
         }
 
-        public async Task<ADM_COMPROMISO_OP> GetCodigoCompromisoOp(int codigoCompromisoOp)
+        public async Task<ADM_PUC_ORDEN_PAGO> GetCodigoPucOrdenPago(int CodigoPucOrdenPago)
         {
             try
             {
-                var result = await _context.ADM_COMPROMISO_OP
-                    .Where(e => e.CODIGO_COMPROMISO_OP == codigoCompromisoOp).FirstOrDefaultAsync();
+                var result = await _context.ADM_PUC_ORDEN_PAGO
+                    .Where(e => e.CODIGO_PUC_ORDEN_PAGO == CodigoPucOrdenPago).FirstOrDefaultAsync();
 
-                return (ADM_COMPROMISO_OP)result;
+                return (ADM_PUC_ORDEN_PAGO)result;
             }
             catch (Exception ex)
             {
@@ -32,11 +32,11 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
-        public async Task<List<ADM_COMPROMISO_OP>> GetAll() 
+        public async Task<List<ADM_PUC_ORDEN_PAGO>> GetAll() 
         {
             try
             {
-                var result = await _context.ADM_COMPROMISO_OP.DefaultIfEmpty().ToListAsync();
+                var result = await _context.ADM_PUC_ORDEN_PAGO.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex) 
@@ -46,13 +46,13 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
-        public async Task<ResultDto<ADM_COMPROMISO_OP>>Add(ADM_COMPROMISO_OP entity) 
+        public async Task<ResultDto<ADM_PUC_ORDEN_PAGO>>Add(ADM_PUC_ORDEN_PAGO entity) 
         {
 
-            ResultDto<ADM_COMPROMISO_OP> result = new ResultDto<ADM_COMPROMISO_OP>(null);
+            ResultDto<ADM_PUC_ORDEN_PAGO> result = new ResultDto<ADM_PUC_ORDEN_PAGO>(null);
             try 
             {
-                await _context.ADM_COMPROMISO_OP.AddAsync(entity);
+                await _context.ADM_PUC_ORDEN_PAGO.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -70,16 +70,16 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
-        public async Task<ResultDto<ADM_COMPROMISO_OP>>Update(ADM_COMPROMISO_OP entity) 
+        public async Task<ResultDto<ADM_PUC_ORDEN_PAGO>>Update(ADM_PUC_ORDEN_PAGO entity) 
         {
-            ResultDto<ADM_COMPROMISO_OP> result = new ResultDto<ADM_COMPROMISO_OP>(null);
+            ResultDto<ADM_PUC_ORDEN_PAGO> result = new ResultDto<ADM_PUC_ORDEN_PAGO>(null);
 
             try
             {
-                ADM_COMPROMISO_OP entityUpdate = await GetCodigoCompromisoOp(entity.CODIGO_COMPROMISO_OP);
+                ADM_PUC_ORDEN_PAGO entityUpdate = await GetCodigoPucOrdenPago(entity.CODIGO_PUC_ORDEN_PAGO);
                 if (entityUpdate != null)
                 {
-                    _context.ADM_COMPROMISO_OP.Update(entity);
+                    _context.ADM_PUC_ORDEN_PAGO.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -96,14 +96,14 @@ namespace Convertidor.Data.Repository.Adm
                 return result;
             }
         }
-        public async Task<string>Delete(int codigoCompromisoOp) 
+        public async Task<string>Delete(int CodigoPucOrdenPago) 
         {
             try
             {
-                ADM_COMPROMISO_OP entity = await GetCodigoCompromisoOp(codigoCompromisoOp);
+                ADM_PUC_ORDEN_PAGO entity = await GetCodigoPucOrdenPago(CodigoPucOrdenPago);
                 if (entity != null)
                 {
-                    _context.ADM_COMPROMISO_OP.Remove(entity);
+                    _context.ADM_PUC_ORDEN_PAGO.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -118,8 +118,8 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
                 int result = 0;
-                var last = await _context.ADM_COMPROMISO_OP.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_COMPROMISO_OP)
+                var last = await _context.ADM_PUC_ORDEN_PAGO.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_PUC_ORDEN_PAGO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -127,7 +127,7 @@ namespace Convertidor.Data.Repository.Adm
                 }
                 else
                 {
-                    result = last.CODIGO_COMPROMISO_OP + 1;
+                    result = last.CODIGO_PUC_ORDEN_PAGO + 1;
                 }
 
                 return (int)result!;
