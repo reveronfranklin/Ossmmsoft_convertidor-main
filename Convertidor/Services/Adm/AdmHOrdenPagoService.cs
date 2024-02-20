@@ -67,12 +67,14 @@ namespace Convertidor.Services.Adm
             itemResult.FechaOrdenPagoObj = (FechaDto)fechaOrdenPagoObj;
             itemResult.TipoOrdenPagoId = dtos.TIPO_ORDEN_PAGO_ID;
             itemResult.FechaPlazoDesde = dtos.FECHA_PLAZO_DESDE;
-            itemResult.FechaPlazoDesdeString = dtos.FECHA_PLAZO_DESDE.ToString("u");
-            FechaDto fechaPlazoDesdeObj = GetFechaDto(dtos.FECHA_PLAZO_DESDE);
+            var fechaPlazoDesde = (DateTime)dtos.FECHA_PLAZO_DESDE;
+            itemResult.FechaPlazoDesdeString = fechaPlazoDesde.ToString("u");
+            FechaDto fechaPlazoDesdeObj = GetFechaDto((DateTime)dtos.FECHA_PLAZO_DESDE);
             itemResult.FechaPlazoDesdeObj = (FechaDto)fechaPlazoDesdeObj;
             itemResult.FechaPlazoHasta = dtos.FECHA_PLAZO_HASTA;
-            itemResult.FechaPlazoHastaString = dtos.FECHA_PLAZO_HASTA.ToString("u");
-            FechaDto fechaPlazoHastaObj = GetFechaDto(dtos.FECHA_PLAZO_HASTA);
+            var fechaPlazoHasta = (DateTime)dtos.FECHA_PLAZO_HASTA;
+            itemResult.FechaPlazoHastaString = fechaPlazoHasta.ToString("u");
+            FechaDto fechaPlazoHastaObj = GetFechaDto((DateTime)dtos.FECHA_PLAZO_HASTA);
             itemResult.FechaPlazoHastaObj = (FechaDto)fechaPlazoHastaObj;
             itemResult.CantidadPago = dtos.CANTIDAD_PAGO;
             itemResult.NumeroPago = dtos.NUMERO_PAGO;
@@ -85,11 +87,12 @@ namespace Convertidor.Services.Adm
             itemResult.Extra2 = dtos.EXTRA2;
             itemResult.Extra3 = dtos.EXTRA3;
             itemResult.UsuarioHIns = dtos.USUARIO_H_INS;
-            itemResult.FechaHIns = dtos.FECHA_H_INS;
-            itemResult.FechaHInsString = dtos.FECHA_H_INS.ToString("u");
-            FechaDto fechaHInsObj = GetFechaDto(dtos.FECHA_H_INS);
+            itemResult.FechaHIns = (DateTime)dtos.FECHA_H_INS;
+            var fechaHIns = (DateTime)dtos.FECHA_INS;
+            itemResult.FechaHInsString = fechaHIns.ToString("u");
+            FechaDto fechaHInsObj = GetFechaDto((DateTime)dtos.FECHA_H_INS);
             itemResult.FechaHInsObj = (FechaDto)fechaHInsObj;
-            itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            itemResult.CodigoPresupuesto = (int)dtos.CODIGO_PRESUPUESTO;
             itemResult.Extra4 = dtos.EXTRA4;
             itemResult.Extra5 = dtos.EXTRA5;
             itemResult.Extra6 = dtos.EXTRA6;
@@ -103,12 +106,11 @@ namespace Convertidor.Services.Adm
             itemResult.Extra3 = dtos.EXTRA15;
             itemResult.NumeroComprobante = dtos.NUMERO_COMPROBANTE;
             itemResult.FechaComprobante = dtos.FECHA_COMPROBANTE;
-            itemResult.FechaComprobanteString = dtos.FECHA_COMPROBANTE.ToString("u");
-            FechaDto fechaComprobanteObj = GetFechaDto(dtos.FECHA_COMPROBANTE);
+            var fechaComprobante = (DateTime)dtos.FECHA_COMPROBANTE;
+            itemResult.FechaComprobanteString = fechaComprobante.ToString("u");
+            FechaDto fechaComprobanteObj = GetFechaDto((DateTime)dtos.FECHA_COMPROBANTE);
             itemResult.FechaComprobanteObj = (FechaDto)fechaComprobanteObj;
-            itemResult.NumeroComprobante2 = dtos.NUMERO_COMPROBANTE2;
-            itemResult.NumeroComprobante3 = dtos.NUMERO_COMPROBANTE3;
-            itemResult.NumeroComprobante4 = dtos.NUMERO_COMPROBANTE4;
+        
 
             return itemResult;
         }
@@ -116,17 +118,59 @@ namespace Convertidor.Services.Adm
         public async Task<List<AdmHOrdenPagoResponseDto>> MapListHOrdenPagoDto(List<ADM_H_ORDEN_PAGO> dtos)
         {
             List<AdmHOrdenPagoResponseDto> result = new List<AdmHOrdenPagoResponseDto>();
-            {
+            
+
                 foreach (var item in dtos)
                 {
-
+                  if (item == null) continue;
                     var itemResult = await MapHOrdenPagoDto(item);
 
                     result.Add(itemResult);
                 }
                 return result;
-            }
+            
         }
+
+
+        public async Task<ResultDto<List<AdmHOrdenPagoResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmHOrdenPagoResponseDto>> result = new ResultDto<List<AdmHOrdenPagoResponseDto>>(null);
+            try
+            {
+                var hOrdenPago = await _repository.GetAll();
+                var cant = hOrdenPago.Count();
+                if (hOrdenPago!=null && hOrdenPago.Count() > 0)
+                {
+                    var listDto = await MapListHOrdenPagoDto(hOrdenPago);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+
 
         public async Task<ResultDto<AdmHOrdenPagoResponseDto>> Update(AdmHOrdenPagoUpdateDto dto)
         {
@@ -260,7 +304,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Status == null)
+                if (dto.Status == null && dto.Status.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -268,35 +312,14 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Motivo == null)
+                if (dto.Motivo == null && dto.Motivo.Length > 2000)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Motivo Invalido";
                     return result;
                 }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
 
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
                 if(dto.UsuarioHIns < 0) 
                 {
                     result.Data = null;
@@ -323,36 +346,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
-                if (dto.Extra4 is not null && dto.Extra4.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra4 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra13 is not null && dto.Extra13.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra13 Invalido";
-                    return result;
-                }
-                if (dto.Extra14 is not null && dto.Extra14.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra14 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra15 is not null && dto.Extra15.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra15 Invalido";
-                    return result;
-                }
+                
 
                 if (dto.NumeroComprobante < 0)
                 {
@@ -369,15 +363,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.NumeroComprobante2 < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero comprobante2 Invalido";
-                    return result;
-                }
 
-                codigoHOrdenPago.CODIGO_H_ORDEN_PAGO = dto.CodigoOrdenPago;
+                codigoHOrdenPago.CODIGO_H_ORDEN_PAGO = dto.CodigoHOrdenPago;
                 codigoHOrdenPago.CODIGO_ORDEN_PAGO = dto.CodigoOrdenPago;
                 codigoHOrdenPago.ANO = dto.ANO;
                 codigoHOrdenPago.CODIGO_COMPROMISO = dto.CodigoCompromiso;
@@ -417,9 +404,7 @@ namespace Convertidor.Services.Adm
                 codigoHOrdenPago.EXTRA15 = dto.Extra15;
                 codigoHOrdenPago.NUMERO_COMPROBANTE = dto.NumeroComprobante;
                 codigoHOrdenPago.FECHA_COMPROBANTE = dto.FechaComprobante;
-                codigoHOrdenPago.NUMERO_COMPROBANTE2=dto.NumeroComprobante2;
-                codigoHOrdenPago.NUMERO_COMPROBANTE3 = dto.NumeroComprobante3;
-                codigoHOrdenPago.NUMERO_COMPROBANTE4 = dto.NumeroComprobante4;
+             
 
 
                 
@@ -456,12 +441,12 @@ namespace Convertidor.Services.Adm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Orden Pago no existe";
+                    result.Message = "Codigo Orden Pago ya existe";
                     return result;
                 }
 
                 var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (codigoOrdenPago != null)
+                if (dto.CodigoOrdenPago == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -576,7 +561,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Status == null)
+                if (dto.Status == null && dto.Status.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -584,35 +569,14 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Motivo == null)
+                if (dto.Motivo == null && dto.Motivo.Length > 2000)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Motivo Invalido";
                     return result;
                 }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+                
 
                 if (dto.UsuarioHIns < 0)
                 {
@@ -643,37 +607,6 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Extra4 is not null && dto.Extra4.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra4 Invalido";
-                    return result;
-                }
-               
-                if (dto.Extra13 is not null && dto.Extra13.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra13 Invalido";
-                    return result;
-                }
-                if (dto.Extra14 is not null && dto.Extra14.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra14 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra15 is not null && dto.Extra15.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra15 Invalido";
-                    return result;
-                }
-
                 if (dto.NumeroComprobante < 0)
                 {
                     result.Data = null;
@@ -689,13 +622,6 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.NumeroComprobante2 < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero comprobante2 Invalido";
-                    return result;
-                }
                
 
             ADM_H_ORDEN_PAGO entity = new ADM_H_ORDEN_PAGO();
@@ -737,9 +663,7 @@ namespace Convertidor.Services.Adm
             entity.EXTRA15 = dto.Extra15;
             entity.NUMERO_COMPROBANTE = dto.NumeroComprobante;
             entity.FECHA_COMPROBANTE = dto.FechaComprobante;
-            entity.NUMERO_COMPROBANTE2 = dto.NumeroComprobante2;
-            entity.NUMERO_COMPROBANTE3 = dto.NumeroComprobante3;
-            entity.NUMERO_COMPROBANTE4 = dto.NumeroComprobante4;
+           
 
 
             

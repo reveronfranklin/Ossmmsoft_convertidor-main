@@ -275,6 +275,8 @@ builder.Services.AddTransient<IAdmImpuestosDocumentosOpRepository, AdmImpuestosD
 builder.Services.AddTransient<IAdmImpuestosOpRepository, AdmImpuestosOpRepository>();
 builder.Services.AddTransient<IAdmBeneficiariosOpRepository, AdmBeneficiariosOpRepository>();
 builder.Services.AddTransient<IAdmPeriodicoOpRepository, AdmPeriodicoOpRepository>();
+builder.Services.AddTransient<IAdmHOrdenPagoRepository, AdmHOrdenPagoRepository>();
+
 
 
 
@@ -303,6 +305,8 @@ builder.Services.AddTransient<IAdmImpuestosDocumentosOpService, AdmImpuestosDocu
 builder.Services.AddTransient<IAdmImpuestosOpService, AdmImpuestosOpService>();
 builder.Services.AddTransient<IAdmBeneficariosOpService, AdmBeneficiariosOpService>();
 builder.Services.AddTransient<IAdmPeriodicoOpService, AdmPeriodicoOpService>();
+builder.Services.AddTransient<IAdmHOrdenPagoService, AdmHOrdenPagoService>();
+
 
 
 
