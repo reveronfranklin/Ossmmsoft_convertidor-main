@@ -2,6 +2,7 @@ namespace Convertidor.Dtos.Bm;
 
 public class Bm1GetDto
 {
+    public int CodigoIcp { get; set; }
     public string UnidadTrabajo { get; set; } = string.Empty;
     public string CodigoGrupo { get; set; } = string.Empty;
     public string CodigoNivel1 { get; set; } = string.Empty;
@@ -19,6 +20,7 @@ public class Bm1GetDto
     
     public int CodigoBien { get; set; }
     public int CodigoMovBien { get; set; }
+    public DateTime FechaMovimiento { get; set; }
     
     public int CantidadFotos { get; set; }
   

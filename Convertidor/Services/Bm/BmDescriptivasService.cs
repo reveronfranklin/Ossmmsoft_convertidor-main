@@ -93,8 +93,42 @@ namespace Convertidor.Services.Bm
             }
 
         }
+        public async Task<List<SelectListDescriptiva>> GetByTitulo(int tituloId)
+        {
 
-        public async Task<ResultDto<List<BmDescriptivasResponseDto>>> GetByTitulo(int tituloId)
+            List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
+            try
+            {
+                var descriptivas = await _repository.GetByTituloId(tituloId);
+             
+                if (descriptivas.Count>0)
+                {
+
+                    foreach (var item in descriptivas)
+                    {
+                        
+                        SelectListDescriptiva resultItem  = new SelectListDescriptiva();
+                        
+                        resultItem.Id = item.DESCRIPCION_ID;
+                        
+                        resultItem.Descripcion = item.DESCRIPCION;
+                        result.Add(resultItem);
+                        
+                        
+                    }
+                }
+
+
+                return result.OrderBy(x=>x.Descripcion).ToList();
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        public async Task<ResultDto<List<BmDescriptivasResponseDto>>> GetByTituloBk(int tituloId)
         {
 
             ResultDto<List<BmDescriptivasResponseDto>> result = new ResultDto<List<BmDescriptivasResponseDto>>(null);

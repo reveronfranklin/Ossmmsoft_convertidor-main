@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Dtos.Adm
+﻿using SixLabors.ImageSharp;
+
+namespace Convertidor.Dtos.Adm
 {
     public class AdmHOrdenPagoResponseDto
     {
@@ -48,7 +50,7 @@
         public string? Extra13 { get; set; } = string.Empty;
         public string? Extra14 { get; set; } = string.Empty;
         public string? Extra15 { get; set; } = string.Empty;
-        public int? NumeroComprobante { get; set; }
+        public decimal? NumeroComprobante { get; set; }
         public DateTime? FechaComprobante { get; set; }
         public string FechaComprobanteString { get; set; }
         public FechaDto FechaComprobanteObj { get; set; }

@@ -58,7 +58,7 @@ namespace Convertidor.Controllers
         [Route("[action]/{id}")]
         public async Task<IActionResult> AddImage(int id, [FromForm]List<IFormFile> files)
         {
-            var result = await _service.AddImage(id,files);
+                var result = await _service.AddImage(id,files);
             return Ok(result);
         }   
         

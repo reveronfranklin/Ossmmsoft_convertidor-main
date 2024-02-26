@@ -583,12 +583,12 @@ namespace Convertidor.Services.Bm
         
         protected void ManipulatePdf(String dest,String code)
         {
+            // 2.5 * 72 = 180 5 * 72= 432
+            Rectangle pageSize = new Rectangle(432, 180);
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+            Document doc = new Document(pdfDoc,new PageSize(pageSize));
            
-            Document doc = new Document(pdfDoc,PageSize.A5);
-           
-       
-            //String code = "675-FH-A12";
+        
 
             Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
             table.AddCell("ENCABEZADO");

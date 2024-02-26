@@ -229,7 +229,10 @@ builder.Services.AddTransient<IBmDirHBienRepository, BmDirHBienRepository>();
 builder.Services.AddTransient<IBmMovBienesRepository, BmMovBienesRepository>();
 builder.Services.AddTransient<IBmSolMovBienesRepository, BmSolMovBienesRepository>();
 builder.Services.AddTransient<IBmBienesFotoRepository, BmBienesFotoRepository>();
-
+builder.Services.AddTransient<IBmConteoDetalleRepository, BmConteoDetalleRepository>();
+builder.Services.AddTransient<IBmConteoRepository, BmConteoRepository>();
+builder.Services.AddTransient<IBmConteoDetalleHistoricoRepository, BmConteoDetalleHistoricoRepository>();
+builder.Services.AddTransient<IBmConteoHistoricoRepository, BmConteoHistoricoRepository>();
 
 
 
@@ -247,7 +250,10 @@ builder.Services.AddTransient<IBmDirHBienService, BmDirHBienService>();
 builder.Services.AddTransient<IBmMovBienesService, BmMovBienesService>();
 builder.Services.AddTransient<IBmSolMovBienesService, BmSolMovBienesService>();
 builder.Services.AddTransient<IBmBienesFotoService, BmBienesFotoService>();
-
+builder.Services.AddTransient<IBmConteoService, BmConteoService>();
+builder.Services.AddTransient<IBmConteoDetalleService, BmConteoDetalleService>();
+builder.Services.AddTransient<IBmConteoHistoricoService, BmConteoHistoricoService>();
+builder.Services.AddTransient<IBmConteoDetalleHistoricoService, BmConteoDetalleHistoricoService>();
 
 
 

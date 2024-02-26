@@ -631,7 +631,66 @@ namespace Convertidor.Data.Repository.Rh
             return result;
         }
         
+       
         
+    public async Task<ResultDto<PersonasDto>> AddImage(int codigoPersona,List<IFormFile> files)
+        {
+        
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.Images; 
+
+            ResultDto<PersonasDto> result = new ResultDto<PersonasDto>(null);
+           
+            var persona = await GetPersona(codigoPersona);
+            if (persona == null)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "Persona No existe";
+                return result;
+            }
+          
+       
+            try
+            {
+             
+              
+                if (files.Count > 0)
+                {
+                    foreach (var file in files)
+                    {
+                        string fileName = file.FileName;
+                        fileName =file.FileName.Replace(" ", "_");
+                        var arrFileName = fileName.Split(".");
+                        
+                        var filePatch = $"{destino}{persona.Cedula}.{arrFileName[1]}";
+
+                        using (var stream =System.IO.File.Create(filePatch) )
+                        {
+                            await  file.CopyToAsync(stream);
+                        }
+                      
+                       
+                    }
+                }
+
+                result.Data = persona;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+              
+               
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+            
+            return result;
+        }
 
         public async Task<ResultDto<PersonasDto>> Update(RhPersonaUpdateDto dto)
         {
@@ -772,29 +831,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 await _repository.Update(persona);
-                if (dto.Data == "/images/avatars/1.png") dto.Data = "";
-                if (dto.Data.Length > 0)
-                {
-                    dto.Extension = ".JPG";
-                
-                    dto.NombreArchivo = $@"{persona.CEDULA}" + dto.Extension;
-                    var settings = _configuration.GetSection("Settings").Get<Settings>();
-                    var ruta = @settings.Images;  
-                    dto.Ruta = ruta;
-                    //
-
-                    //CREA EL ARCHIVO DE IMAGEN
-
-                    //Convert Base64 Encoded string to Byte Array.
-                    var dataArray = dto.Data.Split("/");
-                    //string base64 = dto.Data;
-                    byte[] imageBytes = Convert.FromBase64String(dto.Data);
-
-                    //Ruta y nombre de la imagen
-                    var imageFullName = dto.Ruta + dto.NombreArchivo;
-                    //creo el fichero
-                    await System.IO.File.WriteAllBytesAsync(imageFullName, imageBytes);
-                }
+             
                
  
                 var resultDto = await GetPersona(dto.CodigoPersona);

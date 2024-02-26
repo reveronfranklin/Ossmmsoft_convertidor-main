@@ -54,7 +54,7 @@ namespace Convertidor.Controllers
    
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllByTitulo(BmFilterTituloDto dto)
+        public async Task<IActionResult> GetByTitulo(BmFilterTituloDto dto)
         {
             var result = await _service.GetByTitulo(dto.TituloId);
             return Ok(result);

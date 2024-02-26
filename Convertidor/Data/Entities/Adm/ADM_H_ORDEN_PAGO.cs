@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Data.Entities.Adm
+﻿using SixLabors.ImageSharp;
+
+namespace Convertidor.Data.Entities.Adm
 {
     public class ADM_H_ORDEN_PAGO
     {
@@ -45,7 +47,7 @@
         public string? EXTRA13 { get; set; } = string.Empty;
         public string? EXTRA14 { get; set; } = string.Empty;
         public string? EXTRA15 { get; set; } = string.Empty;
-        public int? NUMERO_COMPROBANTE { get; set; }
+        public decimal? NUMERO_COMPROBANTE { get; set; }
         public DateTime? FECHA_COMPROBANTE { get; set; }
        
     }
