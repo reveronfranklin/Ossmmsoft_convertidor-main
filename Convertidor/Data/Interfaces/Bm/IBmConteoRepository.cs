@@ -8,7 +8,7 @@ public interface IBmConteoRepository
     Task<List<BM_CONTEO>> GetAll();
     Task<ResultDto<BM_CONTEO>> Add(BM_CONTEO entity);
     Task<ResultDto<BM_CONTEO>> Update(BM_CONTEO entity);
-    Task<string> Delete(int tituloId);
+    Task<string> Delete(BM_CONTEO entity);
     Task<int> GetNextKey();
     
 

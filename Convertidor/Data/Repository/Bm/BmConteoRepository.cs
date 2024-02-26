@@ -124,11 +124,11 @@ namespace Convertidor.Data.Repository.Bm
 
         }
 
-        public async Task<string> Delete(int tituloId)
+        public async Task<string> Delete(BM_CONTEO entity )
         {
             try
             {
-                BM_CONTEO entity = await GetByCodigo(tituloId);
+           
                 if (entity != null)
                 {
                     _context.BM_CONTEO.Remove(entity);

@@ -52,11 +52,11 @@ namespace Convertidor.Services.Bm
 
             return FechaDesdeObj;
         }
-        public async Task<BmConteoResponseDto> MapBmConteo(BM_CONTEO_HISTORICO dtos)
+        public async Task<BmConteoHistoricoResponseDto> MapBmConteo(BM_CONTEO_HISTORICO dtos)
         {
 
 
-            BmConteoResponseDto itemResult = new BmConteoResponseDto();
+            BmConteoHistoricoResponseDto itemResult = new BmConteoHistoricoResponseDto();
             itemResult.CodigoBmConteo = dtos.CODIGO_BM_CONTEO;
             itemResult.Titulo = dtos.TITULO;
             itemResult.Comentario = dtos.COMENTARIO;
@@ -74,22 +74,21 @@ namespace Convertidor.Services.Bm
             itemResult.FechaString = dtos.FECHA.ToString("u");
             FechaDto fechaObj = GetFechaDto(dtos.FECHA);
             itemResult.FechaObj = (FechaDto)fechaObj;
-            var resumen = await _conteoDetalleService.GetResumen(dtos.CODIGO_BM_CONTEO);
-            itemResult.ResumenConteo = resumen.Data;
-            itemResult.TotalCantidad = itemResult.ResumenConteo.Sum(r => r.Cantidad);
-            itemResult.TotalCantidadContado = itemResult.ResumenConteo.Sum(r => r.CantidadContada);
+            itemResult.TotalCantidad = dtos.TOTAL_CANTIDAD;
+            itemResult.TotalCantidadContada = dtos.TOTAL_CANTIDAD_CONTADA;
+            itemResult.TotalDiferencia = dtos.TOTAL_DIFERENCIA;
             return itemResult;
 
         }
-        public async Task<List<BmConteoResponseDto>> MapListConteoDto(List<BM_CONTEO_HISTORICO> dtos)
+        public async Task<List<BmConteoHistoricoResponseDto>> MapListConteoDto(List<BM_CONTEO_HISTORICO> dtos)
         {
-            List<BmConteoResponseDto> result = new List<BmConteoResponseDto>();
+            List<BmConteoHistoricoResponseDto> result = new List<BmConteoHistoricoResponseDto>();
 
 
             foreach (var item in dtos)
             {
 
-                BmConteoResponseDto itemResult = new BmConteoResponseDto();
+                BmConteoHistoricoResponseDto itemResult = new BmConteoHistoricoResponseDto();
 
                 itemResult = await MapBmConteo(item);
 
@@ -101,10 +100,10 @@ namespace Convertidor.Services.Bm
 
         }
         
-        public async Task<ResultDto<List<BmConteoResponseDto>>> GetAll()
+        public async Task<ResultDto<List<BmConteoHistoricoResponseDto>>> GetAll()
         {
 
-            ResultDto<List<BmConteoResponseDto>> result = new ResultDto<List<BmConteoResponseDto>>(null);
+            ResultDto<List<BmConteoHistoricoResponseDto>> result = new ResultDto<List<BmConteoHistoricoResponseDto>>(null);
             try
             {
 
@@ -114,7 +113,7 @@ namespace Convertidor.Services.Bm
 
                 if (conteos.Count() > 0)
                 {
-                    List<BmConteoResponseDto> listDto = new List<BmConteoResponseDto>();
+                    List<BmConteoHistoricoResponseDto> listDto = new List<BmConteoHistoricoResponseDto>();
                     listDto = await MapListConteoDto(conteos);
                 
 

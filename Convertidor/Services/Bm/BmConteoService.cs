@@ -300,7 +300,7 @@ namespace Convertidor.Services.Bm
                     }
                     else
                     {
-                        var deleted = await _repository.Delete(created.Data.CODIGO_BM_CONTEO);
+                        var deleted = await _repository.Delete(created.Data);
                         result.Data = null;
                         result.IsValid = false;
                         result.Message =bmDetalleCreated.Message;
@@ -352,6 +352,15 @@ namespace Convertidor.Services.Bm
             conteoHistorico.CODIGO_EMPRESA = conteo.CODIGO_EMPRESA;
             conteoHistorico.USUARIO_CIERRE = conectado.Usuario;
             conteoHistorico.FECHA_CIERRE =  DateTime.Now;
+
+            var resumen = await _conteoDetalleService.GetResumen(conteo.CODIGO_BM_CONTEO);
+            foreach (var item in resumen.Data)
+            {
+                conteoHistorico.TOTAL_CANTIDAD = conteoHistorico.TOTAL_CANTIDAD  + item.Cantidad;
+                conteoHistorico.TOTAL_CANTIDAD_CONTADA = conteoHistorico.TOTAL_CANTIDAD_CONTADA  + item.CantidadContada;
+            }
+
+            conteoHistorico.TOTAL_DIFERENCIA = conteoHistorico.TOTAL_CANTIDAD - conteoHistorico.TOTAL_CANTIDAD_CONTADA;
             return conteoHistorico;
         }
 
@@ -417,7 +426,7 @@ namespace Convertidor.Services.Bm
                 var deleteDetalle = await _conteoDetalleService.DeleteRangeConteo(dto.CodigoBmConteo);
                 if (deleteDetalle)
                 {
-                    var deleted = await _repository.Delete(dto.CodigoBmConteo);
+                    var deleted = await _repository.Delete(conteo);
 
                     if (deleted.Length > 0)
                     {
@@ -521,7 +530,7 @@ namespace Convertidor.Services.Bm
                         var deleteDetalle = await _conteoDetalleService.DeleteRangeConteo(dto.CodigoBmConteo);
                         if (deleteDetalle)
                         {
-                            var deleted = await _repository.Delete(dto.CodigoBmConteo);
+                            var deleted = await _repository.Delete(conteo);
                         }
                     }
                    

@@ -15,4 +15,7 @@ public class BM_CONTEO_HISTORICO
     public int CODIGO_EMPRESA { get; set; }
     public int USUARIO_CIERRE { get; set; }
     public DateTime FECHA_CIERRE { get; set; }
+    public decimal TOTAL_CANTIDAD { get; set; }
+    public decimal TOTAL_CANTIDAD_CONTADA { get; set; }
+    public decimal TOTAL_DIFERENCIA { get; set; }
 }

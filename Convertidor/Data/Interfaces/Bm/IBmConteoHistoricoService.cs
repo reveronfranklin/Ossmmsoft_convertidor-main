@@ -4,5 +4,6 @@ namespace Convertidor.Data.Interfaces.Bm;
 
 public interface IBmConteoHistoricoService
 {
-    Task<ResultDto<List<BmConteoResponseDto>>> GetAll();
+    Task<ResultDto<List<BmConteoHistoricoResponseDto>>> GetAll();
+    
 }
