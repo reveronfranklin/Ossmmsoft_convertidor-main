@@ -375,7 +375,7 @@ namespace Convertidor.Data.Repository.Rh
                     itemResult.Avatar = "/images/avatars/1.png";
                 }
 
-                itemResult.Avatar = $"/images/avatars/{dtos.CEDULA.ToString()}.jpg";
+                itemResult.Avatar = $"/images/avatars/{dtos.FILE_NAME.ToString()}";
                 var desde = DateTime.Now;
                 //var primerMovimiento = await _rhHistoricoPersonalCargorepository.GetPrimerMovimientoByCodigoPersona(dtos.CODIGO_PERSONA);
                 //desde = primerMovimiento.FECHA_NOMINA;
@@ -521,7 +521,7 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     itemResult.Avatar = "/images/avatars/1.png";
                 }
-                itemResult.Avatar = $"/images/avatars/{item.CEDULA.ToString()}.jpg";
+                itemResult.Avatar = $"/images/avatars/{item.FILE_NAME.ToString()}";
 
                 result.Add(itemResult);
 
@@ -664,7 +664,14 @@ namespace Convertidor.Data.Repository.Rh
                         var arrFileName = fileName.Split(".");
                         
                         var filePatch = $"{destino}{persona.Cedula}.{arrFileName[1]}";
-
+                       
+                        var personaUpdate = await _repository.GetCodigoPersona(persona.CodigoPersona);
+                        if (personaUpdate != null)
+                        {
+                            personaUpdate.FILE_NAME= $"{persona.Cedula}.{arrFileName[1]}";
+                            await _repository.Update(personaUpdate);
+                        }
+                        
                         using (var stream =System.IO.File.Create(filePatch) )
                         {
                             await  file.CopyToAsync(stream);

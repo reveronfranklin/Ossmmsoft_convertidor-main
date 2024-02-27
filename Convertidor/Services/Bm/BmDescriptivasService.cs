@@ -101,7 +101,7 @@ namespace Convertidor.Services.Bm
             {
                 var descriptivas = await _repository.GetByTituloId(tituloId);
              
-                if (descriptivas.Count>0)
+                if (descriptivas!= null && descriptivas.Count>0)
                 {
 
                     foreach (var item in descriptivas)
