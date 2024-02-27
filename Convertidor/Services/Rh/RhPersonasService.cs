@@ -512,16 +512,23 @@ namespace Convertidor.Data.Repository.Rh
 
                 }
 
-
-                if (item.SEXO == "F")
+                if (String.IsNullOrEmpty(item.FILE_NAME))
                 {
-                    itemResult.Avatar = "/images/avatars/4.png";    
+                    if (item.SEXO == "F")
+                    {
+                        itemResult.Avatar = "/images/avatars/4.png";    
+                    }
+                    else
+                    {
+                        itemResult.Avatar = "/images/avatars/1.png";
+                    }
                 }
                 else
                 {
-                    itemResult.Avatar = "/images/avatars/1.png";
+                    itemResult.Avatar = $"/images/avatars/{item.FILE_NAME.ToString()}";
                 }
-                itemResult.Avatar = $"/images/avatars/{item.FILE_NAME.ToString()}";
+               
+              
 
                 result.Add(itemResult);
 
