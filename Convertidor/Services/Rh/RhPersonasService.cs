@@ -311,7 +311,8 @@ namespace Convertidor.Data.Repository.Rh
         }
         public async Task<PersonasDto> MapObjPersonasDto(RH_PERSONAS dtos)
         {
-               
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.IMagesFront;
                PersonasDto itemResult = new PersonasDto();
                if (dtos == null) return itemResult;
                try
@@ -368,14 +369,14 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 if (itemResult.Sexo == "F")
                 {
-                    itemResult.Avatar = "/images/avatars/4.png";
+                    itemResult.Avatar = $"{destino}4.png";
                 }
                 else
                 {
-                    itemResult.Avatar = "/images/avatars/1.png";
+                    itemResult.Avatar = $"{destino}1.png";
                 }
 
-                itemResult.Avatar = $"/images/avatars/{dtos.FILE_NAME.ToString()}";
+                itemResult.Avatar = $"{destino}{dtos.FILE_NAME.ToString()}";
                 var desde = DateTime.Now;
                 //var primerMovimiento = await _rhHistoricoPersonalCargorepository.GetPrimerMovimientoByCodigoPersona(dtos.CODIGO_PERSONA);
                 //desde = primerMovimiento.FECHA_NOMINA;
@@ -475,6 +476,9 @@ namespace Convertidor.Data.Repository.Rh
 
         public async Task<List<ListSimplePersonaDto>> MapListSimplePersonasDto(List<RH_PERSONAS> dtos)
         {
+            
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.IMagesFront; 
             List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
 
             foreach (var item in dtos)
@@ -516,16 +520,16 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     if (item.SEXO == "F")
                     {
-                        itemResult.Avatar = "/images/avatars/4.png";    
+                        itemResult.Avatar = $"{destino}4.png";    
                     }
                     else
                     {
-                        itemResult.Avatar = "/images/avatars/1.png";
+                        itemResult.Avatar = $"{destino}1.png";
                     }
                 }
                 else
                 {
-                    itemResult.Avatar = $"/images/avatars/{item.FILE_NAME.ToString()}";
+                    itemResult.Avatar = $"{destino}{item.FILE_NAME.ToString()}";
                 }
                
               
