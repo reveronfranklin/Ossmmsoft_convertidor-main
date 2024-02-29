@@ -106,7 +106,7 @@ namespace Convertidor.Data.Repository.Bm
             try
             {
                 var result = await _context.BM_CONTEO_DETALLE.DefaultIfEmpty().Where(c=>c.CODIGO_BM_CONTEO==codigoConteo && 
-                            c.CANTIDAD_CONTADA>0 && c.DIFERENCIA!=0 && c.COMENTARIO.Length==0)
+                             c.CANTIDAD != c.CANTIDAD_CONTADA && (c.COMENTARIO == null || c.COMENTARIO.Length==0))
                             .FirstOrDefaultAsync();
                 if (result != null)
                 {

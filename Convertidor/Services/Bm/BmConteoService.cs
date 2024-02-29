@@ -379,7 +379,7 @@ namespace Convertidor.Services.Bm
             itemDetalle.NUMERO_LOTE = item.NUMERO_LOTE;
             itemDetalle.CANTIDAD = item.CANTIDAD;
             itemDetalle.CANTIDAD_CONTADA = item.CANTIDAD_CONTADA;
-            itemDetalle.DIFERENCIA = item.DIFERENCIA;
+            itemDetalle.DIFERENCIA = itemDetalle.CANTIDAD -  itemDetalle.CANTIDAD_CONTADA ;
             itemDetalle.NUMERO_PLACA = item.NUMERO_PLACA;
             itemDetalle.VALOR_ACTUAL = item.VALOR_ACTUAL;
             itemDetalle.ARTICULO = item.ARTICULO;
@@ -496,6 +496,17 @@ namespace Convertidor.Services.Bm
                     result.Data = false;
                     result.IsValid = false;
                     result.Message = "No puede Cerrar un conteo con diferencia sin colocar comentarios";
+                    return result;
+                }
+
+                BmConteoFilterDto filter = new BmConteoFilterDto();
+                filter.CodigoBmConteo = dto.CodigoBmConteo;
+                var  cuadreConteo=await _conteoDetalleService.ComparaConteo(filter);
+                if (cuadreConteo.Data.Count>0)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "No puede Cerrar un conteo con diferencia entre Conteos";
                     return result;
                 }
            

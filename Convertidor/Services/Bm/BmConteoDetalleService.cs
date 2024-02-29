@@ -23,17 +23,23 @@ namespace Convertidor.Services.Bm
 
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhPersonasRepository _rhPersonasRepository;
+        private readonly IBmConteoRepository _bmConteoRepository;
+        private readonly IBmDescriptivaRepository _bmDescriptivaRepository;
         private readonly IConfiguration _configuration;
         public BmConteoDetalleService(IBmConteoDetalleRepository repository,
                                 IBM_V_BM1Service bm1Service, 
                                 ISisUsuarioRepository sisUsuarioRepository,
                                 IRhPersonasRepository rhPersonasRepository,
+                                IBmConteoRepository bmConteoRepository,
+                                IBmDescriptivaRepository bmDescriptivaRepository,
                                 IConfiguration configuration)
 		{
             _repository = repository;
             _bm1Service = bm1Service;
             _sisUsuarioRepository = sisUsuarioRepository;
             _rhPersonasRepository = rhPersonasRepository;
+            _bmConteoRepository = bmConteoRepository;
+            _bmDescriptivaRepository = bmDescriptivaRepository;
             _configuration = configuration;
            
 
@@ -297,7 +303,65 @@ namespace Convertidor.Services.Bm
            
         }
    
-     
+     public async Task<ResultDto<List<BmConteoDetalleResponseDto>>> ComparaConteo(BmConteoFilterDto filter)
+        {
+           
+           
+            ResultDto<List<BmConteoDetalleResponseDto>> response = new ResultDto<List<BmConteoDetalleResponseDto>>(null);
+            List<BmConteoDetalleResponseDto> lista = new List<BmConteoDetalleResponseDto>();
+            try
+            {
+                var conteo = await _bmConteoRepository.GetByCodigo(filter.CodigoBmConteo);
+                if (conteo != null)
+                {
+                    
+                    var conteoDescriptiva = await _bmDescriptivaRepository.GetByCodigo(conteo.CANTIDAD_CONTEOS_ID);
+                    var cantidadConteos = Int32.Parse(conteoDescriptiva.DESCRIPCION);
+                    
+                    var detalleConteo = await GetAllByConteo(filter);
+
+                    var primerConteo = detalleConteo.Data.Where(x => x.Conteo == 1).ToList();
+                    foreach (var item in primerConteo)
+                    {
+                        if (cantidadConteos == 1)
+                        {
+                            item.CantidadContadaOtroConteo = item.CantidadContada;
+                            
+                        }
+                        else
+                        {
+                            var otroConteo = detalleConteo.Data
+                                .Where(x => x.Conteo == 2 && x.CodigoBien == item.CodigoBien).FirstOrDefault();
+                            if (otroConteo != null)
+                            {
+                                item.CantidadContadaOtroConteo = otroConteo.CantidadContada;
+                            }
+                        }
+                        lista.Add(item);
+                        
+                    }
+                }
+                
+                
+                response.Data = lista.Where(x=> x.CantidadContada != x.CantidadContadaOtroConteo).ToList();
+                response.IsValid = true;
+                response.Message = "";
+                response.LinkData= $"";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.IsValid = true;
+                response.Message = ex.InnerException.Message;
+                return response;
+            }
+           
+        }
+   
+       
+       
+       
      public async Task<ResultDto<List<BmConteoDetalleResponseDto>>> Update(BmConteoDetalleUpdateDto dto)
         {
 

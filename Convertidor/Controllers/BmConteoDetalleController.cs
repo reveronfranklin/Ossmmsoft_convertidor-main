@@ -32,7 +32,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
         
+        [HttpPost]
+        [Route("[action]")]
 
+        public async Task<ActionResult> GetAllByConteoComparar(BmConteoFilterDto filter) 
+        {
+            var result = await _service.ComparaConteo(filter);
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("[action]")]

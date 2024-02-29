@@ -17,4 +17,5 @@ public interface IBmConteoDetalleService
     Task<bool> DeleteRangeConteo(int codigoConteo);
     Task<bool> ConteoIniciadoConDiferenciaSinComentario(int codigoConteo);
     Task<List<BM_CONTEO_DETALLE>> GetByCodigoConteo(int codigoConteo);
+    Task<ResultDto<List<BmConteoDetalleResponseDto>>> ComparaConteo(BmConteoFilterDto filter);
 }
