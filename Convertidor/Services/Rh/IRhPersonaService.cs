@@ -13,6 +13,7 @@
         Task<ResultDto<PersonasDto>> Create(RhPersonaUpdateDto dto);
         Task<ResultDto<RhPersonaDeleteDto>> Delete(RhPersonaDeleteDto dto);
         List<string> GetListNacionalidad();
+        Task<ResultDto<PersonasDto>> AddImage(int codigoPersona, List<IFormFile> files);
 	}
 }
 

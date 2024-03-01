@@ -22,8 +22,11 @@ namespace Convertidor.Data
         public DbSet<BM_MOV_BIENES> BM_MOV_BIENES { get; set; }
         public DbSet<BM_SOL_MOV_BIENES> BM_SOL_MOV_BIENES { get; set; }
         public DbSet<BM_BIENES_FOTO> BM_BIENES_FOTO { get; set; }
+        public DbSet<BM_CONTEO> BM_CONTEO { get; set; }
+        public DbSet<BM_CONTEO_DETALLE> BM_CONTEO_DETALLE { get; set; }
         
-
+        public DbSet<BM_CONTEO_HISTORICO> BM_CONTEO_HISTORICO { get; set; }
+        public DbSet<BM_CONTEO_DETALLE_HISTORICO> BM_CONTEO_DETALLE_HISTORICO { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
@@ -173,6 +176,46 @@ namespace Convertidor.Data
                 });
                 builder.ToTable("BM_SOL_MOV_BIENES");
             });
+            modelBuilder
+                .Entity<BM_CONTEO>(builder =>
+                {
+
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_BM_CONTEO,
+
+                    });
+                    builder.ToTable("BM_CONTEO");
+                });
+            modelBuilder
+                .Entity<BM_CONTEO_DETALLE>(builder =>
+                {
+
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_BM_CONTEO_DETALLE,
+
+                    });
+                    builder.ToTable("BM_CONTEO_DETALLE");
+                });
+            modelBuilder
+                .Entity<BM_CONTEO_HISTORICO>(builder =>
+                {
+
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_BM_CONTEO,
+
+                    });
+                    builder.ToTable("BM_CONTEO_HISTORICO");
+                });
+            modelBuilder
+                .Entity<BM_CONTEO_DETALLE_HISTORICO>(builder =>
+                {
+
+                    builder.HasKey(s => new { s.CODIGO_BM_CONTEO, s.CONTEO ,s.CODIGO_BIEN});
+                    builder.ToTable("BM_CONTEO_DETALLE_HISTORICO");
+                });
             
         }
 

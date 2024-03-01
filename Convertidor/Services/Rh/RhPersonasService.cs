@@ -311,7 +311,8 @@ namespace Convertidor.Data.Repository.Rh
         }
         public async Task<PersonasDto> MapObjPersonasDto(RH_PERSONAS dtos)
         {
-               
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.IMagesFront;
                PersonasDto itemResult = new PersonasDto();
                if (dtos == null) return itemResult;
                try
@@ -368,14 +369,14 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 if (itemResult.Sexo == "F")
                 {
-                    itemResult.Avatar = "/images/avatars/4.png";
+                    itemResult.Avatar = $"{destino}4.png";
                 }
                 else
                 {
-                    itemResult.Avatar = "/images/avatars/1.png";
+                    itemResult.Avatar = $"{destino}1.png";
                 }
 
-                itemResult.Avatar = $"/images/avatars/{dtos.CEDULA.ToString()}.jpg";
+                itemResult.Avatar = $"{destino}{dtos.FILE_NAME.ToString()}";
                 var desde = DateTime.Now;
                 //var primerMovimiento = await _rhHistoricoPersonalCargorepository.GetPrimerMovimientoByCodigoPersona(dtos.CODIGO_PERSONA);
                 //desde = primerMovimiento.FECHA_NOMINA;
@@ -475,6 +476,9 @@ namespace Convertidor.Data.Repository.Rh
 
         public async Task<List<ListSimplePersonaDto>> MapListSimplePersonasDto(List<RH_PERSONAS> dtos)
         {
+            
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.IMagesFront; 
             List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
 
             foreach (var item in dtos)
@@ -512,16 +516,23 @@ namespace Convertidor.Data.Repository.Rh
 
                 }
 
-
-                if (item.SEXO == "F")
+                if (String.IsNullOrEmpty(item.FILE_NAME))
                 {
-                    itemResult.Avatar = "/images/avatars/4.png";    
+                    if (item.SEXO == "F")
+                    {
+                        itemResult.Avatar = $"{destino}4.png";    
+                    }
+                    else
+                    {
+                        itemResult.Avatar = $"{destino}1.png";
+                    }
                 }
                 else
                 {
-                    itemResult.Avatar = "/images/avatars/1.png";
+                    itemResult.Avatar = $"{destino}{item.FILE_NAME.ToString()}";
                 }
-                itemResult.Avatar = $"/images/avatars/{item.CEDULA.ToString()}.jpg";
+               
+              
 
                 result.Add(itemResult);
 
@@ -631,7 +642,73 @@ namespace Convertidor.Data.Repository.Rh
             return result;
         }
         
+       
         
+    public async Task<ResultDto<PersonasDto>> AddImage(int codigoPersona,List<IFormFile> files)
+        {
+        
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.Images; 
+
+            ResultDto<PersonasDto> result = new ResultDto<PersonasDto>(null);
+           
+            var persona = await GetPersona(codigoPersona);
+            if (persona == null)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "Persona No existe";
+                return result;
+            }
+          
+       
+            try
+            {
+             
+              
+                if (files.Count > 0)
+                {
+                    foreach (var file in files)
+                    {
+                        string fileName = file.FileName;
+                        fileName =file.FileName.Replace(" ", "_");
+                        var arrFileName = fileName.Split(".");
+                        
+                        var filePatch = $"{destino}{persona.Cedula}.{arrFileName[1]}";
+                       
+                        var personaUpdate = await _repository.GetCodigoPersona(persona.CodigoPersona);
+                        if (personaUpdate != null)
+                        {
+                            personaUpdate.FILE_NAME= $"{persona.Cedula}.{arrFileName[1]}";
+                            await _repository.Update(personaUpdate);
+                        }
+                        
+                        using (var stream =System.IO.File.Create(filePatch) )
+                        {
+                            await  file.CopyToAsync(stream);
+                        }
+                      
+                       
+                    }
+                }
+
+                result.Data = persona;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+              
+               
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+            
+            return result;
+        }
 
         public async Task<ResultDto<PersonasDto>> Update(RhPersonaUpdateDto dto)
         {
@@ -772,29 +849,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 await _repository.Update(persona);
-                if (dto.Data == "/images/avatars/1.png") dto.Data = "";
-                if (dto.Data.Length > 0)
-                {
-                    dto.Extension = ".JPG";
-                
-                    dto.NombreArchivo = $@"{persona.CEDULA}" + dto.Extension;
-                    var settings = _configuration.GetSection("Settings").Get<Settings>();
-                    var ruta = @settings.Images;  
-                    dto.Ruta = ruta;
-                    //
-
-                    //CREA EL ARCHIVO DE IMAGEN
-
-                    //Convert Base64 Encoded string to Byte Array.
-                    var dataArray = dto.Data.Split("/");
-                    //string base64 = dto.Data;
-                    byte[] imageBytes = Convert.FromBase64String(dto.Data);
-
-                    //Ruta y nombre de la imagen
-                    var imageFullName = dto.Ruta + dto.NombreArchivo;
-                    //creo el fichero
-                    await System.IO.File.WriteAllBytesAsync(imageFullName, imageBytes);
-                }
+             
                
  
                 var resultDto = await GetPersona(dto.CodigoPersona);

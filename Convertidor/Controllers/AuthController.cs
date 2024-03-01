@@ -66,7 +66,7 @@ namespace Convertidor.Controllers
                     var refreshToken = GenerateRefreshToken(result.AccessToken);
                     refreshToken.Login = dto.Login;
                     result.RefreshToken = refreshToken.Refresh_Token;
-                    SetRefreshToken(refreshToken);
+                    await SetRefreshToken(refreshToken);
                     return Ok(result);
                 }
                 else
@@ -150,7 +150,7 @@ namespace Convertidor.Controllers
         }
        
 
-        private async void SetRefreshToken(RefreshToken newRefreshToken)
+        private async Task SetRefreshToken(RefreshToken newRefreshToken)
         {
 
             

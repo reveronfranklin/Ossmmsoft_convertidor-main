@@ -10,7 +10,8 @@ namespace Convertidor.Services.Bm
         Task<ResultDto<BmDescriptivasResponseDto>> Create(BmDescriptivasUpdateDto dto);
         Task<ResultDto<BmDescriptivaDeleteDto>> Delete(BmDescriptivaDeleteDto dto);
         Task<bool> GetByIdAndTitulo(int tituloId, int id);
-        Task<ResultDto<List<BmDescriptivasResponseDto>>> GetByTitulo(int tituloId);
+  
+        Task<List<SelectListDescriptiva>> GetByTitulo(int tituloId);
         Task<ResultDto<List<BmDescriptivasResponseDto>>> GetByCodigoTitulo(string codigo);
     }
 }

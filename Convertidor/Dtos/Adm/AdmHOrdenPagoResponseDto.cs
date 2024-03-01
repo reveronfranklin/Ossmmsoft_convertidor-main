@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Dtos.Adm
+﻿using SixLabors.ImageSharp;
+
+namespace Convertidor.Dtos.Adm
 {
     public class AdmHOrdenPagoResponseDto
     {

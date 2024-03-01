@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Data.Entities.Adm
+﻿using SixLabors.ImageSharp;
+
+namespace Convertidor.Data.Entities.Adm
 {
     public class ADM_H_ORDEN_PAGO
     {

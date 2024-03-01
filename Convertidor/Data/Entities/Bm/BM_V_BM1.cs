@@ -2,6 +2,7 @@ namespace Convertidor.Data.Entities.Bm;
 
 public class BM_V_BM1
 {
+    public int CODIGO_ICP { get; set; }
     public string UNIDAD_TRABAJO { get; set; } = string.Empty;
     public string CODIGO_GRUPO { get; set; } = string.Empty;
     public string CODIGO_NIVEL1 { get; set; } = string.Empty;

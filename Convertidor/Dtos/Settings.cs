@@ -8,9 +8,11 @@
         public string BmFiles { get; set; }
         public string BmFilesProceso { get; set; }
         public string Images { get; set; }
+        public string IMagesFront { get; set; }
         public string PaisConfig { get; set; }
         public string EmpresaConfig { get; set; }
         public string UrlReport { get; set; }
+        
         
     }
 }

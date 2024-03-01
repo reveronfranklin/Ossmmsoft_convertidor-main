@@ -27,6 +27,8 @@
         public string STATUS { get; set; } = string.Empty;
         public int IDENTIFICACION_ID { get; set; }
         public int NUMERO_IDENTIFICACION { get; set; }
+        
+        public string FILE_NAME { get; set; } = string.Empty;
 
 
 

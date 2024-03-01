@@ -34,7 +34,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-     
+        [HttpGet]
+        [Route("[action]")] 
+        public async Task<IActionResult> GetListICP()
+        {
+            var result = await _service.GetICP();
+            return Ok(result);
+        }
 
 
     }

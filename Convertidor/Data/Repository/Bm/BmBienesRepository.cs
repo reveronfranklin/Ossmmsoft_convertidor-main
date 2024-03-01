@@ -14,17 +14,21 @@ namespace Convertidor.Data.Repository.Bm
     {
 		
         private readonly DataContextBm _context;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public BmBienesRepository(DataContextBm context)
+        public BmBienesRepository(DataContextBm context,   ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
         public async Task<BM_BIENES> GetByCodigoBien(int codigoBien)
         {
             try
             {
+                
+                var conectado = await _sisUsuarioRepository.GetConectado();
                 var result = await _context.BM_BIENES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_BIEN == codigoBien).FirstOrDefaultAsync();
+                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.CODIGO_BIEN == codigoBien).FirstOrDefaultAsync();
         
                 return (BM_BIENES)result;
             }
@@ -40,8 +44,9 @@ namespace Convertidor.Data.Repository.Bm
         {
             try
             {
+                var conectado = await _sisUsuarioRepository.GetConectado();
                 var result = await _context.BM_BIENES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_ARTICULO == codigoArticulo).FirstOrDefaultAsync();
+                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa &&  e.CODIGO_ARTICULO == codigoArticulo).FirstOrDefaultAsync();
 
                 return (BM_BIENES)result;
             }
@@ -56,8 +61,9 @@ namespace Convertidor.Data.Repository.Bm
         {
             try
             {
+                var conectado = await _sisUsuarioRepository.GetConectado();
                 var result = await _context.BM_BIENES.DefaultIfEmpty().
-                    Where(e => e.CODIGO_PROVEEDOR == codigoProveedor).ToListAsync();
+                    Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.CODIGO_PROVEEDOR == codigoProveedor).ToListAsync();
 
                 return (List<BM_BIENES>)result;
             }
@@ -73,8 +79,9 @@ namespace Convertidor.Data.Repository.Bm
         {
             try
             {
+                var conectado = await _sisUsuarioRepository.GetConectado();
                 var result = await _context.BM_BIENES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_ORDEN_COMPRA == codigoOrdenCompra).ToListAsync();
+                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.CODIGO_ORDEN_COMPRA == codigoOrdenCompra).ToListAsync();
 
                 return (List<BM_BIENES>)result;
             }
@@ -90,8 +97,9 @@ namespace Convertidor.Data.Repository.Bm
         {
             try
             {
+                var conectado = await _sisUsuarioRepository.GetConectado();
                 var result = await _context.BM_BIENES.DefaultIfEmpty()
-                    .Where(e => e.NUMERO_PLACA == numeroPlaca)
+                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.NUMERO_PLACA == numeroPlaca)
                     .FirstOrDefaultAsync();
 
                 return (BM_BIENES)result;
@@ -108,7 +116,8 @@ namespace Convertidor.Data.Repository.Bm
         {
             try
             {
-                var result = await _context.BM_BIENES.DefaultIfEmpty().ToListAsync();
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.BM_BIENES.DefaultIfEmpty().Where(e=>e.CODIGO_EMPRESA==conectado.Empresa) .ToListAsync();
 
                 return result;
             }
