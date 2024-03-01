@@ -1,6 +1,8 @@
 ﻿using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
 using Ganss.Excel;
+using MailKit.Search;
+
 namespace Convertidor.Services.Catastro
 {
 	public class BM_V_BM1Service: IBM_V_BM1Service
@@ -62,6 +64,7 @@ namespace Convertidor.Services.Catastro
                                       CodigoGrupo = g.Key.CodigoGrupo,
                                       CodigoNivel1 = g.Key.CodigoNivel1,
                                       CodigoNivel2 = g.Key.CodigoNivel2,
+                                      ConsecutivoPlaca=g.Key.NumeroPlaca,
                                       NumeroLote = g.Key.NumeroLote,
                                       Cantidad = g.Key.Cantidad,
                                       NumeroPlaca = g.Key.CodigoGrupo + "-" + g.Key.CodigoNivel1 +"-" +  g.Key.CodigoNivel2 + "-"+g.Key.NumeroPlaca,
@@ -125,7 +128,10 @@ namespace Convertidor.Services.Catastro
                   
                     
                     
-                response.Data = lista.ToList();
+                response.Data = lista.OrderBy(x=> x.CodigoGrupo)
+                            .ThenBy(x=>x.CodigoNivel1)
+                            .ThenBy(x=>x.CodigoNivel2)
+                            .ThenBy(x=>x.ConsecutivoPlaca).ToList();
                 response.IsValid = true;
                 response.Message = "";
                 response.LinkData= $"/ExcelFiles/{fileName}";
@@ -181,6 +187,7 @@ namespace Convertidor.Services.Catastro
                                       CodigoGrupo = g.Key.CodigoGrupo,
                                       CodigoNivel1 = g.Key.CodigoNivel1,
                                       CodigoNivel2 = g.Key.CodigoNivel2,
+                                      ConsecutivoPlaca=g.Key.NumeroPlaca,
                                       NumeroLote = g.Key.NumeroLote,
                                       Cantidad = g.Key.Cantidad,
                                       NumeroPlaca = g.Key.CodigoGrupo + "-" + g.Key.CodigoNivel1 +"-" +  g.Key.CodigoNivel2 + "-"+g.Key.NumeroPlaca,
@@ -194,13 +201,13 @@ namespace Convertidor.Services.Catastro
 
                                   };
                     
+                response.Data = lista
+                    .OrderBy(x=>x.CodigoBien)
+                    .ThenBy(x=> x.CodigoGrupo)
+                    .ThenBy(x=>x.CodigoNivel1)
+                    .ThenBy(x=>x.CodigoNivel2)
+                    .ThenBy(x=>x.ConsecutivoPlaca).ToList();
                 
-                     
-                
-                  
-                    
-                    
-                response.Data = lista.ToList();
                 response.IsValid = true;
                 response.Message = "";
                 response.LinkData= $"";

@@ -306,9 +306,10 @@ namespace Convertidor.Services.Bm
      public async Task<ResultDto<List<BmConteoDetalleResponseDto>>> ComparaConteo(BmConteoFilterDto filter)
         {
            
-           
+            var detalleConteo = await GetAllByConteo(filter);
             ResultDto<List<BmConteoDetalleResponseDto>> response = new ResultDto<List<BmConteoDetalleResponseDto>>(null);
             List<BmConteoDetalleResponseDto> lista = new List<BmConteoDetalleResponseDto>();
+            List<BmConteoDetalleResponseDto> listaResponse = new List<BmConteoDetalleResponseDto>();
             try
             {
                 var conteo = await _bmConteoRepository.GetByCodigo(filter.CodigoBmConteo);
@@ -318,7 +319,7 @@ namespace Convertidor.Services.Bm
                     var conteoDescriptiva = await _bmDescriptivaRepository.GetByCodigo(conteo.CANTIDAD_CONTEOS_ID);
                     var cantidadConteos = Int32.Parse(conteoDescriptiva.DESCRIPCION);
                     
-                    var detalleConteo = await GetAllByConteo(filter);
+                   
 
                     var primerConteo = detalleConteo.Data.Where(x => x.Conteo == 1).ToList();
                     foreach (var item in primerConteo)
@@ -342,8 +343,18 @@ namespace Convertidor.Services.Bm
                     }
                 }
                 
-                
-                response.Data = lista.Where(x=> x.CantidadContada != x.CantidadContadaOtroConteo).ToList();
+                var diferencias= lista.Where(x=> x.CantidadContada != x.CantidadContadaOtroConteo).ToList();
+                foreach (var itemDiferencias in diferencias)
+                {
+                    var listDif = detalleConteo.Data.Where(x => x.NumeroPlaca == itemDiferencias.NumeroPlaca).ToList();
+                    var find = listaResponse.Where(x => x.NumeroPlaca == itemDiferencias.NumeroPlaca).FirstOrDefault();
+                    if (find == null)
+                    {
+                        listaResponse.AddRange(listDif);
+                    }
+                   
+                }
+                response.Data = listaResponse;
                 response.IsValid = true;
                 response.Message = "";
                 response.LinkData= $"";

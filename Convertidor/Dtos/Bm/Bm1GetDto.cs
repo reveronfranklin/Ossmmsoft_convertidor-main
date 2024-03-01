@@ -8,6 +8,7 @@ public class Bm1GetDto
     public string CodigoNivel1 { get; set; } = string.Empty;
     public string CodigoNivel2 { get; set; } = string.Empty;
     public string NumeroLote { get; set; } = string.Empty;
+    public string ConsecutivoPlaca { get; set; } = string.Empty;
     public int Cantidad { get; set; }
     public string NumeroPlaca { get; set; } = string.Empty;
     public decimal ValorActual { get; set; } 
