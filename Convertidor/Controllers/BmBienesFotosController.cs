@@ -37,8 +37,15 @@ namespace Convertidor.Controllers
             await _service.CreateBardCode();
             return Ok();
         }
-      
-        
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult> CreateBardCodeMultiple()
+        {
+            await _service.CreateBardCodeMultiple();
+            return Ok();
+        }
+
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GetByNumeroPlaca(BmBienesFotoFilterDto dto)

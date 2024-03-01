@@ -67,6 +67,43 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<ResultDto<List<AdmCompromisoOpResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmCompromisoOpResponseDto>> result = new ResultDto<List<AdmCompromisoOpResponseDto>>(null);
+            try
+            {
+                var compromisoOp = await _repository.GetAll();
+                var cant = compromisoOp.Count();
+                if (compromisoOp != null && compromisoOp.Count() > 0)
+                {
+                    var listDto = await MapListCompromisoOpDto(compromisoOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
         public async Task<ResultDto<AdmCompromisoOpResponseDto>> Update(AdmCompromisoOpUpdateDto dto)
         {
             ResultDto<AdmCompromisoOpResponseDto> result = new ResultDto<AdmCompromisoOpResponseDto>(null);

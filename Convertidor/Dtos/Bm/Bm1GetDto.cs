@@ -21,8 +21,8 @@ public class Bm1GetDto
     public int CodigoMovBien { get; set; }
     
     public int CantidadFotos { get; set; }
-  
-    
+    public DateTime FechaMovimiento { get; set; }
+
 }
 public class Bm1ExcelGetDto
 {

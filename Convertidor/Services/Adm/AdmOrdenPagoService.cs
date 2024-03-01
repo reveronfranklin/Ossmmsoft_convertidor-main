@@ -100,6 +100,44 @@ namespace Convertidor.Services.Adm
             return itemResult;
         }
 
+        public async Task<ResultDto<List<AdmOrdenPagoResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmOrdenPagoResponseDto>> result = new ResultDto<List<AdmOrdenPagoResponseDto>>(null);
+            try
+            {
+                var ordenPago = await _repository.GetAll();
+                var cant = ordenPago.Count();
+                if (ordenPago != null && ordenPago.Count() > 0)
+                {
+                    var listDto = await MapListOrdenPagoDto(ordenPago);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
         public async Task<List<AdmOrdenPagoResponseDto>> MapListOrdenPagoDto(List<ADM_ORDEN_PAGO> dtos)
         {
             List<AdmOrdenPagoResponseDto> result = new List<AdmOrdenPagoResponseDto>();

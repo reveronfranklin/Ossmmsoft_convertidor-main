@@ -72,19 +72,61 @@ namespace Convertidor.Services.Adm
             return itemResult;
         }
 
-        public async Task<List<AdmPeriodicoOpResponseDto>> MapListPeriiodicoOpDto(List<ADM_PERIODICO_OP> dtos)
+        public async Task<List<AdmPeriodicoOpResponseDto>> MapListPeriodicoOpDto(List<ADM_PERIODICO_OP> dtos)
         {
             List<AdmPeriodicoOpResponseDto> result = new List<AdmPeriodicoOpResponseDto>();
             {
                 foreach (var item in dtos)
                 {
 
-                    var itemResult = await MapPeriodicoOpDto(item);
+                    if (item != null)
+                    {
+                        var itemResult = await MapPeriodicoOpDto(item);
 
-                    result.Add(itemResult);
+                        result.Add(itemResult);
+                    }
+                    
                 }
                 return result;
             }
+        }
+
+        public async Task<ResultDto<List<AdmPeriodicoOpResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmPeriodicoOpResponseDto>> result = new ResultDto<List<AdmPeriodicoOpResponseDto>>(null);
+            try
+            {
+                var periodicoOp = await _repository.GetAll();
+                var cant = periodicoOp.Count();
+                if (periodicoOp != null && periodicoOp.Count() > 0)
+                {
+                    var listDto = await MapListPeriodicoOpDto(periodicoOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                    
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
         }
 
         public async Task<ResultDto<AdmPeriodicoOpResponseDto>> Update(AdmPeriodicoOpUpdateDto dto)

@@ -55,7 +55,7 @@ namespace Convertidor.Services.Adm
             return itemResult;
         }
 
-        public async Task<List<AdmRetencionesOpResponseDto>> MapListPucOrdenPagoDto(List<ADM_RETENCIONES_OP> dtos)
+        public async Task<List<AdmRetencionesOpResponseDto>> MapListRetencionesOpDto(List<ADM_RETENCIONES_OP> dtos)
         {
             List<AdmRetencionesOpResponseDto> result = new List<AdmRetencionesOpResponseDto>();
             {
@@ -68,6 +68,44 @@ namespace Convertidor.Services.Adm
                 }
                 return result;
             }
+        }
+
+        public async Task<ResultDto<List<AdmRetencionesOpResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmRetencionesOpResponseDto>> result = new ResultDto<List<AdmRetencionesOpResponseDto>>(null);
+            try
+            {
+                var retencionesOp = await _repository.GetAll();
+                var cant = retencionesOp.Count();
+                if (retencionesOp != null && retencionesOp.Count() > 0)
+                {
+                    var listDto = await MapListRetencionesOpDto(retencionesOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
         }
 
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Update(AdmRetencionesOpUpdateDto dto)

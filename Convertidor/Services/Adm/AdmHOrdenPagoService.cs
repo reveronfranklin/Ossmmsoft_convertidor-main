@@ -189,7 +189,7 @@ namespace Convertidor.Services.Adm
                 }
 
                 var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (codigoOrdenPago == null)
+                if (codigoOrdenPago != null)
                 {
                     result.Data = null;
                     result.IsValid = false;

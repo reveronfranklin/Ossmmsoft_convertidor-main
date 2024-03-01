@@ -1,43 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Convertidor.Data.Entities.Bm;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos.Bm;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using NuGet.Packaging;
-using System;
-using System.IO;
+using Convertidor.Dtos.Presupuesto;
+using Convertidor.Services.Catastro;
+using iText.Barcodes;
+using iText.IO.Image;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using iText.Barcodes;
-using iText.Kernel.Geom;
-using iText.Kernel.Pdf.Xobject;
+using NPOI.SS.Formula.Functions;
+
 namespace Convertidor.Services.Bm
 {
-    public class BmBienesFotoService: IBmBienesFotoService
+    public class BmBienesFotoService : IBmBienesFotoService
     {
 
-      
+
         private readonly IBmBienesFotoRepository _repository;
         private readonly IBmBienesRepository _bienesRepository;
+        private readonly IBM_V_BM1Service _bM_V_BM1Service;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IConfiguration _configuration;
         public BmBienesFotoService(IBmBienesFotoRepository repository,
                                     IBmBienesRepository bienesRepository,
+                                    IBM_V_BM1Service bM_V_BM1Service,
                                       ISisUsuarioRepository sisUsuarioRepository,
                                       IConfiguration configuration)
-		{
+        {
             _repository = repository;
             _bienesRepository = bienesRepository;
+            _bM_V_BM1Service = bM_V_BM1Service;
             _sisUsuarioRepository = sisUsuarioRepository;
             _configuration = configuration;
-           
+
 
         }
 
@@ -64,7 +62,7 @@ namespace Convertidor.Services.Bm
             if (dtos.TITULO == null) dtos.TITULO = "";
             itemResult.Titulo = dtos.TITULO;
             itemResult.Patch = $"/BmFiles/{itemResult.NumeroPlaca}/{dtos.FOTO}";
-          
+
 
 
             return itemResult;
@@ -89,7 +87,7 @@ namespace Convertidor.Services.Bm
 
 
         }
-        
+
         public async Task<ResultDto<List<BmBienesFotoResponseDto>>> GetByNumeroPlaca(string numeroPlaca)
         {
 
@@ -103,7 +101,7 @@ namespace Convertidor.Services.Bm
 
                 if (bienesFoto.Count() > 0)
                 {
-                    
+
 
                     var listDto = await MapListBienesFotoDto(bienesFoto);
 
@@ -132,7 +130,7 @@ namespace Convertidor.Services.Bm
 
             return result;
         }
-        
+
         public async Task<ResultDto<BmBienesFotoResponseDto>> Update(BmBienesFotoUpdateDto dto)
         {
 
@@ -155,15 +153,15 @@ namespace Convertidor.Services.Bm
                     result.Message = "Codigo bien invalido";
                     return result;
                 }
-           
-                
+
+
 
                 codigoBienFoto.CODIGO_BIEN_FOTO = dto.CodigoBienFoto;
                 codigoBienFoto.CODIGO_BIEN = dto.CodigoBien;
                 codigoBienFoto.NUMERO_PLACA = dto.NumeroPlaca;
                 codigoBienFoto.FOTO = dto.Foto;
                 codigoBienFoto.TITULO = dto.Titulo;
-               
+
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 codigoBienFoto.CODIGO_EMPRESA = conectado.Empresa;
@@ -204,7 +202,7 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-             
+
                 var numeroPlaca = await _bienesRepository.GetByNumeroPlaca(dto.NumeroPlaca);
                 if (numeroPlaca == null)
                 {
@@ -214,7 +212,7 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-             
+
 
                 BM_BIENES_FOTO entity = new BM_BIENES_FOTO();
                 entity.CODIGO_BIEN_FOTO = await _repository.GetNextKey();
@@ -222,7 +220,7 @@ namespace Convertidor.Services.Bm
                 entity.NUMERO_PLACA = dto.NumeroPlaca;
                 entity.FOTO = dto.Foto;
                 entity.TITULO = dto.Titulo;
-              
+
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
@@ -230,7 +228,7 @@ namespace Convertidor.Services.Bm
                 entity.FECHA_INS = DateTime.Now;
 
                 var created = await _repository.Add(entity);
-                if (created.IsValid && created.Data!=null)
+                if (created.IsValid && created.Data != null)
                 {
                     var resultDto = await MapBmBienesFoto(created.Data);
                     result.Data = resultDto;
@@ -241,15 +239,15 @@ namespace Convertidor.Services.Bm
                 }
                 else
                 {
-                    
+
                     result.Data = null;
                     result.IsValid = created.IsValid;
                     result.Message = created.Message;
                 }
 
                 return result;
-              
-               
+
+
 
             }
             catch (Exception ex)
@@ -280,7 +278,7 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-              
+
                 var deleted = await _repository.Delete(dto.CodigoBienFoto);
 
                 if (deleted.Length > 0)
@@ -310,41 +308,44 @@ namespace Convertidor.Services.Bm
 
             return result;
         }
-        public string[] GetFicheros( string ruta )
+        public string[] GetFicheros(string ruta)
         {
-            
+
             string[] ficheros = Directory.GetFiles(ruta);
             string[] sorted = ficheros.OrderByDescending(o => o).ToArray();
             return sorted;
         }
-        public static bool IsBase64(string base64String) {
+        public static bool IsBase64(string base64String)
+        {
             // Credit: oybek https://stackoverflow.com/users/794764/oybek
             if (string.IsNullOrEmpty(base64String) || base64String.Length % 4 != 0
                                                    || base64String.Contains(" ") || base64String.Contains("\t") || base64String.Contains("\r") || base64String.Contains("\n"))
                 return false;
 
-            try{
+            try
+            {
                 Convert.FromBase64String(base64String);
                 return true;
             }
-            catch(Exception exception){
+            catch (Exception exception)
+            {
                 // Handle the exception
             }
             return false;
         }
-        public async Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImage(int codigoBien,List<IFormFile> files)
+        public async Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImage(int codigoBien, List<IFormFile> files)
         {
-        
+
             var settings = _configuration.GetSection("Settings").Get<Settings>();
-            var destino = @settings.BmFiles; 
+            var destino = @settings.BmFiles;
             var numeroPlaca = "";
             var titulo = "";
-            
-            
-          
+
+
+
 
             ResultDto<List<BmBienesFotoResponseDto>> result = new ResultDto<List<BmBienesFotoResponseDto>>(null);
-           
+
             var numeroPlacaObj = await _bienesRepository.GetByCodigoBien(codigoBien);
             if (numeroPlacaObj == null)
             {
@@ -357,18 +358,18 @@ namespace Convertidor.Services.Bm
             {
                 numeroPlaca = numeroPlacaObj.NUMERO_PLACA;
             }
-            
-       
+
+
             try
             {
-             
-              
+
+
                 if (files.Count > 0)
                 {
                     foreach (var file in files)
                     {
                         string fileName = file.FileName;
-                        fileName =file.FileName.Replace(" ", "_");
+                        fileName = file.FileName.Replace(" ", "_");
                         var findPlacaFoto =
                             await _repository.GetByNumeroPlacaFoto(numeroPlacaObj.NUMERO_PLACA, fileName);
                         if (findPlacaFoto != null)
@@ -381,12 +382,12 @@ namespace Convertidor.Services.Bm
 
                         if (fileName.Length > 13)
                         {
-                            
+
                             var longitud = file.FileName.Length - 14;
                             titulo = fileName.Substring(14, longitud);
-                        
+
                         }
-                      
+
                         if (!Directory.Exists($"{destino}{numeroPlaca}"))
                         {
                             Directory.CreateDirectory($"{destino}{numeroPlaca}");
@@ -394,9 +395,9 @@ namespace Convertidor.Services.Bm
                         var filePatch = $"{destino}{numeroPlaca}/{fileName}";
                         if (!File.Exists($"{filePatch}"))
                         {
-                            using (var stream =System.IO.File.Create(filePatch) )
+                            using (var stream = System.IO.File.Create(filePatch))
                             {
-                                await  file.CopyToAsync(stream);
+                                await file.CopyToAsync(stream);
                             }
                         }
                         if (File.Exists($"{filePatch}"))
@@ -407,18 +408,18 @@ namespace Convertidor.Services.Bm
                             dtoCreate.NumeroPlaca = numeroPlacaObj.NUMERO_PLACA;
                             dtoCreate.Foto = fileName;
                             dtoCreate.Titulo = titulo;
-                            var created=await Create(dtoCreate);
-                            
+                            var created = await Create(dtoCreate);
+
                         }
                     }
                 }
 
                 result = await GetByNumeroPlaca(numeroPlaca);
-                
+
 
                 return result;
-              
-               
+
+
 
             }
             catch (Exception ex)
@@ -427,16 +428,16 @@ namespace Convertidor.Services.Bm
                 result.IsValid = false;
                 result.Message = ex.Message;
             }
-            
+
             return result;
         }
 
         public async Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImageModel(BmBienesimageUpdateDto dto)
         {
             var numeroPlaca = "2-01-00-00315";
-           
+
             var settings = _configuration.GetSection("Settings").Get<Settings>();
-            var destino = @settings.BmFiles; 
+            var destino = @settings.BmFiles;
             if (!Directory.Exists($"{destino}{numeroPlaca}"))
             {
                 Directory.CreateDirectory($"{destino}{numeroPlaca}");
@@ -457,9 +458,9 @@ namespace Convertidor.Services.Bm
                     foreach (var file in dto.Files)
                     {
                         var filePatch = $"{destino}{numeroPlaca}/{file.FileName}";
-                        using (var stream =System.IO.File.Create(filePatch) )
+                        using (var stream = System.IO.File.Create(filePatch))
                         {
-                           await  file.CopyToAsync(stream);
+                            await file.CopyToAsync(stream);
                         }
                         if (File.Exists($"{filePatch}"))
                         {
@@ -469,18 +470,18 @@ namespace Convertidor.Services.Bm
                             dtoCreate.NumeroPlaca = numeroPlaca;
                             dtoCreate.Foto = file.FileName;
                             dtoCreate.Titulo = file.FileName;
-                            var created=await Create(dtoCreate);
-                            
+                            var created = await Create(dtoCreate);
+
                         }
                     }
                 }
 
                 result = await GetByNumeroPlaca(numeroPlaca);
-                
+
 
                 return result;
-              
-               
+
+
 
             }
             catch (Exception ex)
@@ -489,24 +490,24 @@ namespace Convertidor.Services.Bm
                 result.IsValid = false;
                 result.Message = ex.Message;
             }
-            
+
             return result;
         }
-        
+
         public async Task<string> CopiarArchivos()
         {
 
             string text1 = "";
             try
             {
-                
+
                 string outFileName = @"";
 
                 var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
                 var destino = @settings.BmFiles;
                 var origen = @settings.BmFilesProceso;
-              
+
                 var ficheros = GetFicheros(origen);
                 foreach (string file in ficheros)
                 {
@@ -521,21 +522,21 @@ namespace Convertidor.Services.Bm
                     var control = controlFinalArray[0];
                     var numeroPlaca = "";
                     var titulo = "";
-                    
-                    fileName=fileName.Replace(" ", "_");
+
+                    fileName = fileName.Replace(" ", "_");
                     if (control.Length >= 13)
                     {
                         numeroPlaca = control.Substring(0, 13);
-                        
+
                     }
                     if (control.Length > 13)
                     {
                         titulo = "";
                         var longitud = control.Length - 14;
                         titulo = control.Substring(14, longitud);
-                        
+
                     }
-                   
+
 
                     var bmBien = await _bienesRepository.GetByNumeroPlaca(numeroPlaca);
                     if (bmBien != null)
@@ -544,11 +545,11 @@ namespace Convertidor.Services.Bm
                         {
                             Directory.CreateDirectory($"{destino}{numeroPlaca}");
                         }
-                     
+
                         outFileName = $"{destino}{numeroPlaca}{fileName}";
                         if (!File.Exists($"{destino}{numeroPlaca}/{fileName}"))
                         {
-                          
+
                             File.Copy(file, $"{destino}{numeroPlaca}/{fileName}");
                             if (File.Exists($"{destino}{numeroPlaca}/{fileName}"))
                             {
@@ -562,10 +563,10 @@ namespace Convertidor.Services.Bm
 
                             }
                         }
-                        
+
                     }
-                   
-                  
+
+
                 }
 
 
@@ -580,14 +581,15 @@ namespace Convertidor.Services.Bm
 
 
         }
-        
-        protected void ManipulatePdf(String dest,String code)
+
+        protected void ManipulatePdf(String dest, String code)
         {
+            // 2.5 * 72 = 180 5 * 72= 432
+            Rectangle pageSize = new Rectangle(432, 180);
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
-           
-            Document doc = new Document(pdfDoc,PageSize.A5);
-           
-       
+
+            Document doc = new Document(pdfDoc, new PageSize(pageSize));
+
             //String code = "675-FH-A12";
 
             Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
@@ -609,7 +611,7 @@ namespace Convertidor.Services.Bm
             // so the image adding to the cell can be done only using method add().
             Cell cell = new Cell().Add(code128Image);
             table.AddCell(cell);
-            
+
             table.AddCell("PIE");
             /*table.AddCell("Add text and bar code separately:");
 
@@ -632,41 +634,299 @@ namespace Convertidor.Services.Bm
             doc.Close();
         }
 
-   
-         public async Task CreateBardCode()
+
+        protected void ManipulateEjemplo(String dest, String code,string unidadEjecutora,DateTime fecha)
         {
+            // 2.5 * 72 = 180 5 * 72= 432
+            Rectangle pageSize = new Rectangle(170, 85);
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+
+            Document doc = new Document(
+                                            pdfDoc,
+                                            new PageSize(pageSize)
+                                            
+                                        ) ;
+            doc.SetMargins(0, 0, 0, 0);
+
+            //String code = "675-FH-A12";
+
+
+            Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
+            var _env = "development";
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            
+            var pathLogo = @settings.BmFiles;
+            Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+            Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoDerecha.jpeg")));
+            Cell cell = new Cell();
+            cell.SetBorder(null);
+            cell.Add(logo1.SetWidth(20).SetFixedPosition(5f, 73f));
+                                      
+            cell.Add(logo2.SetWidth(20).SetHorizontalAlignment(HorizontalAlignment.RIGHT)
+                          .SetTextAlignment(TextAlignment.RIGHT));
+
+            table.AddCell(cell);
+
+            Cell cell0 = new Cell();
+            cell0.SetBorder(null);
+            Paragraph fechaString = new Paragraph();
+            fechaString.SetTextAlignment(TextAlignment.CENTER);
+            fechaString.Add(fecha.ToShortDateString());
+            cell0.Add(fechaString).SetFontSize(5);
+            table.AddCell(cell0);
+
+            Barcode128 code128 = new Barcode128(pdfDoc);
+
+            // If value is positive, the text distance under the bars. If zero or negative,
+            // the text distance above the bars.
+            code128.SetBaseline(10);
+            code128.SetSize(12);
+            code128.SetCode(code);
+            code128.SetCodeType(Barcode128.CODE128);
+            Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
+            code128Image.SetWidth(100);
+            code128Image.SetHeight(20);
+            // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
+            // this image does not fit the cell, but it does in addCell().
+            // In iText7 there is no constructor (new Cell(Image img)),
+            // so the image adding to the cell can be done only using method add().
+           
+
+
+            Cell cell1 = new Cell();
+            cell1.SetBorder(null);
+            cell1.SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                                                   .SetTextAlignment(TextAlignment.CENTER);
+            Paragraph texto = new Paragraph();
+            texto.Add("Bienes Municipales");
+            cell1.Add(texto).SetFontSize(6).SetBold();
+            cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER));
+
+            table.AddCell(cell1);
+
+            Paragraph texto2 = new Paragraph();
+            Paragraph texto3 = new Paragraph();
+            
+            Cell cell2 = new Cell();
+            cell2.SetBorder(null);
+            cell2.SetHorizontalAlignment(HorizontalAlignment.CENTER);
+            cell2.SetTextAlignment(TextAlignment.CENTER);
+            texto2.Add("Consejo Municipal de Chacao");
+            texto2.SetFontSize(5);
+            texto3.Add(unidadEjecutora);
+            texto3.SetFontSize(5);
+            cell2.Add(texto2);
+            cell2.Add(texto3);
+            table.AddCell(cell2);
+                                                        
+                                                        
+
+
+            /*table.AddCell("Add text and bar code separately:");
+
+            code128 = new Barcode128(pdfDoc);
+            
+            // Suppress the barcode text
+            code128.SetFont(null);
+            code128.SetCode(code);
+            code128.SetCodeType(Barcode128.CODE128);
+
+            // Let the image resize automatically by setting it to be autoscalable.
+            code128Image = new Image(code128.CreateFormXObject(pdfDoc)).SetAutoScale(true);
+            cell = new Cell();
+            cell.Add(new Paragraph("PO #: " + code));
+            cell.Add(code128Image);
+            table.AddCell(cell);*/
+
+            //image1.ScalePercent(50f);
+
+            doc.Add(table);
+
+            doc.Close();
+        }
+
+
+        protected async void GenerateMultiple(List<Bm1GetDto> placas,string dest)
+        {
+            // 2.5 * 72 = 180 5 * 72= 432
+            Rectangle pageSize = new Rectangle(170, 85);
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+
+            Document doc = new Document(
+                                            pdfDoc,
+                                            new PageSize(pageSize)
+
+                                        );
+            doc.SetMargins(0, 0, 0, 0);
+
+            //String code = "675-FH-A12";
+
+            var intNumeroCopias = 2;
+            for (int i = 1; i <= intNumeroCopias; i++)
+            { 
+                pdfDoc.AddNewPage();
+            }
+
+            foreach (var item in placas)
+            {
+
+                Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
+                var _env = "development";
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+                var pathLogo = @settings.BmFiles;
+                Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+                Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacao.png")));
+                Paragraph logos = new Paragraph();
+                logo1.ScaleAbsolute(20f, 10f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(50);
+                logo2.ScaleAbsolute(20f, 12f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(76);
+                logos.Add(logo1).SetWidth(30).SetVerticalAlignment(VerticalAlignment.TOP);
+                logos.Add(logo2).SetWidth(30).SetVerticalAlignment(VerticalAlignment.TOP);
+                Cell cell = new Cell(1,2);
+                cell.SetBorder(null);
+                cell.Add(logos);
+                //cell.SetFixedPosition(5f, 30, 100f);
+                //cell.SetVerticalAlignment(VerticalAlignment.TOP);
+                //cell.Add(logo1.SetWidth(20).SetHorizontalAlignment(HorizontalAlignment.LEFT)
+                //              .SetTextAlignment(TextAlignment.LEFT)).SetPaddingLeft(5);
+
+                //cell.Add(logo2.SetWidth(20).SetHorizontalAlignment(HorizontalAlignment.RIGHT)
+                //              .SetTextAlignment(TextAlignment.RIGHT)).SetPaddingRight(5).SetPaddingTop(0);
+
+                table.AddCell(cell);
+
+                Cell cell0 = new Cell();
+                cell0.SetBorder(null);
+                var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
+                Paragraph fechaString = new Paragraph(fecha);
+                //fechaString.SetTextAlignment(TextAlignment.CENTER);
+                //fechaString.SetFixedPosition(30f, 50f,30f);
+                cell0.SetTextAlignment(TextAlignment.CENTER);
+                cell0.Add(fechaString).SetFontSize(5).SetPaddingTop(5).SetVerticalAlignment(VerticalAlignment.BOTTOM);
+                //cell0.Add(fechaString).SetFontSize(5);
+                table.AddCell(cell0);
+
+
+                Barcode128 code128 = new Barcode128(pdfDoc);
+
+                // If value is positive, the text distance under the bars. If zero or negative,
+                // the text distance above the bars.
+                code128.SetBaseline(10);
+                code128.SetSize(12);
+                code128.SetCode(item.NumeroPlaca);
+                code128.SetCodeType(Barcode128.CODE128);
+                Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
+                code128Image.SetWidth(100);
+                code128Image.SetHeight(20);
+                // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
+                // this image does not fit the cell, but it does in addCell().
+                // In iText7 there is no constructor (new Cell(Image img)),
+                // so the image adding to the cell can be done only using method add().
+
+
+
+                Cell cell1 = new Cell(2,1);
+                cell1.SetBorder(null);
+                cell1.SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                                                       .SetTextAlignment(TextAlignment.CENTER);
+                Paragraph texto = new Paragraph();
+                texto.Add("Bienes Municipales");
+                cell1.Add(texto).SetFontSize(7).SetBold();
+                cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER))
+                                                      .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+
+                table.AddCell(cell1);
+
+                Paragraph texto2 = new Paragraph("Consejo Municipal de Chacao");
+                Paragraph texto3 = new Paragraph(item.UnidadTrabajo);
+
+                Cell cell2 = new Cell(2,1);
+                cell2.SetBorder(null);
+                cell2.Add(texto2).SetFontSize(5).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                                                .SetTextAlignment(TextAlignment.CENTER);
+                cell2.Add(texto3).SetFontSize(5).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                                                .SetTextAlignment(TextAlignment.CENTER);
+                table.AddCell(cell2);
+
+                doc.Add(table);
+
+                
+            }
+
+           
+            
+
+            doc.Close();
+        }
 
         
+
+        public async Task CreateBardCode()
+        {
+
+
             try
             {
                 var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
-              
-             
-                var bienes = await _bienesRepository.GetAll();
+
+
+                var bienes = await _bM_V_BM1Service.GetByPlaca(3145);
                 foreach (var item in bienes)
                 {
                     var destino = @settings.BmFiles;
                     FileInfo file = new FileInfo(destino);
                     file.Directory.Create();
-                    destino = $"{destino}{item.NUMERO_PLACA}.pdf";
-                    ManipulatePdf(destino,item.NUMERO_PLACA);
-                      
-                        
+                    destino = $"{destino}{item.NumeroPlaca}.pdf";
+                    ManipulateEjemplo(destino, item.NumeroPlaca,item.UnidadTrabajo,item.FechaMovimiento);
+
+                    //ManipulatePdf(destino, item.NUMERO_PLACA);
+
+
                 }
-               
+
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-               
+
             }
 
 
         }
 
-        
+
+        public async Task CreateBardCodeMultiple()
+        {
+
+
+            try
+            {
+                var _env = "development";
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+                var destino = @settings.BmFiles;
+                FileInfo file = new FileInfo(destino);
+                file.Directory.Create();
+                destino = $"{destino}placas.pdf";
+
+                var bienes = await _bM_V_BM1Service.GetAll();
+                
+                var listaBienes = bienes.Data.OrderBy(b => b.UnidadTrabajo).ToList();
+                GenerateMultiple(listaBienes, destino);
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+
+
+        }
+
 
     }
 }

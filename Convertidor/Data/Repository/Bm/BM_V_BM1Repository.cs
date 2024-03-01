@@ -43,9 +43,30 @@ namespace Convertidor.Data.Repository.Catastro
 
 
         }
-        
 
-      
+
+        public async Task<List<BM_V_BM1>> GetByPlaca(int codigoBien)
+        {
+            try
+            {
+
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.BM_V_BM1.DefaultIfEmpty().Where(b => b.CODIGO_EMPRESA == conectado.Empresa && b.CODIGO_BIEN==codigoBien).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+
+        }
+
+
+
     }
 }
 
