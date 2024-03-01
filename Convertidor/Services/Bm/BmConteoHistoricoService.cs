@@ -21,20 +21,20 @@ namespace Convertidor.Services.Bm
      
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhPersonasRepository _rhPersonasRepository;
-        private readonly IBmConteoDetalleService _conteoDetalleService;
+        private readonly IBmConteoDetalleHistoricoService _conteoDetalleHistoricoService;
         private readonly IBmDescriptivaRepository _bmDescriptivaRepository;
         private readonly IConfiguration _configuration;
         public BmConteoHistoricoService(IBmConteoHistoricoRepository repository,
                                 ISisUsuarioRepository sisUsuarioRepository,
                                 IRhPersonasRepository rhPersonasRepository,
-                                IBmConteoDetalleService conteoDetalleService,
+                                IBmConteoDetalleHistoricoService conteoDetalleHistoricoService,
                                 IBmDescriptivaRepository bmDescriptivaRepository,
                                 IConfiguration configuration)
 		{
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _rhPersonasRepository = rhPersonasRepository;
-            _conteoDetalleService = conteoDetalleService;
+            _conteoDetalleHistoricoService = conteoDetalleHistoricoService;
             _bmDescriptivaRepository = bmDescriptivaRepository;
             _configuration = configuration;
            
@@ -141,9 +141,58 @@ namespace Convertidor.Services.Bm
 
             return result;
         }
+        
+        public async Task<ResultDto<BmConteoHistoricoResponseDto>> GetByCodigoConteo(int codigoConteo)
+        {
+
+            ResultDto<BmConteoHistoricoResponseDto> result = new ResultDto<BmConteoHistoricoResponseDto>(null);
+            try
+            {
+
+                var conteo = await _repository.GetByCodigo(codigoConteo);
+
+                
+
+                if (conteo!=null)
+                {
+                   
+                    var listDto = await MapBmConteo(conteo);
+                
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
 
 
 
+            return result;
+        }
+
+        public async Task CreateReportConteoHistorico(int codigoConteo)
+        {
+
+            var connteo =await  GetByCodigoConteo(codigoConteo);
+
+            var detalle = await _conteoDetalleHistoricoService.GetAllByConteo(codigoConteo);
+
+
+        }
     }
 }
 
