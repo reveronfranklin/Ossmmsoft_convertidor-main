@@ -12,4 +12,5 @@ public interface IBmBienesFotoService
     Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImage(int codigoBien, List<IFormFile> files);
     Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImageModel(BmBienesimageUpdateDto dto);
     Task CreateBardCode();
+
 }

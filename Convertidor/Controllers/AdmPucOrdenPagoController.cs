@@ -24,6 +24,15 @@ namespace Convertidor.Controllers
 
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _service.GetAll();
+            return Ok(result);
+        }
+
+
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Update(AdmPucOrdenPagoUpdateDto dto)

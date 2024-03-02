@@ -24,8 +24,8 @@ public class Bm1GetDto
     public DateTime FechaMovimiento { get; set; }
     
     public int CantidadFotos { get; set; }
-  
-    
+
+
 }
 public class Bm1ExcelGetDto
 {

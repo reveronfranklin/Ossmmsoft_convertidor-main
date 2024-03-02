@@ -59,6 +59,44 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<ResultDto<List<AdmDetalleSolicitudResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
+            try
+            {
+                var detalleSolicitud = await _repository.GetAll();
+                var cant = detalleSolicitud.Count();
+                if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
+                {
+                    var listDto = await MapListDetalleSolicitudDto(detalleSolicitud);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
         public async Task<ResultDto<AdmDetalleSolicitudResponseDto>> Update(AdmDetalleSolicitudUpdateDto dto)
         {
             ResultDto<AdmDetalleSolicitudResponseDto> result = new ResultDto<AdmDetalleSolicitudResponseDto>(null);

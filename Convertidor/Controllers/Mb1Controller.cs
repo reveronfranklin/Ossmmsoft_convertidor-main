@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Convertidor.Dtos.Bm;
+using Convertidor.Services.Bm;
+using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
 using Convertidor.Services.Catastro;
@@ -42,6 +44,12 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-
+        [HttpPost]
+        [Route("[action]")] 
+        public async Task<IActionResult> GetByListIcp(List<ICPGetDto>? listIcpSeleccionado)
+        {
+            var result = await _service.GetByListIcp(listIcpSeleccionado);
+            return Ok(result);
+        }
     }
 }

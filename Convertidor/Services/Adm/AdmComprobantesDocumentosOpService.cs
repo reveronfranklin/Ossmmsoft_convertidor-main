@@ -88,6 +88,44 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<ResultDto<List<AdmComprobantesDocumentosOpResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmComprobantesDocumentosOpResponseDto>> result = new ResultDto<List<AdmComprobantesDocumentosOpResponseDto>>(null);
+            try
+            {
+                var comprobanteDocumentoOp = await _repository.GetAll();
+                var cant = comprobanteDocumentoOp.Count();
+                if (comprobanteDocumentoOp != null && comprobanteDocumentoOp.Count() > 0)
+                {
+                    var listDto = await MapListComprobantesDocumentosOpDto(comprobanteDocumentoOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
         public async Task<ResultDto<AdmComprobantesDocumentosOpResponseDto>> Update(AdmComprobantesDocumentosOpUpdateDto dto)
         {
             ResultDto<AdmComprobantesDocumentosOpResponseDto> result = new ResultDto<AdmComprobantesDocumentosOpResponseDto>(null);

@@ -77,6 +77,43 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<ResultDto<List<AdmPucOrdenPagoResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmPucOrdenPagoResponseDto>> result = new ResultDto<List<AdmPucOrdenPagoResponseDto>>(null);
+            try
+            {
+                var pucOrdenPago = await _repository.GetAll();
+                var cant = pucOrdenPago.Count();
+                if (pucOrdenPago != null && pucOrdenPago.Count() > 0)
+                {
+                    var listDto = await MapListPucOrdenPagoDto(pucOrdenPago);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
         public async Task<ResultDto<AdmPucOrdenPagoResponseDto>> Update(AdmPucOrdenPagoUpdateDto dto)
         {
             ResultDto<AdmPucOrdenPagoResponseDto> result = new ResultDto<AdmPucOrdenPagoResponseDto>(null);

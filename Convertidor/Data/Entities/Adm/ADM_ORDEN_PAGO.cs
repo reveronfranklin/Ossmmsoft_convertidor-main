@@ -42,10 +42,10 @@
         public string? EXTRA13 { get; set; } = string.Empty;
         public string? EXTRA14 { get; set; } = string.Empty;
         public string? EXTRA15 { get; set; } = string.Empty;
-        public int? NUMERO_COMPROBANTE { get; set; }
+        public decimal? NUMERO_COMPROBANTE { get; set; }
         public DateTime FECHA_COMPROBANTE { get; set; }
-        public int? NUMERO_COMPROBANTE2 { get; set; }
-        public int? NUMERO_COMPROBANTE3 { get; set; }
-        public int? NUMERO_COMPROBANTE4 { get; set; }
+        public decimal? NUMERO_COMPROBANTE2 { get; set; }
+        public decimal? NUMERO_COMPROBANTE3 { get; set; }
+        public decimal? NUMERO_COMPROBANTE4 { get; set; }
     }
 }

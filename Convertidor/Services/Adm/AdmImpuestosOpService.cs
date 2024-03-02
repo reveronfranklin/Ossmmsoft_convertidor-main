@@ -66,6 +66,44 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<ResultDto<List<AdmImpuestosOpResponseDto>>> GetAll()
+        {
+
+            ResultDto<List<AdmImpuestosOpResponseDto>> result = new ResultDto<List<AdmImpuestosOpResponseDto>>(null);
+            try
+            {
+                var impuestosOp = await _repository.GetAll();
+                var cant = impuestosOp.Count();
+                if (impuestosOp != null && impuestosOp.Count() > 0)
+                {
+                    var listDto = await MapListImpuestosOpDto(impuestosOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
         public async Task<ResultDto<AdmImpuestosOpResponseDto>> Update(AdmImpuestosOpUpdateDto dto)
         {
             ResultDto<AdmImpuestosOpResponseDto> result = new ResultDto<AdmImpuestosOpResponseDto>(null);
