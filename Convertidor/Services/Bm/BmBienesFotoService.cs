@@ -660,7 +660,7 @@ namespace Convertidor.Services.Bm
             cell2.SetBorder(null);
             cell2.SetHorizontalAlignment(HorizontalAlignment.CENTER);
             cell2.SetTextAlignment(TextAlignment.CENTER);
-            texto2.Add("Consejo Municipal de Chacao");
+            texto2.Add("Concejo Municipal de Chacao");
             texto2.SetFontSize(5);
             texto3.Add(unidadEjecutora);
             texto3.SetFontSize(5);
@@ -786,7 +786,7 @@ namespace Convertidor.Services.Bm
 
                 table.AddCell(cell1);
 
-                Paragraph texto2 = new Paragraph("Consejo Municipal de Chacao");
+                Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao");
                 Paragraph texto3 = new Paragraph(item.UnidadTrabajo);
 
                 Cell cell2 = new Cell(2,1);
@@ -852,7 +852,7 @@ namespace Convertidor.Services.Bm
 
             try
             {
-                var _env = "development";
+                
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
                 var destino = @settings.BmFiles;
