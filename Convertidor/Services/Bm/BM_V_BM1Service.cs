@@ -489,14 +489,8 @@ namespace Convertidor.Services.Bm
                 logos.Add(logo2).SetWidth(30).SetVerticalAlignment(VerticalAlignment.TOP);
                 Cell cell = new Cell(1,2);
                 cell.SetBorder(null);
-                cell.Add(logos);
-                //cell.SetFixedPosition(5f, 30, 100f);
-                //cell.SetVerticalAlignment(VerticalAlignment.TOP);
-                //cell.Add(logo1.SetWidth(20).SetHorizontalAlignment(HorizontalAlignment.LEFT)
-                //              .SetTextAlignment(TextAlignment.LEFT)).SetPaddingLeft(5);
-
-                //cell.Add(logo2.SetWidth(20).SetHorizontalAlignment(HorizontalAlignment.RIGHT)
-                //              .SetTextAlignment(TextAlignment.RIGHT)).SetPaddingRight(5).SetPaddingTop(0);
+                cell.Add(logos).SetPaddingTop(3);
+          
 
                 table.AddCell(cell);
 
@@ -504,11 +498,10 @@ namespace Convertidor.Services.Bm
                 cell0.SetBorder(null);
                 var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
                 Paragraph fechaString = new Paragraph(fecha);
-                //fechaString.SetTextAlignment(TextAlignment.CENTER);
-                //fechaString.SetFixedPosition(30f, 50f,30f);
+               
                 cell0.SetTextAlignment(TextAlignment.CENTER);
-                cell0.Add(fechaString).SetFontSize(5).SetPaddingTop(5).SetVerticalAlignment(VerticalAlignment.BOTTOM);
-                //cell0.Add(fechaString).SetFontSize(5);
+                cell0.Add(fechaString).SetFontSize(6).SetPaddingTop(1).SetVerticalAlignment(VerticalAlignment.BOTTOM);
+                
                 table.AddCell(cell0);
 
 
@@ -532,24 +525,23 @@ namespace Convertidor.Services.Bm
 
                 Cell cell1 = new Cell(2,1);
                 cell1.SetBorder(null);
-                cell1.SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                cell1.SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(0)
                                                        .SetTextAlignment(TextAlignment.CENTER);
                 Paragraph texto = new Paragraph();
                 texto.Add("Bienes Municipales");
                 cell1.Add(texto).SetFontSize(7).SetBold();
-                cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER))
-                                                      .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER));
 
                 table.AddCell(cell1);
 
-                Paragraph texto2 = new Paragraph("Consejo Municipal de Chacao");
+                Paragraph texto2 = new Paragraph("Consejo Municipal de Chacao").SetFontSize(6);
                 Paragraph texto3 = new Paragraph(item.UnidadTrabajo);
 
                 Cell cell2 = new Cell(2,1);
                 cell2.SetBorder(null);
-                cell2.Add(texto2).SetFontSize(5).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                cell2.Add(texto2).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(3)
                                                 .SetTextAlignment(TextAlignment.CENTER);
-                cell2.Add(texto3).SetFontSize(5).SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                cell2.Add(texto3).SetFontSize(5).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(2)
                                                 .SetTextAlignment(TextAlignment.CENTER);
                 table.AddCell(cell2);
 
