@@ -462,7 +462,7 @@ namespace Convertidor.Services.Bm
                                             new PageSize(pageSize)
 
                                         );
-            doc.SetMargins(0, 0, 0, 0);
+            doc.SetMargins(1, 0, 0, 0);
 
             //String code = "675-FH-A12";
 

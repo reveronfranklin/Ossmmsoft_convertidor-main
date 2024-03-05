@@ -3,11 +3,13 @@ using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
 using Convertidor.Dtos.Presupuesto;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NuGet.Protocol.Plugins;
 using QuestPDF.Elements;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 using static SkiaSharp.HarfBuzz.SKShaper;
 
 
@@ -246,39 +248,44 @@ namespace Convertidor.Services.Bm
                                     
                                     tabla.ColumnsDefinition(async columnas =>
                                     {
-                                        columnas.RelativeColumn(3);
+                                        columnas.RelativeColumn(5);
                                         columnas.RelativeColumn();
                                         columnas.RelativeColumn();
                                         columnas.RelativeColumn();
-                                        columnas.RelativeColumn();
-
-
-                                        if (item.COMENTARIO != null)
-                                        {
-                                            columnas.RelativeColumn(5);
-                                        }
-                                       
-                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                    .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
-
-                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                    .Padding(2).Text(item.CANTIDAD).FontSize(8);
-
-                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                    .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
-
-                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                    .Padding(2).Text(item.DIFERENCIA).FontSize(8);
-
-                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                    .Padding(2).Text(item.COMENTARIO).FontSize(8);
-
-                                    
-
                                         
+                                      
+                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                        .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
+
+                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                        .Padding(2).Text(item.CANTIDAD).FontSize(8);
+
+                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                        .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
+
+                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                        .Padding(2).Text(item.DIFERENCIA).FontSize(8);
+
+
 
                                     });
 
+                                    static IContainer Block(IContainer container)
+                                    {
+                                        return container
+                                            .Border(1)
+                                            .Background(Colors.Grey.Lighten3)
+                                            .ShowOnce()
+                                            .MinWidth(50)
+                                            .MinHeight(50)
+                                            .AlignCenter()
+                                            .AlignMiddle();
+                                    }
+
+                                    if (item.COMENTARIO != null && item.COMENTARIO.Length > 0)
+                                    {
+                                        tabla.Cell().RowSpan(4).ColumnSpan(4).Element(Block).Text(item.COMENTARIO);
+                                    }
                                 }
 
 
@@ -296,20 +303,9 @@ namespace Convertidor.Services.Bm
                                     cabecera.Cell().Background(Colors.LightBlue.Medium)
                                     .Padding(2).Text("Diferencia");
 
-                                    foreach (var item in detalle)
-                                    {
-
-
-                                        cabecera.Cell().ShowIf(item.COMENTARIO != null)
-                                        .Background(Colors.LightBlue.Medium)
-                                        .Padding(2).Text("Comentario");
-
-                                    }
-
-                                   
-
                                 });
 
+                                
                             });
 
                             col1.Item().AlignRight().BorderColor(Colors.Cyan.Medium).Border(1)
