@@ -38,13 +38,7 @@ namespace Convertidor.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<ActionResult> CreateBardCodeMultiple()
-        {
-            await _service.CreateBardCodeMultiple();
-            return Ok();
-        }
+
 
         [HttpPost]
         [Route("[action]")]

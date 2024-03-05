@@ -25,6 +25,7 @@ namespace Convertidor.Data.Repository.Bm
       
 
 
+
         public async Task<List<BM_CONTEO_DETALLE_HISTORICO>> GetAllByConteo(int codigoConteo)
         {
             try
