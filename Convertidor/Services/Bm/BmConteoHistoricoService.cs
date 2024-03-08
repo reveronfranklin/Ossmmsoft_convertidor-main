@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Convertidor.Data.Entities.Bm;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos.Bm;
-using Convertidor.Utility;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Convertidor.Dtos.Presupuesto;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using NuGet.Packaging;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
+using NuGet.Protocol.Plugins;
+using QuestPDF.Elements;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using static SkiaSharp.HarfBuzz.SKShaper;
+
 
 namespace Convertidor.Services.Bm
 {
@@ -191,6 +193,135 @@ namespace Convertidor.Services.Bm
 
             var detalle = await _conteoDetalleHistoricoService.GetAllByConteo(codigoConteo);
 
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.BmFiles;
+
+            var fileName = $"{destino}{codigoConteo.ToString()}.pdf";
+            try
+            {
+                Document.Create(documento =>
+                {
+                    documento.Page(page =>
+                    {
+                        page.Margin(20);
+
+                        page.Header().Row(fila =>
+                        {
+                            fila.ConstantItem(140).Border(0).Height(60).Image(filePath:destino +"LogoIzquierda.jpeg")
+                            .FitWidth().FitHeight();
+                            fila.Spacing(4);
+                            fila.RelativeItem().Border(0).Column(col =>
+                            {
+                                col.Item().AlignCenter().Text("Historico Conteo").Bold().FontSize(14);
+
+                                col.Item().AlignCenter().Text($"{connteo.Data.Titulo}").FontSize(9);
+                                
+                            });
+                            fila.RelativeItem().Border(0).Column(col =>
+                            {
+                                col.Item().Border(1).BorderColor(Colors.Cyan.Medium).AlignCenter()
+                                .Text($"Conteo : {connteo.Data.CodigoBmConteo}").Bold().FontSize(14);
+
+                                col.Item().Border(1).Background(Colors.Cyan.Medium).AlignCenter()
+                                .Text($"{connteo.Data.Fecha.ToShortDateString()}").FontSize(9);
+
+                                col.Spacing(4);
+                            });
+                            
+                        });
+
+                        
+
+                        page.Content().Column(async col1 =>
+                        {
+                            
+                            col1.Spacing(4);
+
+                            col1.Item().LineHorizontal(0.5f);
+                            
+
+                            col1.Item().Table(async tabla =>
+                            {
+
+                                foreach (var item in detalle)
+                                {
+                                    
+                                    tabla.ColumnsDefinition(async columnas =>
+                                    {
+                                        columnas.RelativeColumn(5);
+                                        columnas.RelativeColumn();
+                                        columnas.RelativeColumn();
+                                        columnas.RelativeColumn();
+                                        
+                                      
+                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                        .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
+
+                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                        .Padding(2).Text(item.CANTIDAD).FontSize(8);
+
+                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                        .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
+
+                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                        .Padding(2).Text(item.DIFERENCIA).FontSize(8);
+
+
+
+                                    });
+
+                                    static IContainer Block(IContainer container)
+                                    {
+                                        return container
+                                            .Border(1)
+                                            .Background(Colors.Grey.Lighten3)
+                                            .ShowOnce()
+                                            .MinWidth(50)
+                                            .MinHeight(50)
+                                            .AlignCenter()
+                                            .AlignMiddle();
+                                    }
+
+                                    if (item.COMENTARIO != null && item.COMENTARIO.Length > 0)
+                                    {
+                                        tabla.Cell().RowSpan(4).ColumnSpan(4).Element(Block).Text(item.COMENTARIO);
+                                    }
+                                }
+
+
+                                tabla.Header(cabecera =>
+                                {
+                                    cabecera.Cell().Background(Colors.LightBlue.Medium)
+                                    .Padding(2).Text("Numero Placa");
+
+                                    cabecera.Cell().Background(Colors.LightBlue.Medium)
+                                    .Padding(2).Text("Cantidad");
+
+                                    cabecera.Cell().Background(Colors.LightBlue.Medium)
+                                    .Padding(2).Text("Contado");
+
+                                    cabecera.Cell().Background(Colors.LightBlue.Medium)
+                                    .Padding(2).Text("Diferencia");
+
+                                });
+
+                                
+                            });
+
+                            col1.Item().AlignRight().BorderColor(Colors.Cyan.Medium).Border(1)
+                            .Text($"Total : {connteo.Data.TotalCantidadContada}");
+
+                        });
+                    });
+                }).GeneratePdf(fileName);
+
+            }
+            catch (Exception ex)
+            {
+
+                var message = ex.Message;
+            } 
+            
 
         }
     }

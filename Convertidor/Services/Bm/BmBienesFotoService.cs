@@ -582,9 +582,9 @@ namespace Convertidor.Services.Bm
 
         }
 
-    
 
-        protected void ManipulateEjemplo(String dest, String code,string unidadEjecutora,DateTime fecha)
+
+        protected void ManipulateEjemplo(String dest, String code, string unidadEjecutora, DateTime fecha)
         {
             // 2.5 * 72 = 180 5 * 72= 432
             Rectangle pageSize = new Rectangle(170, 85);
@@ -593,8 +593,8 @@ namespace Convertidor.Services.Bm
             Document doc = new Document(
                                             pdfDoc,
                                             new PageSize(pageSize)
-                                            
-                                        ) ;
+
+                                        );
             doc.SetMargins(0, 0, 0, 0);
 
             //String code = "675-FH-A12";
@@ -603,14 +603,14 @@ namespace Convertidor.Services.Bm
             Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
             var _env = "development";
             var settings = _configuration.GetSection("Settings").Get<Settings>();
-            
+
             var pathLogo = @settings.BmFiles;
             Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
             Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoDerecha.jpeg")));
             Cell cell = new Cell();
             cell.SetBorder(null);
             cell.Add(logo1.SetWidth(20).SetFixedPosition(5f, 73f));
-                                      
+
             cell.Add(logo2.SetWidth(20).SetHorizontalAlignment(HorizontalAlignment.RIGHT)
                           .SetTextAlignment(TextAlignment.RIGHT));
 
@@ -639,7 +639,7 @@ namespace Convertidor.Services.Bm
             // this image does not fit the cell, but it does in addCell().
             // In iText7 there is no constructor (new Cell(Image img)),
             // so the image adding to the cell can be done only using method add().
-           
+
 
 
             Cell cell1 = new Cell();
@@ -655,7 +655,7 @@ namespace Convertidor.Services.Bm
 
             Paragraph texto2 = new Paragraph();
             Paragraph texto3 = new Paragraph();
-            
+
             Cell cell2 = new Cell();
             cell2.SetBorder(null);
             cell2.SetHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -667,8 +667,8 @@ namespace Convertidor.Services.Bm
             cell2.Add(texto2);
             cell2.Add(texto3);
             table.AddCell(cell2);
-                                                        
-                                                        
+
+
 
 
             /*table.AddCell("Add text and bar code separately:");
@@ -693,7 +693,7 @@ namespace Convertidor.Services.Bm
 
             doc.Close();
         }
-        
+
 
         public async Task CreateBardCode()
         {
@@ -712,7 +712,7 @@ namespace Convertidor.Services.Bm
                     FileInfo file = new FileInfo(destino);
                     file.Directory.Create();
                     destino = $"{destino}{item.NumeroPlaca}.pdf";
-                    ManipulateEjemplo(destino, item.NumeroPlaca,item.UnidadTrabajo,item.FechaMovimiento);
+                    ManipulateEjemplo(destino, item.NumeroPlaca, item.UnidadTrabajo, item.FechaMovimiento);
 
                     //ManipulatePdf(destino, item.NUMERO_PLACA);
 
@@ -733,4 +733,3 @@ namespace Convertidor.Services.Bm
 
     }
 }
-
