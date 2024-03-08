@@ -87,7 +87,9 @@ namespace Convertidor.Services.Catastro
                                       ResponsableBien = g.Key.ResponsableBien,
                                       CodigoBien = g.Key.CodigoBien,
                                       CodigoMovBien = g.Key.CodigoMovBien,
-                                      FechaMovimiento=g.Key.FechaMovimiento
+                                      FechaMovimiento=g.Key.FechaMovimiento,
+                                      Year = g.Key.FechaMovimiento.Year,
+                                      Month = g.Key.FechaMovimiento.Month
 
                                   };
                     
@@ -107,7 +109,8 @@ namespace Convertidor.Services.Catastro
                                       Servicio = s.SERVICIO,
                                       ResponsableBien = s.RESPONSABLE_BIEN,
                                       CodigoBien = s.CODIGO_BIEN,
-                                      CodigoMovBien=s.CODIGO_MOV_BIEN
+                                      CodigoMovBien=s.CODIGO_MOV_BIEN,
+                                      FechaMovimiento =s.FECHA_MOVIMIENTO
                  
                                       
                                   } into g
@@ -123,6 +126,9 @@ namespace Convertidor.Services.Catastro
                                       Especificacion = g.Key.Especificacion,   
                                       Servicio = g.Key.Servicio,
                                       ResponsableBien = g.Key.ResponsableBien,
+                                      FechaMovimiento =g.Key.FechaMovimiento,
+                                      Year = g.Key.FechaMovimiento.Year,
+                                      Month = g.Key.FechaMovimiento.Month
                                     
 
                                   };
@@ -229,7 +235,9 @@ namespace Convertidor.Services.Catastro
                                       Servicio = s.SERVICIO,
                                       ResponsableBien = s.RESPONSABLE_BIEN,
                                       CodigoBien = s.CODIGO_BIEN,
-                                      CodigoMovBien=s.CODIGO_MOV_BIEN
+                                      CodigoMovBien=s.CODIGO_MOV_BIEN,
+                                      FechaMovimiento=s.FECHA_MOVIMIENTO,
+                                    
                  
                                       
                                   } into g
@@ -245,6 +253,8 @@ namespace Convertidor.Services.Catastro
                                       Especificacion = g.Key.Especificacion,   
                                       Servicio = g.Key.Servicio,
                                       ResponsableBien = g.Key.ResponsableBien,
+                                      FechaMovimiento=g.Key.FechaMovimiento,
+                                     
                                     
 
                                   };
@@ -576,6 +586,7 @@ namespace Convertidor.Services.Catastro
                 var destino = @settings.ExcelFiles;
                 FileInfo file = new FileInfo(destino);
                 file.Directory.Create();
+                
                 destino = $"{destino}/placas.pdf";
 
                 //var bienes = await _bM_V_BM1Service.GetAll();

@@ -24,6 +24,8 @@ public class Bm1GetDto
     public DateTime FechaMovimiento { get; set; }
     
     public int CantidadFotos { get; set; }
+    public int Year { get; set; }
+    public int Month { get; set; }
 
 
 }
@@ -39,7 +41,10 @@ public class Bm1ExcelGetDto
     public string Servicio { get; set; } = string.Empty;
     public string ResponsableBien { get; set; } = string.Empty;
  
-
+    public DateTime FechaMovimiento { get; set; }
+    public int Year { get; set; }
+    public int Month { get; set; }
+    
   
     
 }
