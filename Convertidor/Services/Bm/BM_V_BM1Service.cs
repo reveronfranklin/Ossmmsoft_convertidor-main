@@ -214,7 +214,9 @@ namespace Convertidor.Services.Bm
                                 ResponsableBien = g.Key.ResponsableBien,
                                 CodigoBien = g.Key.CodigoBien,
                                 CodigoMovBien = g.Key.CodigoMovBien,
-                                FechaMovimiento = g.Key.FechaMovimiento
+                                FechaMovimiento = g.Key.FechaMovimiento,
+                                Year = g.Key.FechaMovimiento.Year,
+                                Month = g.Key.FechaMovimiento.Month
 
                             };
 
@@ -233,7 +235,8 @@ namespace Convertidor.Services.Bm
                                      Servicio = s.SERVICIO,
                                      ResponsableBien = s.RESPONSABLE_BIEN,
                                      CodigoBien = s.CODIGO_BIEN,
-                                     CodigoMovBien = s.CODIGO_MOV_BIEN
+                                     CodigoMovBien = s.CODIGO_MOV_BIEN,
+                                     FechaMovimiento = s.FECHA_MOVIMIENTO
 
 
                                  } into g
@@ -249,6 +252,9 @@ namespace Convertidor.Services.Bm
                                      Especificacion = g.Key.Especificacion,
                                      Servicio = g.Key.Servicio,
                                      ResponsableBien = g.Key.ResponsableBien,
+                                     FechaMovimiento = g.Key.FechaMovimiento,
+                                     Year = g.Key.FechaMovimiento.Year,
+                                     Month = g.Key.FechaMovimiento.Month
 
 
                                  };
