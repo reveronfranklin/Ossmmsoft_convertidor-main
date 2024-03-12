@@ -46,7 +46,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")] 
-        public async Task<IActionResult> GetByListIcp(List<ICPGetDto>? listIcpSeleccionado)
+        public async Task<IActionResult> GetByListIcp(List<ICPGetDto> listIcpSeleccionado)
         {
             var result = await _service.GetByListIcp(listIcpSeleccionado);
             return Ok(result);
