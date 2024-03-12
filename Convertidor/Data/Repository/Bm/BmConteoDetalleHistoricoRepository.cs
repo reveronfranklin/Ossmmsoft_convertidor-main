@@ -31,7 +31,11 @@ namespace Convertidor.Data.Repository.Bm
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var result = await _context.BM_CONTEO_DETALLE_HISTORICO.DefaultIfEmpty().Where(c=>c.CODIGO_EMPRESA==conectado.Empresa && c.CODIGO_BM_CONTEO==codigoConteo).ToListAsync();
+                var result = await _context.BM_CONTEO_DETALLE_HISTORICO.DefaultIfEmpty()
+                    .Where(c=>c.CODIGO_EMPRESA==conectado.Empresa && c.CODIGO_BM_CONTEO==codigoConteo)
+                    .OrderBy(x=> x.UNIDAD_TRABAJO)
+                    .ThenBy(x => x.NUMERO_PLACA)
+                    .ToListAsync();
 
                 return result;
             }

@@ -1,16 +1,11 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
-using Convertidor.Dtos.Presupuesto;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
-using NPOI.SS.UserModel;
-using NuGet.Protocol.Plugins;
-using QuestPDF.Elements;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using static SkiaSharp.HarfBuzz.SKShaper;
 
 
 namespace Convertidor.Services.Bm
@@ -188,10 +183,35 @@ namespace Convertidor.Services.Bm
 
         public async Task CreateReportConteoHistorico(int codigoConteo)
         {
+            static IContainer Block(IContainer container)
+            {
+                return container
+                    .Border(1)
+                    .Background(Colors.Grey.Lighten3)
+                    .ShowOnce()
+                    .MinWidth(50)
+                    .MinHeight(50)
+                    .AlignCenter()
+                    .AlignMiddle();
+            }
+            static IContainer BlockResumenIcp(IContainer container)
+            {
+                return container
+                    .Border(1)
+                    .Background(Colors.Grey.Lighten3)
+                    .ShowOnce()
+                    .MinWidth(50)
+                    .MinHeight(25)
+                    .AlignCenter()
+                    .AlignMiddle();
+            }
 
             var connteo =await  GetByCodigoConteo(codigoConteo);
 
             var detalle = await _conteoDetalleHistoricoService.GetAllByConteo(codigoConteo);
+
+            var resumenIcp = GetResumenICP(detalle);
+            var resumenConteo = GetResumenConteo(detalle);
 
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var destino = @settings.BmFiles;
@@ -207,6 +227,7 @@ namespace Convertidor.Services.Bm
 
                         page.Header().Row(fila =>
                         {
+                            
                             fila.ConstantItem(140).Border(0).Height(60).Image(filePath:destino +"LogoIzquierda.jpeg")
                             .FitWidth().FitHeight();
                             fila.Spacing(4);
@@ -226,11 +247,14 @@ namespace Convertidor.Services.Bm
                                 .Text($"{connteo.Data.Fecha.ToShortDateString()}").FontSize(9);
 
                                 col.Spacing(4);
+
+                                
                             });
-                            
+
+
                         });
 
-                        
+                      
 
                         page.Content().Column(async col1 =>
                         {
@@ -243,64 +267,69 @@ namespace Convertidor.Services.Bm
                             col1.Item().Table(async tabla =>
                             {
 
-                                foreach (var item in detalle)
+
+                                foreach (var itemResumenIcp in resumenIcp)
                                 {
-                                    
-                                    tabla.ColumnsDefinition(async columnas =>
+                                    tabla.Cell().RowSpan(5).ColumnSpan(5).Element(BlockResumenIcp).Text(itemResumenIcp.UnidadTrabajo);
+
+                                    foreach (var item in detalle.Where(x=> x.CODIGO_ICP== itemResumenIcp.CodigoIcp).ToList())
                                     {
-                                        columnas.RelativeColumn(5);
-                                        columnas.RelativeColumn();
-                                        columnas.RelativeColumn();
-                                        columnas.RelativeColumn();
-                                        
+
+                                        tabla.ColumnsDefinition(async columnas =>
+                                        {
+                                            columnas.RelativeColumn(1);
+                                            columnas.RelativeColumn(4);
+                                            columnas.RelativeColumn(2);
+                                            columnas.RelativeColumn(2);
+                                            columnas.RelativeColumn(2);
+
+
+                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignCenter()
+                                            .Padding(2).Text($"{item.CONTEO}").FontSize(8);
+
+                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                            .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
+
+                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                            .Padding(2).Text(item.CANTIDAD).FontSize(8);
+
+                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                            .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
+
+                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                            .Padding(2).Text(item.DIFERENCIA).FontSize(8);
+
+
+
+                                        });
+
                                       
-                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                        .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
 
-                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                        .Padding(2).Text(item.CANTIDAD).FontSize(8);
-
-                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                        .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
-
-                                        tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                        .Padding(2).Text(item.DIFERENCIA).FontSize(8);
-
-
-
-                                    });
-
-                                    static IContainer Block(IContainer container)
-                                    {
-                                        return container
-                                            .Border(1)
-                                            .Background(Colors.Grey.Lighten3)
-                                            .ShowOnce()
-                                            .MinWidth(50)
-                                            .MinHeight(50)
-                                            .AlignCenter()
-                                            .AlignMiddle();
+                                        if (item.COMENTARIO != null && item.COMENTARIO.Length > 0)
+                                        {
+                                            tabla.Cell().RowSpan(4).ColumnSpan(5).Element(Block).Text(item.COMENTARIO);
+                                        }
                                     }
 
-                                    if (item.COMENTARIO != null && item.COMENTARIO.Length > 0)
-                                    {
-                                        tabla.Cell().RowSpan(4).ColumnSpan(4).Element(Block).Text(item.COMENTARIO);
-                                    }
                                 }
+
 
 
                                 tabla.Header(cabecera =>
                                 {
-                                    cabecera.Cell().Background(Colors.LightBlue.Medium)
+                                    cabecera.Cell().ScaleToFit().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
+                                    .Padding(2).Text("Conteo");
+
+                                    cabecera.Cell().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
                                     .Padding(2).Text("Numero Placa");
 
-                                    cabecera.Cell().Background(Colors.LightBlue.Medium)
+                                    cabecera.Cell().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
                                     .Padding(2).Text("Cantidad");
 
-                                    cabecera.Cell().Background(Colors.LightBlue.Medium)
+                                    cabecera.Cell().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
                                     .Padding(2).Text("Contado");
 
-                                    cabecera.Cell().Background(Colors.LightBlue.Medium)
+                                    cabecera.Cell().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
                                     .Padding(2).Text("Diferencia");
 
                                 });
@@ -324,6 +353,56 @@ namespace Convertidor.Services.Bm
             
 
         }
+
+        public List<ICPGetDto> GetResumenICP(List<BM_CONTEO_DETALLE_HISTORICO> dto)
+        {
+
+
+            var lista = from s in dto
+                        group s by new
+                        {
+                            CodigoIcp = s.CODIGO_ICP,
+                            UnidadTrabajo = s.UNIDAD_TRABAJO,
+
+
+
+                        } into g
+                        select new ICPGetDto()
+                        {
+
+                            CodigoIcp = g.Key.CodigoIcp,
+                            UnidadTrabajo = g.Key.UnidadTrabajo,
+
+
+                        };
+            return lista.ToList();
+
+        }
+        public List<ResumenConteoGetDto> GetResumenConteo(List<BM_CONTEO_DETALLE_HISTORICO> dto)
+        {
+
+
+            var lista = from s in dto
+                        group s by new
+                        {
+                            Conteo = s.CONTEO,
+                            
+
+
+
+                        } into g
+                        select new ResumenConteoGetDto()
+                        {
+
+                            Conteo = g.Key.Conteo,
+                          
+
+                        };
+            return lista.ToList();
+
+        }
+
+
     }
 }
 
