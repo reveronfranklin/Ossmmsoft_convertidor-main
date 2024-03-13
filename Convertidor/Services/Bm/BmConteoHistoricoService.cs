@@ -90,6 +90,8 @@ namespace Convertidor.Services.Bm
                 itemResult = await MapBmConteo(item);
 
                 result.Add(itemResult);
+                
+                await CreateReportConteoHistorico(item.CODIGO_BM_CONTEO);
             }
             return result.OrderByDescending(x=>x.CodigoBmConteo).ToList();
 
@@ -215,8 +217,9 @@ namespace Convertidor.Services.Bm
 
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var destino = @settings.BmFiles;
-
-            var fileName = $"{destino}{codigoConteo.ToString()}.pdf";
+            var destinoReport = @settings.ExcelFiles;
+          
+            var fileName = $"{destinoReport}/{codigoConteo.ToString()}.pdf";
             try
             {
                 Document.Create(documento =>
