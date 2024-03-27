@@ -23,15 +23,21 @@ namespace Convertidor.Controllers
         }
         
 
-        [HttpPost]
+        [HttpGet]
         [Route("[action]")]
-
         public async Task<ActionResult> GetAll() 
         {
             var result = await _service.GetAll();
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult> GetAllByFechaMovimiento() 
+        {
+            var result = await _service.GetAllByFechaMovimiento();
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("[action]")]

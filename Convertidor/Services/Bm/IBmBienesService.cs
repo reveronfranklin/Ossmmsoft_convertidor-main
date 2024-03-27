@@ -10,6 +10,7 @@ namespace Convertidor.Services.Bm
         Task<ResultDto<BmBienesResponseDto>> Update(BmBienesUpdateDto dto);
         Task<ResultDto<BmBienesResponseDto>> Create(BmBienesUpdateDto dto);
         Task<ResultDto<BmBienesDeleteDto>> Delete(BmBienesDeleteDto dto);
+        Task<ResultDto<List<BmBienesResponseDto>>> GetAllByFechaMovimiento();
 
     }
 }

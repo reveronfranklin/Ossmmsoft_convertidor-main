@@ -61,6 +61,20 @@ namespace Convertidor.Services
 
 
         }
+
+        public async Task<PRE_INDICE_CAT_PRG> GetByIcpConcat(int codigoPresupuesto,string icpConcat)
+        {
+           
+            string[] listIcp = icpConcat.Split("-");
+            string sector=listIcp[0];
+            string programa = listIcp[1];
+            string subPrograma = listIcp[2];
+            string proyecto = listIcp[3];
+            string actividad =listIcp[4];
+            
+            var icp = await _repository.GetByIcpConcat(codigoPresupuesto,sector, programa, subPrograma, proyecto, actividad);
+            return icp;
+        }
         public async Task<ResultDto<IndiceCategoriaPrograma>> TransferirIndiceCategoriaProgramaPorCantidadDeDias(int dias)
         {
 

@@ -6,6 +6,8 @@
         public string Descripcion { get; set; } = string.Empty;
         public int Ano { get; set; }
         public List<PreFinanciadoDto>? PreFinanciadoDto { get; set; }
+        public bool presupuestoEnEjecucion { get; set; }
+        
     }
 }
 

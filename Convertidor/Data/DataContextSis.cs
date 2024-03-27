@@ -25,7 +25,10 @@ namespace Convertidor.Data
         public virtual DbSet<OssModeloCalculo> OssModeloCalculos { get; set; } = null!;
         public virtual DbSet<OssModulo> OssModulos { get; set; } = null!;
         public virtual DbSet<OssVariable> OssVariables { get; set; } = null!;
-
+        public virtual DbSet<SIS_SOURCE> SIS_SOURCE { get; set; } = null!;
+        public virtual DbSet<SIS_P_SOURCE> SIS_P_SOURCE { get; set; } = null!;
+        public virtual DbSet<SIS_DET_SOURCE> SIS_DET_SOURCE { get; set; } = null!;
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
@@ -435,13 +438,39 @@ namespace Convertidor.Data
                 entity.Property(e => e.UsuarioUpd)
                     .HasPrecision(10)
                     .HasColumnName("USUARIO_UPD");
-            })
+            });
            
-              
+                
+                modelBuilder.Entity<SIS_SOURCE>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_SOURCE,
 
-       
-            
-            .Entity<SIS_UBICACION_NACIONAL>(builder =>
+                    });
+                    builder.ToTable("SIS_SOURCE");
+                });
+                modelBuilder.Entity<SIS_P_SOURCE>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_P_SOURCE,
+
+                    });
+                    builder.ToTable("SIS_P_SOURCE");
+                });
+                modelBuilder.Entity<SIS_DET_SOURCE>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_DET_SOURCE,
+
+                    });
+                    builder.ToTable("SIS_DET_SOURCE");
+                });
+                
+                
+                modelBuilder.Entity<SIS_UBICACION_NACIONAL>(builder =>
             {
                 builder.HasNoKey();
                 builder.ToTable("SIS_UBICACION_NACIONAL");

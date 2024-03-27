@@ -26,6 +26,9 @@ namespace Convertidor.Data
         public DbSet<PRE_PLAN_UNICO_CUENTAS> PRE_PLAN_UNICO_CUENTAS { get; set; }
         public DbSet<PRE_SALDOS_DIARIOS> PRE_SALDOS_DIARIOS { get; set; }
         public DbSet<PRE_ASIGNACIONES> PRE_ASIGNACIONES { get; set; }
+        public DbSet<PRE_ASIGNACIONES_DETALLE> PRE_ASIGNACIONES_DETALLE { get; set; }
+        
+        
         public DbSet<PRE_RELACION_CARGOS> PRE_RELACION_CARGOS { get; set; }
         public DbSet<PRE_CARGOS> PRE_CARGOS { get; set; }
         public DbSet<PRE_DESCRIPTIVAS> PRE_DESCRIPTIVAS { get; set; }
@@ -51,8 +54,21 @@ namespace Convertidor.Data
              })
               .Entity<PRE_ASIGNACIONES>(builder =>
               {
-                  builder.HasNoKey();
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_ASIGNACION,
+
+                  });
                   builder.ToTable("PRE_ASIGNACIONES");
+              })
+              .Entity<PRE_ASIGNACIONES_DETALLE>(builder =>
+              {
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_ASIGNACION_DETALLE,
+
+                  });
+                  builder.ToTable("PRE_ASIGNACIONES_DETALLE");
               })
             .Entity<PRE_V_DOC_COMPROMISOS>(builder =>
             {

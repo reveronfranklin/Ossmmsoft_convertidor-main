@@ -10,6 +10,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Path = System.IO.Path;
 //using QuestPDF.Fluent;
 //using QuestPDF.Helpers;
@@ -24,24 +25,23 @@ namespace Convertidor.Services.Bm
 
         private readonly IBM_V_BM1Repository _repository;
         private readonly IConfiguration _configuration;
-
+        private readonly IBmMovBienesRepository _bmMovBienesRepository;
 
 
         public BM_V_BM1Service(IBM_V_BM1Repository repository,
-                                IConfiguration configuration
-
+                                IConfiguration configuration,
+                                IBmMovBienesRepository bmMovBienesRepository
                                 )
 
         {
             _repository = repository;
             _configuration = configuration;
-
-
+            _bmMovBienesRepository = bmMovBienesRepository;
         }
 
 
 
-        public async Task<ResultDto<List<Bm1GetDto>>> GetAll()
+        public async Task<ResultDto<List<Bm1GetDto>>> GetAll(DateTime? desde,DateTime? hasta)
         {
 
 
@@ -52,7 +52,8 @@ namespace Convertidor.Services.Bm
                 //var bienesFoto =  _bmBienesFotoRepository.BienesConFoto();
 
                 var result = await _repository.GetAll();
-
+                List<Bm1GetDto> listaResult = new List<Bm1GetDto>();
+                List<Bm1ExcelGetDto> listaResultExcel = new List<Bm1ExcelGetDto>();
                 var lista = from s in result
                             group s by new
                             {
@@ -70,7 +71,8 @@ namespace Convertidor.Services.Bm
                                 ResponsableBien = s.RESPONSABLE_BIEN,
                                 CodigoBien = s.CODIGO_BIEN,
                                 CodigoMovBien = s.CODIGO_MOV_BIEN,
-                                FechaMovimiento = s.FECHA_MOVIMIENTO
+                                FechaMovimiento = s.FECHA_MOVIMIENTO,
+                                FechaMovimientoFiltro=s.FECHA_MOVIMIENTO
 
                             } into g
                             select new Bm1GetDto()
@@ -91,28 +93,51 @@ namespace Convertidor.Services.Bm
                                 ResponsableBien = g.Key.ResponsableBien,
                                 CodigoBien = g.Key.CodigoBien,
                                 CodigoMovBien = g.Key.CodigoMovBien,
-                                FechaMovimiento = g.Key.FechaMovimiento
+                                FechaMovimiento = g.Key.FechaMovimiento,
+                                FechaMovimientoFiltro= g.Key.FechaMovimientoFiltro
+                               
 
                             };
 
-
-                var listaExcel = from s in result
+                if (lista != null && lista.Count() > 0)
+                {
+                    foreach (var item in lista)
+                    {
+                        item.FechaMovimientoFiltro =
+                            await _bmMovBienesRepository.GetByCodigoBienFecha(item.CodigoBien, (DateTime)hasta);
+                        var fecha = (DateTime)item.FechaMovimientoFiltro;
+                        item.Year = fecha.Year;
+                        item.Month = fecha.Month;
+                        
+                        listaResult.Add(item);
+                    }
+                }
+                
+                listaResult = listaResult.Where(x => x.FechaMovimientoFiltro>=desde && x.FechaMovimientoFiltro <= hasta).OrderBy(x => x.CodigoGrupo)
+                    .ThenBy(x => x.CodigoNivel1)
+                    .ThenBy(x => x.CodigoNivel2)
+                    .ThenBy(x => x.ConsecutivoPlaca).ToList();
+                
+                var listaExcel = from s in listaResult
                                  group s by new
                                  {
-                                     UnidadTrabajo = s.UNIDAD_TRABAJO,
-                                     CodigoGrupo = s.CODIGO_GRUPO,
-                                     CodigoNivel1 = s.CODIGO_NIVEL1,
-                                     CodigoNivel2 = s.CODIGO_NIVEL2,
-                                     NumeroLote = s.NUMERO_LOTE,
-                                     Cantidad = s.CANTIDAD,
-                                     NumeroPlaca = s.NUMERO_PLACA,
-                                     Articulo = s.ARTICULO,
-                                     Especificacion = s.ESPECIFICACION,
-                                     Servicio = s.SERVICIO,
-                                     ResponsableBien = s.RESPONSABLE_BIEN,
-                                     CodigoBien = s.CODIGO_BIEN,
-                                     CodigoMovBien = s.CODIGO_MOV_BIEN
-
+                                     UnidadTrabajo = s.UnidadTrabajo,
+                                     CodigoGrupo = s.CodigoGrupo,
+                                     CodigoNivel1 = s.CodigoNivel1,
+                                     CodigoNivel2 = s.CodigoNivel2,
+                                     NumeroLote = s.NumeroLote,
+                                     Cantidad = s.Cantidad,
+                                     NumeroPlaca = s.NumeroPlaca,
+                                     Articulo = s.Articulo,
+                                     Especificacion = s.Especificacion,
+                                     Servicio = s.Servicio,
+                                     ResponsableBien = s.ResponsableBien,
+                                     CodigoBien = s.CodigoBien,
+                                     CodigoMovBien = s.CodigoMovBien,
+                                     FechaMovimiento = s.FechaMovimiento,
+                                     FechaMovimientoFiltro=s.FechaMovimientoFiltro,
+                                     Year=s.Year,
+                                     Month=s.Month
 
                                  } into g
                                  select new Bm1ExcelGetDto()
@@ -124,12 +149,31 @@ namespace Convertidor.Services.Bm
                                      Cantidad = g.Key.Cantidad,
                                      NumeroPlaca = g.Key.CodigoGrupo + "-" + g.Key.CodigoNivel1 + "-" + g.Key.CodigoNivel2 + "-" + g.Key.NumeroPlaca,
                                      Articulo = g.Key.Articulo,
+                                     CodigoBien = g.Key.CodigoBien,
                                      Especificacion = g.Key.Especificacion,
                                      Servicio = g.Key.Servicio,
                                      ResponsableBien = g.Key.ResponsableBien,
-
+                                     FechaMovimiento = g.Key.FechaMovimiento,
+                                     FechaMovimientoFiltro = (DateTime)g.Key.FechaMovimientoFiltro,
+                                     Year = g.Key.Year,
+                                     Month = g.Key.Month
 
                                  };
+                /*if (listaExcel != null && listaExcel.Count() > 0)
+                {
+                    foreach (var item in listaExcel)
+                    {
+                        item.FechaMovimientoFiltro =
+                            await _bmMovBienesRepository.GetByCodigoBienFecha(item.CodigoBien, (DateTime)hasta);
+                        var fecha = (DateTime)item.FechaMovimientoFiltro;
+                        item.Year = fecha.Year;
+                        item.Month = fecha.Month;
+                        listaResultExcel.Add(item);
+                    }
+
+                }*/
+              
+               
                 ExcelMapper mapper = new ExcelMapper();
 
 
@@ -140,15 +184,12 @@ namespace Convertidor.Services.Bm
                 var fileName = $"BM1.xlsx";
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
 
-                var excelData = listaExcel.ToList();
+                var excelData =  listaExcel.ToList();
                 mapper.Save(newFile, excelData, $"BM1", true);
 
 
 
-                response.Data = lista.OrderBy(x => x.CodigoGrupo)
-                            .ThenBy(x => x.CodigoNivel1)
-                            .ThenBy(x => x.CodigoNivel2)
-                            .ThenBy(x => x.ConsecutivoPlaca).ToList();
+                response.Data = listaResult;
                 response.IsValid = true;
                 response.Message = "";
                 response.LinkData = $"/ExcelFiles/{fileName}";
@@ -163,7 +204,7 @@ namespace Convertidor.Services.Bm
             }
 
         }
-        public async Task<ResultDto<List<Bm1GetDto>>> GetAllByIcp(int codigoIcp)
+        public async Task<ResultDto<List<Bm1GetDto>>> GetAllByIcp(int codigoIcp,DateTime? desde,DateTime? hasta)
         {
 
 
@@ -174,7 +215,8 @@ namespace Convertidor.Services.Bm
                 //var bienesFoto =  _bmBienesFotoRepository.BienesConFoto();
 
                 var result = await _repository.GetAllByCodigoIcp(codigoIcp);
-
+                List<Bm1GetDto> listaResult = new List<Bm1GetDto>();
+                List<Bm1ExcelGetDto> listaResultExcel = new List<Bm1ExcelGetDto>();
                 var lista = from s in result
                             group s by new
                             {
@@ -193,6 +235,7 @@ namespace Convertidor.Services.Bm
                                 CodigoBien = s.CODIGO_BIEN,
                                 CodigoMovBien = s.CODIGO_MOV_BIEN,
                                 FechaMovimiento = s.FECHA_MOVIMIENTO
+                                
 
 
                             } into g
@@ -216,27 +259,48 @@ namespace Convertidor.Services.Bm
                                 CodigoMovBien = g.Key.CodigoMovBien,
                                 FechaMovimiento = g.Key.FechaMovimiento,
                                 Year = g.Key.FechaMovimiento.Year,
-                                Month = g.Key.FechaMovimiento.Month
+                                Month = g.Key.FechaMovimiento.Month,
+                             
 
                             };
 
-                var listaExcel = from s in result
+                if (lista != null && lista.Count() > 0)
+                {
+                    foreach (var item in lista)
+                    {
+                        item.FechaMovimientoFiltro =
+                            await _bmMovBienesRepository.GetByCodigoBienFecha(item.CodigoBien, (DateTime)hasta);
+                        var fecha = (DateTime)item.FechaMovimientoFiltro;
+                        item.Year = fecha.Year;
+                        item.Month = fecha.Month;
+                        listaResult.Add(item);
+                    }
+                }
+                listaResult = listaResult.Where(x => x.FechaMovimientoFiltro >= desde && x.FechaMovimientoFiltro <= hasta).OrderBy(x => x.CodigoGrupo)
+                    .ThenBy(x => x.CodigoNivel1)
+                    .ThenBy(x => x.CodigoNivel2)
+                    .ThenBy(x => x.ConsecutivoPlaca).ToList();
+                
+                var listaExcel = from s in listaResult
                                  group s by new
                                  {
-                                     UnidadTrabajo = s.UNIDAD_TRABAJO,
-                                     CodigoGrupo = s.CODIGO_GRUPO,
-                                     CodigoNivel1 = s.CODIGO_NIVEL1,
-                                     CodigoNivel2 = s.CODIGO_NIVEL2,
-                                     NumeroLote = s.NUMERO_LOTE,
-                                     Cantidad = s.CANTIDAD,
-                                     NumeroPlaca = s.NUMERO_PLACA,
-                                     Articulo = s.ARTICULO,
-                                     Especificacion = s.ESPECIFICACION,
-                                     Servicio = s.SERVICIO,
-                                     ResponsableBien = s.RESPONSABLE_BIEN,
-                                     CodigoBien = s.CODIGO_BIEN,
-                                     CodigoMovBien = s.CODIGO_MOV_BIEN,
-                                     FechaMovimiento = s.FECHA_MOVIMIENTO
+                                     UnidadTrabajo = s.UnidadTrabajo,
+                                     CodigoGrupo = s.CodigoGrupo,
+                                     CodigoNivel1 = s.CodigoNivel1,
+                                     CodigoNivel2 = s.CodigoNivel2,
+                                     NumeroLote = s.NumeroLote,
+                                     Cantidad = s.Cantidad,
+                                     NumeroPlaca = s.NumeroPlaca,
+                                     Articulo = s.Articulo,
+                                     Especificacion = s.Especificacion,
+                                     Servicio = s.Servicio,
+                                     ResponsableBien = s.ResponsableBien,
+                                     CodigoBien = s.CodigoBien,
+                                     CodigoMovBien = s.CodigoMovBien,
+                                     FechaMovimiento = s.FechaMovimiento,
+                                     FechaMovimientoFiltro=s.FechaMovimientoFiltro,
+                                     Year=s.Year,
+                                     Month=s.Month
 
 
                                  } into g
@@ -253,11 +317,28 @@ namespace Convertidor.Services.Bm
                                      Servicio = g.Key.Servicio,
                                      ResponsableBien = g.Key.ResponsableBien,
                                      FechaMovimiento = g.Key.FechaMovimiento,
-                                     Year = g.Key.FechaMovimiento.Year,
-                                     Month = g.Key.FechaMovimiento.Month
+                                   
+                                     CodigoBien=g.Key.CodigoBien,
+                                     FechaMovimientoFiltro = (DateTime)g.Key.FechaMovimientoFiltro,
+                                     Year = g.Key.Year,
+                                     Month = g.Key.Month,
 
 
                                  };
+                
+               /* if (listaExcel != null && listaExcel.Count() > 0)
+                {
+                    foreach (var item in listaExcel)
+                    {
+                        item.FechaMovimientoFiltro =
+                            await _bmMovBienesRepository.GetByCodigoBienFecha(item.CodigoBien, (DateTime)hasta);
+                        var fecha = (DateTime)item.FechaMovimientoFiltro;
+                        item.Year = fecha.Year;
+                        item.Month = fecha.Month;
+                        listaResultExcel.Add(item);
+                    }
+                }*/
+              
                 ExcelMapper mapper = new ExcelMapper();
 
 
@@ -274,12 +355,7 @@ namespace Convertidor.Services.Bm
 
 
 
-                response.Data = lista
-                    .OrderBy(x => x.CodigoBien)
-                    .ThenBy(x => x.CodigoGrupo)
-                    .ThenBy(x => x.CodigoNivel1)
-                    .ThenBy(x => x.CodigoNivel2)
-                    .ThenBy(x => x.ConsecutivoPlaca).ToList();
+                response.Data = listaResult.ToList();
 
                 response.IsValid = true;
                 response.Message = "";
@@ -297,10 +373,10 @@ namespace Convertidor.Services.Bm
         }
 
 
-        public async Task<ResultDto<List<Bm1GetDto>>> GetByListIcp(List<ICPGetDto> listIcpSeleccionado)
+        public async Task<ResultDto<List<Bm1GetDto>>> GetByListIcp(Bm1Filter filter)
         {
 
-
+            var listIcpSeleccionado = filter.ListIcpSeleccionado;
             ResultDto<List<Bm1GetDto>> response = new ResultDto<List<Bm1GetDto>>(null);
             try
             {
@@ -314,7 +390,7 @@ namespace Convertidor.Services.Bm
                     foreach (var item in listIcpSeleccionado)
                     {
 
-                        var itemFilter = await GetAllByIcp(item.CodigoIcp);
+                        var itemFilter = await GetAllByIcp(item.CodigoIcp,filter.FechaDesde,filter.FechaHasta);
 
                         if (itemFilter.Data.Count > 0)
                         {
@@ -326,7 +402,7 @@ namespace Convertidor.Services.Bm
                 }
                 else
                 {
-                    var allData = await GetAll();
+                    var allData = await GetAll(filter.FechaDesde,filter.FechaHasta);
                     searchList = allData.Data;
 
                 }

@@ -124,6 +124,40 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        
+        public async Task<PRE_INDICE_CAT_PRG> GetByIcpConcat(int codigoPresupuesto,string sector,string programa,string subPrograma,string proyecto,string actividad)
+        {
+            try
+            {
+
+                var result = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                    .Where(x => 
+                                x.CODIGO_PRESUPUESTO==codigoPresupuesto&&
+                                x.CODIGO_SECTOR == sector &&
+                                x.CODIGO_PROGRAMA == programa &&
+                                x.CODIGO_SUBPROGRAMA == subPrograma &&
+                                x.CODIGO_PROYECTO == proyecto &&
+                                x.CODIGO_ACTIVIDAD == actividad 
+                    )
+                    .OrderBy(x => x.CODIGO_SECTOR)
+                    .ThenBy(x => x.CODIGO_PROGRAMA)
+                    .ThenBy(x => x.CODIGO_SUBPROGRAMA)
+                    .ThenBy(x => x.CODIGO_PROYECTO)
+                    .ThenBy(x => x.CODIGO_ACTIVIDAD)
+                    .FirstOrDefaultAsync();
+                return (PRE_INDICE_CAT_PRG)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        
         public async Task<PRE_INDICE_CAT_PRG> GetHastaActividad(int ano,int codIcp,string sector,string programa,string subPrograma,string proyecto,string actividad)
         {
             try

@@ -1081,9 +1081,13 @@ namespace Convertidor.Services
              
             return result;
         }
-      
 
-   
+
+        public async Task<PRE_PLAN_UNICO_CUENTAS> GetByCodigos(FilterPrePUCPresupuestoCodigos filter)
+        {
+            var puc = await _repository.GetByCodigos(filter);
+            return puc;
+        }
 
         public async Task<ResultDto<PrePlanUnicoCuentasGetDto>> ValidateDto(PrePlanUnicoCuentaUpdateDto dto)
         {

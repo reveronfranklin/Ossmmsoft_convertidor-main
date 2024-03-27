@@ -20,17 +20,20 @@ namespace Convertidor.Services.Bm
         private readonly IBmDescriptivaRepository _bmDescriptivaRepository;
         private readonly IBmArticulosRepository _bmArticulosRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IBmMovBienesRepository _bmMovBienesRepository;
         private readonly IConfiguration _configuration;
         public BmBienesService(IBmBienesRepository repository,
                                       IBmDescriptivaRepository bmDescriptivaRepository,
                                       IBmArticulosRepository bmArticulosRepository,
                                       ISisUsuarioRepository sisUsuarioRepository,
+                                      IBmMovBienesRepository bmMovBienesRepository,
                                       IConfiguration configuration)
 		{
             _repository = repository;
             _bmDescriptivaRepository = bmDescriptivaRepository;
             _bmArticulosRepository = bmArticulosRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _bmMovBienesRepository = bmMovBienesRepository;
             _configuration = configuration;
            
 
@@ -75,7 +78,16 @@ namespace Convertidor.Services.Bm
             itemResult.FechaFactura = dtos.FECHA_FACTURA;
             itemResult.TipoImpuestoId = dtos.TIPO_IMPUESTO_ID;
             itemResult.OrigenId = dtos.ORIGEN_ID;
-
+            var movimiento = await _bmMovBienesRepository.GetByCodigoBienFecha(dtos.CODIGO_BIEN, DateTime.Now.AddYears(-3));
+            if (movimiento != null)
+            {
+                itemResult.FechaMovimiento = movimiento;
+            }
+            var activo = await _bmMovBienesRepository.CodigoBienActivo(dtos.CODIGO_BIEN, DateTime.Now.AddYears(-3));
+           
+            itemResult.Activo = activo;
+            
+            
 
             return itemResult;
 
@@ -100,7 +112,57 @@ namespace Convertidor.Services.Bm
 
         }
 
-       
+        
+        public async Task<ResultDto<List<BmBienesResponseDto>>> GetAllByFechaMovimiento()
+        {
+
+            ResultDto<List<BmBienesResponseDto>> result = new ResultDto<List<BmBienesResponseDto>>(null);
+            try
+            {
+
+                var bienes = await _repository.GetAll();
+
+
+
+                if (bienes.Count() > 0)
+                {
+                    List<BmBienesResponseDto> listDto = new List<BmBienesResponseDto>();
+
+                    foreach (var item in bienes)
+                    {
+                        BmBienesResponseDto dto = new BmBienesResponseDto();
+                        dto = await MapBmBienes(item);
+
+                        listDto.Add(dto);
+                    }
+                 
+                    var fechaHasta = "2021-12-31T00:00:00";
+                    DateTime dateTime = DateTime.Parse(fechaHasta);
+                    result.Data = listDto.Where(x=>x.FechaMovimiento<=dateTime && x.Activo).ToList();
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+            
         public async Task<ResultDto<List<BmBienesResponseDto>>> GetAll()
         {
 

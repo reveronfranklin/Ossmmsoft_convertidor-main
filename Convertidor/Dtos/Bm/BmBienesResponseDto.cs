@@ -29,7 +29,9 @@ namespace Convertidor.Dtos.Bm
 		public string FechaFacturaString { get; set; }
 		public FechaDto FechaFacturaObj { get; set; }
 		public int TipoImpuestoId { get; set; }
-		
+		public DateTime? FechaMovimiento { get; set; }
+
+		public bool Activo { get; set; }
 		
 	
       

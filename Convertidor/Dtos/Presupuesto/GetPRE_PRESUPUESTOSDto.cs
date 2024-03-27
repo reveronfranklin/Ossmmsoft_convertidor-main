@@ -38,7 +38,7 @@
         public decimal TotalVigente { get; set; }
         public string TotalVigenteString { get; set; } = string.Empty;
 
-
+        public bool presupuestoEnEjecucion { get; set; }
       
    
     

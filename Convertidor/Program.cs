@@ -72,6 +72,10 @@ builder.Services.AddTransient<IPRE_V_DOC_PAGADOServices, PRE_V_DOC_PAGADOService
 builder.Services.AddTransient<IPRE_V_DOC_BLOQUEADOServices, PRE_V_DOC_BLOQUEADOServices>();
 builder.Services.AddTransient<IPRE_V_DOC_MODIFICADOServices, PRE_V_DOC_MODIFICADOServices>();
 builder.Services.AddTransient<IPRE_PLAN_UNICO_CUENTASRepository, PRE_PLAN_UNICO_CUENTASRepository>();
+builder.Services.AddTransient<IPreAsignacionesDetalleRepository, PreAsignacionesDetalleRepository>();
+builder.Services.AddTransient<IPRE_ASIGNACIONESRepository, PRE_ASIGNACIONESRepository>();
+builder.Services.AddTransient<IPreAsignacionesDetalleRepository, PreAsignacionesDetalleRepository>();
+
 builder.Services.AddTransient<IPrePlanUnicoCuentasService, PrePlanUnicoCuentasService>();
 
 builder.Services.AddTransient<IPRE_RELACION_CARGOSRepository, PRE_RELACION_CARGOSRepository>();
@@ -83,7 +87,8 @@ builder.Services.AddTransient<IPreCargosRepository, PreCargosRepository>();
 builder.Services.AddTransient<IPreCargosService, PreCargosService>();
 builder.Services.AddTransient<IPRE_RELACION_CARGOSRepository, PRE_RELACION_CARGOSRepository>();
 builder.Services.AddTransient<IPreRelacionCargosService, PreRelacionCargosService>();
-
+builder.Services.AddTransient<IPreAsignacionService, PreAsignacionService>();
+builder.Services.AddTransient<IPreAsignacionDetalleService, PreAsignacionDetalleService>();
 
 
 //Repository SIS
@@ -99,6 +104,11 @@ builder.Services.AddTransient<IOssFuncionRepository, OssFuncionRepository>();
 builder.Services.AddTransient<IOssFormulaRepository, OssFormulaRepository>();
 builder.Services.AddTransient<IOssModeloCalculoRepository, OssModeloCalculoRepository>();
 builder.Services.AddTransient<IOssCalculoRepository,OssCalculoRepository>();
+builder.Services.AddTransient<ISisParametrosSourceRepository,SisParametrosSourceRepository>();
+builder.Services.AddTransient<ISisDetSourceRepository,SisDetSourceRepository>();
+builder.Services.AddTransient<ISisSourceRepository,SisSourceRepository>();
+
+
 
 //Services Sis
 builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
@@ -461,3 +471,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

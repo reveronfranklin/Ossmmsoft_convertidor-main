@@ -225,7 +225,7 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                
-                FormattableString xquery = $"UPDATE SIS.SIS_USUARIOS SET PASSWORDSTRING=SIS.SIS_DESENCRYPTED(PASSWORD) WHERE LOGIN={dto.Login};";
+                    FormattableString xquery = $"UPDATE SIS.SIS_USUARIOS SET PASSWORDSTRING=SIS.SIS_DESENCRYPTED(PASSWORD) WHERE LOGIN={dto.Login};";
                 var result = _context.Database.ExecuteSqlInterpolated(xquery);
 
 

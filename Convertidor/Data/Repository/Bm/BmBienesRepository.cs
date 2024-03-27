@@ -118,7 +118,7 @@ namespace Convertidor.Data.Repository.Bm
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 var result = await _context.BM_BIENES.DefaultIfEmpty().Where(e=>e.CODIGO_EMPRESA==conectado.Empresa) .ToListAsync();
-
+                //var result = await _context.BM_BIENES.DefaultIfEmpty() .ToListAsync();
                 return result;
             }
             catch (Exception ex)

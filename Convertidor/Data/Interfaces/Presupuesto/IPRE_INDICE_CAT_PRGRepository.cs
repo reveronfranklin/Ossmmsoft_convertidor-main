@@ -7,6 +7,9 @@ namespace Convertidor.Data.Interfaces.Presupuesto
     {
         Task<IEnumerable<PRE_INDICE_CAT_PRG>> GetByLastDay(int days);
         Task<IEnumerable<PRE_INDICE_CAT_PRG>> GetAll();
+
+        Task<PRE_INDICE_CAT_PRG> GetByIcpConcat(int codigoPresupuesto, string sector, string programa,
+            string subPrograma, string proyecto, string actividad);
         Task<List<PRE_INDICE_CAT_PRG>> GetAllByCodigoPresupuesto(int codigoPresupuesto);
         Task<ResultDto<PRE_INDICE_CAT_PRG>> Update(PRE_INDICE_CAT_PRG entity);
         Task<ResultDto<PRE_INDICE_CAT_PRG>> Create(PRE_INDICE_CAT_PRG entity);
