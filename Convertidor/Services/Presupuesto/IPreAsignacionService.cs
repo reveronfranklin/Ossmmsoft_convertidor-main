@@ -11,6 +11,7 @@ public interface IPreAsignacionService
     
     Task<ResultDto<List<PreAsignacionesGetDto>>> GetAllByIcpPuc(PreAsignacionesFilterDto filter);
     Task<ResultDto<PreAsignacionesGetDto>> Add(PreAsignacionesUpdateDto entity);
+    Task<ResultDto<PreAsignacionesGetDto>> CreateListAsignaciones(PreAsignacionesExcel excel);
     Task<ResultDto<PreAsignacionesGetDto>> Update(PreAsignacionesUpdateDto entity);
     Task<ResultDto<string>> Delete(PreAsignacionesDeleteDto deleteDto);
     Task<bool> PresupuestoExiste(int codPresupuesto);

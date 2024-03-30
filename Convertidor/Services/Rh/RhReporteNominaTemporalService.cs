@@ -2,15 +2,15 @@
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhReporteNominaHistoricoService: IRhReporteNominaHistoricoService
+	public class RhReporteNominaTemporalService: IRhReporteNominaTemporalService
     {
         
    
-        private readonly IRhReporteNominaHistoricoRepository _repository;
+        private readonly IRhReporteNominaTemporalRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
    
 
-        public RhReporteNominaHistoricoService(IRhReporteNominaHistoricoRepository repository, 
+        public RhReporteNominaTemporalService(IRhReporteNominaTemporalRepository repository, 
                                         IRhDescriptivasService descriptivaService, 
                                         ISisUsuarioRepository sisUsuarioRepository)
         {
@@ -49,7 +49,37 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<ResultDto<List<RhReporteNominaResponseDto>> > GetByPeriodoTipoNominaPersona(FilterRepoteNomina filter)
+        {
+            try
+            {
+                ResultDto<List<RhReporteNominaResponseDto>> result = new  ResultDto<List<RhReporteNominaResponseDto>> (null);
+                var historico = await _repository.GetByPeriodoTipoNominaPersona(filter.CodigoPeriodo,filter.CodigoTipoNomina,(int)filter.CodigoPersona);
+                if (historico.Count > 0)
+                {
+                    result.Data = await MapListHistorico(historico);
+                    result.Message = "";
+                    result.IsValid = true;
+                    
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    return result;
+                }
+            
 
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+        }
         public FechaDto GetFechaDto(DateTime fecha)
         {
             var FechaDesdeObj = new FechaDto();
@@ -63,7 +93,7 @@ namespace Convertidor.Data.Repository.Rh
         }
        
   
-        public async  Task<List<RhReporteNominaResponseDto>> MapListHistorico(List<RH_V_REPORTE_NOMINA_HISTORICO> dtos)
+        public async  Task<List<RhReporteNominaResponseDto>> MapListHistorico(List<RH_V_REPORTE_NOMINA_TEMPORAL> dtos)
         {
                             var lista = from s in dtos
                             group s by new

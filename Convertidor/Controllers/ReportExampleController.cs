@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Convertidor.Services.Rh.Report.Example;
+using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
 
@@ -9,12 +10,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class RhReporteNominaHistoricoController : ControllerBase
+    public class ReportExampleController : ControllerBase
     {
        
-        private readonly IRhReporteNominaHistoricoService _service;
+        private readonly IReportExampleService _service;
 
-        public RhReporteNominaHistoricoController(IRhReporteNominaHistoricoService service)
+        public ReportExampleController(IReportExampleService service)
         {
 
             _service = service;
@@ -22,20 +23,14 @@ namespace Convertidor.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult>  GetByPeriodoTipoNomina(FilterRepoteNomina filter)
+        public async Task<IActionResult>  GeneratePdf()
         {
-            var result = await _service.GetByPeriodoTipoNomina(filter);
-            return Ok(result);
+            _service.GeneratePdf();
+            return Ok();
         }
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult>  GetByPeriodoTipoNominaPersona(FilterRepoteNomina filter)
-        {
-            var result = await _service.GetByPeriodoTipoNominaPersona(filter);
-            return Ok(result);
-        }
+       
 
         
     }

@@ -2,22 +2,38 @@
 
 namespace Convertidor.Data.Repository.Rh
 {
-    public class RhReporteNominaRepository : IRhReporteNominaHistoricoRepository
+    public class RhReporteNominaTemporalRepository : IRhReporteNominaTemporalRepository
     {
 		
         private readonly DataContext _context;
 
-        public RhReporteNominaRepository(DataContext context)
+        public RhReporteNominaTemporalRepository(DataContext context)
         {
             _context = context;
         }
-        public async Task<List<RH_V_REPORTE_NOMINA_HISTORICO>> GetByPeriodoTipoNomina(int codigoPeriodo,int tipoNomina)
+        public async Task<List<RH_V_REPORTE_NOMINA_TEMPORAL>> GetByPeriodoTipoNomina(int codigoPeriodo,int tipoNomina)
         {
             try
             {
-                var result = await _context.RH_V_REPORTE_NOMINA_HISTORICO.DefaultIfEmpty().Where(e => e.CODIGO_TIPO_NOMINA==tipoNomina && e.CODIGO_PERIODO==codigoPeriodo).ToListAsync();
+                var result = await _context.RH_V_REPORTE_NOMINA_TEMPORAL.DefaultIfEmpty().Where(e => e.CODIGO_TIPO_NOMINA==tipoNomina && e.CODIGO_PERIODO==codigoPeriodo).ToListAsync();
         
-                return (List<RH_V_REPORTE_NOMINA_HISTORICO>)result; 
+                return (List<RH_V_REPORTE_NOMINA_TEMPORAL>)result; 
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        public async Task<List<RH_V_REPORTE_NOMINA_TEMPORAL>> GetByPeriodoTipoNominaPersona(int codigoPeriodo,int tipoNomina,int codigoPersona)
+        {
+            try
+            {
+                var result = await _context.RH_V_REPORTE_NOMINA_TEMPORAL.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_TIPO_NOMINA==tipoNomina && e.CODIGO_PERIODO==codigoPeriodo && e.CODIGO_PERSONA==codigoPersona).ToListAsync();
+        
+                return (List<RH_V_REPORTE_NOMINA_TEMPORAL>)result; 
             }
             catch (Exception ex)
             {

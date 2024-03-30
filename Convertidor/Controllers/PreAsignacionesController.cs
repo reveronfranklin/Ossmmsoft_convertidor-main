@@ -91,6 +91,14 @@ namespace Convertidor.Controllers
         
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> CreateListAsignaciones(PreAsignacionesExcel dto)
+        {
+            var result = await _service.CreateListAsignaciones(dto);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> ValidarListAsignaciones(PreAsignacionesExcel dto)
         {
             var result = await _service.ValidarListAsignaciones(dto);

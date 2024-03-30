@@ -9,12 +9,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class RhReporteNominaHistoricoController : ControllerBase
+    public class RhReporteNominaTemporalController : ControllerBase
     {
        
-        private readonly IRhReporteNominaHistoricoService _service;
+        private readonly IRhReporteNominaTemporalService _service;
 
-        public RhReporteNominaHistoricoController(IRhReporteNominaHistoricoService service)
+        public RhReporteNominaTemporalController(IRhReporteNominaTemporalService service)
         {
 
             _service = service;
@@ -29,7 +29,13 @@ namespace Convertidor.Controllers
             var result = await _service.GetByPeriodoTipoNomina(filter);
             return Ok(result);
         }
-        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult>  GetByPeriodoTipoNominaPersona(FilterRepoteNomina filter)
+        {
+            var result = await _service.GetByPeriodoTipoNominaPersona(filter);
+            return Ok(result);
+        }
         
     }
 }

@@ -10,25 +10,24 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class ReportExampleController : ControllerBase
+    public class ReportHistoricoNominaController : ControllerBase
     {
        
-        private readonly IReportExampleService _service;
+        private readonly IReportHistoricoNominaService _service;
 
-        public ReportExampleController(IReportExampleService service)
+        public ReportHistoricoNominaController(IReportHistoricoNominaService service)
         {
 
             _service = service;
            
         }
-
-
-        [HttpGet]
+        
+        [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult>  GeneratePdf()
+        public async Task<IActionResult>  GeneratePdf(FilterRepoteNomina filter)
         {
-            _service.GeneratePdf();
-            return Ok();
+           await  _service.GeneratePdf(filter);
+           return Ok();
         }
        
 

@@ -1,6 +1,6 @@
 namespace Convertidor.Services.Rh.Report.Example;
 
-public interface IReportExampleService
+public interface IReportHistoricoNominaService
 {
-    void GeneratePdf();
+    Task GeneratePdf(FilterRepoteNomina filter);
 }

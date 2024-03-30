@@ -131,17 +131,18 @@ public class PreAsignacionService: IPreAsignacionService
                     result.Message = "Valor invalido";
                     return result;
                 }
-                decimal totalReembolso = 0;
+                decimal totalDesembolso= 0;
                 var asignacionDetalle = await _preAsignacionesDetalleRepository.GetAllByAsignacion(dto.Id);
                 if (asignacionDetalle.Count > 0)
                 {
                     foreach (var item in asignacionDetalle)
                     {
-                        totalReembolso = totalReembolso + item.MONTO;
+                        totalDesembolso = totalDesembolso + item.MONTO;
                     }
                 }
 
-                asignacionUpdate.TOTAL_DESEMBOLSO = totalReembolso;
+                asignacionUpdate.TOTAL_DESEMBOLSO = totalDesembolso;
+                asignacionUpdate.ORDINARIO = totalDesembolso;
                 asignacionUpdate.FECHA_UPD = DateTime.Now;
                 await _repository.Update(asignacionUpdate);
 
@@ -327,6 +328,82 @@ public class PreAsignacionService: IPreAsignacionService
             return result;
         }
 
+          public async Task<ResultDto<PreAsignacionesGetDto>> CreateListAsignaciones(PreAsignacionesExcel excel)
+        {
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            ResultDto<PreAsignacionesGetDto> result = new ResultDto<PreAsignacionesGetDto>(null);
+            try
+            {
+                var validar = await ValidarListAsignaciones(excel);
+
+                if (!validar.IsValid)
+                {
+                    return validar;
+                }
+                
+                var prevSaldo = await _preVSaldosRepository.PresupuestoExiste(excel.CodigoPresupuesto);
+                if (prevSaldo)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto en ejecucion, No Puede ser modificado";
+                    return result;
+                }
+                
+
+                result.IsValid = true;
+                foreach (var entity in excel.Asignaciones)
+                {
+                    PreAsignacionesUpdateDto dto = new PreAsignacionesUpdateDto();
+                    dto.CodigoAsignacion = 0;
+                    dto.CodigoPresupuesto = excel.CodigoPresupuesto;
+                    dto.Año = 0;
+                    dto.Escenario = 0;
+                    dto.CodigoIcp = 0;
+                    var icp = await _indiceCategoriaProgramaService.GetByIcpConcat(excel.CodigoPresupuesto,entity.CodigoIcpConcat);
+                    if (icp != null)
+                    {
+                        dto.CodigoIcp = icp.CODIGO_ICP;
+                    }
+                    string[] pucList = entity.CodigoPucConcat.Split(".");
+                    FilterPrePUCPresupuestoCodigos filter = new FilterPrePUCPresupuestoCodigos();
+                    filter.CodigoPresupuesto = excel.CodigoPresupuesto;
+                    filter.CodigoGrupo = pucList[0];
+                    filter.CodicoNivel1 = pucList[1];
+                    filter.CodicoNivel2 = pucList[2];
+                    filter.CodicoNivel3 = pucList[3];
+                    filter.CodicoNivel4 = pucList[4];
+                    filter.CodicoNivel5 = pucList[5];
+                    filter.CodicoNivel6 = pucList[6];
+                    dto.CodigoPuc = 0;
+                    var puc = await _prePlanUnicoCuentasService.GetByCodigos(filter);
+                    if (puc != null)
+                    {
+                        dto.CodigoPuc = puc.CODIGO_PUC;
+                    }
+                    
+                    dto.Presupuestado = entity.Presupuestado;
+                    dto.Ordinario = entity.Ordinario;
+                    dto.Coordinado = entity.Coordinado;
+                    dto.Laee = entity.Laee;
+                    dto.Fides = entity.Fides;
+                    var created = await Add(dto);
+                    result = created;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = $"{ex.Message}: Datos no cumplen con el formato requerido de Asignaciones ";
+                result.LinkData = "";
+            }
+
+            return result;
+        }
+        
+        
         public async Task<ResultDto<PreAsignacionesGetDto>> ValidarListAsignaciones(PreAsignacionesExcel excel)
         {
             var conectado = await _sisUsuarioRepository.GetConectado();
@@ -600,17 +677,18 @@ public class PreAsignacionService: IPreAsignacionService
                 }
                 
               
-                decimal totalReembolso = 0;
+                decimal totalDesembolso = 0;
                 var asignacionDetalle = await _preAsignacionesDetalleRepository.GetAllByAsignacion(entity.CodigoAsignacion);
                 if (asignacionDetalle.Count > 0)
                 {
                     foreach (var item in asignacionDetalle)
                     {
-                        totalReembolso = totalReembolso + item.MONTO;
+                        totalDesembolso = totalDesembolso + item.MONTO;
                     }
                 }
 
-                asignacion.TOTAL_DESEMBOLSO = totalReembolso;
+                asignacion.TOTAL_DESEMBOLSO = totalDesembolso;
+                asignacion.ORDINARIO = totalDesembolso;
              
                 //asignacion.CODIGO_PRESUPUESTO = entity.CodigoPresupuesto;
                 asignacion.ESCENARIO = entity.Escenario;
@@ -683,7 +761,7 @@ public class PreAsignacionService: IPreAsignacionService
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Presupuesto en ejecucion, No Puede ser modificado";
+                    result.Message = "Presupuesto en ejecucion, No Puede ser Eliminado";
                     return result;
                 }
               

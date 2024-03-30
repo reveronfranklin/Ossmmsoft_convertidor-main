@@ -2,35 +2,47 @@
 
 namespace Convertidor.Data.Repository.Rh
 {
-	public class RhAdministrativosService: IRhAdministrativosService
+	public class RhReporteNominaHistoricoService: IRhReporteNominaHistoricoService
     {
         
    
-        private readonly IRhAdministrativosRepository _repository;
-        private readonly IRhDescriptivasService _descriptivaService;
+        private readonly IRhReporteNominaHistoricoRepository _repository;
+        private readonly IRhTipoNominaService _rhTipoNominaService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
    
 
-        public RhAdministrativosService(IRhAdministrativosRepository repository, 
-                                        IRhDescriptivasService descriptivaService, 
+        public RhReporteNominaHistoricoService(IRhReporteNominaHistoricoRepository repository, 
+                                        IRhTipoNominaService rhTipoNominaService, 
                                         ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
-            _descriptivaService = descriptivaService;
+            _rhTipoNominaService = rhTipoNominaService;
             _sisUsuarioRepository = sisUsuarioRepository;
         }
        
-        public async Task<List<RhAdministrativosResponseDto>> GetByCodigoPersona(int codigoPersona)
+        public async Task<ResultDto<List<RhReporteNominaResponseDto>> > GetByPeriodoTipoNomina(FilterRepoteNomina filter)
         {
             try
             {
-                
-                var administrativos = await _repository.GetByCodigoPersona(codigoPersona);
+                ResultDto<List<RhReporteNominaResponseDto>> result = new  ResultDto<List<RhReporteNominaResponseDto>> (null);
+                var historico = await _repository.GetByPeriodoTipoNomina(filter.CodigoPeriodo,filter.CodigoTipoNomina);
+                if (historico.Count > 0)
+                {
+                    result.Data = await MapListHistorico(historico);
+                    result.Message = "";
+                    result.IsValid = true;
+                    
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    return result;
+                }
+            
 
-                var result = await MapListAdministrativosDto(administrativos);
-
-
-                return (List<RhAdministrativosResponseDto>)result;
+                return result;
             }
             catch (Exception ex)
             {
@@ -39,24 +51,102 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
-        public async Task<RH_ADMINISTRATIVOS> GetPrimerMovimientoByCodigoPersona(int codigoPersona)
+
+        public async Task<ResultDto<List<RhReporteNominaResponseDto>> > GetByPeriodoTipoNominaPersona(FilterRepoteNomina filter)
         {
             try
             {
-                var result = await _repository.GetPrimerMovimientoCodigoPersona(codigoPersona);
-               
+                ResultDto<List<RhReporteNominaResponseDto>> result = new  ResultDto<List<RhReporteNominaResponseDto>> (null);
+                var historico = await _repository.GetByPeriodoTipoNominaPersona(filter.CodigoPeriodo,filter.CodigoTipoNomina,(int)filter.CodigoPersona);
+                if (historico.Count > 0)
+                {
+                    result.Data = await MapListHistorico(historico);
+                    result.Message = "";
+                    result.IsValid = true;
+                    
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    return result;
+                }
+            
 
-
-                return (RH_ADMINISTRATIVOS)result;
+                return result;
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+        }
+        
+        public async Task<ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> > GetByPeriodoTipoNominaResumenConcepto(FilterRepoteNomina filter)
+        {
+            try
+            {
+                ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> result = new  ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> (null);
+                var historico = await _repository.GetByPeriodoTipoNomina(filter.CodigoPeriodo,filter.CodigoTipoNomina);
+                if (historico.Count > 0)
+                {
+                    result.Data = await MapListHistoricoResumenConcepto(historico,filter);
+                    result.Message = "";
+                    result.IsValid = true;
+                    
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    return result;
+                }
+            
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 return null;
             }
 
         }
 
+        public async Task<ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> > GetByPeriodoTipoNominaResumenConceptoPersona(FilterRepoteNomina filter)
+        {
+            try
+            {
+                ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> result = new  ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> (null);
+                var historico = await _repository.GetByPeriodoTipoNominaPersona(filter.CodigoPeriodo,filter.CodigoTipoNomina,(int)filter.CodigoPersona);
+                if (historico.Count > 0)
+                {
+                    result.Data = await MapListHistoricoResumenConcepto(historico,filter);
+                    result.Message = "";
+                    result.IsValid = true;
+                    
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    return result;
+                }
+            
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+        }
 
         public FechaDto GetFechaDto(DateTime fecha)
         {
@@ -70,320 +160,116 @@ namespace Convertidor.Data.Repository.Rh
             return FechaDesdeObj;
         }
        
-        public async  Task<RhAdministrativosResponseDto> MapAdministrativosDto(RH_ADMINISTRATIVOS dtos)
+        
+        public async  Task<List<RhReporteNominaResponseDto>> MapListHistorico(List<RH_V_REPORTE_NOMINA_HISTORICO> dtos)
         {
- 
-
-                RhAdministrativosResponseDto itemResult = new RhAdministrativosResponseDto();
-                itemResult.CodigoAdministrativo = dtos.CODIGO_ADMINISTRATIVO;
-                itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
-                itemResult.FechaIngreso = dtos.FECHA_INGRESO.ToString("u");          
-                FechaDto FechaIngresoObj = GetFechaDto(dtos.FECHA_INGRESO);
-                itemResult.FechaIngresoObj = (FechaDto)FechaIngresoObj;
-                
-                itemResult.TipoPago = dtos.TIPO_PAGO;
-                itemResult.BancoId = dtos.BANCO_ID;
-                itemResult.DescripcionBanco = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dtos.BANCO_ID);
-                itemResult.TipoCuentaId = dtos.TIPO_CUENTA_ID;
-                itemResult.DescripcionCuenta = await _descriptivaService.GetDescripcionByCodigoDescriptiva(dtos.TIPO_CUENTA_ID);
-                if (dtos.NO_CUENTA is null) dtos.NO_CUENTA = "";
-                itemResult.NoCuenta = dtos.NO_CUENTA;
-             
-          
-            return itemResult;
-
-
-
-        }
-
-        public async  Task<List<RhAdministrativosResponseDto>> MapListAdministrativosDto(List<RH_ADMINISTRATIVOS> dtos)
-        {
-            List<RhAdministrativosResponseDto> result = new List<RhAdministrativosResponseDto>();
+                            var lista = from s in dtos
+                            group s by new
+                            {
+                                FechaNomina = s.FECHA_NOMINA,
+                                FechaNominaString=s.FECHA_NOMINA.ToString("u"),
+                                FechaNominaObj= GetFechaDto(s.FECHA_NOMINA),
+                                CodigoPeriodo=s.CODIGO_PERIODO,
+                                CodigoTipoNomina=s.CODIGO_TIPO_NOMINA,
+                                CodigoIcpConcat=s.CODIGO_ICP_CONCAT,
+                                CodigoIcp=s.CODIGO_ICP,
+                                Denominacion=s.DENOMINACION,
+                                DenominacionCargo=s.DENOMINACION_CARGO,
+                                Cedula=s.CEDULA,
+                                Nombre=s.NOMBRE,
+                                NoCuenta=s.NO_CUENTA,
+                                NumeroConcepto=s.NUMERO_CONCEPTO,
+                                TipoMovConcepto=s.TIPO_MOV_CONCEPTO,
+                                DenominacionConcepto=s.DENOMINACION_CONCEPTO,
+                                ComplementoConcepto=s.COMPLEMENTO_CONCEPTO,
+                                Porcentaje=s.PORCENTAJE,
+                                TipoConcepto=s.TIPO_CONCEPTO,
+                                Monto=s.MONTO,
+                                Asignacion=s.ASIGNACION,
+                                Deduccion=s.DEDUCCION,
+                                Status=s.STATUS,
+                                DescripcionStatus=s.DESCRIPCION_STATUS,
+                                CodigoPersona=s.CODIGO_PERSONA,
+                                FechaIngreso=s.FECHA_INGRESO,
+                                FechaIngresoString=s.FECHA_INGRESO.ToString("u"),
+                                FechaIngresoObj=GetFechaDto(s.FECHA_INGRESO),
+                                CargoCodigo=s.CARGO_CODIGO,
+                                Banco=s.BANCO,
+                                CodigoConcepto=s.CODIGO_CONCEPTO,
+                                Modulo=s.MODULO,
+                                CodigoIdentificador=s.CODIGO_IDENTIFICADOR,
+                                CodigoEmpresa=s.CODIGO_EMPRESA,
+                                Descripcion=s.DESCRIPCION,
+                                
+                            } into g
+                            select new RhReporteNominaResponseDto()
+                            {
+                                FechaNomina = g.Key.FechaNomina,
+                                FechaNominaString = g.Key.FechaNominaString,
+                                FechaNominaObj = g.Key.FechaNominaObj,
+                                CodigoPeriodo = g.Key.CodigoPeriodo,
+                                CodigoTipoNomina = g.Key.CodigoTipoNomina,
+                                CodigoIcpConcat = g.Key.CodigoIcpConcat,
+                                Denominacion = g.Key.Denominacion,
+                                DenominacionCargo = g.Key.DenominacionCargo,
+                                Cedula = g.Key.Cedula,
+                                Nombre = g.Key.Nombre,
+                                NoCuenta = g.Key.NoCuenta,
+                                NumeroConcepto = g.Key.NumeroConcepto,
+                                TipoMovConcepto = g.Key.TipoMovConcepto,
+                                DenominacionConcepto = g.Key.DenominacionConcepto,
+                                ComplementoConcepto = g.Key.ComplementoConcepto,
+                                Porcentaje = g.Key.Porcentaje,
+                                TipoConcepto = g.Key.TipoConcepto,
+                                Monto = g.Key.Monto,
+                                Asignacion = g.Key.Asignacion,
+                                Deduccion = g.Key.Deduccion,
+                                Status = g.Key.Status,
+                                DescripcionStatus = g.Key.DescripcionStatus,
+                                CodigoPersona = g.Key.CodigoPersona,
+                                FechaIngreso = g.Key.FechaIngreso,
+                                FechaIngresoString = g.Key.FechaIngresoString,
+                                FechaIngresoObj = g.Key.FechaIngresoObj,
+                                CargoCodigo = g.Key.CargoCodigo,
+                                Banco = g.Key.Banco,
+                                CodigoConcepto = g.Key.CodigoConcepto,
+                                Modulo = g.Key.Modulo,
+                                CodigoIdentificador = g.Key.CodigoIdentificador,
+                                CodigoEmpresa = g.Key.CodigoEmpresa,
+                                Descripcion = g.Key.Descripcion,
+                                
+                                
+                                
+                            };
            
-            
-            foreach (var item in dtos)
-            {
+            return lista.ToList();
 
-                RhAdministrativosResponseDto itemResult = new RhAdministrativosResponseDto();
-
-                itemResult = await MapAdministrativosDto(item);
+        }
+        
+           public async  Task<List<RhReporteNominaResumenConceptoResponseDto>> MapListHistoricoResumenConcepto(List<RH_V_REPORTE_NOMINA_HISTORICO> dtos,FilterRepoteNomina filter)
+           {
+               RhTiposNominaFilterDto tiposNominaFilterDto = new RhTiposNominaFilterDto();
+               tiposNominaFilterDto.CodigoTipoNomina = filter.CodigoTipoNomina;
+               var tipoNomina = await _rhTipoNominaService.GetByCodigo(tiposNominaFilterDto);
                
-                result.Add(itemResult);
-            }
-            return result;
+            
+            var lista = from s in dtos
+                group s by new { FechaNomina=s.FECHA_NOMINA.ToString("u"), NumeroConcepto = s.NUMERO_CONCEPTO ,DenominacionConcepto=s.DENOMINACION_CONCEPTO} into g
+                select new RhReporteNominaResumenConceptoResponseDto()
+                {
+                    FechaNomina=g.Key.FechaNomina,
+                    TipoNomina = tipoNomina.Descripcion,
+                    NumeroConcepto=g.Key.NumeroConcepto,
+                    DenominacionConcepto=g.Key.DenominacionConcepto,
+                    Asignacion = g.Sum(s => s.ASIGNACION),
+                    Deduccion = g.Sum(s => s.DEDUCCION),
 
-
+                };
+           
+            return lista.ToList();
 
         }
-
         
-        public async Task<ResultDto<RhAdministrativosResponseDto>> Update(RhAdministrativosUpdate dto)
-        {
-
-            ResultDto<RhAdministrativosResponseDto> result = new ResultDto<RhAdministrativosResponseDto>(null);
-            try
-            {
-
-                var administrativo = await _repository.GetByCodigo(dto.CodigoAdministrativo);
-                if (administrativo == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Administrativo no existe";
-                    return result;
-                }
-                if (dto.NoCuenta.Trim().Length <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cuenta Invalida";
-                    return result;
-                }
-
-                
-                var bancos = await _descriptivaService.GetByTitulo(18);
-                if (bancos.Count<=0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Banco  Invalido";
-                    return result;
-                }
-                else
-                {
-                    var banco = bancos.Where(x => x.Id == dto.BancoId);
-                    if (banco is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Banco  Invalido";
-                        return result;
-                    }
-                }
-                var tipoCuentas = await _descriptivaService.GetByTitulo(19);
-                if (tipoCuentas.Count<=0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo de Cuenta Invalida";
-                    return result;
-                }
-                else
-                {
-                    var tipoCuenta = tipoCuentas.Where(x => x.Id == dto.BancoId);
-                    if (tipoCuenta is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Tipo de Cuenta Invalida";
-                        return result;
-                    }
-                }    
-                if (dto.NoCuenta.Length!=20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero de Cuenta Invalida(Min 20 digitos)";
-                    return result;
-                }
-
-                administrativo.BANCO_ID= dto.BancoId;
-                administrativo.TIPO_PAGO = dto.TipoPago;
-                administrativo.TIPO_CUENTA_ID = dto.TipoCuentaId;
-                administrativo.NO_CUENTA = dto.NoCuenta;
-                administrativo.FECHA_UPD = DateTime.Now;
-                var fechaIngreso = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
-                administrativo.FECHA_INGRESO = fechaIngreso;
-
-                var conectado = await _sisUsuarioRepository.GetConectado();
-                administrativo.CODIGO_EMPRESA = conectado.Empresa;
-                administrativo.USUARIO_UPD = conectado.Usuario;
-
-
-                await _repository.Update(administrativo);
-
-        
-                
-                var resultDto = await MapAdministrativosDto(administrativo);
-                result.Data = resultDto;
-                result.IsValid = true;
-                result.Message = "";
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-            }
-
-
-
-            return result;
-        }
-
-        public async Task<ResultDto<RhAdministrativosResponseDto>> Create(RhAdministrativosUpdate dto)
-        {
-
-            ResultDto<RhAdministrativosResponseDto> result = new ResultDto<RhAdministrativosResponseDto>(null);
-            try
-            {
-                if (dto.NoCuenta.Trim().Length <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cuenta Invalida";
-                    return result;
-                }
-
-                
-                var bancos = await _descriptivaService.GetByTitulo(18);
-                if (bancos.Count<=0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Banco  Invalido";
-                    return result;
-                }
-                else
-                {
-                    var banco = bancos.Where(x => x.Id == dto.BancoId);
-                    if (banco is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Banco  Invalido";
-                        return result;
-                    }
-                }
-                var tipoCuentas = await _descriptivaService.GetByTitulo(19);
-                if (tipoCuentas.Count<=0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo de Cuenta Invalida";
-                    return result;
-                }
-                else
-                {
-                    var tipoCuenta = tipoCuentas.Where(x => x.Id == dto.BancoId);
-                    if (tipoCuenta is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Tipo de Cuenta Invalida";
-                        return result;
-                    }
-                }    
-                if (dto.NoCuenta.Length!=20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero de Cuenta Invalida(Min 20 digitos)";
-                    return result;
-                }
-
-                RH_ADMINISTRATIVOS entity = new RH_ADMINISTRATIVOS();
-                entity.CODIGO_ADMINISTRATIVO = await _repository.GetNextKey();
-                entity.CODIGO_PERSONA = dto.CodigoPersona;
-                entity.BANCO_ID= dto.BancoId;
-                entity.TIPO_PAGO = dto.TipoPago;
-                entity.TIPO_CUENTA_ID = dto.TipoCuentaId;
-                entity.NO_CUENTA = dto.NoCuenta;
-                var fechaIngreso = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
-                entity.FECHA_INGRESO = fechaIngreso;
-                entity.FECHA_INS = DateTime.Now;
-             
-                var conectado = await _sisUsuarioRepository.GetConectado();
-                entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario;
-
-
-                var created=await _repository.Add(entity);
-                
-                if (created.IsValid && created.Data != null)
-                {
-                    var resultDto = await MapAdministrativosDto(created.Data);
-                    result.Data = resultDto;
-                    result.IsValid = true;
-                    result.Message = "";
-
-
-                }
-                else
-                {
-
-                    result.Data = null;
-                    result.IsValid = created.IsValid;
-                    result.Message = created.Message;
-                }
-
-                return result;  
-
-              
-
-
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-            }
-
-
-
-            return result;
-        }
- 
-        public async Task<ResultDto<RhAdministrativosDeleteDto>> Delete(RhAdministrativosDeleteDto dto)
-        {
-
-            ResultDto<RhAdministrativosDeleteDto> result = new ResultDto<RhAdministrativosDeleteDto>(null);
-            try
-            {
-
-                var administrativo = await _repository.GetByCodigo(dto.CodigoAdministrativo);
-                if (administrativo == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Administrativo no existe";
-                    return result;
-                }
-
-
-                var deleted = await _repository.Delete(dto.CodigoAdministrativo);
-
-                if (deleted.Length > 0)
-                {
-                    result.Data = dto;
-                    result.IsValid = false;
-                    result.Message = deleted;
-                }
-                else
-                {
-                    result.Data = dto;
-                    result.IsValid = true;
-                    result.Message = deleted;
-
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = dto;
-                result.IsValid = false;
-                result.Message = ex.Message;
-            }
-
-
-
-            return result;
-        }
-
         
         
     }

@@ -168,25 +168,26 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
         public async Task<decimal> GetTotal(int codigoAsignacion)
         {
             var conectado = await _sisUsuarioRepository.GetConectado();
-            decimal totalReembolso = 0;
+            decimal totalDesembolso = 0;
             var asignacionDetalle = await _repository.GetAllByAsignacion(codigoAsignacion);
             if (asignacionDetalle.Count > 0)
             {
                 foreach (var item in asignacionDetalle)
                 {
-                    totalReembolso = totalReembolso + item.MONTO;
+                    totalDesembolso = totalDesembolso + item.MONTO;
                 }
             }
 
-            return totalReembolso;
+            return totalDesembolso;
         }
-        public async Task ActualizaTotalReembolsoAsignacion(int codigoAsignacion)
+        public async Task ActualizaTotalDesembolsoAsignacion(int codigoAsignacion)
         {
             var conectado = await _sisUsuarioRepository.GetConectado();
-            decimal totalReembolso = 0;
-            totalReembolso = await GetTotal(codigoAsignacion);
+            decimal totalDesembolso = 0;
+            totalDesembolso = await GetTotal(codigoAsignacion);
             var asignacionUpdated = await _preAsignacionesRepository.GetByCodigo(codigoAsignacion);
-            asignacionUpdated.TOTAL_DESEMBOLSO = totalReembolso;
+            asignacionUpdated.TOTAL_DESEMBOLSO = totalDesembolso;
+            asignacionUpdated.ORDINARIO = totalDesembolso;
             asignacionUpdated.USUARIO_UPD = conectado.Usuario;
             asignacionUpdated.FECHA_UPD = DateTime.Now;
             await _preAsignacionesRepository.Update(asignacionUpdated);
@@ -221,13 +222,13 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                     result.Message = "Asignacion Invalido";
                     return result;
                 }
-                decimal totalReembolso = 0;
-                totalReembolso = await GetTotal(entity.CodigoAsignacion);
-                if (asignacion.Data.Presupuestado<totalReembolso + entity.Monto)
+                decimal totalDesembolso = 0;
+                totalDesembolso = await GetTotal(entity.CodigoAsignacion);
+                if (asignacion.Data.Presupuestado<totalDesembolso + entity.Monto)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = $"Monto total de reembolso supera el presupuestado: {asignacion.Data.Presupuestado}";
+                    result.Message = $"Monto total de desembolso supera el presupuestado: {asignacion.Data.Presupuestado}";
                     return result;
                 }
 
@@ -250,7 +251,7 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                 
                 if (created.IsValid && created.Data!=null)
                 {
-                    await ActualizaTotalReembolsoAsignacion(entity.CodigoAsignacion);
+                    await ActualizaTotalDesembolsoAsignacion(entity.CodigoAsignacion);
                     var resultDto = await MapPreAsignacionDetalleDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
@@ -317,13 +318,13 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                     return result;
                 }
 
-                decimal totalReembolso = 0;
-                totalReembolso = await GetTotal(entity.CodigoAsignacion);
-                if (asignacion.Data.Presupuestado<(totalReembolso -asignacionDetalle.MONTO)+ entity.Monto)
+                decimal totaldesembolso = 0;
+                totaldesembolso = await GetTotal(entity.CodigoAsignacion);
+                if (asignacion.Data.Presupuestado<(totaldesembolso -asignacionDetalle.MONTO)+ entity.Monto)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = $"Monto total de reembolso supera el presupuestado: {asignacion.Data.Presupuestado}";
+                    result.Message = $"Monto total de desembolso supera el presupuestado: {asignacion.Data.Presupuestado}";
                     return result;
                 }
 
@@ -342,7 +343,7 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                 var created = await _repository.Update(asignacionDetalle);
                 if (created.IsValid && created.Data!=null)
                 {
-                    await ActualizaTotalReembolsoAsignacion(entity.CodigoAsignacion);
+                    await ActualizaTotalDesembolsoAsignacion(entity.CodigoAsignacion);
                     var resultDto = await MapPreAsignacionDetalleDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
@@ -391,9 +392,10 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
 
               
                 var deleted = await _repository.Delete(deleteDto.CodigoAsignacionDetalle);
-
+                await ActualizaTotalDesembolsoAsignacion(asignacionDetalle.CODIGO_ASIGNACION);
                 if (deleted.Length > 0)
                 {
+                    
                     result.Data = "";
                     result.IsValid = false;
                     result.Message = deleted;

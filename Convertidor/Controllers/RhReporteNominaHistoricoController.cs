@@ -9,12 +9,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class RhTipoNominaController : ControllerBase
+    public class RhReporteNominaHistoricoController : ControllerBase
     {
        
-        private readonly IRhTipoNominaService _service;
+        private readonly IRhReporteNominaHistoricoService _service;
 
-        public RhTipoNominaController(IRhTipoNominaService service)
+        public RhReporteNominaHistoricoController(IRhReporteNominaHistoricoService service)
         {
 
             _service = service;
@@ -22,57 +22,21 @@ namespace Convertidor.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult>  GetByPeriodoTipoNomina(FilterRepoteNomina filter)
         {
-            var result = await _service.GetAll();
+            var result = await _service.GetByPeriodoTipoNomina(filter);
             return Ok(result);
         }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult>  GetByPeriodoTipoNominaPersona(FilterRepoteNomina filter)
+        {
+            var result = await _service.GetByPeriodoTipoNominaPersona(filter);
+            return Ok(result);
+        }
+
         
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> GetByCodigo(RhTiposNominaFilterDto filter)
-        {
-            var result = await _service.GetByCodigo(filter);
-            return Ok(result);
-        }
-        
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> GetTipoNominaByCodigoPersona(PersonaFilterDto filter)
-        {
-            var result = await _service.GetTipoNominaByCodigoPersona(filter.CodigoPersona,(DateTime)filter.Desde,(DateTime)filter.Hasta);
-            return Ok(result);
-        }
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Create(RhTiposNominaUpdateDto dto)
-        {
-            var result = await _service.Create(dto);
-            return Ok(result);
-        }
-
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Update(RhTiposNominaUpdateDto dto)
-        {
-            var result = await _service.Update(dto);
-            return Ok(result);
-        }
-
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Delete(RhTiposNominaDeleteDto dto)
-        {
-            var result = await _service.Delete(dto);
-            return Ok(result);
-        }
-
-
-
     }
 }

@@ -1,6 +1,6 @@
 namespace Convertidor.Data.Entities.Rh;
 
-public class RH_V_REPORTE_NOMINA_HISTORICO
+public class RH_V_REPORTE_NOMINA_TEMPORAL
 {
     public DateTime FECHA_NOMINA { get; set; }
     public int CODIGO_PERIODO { get; set; }

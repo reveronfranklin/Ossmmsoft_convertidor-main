@@ -25,6 +25,7 @@ using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using Convertidor.Services.Rh.Report.Example;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -222,7 +223,13 @@ builder.Services.AddTransient<IRhConceptosFormulaService, RhConceptosFormulaServ
 builder.Services.AddTransient<IRhConceptosPUCRepository, RhConceptosPUCRepository>();
 builder.Services.AddTransient<IRhConceptosPUCService, RhConceptosPUCService>();
 builder.Services.AddTransient<IRhMovNominaService, RhMovNominaService>();
+builder.Services.AddTransient<IRhReporteNominaTemporalRepository, RhReporteNominaTemporalRepository>();
+builder.Services.AddTransient<IRhReporteNominaHistoricoRepository, RhReporteNominaHistoricoRepository>();
+builder.Services.AddTransient<IRhReporteNominaHistoricoService, RhReporteNominaHistoricoService>();
+builder.Services.AddTransient<IRhReporteNominaTemporalService, RhReporteNominaTemporalService>();
 
+builder.Services.AddTransient<IReportExampleService, ReportExampleService>();
+builder.Services.AddTransient<IReportHistoricoNominaService, ReportHistoricoNominaService>();
 
 
 

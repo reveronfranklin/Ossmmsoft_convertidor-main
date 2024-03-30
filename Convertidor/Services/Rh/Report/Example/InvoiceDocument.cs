@@ -9,13 +9,16 @@ namespace Convertidor.Services.Rh.Report.Example
 {
     public class InvoiceDocument : IDocument
     {
+    
         public static Image LogoImage { get; } = Image.FromFile("logo.png");
-        
+        private readonly string _patchLogo;
         public InvoiceModel Model { get; }
 
-        public InvoiceDocument(InvoiceModel model)
+        public InvoiceDocument(InvoiceModel model,string patchLogo)
         {
+            
             Model = model;
+            _patchLogo = patchLogo;
         }
 
         public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
@@ -41,6 +44,9 @@ namespace Convertidor.Services.Rh.Report.Example
 
         void ComposeHeader(IContainer container)
         {
+            
+         
+            
             container.Row(row =>
             {
                 row.RelativeItem().Column(column =>
@@ -62,7 +68,9 @@ namespace Convertidor.Services.Rh.Report.Example
                     });
                 });
 
-                row.ConstantItem(175).Image(LogoImage);
+                //row.ConstantItem(175).Image(LogoImage);
+                row.ConstantItem(175).Image(_patchLogo);
+                row.ConstantItem(175).Image(_patchLogo);
             });
         }
 
