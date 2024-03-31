@@ -130,6 +130,15 @@ namespace Convertidor.Services.Rh.Report.Example
                         row.RelativeItem().Component(new PersonaComponent("", persona));
                   
                     });
+                    
+                    var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
+                    column.Item().Row(row =>
+                    {
+                        row.RelativeItem().Component(new ReciboComponent("", personaRecibo));
+                  
+                    });
+                    
+                    
                 }
                
                 
@@ -463,7 +472,18 @@ namespace Convertidor.Services.Rh.Report.Example
                         //static IContainer CellStyle(IContainer container) => container.PaddingVertical(2);
 
                     }
-                    
+                   
+                    table.Cell().Text($"").FontSize(7);
+                    table.Cell().Text($"").FontSize(7);
+                    table.Cell().AlignRight().Text($"Total:").FontSize(10).SemiBold();
+                    var asig = ModelRecibos.Sum(x => x.Asignacion);
+                    var ded = ModelRecibos.Sum(x => x.Deduccion);
+                    var totalAsignacion = asig.ToString("N", formato);
+                    var totalDeduccion = ded.ToString("N", formato);
+                    var neto = asig - ded;
+                    table.Cell().AlignRight().Text($"{neto.ToString("N", formato)}").FontSize(10).SemiBold();
+                    table.Cell().AlignRight().Text($"{totalAsignacion}").FontSize(10).SemiBold();
+                    table.Cell().AlignRight().Text($"{totalDeduccion}").FontSize(10).SemiBold();
                
             });
         }
