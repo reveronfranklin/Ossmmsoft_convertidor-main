@@ -42,7 +42,15 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
         public async Task<PreAsignacionesDetalleGetDto> MapPreAsignacionDetalleDto(PRE_ASIGNACIONES_DETALLE asignacion)
         {
             PreAsignacionesDetalleGetDto result = new PreAsignacionesDetalleGetDto();
-
+            result.CodigoIcpConcat = "";
+            result.CodigoPucConcat = "";
+            var preAsignacion = await _preAsignacionService.GetByCodigo(asignacion.CODIGO_ASIGNACION);
+            if (preAsignacion.Data != null)
+            {
+                result.CodigoIcpConcat = preAsignacion.Data.CodigoIcpConcat;
+                result.CodigoPucConcat = preAsignacion.Data.CodigoPucConcat;
+            }
+            
             result.CodigoAsignacion = asignacion.CODIGO_ASIGNACION;
             result.CodigoAsignacionDetalle = asignacion.CODIGO_ASIGNACION_DETALLE;
             result.FechaDesembolso = asignacion.FECHA_DESEMBOLSO;

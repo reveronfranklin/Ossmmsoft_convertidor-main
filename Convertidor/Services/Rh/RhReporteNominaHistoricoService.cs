@@ -245,7 +245,58 @@ namespace Convertidor.Data.Repository.Rh
             return lista.ToList();
 
         }
-        
+
+        public string GetMes(int mes)
+        {
+            string result;
+            int opt = 2;
+ 
+            switch(mes)
+            {
+                case 1: 
+                    result = "Enero";
+                    break;
+                case 2: 
+                    result = "Febrero";
+                    break;
+                case 3: 
+                    result = "Marzo";
+                    break;
+                case 4: 
+                    result = "Abril";
+                    break;
+                case 5: 
+                    result = "Mqyo";
+                    break;
+                case 6: 
+                    result = "Junio";
+                    break;
+                case 7: 
+                    result = "Julio";
+                    break;
+                case 8: 
+                    result = "Agosto";
+                    break;
+                case 9: 
+                    result = "Septiembre";
+                    break;
+                case 10: 
+                    result = "Octubre";
+                    break;
+                case 11: 
+                    result = "Noviembre";
+                    break;
+                case 12: 
+                    result = "Diciembre";
+                    break;
+                
+                default:
+                    result = "Error";
+                    break;
+            }
+
+            return result;
+        }
            public async  Task<List<RhReporteNominaResumenConceptoResponseDto>> MapListHistoricoResumenConcepto(List<RH_V_REPORTE_NOMINA_HISTORICO> dtos,FilterRepoteNomina filter)
            {
                RhTiposNominaFilterDto tiposNominaFilterDto = new RhTiposNominaFilterDto();
@@ -254,13 +305,17 @@ namespace Convertidor.Data.Repository.Rh
                
             
             var lista = from s in dtos
-                group s by new { FechaNomina=s.FECHA_NOMINA.ToString("u"), NumeroConcepto = s.NUMERO_CONCEPTO ,DenominacionConcepto=s.DENOMINACION_CONCEPTO} into g
+                group s by new { FechaNomina=s.FECHA_NOMINA, NumeroConcepto = s.NUMERO_CONCEPTO ,DenominacionConcepto=s.DENOMINACION_CONCEPTO,Periodo=s.PERIODO,Descripcion=s.DESCRIPCION} into g
                 select new RhReporteNominaResumenConceptoResponseDto()
                 {
                     FechaNomina=g.Key.FechaNomina,
                     TipoNomina = tipoNomina.Descripcion,
                     NumeroConcepto=g.Key.NumeroConcepto,
                     DenominacionConcepto=g.Key.DenominacionConcepto,
+                    Periodo=g.Key.Periodo,
+                    Año = g.Key.FechaNomina.Year.ToString(),
+                    Mes=GetMes(g.Key.FechaNomina.Month),
+                    Descripcion = g.Key.Descripcion,
                     Asignacion = g.Sum(s => s.ASIGNACION),
                     Deduccion = g.Sum(s => s.DEDUCCION),
 

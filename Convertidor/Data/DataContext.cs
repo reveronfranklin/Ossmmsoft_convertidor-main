@@ -14,6 +14,9 @@ namespace Convertidor.Data
         public DbSet<RH_HISTORICO_NOMINA> RH_HISTORICO_NOMINA { get; set; }
         public DbSet<RH_V_REPORTE_NOMINA_HISTORICO> RH_V_REPORTE_NOMINA_HISTORICO { get; set; }
         public DbSet<RH_V_REPORTE_NOMINA_TEMPORAL> RH_V_REPORTE_NOMINA_TEMPORAL { get; set; }
+        public DbSet<RH_V_REPORTE_NOMINA_FIRMA> RH_V_REPORTE_NOMINA_FIRMA { get; set; }
+        
+        
         public DbSet<RH_HISTORICO_PERSONAL_CARGO> RH_HISTORICO_PERSONAL_CARGO { get; set; }
         public DbSet<PRE_INDICE_CAT_PRG> PRE_INDICE_CAT_PRG { get; set; }
         public DbSet<RH_V_HISTORICO_MOVIMIENTOS> RH_V_HISTORICO_MOVIMIENTOS { get; set; }
@@ -90,6 +93,13 @@ namespace Convertidor.Data
                 builder.HasNoKey();
                 builder.ToTable("RH_V_REPORTE_NOMINA_HISTORICO");
             });
+            modelBuilder.Entity<RH_V_REPORTE_NOMINA_FIRMA>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("RH_V_REPORTE_NOMINA_FIRMA");
+            });
+            
+            
             
             modelBuilder.Entity<RH_TMP_RETENCIONES_SSO>(builder =>
             {

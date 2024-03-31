@@ -230,7 +230,8 @@ builder.Services.AddTransient<IRhReporteNominaTemporalService, RhReporteNominaTe
 
 builder.Services.AddTransient<IReportExampleService, ReportExampleService>();
 builder.Services.AddTransient<IReportHistoricoNominaService, ReportHistoricoNominaService>();
-
+builder.Services.AddTransient<IRhReporteFirmaRepository, RhReporteFirmaRepository>();
+builder.Services.AddTransient<IRhReporteFirmaService, RhReporteFirmaService>();
 
 
 //BM Repository
