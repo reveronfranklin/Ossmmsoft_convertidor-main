@@ -525,6 +525,7 @@ namespace Convertidor.Services.Rh.Report.Example
                     columns.RelativeColumn();
                     columns.RelativeColumn();
                     columns.RelativeColumn();
+                    columns.RelativeColumn();
                 });
                
                 table.Header(header =>
@@ -535,6 +536,7 @@ namespace Convertidor.Services.Rh.Report.Example
                     header.Cell().Text("NOMBRE").Style(headerStyle);
                     header.Cell().Text("CARGO").Style(headerStyle);
                     header.Cell().Text("CODIGO").Style(headerStyle);
+                    header.Cell().Text("SUELDO").Style(headerStyle);
                     header.Cell().Text("BANCO").Style(headerStyle);
                     header.Cell().Text("CUENTA").Style(headerStyle);
                   
@@ -545,6 +547,8 @@ namespace Convertidor.Services.Rh.Report.Example
                 table.Cell().Element(CellStyle).Text($"{Data.Nombre}").FontSize(7);
                 table.Cell().Element(CellStyle).Text($"{Data.DenominacionCargo}").FontSize(7);
                 table.Cell().Element(CellStyle).Text($"{Data.CodigoPersona}").FontSize(7);
+                var sueldo = Data.Sueldo.ToString("N", formato);
+                table.Cell().Element(CellStyle).Text($"{sueldo}").FontSize(7);
                 table.Cell().Element(CellStyle).Text($"{Data.Banco}").FontSize(7);
                 table.Cell().Element(CellStyle).Text($"{Data.NoCuenta}").FontSize(7);
                 

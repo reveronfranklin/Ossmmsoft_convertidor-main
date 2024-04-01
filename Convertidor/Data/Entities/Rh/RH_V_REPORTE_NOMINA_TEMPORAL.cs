@@ -33,5 +33,6 @@ public class RH_V_REPORTE_NOMINA_TEMPORAL
     public int CODIGO_EMPRESA { get; set; }
     public string DESCRIPCION { get; set; }
     public int PERIODO { get; set; }
+    public decimal SUELDO { get; set; }
 
 }

@@ -36,4 +36,6 @@ public class RhReporteNominaResponseDto
     public string CodigoIdentificador { get; set; }
     public int CodigoEmpresa { get; set; }
     public string Descripcion { get; set; }
+    public decimal Sueldo { get; set; }
+    
 }

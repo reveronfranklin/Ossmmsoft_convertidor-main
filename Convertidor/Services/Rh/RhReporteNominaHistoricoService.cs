@@ -200,6 +200,7 @@ namespace Convertidor.Data.Repository.Rh
                                 CodigoIdentificador=s.CODIGO_IDENTIFICADOR,
                                 CodigoEmpresa=s.CODIGO_EMPRESA,
                                 Descripcion=s.DESCRIPCION,
+                                Sueldo=s.SUELDO
                                 
                             } into g
                             select new RhReporteNominaResponseDto()
@@ -237,7 +238,7 @@ namespace Convertidor.Data.Repository.Rh
                                 CodigoIdentificador = g.Key.CodigoIdentificador,
                                 CodigoEmpresa = g.Key.CodigoEmpresa,
                                 Descripcion = g.Key.Descripcion,
-                                
+                                Sueldo=g.Key.Sueldo
                                 
                                 
                             };
