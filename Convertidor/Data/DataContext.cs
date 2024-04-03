@@ -67,6 +67,8 @@ namespace Convertidor.Data
 
         public DbSet<RH_H_RETENCIONES_SIND> RH_H_RETENCIONES_SIND { get; set; }
         public DbSet<RH_H_PERIODOS> RH_H_PERIODOS { get; set; }
+        public DbSet<RH_V_RECIBO_PAGO> RH_V_RECIBO_PAGO { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -426,6 +428,12 @@ namespace Convertidor.Data
                 builder.ToTable("RH_ADMINISTRATIVOS");
             });
 
+            modelBuilder.Entity<RH_V_RECIBO_PAGO>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("RH_V_RECIBO_PAGO");
+            });
+            
 
         }
     }

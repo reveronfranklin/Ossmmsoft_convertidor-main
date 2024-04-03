@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Dtos.Presupuesto;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
 using QuestPDF.Fluent;
@@ -206,6 +207,35 @@ namespace Convertidor.Services.Bm
                     .AlignMiddle();
             }
 
+            static IContainer BlockCabeceraTotal(IContainer container)
+            {
+                return container
+                    .Border(1)
+                    .Background(Colors.Grey.Lighten3)
+                    .PaddingRight(2)
+                    .ShowOnce()
+                    .MinWidth(50)
+                    .MinHeight(20)
+                    .AlignCenter()
+                    .AlignMiddle();
+            }
+
+            static IContainer BlockTotales(IContainer container)
+            {
+                return container
+                    .Border(1)
+                    .Background(Colors.Grey.Lighten3)
+                    .PaddingRight(2)
+                    .PaddingLeft(26)
+                    .ShowOnce()
+                    .MinWidth(50)
+                    .MinHeight(20)
+                    .AlignRight()
+                    .AlignMiddle();
+
+            }
+
+
             var connteo =await  GetByCodigoConteo(codigoConteo);
 
             var detalle = await _conteoDetalleHistoricoService.GetAllByConteo(codigoConteo);
@@ -235,15 +265,15 @@ namespace Convertidor.Services.Bm
                             {
                                 col.Item().AlignCenter().Text("Historico Conteo").Bold().FontSize(14);
 
-                                col.Item().AlignCenter().Text($"{connteo.Data.Titulo}").FontSize(9);
-                                
+                                col.Item().AlignCenter().Text($"{connteo.Data.Titulo}").FontSize(12);
+
                             });
                             fila.RelativeItem().Border(0).Column(col =>
                             {
                                 col.Item().Border(1).BorderColor(Colors.Cyan.Medium).AlignCenter()
                                 .Text($"Conteo : {connteo.Data.CodigoBmConteo}").Bold().FontSize(14);
 
-                                col.Item().Border(1).Background(Colors.Cyan.Medium).AlignCenter()
+                                col.Item().Border(1).Background(Colors.LightBlue.Medium).AlignCenter()
                                 .Text($"{connteo.Data.Fecha.ToShortDateString()}").FontSize(9);
 
                                 col.Spacing(4);
@@ -251,17 +281,18 @@ namespace Convertidor.Services.Bm
                                 
                             });
 
-
                         });
 
                       
 
                         page.Content().Column(async col1 =>
                         {
-                            
+
                             col1.Spacing(4);
 
+                            col1.Item().Element(Block).Text($"Comentario :{"  "}  {connteo.Data.Comentario}");
                             col1.Item().LineHorizontal(0.5f);
+
                             
 
                             col1.Item().Table(async tabla =>
@@ -270,10 +301,12 @@ namespace Convertidor.Services.Bm
 
                                 foreach (var itemResumenIcp in resumenIcp)
                                 {
+
                                     tabla.Cell().RowSpan(5).ColumnSpan(5).Element(BlockResumenIcp).Text(itemResumenIcp.UnidadTrabajo);
 
                                     foreach (var item in detalle.Where(x=> x.CODIGO_ICP== itemResumenIcp.CodigoIcp).ToList())
                                     {
+                                        
 
                                         tabla.ColumnsDefinition(async columnas =>
                                         {
@@ -307,7 +340,7 @@ namespace Convertidor.Services.Bm
 
                                         if (item.COMENTARIO != null && item.COMENTARIO.Length > 0)
                                         {
-                                            tabla.Cell().RowSpan(4).ColumnSpan(5).Element(Block).Text(item.COMENTARIO);
+                                            tabla.Cell().ColumnSpan(5).Element(Block).Text(item.COMENTARIO);
                                         }
                                     }
 
@@ -336,10 +369,21 @@ namespace Convertidor.Services.Bm
 
                                 
                             });
+                            col1.Item().Row(pie =>
+                            {
+                                pie.ConstantItem(350).PaddingRight(2).AlignRight().Element(BlockCabeceraTotal).Text("Total Cantidad");
+                                pie.RelativeColumn().PaddingRight(2).Element(BlockCabeceraTotal).Text("Total Contada");
+                                pie.RelativeColumn().PaddingRight(2).Element(BlockCabeceraTotal).Text("Total Diferencia");
 
-                            col1.Item().AlignRight().BorderColor(Colors.Cyan.Medium).Border(1)
-                            .Text($"Total : {connteo.Data.TotalCantidadContada}");
+                            });
 
+                            col1.Item().Row(pie =>
+                            {
+                                pie.ConstantItem(350).PaddingRight(2).AlignRight().Element(BlockTotales).Text(connteo.Data.TotalCantidad);
+                                pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(connteo.Data.TotalCantidadContada);
+                                pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(connteo.Data.TotalDiferencia);
+
+                            });
                         });
                     });
                 }).GeneratePdf(fileName);

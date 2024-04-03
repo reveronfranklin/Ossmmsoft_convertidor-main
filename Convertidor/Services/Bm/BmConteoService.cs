@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Convertidor.Data.Entities.Bm;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos.Bm;
 using Convertidor.Utility;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using NuGet.Packaging;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace Convertidor.Services.Bm
 {
@@ -22,6 +18,7 @@ namespace Convertidor.Services.Bm
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhPersonasRepository _rhPersonasRepository;
         private readonly IBmConteoDetalleService _conteoDetalleService;
+        private readonly IBmConteoDetalleRepository _bmConteoDetalleRepository;
         private readonly IBmDescriptivaRepository _bmDescriptivaRepository;
         private readonly IBmConteoHistoricoRepository _bmConteoHistoricoRepository;
         private readonly IBmConteoDetalleHistoricoRepository _bmConteoDetalleHistoricoRepository;
@@ -30,6 +27,7 @@ namespace Convertidor.Services.Bm
                                 ISisUsuarioRepository sisUsuarioRepository,
                                 IRhPersonasRepository rhPersonasRepository,
                                 IBmConteoDetalleService conteoDetalleService,
+                                IBmConteoDetalleRepository bmConteoDetalleRepository,
                                 IBmDescriptivaRepository bmDescriptivaRepository,
                                 IBmConteoHistoricoRepository bmConteoHistoricoRepository,
                                 IBmConteoDetalleHistoricoRepository bmConteoDetalleHistoricoRepository,
@@ -39,6 +37,7 @@ namespace Convertidor.Services.Bm
             _sisUsuarioRepository = sisUsuarioRepository;
             _rhPersonasRepository = rhPersonasRepository;
             _conteoDetalleService = conteoDetalleService;
+            _bmConteoDetalleRepository = bmConteoDetalleRepository;
             _bmDescriptivaRepository = bmDescriptivaRepository;
             _bmConteoHistoricoRepository = bmConteoHistoricoRepository;
             _bmConteoDetalleHistoricoRepository = bmConteoDetalleHistoricoRepository;
@@ -357,7 +356,7 @@ namespace Convertidor.Services.Bm
             foreach (var item in resumen.Data)
             {
                 conteoHistorico.TOTAL_CANTIDAD = conteoHistorico.TOTAL_CANTIDAD  + item.Cantidad;
-                conteoHistorico.TOTAL_CANTIDAD_CONTADA = conteoHistorico.TOTAL_CANTIDAD_CONTADA  + item.CantidadContada;
+                conteoHistorico.TOTAL_CANTIDAD_CONTADA = conteoHistorico.TOTAL_CANTIDAD_CONTADA + item.CantidadContada;
             }
 
             conteoHistorico.TOTAL_DIFERENCIA = conteoHistorico.TOTAL_CANTIDAD - conteoHistorico.TOTAL_CANTIDAD_CONTADA;
@@ -565,6 +564,332 @@ namespace Convertidor.Services.Bm
 
 
             return result;
+        }
+
+        public List<ICPGetDto> GetResumenICP(List<BM_CONTEO_DETALLE> dto)
+        {
+
+
+            var lista = from s in dto
+                        group s by new
+                        {
+                            CodigoIcp = s.CODIGO_ICP,
+                            UnidadTrabajo = s.UNIDAD_TRABAJO,
+
+
+
+                        } into g
+                        select new ICPGetDto()
+                        {
+
+                            CodigoIcp = g.Key.CodigoIcp,
+                            UnidadTrabajo = g.Key.UnidadTrabajo,
+
+
+                        };
+            return lista.ToList();
+
+        }
+        public List<ResumenConteoGetDto> GetResumenConteo(List<BM_CONTEO_DETALLE> dto)
+        {
+
+
+            var lista = from s in dto
+                        group s by new
+                        {
+                            Conteo = s.CONTEO,
+
+
+
+
+                        } into g
+                        select new ResumenConteoGetDto()
+                        {
+
+                            Conteo = g.Key.Conteo,
+
+
+                        };
+            return lista.ToList();
+
+        }
+
+        public async Task<ResultDto<BmConteoResponseDto>> GetByCodigoConteo(int conteiID)
+        {
+
+            ResultDto<BmConteoResponseDto> result = new ResultDto<BmConteoResponseDto>(null);
+            try
+            {
+
+                var conteo = await _repository.GetByCodigo(conteiID);
+
+
+
+                if (conteo != null)
+                {
+
+                    var listDto = await MapBmConteo(conteo);
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        public async Task CreateReportConteo(int conteoId)
+        {
+            static IContainer Block(IContainer container)
+            {
+                return container
+                    .Border(1)
+                    .Background(Colors.Grey.Lighten3)
+                    .ShowOnce()
+                    .MinWidth(50)
+                    .MinHeight(50)
+                    .AlignCenter()
+                    .AlignMiddle();
+            }
+            static IContainer BlockResumenIcp(IContainer container)
+            {
+                return container
+                    .Border(1)
+                    .Background(Colors.Grey.Lighten3)
+                    .ShowOnce()
+                    .MinWidth(50)
+                    .MinHeight(25)
+                    .AlignCenter()
+                    .AlignMiddle();
+            }
+
+            static IContainer BlockCabeceraTotal(IContainer container)
+            {
+                return container
+                    .Border(1)
+                    .Background(Colors.Grey.Lighten3)
+                    .PaddingRight(2)
+                    .ShowOnce()
+                    .MinWidth(50)
+                    .MinHeight(20)
+                    .AlignCenter()
+                    .AlignMiddle();
+            }
+
+            static IContainer BlockTotales(IContainer container)
+            {
+                return container
+                    .Border(1)
+                    .Background(Colors.Grey.Lighten3)
+                    .PaddingRight(2)
+                    .PaddingLeft(26)
+                    .ShowOnce()
+                    .MinWidth(50)
+                    .MinHeight(20)
+                    .AlignRight()
+                    .AlignMiddle();
+
+            }
+
+
+            BmConteoFilterDto filter = new BmConteoFilterDto();
+            
+
+            var connteo = await GetByCodigoConteo(conteoId);
+            
+            var detalle = await _bmConteoDetalleRepository.GetAllByConteo(conteoId);
+
+            var resumenIcp = GetResumenICP(detalle);
+            var resumenConteo = GetResumenConteo(detalle);
+
+            
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.BmFiles;
+
+            var fileName = $"{destino}Conteo-{conteoId.ToString()}.pdf";
+            try
+            {
+                if (connteo == null)
+                {
+                    var ex = new IOException();
+                    connteo.Data = null;
+                    connteo.IsValid = false;
+                    connteo.Message = ex.Message;
+                }
+
+                else
+                {
+                    Document.Create(documento =>
+                    {
+                        documento.Page(page =>
+                        {
+                            page.Margin(20);
+
+                            page.Header().Row(fila =>
+                            {
+
+                                fila.ConstantItem(140).Border(0).Height(60).Image(filePath: destino + "LogoIzquierda.jpeg")
+                                .FitWidth().FitHeight();
+                                fila.Spacing(4);
+                                fila.RelativeItem().Border(0).Column(col =>
+                                {
+                                    col.Item().AlignCenter().Text("Conteo en Proceso").Bold().FontSize(14);
+
+                                    col.Item().AlignCenter().Text($"{connteo.Data.Titulo}").FontSize(12);
+
+                                });
+                                fila.RelativeItem().Border(0).Column(col =>
+                                {
+                                    col.Item().Border(1).BorderColor(Colors.Cyan.Medium).AlignCenter()
+                                    .Text($"Conteo : {connteo.Data.CodigoBmConteo}").Bold().FontSize(14);
+
+                                    col.Item().Border(1).Background(Colors.LightBlue.Medium).AlignCenter()
+                                    .Text($"{connteo.Data.Fecha.ToShortDateString()}").FontSize(9);
+
+                                    col.Spacing(4);
+
+
+                                });
+
+                            });
+
+
+
+                            page.Content().Column(async col1 =>
+                            {
+
+                                col1.Spacing(4);
+
+                                col1.Item().Element(Block).Text($"Comentario :{"  "}  {connteo.Data.Comentario}");
+                                col1.Item().LineHorizontal(0.5f);
+
+
+
+                                col1.Item().Table(async tabla =>
+                                {
+
+
+                                    foreach (var itemResumenIcp in resumenIcp)
+                                    {
+
+                                        tabla.Cell().RowSpan(5).ColumnSpan(5).Element(BlockResumenIcp).Text(itemResumenIcp.UnidadTrabajo);
+
+                                        foreach (var item in detalle.Where(x => x.CODIGO_ICP == itemResumenIcp.CodigoIcp).ToList())
+                                        {
+
+
+                                            tabla.ColumnsDefinition(async columnas =>
+                                                {
+                                                    columnas.RelativeColumn(1);
+                                                    columnas.RelativeColumn(4);
+                                                    columnas.RelativeColumn(2);
+                                                    columnas.RelativeColumn(2);
+                                                    columnas.RelativeColumn(2);
+
+
+                                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignCenter()
+                                                    .Padding(2).Text($"{item.CONTEO}").FontSize(8);
+
+                                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                                    .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
+
+                                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                                    .Padding(2).Text(item.CANTIDAD).FontSize(8);
+
+                                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                                    .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
+
+                                                    tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                                    .Padding(2).Text(item.DIFERENCIA).FontSize(8);
+
+
+
+                                                });
+
+
+
+                                            if (item.COMENTARIO != null && item.COMENTARIO.Length > 0)
+                                            {
+                                                tabla.Cell().ColumnSpan(5).Element(Block).Text(item.COMENTARIO);
+                                            }
+                                        }
+
+                                    }
+
+
+
+                                    tabla.Header(cabecera =>
+                                        {
+                                            cabecera.Cell().ScaleToFit().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
+                                            .Padding(2).Text("Conteo");
+
+                                            cabecera.Cell().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
+                                            .Padding(2).Text("Numero Placa");
+
+                                            cabecera.Cell().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
+                                            .Padding(2).Text("Cantidad");
+
+                                            cabecera.Cell().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
+                                            .Padding(2).Text("Contado");
+
+                                            cabecera.Cell().Background(Colors.LightBlue.Medium).AlignMiddle().AlignCenter()
+                                            .Padding(2).Text("Diferencia");
+
+                                        });
+
+
+                                });
+
+                                col1.Item().Row(pie =>
+                                {
+                                    pie.ConstantItem(350).PaddingRight(2).AlignRight().Element(BlockCabeceraTotal).Text("Total Cantidad");
+                                    pie.RelativeItem().PaddingRight(2).Element(BlockCabeceraTotal).Text("Total Contada");
+                                    pie.RelativeItem().PaddingRight(2).Element(BlockCabeceraTotal).Text("Total Diferencia");
+
+                                });
+
+                                col1.Item().Row(pie =>
+                                {
+                                    pie.ConstantItem(350).AlignRight().PaddingRight(2).Element(BlockTotales).AlignRight().Text(connteo.Data.TotalCantidad);
+                                    pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(connteo.Data.TotalCantidadContado);
+                                    pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(connteo.Data.TotalDiferencia);
+
+                                });
+                            });
+
+
+                        });
+
+
+
+                    }).GeneratePdf(fileName);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                var message = ex.Message;
+            }
+
+
         }
 
     }
