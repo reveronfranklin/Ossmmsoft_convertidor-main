@@ -8,7 +8,9 @@
         public string FechaNominaString { get; set; }
         public FechaDto FechaNominaObj { get; set; }
         public int Periodo { get; set; }
+        public string DescripcionPeriodo { get; set; }
         public string TipoNomina { get; set; }
+        public string DescripcionTipoNomina{ get; set; }
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;
         public string EXTRA3 { get; set; } = string.Empty;
@@ -27,6 +29,9 @@
         public FechaDto FechaPrenominaObj { get; set; }
         public int CodigoPresupuesto { get; set; }
         public string Descripcion { get; set; } = string.Empty;
+        public string SearchText { get { return $"{CodigoTipoNomina}-{FechaNominaString}-{DescripcionPeriodo}-{DescripcionTipoNomina}"; } }
+        public int Year { get { return FechaNomina.Year; } }
+
 
     }
 }

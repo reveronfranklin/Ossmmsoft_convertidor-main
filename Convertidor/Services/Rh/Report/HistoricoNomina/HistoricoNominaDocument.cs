@@ -14,7 +14,8 @@ namespace Convertidor.Services.Rh.Report.Example
         public List<RhReporteNominaResumenConceptoResponseDto> Model { get; }
         public List<RhReporteFirmaResponseDto> ModelFirma { get; }
         public List<RhReporteNominaResponseDto> ModelRecibos { get; }
-        public HistoricoNominaDocument(List<RhReporteNominaResumenConceptoResponseDto> model,
+        public HistoricoNominaDocument(
+            List<RhReporteNominaResumenConceptoResponseDto> model,
             List<RhReporteFirmaResponseDto> modelFirma,
             List<RhReporteNominaResponseDto> modelRecibos, 
             string patchLogo)

@@ -26,8 +26,8 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult>  GeneratePdf(FilterRepoteNomina filter)
         {
-           await  _service.GeneratePdf(filter);
-           return Ok();
+           var result =await  _service.GeneratePdf(filter);
+           return Ok(result);
         }
        
 

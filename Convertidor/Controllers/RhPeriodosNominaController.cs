@@ -22,7 +22,7 @@ namespace Convertidor.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GetAll(PeriodoFilterDto filter)
         {

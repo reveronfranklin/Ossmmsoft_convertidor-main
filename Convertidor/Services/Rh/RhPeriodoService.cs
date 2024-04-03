@@ -173,7 +173,9 @@ namespace Convertidor.Data.Repository.Rh
                     FechaNominaString=g.Key.FechaNominaString,
                     FechaNominaObj=g.Key.FechaNominaObj,
                     Periodo=g.Key.Periodo,
+                    DescripcionPeriodo = GetPeriodo(g.Key.Periodo),
                     TipoNomina=g.Key.TipoNomina,
+                    DescripcionTipoNomina = GetTipoNomina(g.Key.TipoNomina),
                     EXTRA1=g.Key.EXTRA1,
                     EXTRA2=g.Key.EXTRA2,
                     EXTRA3=g.Key.EXTRA3, 
@@ -228,6 +230,23 @@ namespace Convertidor.Data.Repository.Rh
             especial.Decripcion = "2da. Quincena";
             result.Add(normal);
             result.Add(especial);
+          
+            return result;
+        }
+        
+        public string GetPeriodo(int periodo)
+        {
+            string result = "";
+            var periodoObj = GetListPeriodo().Where(x => x.Codigo == periodo).First();
+            result = periodoObj.Decripcion;
+          
+            return result;
+        }
+        public string GetTipoNomina(string tipoNomina)
+        {
+            string result = "";
+            var tipoNominaObj = GetListTipoNomina().Where(x => x.Codigo == tipoNomina).First();
+            result = tipoNominaObj.Decripcion;
           
             return result;
         }
