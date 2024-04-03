@@ -24,7 +24,7 @@ public class ReportHistoricoNominaService:IReportHistoricoNominaService
         var settings = _configuration.GetSection("Settings").Get<Settings>();
         
         var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
-        var filePath = $"HistoricoDeNomina-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
+        var filePath = $"{ @settings.RhFiles}HistoricoDeNomina-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
 
     
         var model = await   _rhReporteNominaHistoricoService.GetByPeriodoTipoNominaResumenConcepto(filter);

@@ -19,12 +19,13 @@ namespace Convertidor.Data.Repository.Rh
             _sisUsuarioRepository = sisUsuarioRepository;
         }
        
-        public async Task<List<RH_PERIODOS>> GetAll(PeriodoFilterDto filter)
+        public async Task<List<RhPeriodosResponseDto>> GetAll(PeriodoFilterDto filter)
         {
             try
             {
                 var result = await _repository.GetAll(filter);
-                return (List<RH_PERIODOS>)result;
+                var resultDto = await MapListPeriodoDto(result);
+                return (List<RhPeriodosResponseDto>)resultDto;
             }
             catch (Exception ex)
             {
@@ -36,13 +37,14 @@ namespace Convertidor.Data.Repository.Rh
 
        
 
-        public async Task<List<RH_PERIODOS>> GetByTipoNomina(int tipoNomina)
+        public async Task<List<RhPeriodosResponseDto>> GetByTipoNomina(int tipoNomina)
            {
             try
             {
 
                 var result = await _repository.GetByTipoNomina(tipoNomina);
-                return (List<RH_PERIODOS>)result;
+                var resultDto = await MapListPeriodoDto(result);
+                return (List<RhPeriodosResponseDto>)resultDto;
             }
             catch (Exception ex)
             {
@@ -56,8 +58,8 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var fecha = await _repository.GetByYear(ano);
-                var resultDto = await MapListPeriodoDto(fecha);
+                var data = await _repository.GetByYear(ano);
+                var resultDto = await MapListPeriodoDto(data);
                 return resultDto;
             }
             catch (Exception ex)
@@ -129,17 +131,72 @@ namespace Convertidor.Data.Repository.Rh
         public async Task<List<RhPeriodosResponseDto>> MapListPeriodoDto(List<RH_PERIODOS> dtos)
         {
             List<RhPeriodosResponseDto> result = new List<RhPeriodosResponseDto>();
+          
+            
+            
+            var data = from s in dtos
+                group s by new
+                {
+                    CodigoPeriodo = s.CODIGO_PERIODO,
+                    CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
+                    FechaNomina = s.FECHA_NOMINA,
+                    FechaNominaString = s.FECHA_NOMINA.ToString("u"),
+                    FechaNominaObj = GetFechaDto(s.FECHA_NOMINA),
+                    Periodo = s.PERIODO,
+                    TipoNomina = s.TIPO_NOMINA,
+                    EXTRA1 = s.EXTRA1,
+                    EXTRA2 = s.EXTRA2,
+                    EXTRA3 = s.EXTRA3,
+                    UsuarioPreCierre = s.USUARIO_PRECIERRE,
+                    FechaPreCierre = s.FECHA_PRECIERRE,
+                    FechaPreCierreString = s.FECHA_PRECIERRE.ToString("u"),
+                    FechaPreCierreObj =  GetFechaDto(s.FECHA_PRECIERRE),
+                    UsuarioCierre = s.USUARIO_CIERRE,
+                    FechaCierre = s.FECHA_CIERRE,
+                    FechaCierreString = s.FECHA_CIERRE.ToString("u"),
+                    FechaCierreObj = GetFechaDto(s.FECHA_CIERRE),
+                    CodigoCuentaEmpresa = s.CODIGO_CUENTA_EMPRESA,
+                    UsuarioPreNomina = s.USUARIO_PRENOMINA,
+                    FechaPrenomina = s.FECHA_PRENOMINA,
+                    FechaPrenominaString = s.FECHA_PRENOMINA.ToString("u"),
+                    FechaPrenominaObj =  GetFechaDto(s.FECHA_PRENOMINA),
+                    CodigoPresupuesto = s.CODIGO_PRESUPUESTO,
+                    Descripcion = s.DESCRIPCION,
+                  
+                            
+                } into g
+                select new RhPeriodosResponseDto
+                {
+                    CodigoPeriodo=g.Key.CodigoPeriodo,
+                    CodigoTipoNomina=g.Key.CodigoTipoNomina,
+                    FechaNomina=g.Key.FechaNomina,
+                    FechaNominaString=g.Key.FechaNominaString,
+                    FechaNominaObj=g.Key.FechaNominaObj,
+                    Periodo=g.Key.Periodo,
+                    TipoNomina=g.Key.TipoNomina,
+                    EXTRA1=g.Key.EXTRA1,
+                    EXTRA2=g.Key.EXTRA2,
+                    EXTRA3=g.Key.EXTRA3, 
+                    UsuarioPreCierre=g.Key.UsuarioPreCierre,
+                    FechaPreCierre=g.Key.FechaPreCierre,
+                    FechaPreCierreString=g.Key.FechaPreCierreString,
+                    FechaPreCierreObj=g.Key.FechaPreCierreObj,
+                    UsuarioCierre=g.Key.UsuarioCierre,
+                    FechaCierre=g.Key.FechaCierre,
+                    FechaCierreString=g.Key.FechaCierreString,
+                    FechaCierreObj=g.Key.FechaCierreObj,
+                    CodigoCuentaEmpresa=g.Key.CodigoCuentaEmpresa,
+                    UsuarioPreNomina=g.Key.UsuarioPreNomina,
+                    FechaPrenomina=g.Key.FechaPrenomina,
+                    FechaPrenominaString=g.Key.FechaPrenominaString,
+                    FechaPrenominaObj=g.Key.FechaPrenominaObj,
+                    CodigoPresupuesto=g.Key.CodigoPresupuesto,
+                    Descripcion=g.Key.Descripcion,
+                            
+                };
+            
 
-            foreach (var item in dtos)
-            {
-
-                RhPeriodosResponseDto itemResult = new RhPeriodosResponseDto();
-                itemResult = await MapPeriodosDto(item);
-                
-                result.Add(itemResult);
-
-
-            }
+            result = data.ToList();
             return result;
 
 
