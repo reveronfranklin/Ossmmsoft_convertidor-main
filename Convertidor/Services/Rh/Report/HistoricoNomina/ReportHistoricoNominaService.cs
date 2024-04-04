@@ -29,6 +29,8 @@ public class ReportHistoricoNominaService:IReportHistoricoNominaService
 
     
         var model = await   _rhReporteNominaHistoricoService.GetByPeriodoTipoNominaResumenConcepto(filter);
+        if (model.Data == null) return model.Message;
+        
         var modelFirma = await _rhReporteFirmaService.GetAll();
         var modelRecibos = await _rhReporteNominaHistoricoService.GetByPeriodoTipoNomina(filter);
         var document = new HistoricoNominaDocument(model.Data,modelFirma.Data,modelRecibos.Data,pathLogo);
