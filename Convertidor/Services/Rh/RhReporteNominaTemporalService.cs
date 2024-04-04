@@ -7,14 +7,17 @@ namespace Convertidor.Data.Repository.Rh
         
    
         private readonly IRhReporteNominaTemporalRepository _repository;
+        private readonly IRhTipoNominaService _rhTipoNominaService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
    
 
         public RhReporteNominaTemporalService(IRhReporteNominaTemporalRepository repository, 
                                         IRhDescriptivasService descriptivaService, 
+                                        IRhTipoNominaService rhTipoNominaService, 
                                         ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
+            _rhTipoNominaService = rhTipoNominaService;
             _sisUsuarioRepository = sisUsuarioRepository;
         }
        
@@ -80,6 +83,119 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        
+        public async Task<ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> > GetByPeriodoTipoNominaResumenConcepto(FilterRepoteNomina filter)
+        {
+            try
+            {
+                ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> result = new  ResultDto<List<RhReporteNominaResumenConceptoResponseDto>> (null);
+                var historico = await _repository.GetByPeriodoTipoNomina(filter.CodigoPeriodo,filter.CodigoTipoNomina);
+                if (historico.Count > 0)
+                {
+                    result.Data = await MapListHistoricoResumenConcepto(historico,filter);
+                    result.Message = "";
+                    result.IsValid = true;
+                    
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    return result;
+                }
+            
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+        }
+
+        public string GetMes(int mes)
+        {
+            string result;
+            int opt = 2;
+ 
+            switch(mes)
+            {
+                case 1: 
+                    result = "Enero";
+                    break;
+                case 2: 
+                    result = "Febrero";
+                    break;
+                case 3: 
+                    result = "Marzo";
+                    break;
+                case 4: 
+                    result = "Abril";
+                    break;
+                case 5: 
+                    result = "Mqyo";
+                    break;
+                case 6: 
+                    result = "Junio";
+                    break;
+                case 7: 
+                    result = "Julio";
+                    break;
+                case 8: 
+                    result = "Agosto";
+                    break;
+                case 9: 
+                    result = "Septiembre";
+                    break;
+                case 10: 
+                    result = "Octubre";
+                    break;
+                case 11: 
+                    result = "Noviembre";
+                    break;
+                case 12: 
+                    result = "Diciembre";
+                    break;
+                
+                default:
+                    result = "Error";
+                    break;
+            }
+
+            return result;
+        }
+        public async  Task<List<RhReporteNominaResumenConceptoResponseDto>> MapListHistoricoResumenConcepto(List<RH_V_REPORTE_NOMINA_TEMPORAL> dtos,FilterRepoteNomina filter)
+        {
+            RhTiposNominaFilterDto tiposNominaFilterDto = new RhTiposNominaFilterDto();
+            tiposNominaFilterDto.CodigoTipoNomina = filter.CodigoTipoNomina;
+            var tipoNomina = await _rhTipoNominaService.GetByCodigo(tiposNominaFilterDto);
+               
+            
+            var lista = from s in dtos
+                group s by new { FechaNomina=s.FECHA_NOMINA, NumeroConcepto = s.NUMERO_CONCEPTO ,DenominacionConcepto=s.DENOMINACION_CONCEPTO,Periodo=s.PERIODO,Descripcion=s.DESCRIPCION} into g
+                select new RhReporteNominaResumenConceptoResponseDto()
+                {
+                    FechaNomina=g.Key.FechaNomina,
+                    TipoNomina = tipoNomina.Descripcion,
+                    NumeroConcepto=g.Key.NumeroConcepto,
+                    DenominacionConcepto=g.Key.DenominacionConcepto,
+                    Periodo=g.Key.Periodo,
+                    Año = g.Key.FechaNomina.Year.ToString(),
+                    Mes=GetMes(g.Key.FechaNomina.Month),
+                    Descripcion = g.Key.Descripcion,
+                    Asignacion = g.Sum(s => s.ASIGNACION),
+                    Deduccion = g.Sum(s => s.DEDUCCION),
+
+                };
+           
+            return lista.ToList();
+
+        }
+
+
         public FechaDto GetFechaDto(DateTime fecha)
         {
             var FechaDesdeObj = new FechaDto();

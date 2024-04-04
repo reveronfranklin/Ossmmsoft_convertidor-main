@@ -53,6 +53,22 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<RhPeriodosResponseDto> GetByPeriodo(int codigoPeriodo)
+        {
+            try
+            {
+
+                var result = await _repository.GetByCodigo(codigoPeriodo);
+                var resultDto = await MapPeriodosDto(result);
+                return (RhPeriodosResponseDto)resultDto;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<List<RhPeriodosResponseDto>> GetByYear(int ano)
         {
             try
