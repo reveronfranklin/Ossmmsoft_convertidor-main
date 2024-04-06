@@ -117,7 +117,7 @@ namespace Convertidor.Controllers
             //result.accessToken = token;
             //result.refreshToken = newRefreshToken.Refresh_Token;
 
-                resultLogin.Message = "";
+            resultLogin.Message = "";
             resultLogin.RefreshToken = newRefreshToken.Refresh_Token; 
             resultLogin.AccessToken = token;
             resultLogin.Name = sisUsuario.LOGIN;

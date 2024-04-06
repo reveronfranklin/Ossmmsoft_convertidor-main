@@ -28,28 +28,29 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<List<RhTmpRetencionesIncesDto>> result = new ResultDto<List<RhTmpRetencionesIncesDto>>(null);
             try
             {
-                var historico = await _rrhservice.GetRetencionesHInces(filter);
-                if (historico.Count == 0)
-                {
-                    int procesoId = 0;
-                    procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
+               
+                int procesoId = 0;
+                procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
 
-                    await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
-                    var retenciones = await _repository.GetByProcesoId(procesoId);
-                    if (retenciones.Count > 0)
+                await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                var retenciones = await _repository.GetByProcesoId(procesoId);
+                if (retenciones.Count > 0)
+                {
+                    var contador = 0;
+                    var listRetenciones = await MapListRhTmpRetencionesIncesDto(retenciones);
+                    foreach (var item in listRetenciones)
                     {
-                        var listRetenciones = MapRetencionesIncesTmpH(retenciones);
-                        var created = await _rrhservice.Create(listRetenciones);
-                        await _repository.Delete(procesoId);
+                        contador = contador + 1;
+                        item.Id = contador;
+                    } 
+                    result.Data = listRetenciones.OrderBy(x=>x.FechaNomina).ToList();;
 
-                    }
-                    result.Data = await MapListRhTmpRetencionesIncesDto(retenciones);
-                }
-                else
-                {
-                    result.Data = historico;
+                    await _repository.Delete(procesoId);
+            
 
                 }
+               
+                
                 var linkData = $"";
                 if (result.Data.Count > 0)
                 {
@@ -167,19 +168,50 @@ namespace Convertidor.Data.Repository.Rh
         {
             List<RhTmpRetencionesIncesDto> result = new List<RhTmpRetencionesIncesDto>();
 
-            if (entities != null)
-            {
-                foreach (var item in entities)
+           
+           
+            var data = from s in entities
+                group s by new
                 {
-
-                    RhTmpRetencionesIncesDto itemResult = new RhTmpRetencionesIncesDto();
-
-                    itemResult = await MapRhTmpRetencionesIncesDto(item);
-
-                    result.Add(itemResult);
-                }
-            }
-
+                    
+                    CodigoRetencionAporte = s.CODIGO_RETENCION_APORTE,
+                    Secuencia = s.SECUENCIA,
+                    UnidadEjecutora = s.UNIDAD_EJECUTORA,
+                    CedulaTexto = s.CEDULATEXTO,
+                    NombresApellidos = s.NOMBRES_APELLIDOS,
+                    DescripcionCargo = s.DESCRIPCION_CARGO,
+                    FechaIngreso = s.FECHA_INGRESO,
+                    MontoIncesTrabajador = s.MONTO_INCES_TRABAJADOR,
+                    MontoIncesPatrono=s.MONTO_INCES_PATRONO,
+                    MontoTotalRetencion=s.MONTO_TOTAL_RETENCION,
+                    FechaNomina = s.FECHA_NOMINA,
+                    SiglasTipoNomina = s.SIGLAS_TIPO_NOMINA,
+                    FechaDesde = s.FECHA_DESDE,
+                    FechaHasta = s.FECHA_HASTA,
+                    CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
+                    
+                } into g
+                select new RhTmpRetencionesIncesDto
+                {
+                    CodigoRetencionAporte=g.Key.CodigoRetencionAporte,
+                    Secuencia=g.Key.Secuencia,
+                    UnidadEjecutora=g.Key.UnidadEjecutora,
+                    CedulaTexto=g.Key.CedulaTexto,
+                    NombresApellidos=g.Key.NombresApellidos,
+                    DescripcionCargo=g.Key.DescripcionCargo,
+                    FechaIngreso = g.Key.FechaIngreso,
+                    MontoIncesTrabajador=g.Key.MontoIncesTrabajador,
+                    MontoIncesPatrono=g.Key.MontoIncesPatrono,
+                    MontoTotalRetencion=g.Key.MontoTotalRetencion,
+                    FechaNomina=g.Key.FechaNomina,
+                    SiglasTipoNomina=g.Key.SiglasTipoNomina, 
+                    FechaDesde=g.Key.FechaDesde,
+                    FechaHasta=g.Key.FechaHasta,
+                    CodigoTipoNomina=g.Key.CodigoTipoNomina,
+                 
+                            
+                };
+            result = data.ToList();
             return result;
 
 

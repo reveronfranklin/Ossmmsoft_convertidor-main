@@ -28,9 +28,7 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<List<RhTmpRetencionesSindDto>> result = new ResultDto<List<RhTmpRetencionesSindDto>>(null);
             try
             {
-                var historico = await _rrhservice.GetRetencionesHSind(filter);
-                if (historico.Count == 0)
-                {
+              
                     int procesoId = 0;
                     procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
 
@@ -38,18 +36,21 @@ namespace Convertidor.Data.Repository.Rh
                     var retenciones = await _repository.GetByProcesoId(procesoId);
                     if (retenciones.Count > 0)
                     {
-                        var listRetenciones = MapRetencionesSindTmpH(retenciones);
-                        var created = await _rrhservice.Create(listRetenciones);
+                        var listRetenciones =await MapListRhTmpRetencionesSindDto(retenciones);
+                        var contador = 0;
+                        foreach (var item in listRetenciones)
+                        {
+                            contador = contador + 1;
+                            item.Id = contador;
+                        } 
+                        result.Data = listRetenciones.OrderBy(x=>x.FechaNomina).ToList();;
+
                         await _repository.Delete(procesoId);
 
                     }
-                    result.Data = await MapListRhTmpRetencionesSindDto(retenciones);
-                }
-                else
-                {
-                    result.Data = historico;
-
-                }
+                   
+                
+               
                 var linkData= $"";
 
                 if (result.Data.Count > 0)
@@ -164,19 +165,51 @@ namespace Convertidor.Data.Repository.Rh
         public async  Task<List<RhTmpRetencionesSindDto>> MapListRhTmpRetencionesSindDto(List<RH_TMP_RETENCIONES_SIND> entities)
         {
             List<RhTmpRetencionesSindDto> result = new List<RhTmpRetencionesSindDto>();
-
-            if (entities !=null) {
-                foreach (var item in entities)
+                
+         
+            
+             var data = from s in entities
+                group s by new
                 {
-
-                    RhTmpRetencionesSindDto itemResult = new RhTmpRetencionesSindDto();
-
-                    itemResult = await MapRhTmpRetencionesSindDto(item);
-
-                    result.Add(itemResult);
-                }
-            }
-        
+                    
+                    CodigoRetencionAporte = s.CODIGO_RETENCION_APORTE,
+                    Secuencia = s.SECUENCIA,
+                    UnidadEjecutora = s.UNIDAD_EJECUTORA,
+                    CedulaTexto = s.CEDULATEXTO,
+                    NombresApellidos = s.NOMBRES_APELLIDOS,
+                    DescripcionCargo = s.DESCRIPCION_CARGO,
+                    FechaIngreso = s.FECHA_INGRESO,
+                    MontoSindTrabajador = s.MONTO_SIND_TRABAJADOR,
+                    MontoSindPatrono=s.MONTO_SIND_PATRONO,
+                    MontoTotalRetencion=s.MONTO_TOTAL_RETENCION,
+                    FechaNomina = s.FECHA_NOMINA,
+                    SiglasTipoNomina = s.SIGLAS_TIPO_NOMINA,
+                    FechaDesde = s.FECHA_DESDE,
+                    FechaHasta = s.FECHA_HASTA,
+                    CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
+                    
+                } into g
+                select new RhTmpRetencionesSindDto
+                {
+                    CodigoRetencionAporte=g.Key.CodigoRetencionAporte,
+                    Secuencia=g.Key.Secuencia,
+                    UnidadEjecutora=g.Key.UnidadEjecutora,
+                    CedulaTexto=g.Key.CedulaTexto,
+                    NombresApellidos=g.Key.NombresApellidos,
+                    DescripcionCargo=g.Key.DescripcionCargo,
+                    FechaIngreso = g.Key.FechaIngreso,
+                    MontoSindTrabajador=g.Key.MontoSindTrabajador,
+                    MontoSindPatrono=g.Key.MontoSindPatrono,
+                    MontoTotalRetencion=g.Key.MontoTotalRetencion,
+                    FechaNomina=g.Key.FechaNomina,
+                    SiglasTipoNomina=g.Key.SiglasTipoNomina, 
+                    FechaDesde=g.Key.FechaDesde,
+                    FechaHasta=g.Key.FechaHasta,
+                    CodigoTipoNomina=g.Key.CodigoTipoNomina,
+                 
+                            
+                };
+             result = data.ToList();
             return result;
 
 

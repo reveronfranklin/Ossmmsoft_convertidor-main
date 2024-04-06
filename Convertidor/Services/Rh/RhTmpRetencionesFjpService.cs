@@ -28,33 +28,37 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<List<RhTmpRetencionesFjpDto>> result = new ResultDto<List<RhTmpRetencionesFjpDto>>(null);
             try
             {
-                var historico = await _rrhservice.GetRetencionesHFjp(filter);
-                if (historico.Count == 0)
+                if (filter.TipoNomina == 0)
                 {
-                    int procesoId = 0;
-                    procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    result.LinkData = "No Data";
+                    return result;
+                }
+                int procesoId = 0;
+                procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
 
-                    await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
-                    var retenciones = await _repository.GetByProcesoId(procesoId);
-                    if (retenciones.Count>0)
+                await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                var retenciones = await _repository.GetByProcesoId(procesoId);
+                if (retenciones.Count>0)
+                {
+                    var listRetenciones = await MapListRhTmpRetencionesFjpDto(retenciones);
+                    var contador = 0;
+                    foreach (var item in listRetenciones)
                     {
-                        var listRetenciones = MapRetencionesFjpTmpH(retenciones);
-                        var created = await _rrhservice.Create(listRetenciones);
-                        await _repository.Delete(procesoId);
+                        contador = contador + 1;
+                        item.Id = contador;
+                    } 
+                    result.Data = listRetenciones.OrderBy(x=>x.FechaNomina).ToList();;
 
-                    }
-                    result.Data = await MapListRhTmpRetencionesFjpDto(retenciones);
-                }
-                else
-                {
-                    result.Data = historico;
+                    await _repository.Delete(procesoId);
 
                 }
-                
                 
                 var linkData = $"";
 
-                if (result.Data.Count > 0)
+                if (result.Data !=null && result.Data.Count > 0)
                 {
                     
                     ExcelMapper mapper = new ExcelMapper();
@@ -167,16 +171,48 @@ namespace Convertidor.Data.Repository.Rh
         {
             List<RhTmpRetencionesFjpDto> result = new List<RhTmpRetencionesFjpDto>();
            
-            
-            foreach (var item in entities)
-            {
-
-                RhTmpRetencionesFjpDto itemResult = new RhTmpRetencionesFjpDto();
-
-                itemResult = await MapRhTmpRetencionesFjpDto(item);
-               
-                result.Add(itemResult);
-            }
+           
+              var data = from s in entities
+                group s by new
+                {
+                    
+                    CodigoRetencionAporte = s.CODIGO_RETENCION_APORTE,
+                    Secuencia = s.SECUENCIA,
+                    UnidadEjecutora = s.UNIDAD_EJECUTORA,
+                    CedulaTexto = s.CEDULATEXTO,
+                    NombresApellidos = s.NOMBRES_APELLIDOS,
+                    DescripcionCargo = s.DESCRIPCION_CARGO,
+                    FechaIngreso = s.FECHA_INGRESO,
+                    MontoFjpTrabajador = s.MONTO_FJP_TRABAJADOR,
+                    MontoFjpPatrono=s.MONTO_FJP_PATRONO,
+                    MontoTotalRetencion=s.MONTO_TOTAL_RETENCION,
+                    FechaNomina = s.FECHA_NOMINA,
+                    SiglasTipoNomina = s.SIGLAS_TIPO_NOMINA,
+                    FechaDesde = s.FECHA_DESDE,
+                    FechaHasta = s.FECHA_HASTA,
+                    CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
+                    
+                } into g
+                select new RhTmpRetencionesFjpDto
+                {
+                    CodigoRetencionAporte=g.Key.CodigoRetencionAporte,
+                    Secuencia=g.Key.Secuencia,
+                    UnidadEjecutora=g.Key.UnidadEjecutora,
+                    CedulaTexto=g.Key.CedulaTexto,
+                    NombresApellidos=g.Key.NombresApellidos,
+                    DescripcionCargo=g.Key.DescripcionCargo,
+                    FechaIngreso = g.Key.FechaIngreso,
+                    MontoFjpTrabajador=g.Key.MontoFjpPatrono,
+                    MontoTotalRetencion=g.Key.MontoTotalRetencion,
+                    FechaNomina=g.Key.FechaNomina,
+                    SiglasTipoNomina=g.Key.SiglasTipoNomina, 
+                    FechaDesde=g.Key.FechaDesde,
+                    FechaHasta=g.Key.FechaHasta,
+                    CodigoTipoNomina=g.Key.CodigoTipoNomina,
+                 
+                            
+                };
+              result = data.ToList();
             return result;
 
 

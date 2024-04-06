@@ -2,6 +2,7 @@
 {
     public class RhTmpRetencionesSsoDto
     {
+        public int Id { get; set; }
         public int CodigoRetencionAporte { get; set; }
         public int Secuencia { get; set; }
         public string UnidadEjecutora { get; set; }

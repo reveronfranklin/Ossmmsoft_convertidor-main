@@ -2,6 +2,7 @@
 {
     public class RhTmpRetencionesCahDto
     {
+        public int Id { get; set; }
         public int CodigoRetencionAporte { get; set; }
         public int Secuencia { get; set; }
         public string UnidadEjecutora { get; set; }
@@ -20,6 +21,8 @@
 
         public string Avatar { get; set; } = string.Empty;
         public string SearchText { get { return $"{UnidadEjecutora}-{CedulaTexto}-{NombresApellidos}-{UnidadEjecutora}--{DescripcionCargo}"; } }
-
+      
+      
+        
     }
 }

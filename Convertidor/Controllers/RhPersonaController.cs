@@ -58,7 +58,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetPersona(PersonaFilterDto filter)
         {
-            var result = await _service.GetPersona(filter.CodigoPersona);
+                var result = await _service.GetPersona(filter.CodigoPersona);
             return Ok(result);
         }
         

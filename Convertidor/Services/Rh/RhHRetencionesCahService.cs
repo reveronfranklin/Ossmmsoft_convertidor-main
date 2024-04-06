@@ -66,31 +66,63 @@ namespace Convertidor.Data.Repository.Rh
             return itemResult;
 
         }
-
-        public async  Task<List<RhTmpRetencionesCahDto>> MapListRhTmpRetencionesCahDto(List<RH_H_RETENCIONES_CAH> entities)
+        public async Task<List<RhTmpRetencionesCahDto>> MapListRhTmpRetencionesCahDto(List<RH_H_RETENCIONES_CAH> dtos)
         {
             List<RhTmpRetencionesCahDto> result = new List<RhTmpRetencionesCahDto>();
-           
-            if(entities!= null)
-            {
-                foreach (var item in entities)
+          
+            
+            
+            var data = from s in dtos
+                group s by new
                 {
-
-                    RhTmpRetencionesCahDto itemResult = new RhTmpRetencionesCahDto();
-
-                    itemResult = await MapRhTmpRetencionesCahDto(item);
-
-                    result.Add(itemResult);
-                }
-            }
+                    
+                    CodigoRetencionAporte = s.CODIGO_RETENCION_APORTE,
+                    Secuencia = s.SECUENCIA,
+                    UnidadEjecutora = s.UNIDAD_EJECUTORA,
+                    CedulaTexto = s.CEDULATEXTO,
+                    NombresApellidos = s.NOMBRES_APELLIDOS,
+                    DescripcionCargo = s.DESCRIPCION_CARGO,
+                    FechaIngreso = s.FECHA_INGRESO,
+                    MontoCahTrabajador = s.MONTO_CAH_TRABAJADOR,
+                    MontoCahPatrono = s.MONTO_CAH_PATRONO,
+                    MontoTotalRetencion = s.MONTO_TOTAL_RETENCION,
+                    FechaNomina = s.FECHA_NOMINA,
+                    SiglasTipoNomina = s.SIGLAS_TIPO_NOMINA,
+                    FechaDesde = s.FECHA_DESDE,
+                    FechaHasta = s.FECHA_HASTA,
+                    CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
+                    
+                } into g
+                select new RhTmpRetencionesCahDto
+                {
+                    CodigoRetencionAporte=g.Key.CodigoRetencionAporte,
+                    Secuencia=g.Key.Secuencia,
+                    UnidadEjecutora=g.Key.UnidadEjecutora,
+                    CedulaTexto=g.Key.CedulaTexto,
+                    NombresApellidos=g.Key.NombresApellidos,
+                    DescripcionCargo=g.Key.DescripcionCargo,
+                    FechaIngreso = g.Key.FechaIngreso,
+                    MontoCahTrabajador=g.Key.MontoCahTrabajador,
+                    MontoCahPatrono = g.Key.MontoCahPatrono,
+                    MontoTotalRetencion=g.Key.MontoTotalRetencion,
+                    FechaNomina=g.Key.FechaNomina,
+                    SiglasTipoNomina=g.Key.SiglasTipoNomina, 
+                    FechaDesde=g.Key.FechaDesde,
+                    FechaHasta=g.Key.FechaHasta,
+                    CodigoTipoNomina=g.Key.CodigoTipoNomina,
+                 
+                            
+                };
             
 
-           
+            result = data.ToList();
             return result;
 
 
 
         }
+
+
 
 
 
