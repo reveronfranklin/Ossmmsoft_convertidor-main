@@ -128,10 +128,7 @@ namespace Convertidor.Services.Rh.Report.Example
                         {
                             container.PaddingVertical(40).Column(async column =>
                             {
-                                //column.Spacing(20);
 
-                                //column.Item().PageBreak();
-                                //column.Item().AlignCenter().Text($"RECIBOS").SemiBold();
                                 var listaDepartamento = from s in ModelRecibos
                                                    group s by new
                                                    {
@@ -148,6 +145,11 @@ namespace Convertidor.Services.Rh.Report.Example
 
                                 foreach (var itemDepartamento in listaDepartamento)
                                 {
+                                    
+
+                                    
+                                    column.Item().AlignCenter().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
+                                    column.Item().PageBreak();
                                     var listaPersona = from s in ModelRecibos.Where(x=> x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat)
                                                        group s by new
                                                        {
