@@ -4,30 +4,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
-	public class PRE_ASIGNACIONESRepository : IPRE_ASIGNACIONESRepository
+	public class PRE_SALDOSRepository : IPRE_SALDOSRepository
     {
 	
 
         private readonly DataContextPre _context;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public PRE_ASIGNACIONESRepository(DataContextPre context, ISisUsuarioRepository sisUsuarioRepository)
+        public PRE_SALDOSRepository(DataContextPre context, ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
             _sisUsuarioRepository = sisUsuarioRepository;
         }
 
         
-        public async Task<PRE_ASIGNACIONES> GetByCodigo(int codigo)
+        public async Task<PRE_SALDOS> GetByCodigo(int codigo)
         {
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
              
-                var result = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_EMPRESA==conectado.Empresa && e.CODIGO_ASIGNACION == codigo).FirstOrDefaultAsync();
+                var result = await _context.PRE_SALDOS.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_EMPRESA==conectado.Empresa && e.CODIGO_SALDO== codigo).FirstOrDefaultAsync();
 
-                return (PRE_ASIGNACIONES)result;
+                return (PRE_SALDOS)result;
             }
             catch (Exception ex)
             {
@@ -37,12 +37,12 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
        
-        public async Task<List<PRE_ASIGNACIONES>> GetAll()
+        public async Task<List<PRE_SALDOS>> GetAll()
         {
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var result = await _context.PRE_ASIGNACIONES.DefaultIfEmpty().Where(x=>x.CODIGO_EMPRESA==conectado.Empresa).ToListAsync();
+                var result = await _context.PRE_SALDOS.DefaultIfEmpty().Where(x=>x.CODIGO_EMPRESA==conectado.Empresa).ToListAsync();
 
                 return result;
             }
@@ -53,12 +53,12 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
-        public async Task<List<PRE_ASIGNACIONES>> GetAllByPresupuesto(int codigoPresupuesto)
+        public async Task<List<PRE_SALDOS>> GetAllByPresupuesto(int codigoPresupuesto)
         {
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var result = await _context.PRE_ASIGNACIONES.DefaultIfEmpty().Where(x=> x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
+                var result = await _context.PRE_SALDOS.DefaultIfEmpty().Where(x=> x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
 
                 return result;
             }
@@ -69,12 +69,12 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
-        public async Task<List<PRE_ASIGNACIONES>> GetAllByIcp(int codigoPresupuesto,int codigoIcp)
+        public async Task<List<PRE_SALDOS>> GetAllByIcp(int codigoPresupuesto,int codigoIcp)
         {
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var result = await _context.PRE_ASIGNACIONES.DefaultIfEmpty().Where(x=> x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.CODIGO_ICP==codigoIcp).ToListAsync();
+                var result = await _context.PRE_SALDOS.DefaultIfEmpty().Where(x=> x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.CODIGO_ICP==codigoIcp).ToListAsync();
 
                 return result;
             }
@@ -85,12 +85,12 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
-        public async Task<List<PRE_ASIGNACIONES>> GetAllByIcpPuc(int codigoPresupuesto,int codigoIcp,int codigoPuc)
+        public async Task<List<PRE_SALDOS>> GetAllByIcpPuc(int codigoPresupuesto,int codigoIcp,int codigoPuc)
         {
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var result = await _context.PRE_ASIGNACIONES.DefaultIfEmpty().Where(x=> x.CODIGO_EMPRESA==conectado.Empresa  && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.CODIGO_ICP==codigoIcp && x.CODIGO_PUC==codigoPuc).ToListAsync();
+                var result = await _context.PRE_SALDOS.DefaultIfEmpty().Where(x=> x.CODIGO_EMPRESA==conectado.Empresa  && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.CODIGO_ICP==codigoIcp && x.CODIGO_PUC==codigoPuc).ToListAsync();
 
                 return result;
             }
@@ -103,15 +103,15 @@ namespace Convertidor.Data.Repository.Presupuesto
         }
 
 
-        public async Task<ResultDto<PRE_ASIGNACIONES>> Add(PRE_ASIGNACIONES entity)
+        public async Task<ResultDto<PRE_SALDOS>> Add(PRE_SALDOS entity)
         {
-            ResultDto<PRE_ASIGNACIONES> result = new ResultDto<PRE_ASIGNACIONES>(null);
+            ResultDto<PRE_SALDOS> result = new ResultDto<PRE_SALDOS>(null);
             try
             {
 
 
 
-                await _context.PRE_ASIGNACIONES.AddAsync(entity);
+                await _context.PRE_SALDOS.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -134,18 +134,18 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<ResultDto<PRE_ASIGNACIONES>> Update(PRE_ASIGNACIONES entity)
+        public async Task<ResultDto<PRE_SALDOS>> Update(PRE_SALDOS entity)
         {
-            ResultDto<PRE_ASIGNACIONES> result = new ResultDto<PRE_ASIGNACIONES>(null);
+            ResultDto<PRE_SALDOS> result = new ResultDto<PRE_SALDOS>(null);
 
             try
             {
-                PRE_ASIGNACIONES entityUpdate = await GetByCodigo(entity.CODIGO_ASIGNACION);
+                PRE_SALDOS entityUpdate = await GetByCodigo(entity.CODIGO_SALDO);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.PRE_ASIGNACIONES.Update(entity);
+                    _context.PRE_SALDOS.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -174,10 +174,10 @@ namespace Convertidor.Data.Repository.Presupuesto
 
             try
             {
-                PRE_ASIGNACIONES entity = await GetByCodigo(codigoAsignacion);
+                PRE_SALDOS entity = await GetByCodigo(codigoAsignacion);
                 if (entity != null)
                 {
-                    _context.PRE_ASIGNACIONES.Remove(entity);
+                    _context.PRE_SALDOS.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -196,7 +196,7 @@ namespace Convertidor.Data.Repository.Presupuesto
 
             try
             {
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE.PRE_ASIGNACIONES WHERE CODIGO_PRESUPUESTO= {codigoPresupuesto};\nEND;";
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE.PRE_SALDOS WHERE CODIGO_PRESUPUESTO= {codigoPresupuesto};\nEND;";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 return "";
@@ -215,8 +215,8 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
                 int result = 0;
-                var last = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_ASIGNACION)
+                var last = await _context.PRE_SALDOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_SALDO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -224,7 +224,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
                 else
                 {
-                    result = last.CODIGO_ASIGNACION + 1;
+                    result = last.CODIGO_SALDO + 1;
                 }
 
                 return (int)result!;
@@ -247,7 +247,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var asignaciones = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
+                var asignaciones = await _context.PRE_SALDOS.DefaultIfEmpty()
                     .Where(x => x.CODIGO_EMPRESA==conectado.Empresa  && x.CODIGO_PRESUPUESTO == codPresupuesto).FirstOrDefaultAsync();
                 if (asignaciones != null)
                 {
@@ -274,7 +274,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var asignaciones = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
+                var asignaciones = await _context.PRE_SALDOS.DefaultIfEmpty()
                     .Where(x => x.CODIGO_EMPRESA==conectado.Empresa  && x.CODIGO_PRESUPUESTO == codPresupuesto &&  x.PRESUPUESTADO>0).FirstOrDefaultAsync();
                 if (asignaciones != null)
                 {
@@ -302,7 +302,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var asignaciones = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
+                var asignaciones = await _context.PRE_SALDOS.DefaultIfEmpty()
                     .Where(x => x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_ICP == codigoICP).FirstOrDefaultAsync();
                 if (asignaciones != null)
                 {
@@ -331,7 +331,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
-                var asignaciones = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
+                var asignaciones = await _context.PRE_SALDOS.DefaultIfEmpty()
                     .Where(x => x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_PUC == codigoPUC).FirstOrDefaultAsync();
                 if (asignaciones != null)
                 {

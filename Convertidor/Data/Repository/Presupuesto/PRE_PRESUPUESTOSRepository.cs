@@ -172,6 +172,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
                 entity.FECHA_DESDE = entity.FECHA_DESDE.Date;
                 entity.FECHA_HASTA = entity.FECHA_HASTA.Date;
+                entity.FECHA_APROBACION = null;
+                entity.FECHA_UPD = null;
                 entity.FECHA_INS = DateTime.Now;
                 //entity.USUARIO_INS = conectado.Usuario;
                 //entity.CODIGO_EMPRESA = conectado.Empresa;
@@ -243,12 +245,18 @@ namespace Convertidor.Data.Repository.Presupuesto
 
             try
             {
-                PRE_PRESUPUESTOS entity = await GetByCodigo(codigoEmpresa, codigoPresupuesto);
+                
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nDELETE FROM PRE.PRE_PRESUPUESTOS WHERE CODIGO_PRESUPUESTO = {codigoPresupuesto};\nEND;";
+
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                
+                /*PRE_PRESUPUESTOS entity = await GetByCodigo(codigoEmpresa, codigoPresupuesto);
                 if (entity != null)
                 {
                     _context.PRE_PRESUPUESTOS.Remove(entity);
                     await _context.SaveChangesAsync();
-                }
+                }*/
                 return "";
             }
             catch (Exception ex)
@@ -256,6 +264,32 @@ namespace Convertidor.Data.Repository.Presupuesto
                 return ex.Message;
             }
          
+
+
+        }
+
+        
+        public async Task AprobarPresupuesto(int codigoPresupuesto,int codigoUsuario,int codigoEmpresa)
+        {
+
+         
+            try
+            {
+               
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_PKG_CLONAR_PRESUPUESTO.INSERT_PRE_SALDO({codigoPresupuesto},{codigoUsuario},{codigoEmpresa});\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+
+            }
+            catch (Exception ex)
+            {
+                var mess = ex.InnerException.Message;
+
+                throw;
+            }
+
+
 
 
         }

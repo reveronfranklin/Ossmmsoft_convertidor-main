@@ -33,7 +33,12 @@ namespace Convertidor.Data
         public DbSet<PRE_CARGOS> PRE_CARGOS { get; set; }
         public DbSet<PRE_DESCRIPTIVAS> PRE_DESCRIPTIVAS { get; set; }
         public DbSet<PRE_TITULOS> PRE_TITULOS { get; set; }
+        public DbSet<PRE_PUC_SOL_MODIFICACION> PRE_PUC_SOL_MODIFICACION { get; set; }
         
+        public DbSet<PRE_SALDOS> PRE_SALDOS { get; set; }
+        public DbSet<PRE_RESUMEN_SALDOS> PRE_RESUMEN_SALDOS { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,10 +52,35 @@ namespace Convertidor.Data
                 builder.HasNoKey();
                 builder.ToTable("PRE_V_SALDOS");
             })
+            .Entity<PRE_RESUMEN_SALDOS>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("PRE_RESUMEN_SALDOS");
+            })
+            .Entity<PRE_SALDOS>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_SALDO,
+
+                });
+                builder.ToTable("PRE_SALDOS");
+            })
+            
+            
              .Entity<PRE_SALDOS_DIARIOS>(builder =>
              {
                  builder.HasNoKey();
                  builder.ToTable("PRE_SALDOS_DIARIOS");
+             })
+             .Entity<PRE_PUC_SOL_MODIFICACION>(builder =>
+             {
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_PUC_SOL_MODIFICACION,
+
+                 });
+                 builder.ToTable("PRE_PUC_SOL_MODIFICACION");
              })
               .Entity<PRE_ASIGNACIONES>(builder =>
               {

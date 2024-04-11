@@ -67,6 +67,20 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter)
         {
             ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
+            if (filter.CodigoPresupuesto == 0)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "No Data";
+                result.LinkData = $"No DAta";
+            }
+
+           
+           
+            
+            
+            //********
+            
             var cacheKey = $"GetAllByPresupuestoIpcPuc{filter.CodigoPresupuesto.ToString()}-{filter.CodigoPuc.ToString()}-{filter.CodigoIPC.ToString()}";
             var listPresupuesto= await _distributedCache.GetAsync(cacheKey);
             if (listPresupuesto != null)
@@ -76,17 +90,21 @@ namespace Convertidor.Controllers
             else
             {
                 result = await _service.GetAllByPresupuestoIpcPuc(filter);
-                var options = new DistributedCacheEntryOptions()
-                    .SetAbsoluteExpiration(DateTime.Now.AddDays(1))
-                    .SetSlidingExpiration(TimeSpan.FromDays(1));
-                var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
-                var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
-                await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                if (result.Data.Count > 0)
+                {
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(1))
+                        .SetSlidingExpiration(TimeSpan.FromDays(1));
+                    var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                }
+               
             }
             
             try
             {
-                if (result.Data.Count() > 0)
+                if (result.Data != null && result.Data.Count() > 0)
                 {
 
                     ExcelMapper mapper = new ExcelMapper();

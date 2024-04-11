@@ -16,12 +16,15 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<PRE_INDICE_CAT_PRG> GetByCodigos(PreIndiceCategoriaProgramaticaUpdateDto entity);
         Task<PRE_INDICE_CAT_PRG> GetByCodigo(int codigoIcp);
         Task<string> Delete(int codigoICP);
+        Task<string> DeleteByPresupuesto(int codigoPresupuesto);
         Task<PRE_INDICE_CAT_PRG> GetHastaActividad(int ano, int codIcp, string sector, string programa, string subPrograma, string proyecto, string actividad);
         Task<PRE_INDICE_CAT_PRG> GetHastaProyecto(int ano, int codIcp, string sector, string programa, string subPrograma, string proyecto);
         Task<PRE_INDICE_CAT_PRG> GetHastaSubPrograma(int ano, int codIcp, string sector, string programa, string subPrograma);
         Task<PRE_INDICE_CAT_PRG> GetHastaPrograma(int ano, int codIcp, string sector, string programa);
         Task<PRE_INDICE_CAT_PRG> GetHastaSector(int ano, int codIcp, string sector);
-        Task<ResultDto<List<PRE_INDICE_CAT_PRG>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen, int codigoPresupuestoDestino);
+
+        Task<ResultDto<List<PRE_INDICE_CAT_PRG>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,
+            int codigoPresupuestoDestino, int codigoUsuario, int codigoEmpresa);
         Task<PreIndiceCategoriaProgramaticaDescripciones> GetDescripcionIcp(int codIcp);
     }
 }

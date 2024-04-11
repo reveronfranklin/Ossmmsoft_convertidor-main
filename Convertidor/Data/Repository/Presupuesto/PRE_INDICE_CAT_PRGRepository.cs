@@ -547,7 +547,28 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
+        
+        public async Task<string> DeleteByPresupuesto(int codigoPresupuesto)
+        {
 
+            try
+            {
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE.PRE_INDICE_CAT_PRG WHERE CODIGO_PRESUPUESTO= {codigoPresupuesto};\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
+      
         public async Task<ResultDto<PRE_INDICE_CAT_PRG>> Update(PRE_INDICE_CAT_PRG entity)
         {
             ResultDto<PRE_INDICE_CAT_PRG> result = new ResultDto<PRE_INDICE_CAT_PRG>(null);
@@ -668,7 +689,7 @@ namespace Convertidor.Data.Repository.Presupuesto
         }
 
 
-        public async Task<ResultDto<List<PRE_INDICE_CAT_PRG>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,int codigoPresupuestoDestino)
+        public async Task<ResultDto<List<PRE_INDICE_CAT_PRG>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,int codigoPresupuestoDestino,int codigoUsuario,int codigoEmpresa)
         {
 
             ResultDto<List<PRE_INDICE_CAT_PRG>> result = new ResultDto<List<PRE_INDICE_CAT_PRG>>(null);
@@ -704,7 +725,12 @@ namespace Convertidor.Data.Repository.Presupuesto
                     return result;
                 }
 
-                var icpOrigenResult = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_PKG_CLONAR_PRESUPUESTO.CLONAR_Presupuesto({codigoPresupuestoOrigen},{codigoPresupuestoDestino},{codigoUsuario},{codigoEmpresa});\nEND;";
+
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                
+                /*var icpOrigenResult = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
                           .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoOrigen)
                           .OrderBy(x => x.CODIGO_SECTOR)
                           .ThenBy(x => x.CODIGO_PROGRAMA)
@@ -735,7 +761,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                     result.IsValid = false;
                     result.Message = "No existe ICP para el presupuesto Origen";
                     return result;
-                }
+                }*/
 
 
                 var icpDestinoResult = await _context.PRE_INDICE_CAT_PRG.DefaultIfEmpty()
@@ -756,8 +782,11 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
-                return null;
+                var msg = ex.Message;
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
             }
 
 

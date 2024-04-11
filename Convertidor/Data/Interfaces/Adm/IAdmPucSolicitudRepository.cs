@@ -10,5 +10,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_PUC_SOLICITUD>> Update(ADM_PUC_SOLICITUD entity);
         Task<string> Delete(int codigoPucSolicitud);
         Task<int> GetNextKey();
+        Task<bool> ExistePresupuesto(int codigoPresupuesto);
     }
 }

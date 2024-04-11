@@ -29,6 +29,26 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+        public async Task<bool> ExistePresupuesto(int codigoPresupuesto)
+        {
+            var result = false;
+            try
+            {
+                var solicitud = await _context.ADM_PUC_SOLICITUD.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_PRESUPUESTO == codigoPresupuesto).FirstOrDefaultAsync();
+                if (solicitud != null)
+                {
+                    result = true;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return false;
+            }
+
+        }
 
         public async Task<List<ADM_PUC_SOLICITUD>> GetAll() 
         {

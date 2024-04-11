@@ -756,7 +756,10 @@ namespace Convertidor.Services
         
         public async Task DeleteByCodigoPresupuesto(int codigoPresupuesto)
         {
-            var icps= await  GetAllByCodigoPresupuesto(codigoPresupuesto);
+
+            var deleted = await _repository.DeleteByPresupuesto(codigoPresupuesto);
+            
+            /*var icps= await  GetAllByCodigoPresupuesto(codigoPresupuesto);
             if (icps!=null && icps.Data != null)
             {
                 foreach (var item in icps.Data)
@@ -765,7 +768,7 @@ namespace Convertidor.Services
                     dto.CodigoPuc = item.CodigoPuc;
                     await Delete(dto);
                 }
-            }
+            }*/
 
         }
 

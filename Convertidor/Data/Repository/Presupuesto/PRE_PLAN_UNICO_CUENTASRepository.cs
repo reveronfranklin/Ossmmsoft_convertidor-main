@@ -414,6 +414,26 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
+        
+        public async Task<string> DeleteByPresupuesto(int codigoPresupuesto)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE.PRE_PLAN_UNICO_CUENTAS WHERE CODIGO_PRESUPUESTO= {codigoPresupuesto};\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
         public async Task<ResultDto<PRE_PLAN_UNICO_CUENTAS>> Update(PRE_PLAN_UNICO_CUENTAS entity)
         {
             ResultDto<PRE_PLAN_UNICO_CUENTAS> result = new ResultDto<PRE_PLAN_UNICO_CUENTAS>(null);
@@ -519,7 +539,7 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
-        public async Task<ResultDto<List<PRE_PLAN_UNICO_CUENTAS>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,int codigoPresupuestoDestino)
+        public async Task<ResultDto<List<PRE_PLAN_UNICO_CUENTAS>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,int codigoPresupuestoDestino,int codigoUsuario,int codigoEmpresa)
         {
 
             ResultDto<List<PRE_PLAN_UNICO_CUENTAS>> result = new ResultDto<List<PRE_PLAN_UNICO_CUENTAS>>(null);
@@ -555,7 +575,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                     return result;
                 }
 
-                var pucOrigenResult = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
+                
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_PKG_CLONAR_PRESUPUESTO.CLONAR_PUC({codigoPresupuestoOrigen},{codigoPresupuestoDestino},{codigoUsuario},{codigoEmpresa});\nEND;";
+
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                
+                
+                /*var pucOrigenResult = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
                           .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuestoOrigen)
                            .OrderBy(x => x.CODIGO_GRUPO)
                              .ThenBy(x => x.CODIGO_NIVEL1)
@@ -565,7 +592,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                               .ThenBy(x => x.CODIGO_NIVEL5)
                           .ToListAsync();
 
-                if (pucOrigenResult.Count > 0)
+               
+
+                 if (pucOrigenResult.Count > 0)
                 {
                     foreach (var item in pucOrigenResult)
                     {
@@ -585,7 +614,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                     result.IsValid = false;
                     result.Message = "No existe ICP para el presupuesto Origen";
                     return result;
-                }
+                }*/
 
 
                 var icpDestinoResult = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
@@ -606,8 +635,11 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
-                return null;
+                result.Data = null;
+                result.IsValid = true;
+                result.Message = ex.Message;
+
+                return result;
             }
 
 

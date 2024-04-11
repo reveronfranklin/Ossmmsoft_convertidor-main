@@ -90,6 +90,13 @@ builder.Services.AddTransient<IPRE_RELACION_CARGOSRepository, PRE_RELACION_CARGO
 builder.Services.AddTransient<IPreRelacionCargosService, PreRelacionCargosService>();
 builder.Services.AddTransient<IPreAsignacionService, PreAsignacionService>();
 builder.Services.AddTransient<IPreAsignacionDetalleService, PreAsignacionDetalleService>();
+builder.Services.AddTransient<IPrePucSolicitudModificacionRepository, PrePucSolicitudModificacionRepository>();
+builder.Services.AddTransient<IPrePucSolicitudModificacionService, PrePucSolicitudModificacionService>();
+builder.Services.AddTransient<IPRE_SALDOSRepository, PRE_SALDOSRepository>();
+builder.Services.AddTransient<IPreResumenSaldoRepository, PreResumenSaldoRepository>();
+builder.Services.AddTransient<IPreResumenSaldoServices, PreResumenSaldoServices>();
+builder.Services.AddTransient<IReportPreResumenSaldoService, ReportPreResumenSaldoService>();
+
 
 
 //Repository SIS

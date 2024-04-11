@@ -802,7 +802,12 @@ namespace Convertidor.Services
 
         public async Task DeleteByCodigoPresupuesto(int codigoPresupuesto)
         {
-            FilterByPresupuestoDto filter = new FilterByPresupuestoDto();
+
+            
+            
+            var deleted=await _repository.DeleteByPresupuesto(codigoPresupuesto);
+            
+            /*FilterByPresupuestoDto filter = new FilterByPresupuestoDto();
             filter.CodigoPresupuesto = codigoPresupuesto;
             var icps= await  GetAllByCodigoPresupuesto(filter);
             if (icps!=null && icps.Data != null)
@@ -813,7 +818,7 @@ namespace Convertidor.Services
                     dto.CodigoIcp = item.CodigoIcp;
                     await Delete(dto);
                 }
-            }
+            }*/
 
         }
 

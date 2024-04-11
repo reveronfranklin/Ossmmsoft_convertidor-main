@@ -18,10 +18,13 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<PRE_PLAN_UNICO_CUENTAS> GetHastaGrupoIgualPuc(int codigoPresupuesto, int codigoPuc, string grupo);
         Task<PRE_PLAN_UNICO_CUENTAS> GetByCodigo(int codigoIcp);
         Task<string> Delete(int codigoPuc);
+        Task<string> DeleteByPresupuesto(int codigoPresupuesto);
         Task<ResultDto<PRE_PLAN_UNICO_CUENTAS>> Update(PRE_PLAN_UNICO_CUENTAS entity);
         Task<ResultDto<PRE_PLAN_UNICO_CUENTAS>> Create(PRE_PLAN_UNICO_CUENTAS entity);
         Task<int> GetNextKey();
-        Task<ResultDto<List<PRE_PLAN_UNICO_CUENTAS>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen, int codigoPresupuestoDestino);
-    }
+
+        Task<ResultDto<List<PRE_PLAN_UNICO_CUENTAS>>> ClonarByCodigoPresupuesto(int codigoPresupuestoOrigen,
+	        int codigoPresupuestoDestino, int codigoUsuario, int codigoEmpresa);
+	}
 }
 

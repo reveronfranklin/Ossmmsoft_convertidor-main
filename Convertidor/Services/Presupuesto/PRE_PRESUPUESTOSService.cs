@@ -2,6 +2,7 @@
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Services.Adm;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
@@ -20,6 +21,10 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPrePlanUnicoCuentasService _prePlanUnicoCuentasService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IMapper _mapper;
+        private readonly IAdmPucSolicitudService _admPucSolicitudService;
+        private readonly IPrePucSolicitudModificacionService _prePucSolicitudModificacionService;
+        private readonly IPRE_SALDOSRepository _preSaldosRepository;
+
 
         public PRE_PRESUPUESTOSService(IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                             
@@ -31,7 +36,11 @@ namespace Convertidor.Services.Presupuesto
                                         IPRE_PLAN_UNICO_CUENTASRepository pRE_PLAN_UNICO_CUENTASRepository,
                                         IPrePlanUnicoCuentasService prePlanUnicoCuentasService,
                                         ISisUsuarioRepository sisUsuarioRepository,
-                                        IMapper mapper)
+                                        IMapper mapper,
+                                        IAdmPucSolicitudService admPucSolicitudService,
+                                        IPrePucSolicitudModificacionService prePucSolicitudModificacionService,
+                                        IPRE_SALDOSRepository preSaldosRepository
+                                        )
         {
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
             
@@ -44,6 +53,9 @@ namespace Convertidor.Services.Presupuesto
             _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
             _sisUsuarioRepository = sisUsuarioRepository;
             _mapper = mapper;
+            _admPucSolicitudService = admPucSolicitudService;
+            _prePucSolicitudModificacionService = prePucSolicitudModificacionService;
+            _preSaldosRepository = preSaldosRepository;
         }
 
 
@@ -279,7 +291,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var presupuestoExiste = await _PRE_ASIGNACIONESRepository.PresupuestoExiste(dto.CodigoPresupuesto);
+                var presupuestoExiste = await _PRE_ASIGNACIONESRepository.PresupuestoExisteConMonto(dto.CodigoPresupuesto);
                 if (presupuestoExiste)
                 {
                     result.Data = dto;
@@ -288,8 +300,42 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                
+                //TODO ELIMINAR PRE_SALDO
+                /*
+                 *SE PUEDE BORRAR DE PRE_SALDOS, SIEMPRE QUE NO SE TENGA
+                   
+                   EJECUTADO EL PRESUPUESTO.
+                   LAS TABLAS DONDE INICIA LA EJECUCION DEL PRESUPUESTO SON:
+                 *
+                 *
+                 * ADM_PUC_SOLICITUD.
+                   PRE_PUC_SOL_MODIFICACION
+                 */
+                var presupuestoExisteSolicitud = await _admPucSolicitudService.PresupuestoExiste(dto.CodigoPresupuesto);
+                if (presupuestoExisteSolicitud.Data)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto no puede ser eliminado,tiene Movimiento PUC_SOLICITUD";
+                    return result;
+                }
+
+                var presupuestoExisteSolicitudModificacion =
+                    await _prePucSolicitudModificacionService.PresupuestoExiste(dto.CodigoPresupuesto);
+                if (presupuestoExisteSolicitudModificacion)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto no puede ser eliminado,tiene Solicitud de Modificacion";
+                    return result;
+                }
+                
                 await _indiceCategoriaProgramaService.DeleteByCodigoPresupuesto(dto.CodigoPresupuesto);
                 await _prePlanUnicoCuentasService.DeleteByCodigoPresupuesto(dto.CodigoPresupuesto);
+                await _PRE_ASIGNACIONESRepository.DeleteByPresupuesto(dto.CodigoPresupuesto);
+                await _preSaldosRepository.DeleteByPresupuesto(dto.CodigoPresupuesto);
+                
                 var  deleted =await _pRE_PRESUPUESTOSRepository.Delete(13,dto.CodigoPresupuesto);
                 
                 if (deleted.Length>0)
@@ -382,15 +428,34 @@ namespace Convertidor.Services.Presupuesto
                 
                 if (created.IsValid && created.Data!=null)
                 {
-
-
-
-
+                    
                     int codigoPresupuestoOrigen = created.Data.CODIGO_PRESUPUESTO - 1;
-                    var resultClonado = await _PRE_INDICE_CAT_PRGRepository.ClonarByCodigoPresupuesto(codigoPresupuestoOrigen, created.Data.CODIGO_PRESUPUESTO);
+                    
+                    var resultClonadoPUC = await _pRE_PLAN_UNICO_CUENTASRepository.ClonarByCodigoPresupuesto(codigoPresupuestoOrigen, created.Data.CODIGO_PRESUPUESTO,conectado.Usuario,conectado.Empresa);
+                    if (resultClonadoPUC.IsValid == false)
+                    {
+                        DeletePrePresupuestoDto dtoDelete = new DeletePrePresupuestoDto();
+                        dtoDelete.CodigoPresupuesto = created.Data.CODIGO_PRESUPUESTO;
+                        await Delete(dtoDelete);
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = resultClonadoPUC.Message;
+                        return result;
+                    }
+                    
+                    
+                    var resultClonado = await _PRE_INDICE_CAT_PRGRepository.ClonarByCodigoPresupuesto(codigoPresupuestoOrigen, created.Data.CODIGO_PRESUPUESTO,conectado.Usuario,conectado.Empresa);
+                    if (resultClonado.IsValid == false)
+                    {
+                        DeletePrePresupuestoDto dtoDelete = new DeletePrePresupuestoDto();
+                        dtoDelete.CodigoPresupuesto = created.Data.CODIGO_PRESUPUESTO;
+                        await Delete(dtoDelete);
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = resultClonado.Message;
+                        return result;
+                    }
 
-
-                    var resultClonadoPUC = await _pRE_PLAN_UNICO_CUENTASRepository.ClonarByCodigoPresupuesto(codigoPresupuestoOrigen, created.Data.CODIGO_PRESUPUESTO);
 
                 }
 
@@ -495,7 +560,82 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<ResultDto<GetPRE_PRESUPUESTOSDto>> AprobarPresupuesto(int codigoPresupuesto,string fechaAprobacion)
+        {
+            
+            
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            ResultDto<GetPRE_PRESUPUESTOSDto> result = new ResultDto<GetPRE_PRESUPUESTOSDto>(null);
+            try
+            {
 
+                if (!Convertidor.Utility.DateValidate.IsDate(fechaAprobacion))
+                {
+                    result.IsValid = false;
+                    result.Message = "Fecha de Aprobacion invalida";
+                    return result;
+                }
+                
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, codigoPresupuesto);
+                if (presupuesto==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto no existe";
+                    return result;
+                }
+                if(presupuesto.FECHA_APROBACION!=null) {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = " No existe un Presupuesto Activo.";
+                    return result;
+                }
+                var presupuestoExiste = await _PRE_ASIGNACIONESRepository.PresupuestoExisteConMonto(codigoPresupuesto);
+                if (!presupuestoExiste)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No puede aprobar un presupuesto sin asignaciones";
+                    return result;
+                }
+
+                var preSaldoExiste = await _pre_V_SALDOSRepository.PresupuestoExiste(codigoPresupuesto);
+                if (preSaldoExiste)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No puede aprobar un presupuesto ya APROBADO(EXISTE EN SALDO)";
+                    return result;
+                }
+                
+                await _pRE_PRESUPUESTOSRepository.AprobarPresupuesto(codigoPresupuesto, conectado.Usuario,
+                    conectado.Empresa);
+           
+                presupuesto.FECHA_APROBACION = Convert.ToDateTime(fechaAprobacion, CultureInfo.InvariantCulture);  
+                presupuesto.USUARIO_UPD = conectado.Usuario;
+                presupuesto.CODIGO_EMPRESA = conectado.Empresa;
+                presupuesto.FECHA_UPD = DateTime.Now;
+                await _pRE_PRESUPUESTOSRepository.Update(presupuesto);
+                
+                FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();
+                filter.FinanciadoId = 0;
+                filter.CodigoPresupuesto = presupuesto.CODIGO_PRESUPUESTO;
+                var resultDto = await MapPrePresupuestoToGetPrePresupuestoDtoCrud(presupuesto,filter);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+
+        }
 
         public FechaDto GetFechaDto(DateTime fecha)
         {
@@ -525,12 +665,18 @@ namespace Convertidor.Services.Presupuesto
             dto.FechaDesdeObj = (FechaDto)FechaDesdeObj;
             FechaDto FechaHastaObj = GetFechaDto(entity.FECHA_HASTA);
             dto.FechaHastaObj = (FechaDto)FechaHastaObj;
+
+            if (entity.FECHA_APROBACION != null)
+            {
+                dto.FechaAprobacion= (DateTime)entity.FECHA_APROBACION;
+         
+                dto.FechaAprobacionString=  dto.FechaAprobacion.ToString("u");
             
-            
-            dto.FechaAprobacion= entity.FECHA_APROBACION;
-            dto.FechaAprobacionString= entity.FECHA_APROBACION.ToString("u");
-            FechaDto FechaAprobacionObj = GetFechaDto(entity.FECHA_APROBACION);
-            dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
+          
+                FechaDto FechaAprobacionObj = GetFechaDto((DateTime)entity.FECHA_APROBACION);
+                dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
+            }
+           
             
             dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
 
@@ -669,11 +815,17 @@ namespace Convertidor.Services.Presupuesto
             dto.FechaHastaString = entity.FECHA_HASTA.ToString("u");
             FechaDto FechaHastaObj = GetFechaDto(entity.FECHA_HASTA);
             dto.FechaHastaObj = (FechaDto)FechaHastaObj;
+            if (entity.FECHA_APROBACION != null)
+            {
+                dto.FechaAprobacion = (DateTime)entity.FECHA_APROBACION;
+                dto.FechaAprobacionString = dto.FechaAprobacion .ToString("u");
+                FechaDto FechaAprobacionObj = GetFechaDto((DateTime)entity.FECHA_APROBACION);
+                dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
+            }
+       
+           
             
-            dto.FechaAprobacion = entity.FECHA_APROBACION;
-            dto.FechaAprobacionString = entity.FECHA_APROBACION.ToString("u");
-            FechaDto FechaAprobacionObj = GetFechaDto(entity.FECHA_APROBACION);
-            dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
+            
             dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
 
             dto.FechaOrdenanza = entity.FECHA_ORDENANZA;

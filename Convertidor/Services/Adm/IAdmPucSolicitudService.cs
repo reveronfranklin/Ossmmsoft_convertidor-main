@@ -8,5 +8,6 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmPucSolicitudResponseDto>> Update(AdmPucSolicitudUpdateDto dto);
         Task<ResultDto<AdmPucSolicitudResponseDto>> Create(AdmPucSolicitudUpdateDto dto);
         Task<ResultDto<AdmPucSolicitudDeleteDto>> Delete(AdmPucSolicitudDeleteDto dto);
+        Task<ResultDto<bool>> PresupuestoExiste(int codigoPresupuesto);
     }
 }

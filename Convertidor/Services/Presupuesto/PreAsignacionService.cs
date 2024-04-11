@@ -491,14 +491,14 @@ public class PreAsignacionService: IPreAsignacionService
                     result.LinkData = "";
                     return result;
                 }
-                if (entity.Ordinario <= 0)
+                /*if (entity.Ordinario <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Monto Ordinario Invalido";
                     result.LinkData = "";
                     return result;
-                }
+                }*/
                 
                 var presupuesto = await _presupuestosService.GetByCodigo(conectado.Empresa, entity.CodigoPresupuesto);
                 if (presupuesto == null)
@@ -537,16 +537,16 @@ public class PreAsignacionService: IPreAsignacionService
                     return result;
                 }
 
-                var asignacion =
+              /*  var asignacion =
                     await _repository.GetAllByIcpPuc(entity.CodigoPresupuesto, entity.CodigoIcp, entity.CodigoPuc);
                 if (asignacion != null && asignacion.Count > 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Ya esiste registro para este Presupuesto,ICP,PUC";
+                    result.Message = "Ya existe registro para este Presupuesto,ICP,PUC";
                     result.LinkData = "";
                     return result;
-                }
+                }*/
                 
               
                 result.Data = null;
@@ -794,6 +794,43 @@ public class PreAsignacionService: IPreAsignacionService
             }
         }
 
+        
+        public async  Task<ResultDto<string>> DeleteByPresupuesto(int codigoPresupuesto)
+        {
+            
+            ResultDto<string> result = new ResultDto<string>(null);
+            try
+            {
+
+               
+                var deleted = await _repository.DeleteByPresupuesto(codigoPresupuesto);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = "";
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = "";
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = "";
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
         public async Task<bool> PresupuestoExiste(int codPresupuesto)
         {
             return await _repository.PresupuestoExiste(codPresupuesto);

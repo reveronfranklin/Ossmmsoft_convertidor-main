@@ -12,7 +12,7 @@ namespace Convertidor.Data.Entities.Presupuesto
         public decimal MONTO_PRESUPUESTO { get; set; }
         public DateTime FECHA_DESDE { get; set; }
         public DateTime FECHA_HASTA { get; set; }
-        public DateTime FECHA_APROBACION { get; set; }
+        public DateTime? FECHA_APROBACION { get; set; }
         public string NUMERO_ORDENANZA { get; set; } = string.Empty;
         public DateTime FECHA_ORDENANZA { get; set; }
         public string EXTRA1 { get; set; } = string.Empty;
@@ -21,7 +21,7 @@ namespace Convertidor.Data.Entities.Presupuesto
         public int USUARIO_INS { get; set; }
         public DateTime FECHA_INS { get; set; }
         public int USUARIO_UPD { get; set; }
-        public DateTime FECHA_UPD { get; set; }
+        public DateTime? FECHA_UPD { get; set; }
         public int CODIGO_EMPRESA { get; set; }
 
     }
