@@ -1,4 +1,5 @@
-﻿using Convertidor.Services.Rh.Report.Example;
+﻿
+using Convertidor.Services.Rh.Report.HistoricoNomina;
 using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF

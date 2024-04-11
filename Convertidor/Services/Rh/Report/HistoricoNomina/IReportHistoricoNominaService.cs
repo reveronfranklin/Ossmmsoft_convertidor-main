@@ -1,4 +1,4 @@
-namespace Convertidor.Services.Rh.Report.Example;
+namespace Convertidor.Services.Rh.Report.HistoricoNomina;
 
 public interface IReportHistoricoNominaService
 {

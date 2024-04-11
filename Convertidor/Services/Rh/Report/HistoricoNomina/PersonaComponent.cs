@@ -5,7 +5,7 @@ using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-namespace Convertidor.Services.Rh.Report.Example;
+namespace Convertidor.Services.Rh.Report.HistoricoNomina;
 
   public class PersonaComponent : IComponent
     {
