@@ -26,6 +26,7 @@ using QuestPDF.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using Convertidor.Services.Rh.Report.Example;
+using Convertidor.Services.Rh.Report.HistoricoNomina;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -94,6 +95,8 @@ builder.Services.AddTransient<IPrePucSolicitudModificacionRepository, PrePucSoli
 builder.Services.AddTransient<IPrePucSolicitudModificacionService, PrePucSolicitudModificacionService>();
 builder.Services.AddTransient<IPRE_SALDOSRepository, PRE_SALDOSRepository>();
 builder.Services.AddTransient<IPreResumenSaldoRepository, PreResumenSaldoRepository>();
+
+
 builder.Services.AddTransient<IPreResumenSaldoServices, PreResumenSaldoServices>();
 builder.Services.AddTransient<IReportPreResumenSaldoService, ReportPreResumenSaldoService>();
 

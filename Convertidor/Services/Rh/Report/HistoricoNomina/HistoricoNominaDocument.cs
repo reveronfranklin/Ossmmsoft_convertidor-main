@@ -4,7 +4,7 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using Image = QuestPDF.Infrastructure.Image;
 
-namespace Convertidor.Services.Rh.Report.Example
+namespace Convertidor.Services.Rh.Report.HistoricoNomina
 {
     public class HistoricoNominaDocument : IDocument
     {
