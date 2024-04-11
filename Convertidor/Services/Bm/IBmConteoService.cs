@@ -12,4 +12,5 @@ public interface IBmConteoService
 
     Task<ResultDto<bool>> CerrarConteo(BmConteoCerrarDto dto);
 
+    Task CreateReportConteo(int conteoId);
 }

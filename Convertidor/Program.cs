@@ -233,15 +233,20 @@ builder.Services.AddTransient<IRhConceptosFormulaService, RhConceptosFormulaServ
 builder.Services.AddTransient<IRhConceptosPUCRepository, RhConceptosPUCRepository>();
 builder.Services.AddTransient<IRhConceptosPUCService, RhConceptosPUCService>();
 builder.Services.AddTransient<IRhMovNominaService, RhMovNominaService>();
+
+builder.Services.AddTransient<IRhVReciboPagoService, RhVReciboPagoService>();
 builder.Services.AddTransient<IRhReporteNominaTemporalRepository, RhReporteNominaTemporalRepository>();
 builder.Services.AddTransient<IRhReporteNominaHistoricoRepository, RhReporteNominaHistoricoRepository>();
 builder.Services.AddTransient<IRhReporteNominaHistoricoService, RhReporteNominaHistoricoService>();
-builder.Services.AddTransient<IRhReporteNominaTemporalService, RhReporteNominaTemporalService>();
+
 
 builder.Services.AddTransient<IReportExampleService, ReportExampleService>();
 builder.Services.AddTransient<IReportHistoricoNominaService, ReportHistoricoNominaService>();
 builder.Services.AddTransient<IRhReporteFirmaRepository, RhReporteFirmaRepository>();
 builder.Services.AddTransient<IRhReporteFirmaService, RhReporteFirmaService>();
+builder.Services.AddTransient<IReportReciboPagoService, ReportReciboPagoService>();
+
+
 
 
 //BM Repository
@@ -262,6 +267,8 @@ builder.Services.AddTransient<IBmConteoDetalleRepository, BmConteoDetalleReposit
 builder.Services.AddTransient<IBmConteoRepository, BmConteoRepository>();
 builder.Services.AddTransient<IBmConteoDetalleHistoricoRepository, BmConteoDetalleHistoricoRepository>();
 builder.Services.AddTransient<IBmConteoHistoricoRepository, BmConteoHistoricoRepository>();
+builder.Services.AddTransient<IRhVReciboPagoRepository, RhVReciboPagoRepository>();
+
 
 
 
@@ -311,6 +318,13 @@ builder.Services.AddTransient<IAdmImpuestosOpRepository, AdmImpuestosOpRepositor
 builder.Services.AddTransient<IAdmBeneficiariosOpRepository, AdmBeneficiariosOpRepository>();
 builder.Services.AddTransient<IAdmPeriodicoOpRepository, AdmPeriodicoOpRepository>();
 builder.Services.AddTransient<IAdmHOrdenPagoRepository, AdmHOrdenPagoRepository>();
+builder.Services.AddTransient<IAdmContratosRepository, AdmContratosRepository>();
+builder.Services.AddTransient<IAdmValContratoRepository, AdmValContratoRepository>();
+builder.Services.AddTransient<IAdmDetalleValContratoRepository, AdmDetalleValContratoRepository>();
+builder.Services.AddTransient<IAdmPucContratoRepository, AdmPucContratoRepository>();
+builder.Services.AddTransient<IAdmChequesRepository, AdmChequesRepository>();
+
+
 
 
 
@@ -341,6 +355,12 @@ builder.Services.AddTransient<IAdmImpuestosOpService, AdmImpuestosOpService>();
 builder.Services.AddTransient<IAdmBeneficariosOpService, AdmBeneficiariosOpService>();
 builder.Services.AddTransient<IAdmPeriodicoOpService, AdmPeriodicoOpService>();
 builder.Services.AddTransient<IAdmHOrdenPagoService, AdmHOrdenPagoService>();
+builder.Services.AddTransient<IAdmContratosService, AdmContratosService>();
+builder.Services.AddTransient<IAdmValContratoService, AdmValContratoService>();
+builder.Services.AddTransient<IAdmPucContratoService, AdmPucContratoService>();
+builder.Services.AddTransient<IAdmChequesService, AdmChequesService>();
+
+
 
 
 

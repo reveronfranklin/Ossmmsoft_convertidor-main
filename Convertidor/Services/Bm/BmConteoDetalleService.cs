@@ -302,6 +302,8 @@ namespace Convertidor.Services.Bm
             }
            
         }
+
+
    
      public async Task<ResultDto<List<BmConteoDetalleResponseDto>>> ComparaConteo(BmConteoFilterDto filter)
         {
@@ -611,6 +613,8 @@ namespace Convertidor.Services.Bm
             return await _repository.ConteoIniciadoConDiferenciaSinComentario(codigoConteo);
         }
 
+
     }
+
 }
 

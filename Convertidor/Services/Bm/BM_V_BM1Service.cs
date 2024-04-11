@@ -2,6 +2,7 @@
 using Convertidor.Dtos.Bm;
 using Ganss.Excel;
 using iText.Barcodes;
+using iText.IO.Font;
 using iText.IO.Font.Constants;
 using iText.IO.Image;
 using iText.Kernel.Font;
@@ -11,11 +12,8 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+
 using Path = System.IO.Path;
-//using QuestPDF.Fluent;
-//using QuestPDF.Helpers;
-//using QuestPDF.Infrastructure;
-//using QuestPDF.Previewer;
 
 namespace Convertidor.Services.Bm
 {
@@ -775,6 +773,133 @@ namespace Convertidor.Services.Bm
             doc.Close();
         }
 
+        protected async void GenerateMultipleFont(List<Bm1GetDto> placas, string dest)
+        {
+            // 2.5 * 72 = 180 5 * 72= 432
+            Rectangle pageSize = new Rectangle(170, 85);
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+
+            Document doc = new Document(
+                                            pdfDoc,
+                                            new PageSize(pageSize)
+
+                                        );
+
+            var _env = "development";
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var pathFont = $"{settings.BmFiles + ("arial.ttf")}";
+            FontProgram fontProgram =
+                    FontProgramFactory.CreateFont(pathFont);
+            PdfFont font = PdfFontFactory.CreateFont(fontProgram, PdfEncodings.WINANSI,PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+
+            doc.SetFont(font);
+
+            doc.SetMargins(3, 0, 0, 0);
+            
+            //String code = "675-FH-A12";
+            try
+            {
+                var intNumeroCopias = 2;
+                for (int i = 1; i <= intNumeroCopias; i++)
+                {
+                    pdfDoc.AddNewPage();
+                }
+
+
+                foreach (var item in placas)
+                {
+
+                    Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
+                    
+                    //PdfFont  font = PdfFontFactory.CreateFont(pathFont, PdfEncodings.IDENTITY_H);
+
+                    var pathLogo = @settings.BmFiles;
+                    Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacao.png")));
+                    var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
+                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+
+
+                    Paragraph logos = new Paragraph();
+                    logo1.ScaleAbsolute(30f, 25f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(20);
+                    logo2.ScaleAbsolute(40f, 25f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(20);
+
+                    logos.SetPaddingBottom(0);
+
+                    logos.Add(logo1).SetHorizontalAlignment(HorizontalAlignment.LEFT);
+
+                    logos.Add(fecha).SetTextAlignment(TextAlignment.CENTER)
+                                    .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                                    .SetFontSize(8);
+
+                    logos.Add(logo2).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetMarginLeft(10).SetMarginRight(30);
+
+                    Cell cell = new Cell(1, 3);
+                    cell.SetPaddingBottom(0);
+                    cell.SetBorder(null);
+                    cell.Add(logos);
+
+
+                    table.AddHeaderCell(cell);
+
+              
+
+                    Barcode128 code128 = new Barcode128(pdfDoc);
+
+                    // If value is positive, the text distance under the bars. If zero or negative,
+                    // the text distance above the bars.
+                    code128.SetBaseline(10);
+                    code128.SetSize(12);
+                    code128.SetCode(item.NumeroPlaca);
+                    code128.SetCodeType(Barcode128.CODE128);
+                    Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
+                    code128Image.SetWidth(100);
+                    code128Image.SetHeight(20);
+                    // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
+                    // this image does not fit the cell, but it does in addCell().
+                    // In iText7 there is no constructor (new Cell(Image img)),
+                    // so the image adding to the cell can be done only using method add().
+
+
+
+                    Cell cell1 = new Cell(2, 1);
+                    cell1.SetBorder(null);
+                    cell1.SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(0)
+                                                           .SetTextAlignment(TextAlignment.CENTER);
+                    Paragraph texto = new Paragraph();
+                    texto.Add("Bienes Municipales");
+                    cell1.Add(texto).SetFontSize(7).SetBold().SetPaddingTop(0);
+                    cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER));
+
+                    table.AddCell(cell1);
+
+                    Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(6);
+                    Paragraph texto3 = new Paragraph(item.UnidadTrabajo);
+
+                    Cell cell2 = new Cell(2, 1);
+                    cell2.SetBorder(null);
+                    cell2.Add(texto2).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(3)
+                                                    .SetTextAlignment(TextAlignment.CENTER);
+                    cell2.Add(texto3).SetFontSize(5).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(2).SetMarginBottom(1)
+                                                    .SetTextAlignment(TextAlignment.CENTER);
+                    table.AddFooterCell(cell2);
+
+                    doc.Add(table);
+
+
+                }
+
+                doc.Close();
+
+            }
+            
+
+            catch(System.IO.IOException cause) 
+            {
+                throw new iText.IO.Exceptions.IOException("Character code exception.", cause);
+            }
+
+        }
+
         //protected async void GenerateMultipleQuest(List<Bm1GetDto> placas, string dest)
         //{
 
@@ -844,7 +969,7 @@ namespace Convertidor.Services.Bm
                 //var bienes = await _bM_V_BM1Service.GetAll();
                 
                 var listaBienes = bienes.OrderBy(b => b.UnidadTrabajo).ToList();
-                GenerateMultiple(listaBienes, destino);
+                GenerateMultipleFont(listaBienes, destino);
 
 
             }

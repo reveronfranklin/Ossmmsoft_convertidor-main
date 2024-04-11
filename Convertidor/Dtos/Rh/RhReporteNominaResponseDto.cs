@@ -37,5 +37,5 @@ public class RhReporteNominaResponseDto
     public int CodigoEmpresa { get; set; }
     public string Descripcion { get; set; }
     public decimal Sueldo { get; set; }
-    
+    public string DenominacionTipoNomina { get; set; }
 }

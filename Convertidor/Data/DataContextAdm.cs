@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.Adm;
+﻿using Convertidor.Data.Entities;
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Entities.ADM;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,12 @@ namespace Convertidor.Data
         public DbSet<ADM_BENEFICIARIOS_OP> ADM_BENEFICIARIOS_OP { get; set; }
         public DbSet<ADM_PERIODICO_OP> ADM_PERIODICO_OP { get; set; }
         public DbSet<ADM_H_ORDEN_PAGO> ADM_H_ORDEN_PAGO { get; set; }
+        public DbSet<ADM_CONTRATOS> ADM_CONTRATOS { get; set; }
+        public DbSet<ADM_VAL_CONTRATO> ADM_VAL_CONTRATO { get; set; }
+        public DbSet<ADM_DETALLE_VAL_CONTRATO> ADM_DETALLE_VAL_CONTRATO { get; set; }
+        public DbSet<ADM_PUC_CONTRATO> ADM_PUC_CONTRATO { get; set; }
+        public DbSet<ADM_CHEQUES> ADM_CHEQUES { get; set; }
+
 
 
 
@@ -309,6 +316,194 @@ namespace Convertidor.Data
         });
         builder.ToTable("ADM_H_ORDEN_PAGO");
     });
+                modelBuilder
+       .Entity<ADM_CONTRATOS>(builder =>
+       {
+           //builder.HasNoKey();
+           builder.HasKey(table => new
+           {
+               table.CODIGO_CONTRATO,
+
+           });
+           builder.ToTable("ADM_CONTRATOS");
+       });
+                modelBuilder
+      .Entity<ADM_VAL_CONTRATO>(builder =>
+      {
+          //builder.HasNoKey();
+          builder.HasKey(table => new
+          {
+              table.CODIGO_VAL_CONTRATO,
+
+          });
+          builder.ToTable("ADM_VAL_CONTRATO");
+      });
+                modelBuilder
+     .Entity<ADM_DETALLE_VAL_CONTRATO>(builder =>
+     {
+         //builder.HasNoKey();
+         builder.HasKey(table => new
+         {
+             table.CODIGO_DETALLE_VAL_CONTRATO,
+
+         });
+         builder.ToTable("ADM_DETALLE_VAL_CONTRATO");
+     });
+                modelBuilder
+    .Entity<ADM_PUC_CONTRATO>(builder =>
+    {
+        //builder.HasNoKey();
+        builder.HasKey(table => new
+        {
+            table.CODIGO_PUC_CONTRATO,
+
+        });
+        builder.ToTable("ADM_PUC_CONTRATO");
+    });
+
+            modelBuilder.Entity<ADM_CHEQUES>(entity =>
+            {
+              
+
+                entity.ToTable("ADM_CHEQUES");
+                entity.HasKey(table => new
+                {
+                    table.CODIGO_CHEQUE,
+
+                });
+
+
+                entity.Property(e => e.ANO)
+                    .HasPrecision(4)
+                    .HasColumnName("ANO");
+
+                entity.Property(e => e.CODIGO_CHEQUE)
+                    .HasPrecision(10)
+                    .HasColumnName("CODIGO_CHEQUE");
+
+                entity.Property(e => e.CODIGO_CONTACTO_PROVEEDOR)
+                    .HasPrecision(10)
+                    .HasColumnName("CODIGO_CONTACTO_PROVEEDOR");
+
+                entity.Property(e => e.CODIGO_CUENTA_BANCO)
+                    .HasPrecision(10)
+                    .HasColumnName("CODIGO_CUENTA_BANCO");
+
+                entity.Property(e => e.CODIGO_EMPRESA)
+                    .HasPrecision(10)
+                    .HasColumnName("CODIGO_EMPRESA");
+
+                entity.Property(e => e.CODIGO_PRESUPUESTO)
+                    .HasPrecision(10)
+                    .HasColumnName("CODIGO_PRESUPUESTO");
+
+                entity.Property(e => e.CODIGO_PROVEEDOR)
+                    .HasPrecision(10)
+                    .HasColumnName("CODIGO_PROVEEDOR");
+
+                entity.Property(e => e.ENDOSO)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("ENDOSO")
+                    .IsFixedLength();
+
+                entity.Property(e => e.EXTRA1)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("EXTRA1");
+
+                entity.Property(e => e.EXTRA2)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("EXTRA2");
+
+                entity.Property(e => e.EXTRA3)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("EXTRA3");
+
+                entity.Property(e => e.FECHA_ANULACION)
+                    .HasColumnType("DATE")
+                    .HasColumnName("FECHA_ANULACION");
+
+                entity.Property(e => e.FECHA_CHEQUE)
+                    .HasColumnType("DATE")
+                    .HasColumnName("FECHA_CHEQUE");
+
+                entity.Property(e => e.FECHA_CONCILIACION)
+                    .HasColumnType("DATE")
+                    .HasColumnName("FECHA_CONCILIACION");
+
+                entity.Property(e => e.FECHA_ENTREGA)
+                    .HasColumnType("DATE")
+                    .HasColumnName("FECHA_ENTREGA");
+
+                entity.Property(e => e.FECHA_INS)
+                    .HasColumnType("DATE")
+                    .HasColumnName("FECHA_INS");
+
+                entity.Property(e => e.FECHA_UPD)
+                    .HasColumnType("DATE")
+                    .HasColumnName("FECHA_UPD");
+
+                entity.Property(e => e.MOTIVO)
+                    .IsRequired()
+                    .HasMaxLength(2000)
+                    .IsUnicode(false)
+                    .HasColumnName("MOTIVO");
+
+                entity.Property(e => e.NUMERO_CHEQUE)
+                    .HasPrecision(10)
+                    .HasColumnName("NUMERO_CHEQUE");
+
+                entity.Property(e => e.NUMERO_CHEQUERA)
+                    .HasPrecision(10)
+                    .HasColumnName("NUMERO_CHEQUERA");
+
+                entity.Property(e => e.PRINT_COUNT)
+                    .HasPrecision(5)
+                    .HasColumnName("PRINT_COUNT");
+
+                entity.Property(e => e.STATUS)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS")
+                    .IsFixedLength();
+
+                entity.Property(e => e.TIPO_BENEFICIARIO)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("TIPO_BENEFICIARIO")
+                    .IsFixedLength();
+
+                entity.Property(e => e.TIPO_CHEQUE_ID)
+                    .HasPrecision(10)
+                    .HasColumnName("TIPO_CHEQUE_ID");
+
+                entity.Property(e => e.USUARIO_ENTREGA)
+                    .HasPrecision(10)
+                    .HasColumnName("USUARIO_ENTREGA");
+
+                entity.Property(e => e.USUARIO_INS)
+                    .HasPrecision(10)
+                    .HasColumnName("USUARIO_INS");
+
+                entity.Property(e => e.USUARIO_UPD)
+                    .HasPrecision(10)
+                    .HasColumnName("USUARIO_UPD");
+            });
+
+            //            modelBuilder
+            //.Entity<ADM_CHEQUES>(builder =>
+            //{
+            //    //builder.HasNoKey();
+            //    builder.HasKey(table => new
+            //    {
+            //        table.CODIGO_CHEQUE,
+
+            //    });
+            //    builder.ToTable("ADM_CHEQUES");
+            //});
 
         }
 

@@ -8,8 +8,7 @@
         public int FrecuenciaPagoId { get; set; }
         public string FrecuenciaPago { get; set; }
         public decimal SueldoMinimo { get; set; }
-
-
+       
     }
 
    

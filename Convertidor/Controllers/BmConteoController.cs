@@ -66,5 +66,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> CreateReportConteo(BmConteoFilterDto dto)
+        {
+            await _service.CreateReportConteo(dto.CodigoBmConteo);
+            return Ok();
+        }
+
     }
 }
