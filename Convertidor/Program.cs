@@ -238,6 +238,7 @@ builder.Services.AddTransient<IRhVReciboPagoService, RhVReciboPagoService>();
 builder.Services.AddTransient<IRhReporteNominaTemporalRepository, RhReporteNominaTemporalRepository>();
 builder.Services.AddTransient<IRhReporteNominaHistoricoRepository, RhReporteNominaHistoricoRepository>();
 builder.Services.AddTransient<IRhReporteNominaHistoricoService, RhReporteNominaHistoricoService>();
+builder.Services.AddTransient<IRhReporteNominaTemporalService, RhReporteNominaTemporalService>();
 
 
 builder.Services.AddTransient<IReportExampleService, ReportExampleService>();
