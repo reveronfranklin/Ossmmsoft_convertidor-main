@@ -9,11 +9,12 @@ namespace Convertidor.Data.Repository.Presupuesto
     {
 		
         private readonly DataContextPre _context;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public PRE_PRESUPUESTOSRepository(DataContextPre context)
+        public PRE_PRESUPUESTOSRepository(DataContextPre context,ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
-           
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
 
@@ -57,7 +58,7 @@ namespace Convertidor.Data.Repository.Presupuesto
         {
             try
             {
-
+                
                 var result = await _context.PRE_PRESUPUESTOS.DefaultIfEmpty()
                     .Where(x => x.CODIGO_EMPRESA == codigoEmpresa && x.CODIGO_PRESUPUESTO == codigoPresupuesto)
                     .FirstOrDefaultAsync();

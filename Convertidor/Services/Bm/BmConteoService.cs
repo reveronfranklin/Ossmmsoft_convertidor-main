@@ -1,3 +1,4 @@
+
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
@@ -6,6 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+
+﻿
+using Convertidor.Data.Entities.Bm;
+using Convertidor.Data.Interfaces.Bm;
+using Convertidor.Dtos.Bm;
+using Convertidor.Utility;
+
+
 
 namespace Convertidor.Services.Bm
 {
@@ -100,6 +109,8 @@ namespace Convertidor.Services.Bm
                     itemResult = await MapBmConteo(item);
 
                     result.Add(itemResult);
+
+                
                 }
                
             }

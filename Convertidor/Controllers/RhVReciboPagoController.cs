@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Convertidor.Services.Rh.Report.Example;
+using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
 
@@ -11,14 +12,15 @@ namespace Convertidor.Controllers
     //[Authorize]
     public class RhVReciboPagoController : ControllerBase
     {
-       
-        private readonly IRhVReciboPagoService _service;
 
-        public RhVReciboPagoController(IRhVReciboPagoService service)
+        private readonly IRhVReciboPagoService _service;
+        private readonly IReportReciboPagoService _reciboPagoService;
+
+        public RhVReciboPagoController(IRhVReciboPagoService service,IReportReciboPagoService reciboPagoService)
         {
 
             _service = service;
-           
+            _reciboPagoService = reciboPagoService;
         }
 
 
@@ -29,7 +31,7 @@ namespace Convertidor.Controllers
             var result = await _service.GetAll();
             return Ok(result);
         }
-        
+
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetByFilter(FilterReciboPagoDto dto)
@@ -46,7 +48,17 @@ namespace Convertidor.Controllers
             return Ok();
         }
 
-
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GeneratePdf(FilterRepoteNomina filter)
+        {
+            await _reciboPagoService.GeneratePdf(filter);
+            return Ok();
+        }
 
     }
+        
+
+
+    
 }

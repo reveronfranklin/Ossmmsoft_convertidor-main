@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.EntitiesDestino;
+﻿using Convertidor.Data.Entities.Presupuesto;
+using Convertidor.Data.EntitiesDestino;
 using Convertidor.Dtos.Presupuesto;
 
 namespace Convertidor.Services.Presupuesto
@@ -6,6 +7,7 @@ namespace Convertidor.Services.Presupuesto
     public interface IIndiceCategoriaProgramaService
     {
         Task<ResultDto<IndiceCategoriaPrograma>> TransferirIndiceCategoriaProgramaPorCantidadDeDias(int dias);
+        Task<PRE_INDICE_CAT_PRG> GetByIcpConcat(int codigoPresupuesto, string icpConcat);
         Task<ResultDto<List<PreIndiceCategoriaProgramaticaGetDto>>> GetAllByCodigoPresupuesto(FilterByPresupuestoDto filter);
         Task<ResultDto<PreIndiceCategoriaProgramaticaGetDto>> Update(PreIndiceCategoriaProgramaticaUpdateDto dto);
         Task<ResultDto<PreIndiceCategoriaProgramaticaGetDto>> Create(PreIndiceCategoriaProgramaticaUpdateDto dto);

@@ -23,9 +23,12 @@
         public DateTime FECHA_UPD { get; set; }
         public int CODIGO_EMPRESA { get; set; }
         public decimal PRESUPUESTADO { get; set; }
-        
+
+        public decimal TOTAL_DESEMBOLSO { get; set; } = 0;
 
 
-    }
+
+
+	}
 }
 

@@ -29,10 +29,11 @@ namespace Convertidor.Controllers
      
 
         [HttpGet]
-        [Route("[action]")]
+        [Route("[action]")] 
         public async Task<IActionResult> GetAll()
         {
-            var result = await _service.GetAll();
+            
+            var result = await _service.GetAll(DateTime.Now.AddYears(-20), DateTime.Now);
             return Ok(result);
         }
 
@@ -46,9 +47,9 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")] 
-        public async Task<IActionResult> GetByListIcp(List<ICPGetDto>? listIcpSeleccionado)
+        public async Task<IActionResult> GetByListIcp(Bm1Filter filter)
         {
-            var result = await _service.GetByListIcp(listIcpSeleccionado);
+            var result = await _service.GetByListIcp(filter);
             return Ok(result);
         }
     }

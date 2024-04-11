@@ -57,7 +57,8 @@ namespace Convertidor.Services.Presupuesto
             ResultDto<GetPRE_PRESUPUESTOSDto> result = new ResultDto<GetPRE_PRESUPUESTOSDto>(null);
             try
             {
-                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(filter.CodigoEmpresa, filter.CodigoPresupuesto);
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, filter.CodigoPresupuesto);
                 if (presupuesto != null)
                 {
                     var dto = await MapPrePresupuestoToGetPrePresupuestoDto(presupuesto,filter);
@@ -102,12 +103,18 @@ namespace Convertidor.Services.Presupuesto
                         dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
                         dto.Descripcion = item.DENOMINACION;
                         dto.Ano = item.ANO;
-                           var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
-                if (preListFinanciado.Count > 0) {
+                       var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
+                        if (preListFinanciado.Count > 0) {
 
-                    dto.PreFinanciadoDto = preListFinanciado;
-                }
+                            dto.PreFinanciadoDto = preListFinanciado;
+                        }
 
+                        dto.presupuestoEnEjecucion = false;
+                        var presupuestoExiste = await _pre_V_SALDOSRepository.PresupuestoExiste(item.CODIGO_PRESUPUESTO);
+                        if (presupuestoExiste)
+                        {
+                            dto.presupuestoEnEjecucion = presupuestoExiste;
+                        }
                         listDto.Add(dto);
                     }
 
@@ -531,7 +538,12 @@ namespace Convertidor.Services.Presupuesto
             dto.FechaOrdenanzaString = entity.FECHA_ORDENANZA.ToString("u");
             FechaDto FechaOrdenanzaObj = GetFechaDto(entity.FECHA_ORDENANZA);
             dto.FechaOrdenanzaObj = (FechaDto)FechaOrdenanzaObj;
-       
+            dto.presupuestoEnEjecucion = false;
+            var presupuestoExiste = await _pre_V_SALDOSRepository.PresupuestoExiste(entity.CODIGO_PRESUPUESTO);
+            if (presupuestoExiste)
+            {
+                dto.presupuestoEnEjecucion = presupuestoExiste;
+            }
 
             dto.Extra1 = entity.EXTRA1;
             dto.Extra2 = entity.EXTRA2;

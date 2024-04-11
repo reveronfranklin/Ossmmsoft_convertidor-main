@@ -25,6 +25,7 @@ using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using Convertidor.Services.Rh.Report.Example;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +73,10 @@ builder.Services.AddTransient<IPRE_V_DOC_PAGADOServices, PRE_V_DOC_PAGADOService
 builder.Services.AddTransient<IPRE_V_DOC_BLOQUEADOServices, PRE_V_DOC_BLOQUEADOServices>();
 builder.Services.AddTransient<IPRE_V_DOC_MODIFICADOServices, PRE_V_DOC_MODIFICADOServices>();
 builder.Services.AddTransient<IPRE_PLAN_UNICO_CUENTASRepository, PRE_PLAN_UNICO_CUENTASRepository>();
+builder.Services.AddTransient<IPreAsignacionesDetalleRepository, PreAsignacionesDetalleRepository>();
+builder.Services.AddTransient<IPRE_ASIGNACIONESRepository, PRE_ASIGNACIONESRepository>();
+builder.Services.AddTransient<IPreAsignacionesDetalleRepository, PreAsignacionesDetalleRepository>();
+
 builder.Services.AddTransient<IPrePlanUnicoCuentasService, PrePlanUnicoCuentasService>();
 
 builder.Services.AddTransient<IPRE_RELACION_CARGOSRepository, PRE_RELACION_CARGOSRepository>();
@@ -83,7 +88,8 @@ builder.Services.AddTransient<IPreCargosRepository, PreCargosRepository>();
 builder.Services.AddTransient<IPreCargosService, PreCargosService>();
 builder.Services.AddTransient<IPRE_RELACION_CARGOSRepository, PRE_RELACION_CARGOSRepository>();
 builder.Services.AddTransient<IPreRelacionCargosService, PreRelacionCargosService>();
-
+builder.Services.AddTransient<IPreAsignacionService, PreAsignacionService>();
+builder.Services.AddTransient<IPreAsignacionDetalleService, PreAsignacionDetalleService>();
 
 
 //Repository SIS
@@ -99,6 +105,11 @@ builder.Services.AddTransient<IOssFuncionRepository, OssFuncionRepository>();
 builder.Services.AddTransient<IOssFormulaRepository, OssFormulaRepository>();
 builder.Services.AddTransient<IOssModeloCalculoRepository, OssModeloCalculoRepository>();
 builder.Services.AddTransient<IOssCalculoRepository,OssCalculoRepository>();
+builder.Services.AddTransient<ISisParametrosSourceRepository,SisParametrosSourceRepository>();
+builder.Services.AddTransient<ISisDetSourceRepository,SisDetSourceRepository>();
+builder.Services.AddTransient<ISisSourceRepository,SisSourceRepository>();
+
+
 
 //Services Sis
 builder.Services.AddTransient<ISisUsuarioServices, SisUsuarioServices>();
@@ -212,7 +223,18 @@ builder.Services.AddTransient<IRhConceptosFormulaService, RhConceptosFormulaServ
 builder.Services.AddTransient<IRhConceptosPUCRepository, RhConceptosPUCRepository>();
 builder.Services.AddTransient<IRhConceptosPUCService, RhConceptosPUCService>();
 builder.Services.AddTransient<IRhMovNominaService, RhMovNominaService>();
+
 builder.Services.AddTransient<IRhVReciboPagoService, RhVReciboPagoService>();
+builder.Services.AddTransient<IRhReporteNominaTemporalRepository, RhReporteNominaTemporalRepository>();
+builder.Services.AddTransient<IRhReporteNominaHistoricoRepository, RhReporteNominaHistoricoRepository>();
+builder.Services.AddTransient<IRhReporteNominaHistoricoService, RhReporteNominaHistoricoService>();
+
+
+builder.Services.AddTransient<IReportExampleService, ReportExampleService>();
+builder.Services.AddTransient<IReportHistoricoNominaService, ReportHistoricoNominaService>();
+builder.Services.AddTransient<IRhReporteFirmaRepository, RhReporteFirmaRepository>();
+builder.Services.AddTransient<IRhReporteFirmaService, RhReporteFirmaService>();
+builder.Services.AddTransient<IReportReciboPagoService, ReportReciboPagoService>();
 
 
 
@@ -236,6 +258,7 @@ builder.Services.AddTransient<IBmConteoRepository, BmConteoRepository>();
 builder.Services.AddTransient<IBmConteoDetalleHistoricoRepository, BmConteoDetalleHistoricoRepository>();
 builder.Services.AddTransient<IBmConteoHistoricoRepository, BmConteoHistoricoRepository>();
 builder.Services.AddTransient<IRhVReciboPagoRepository, RhVReciboPagoRepository>();
+
 
 
 
@@ -476,3 +499,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

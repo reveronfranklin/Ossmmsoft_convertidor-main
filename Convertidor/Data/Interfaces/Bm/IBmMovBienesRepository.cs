@@ -13,7 +13,9 @@ namespace Convertidor.Data.Interfaces.Bm
         Task<ResultDto<BM_MOV_BIENES>> Update(BM_MOV_BIENES entity);
         Task<string> Delete(int codigoMovBien);
         Task<int> GetNextKey();
- 
+        Task<DateTime> GetByCodigoBienFecha(int codigoBien, DateTime hasta);
+        Task<bool> CodigoBienActivo(int codigoBien, DateTime hasta);
+
     }
 }
 

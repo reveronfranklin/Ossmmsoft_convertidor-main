@@ -1,5 +1,6 @@
 ﻿using Convertidor.Dtos.Bm;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Services.Rh.Report.Example;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.MinimalApi;
 using NPOI.OpenXmlFormats;
@@ -9,6 +10,8 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using QuestPDF.Previewer;
+using System.Globalization;
+using System.IO.Pipelines;
 
 namespace Convertidor.Services.Rh
 {
@@ -16,21 +19,19 @@ namespace Convertidor.Services.Rh
     {
 
         private readonly IRhVReciboPagoRepository _repository;
+        private readonly IReportReciboPagoService _reportReciboPagoService;
         private readonly IConfiguration _configuration;
 
 
-        public RhVReciboPagoService(IRhVReciboPagoRepository repository,
-                                      IRhTipoNominaRepository rhTipoNominaRepository,
-                                      IRhPeriodoRepository periodoRepository,
-                                      IRhPersonasRepository personasRepository,
-                                      ISisUsuarioRepository usuarioRepository,
-                                      IConfiguration configuration,
-                                      IRhPersonaService personaService)
+        public RhVReciboPagoService(  IRhVReciboPagoRepository repository,
+                                      IReportReciboPagoService reportReciboPagoService,
+                                      IConfiguration configuration)
+                                     
         {
             _repository = repository;
+            _reportReciboPagoService = reportReciboPagoService;
             _configuration = configuration;
-
-
+           
         }
 
         public FechaDto GetFechaDto(DateTime fecha)
@@ -210,9 +211,7 @@ namespace Convertidor.Services.Rh
                     .Border(1)
                     .Background(Colors.Grey.Lighten3)
                     .ShowOnce()
-                    .MinWidth(50)
-                    .MinHeight(20)
-                    .AlignCenter()
+                    .AlignRight()
                     .AlignMiddle();
 
             }
@@ -256,6 +255,7 @@ namespace Convertidor.Services.Rh
             }
 
 
+            NumberFormatInfo formato = new CultureInfo("es-AR").NumberFormat;
 
 
 
@@ -264,8 +264,8 @@ namespace Convertidor.Services.Rh
 
             var resumen = reciboPago.FirstOrDefault();
 
-            var tipoNomina = await _repository.GetByCodigoTipoNomina(codigoTipoNomina,codigoPersona);
-           
+            var tipoNomina = await _repository.GetByCodigoTipoNomina(codigoTipoNomina, codigoPersona);
+
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var destino = @settings.ExcelFiles;
 
@@ -288,12 +288,12 @@ namespace Convertidor.Services.Rh
                         {
 
                             page.Margin(20);
-                            page.Size(PageSizes.A4.Landscape());
+                            page.Size(PageSizes.B4.Landscape());
 
                             page.Header().Row(fila =>
                             {
 
-                                fila.ConstantItem(140).Border(0).Height(60).Image(filePath: settings.BmFiles + "LogoIzquierda.jpeg")
+                                fila.ConstantItem(140).Border(0).Height(60).AlignRight().Image(filePath: settings.BmFiles + "LogoIzquierda.jpeg")
                                 .FitWidth().FitHeight();
                                 fila.Spacing(4);
 
@@ -334,13 +334,17 @@ namespace Convertidor.Services.Rh
 
 
                                         tabla.Cell().Border(1).AlignCenter().Text(tipoNomina.CODIGO_ICP_CONCAT);
-                                        tabla.Cell().ColumnSpan(2).Border(1).AlignCenter().Text(tipoNomina.NOMBRE);
+                                        tabla.Cell().ColumnSpan(3).Border(1).AlignCenter().Text(tipoNomina.NOMBRE);
 
                                         tabla.Cell().Border(1).AlignCenter().Text(tipoNomina.CODIGO_TIPO_NOMINA);
                                         tabla.Cell().Border(1).AlignCenter().Text(tipoNomina.CEDULA);
 
-                                        tabla.Cell().Border(1).AlignCenter().Text(tipoNomina.SUELDO);
-                                        tabla.Cell().Border(1).AlignCenter().Text(tipoNomina.FECHA_NOMINA.ToShortDateString());
+                                        tabla.Cell().Row(fila =>
+                                        {
+                                            fila.ConstantItem(69).Border(1).AlignCenter().Text(tipoNomina.SUELDO);
+                                            fila.RelativeItem().Border(1).AlignCenter().Text(tipoNomina.FECHA_NOMINA.ToShortDateString());
+                                        });
+                                     
 
 
 
@@ -350,21 +354,33 @@ namespace Convertidor.Services.Rh
 
 
                                             cabecera.Cell().Border(1).AlignCenter().AlignMiddle().Text("DEPARTAMENTO").Bold();
-                                            cabecera.Cell().ColumnSpan(2).Border(1).AlignCenter().AlignMiddle().Text("NOMBRE").Bold();
+                                            cabecera.Cell().ColumnSpan(3).Border(1).AlignCenter().AlignMiddle().Text("NOMBRE").Bold();
 
                                             cabecera.Cell().Border(1).AlignCenter().AlignMiddle().Text("TIPO NOMINA").Bold();
                                             cabecera.Cell().Border(1).AlignCenter().AlignMiddle().Text("CEDULA").Bold();
 
-                                            cabecera.Cell().Border(1).AlignCenter().AlignMiddle().Text("SUELDO").Bold();
-                                            cabecera.Cell().Border(1).AlignCenter().AlignMiddle().Text("FECHA").Bold();
+                                            cabecera.Cell().Row(fila => 
+                                            {
+                                                fila.RelativeItem().Border(1).AlignCenter().AlignMiddle().Text("SUELDO").Bold();
+                                                fila.RelativeItem().Border(1).AlignCenter().AlignMiddle().Text("FECHA").Bold();
+
+                                            });
+                                           
 
 
 
 
 
                                             tabla.Cell().ColumnSpan(2).Border(1).AlignCenter().Text("CONCEPTO").Bold();
-                                            tabla.Cell().Border(1).AlignCenter().Text("COMPLEMENTO").Bold();
-                                            tabla.Cell().Border(1).AlignCenter().ShrinkHorizontal().Text("%").Bold();
+
+                                               tabla.Cell().BorderBottom(1).BorderRight(1).AlignCenter().Text("COMPLEMENTO").Bold();
+                                                tabla.Cell().ShrinkHorizontal().Border(1).AlignCenter().Text("%").Bold();
+                                            
+                                            
+                                                
+                                            
+
+                                            
                                             tabla.Cell().Border(1).AlignCenter().Text("ACUMULADO").Bold();
                                             tabla.Cell().Border(1).AlignCenter().Text("ASIGNACIONES").Bold();
                                             tabla.Cell().Border(1).AlignCenter().Text("DEDUCCIONES").Bold();
@@ -375,43 +391,59 @@ namespace Convertidor.Services.Rh
 
                                                 foreach (var item in reciboPago)
                                                 {
-                                                    tabla.Cell().ColumnSpan(2).BorderLeft(1).BorderRight(1).AlignCenter().ScaleToFit().Text(item.DENOMINACION_CONCEPTO);
-                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignCenter().Padding(2).Text(item.COMPLEMENTO_CONCEPTO);
+                                                    tabla.Cell().ColumnSpan(2).BorderLeft(1).BorderRight(1).AlignLeft().ScaleToFit().PaddingLeft(3).Text(item.DENOMINACION_CONCEPTO);
 
-                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignCenter().Text(item.PORCENTAJE);
-                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignCenter().Text(item.MONTO);
+                                                    tabla.Cell().ColumnSpan(2).AlignCenter().Text(item.COMPLEMENTO_CONCEPTO);
 
-                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignCenter().Text(item.ASIGNACION);
-                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignCenter().Text(item.DEDUCCION);
+                                                        
+                                                    
+
+                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignRight().Text(item.PORCENTAJE);
+                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignRight().PaddingRight(5).Text(item.MONTO);
+                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignRight().PaddingRight(5).Text(item.ASIGNACION);
+                                                    tabla.Cell().BorderLeft(1).BorderRight(1).AlignRight().PaddingRight(5).Text(item.DEDUCCION);
 
 
                                                 }
 
-                                                tabla.Cell().Row(fila =>
-                                                {
-                                                    fila.ConstantColumn(80).Border(1).AlignRight().Padding(2).Text(resumen.ASIGNACION + resumen.ASIGNACION);
-                                                    fila.RelativeColumn().Border(1).AlignRight().Padding(2).Text(resumen.DEDUCCION + resumen.DEDUCCION);
-                                                });
+                                                tabla.Cell().BorderLeft(1).Text($"").FontSize(7);
+                                                tabla.Cell().Text($"").FontSize(7);
+                                                tabla.Cell().BorderRight(1).Text($"").FontSize(7);
+                                                tabla.Cell().BorderRight(1).Text($"").FontSize(7);
+                                                tabla.Cell().BorderRight(1).Text($"").FontSize(7);
 
 
+
+
+
+                                                var asig = resumenRecibo.Sum(x => x.Asignacion);
+                                                var ded = resumenRecibo.Sum(x => x.Deduccion);
+                                                var totalAsignacion = asig.ToString("N", formato);
+                                                var totalDeduccion = ded.ToString("N", formato);
+                                                var neto = asig - ded;
+
+                                                tabla.Cell().Border(1).AlignRight().PaddingRight(5).Text($"{totalAsignacion}").FontSize(10).SemiBold();
+                                                tabla.Cell().Border(1).AlignRight().PaddingRight(5).Text($"{totalDeduccion}").FontSize(10).SemiBold();
+
+                                                tabla.Cell().BorderLeft(1).BorderBottom(1).Text($"").FontSize(7);
+                                                tabla.Cell().BorderBottom(1).Text($"").FontSize(7);
+                                                tabla.Cell().BorderBottom(1).Text($"").FontSize(7);
+                                                tabla.Cell().BorderBottom(1).BorderRight(1).Text($"").FontSize(7);
+                                                tabla.Cell().BorderBottom(1).BorderLeft(1).BorderRight(1).Text($"").FontSize(7);
+                                                
+                                                //tabla.Cell().BorderBottom(1).Text($"").FontSize(7);
+                                                tabla.Cell().Element(Block).AlignCenter().PaddingRight(2).PaddingBottom(5).Text($"NETO A COBRAR").FontSize(10).SemiBold();
+                                                tabla.Cell().Element(Block).AlignBottom().AlignRight().PaddingRight(5).PaddingBottom(5).Text($"{neto.ToString("N", formato)}").FontSize(10).SemiBold();
                                             }
 
 
 
-
-
-                                            col1.Item().Row(pie =>
-                                            {
-                                                pie.RelativeItem().Border(1).Text($"N° \n \n \n " + "    " + "   " + "  " + "1");
-                                                pie.ConstantItem(550).Border(1).AlignCenter().Text($"Liquidacion de Sueldos y Salarios. Acepto que despues de hechas las" +
-                                                    "Deducciones de mi Sueldo o Salario, he recibido conforme el saldo abajo indicado, en pago de los servicios" +
-                                                    "que he prestado hasta la fecha que se indica.");
-                                                pie.RelativeItem().Border(1).AlignCenter().AlignMiddle().Text($"_______________________" + " " +
-                                                                                                 $"Firma del Beneficiario")
-                                                                                             ;
-
-                                            });
-
+                                            tabla.Cell().Border(1).Text($"No. \n \n \n " + "                                                  " + "1");
+                                            tabla.Cell().ColumnSpan(5).Border(1).AlignLeft().AlignMiddle().PaddingRight(2).PaddingLeft(8).Text($"Liquidacion de Sueldos y Salarios. Acepto que despues de hechas las " +
+                                                "Deducciones de mi Sueldo o Salario, he recibido conforme el saldo abajo indicado, en pago de los servicios " +
+                                                "que he prestado hasta la fecha que se indica.").FontSize(10).SemiBold(); ;
+                                            tabla.Cell().Border(1).AlignCenter().AlignMiddle().Padding(2).Text($"__________________________ \n" + " " +
+                                                                                             $"Firma del Beneficiario").FontSize(10).SemiBold(); 
 
                                         });
 
@@ -421,50 +453,13 @@ namespace Convertidor.Services.Rh
                                 });
 
 
-                                //     }
-                                //     //tabla.Cell().ShowOnce().Border(1).Text("Temperature");
-                                //     //tabla.Cell().ShowOnce().Border(1).Text("17°C");
-
-                                //     //tabla.Cell().ShowOnce().Border(1).Text("Temperature");
-                                //     //tabla.Cell().ShowOnce().Border(1).Text("32°C");
-
-                                //     //tabla.Cell().ShowOnce().Border(1).Text("Remarks");
-                                //     //tabla.Cell().ColumnSpan(3).ShowOnce().Border(1).Text("");
-                                // });
-
-
-
-
-                                //    //col1.Item().Row(pie =>
-                                //    //{
-                                //    //    pie.ConstantItem(350).AlignRight().PaddingRight(2).Element(BlockTotales).AlignRight().Text(item./*Asignacion*/);
-                                //    //    pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(.Deduccion);
-                                //    //});
-
-                                //    //col1.Item().Row(pie =>
-                                //    //{
-                                //    //    pie.ConstantItem(350).PaddingRight(2).AlignRight().Element(BlockCabeceraTotal).Text("Total Neto");
-                                //    //    pie.RelativeItem().PaddingRight(2).Element(BlockCabeceraTotal).Text(itemResumen.TotalNeto);
-
-                                //    //});
-
-
-
-
-
-
-
-
-
-
-
                             });
 
 
                         });
 
 
-                    }).GeneratePdf(fileName);
+                    }).ShowInPreviewer();/*.GeneratePdf(fileName);*/
                 }
             }
             catch (Exception ex)
@@ -475,6 +470,8 @@ namespace Convertidor.Services.Rh
 
         }
     }
+
+    
 }    
 
       

@@ -5,5 +5,6 @@ public class FilterReciboPagoDto
     public int CodigoPeriodo { get; set; }
     public int CodigoTipoNomina { get; set; }
     public int CodigoPersona { get; set; }
+    public int MarcaAgua { get; set; }
 
 }

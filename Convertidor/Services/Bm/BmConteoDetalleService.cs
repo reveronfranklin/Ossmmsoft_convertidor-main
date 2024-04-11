@@ -501,7 +501,7 @@ namespace Convertidor.Services.Bm
                     foreach (var item in listIcpSeleccionado)
                     {
 
-                        var itemFilter = await _bm1Service.GetAllByIcp(item.CodigoIcp);
+                        var itemFilter = await _bm1Service.GetAllByIcp(item.CodigoIcp,DateTime.Now.AddYears(-20),DateTime.Now);
                         if (itemFilter.Data.Count > 0)
                         {
                             unidadTrabajoParameter = $"{unidadTrabajoParameter},{item.CodigoIcp}";
@@ -512,7 +512,7 @@ namespace Convertidor.Services.Bm
                 }
                 else
                 {
-                    var bm1= await _bm1Service.GetAll();
+                    var bm1= await _bm1Service.GetAll(DateTime.Now.AddYears(-20),DateTime.Now);
                     searchList = bm1.Data;
                 }
 

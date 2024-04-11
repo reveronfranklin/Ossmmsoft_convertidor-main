@@ -49,6 +49,48 @@ namespace Convertidor.Data.Repository.Bm
             }
 
         }
+        public async Task<DateTime> GetByCodigoBienFecha(int codigoBien,DateTime hasta)
+        {
+            DateTime result= DateTime.Now;
+            try
+            {
+                var movimiento = await _context.BM_MOV_BIENES.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_BIEN == codigoBien && e.FECHA_MOVIMIENTO <= hasta).OrderByDescending(x=>x.FECHA_MOVIMIENTO).FirstOrDefaultAsync();
+                if (movimiento != null)
+                {
+                    result = movimiento.FECHA_MOVIMIENTO;
+                }
+              
+                return (DateTime)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return result;
+            }
+
+        }
+        public async Task<bool> CodigoBienActivo(int codigoBien,DateTime hasta)
+        {
+            bool result= false;
+            try
+            {
+                var movimiento = await _context.BM_MOV_BIENES.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_BIEN == codigoBien && e.FECHA_MOVIMIENTO <= hasta && e.TIPO_MOVIMIENTO=="D").OrderByDescending(x=>x.FECHA_MOVIMIENTO).FirstOrDefaultAsync();
+                if (movimiento != null)
+                {
+                    result = true;
+                }
+              
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return result;
+            }
+
+        }
        
         public async Task<List<BM_MOV_BIENES>> GetAll()
         {

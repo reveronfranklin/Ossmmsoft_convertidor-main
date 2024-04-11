@@ -140,6 +140,28 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+        
+        public async Task<bool> PresupuestoExiste(int codigoPresupuesto)
+        {
+            try
+            {
+                bool result = false;
+                var saldo = await _context.PRE_V_SALDOS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PRESUPUESTO== codigoPresupuesto).FirstOrDefaultAsync();
+                if (saldo != null)
+                {
+                    result = true;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+
+        }
+
 
         public async Task<List<PRE_V_SALDOS>> GetAllByPresupuestoPucConcat(FilterPresupuestoPucConcat filter)
         {

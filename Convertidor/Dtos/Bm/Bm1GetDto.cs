@@ -16,12 +16,13 @@ public class Bm1GetDto
     public string Especificacion { get; set; } = string.Empty;
     public string Servicio { get; set; } = string.Empty;
     public string ResponsableBien { get; set; } = string.Empty;
-    public string SearchText { get { return $"{UnidadTrabajo}-{CodigoGrupo}-{NumeroPlaca}-{Articulo}-{ResponsableBien}"; } }
+    public string SearchText { get { return $"{UnidadTrabajo}-{CodigoGrupo}-{NumeroPlaca}-{Articulo}-{ResponsableBien}-{Year.ToString()}-{Month.ToString()}"; } }
     public string linkData { get; set; } = string.Empty;
     
     public int CodigoBien { get; set; }
     public int CodigoMovBien { get; set; }
     public DateTime FechaMovimiento { get; set; }
+    public DateTime? FechaMovimientoFiltro { get; set; }
     
     public int CantidadFotos { get; set; }
     public int Year { get; set; }
@@ -35,6 +36,7 @@ public class Bm1ExcelGetDto
  
     public int Cantidad { get; set; }
     public string NumeroPlaca { get; set; } = string.Empty;
+    public int CodigoBien { get; set; }
     public decimal ValorActual { get; set; } 
     public string Articulo { get; set; } = string.Empty;
     public string Especificacion { get; set; } = string.Empty;
@@ -42,6 +44,7 @@ public class Bm1ExcelGetDto
     public string ResponsableBien { get; set; } = string.Empty;
  
     public DateTime FechaMovimiento { get; set; }
+    public DateTime FechaMovimientoFiltro { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }
     

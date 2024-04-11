@@ -4,8 +4,8 @@
 	{
 
 
-        Task<List<RH_PERIODOS>> GetAll(PeriodoFilterDto filter);
-        Task<List<RH_PERIODOS>> GetByTipoNomina(int tipoNomina);
+		Task<List<RhPeriodosResponseDto>> GetAll(PeriodoFilterDto filter);
+        Task<List<RhPeriodosResponseDto>> GetByTipoNomina(int tipoNomina);
         Task<List<RhPeriodosResponseDto>> GetByYear(int ano);
         Task<ResultDto<RhPeriodosResponseDto>> Create(RhPeriodosUpdate dto);
         Task<ResultDto<RhPeriodosResponseDto>> Update(RhPeriodosUpdate dto);
