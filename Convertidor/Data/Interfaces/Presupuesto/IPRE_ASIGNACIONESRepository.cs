@@ -15,8 +15,10 @@ namespace Convertidor.Data.Interfaces.Presupuesto
 		Task<int> GetNextKey();
 		
         Task<bool> PresupuestoExiste(int codPresupuesto);
+        Task<bool> PresupuestoExisteConMonto(int codPresupuesto);
         Task<bool> ICPExiste(int codigoICP);
         Task<bool> PUCExiste(int codigoPUC);
-    }
+        Task<string> DeleteByPresupuesto(int codigoPresupuesto);
+	}
 }
 

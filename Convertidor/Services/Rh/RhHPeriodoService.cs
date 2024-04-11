@@ -143,6 +143,7 @@
                 itemResult.FechaNomina = item.FECHA_NOMINA;
                 itemResult.Periodo = item.PERIODO;
                 itemResult.TipoNomina = item.TIPO_NOMINA;
+                itemResult.Descripcion = item.DESCRIPCION;
                 result.Add(itemResult);
 
 

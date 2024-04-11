@@ -200,6 +200,21 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
             asignacionUpdated.FECHA_UPD = DateTime.Now;
             await _preAsignacionesRepository.Update(asignacionUpdated);
         }
+
+        public async Task<bool> PresupuestoPermiteDesembolso(int codigoPresupuesto)
+        {
+            var result = true;
+            var ultimoPresupuesto = await _presupuestosService.GetUltimo();
+            if (ultimoPresupuesto != null)
+            {
+                if (ultimoPresupuesto.CODIGO_PRESUPUESTO < codigoPresupuesto)
+                {
+                    result = false;
+                }
+            }
+
+                return result;
+        }
         public async Task<ResultDto<PreAsignacionesDetalleGetDto>> Add(PreAsignacionesDetalleUpdateDto entity)
         {
             ResultDto<PreAsignacionesDetalleGetDto> result = new ResultDto<PreAsignacionesDetalleGetDto>(null);
@@ -219,7 +234,7 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                     result.Message = "Notas  Invalido";
                     return result;
                 }
-              
+               
 
 
                 var asignacion = await _preAsignacionService.GetByCodigo(entity.CodigoAsignacion);
@@ -230,6 +245,17 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                     result.Message = "Asignacion Invalido";
                     return result;
                 }
+
+                var presupuestoValido = await PresupuestoPermiteDesembolso(asignacion.Data.CodigoPresupuesto);
+                if (!presupuestoValido)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"No puede realizar desembolso a un presupuesto menor a el actual!";
+                    return result;
+                }
+                
+                
                 decimal totalDesembolso = 0;
                 totalDesembolso = await GetTotal(entity.CodigoAsignacion);
                 if (asignacion.Data.Presupuestado<totalDesembolso + entity.Monto)
@@ -251,7 +277,7 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                 asignacionNew.CODIGO_EMPRESA = conectado.Empresa;
                 asignacionNew.USUARIO_INS = conectado.Usuario;
                 asignacionNew.FECHA_INS = DateTime.Now;
-
+                asignacionNew.FECHA_UPD = null; 
                 var created = await _repository.Add(asignacionNew);
                 
                
@@ -286,6 +312,7 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
             return result;
         }
 
+        
         public async Task<ResultDto<PreAsignacionesDetalleGetDto>> Update(PreAsignacionesDetalleUpdateDto entity)
         {
              ResultDto<PreAsignacionesDetalleGetDto> result = new ResultDto<PreAsignacionesDetalleGetDto>(null);
@@ -310,6 +337,14 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                     return result;
                     
 
+                }
+                var presupuestoValido = await PresupuestoPermiteDesembolso(asignacion.Data.CodigoPresupuesto);
+                if (!presupuestoValido)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"No puede realizar desembolso a un presupuesto menor a el actual!";
+                    return result;
                 }
                 if (entity.Monto <= 0)
                 {
@@ -345,9 +380,7 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 asignacionDetalle.CODIGO_EMPRESA = conectado.Empresa;
                 asignacionDetalle.USUARIO_INS = conectado.Usuario;
-                asignacionDetalle.FECHA_INS = DateTime.Now;
-
-
+                asignacionDetalle.FECHA_UPD = DateTime.Now;
                 var created = await _repository.Update(asignacionDetalle);
                 if (created.IsValid && created.Data!=null)
                 {

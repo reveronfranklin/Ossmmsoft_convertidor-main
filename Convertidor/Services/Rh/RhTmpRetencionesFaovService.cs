@@ -25,27 +25,32 @@ namespace Convertidor.Data.Repository.Rh
         {
             ResultDto<List<RhTmpRetencionesFaovDto>> result = new ResultDto<List<RhTmpRetencionesFaovDto>>(null);
             try
-            {
-                var historico = await _rrhservice.GetRetencionesHFaov(filter);
-                if (historico.Count == 0)
+            {   
+                if (filter.TipoNomina == 0)
                 {
-                    int procesoId = 0;
-                    procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
-
-                    await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
-                    var retenciones = await _repository.GetByProcesoId(procesoId);
-                    if (retenciones != null)
-                    {
-                        var listRetenciones = MapRetencionesFaovTmpH(retenciones);
-                        var created = await _rrhservice.Create(listRetenciones);
-                        await _repository.Delete(procesoId);
-
-                    }
-                    result.Data = await MapListRhTmpRetencionesFaovDto(retenciones);
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    result.LinkData = "";
+                    return result;
                 }
-                else
+                int procesoId = 0;
+                procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
+
+                await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                var retenciones = await _repository.GetByProcesoId(procesoId);
+                if (retenciones != null)
                 {
-                    result.Data = historico;
+                    var listRetenciones = await MapListRhTmpRetencionesFaovDto(retenciones);
+                    var contador = 0;
+                    foreach (var item in listRetenciones)
+                    {
+                        contador = contador + 1;
+                        item.Id = contador;
+                    }
+                    result.Data = listRetenciones.OrderBy(x=>x.FechaNomina).ToList();;
+                   
+                    await _repository.Delete(procesoId);
 
                 }
                 
@@ -181,17 +186,55 @@ namespace Convertidor.Data.Repository.Rh
         public async  Task<List<RhTmpRetencionesFaovDto>> MapListRhTmpRetencionesFaovDto(List<RH_TMP_RETENCIONES_FAOV> entities)
         {
             List<RhTmpRetencionesFaovDto> result = new List<RhTmpRetencionesFaovDto>();
-           
             
-            foreach (var item in entities)
-            {
+            
 
-                RhTmpRetencionesFaovDto itemResult = new RhTmpRetencionesFaovDto();
+                var data = from s in entities
+                group s by new
+                {
+                    
+                    CodigoRetencionAporte = s.CODIGO_RETENCION_APORTE,
+                    Secuencia = s.SECUENCIA,
+                    UnidadEjecutora = s.UNIDAD_EJECUTORA,
+                    CedulaTexto = s.CEDULATEXTO,
+                    NombresApellidos = s.NOMBRES_APELLIDOS,
+                    DescripcionCargo = s.DESCRIPCION_CARGO,
+                    FechaIngreso = s.FECHA_INGRESO,
+                    MontoFaovTrabajador = s.MONTO_FAOV_TRABAJADOR,
+                    MontoFaovPatrono=s.MONTO_FAOV_PATRONO,
+                    MontoTotalRetencion=s.MONTO_TOTAL_RETENCION,
+                    FechaNomina = s.FECHA_NOMINA,
+                    SiglasTipoNomina = s.SIGLAS_TIPO_NOMINA,
+                    RegistroConcat=s.REGISTRO_CONCAT,
+                    FechaDesde = s.FECHA_DESDE,
+                    FechaHasta = s.FECHA_HASTA,
+                    CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
+                    
+                } into g
+                select new RhTmpRetencionesFaovDto
+                {
+                    CodigoRetencionAporte=g.Key.CodigoRetencionAporte,
+                    Secuencia=g.Key.Secuencia,
+                    UnidadEjecutora=g.Key.UnidadEjecutora,
+                    CedulaTexto=g.Key.CedulaTexto,
+                    NombresApellidos=g.Key.NombresApellidos,
+                    DescripcionCargo=g.Key.DescripcionCargo,
+                    FechaIngreso = g.Key.FechaIngreso,
+                    MontoFaovTrabajador=g.Key.MontoFaovTrabajador,
+                    MontoFaovPatrono=g.Key.MontoFaovPatrono,
+                    MontoTotalRetencion=g.Key.MontoTotalRetencion,
+                    FechaNomina=g.Key.FechaNomina,
+                    SiglasTipoNomina=g.Key.SiglasTipoNomina, 
+                    RegistroConcat=g.Key.RegistroConcat,
+                    FechaDesde=g.Key.FechaDesde,
+                    FechaHasta=g.Key.FechaHasta,
+                    CodigoTipoNomina=g.Key.CodigoTipoNomina,
+                 
+                            
+                };
 
-                itemResult = await MapRhTmpRetencionesFaovDto(item);
-               
-                result.Add(itemResult);
-            }
+
+                result = data.ToList();
             return result;
 
         }

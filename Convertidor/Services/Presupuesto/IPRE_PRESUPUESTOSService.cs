@@ -13,6 +13,7 @@ namespace Convertidor.Services.Presupuesto
 
         Task<ResultDto<GetPRE_PRESUPUESTOSDto>> Create(CreatePRE_PRESUPUESTOSDto dto);
         Task<ResultDto<GetPRE_PRESUPUESTOSDto>> Update(UpdatePRE_PRESUPUESTOSDto dto);
+        Task<ResultDto<GetPRE_PRESUPUESTOSDto>> AprobarPresupuesto(int codigoPresupuesto, string fechaAprobacion);
         Task<ResultDto<DeletePrePresupuestoDto>> Delete(DeletePrePresupuestoDto dto);
 
         Task<ResultDto<List<ListPresupuestoDto>>> GetListPresupuesto();

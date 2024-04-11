@@ -17,7 +17,7 @@ namespace Convertidor.Data.Repository.Rh
 
             try
             {
-                if (filter.Year<=0  )
+                /*if (filter.Year<=0  )
                 {
                     var lastPeriodo = await _context.RH_PERIODOS.DefaultIfEmpty().OrderByDescending(p=>p.FECHA_NOMINA).FirstOrDefaultAsync();
                     if (lastPeriodo != null)
@@ -28,7 +28,7 @@ namespace Convertidor.Data.Repository.Rh
                         filter.Year = DateTime.Now.Year;
                     }
 
-                }
+                }*/
 
                 List<RH_PERIODOS> result = new List<RH_PERIODOS>();
                 if (filter.Year>0 && filter.CodigoTipoNomina > 0)
@@ -39,8 +39,12 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p => p.FECHA_NOMINA.Year == filter.Year ).ToListAsync();
                 }
+                if (filter.Year==0 && filter.CodigoTipoNomina > 0)
+                {
+                    result = await _context.RH_PERIODOS.DefaultIfEmpty().Where(p=>   p.CODIGO_TIPO_NOMINA==filter.CodigoTipoNomina).ToListAsync();
+                }
 
-
+                result = result.OrderByDescending(x => x.FECHA_NOMINA).ToList();
                 return (List<RH_PERIODOS>)result;
             }
             catch (Exception ex)

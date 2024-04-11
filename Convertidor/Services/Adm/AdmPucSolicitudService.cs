@@ -94,6 +94,31 @@ namespace Convertidor.Services.Adm
             }
 
         }
+        public async Task<ResultDto<bool>> PresupuestoExiste(int codigoPresupuesto)
+        {
+
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+                var existe = await _repository.ExistePresupuesto(codigoPresupuesto);
+   
+                    result.Data = existe;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+              
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
 
         public async Task<ResultDto<AdmPucSolicitudResponseDto>> Update(AdmPucSolicitudUpdateDto dto)
         {

@@ -18,6 +18,7 @@ namespace Convertidor.Data.Repository.Rh
                                                 IConfiguration configuration)
         {
             _repository = repository;
+            _repository = repository;
             _ossConfigService = ossConfigService;
             _rrhservice = rrhservice;
             _configuration = configuration;
@@ -28,70 +29,37 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<List<RhTmpRetencionesCahDto>> result = new ResultDto<List<RhTmpRetencionesCahDto>>(null);
             try
             {
-                var historico = await _rrhservice.GetRetencionesHCah(filter);
-                if (historico.Count == 0)
+
+                if (filter.TipoNomina == 0)
                 {
-                    int procesoId = 0;
-                    procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
-
-                    await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
-                    var retenciones = await _repository.GetByProcesoId(procesoId);
-                    if (retenciones != null)
-                    {
-                        var listRetenciones = MapRetencionesCahTmpH(retenciones);
-                        var created = await _rrhservice.Create(listRetenciones);
-                        await _repository.Delete(procesoId);
-
-                    }
-                    
-                    var historicoNew  = await _rrhservice.GetRetencionesHCah(filter);
-                    result.Data = historicoNew.OrderBy(x=>x.FechaNomina).ToList();
-                }
-                else
-                {
-                    result.Data = historico.OrderBy(x=>x.FechaNomina).ToList();;
-
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    result.LinkData = "";
+                    return result;
                 }
                 
-                var linkData= $"";
-                if (result.Data.Count > 0)
+                int procesoId = 0;
+                procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
+
+                await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                var retenciones = await _repository.GetByProcesoId(procesoId);
+                if (retenciones != null)
                 {
-                    ExcelMapper mapper = new ExcelMapper();
-
-
-                    var settings = _configuration.GetSection("Settings").Get<Settings>();
-
-
-                    var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
-                    DateTime desde = Convert.ToDateTime(filter.FechaDesde);
-                    var mesString = "00" + desde.Month.ToString();
-                    var diaString = "00" + desde.Day.ToString();
-                    string mes = mesString.Substring(mesString.Length - 2, 2);
-                    string dia = diaString.Substring(diaString.Length - 2, 2);
-                    var desdeFilter = desde.Year + mes + dia;
-
-                    DateTime hasta = Convert.ToDateTime(filter.FechaHasta);
-                    var mesHastaString = "00" + hasta.Month.ToString();
-                    var diaHastaString = "00" + hasta.Day.ToString();
-                    string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);
-                    string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
-                    var hastaFilter = hasta.Year + mesHasta + diaHasta;
-                    var fileName = $"RetencionesCAH-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.xlsx";
-                    string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-                    if (File.Exists(newFile))
+                    var listRetenciones =  await MapListRhTmpRetencionesCahDto(retenciones);
+                    int contador = 0;
+                    foreach (var item in listRetenciones)
                     {
-                        File.Delete(newFile);
+                        contador = contador + 1;
+                        item.Id = contador;
                     }
-
-                    mapper.Save(newFile, result.Data, $"RetencionesCAH", true);
-                    linkData= $"/ExcelFiles/{fileName}";
-
+                    result.Data = listRetenciones.OrderBy(x=>x.FechaNomina).ToList();;
                 }
-         
-                
+        
+                var deleted =await _repository.Delete(procesoId);
                 result.IsValid = true;
                 result.Message = "";
-                result.LinkData = linkData;
+                result.LinkData = "";
                 return result;
             }
             catch (Exception ex)
@@ -109,35 +77,52 @@ namespace Convertidor.Data.Repository.Rh
         {
             List<RH_H_RETENCIONES_CAH> result = new List<RH_H_RETENCIONES_CAH>();
 
-            foreach (var retencion in retenciones)
-            {
-                RH_H_RETENCIONES_CAH resultItem = new RH_H_RETENCIONES_CAH();
+            
+                   var data = from s in retenciones
+                group s by new
+                {
+                    
+                    CodigoRetencionAporte = s.CODIGO_RETENCION_APORTE,
+                    Secuencia = s.SECUENCIA,
+                    UnidadEjecutora = s.UNIDAD_EJECUTORA,
+                    CedulaTexto = s.CEDULATEXTO,
+                    NombresApellidos = s.NOMBRES_APELLIDOS,
+                    DescripcionCargo = s.DESCRIPCION_CARGO,
+                    FechaIngreso = s.FECHA_INGRESO,
+                    MontoCahTrabajador = s.MONTO_CAH_TRABAJADOR,
+                    MontoCahPatrono = s.MONTO_CAH_PATRONO,
+                    MontoTotalRetencion = s.MONTO_TOTAL_RETENCION,
+                    FechaNomina = s.FECHA_NOMINA,
+                    SiglasTipoNomina = s.SIGLAS_TIPO_NOMINA,
+                    FechaDesde = s.FECHA_DESDE,
+                    FechaHasta = s.FECHA_HASTA,
+                    CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
+                    
+                } into g
+                select new RH_H_RETENCIONES_CAH
+                {
+                    CODIGO_RETENCION_APORTE=g.Key.CodigoRetencionAporte,
+                    SECUENCIA=g.Key.Secuencia,
+                    UNIDAD_EJECUTORA=g.Key.UnidadEjecutora,
+                    CEDULATEXTO=g.Key.CedulaTexto,
+                    NOMBRES_APELLIDOS=g.Key.NombresApellidos,
+                    DESCRIPCION_CARGO=g.Key.DescripcionCargo,
+                    FECHA_INGRESO = g.Key.FechaIngreso,
+                    MONTO_CAH_TRABAJADOR=g.Key.MontoCahTrabajador,
+                    MONTO_CAH_PATRONO = g.Key.MontoCahPatrono,
+                    MONTO_TOTAL_RETENCION=g.Key.MontoTotalRetencion,
+                    FECHA_NOMINA=g.Key.FechaNomina,
+                    SIGLAS_TIPO_NOMINA=g.Key.SiglasTipoNomina, 
+                    FECHA_DESDE=g.Key.FechaDesde,
+                    FECHA_HASTA=g.Key.FechaHasta,
+                    CODIGO_TIPO_NOMINA=g.Key.CodigoTipoNomina,
+                 
+                            
+                };
 
-                resultItem.CODIGO_RETENCION_APORTE = retencion.CODIGO_RETENCION_APORTE;
-                resultItem.SECUENCIA = retencion.SECUENCIA;
-                resultItem.UNIDAD_EJECUTORA = retencion.UNIDAD_EJECUTORA;
-                resultItem.CEDULATEXTO = retencion.CEDULATEXTO;
-                resultItem.NOMBRES_APELLIDOS = retencion.NOMBRES_APELLIDOS;
-                resultItem.DESCRIPCION_CARGO = retencion.DESCRIPCION_CARGO;
-                resultItem.FECHA_INGRESO = retencion.FECHA_INGRESO;
-                resultItem.MONTO_CAH_TRABAJADOR = retencion.MONTO_CAH_TRABAJADOR;
-                resultItem.MONTO_CAH_PATRONO = retencion.MONTO_CAH_PATRONO;
-                resultItem.MONTO_TOTAL_RETENCION = retencion.MONTO_TOTAL_RETENCION;
-                resultItem.FECHA_NOMINA = retencion.FECHA_NOMINA;
-                resultItem.SIGLAS_TIPO_NOMINA = retencion.SIGLAS_TIPO_NOMINA;
-                resultItem.PROCESO_ID = retencion.PROCESO_ID;
-                resultItem.FECHA_DESDE = retencion.FECHA_DESDE;
-                resultItem.FECHA_HASTA = retencion.FECHA_HASTA;
-                resultItem.CODIGO_TIPO_NOMINA = retencion.CODIGO_TIPO_NOMINA;
 
 
-
-                result.Add(resultItem);
-
-
-
-            }
-
+                   result = data.ToList();
             return result;
 
         }
@@ -172,15 +157,52 @@ namespace Convertidor.Data.Repository.Rh
             List<RhTmpRetencionesCahDto> result = new List<RhTmpRetencionesCahDto>();
            
             
-            foreach (var item in entities)
-            {
+                      var data = from s in entities
+                group s by new
+                {
+                    
+                    CodigoRetencionAporte = s.CODIGO_RETENCION_APORTE,
+                    Secuencia = s.SECUENCIA,
+                    UnidadEjecutora = s.UNIDAD_EJECUTORA,
+                    CedulaTexto = s.CEDULATEXTO,
+                    NombresApellidos = s.NOMBRES_APELLIDOS,
+                    DescripcionCargo = s.DESCRIPCION_CARGO,
+                    FechaIngreso = s.FECHA_INGRESO,
+                    MontoCahTrabajador = s.MONTO_CAH_TRABAJADOR,
+                    MontoCahPatrono = s.MONTO_CAH_PATRONO,
+                    MontoTotalRetencion = s.MONTO_TOTAL_RETENCION,
+                    FechaNomina = s.FECHA_NOMINA,
+                    SiglasTipoNomina = s.SIGLAS_TIPO_NOMINA,
+                    FechaDesde = s.FECHA_DESDE,
+                    FechaHasta = s.FECHA_HASTA,
+                    CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
+                    
+                } into g
+                select new RhTmpRetencionesCahDto
+                {
+                    CodigoRetencionAporte=g.Key.CodigoRetencionAporte,
+                    Secuencia=g.Key.Secuencia,
+                    UnidadEjecutora=g.Key.UnidadEjecutora,
+                    CedulaTexto=g.Key.CedulaTexto,
+                    NombresApellidos=g.Key.NombresApellidos,
+                    DescripcionCargo=g.Key.DescripcionCargo,
+                    FechaIngreso = g.Key.FechaIngreso,
+                    MontoCahTrabajador=g.Key.MontoCahTrabajador,
+                    MontoCahPatrono = g.Key.MontoCahPatrono,
+                    MontoTotalRetencion=g.Key.MontoTotalRetencion,
+                    FechaNomina=g.Key.FechaNomina,
+                    SiglasTipoNomina=g.Key.SiglasTipoNomina, 
+                    FechaDesde=g.Key.FechaDesde,
+                    FechaHasta=g.Key.FechaHasta,
+                    CodigoTipoNomina=g.Key.CodigoTipoNomina,
+                 
+                            
+                };
 
-                RhTmpRetencionesCahDto itemResult = new RhTmpRetencionesCahDto();
 
-                itemResult = await MapRhTmpRetencionesCahDto(item);
-               
-                result.Add(itemResult);
-            }
+
+
+            result = data.ToList();
             return result;
 
 

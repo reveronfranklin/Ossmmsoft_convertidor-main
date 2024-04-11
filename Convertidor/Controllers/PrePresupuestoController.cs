@@ -122,6 +122,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost] 
+        [Route("[action]")]
+        public async Task<IActionResult> AprobarPresupuesto(AprobaPrePresupuestoDto dto)
+        {
+            var result = await _prePresupuestoService.AprobarPresupuesto(dto.CodigoPresupuesto,dto.FechaAprobacion);
+            return Ok(result);
+        }
+        
 
         [HttpPost]
         [Route("[action]")]

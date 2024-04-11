@@ -17,6 +17,7 @@ public class Bm1GetDto
     public string Servicio { get; set; } = string.Empty;
     public string ResponsableBien { get; set; } = string.Empty;
     public string SearchText { get { return $"{UnidadTrabajo}-{CodigoGrupo}-{NumeroPlaca}-{Articulo}-{ResponsableBien}-{Year.ToString()}-{Month.ToString()}"; } }
+   
     public string linkData { get; set; } = string.Empty;
     
     public int CodigoBien { get; set; }

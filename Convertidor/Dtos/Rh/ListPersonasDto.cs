@@ -95,6 +95,9 @@
         public string Avatar { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string DescripcionStatus { get { return GetStatus(Status); } }
+        
+        public string SearchText { get { return $"{Cedula}-{Nombre}-{Apellido}-{DescripcionStatus}"; } }
+        
         private string GetStatus(string status)
         {
 
@@ -142,6 +145,7 @@
         public string Status { get; set; } = string.Empty;    
         public int IdentificacionId { get; set; }
         public int NumeroIdentificacion { get; set; }
+        public string SearchText { get { return $"{Cedula}-{Nombre}-{Apellido}-{NumeroIdentificacion}"; } }
         public TiempoServicioResponseDto? TiempoServicio { get; set; }
         public List<ListHistoricoMovimientoDto>? HistoricoMovimientoDto { get; set; }
         public List<RhEducacionResponseDto>? EducacionDto { get; set; }

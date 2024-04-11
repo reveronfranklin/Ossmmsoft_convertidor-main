@@ -2,8 +2,9 @@
 {
 	public class PeriodoFilterDto
 	{
-		public int Year { get; set; }
         public int CodigoTipoNomina { get; set; }
+        public int Year { get; set; }
+        
     }
 }
 

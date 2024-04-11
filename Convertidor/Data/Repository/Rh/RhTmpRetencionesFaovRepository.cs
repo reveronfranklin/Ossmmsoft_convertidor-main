@@ -67,12 +67,9 @@ namespace Convertidor.Data.Repository.Rh
 
             try
             {
-                var entity = await GetByProcesoId(procesoId);
-                if (entity.Count>0)
-                {
-                    _context.RH_TMP_RETENCIONES_FAOV.RemoveRange(entity);
-                    await _context.SaveChangesAsync();
-                }
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM RH.RH_TMP_RETENCIONES_FAOV WHERE PROCESO_ID= {procesoId};\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 return "";
             }
             catch (Exception ex)

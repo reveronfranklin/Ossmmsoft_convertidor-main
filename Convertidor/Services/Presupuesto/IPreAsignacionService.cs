@@ -19,4 +19,5 @@ public interface IPreAsignacionService
     Task<bool> PUCExiste(int codigoPUC);
     Task<ResultDto<PreAsignacionesGetDto>> UpdateField(UpdateFieldDto dto);
     Task<ResultDto<PreAsignacionesGetDto>> ValidarListAsignaciones(PreAsignacionesExcel excel);
+    Task<ResultDto<string>> DeleteByPresupuesto(int codigoPresupuesto);
 }

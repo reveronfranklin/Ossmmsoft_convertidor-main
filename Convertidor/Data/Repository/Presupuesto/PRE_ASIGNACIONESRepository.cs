@@ -191,6 +191,25 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
         
+        public async Task<string> DeleteByPresupuesto(int codigoPresupuesto)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE.PRE_ASIGNACIONES WHERE CODIGO_PRESUPUESTO= {codigoPresupuesto};\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
         public async Task<int> GetNextKey()
         {
             try
@@ -230,6 +249,33 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 var asignaciones = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
                     .Where(x => x.CODIGO_EMPRESA==conectado.Empresa  && x.CODIGO_PRESUPUESTO == codPresupuesto).FirstOrDefaultAsync();
+                if (asignaciones != null)
+                {
+                    result = true;
+                }
+                else {
+                    result = false;
+                }
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+
+        }
+        public async Task<bool> PresupuestoExisteConMonto(int codPresupuesto)
+        {
+
+            bool result;
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var asignaciones = await _context.PRE_ASIGNACIONES.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_EMPRESA==conectado.Empresa  && x.CODIGO_PRESUPUESTO == codPresupuesto &&  x.PRESUPUESTADO>0).FirstOrDefaultAsync();
                 if (asignaciones != null)
                 {
                     result = true;
