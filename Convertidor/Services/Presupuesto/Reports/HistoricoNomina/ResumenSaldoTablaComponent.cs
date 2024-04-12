@@ -34,8 +34,8 @@ namespace Convertidor.Services.Rh.Report.Example;
                 table.ColumnsDefinition(columns =>
                 {
                    
+                    columns.ConstantColumn(55);
                     columns.ConstantColumn(35);
-                    columns.ConstantColumn(25);
                     columns.RelativeColumn();
                     columns.RelativeColumn();
                     columns.RelativeColumn();
@@ -83,7 +83,7 @@ namespace Convertidor.Services.Rh.Report.Example;
                     }
                    
                     table.Cell().Text($"").FontSize(7);
-                    table.Cell().AlignRight().Text($"Total:").FontSize(10).SemiBold();
+                    table.Cell().AlignRight().Text($"Total:").FontSize(7).SemiBold();
                     var totalPresupuestado = ModelRecibos.Sum(x => x.Presupuestado);
                     var totalModificacion = ModelRecibos.Sum(x => x.Modificacion);
                     var totalAsignacionModificada = ModelRecibos.Sum(x => x.AsignacionModificada);
@@ -92,12 +92,12 @@ namespace Convertidor.Services.Rh.Report.Example;
                     var totalPagado = ModelRecibos.Sum(x => x.Pagado);
                     
           
-                    table.Cell().AlignRight().Text($"{totalPresupuestado.ToString("N", formato)}").FontSize(10).SemiBold();
-                    table.Cell().AlignRight().Text($"{totalModificacion.ToString("N", formato)}").FontSize(10).SemiBold();
-                    table.Cell().AlignRight().Text($"{totalAsignacionModificada.ToString("N", formato)}").FontSize(10).SemiBold();
-                    table.Cell().AlignRight().Text($"{totalComprometido.ToString("N", formato)}").FontSize(10).SemiBold();
-                    table.Cell().AlignRight().Text($"{totalCausado.ToString("N", formato)}").FontSize(10).SemiBold();
-                    table.Cell().AlignRight().Text($"{totalPagado.ToString("N", formato)}").FontSize(10).SemiBold();
+                    table.Cell().AlignRight().Text($"{totalPresupuestado.ToString("N", formato)}").FontSize(7).SemiBold();
+                    table.Cell().AlignRight().Text($"{totalModificacion.ToString("N", formato)}").FontSize(7).SemiBold();
+                    table.Cell().AlignRight().Text($"{totalAsignacionModificada.ToString("N", formato)}").FontSize(7).SemiBold();
+                    table.Cell().AlignRight().Text($"{totalComprometido.ToString("N", formato)}").FontSize(7).SemiBold();
+                    table.Cell().AlignRight().Text($"{totalCausado.ToString("N", formato)}").FontSize(7).SemiBold();
+                    table.Cell().AlignRight().Text($"{totalPagado.ToString("N", formato)}").FontSize(7).SemiBold();
 
                
             });
