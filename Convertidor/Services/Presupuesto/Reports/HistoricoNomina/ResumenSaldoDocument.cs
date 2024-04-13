@@ -11,15 +11,18 @@ namespace Convertidor.Services.Rh.Report.Example
     {
 
         public static Image LogoImage { get; } = Image.FromFile("logo.png");
+        private readonly string _title;
         private readonly string _patchLogo;
         public List<PreResumenSaldoGetDto> Model { get; }
 
         public ResumenSaldoDocument(
+            string Title,
             List<PreResumenSaldoGetDto> model,
             string patchLogo)
         {
 
             Model = model;
+            _title = Title;
             _patchLogo = patchLogo;
         }
 
@@ -59,13 +62,13 @@ namespace Convertidor.Services.Rh.Report.Example
 
                     column.Item().Text(text =>
                     {
-                        text.Span($"{firstResumen.DenominacionPresupuesto}").FontSize(7).SemiBold();
+                        text.Span($"{_title}").FontSize(7).SemiBold();
                         ;
 
                     });
 
                 });
-                row.RelativeItem().Column(column =>
+                /*row.RelativeItem().Column(column =>
                 {
 
                     column.Item().Text(text =>
@@ -83,7 +86,7 @@ namespace Convertidor.Services.Rh.Report.Example
                         text.Span($"{descripcion}").FontSize(7).SemiBold();
                         ;
                     });
-                });
+                });*/
 
 
                 row.ConstantItem(125).Image(_patchLogo);

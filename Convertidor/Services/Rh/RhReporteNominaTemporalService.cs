@@ -21,6 +21,38 @@ namespace Convertidor.Data.Repository.Rh
             _sisUsuarioRepository = sisUsuarioRepository;
         }
        
+        
+        public async Task<ResultDto<List<RhReporteNominaResumenResponseDto>> > GetByPeriodoTipoNominaResumen(FilterRepoteNomina filter)
+        {
+            try
+            {
+                ResultDto<List<RhReporteNominaResumenResponseDto>> result = new  ResultDto<List<RhReporteNominaResumenResponseDto>> (null);
+                var historico = await _repository.GetByPeriodoTipoNomina(filter.CodigoPeriodo,filter.CodigoTipoNomina);
+                if (historico.Count > 0)
+                {
+                    result.Data = await MapListHistoricoResumen(historico);
+                    result.Message = "";
+                    result.IsValid = true;
+                    
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No Data";
+                    return result;
+                }
+            
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+        }
         public async Task<ResultDto<List<RhReporteNominaResponseDto>> > GetByPeriodoTipoNomina(FilterRepoteNomina filter)
         {
             try
@@ -208,7 +240,43 @@ namespace Convertidor.Data.Repository.Rh
             return FechaDesdeObj;
         }
        
-  
+    public async  Task<List<RhReporteNominaResumenResponseDto>> MapListHistoricoResumen(List<RH_V_REPORTE_NOMINA_TEMPORAL> dtos)
+        {
+                            var lista = from s in dtos
+                            group s by new
+                            {
+                                CodigoTipoNomina=s.CODIGO_TIPO_NOMINA,
+                                CodigoPeriodo=s.CODIGO_PERIODO,
+                                Periodo=s.PERIODO,
+                                FechaNomina = s.FECHA_NOMINA,
+                                FechaNominaString=s.FECHA_NOMINA.ToString("u"),
+                                FechaNominaObj= GetFechaDto(s.FECHA_NOMINA),
+                                CodigoIcpConcat=s.CODIGO_ICP_CONCAT,
+                                CodigoIcp=s.CODIGO_ICP,
+                                Denominacion=s.DENOMINACION,
+                                CodigoPersona=s.CODIGO_PERSONA,
+                                Nombre=s.NOMBRE,
+                                
+                            } into g
+                            select new RhReporteNominaResumenResponseDto()
+                            {
+                                CodigoTipoNomina = g.Key.CodigoTipoNomina,
+                                CodigoPeriodo = g.Key.CodigoPeriodo,
+                                Periodo=g.Key.Periodo,
+                                FechaNomina = g.Key.FechaNomina,
+                                FechaNominaString = g.Key.FechaNominaString,
+                                FechaNominaObj = g.Key.FechaNominaObj,
+                                CodigoIcpConcat = g.Key.CodigoIcpConcat,
+                                CodigoIcp = g.Key.CodigoIcp,
+                                Denominacion = g.Key.Denominacion,
+                                CodigoPersona = g.Key.CodigoPersona,
+                                Nombre = g.Key.Nombre,
+                                
+                            };
+           
+            return lista.ToList();
+
+        }
         public async  Task<List<RhReporteNominaResponseDto>> MapListHistorico(List<RH_V_REPORTE_NOMINA_TEMPORAL> dtos)
         {
                             var lista = from s in dtos

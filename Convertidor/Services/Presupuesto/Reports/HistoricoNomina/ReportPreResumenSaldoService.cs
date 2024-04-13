@@ -8,13 +8,16 @@ public class ReportPreResumenSaldoService:IReportPreResumenSaldoService
 {
     private readonly IConfiguration _configuration;
     private readonly IPreResumenSaldoServices _services;
-  
+    private readonly IPRE_PRESUPUESTOSService _presupuestosService;
+
 
     public ReportPreResumenSaldoService(IConfiguration configuration,
-                                        IPreResumenSaldoServices services)
+                                        IPreResumenSaldoServices services,
+                                        IPRE_PRESUPUESTOSService presupuestosService)
     {
         _configuration = configuration;
         _services = services;
+        _presupuestosService = presupuestosService;
     }
     
     public async Task<string> GeneratePdf(FilterResumenSaldo filter)
@@ -24,8 +27,9 @@ public class ReportPreResumenSaldoService:IReportPreResumenSaldoService
         var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
         var fileName= $"ResumenSaldo-{filter.CodigoPresupuesto}.pdf";
         var filePath = $"{ @settings.ExcelFiles}/{fileName}.pdf";
-
-
+        FilterPRE_PRESUPUESTOSDto filterPresupuesto = new FilterPRE_PRESUPUESTOSDto();
+        filterPresupuesto.CodigoPresupuesto = filter.CodigoPresupuesto;
+        var presupuesto = await _presupuestosService.GetByCodigo(filterPresupuesto);
         var resumen = await _services.GetAllByPresupuesto(filter.CodigoPresupuesto);
         if (resumen == null)
         {
@@ -33,7 +37,7 @@ public class ReportPreResumenSaldoService:IReportPreResumenSaldoService
         }
         else
         {
-            var document = new ResumenSaldoDocument(resumen.Data,pathLogo);
+            var document = new ResumenSaldoDocument(presupuesto.Data.Denominacion,resumen.Data,pathLogo);
             fileName= $"ResumenSaldo-{filter.CodigoPresupuesto}.pdf";
             filePath = $"{ @settings.ExcelFiles}/{fileName}";
             document.GeneratePdf(filePath);
