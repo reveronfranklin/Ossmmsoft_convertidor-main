@@ -163,10 +163,7 @@ namespace Convertidor.Services.Presupuesto
             ResultDto<List<GetPRE_PRESUPUESTOSDto>> result = new ResultDto<List<GetPRE_PRESUPUESTOSDto>>(null);
             try
             {
-
                 
-
-
                 var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
 
                 if (filter.CodigoPresupuesto == 0) {

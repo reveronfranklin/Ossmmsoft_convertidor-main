@@ -7,4 +7,6 @@ public interface IRhReporteNominaTemporalService
 
     Task<ResultDto<List<RhReporteNominaResumenConceptoResponseDto>>> GetByPeriodoTipoNominaResumenConcepto(
         FilterRepoteNomina filter);
+
+    Task<ResultDto<List<RhReporteNominaResumenResponseDto>>> GetByPeriodoTipoNominaResumen(FilterRepoteNomina filter);
 }

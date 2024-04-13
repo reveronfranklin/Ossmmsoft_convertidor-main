@@ -13,12 +13,12 @@ namespace Convertidor.Controllers
     {
        
         private readonly IRhReporteNominaHistoricoService _service;
+        private readonly IRhReporteNominaTemporalService _serviceTemporal;
 
-        public RhReporteNominaHistoricoController(IRhReporteNominaHistoricoService service)
+        public RhReporteNominaHistoricoController(IRhReporteNominaHistoricoService service,IRhReporteNominaTemporalService serviceTemporal)
         {
-
             _service = service;
-           
+            _serviceTemporal = serviceTemporal;
         }
 
 
@@ -29,12 +29,31 @@ namespace Convertidor.Controllers
             var result = await _service.GetByPeriodoTipoNomina(filter);
             return Ok(result);
         }
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult>  GetByPeriodoTipoNominaPersona(FilterRepoteNomina filter)
         {
             var result = await _service.GetByPeriodoTipoNominaPersona(filter);
             return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult>  GetByPeriodoTipoNominaResumen(FilterRepoteNomina filter)
+        {
+            var temporal = await _serviceTemporal.GetByPeriodoTipoNominaResumen(filter);
+            if (temporal.Data.Count > 0)
+            {
+                return Ok(temporal);
+            }
+            else
+            {
+                var historico = await _service.GetByPeriodoTipoNominaResumen(filter);
+                return Ok(historico);
+            }
+            
+           
         }
 
         
