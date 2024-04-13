@@ -142,14 +142,26 @@ namespace Convertidor.Services.Rh.Report.Example
 
 
                                                    };
-
+                                int contador = 0;
                                 foreach (var itemDepartamento in listaDepartamento)
                                 {
-                                    
 
-                                    
-                                    column.Item().AlignCenter().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
-                                    column.Item().PageBreak();
+
+                                    if (contador % 2 != 0)
+                                    {
+
+                                        column.Item().PageBreak();
+                                        column.Item().AlignCenter().ShowOnce().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
+
+                                        column.Item().PageBreak();
+
+                                    }
+                                    else 
+                                    {
+                                        column.Item().AlignCenter().ShowOnce().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
+                                        column.Item().PageBreak();
+                                    }
+
                                     var listaPersona = from s in ModelRecibos.Where(x=> x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat)
                                                        group s by new
                                                        {
@@ -163,35 +175,35 @@ namespace Convertidor.Services.Rh.Report.Example
 
 
                                                        };
-                                    int contador = 0;
+                                    
 
 
 
                                     foreach (var itemPersona in listaPersona)
                                     {
                                         contador++;
+                                      
+                                            var persona = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).FirstOrDefault();
+                                          
+                                            column.Item().Row(row =>
+                                            {
+                                                row.RelativeItem().Component(new PersonasComponent("", persona, _descripcionTipoNomina));
 
-                                        var persona = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).FirstOrDefault();
+                                            });
 
-                                        column.Item().Row(row =>
-                                        {
-                                            row.RelativeItem().Component(new PersonasComponent("", persona, _descripcionTipoNomina));
+                                            var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
+                                            column.Item().Row(row =>
+                                            {
+                                                row.RelativeItem().Component(new ReciboPagoComponent("", personaRecibo, contador));
 
-                                        });
+                                            });
 
-                                        var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
-                                        column.Item().Row(row =>
-                                        {
-                                            row.RelativeItem().Component(new ReciboPagoComponent("", personaRecibo, contador));
+                                            column.Item().Row(row =>
+                                            {
+                                                row.RelativeItem().Component(new PieReciboComponent(contador));
 
-                                        });
-
-                                        column.Item().Row(row =>
-                                        {
-                                            row.RelativeItem().Component(new PieReciboComponent(contador));
-
-                                        });
-
+                                            });
+                                        
 
                                     }
                                 }
@@ -433,56 +445,75 @@ namespace Convertidor.Services.Rh.Report.Example
                         {
                             container.PaddingVertical(40).Column(async column =>
                             {
-                                //column.Spacing(20);
 
-                                //column.Item().PageBreak();
-                                //column.Item().AlignCenter().Text($"RECIBOS").SemiBold();
-                                var listaPersona = from s in ModelRecibos
-                                                   group s by new
-                                                   {
-                                                       Cedula = s.Cedula,
+                                var listaDepartamento = from s in ModelRecibos
+                                                        group s by new
+                                                        {
+                                                            CodigoIcpConcat = s.CodigoIcpConcat,
 
 
-                                                   } into g
-                                                   select new
-                                                   {
-                                                       Cedula = g.Key.Cedula,
+                                                        } into g
+                                                        select new
+                                                        {
+                                                            CodigoIcpConcat = g.Key.CodigoIcpConcat,
 
 
-                                                   };
-                                int contador = 0;
+                                                        };
 
-
-
-                                foreach (var itemPersona in listaPersona)
+                                foreach (var itemDepartamento in listaDepartamento)
                                 {
-                                    contador++;
 
-                                    var persona = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).FirstOrDefault();
-
-                                    column.Item().Row(row =>
-                        {
-                            row.RelativeItem().Component(new PersonasComponent("", persona, _descripcionTipoNomina));
-
-                        });
-
-                                    var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
-                                    column.Item().Row(row =>
-                        {
-                            row.RelativeItem().Component(new ReciboPagoComponent("", personaRecibo, contador));
-
-                        });
-
-                                    column.Item().Row(row =>
-                        {
-                            row.RelativeItem().Component(new PieReciboComponent(contador));
-
-                        });
+                                    column.Item().AlignCenter().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
+                                    column.Item().PageBreak();
+                                    var listaPersona = from s in ModelRecibos.Where(x => x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat)
+                                                       group s by new
+                                                       {
+                                                           Cedula = s.Cedula,
 
 
+                                                       } into g
+                                                       select new
+                                                       {
+                                                           Cedula = g.Key.Cedula,
+
+
+                                                       };
+                                    int contador = 0;
+
+
+
+                                    foreach (var itemPersona in listaPersona)
+                                    {
+                                        contador++;
+
+                                        if (contador == 1)
+                                        {
+                                            column.Item().PageBreak();
+
+                                            var persona = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).FirstOrDefault();
+
+                                            column.Item().Row(row =>
+                                            {
+                                                row.RelativeItem().Component(new PersonasComponent("", persona, _descripcionTipoNomina));
+
+                                            });
+
+                                            var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
+                                            column.Item().Row(row =>
+                                            {
+                                                row.RelativeItem().Component(new ReciboPagoComponent("", personaRecibo, contador));
+
+                                            });
+
+                                            column.Item().Row(row =>
+                                            {
+                                                row.RelativeItem().Component(new PieReciboComponent(contador));
+
+                                            });
+                                        }
+
+                                    }
                                 }
-
-
 
                             });
 

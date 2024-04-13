@@ -16,46 +16,49 @@ namespace Convertidor.Services.Rh.Report.Example;
           
         _contador = contador;
     }
-            
-        public void Compose(IContainer container)
+
+    public void Compose(IContainer container)
+    {
+        var headerStyle = TextStyle.Default.SemiBold().FontSize(7);
+        NumberFormatInfo formato = new CultureInfo("es-AR").NumberFormat;
+        static IContainer CellStyle(IContainer container) => container.BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(2);
+        formato.CurrencyGroupSeparator = ".";
+        formato.NumberDecimalSeparator = ",";
+        formato.NumberDecimalDigits = 2;
+        container.Table(table =>
         {
-            var headerStyle = TextStyle.Default.SemiBold().FontSize(7);
-            NumberFormatInfo formato = new CultureInfo("es-AR").NumberFormat;
-            static IContainer CellStyle(IContainer container) => container.BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(2);
-            formato.CurrencyGroupSeparator = ".";
-            formato.NumberDecimalSeparator = ",";
-            formato.NumberDecimalDigits = 2;
-            container.Table(table =>
+            table.ColumnsDefinition(columns =>
             {
-                table.ColumnsDefinition(columns =>
-                {
-                   
-                    columns.ConstantColumn(50);
-                    columns.ConstantColumn(400);
-                    columns.RelativeColumn();
-                   
 
-                });
-               
-                
-                table.Cell().Border(1).AlignCenter().Element(CellStyle).Text($"No {_contador} ").SemiBold().FontSize(7);
-                table.Cell().Border(1).AlignCenter().Element(CellStyle).Text($"Liquidacion de Sueldos y Salarios. Acepto que despues de hechas las  deducciones de mi sueldo o salario, he recibido conforme el saldo abajo indicado, en pago de los servicios que he prestado hasta la fecha que se indica.").SemiBold().FontSize(7);
-                table.Cell().Border(1).AlignMiddle().AlignCenter().Element(CellStyle).Text($"________________________ \n"+ "Firma del Beneficiario ").SemiBold().FontSize(7);
+                columns.ConstantColumn(50);
+                columns.ConstantColumn(400);
+                columns.RelativeColumn();
 
-                table.Cell().ColumnSpan(3).PaddingVertical(20);
 
-                table.Cell().Element(ComposeSalto);
             });
 
-      
 
-        void ComposeSalto(IContainer container)
-        {
-            if(_contador % 2 == 0) 
+            table.Cell().Border(1).AlignCenter().Element(CellStyle).Text($"No {_contador} ").SemiBold().FontSize(7);
+            table.Cell().Border(1).AlignCenter().Element(CellStyle).Text($"Liquidacion de Sueldos y Salarios. Acepto que despues de hechas las  deducciones de mi sueldo o salario, he recibido conforme el saldo abajo indicado, en pago de los servicios que he prestado hasta la fecha que se indica.").SemiBold().FontSize(7);
+            table.Cell().Border(1).AlignMiddle().AlignCenter().Element(CellStyle).Text($"________________________ \n" + "Firma del Beneficiario ").SemiBold().FontSize(7);
+
+            table.Cell().ColumnSpan(3).PaddingVertical(20);
+
+
+
+            if (_contador % 2 == 0)
             {
-                container.PageBreak();
+                table.Cell().Column(columna =>
+                {
+                  columna.Item().PageBreak();
+                });
             }
-        }
+
+        });
+
+
+
 
     }
     }
+    

@@ -57,6 +57,7 @@ builder.Services.AddTransient<IPRE_V_DOC_PAGADORepository, PRE_V_DOC_PAGADORepos
 builder.Services.AddTransient<IPRE_V_DOC_BLOQUEADORepository, PRE_V_DOC_BLOQUEADORepository>();
 builder.Services.AddTransient<IPRE_V_DOC_MODIFICADORepository, PRE_V_DOC_MODIFICADORepository>();
 builder.Services.AddTransient<IPRE_ASIGNACIONESRepository, PRE_ASIGNACIONESRepository>();
+builder.Services.AddTransient<IPreCompromisosRepository, PreCompromisosRepository>();
 
 
 
@@ -99,6 +100,7 @@ builder.Services.AddTransient<IPreResumenSaldoRepository, PreResumenSaldoReposit
 
 builder.Services.AddTransient<IPreResumenSaldoServices, PreResumenSaldoServices>();
 builder.Services.AddTransient<IReportPreResumenSaldoService, ReportPreResumenSaldoService>();
+builder.Services.AddTransient<IPreCompromisosService, PreCompromisosService>();
 
 
 
