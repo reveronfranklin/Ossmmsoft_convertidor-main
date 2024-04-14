@@ -12,4 +12,6 @@ public interface IRhReporteNominaHistoricoService
 
     Task<ResultDto<List<RhReporteNominaResumenConceptoResponseDto>>> GetByPeriodoTipoNominaResumenConceptoPersona(
         FilterRepoteNomina filter);
+
+    Task<List<RhListOficinaDto>> ListIcp(FilterRepoteNomina filter);
 }

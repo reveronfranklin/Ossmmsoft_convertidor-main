@@ -2,6 +2,7 @@ namespace Convertidor.Dtos.Rh;
 
 public class RhReporteNominaResponseDto
 {
+   
     public DateTime FechaNomina { get; set; }
     public string FechaNominaString { get; set; }
     public FechaDto FechaNominaObj { get; set; }
