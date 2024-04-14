@@ -52,8 +52,9 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GeneratePdf(FilterRepoteNomina filter)
         {
+            var filePath = $"ReporteReciboPago-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
             await _reciboPagoService.GeneratePdf(filter);
-            return Ok();
+            return Ok(filePath);
         }
 
     }

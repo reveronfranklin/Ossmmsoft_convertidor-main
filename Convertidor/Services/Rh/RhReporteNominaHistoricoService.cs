@@ -201,8 +201,6 @@ namespace Convertidor.Data.Repository.Rh
                                 CodigoPeriodo=s.CODIGO_PERIODO,
                                 Periodo=s.PERIODO,
                                 FechaNomina = s.FECHA_NOMINA,
-                                FechaNominaString=s.FECHA_NOMINA.ToString("u"),
-                                FechaNominaObj= GetFechaDto(s.FECHA_NOMINA),
                                 CodigoIcpConcat=s.CODIGO_ICP_CONCAT,
                                 CodigoIcp=s.CODIGO_ICP,
                                 Denominacion=s.DENOMINACION,
@@ -216,18 +214,79 @@ namespace Convertidor.Data.Repository.Rh
                                 CodigoPeriodo = g.Key.CodigoPeriodo,
                                 Periodo=g.Key.Periodo,
                                 FechaNomina = g.Key.FechaNomina,
-                                FechaNominaString = g.Key.FechaNominaString,
-                                FechaNominaObj = g.Key.FechaNominaObj,
+                                FechaNominaString=g.Key.FechaNomina.ToString("u"),
+                                FechaNominaObj= GetFechaDto(g.Key.FechaNomina),
                                 CodigoIcpConcat = g.Key.CodigoIcpConcat,
                                 CodigoIcp = g.Key.CodigoIcp,
                                 Denominacion = g.Key.Denominacion,
                                 CodigoPersona = g.Key.CodigoPersona,
                                 Nombre = g.Key.Nombre,
+                                DescripcionPeriodo = GetPeriodo(g.Key.Periodo),
                                 
                             };
-           
-            return lista.ToList();
+                            
+                            int contador = 0;
+                            var result = lista.ToList();
+                            foreach (var item in result)
+                            {
+                                contador = contador + 1;
+                                item.Id = contador;
+                            }
 
+                            result = result.OrderBy(x => x.Denominacion).ThenBy(x=>x.Nombre).ToList();
+            return result;
+
+        }
+          public async  Task<List<RhListOficinaDto>> ListIcp(FilterRepoteNomina filter)
+        {
+            var dtos = await _repository.GetByPeriodoTipoNomina(filter.CodigoPeriodo,filter.CodigoTipoNomina);
+            
+            var lista = from s in dtos
+            group s by new
+            {
+                CodigoIcpConcat=s.CODIGO_ICP_CONCAT,
+                CodigoIcp=s.CODIGO_ICP,
+                Denominacion=s.DENOMINACION,
+              
+                
+            } into g
+            select new RhListOficinaDto()
+            {
+              
+                CodigoIcpConcat = g.Key.CodigoIcpConcat,
+                CodigoIcp = g.Key.CodigoIcp,
+                Denominacion = g.Key.Denominacion,
+                
+            };
+                            
+                           
+
+            var result = lista.OrderBy(x => x.Denominacion).ToList();
+            return result;
+
+        }
+        
+        public List<ListPeriodo> GetListPeriodo()
+        {
+            List<ListPeriodo> result = new List<ListPeriodo>();
+            ListPeriodo normal = new ListPeriodo();
+            normal.Codigo = 1;
+            normal.Decripcion = "1ra. Quincena";
+            ListPeriodo especial = new ListPeriodo();
+            especial.Codigo = 2;
+            especial.Decripcion = "2da. Quincena";
+            result.Add(normal);
+            result.Add(especial);
+          
+            return result;
+        }
+        public string GetPeriodo(int periodo)
+        {
+            string result = "";
+            var periodoObj = GetListPeriodo().Where(x => x.Codigo == periodo).First();
+            result = periodoObj.Decripcion;
+          
+            return result;
         }
 
         public async  Task<List<RhReporteNominaResponseDto>> MapListHistorico(List<RH_V_REPORTE_NOMINA_HISTORICO> dtos)
@@ -279,6 +338,7 @@ namespace Convertidor.Data.Repository.Rh
                                 FechaNominaObj = g.Key.FechaNominaObj,
                                 CodigoPeriodo = g.Key.CodigoPeriodo,
                                 CodigoTipoNomina = g.Key.CodigoTipoNomina,
+                                CodigoIcp = g.Key.CodigoIcp,
                                 CodigoIcpConcat = g.Key.CodigoIcpConcat,
                                 Denominacion = g.Key.Denominacion,
                                 DenominacionCargo = g.Key.DenominacionCargo,
@@ -311,6 +371,7 @@ namespace Convertidor.Data.Repository.Rh
                                 
                                 
                             };
+                           
            
             return lista.ToList();
 

@@ -43,18 +43,45 @@ namespace Convertidor.Controllers
         public async Task<IActionResult>  GetByPeriodoTipoNominaResumen(FilterRepoteNomina filter)
         {
             var temporal = await _serviceTemporal.GetByPeriodoTipoNominaResumen(filter);
-            if (temporal.Data.Count > 0)
+            if (temporal.Data!=null && temporal.Data.Count > 0)
             {
+                if (filter.CodigoIcp!= null && filter.CodigoIcp > 0)
+                {
+                    temporal.Data = temporal.Data.Where(x => x.CodigoIcp == filter.CodigoIcp).ToList();
+                }
                 return Ok(temporal);
             }
             else
             {
                 var historico = await _service.GetByPeriodoTipoNominaResumen(filter);
+                if (filter.CodigoIcp!= null && filter.CodigoIcp > 0)
+                {
+                    historico.Data = historico.Data.Where(x => x.CodigoIcp == filter.CodigoIcp).ToList();
+                }
                 return Ok(historico);
             }
             
            
         }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult>  ListIcp(FilterRepoteNomina filter)
+        {
+            var temporal = await _serviceTemporal.GetByPeriodoTipoNominaResumen(filter);
+            if (temporal.Data!=null && temporal.Data.Count > 0)
+            {
+                var data = await _serviceTemporal.ListIcp(filter);
+                return Ok(temporal);
+            }
+            else
+            {
+                var historico = await _service.ListIcp(filter);
+                return Ok(historico);
+            }
+            
+           
+        }
+        
 
         
     }

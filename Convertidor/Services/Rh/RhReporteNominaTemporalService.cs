@@ -148,6 +148,36 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async  Task<List<RhListOficinaDto>> ListIcp(FilterRepoteNomina filter)
+        {
+            var dtos = await _repository.GetByPeriodoTipoNomina(filter.CodigoPeriodo,filter.CodigoTipoNomina);
+            
+            var lista = from s in dtos
+                group s by new
+                {
+                    CodigoIcpConcat=s.CODIGO_ICP_CONCAT,
+                    CodigoIcp=s.CODIGO_ICP,
+                    Denominacion=s.DENOMINACION,
+              
+                
+                } into g
+                select new RhListOficinaDto()
+                {
+              
+                    CodigoIcpConcat = g.Key.CodigoIcpConcat,
+                    CodigoIcp = g.Key.CodigoIcp,
+                    Denominacion = g.Key.Denominacion,
+                
+                };
+                            
+                           
+
+            var result = lista.OrderBy(x => x.Denominacion).ToList();
+            return result;
+
+        }
+
+        
         public string GetMes(int mes)
         {
             string result;
@@ -325,6 +355,7 @@ namespace Convertidor.Data.Repository.Rh
                                 FechaNominaObj = g.Key.FechaNominaObj,
                                 CodigoPeriodo = g.Key.CodigoPeriodo,
                                 CodigoTipoNomina = g.Key.CodigoTipoNomina,
+                                CodigoIcp = g.Key.CodigoIcp,
                                 CodigoIcpConcat = g.Key.CodigoIcpConcat,
                                 Denominacion = g.Key.Denominacion,
                                 DenominacionCargo = g.Key.DenominacionCargo,
