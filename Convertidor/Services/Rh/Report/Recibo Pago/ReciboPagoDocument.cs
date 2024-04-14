@@ -384,18 +384,17 @@ namespace Convertidor.Services.Rh.Report.Example
                         }
 
                     }
-                
-
-                    else if(_ImprimirMarcaAgua == false)
+                    else 
                     {
-
-
                         page.Size(PageSizes.A4);
                         page.Margin(15);
-                        page.MarginVertical(verticalMargin, Unit.Inch);
-                        page.MarginHorizontal(horizontalMargin, Unit.Inch);
+                      
                         page.Header().Element(ComposeHeader);
                         page.Content().Element(ComposeContent);
+                    
+
+                       
+
 
 
                         void ComposeHeader(IContainer container)
@@ -459,12 +458,26 @@ namespace Convertidor.Services.Rh.Report.Example
 
 
                                                         };
-
+                                int contador = 0;
                                 foreach (var itemDepartamento in listaDepartamento)
                                 {
 
-                                    column.Item().AlignCenter().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
-                                    column.Item().PageBreak();
+
+                                    if (contador % 2 != 0)
+                                    {
+
+                                        column.Item().PageBreak();
+                                        column.Item().AlignCenter().ShowOnce().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
+
+                                        column.Item().PageBreak();
+
+                                    }
+                                    else
+                                    {
+                                        column.Item().AlignCenter().ShowOnce().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
+                                        column.Item().PageBreak();
+                                    }
+
                                     var listaPersona = from s in ModelRecibos.Where(x => x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat)
                                                        group s by new
                                                        {
@@ -478,7 +491,7 @@ namespace Convertidor.Services.Rh.Report.Example
 
 
                                                        };
-                                    int contador = 0;
+
 
 
 
@@ -486,34 +499,35 @@ namespace Convertidor.Services.Rh.Report.Example
                                     {
                                         contador++;
 
-                                        if (contador == 1)
+                                        var persona = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).FirstOrDefault();
+
+                                        column.Item().Row(row =>
                                         {
-                                            column.Item().PageBreak();
+                                            row.RelativeItem().Component(new PersonasComponent("", persona, _descripcionTipoNomina));
 
-                                            var persona = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).FirstOrDefault();
+                                        });
 
-                                            column.Item().Row(row =>
-                                            {
-                                                row.RelativeItem().Component(new PersonasComponent("", persona, _descripcionTipoNomina));
+                                        var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
+                                        column.Item().Row(row =>
+                                        {
+                                            row.RelativeItem().Component(new ReciboPagoComponent("", personaRecibo, contador));
 
-                                            });
+                                        });
 
-                                            var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
-                                            column.Item().Row(row =>
-                                            {
-                                                row.RelativeItem().Component(new ReciboPagoComponent("", personaRecibo, contador));
+                                        column.Item().Row(row =>
+                                        {
+                                            row.RelativeItem().Component(new PieReciboComponent(contador));
 
-                                            });
+                                        });
 
-                                            column.Item().Row(row =>
-                                            {
-                                                row.RelativeItem().Component(new PieReciboComponent(contador));
-
-                                            });
-                                        }
 
                                     }
                                 }
+
+
+
+
+
 
                             });
 
@@ -684,10 +698,10 @@ namespace Convertidor.Services.Rh.Report.Example
 
                             });
                         }
-
                     }
+
+                    
                 });
         }
     }
 }
-  
