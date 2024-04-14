@@ -37,6 +37,10 @@ namespace Convertidor.Data
         
         public DbSet<PRE_SALDOS> PRE_SALDOS { get; set; }
         public DbSet<PRE_RESUMEN_SALDOS> PRE_RESUMEN_SALDOS { get; set; }
+        public DbSet<PRE_DIRECTIVOS> PRE_DIRECTIVOS { get; set; }
+        public DbSet<PRE_COMPROMISOS> PRE_COMPROMISOS { get; set; }
+
+
 
 
 
@@ -44,7 +48,7 @@ namespace Convertidor.Data
         {
          
             base.OnModelCreating(modelBuilder);
-          
+
 
             modelBuilder
             .Entity<PRE_V_SALDOS>(builder =>
@@ -66,8 +70,8 @@ namespace Convertidor.Data
                 });
                 builder.ToTable("PRE_SALDOS");
             })
-            
-            
+
+
              .Entity<PRE_SALDOS_DIARIOS>(builder =>
              {
                  builder.HasNoKey();
@@ -205,7 +209,7 @@ namespace Convertidor.Data
                 });
                 builder.ToTable("PRE_TITULOS");
             })
-                     
+
             .Entity<PRE_PRESUPUESTOS>(builder =>
             {
                 //builder.HasNoKey();
@@ -215,8 +219,31 @@ namespace Convertidor.Data
 
                 });
                 builder.ToTable("PRE_PRESUPUESTOS");
+            })
+            .Entity<PRE_DIRECTIVOS>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_DIRECTIVO,
+
+                 });
+                 builder.ToTable("PRE_DIRECTIVOS");
+             })
+
+            .Entity<PRE_COMPROMISOS>(builder =>
+            {
+                //builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_COMPROMISO,
+
+                });
+                builder.ToTable("PRE_COMPROMISOS");
             });
-           
+            
+
+
 
         }
 
