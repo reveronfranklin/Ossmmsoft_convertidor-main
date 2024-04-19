@@ -58,6 +58,17 @@ builder.Services.AddTransient<IPRE_V_DOC_BLOQUEADORepository, PRE_V_DOC_BLOQUEAD
 builder.Services.AddTransient<IPRE_V_DOC_MODIFICADORepository, PRE_V_DOC_MODIFICADORepository>();
 builder.Services.AddTransient<IPRE_ASIGNACIONESRepository, PRE_ASIGNACIONESRepository>();
 builder.Services.AddTransient<IPreCompromisosRepository, PreCompromisosRepository>();
+builder.Services.AddTransient<IPreDetalleCompromisosRepository, PreDetalleCompromisosRepository>();
+builder.Services.AddTransient<IPrePucCompromisosRepository, PrePucCompromisosRepository>();
+builder.Services.AddTransient<IPreSolModificacionRepository, PreSolModificacionRepository>();
+builder.Services.AddTransient<IPreModificacionRepository, PreModificacionRepository>();
+builder.Services.AddTransient<IPrePucModificacionRepository, PrePucModificacionRepository>();
+builder.Services.AddTransient<IPreMetasRepository, PreMetasRepository>();
+
+
+
+
+
 
 
 
@@ -101,6 +112,15 @@ builder.Services.AddTransient<IPreResumenSaldoRepository, PreResumenSaldoReposit
 builder.Services.AddTransient<IPreResumenSaldoServices, PreResumenSaldoServices>();
 builder.Services.AddTransient<IReportPreResumenSaldoService, ReportPreResumenSaldoService>();
 builder.Services.AddTransient<IPreCompromisosService, PreCompromisosService>();
+builder.Services.AddTransient<IPreDetalleCompromisosService, PreDetalleCompromisosService>();
+builder.Services.AddTransient<IPrePucCompromisosService, PrePucCompromisosService>();
+builder.Services.AddTransient<IPreSolModificacionService, PreSolModificacionService>();
+builder.Services.AddTransient<IPreModificacionService, PreModificacionService>();
+builder.Services.AddTransient<IPrePucModificacionService, PrePucModificacionService>();
+builder.Services.AddTransient<IPreMetasService, PreMetasService>();
+
+
+
 
 
 
