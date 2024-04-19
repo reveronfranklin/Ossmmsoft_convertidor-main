@@ -26,7 +26,7 @@ namespace Convertidor.Data.Repository.Rh
             {
                 ResultDto<List<RhReporteFirmaResponseDto>> result = new  ResultDto<List<RhReporteFirmaResponseDto>> (null);
                 var data = await _repository.GetAll();
-                if (data.Count > 0)
+                if (data.Count >0 )
                 {
                     result.Data = await MapListFirma(data);
                     result.Message = "";

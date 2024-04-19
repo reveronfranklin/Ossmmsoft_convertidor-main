@@ -35,7 +35,7 @@ public class ReportReciboPagoService : IReportReciboPagoService
         RhTiposNominaFilterDto filterTipoNomina = new RhTiposNominaFilterDto();
         filterTipoNomina.CodigoTipoNomina = filter.CodigoTipoNomina;
         var tipoNomina = await _rhTipoNominaService.GetByCodigo(filterTipoNomina);
-        
+            
         var temporal = await _serviceTemporal.GetByPeriodoTipoNomina(filter);
         if (temporal.Data!=null && temporal.Data.Count > 0)
         {

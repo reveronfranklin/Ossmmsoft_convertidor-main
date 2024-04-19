@@ -19,18 +19,13 @@ namespace AppService.Api.Controllers
             _service = service;
           
         }
-
-
-       
         
 
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> SendEmail(EmailDto request)
         {
-           
             
-
             _service.SendEmail(request);
 
             return Ok();

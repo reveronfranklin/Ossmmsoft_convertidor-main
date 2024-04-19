@@ -91,14 +91,51 @@ namespace Convertidor.Data.Repository.Rh
         public FechaDto GetFechaDto(DateTime fecha)
         {
             var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
+            try
+            {
+              
+                FechaDesdeObj.Year = fecha.Year.ToString();
+                string month = "00" + fecha.Month.ToString();
+                string day = "00" + fecha.Day.ToString();
+                FechaDesdeObj.Month = month.Substring(month.Length - 2);
+                FechaDesdeObj.Day = day.Substring(day.Length - 2);
 
-            return FechaDesdeObj;
+                return FechaDesdeObj;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return FechaDesdeObj;
+
+            }
+           
         }
+        public string GetFechaString(DateTime? fecha)
+        {
+            var result = "";
+            try
+            {
+              
+                if (fecha != null)
+                {
+                    result = $"{fecha:MM/dd/yyyy}";
+                }
+         
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return result;
+              
+            }
+           
+          
+        }
+        
+      
+        
 
         public async Task<RhPeriodosResponseDto> MapPeriodosDto(RH_PERIODOS dtos)
         {
@@ -107,8 +144,12 @@ namespace Convertidor.Data.Repository.Rh
             RhPeriodosResponseDto itemResult = new RhPeriodosResponseDto();
             itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
             itemResult.CodigoTipoNomina = dtos.CODIGO_TIPO_NOMINA;
+
+            itemResult.DescripcionPeriodo = GetPeriodo(dtos.PERIODO);
+            itemResult.DescripcionTipoNomina = GetTipoNomina(dtos.TIPO_NOMINA);
+            
             itemResult.FechaNomina = dtos.FECHA_NOMINA;
-            itemResult.FechaNominaString = dtos.FECHA_NOMINA.ToString("u");
+            itemResult.FechaNominaString =$"{dtos.FECHA_NOMINA:MM/dd/yyyy}";
             FechaDto fechaNominaObj = GetFechaDto(dtos.FECHA_NOMINA);
             itemResult.FechaNominaObj = (FechaDto)fechaNominaObj;
             itemResult.Periodo = dtos.PERIODO;
@@ -117,21 +158,44 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.EXTRA2 = dtos.EXTRA2;
             itemResult.EXTRA3 = dtos.EXTRA3;
             itemResult.UsuarioPreCierre = dtos.USUARIO_PRECIERRE;
+           
             itemResult.FechaPreCierre = dtos.FECHA_PRECIERRE;
-            itemResult.FechaPreCierreString = dtos.FECHA_PRECIERRE.ToString("u");
-            FechaDto fechaPrecierreObj = GetFechaDto(dtos.FECHA_PRECIERRE);
-            itemResult.FechaPreCierreObj = (FechaDto)fechaPrecierreObj;
+            itemResult.FechaPreCierreString = "";
+            itemResult.FechaPreCierreObj = null;
+            if (dtos.FECHA_PRECIERRE != null)
+            {
+                itemResult.FechaPreCierreString =$"{dtos.FECHA_PRECIERRE:MM/dd/yyyy}";
+                FechaDto fechaPrecierreObj = GetFechaDto((DateTime)dtos.FECHA_PRECIERRE);
+                itemResult.FechaPreCierreObj = (FechaDto)fechaPrecierreObj;
+            }    
+           
+            
             itemResult.UsuarioCierre = dtos.USUARIO_CIERRE;
             itemResult.FechaCierre = dtos.FECHA_CIERRE;
-            itemResult.FechaCierreString = dtos.FECHA_CIERRE.ToString("u");
-            FechaDto fechaCierreObj = GetFechaDto(dtos.FECHA_CIERRE);
-            itemResult.FechaCierreObj = (FechaDto)fechaCierreObj;
+            itemResult.FechaCierreString = "";
+            itemResult.FechaCierreObj = null;
+            if (dtos.FECHA_CIERRE!=null)
+            {
+                itemResult.FechaCierre = dtos.FECHA_CIERRE;
+                itemResult.FechaCierreString =$"{dtos.FECHA_CIERRE:MM/dd/yyyy}";
+                FechaDto fechaCierreObj = GetFechaDto((DateTime)dtos.FECHA_CIERRE);
+                itemResult.FechaCierreObj = (FechaDto)fechaCierreObj;
+            }
+        
+            
             itemResult.CodigoCuentaEmpresa = dtos.CODIGO_CUENTA_EMPRESA;
             itemResult.UsuarioPreNomina = dtos.USUARIO_PRENOMINA;
             itemResult.FechaPrenomina = dtos.FECHA_PRENOMINA;
-            itemResult.FechaPrenominaString = dtos.FECHA_PRENOMINA.ToString("u");
-            FechaDto fechaPrenominaObj = GetFechaDto(dtos.FECHA_PRENOMINA);
-            itemResult.FechaPrenominaObj = (FechaDto)fechaPrenominaObj;
+            itemResult.FechaPrenominaString = "";
+            itemResult.FechaPrenominaObj = null;
+            if (dtos.FECHA_PRENOMINA != null)
+            {
+                itemResult.FechaPrenominaString = $"{dtos.FECHA_PRENOMINA:MM/dd/yyyy}";
+                FechaDto fechaPrenominaObj = GetFechaDto((DateTime)dtos.FECHA_PRENOMINA);
+                itemResult.FechaPrenominaObj = (FechaDto)fechaPrenominaObj;
+            }
+           
+            
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             itemResult.Descripcion = dtos.DESCRIPCION;
 
@@ -147,16 +211,25 @@ namespace Convertidor.Data.Repository.Rh
         public async Task<List<RhPeriodosResponseDto>> MapListPeriodoDto(List<RH_PERIODOS> dtos)
         {
             List<RhPeriodosResponseDto> result = new List<RhPeriodosResponseDto>();
-          
-            
-            
-            var data = from s in dtos
+
+            try
+            {
+
+
+                foreach (var item in dtos)
+                {
+                    var dto = await MapPeriodosDto(item);
+                    result.Add(dto);
+                }
+                
+                
+                /*  var data = from s in dtos
                 group s by new
                 {
                     CodigoPeriodo = s.CODIGO_PERIODO,
                     CodigoTipoNomina = s.CODIGO_TIPO_NOMINA,
                     FechaNomina = s.FECHA_NOMINA,
-                    FechaNominaString = s.FECHA_NOMINA.ToString("u"),
+                    FechaNominaString = $"{s.FECHA_NOMINA:MM/dd/yyyy}",
                     FechaNominaObj = GetFechaDto(s.FECHA_NOMINA),
                     Periodo = s.PERIODO,
                     TipoNomina = s.TIPO_NOMINA,
@@ -165,17 +238,14 @@ namespace Convertidor.Data.Repository.Rh
                     EXTRA3 = s.EXTRA3,
                     UsuarioPreCierre = s.USUARIO_PRECIERRE,
                     FechaPreCierre = s.FECHA_PRECIERRE,
-                    FechaPreCierreString = s.FECHA_PRECIERRE.ToString("u"),
-                    FechaPreCierreObj =  GetFechaDto(s.FECHA_PRECIERRE),
+                    FechaPreCierreObj =  GetFechaDto((DateTime)s.FECHA_PRECIERRE),
                     UsuarioCierre = s.USUARIO_CIERRE,
                     FechaCierre = s.FECHA_CIERRE,
-                    FechaCierreString = s.FECHA_CIERRE.ToString("u"),
-                    FechaCierreObj = GetFechaDto(s.FECHA_CIERRE),
+                    FechaCierreObj = GetFechaDto((DateTime)s.FECHA_CIERRE),
                     CodigoCuentaEmpresa = s.CODIGO_CUENTA_EMPRESA,
                     UsuarioPreNomina = s.USUARIO_PRENOMINA,
                     FechaPrenomina = s.FECHA_PRENOMINA,
-                    FechaPrenominaString = s.FECHA_PRENOMINA.ToString("u"),
-                    FechaPrenominaObj =  GetFechaDto(s.FECHA_PRENOMINA),
+                    FechaPrenominaObj =  GetFechaDto((DateTime)s.FECHA_PRENOMINA),
                     CodigoPresupuesto = s.CODIGO_PRESUPUESTO,
                     Descripcion = s.DESCRIPCION,
                   
@@ -197,25 +267,33 @@ namespace Convertidor.Data.Repository.Rh
                     EXTRA3=g.Key.EXTRA3, 
                     UsuarioPreCierre=g.Key.UsuarioPreCierre,
                     FechaPreCierre=g.Key.FechaPreCierre,
-                    FechaPreCierreString=g.Key.FechaPreCierreString,
+                
                     FechaPreCierreObj=g.Key.FechaPreCierreObj,
                     UsuarioCierre=g.Key.UsuarioCierre,
                     FechaCierre=g.Key.FechaCierre,
-                    FechaCierreString=g.Key.FechaCierreString,
+                  
                     FechaCierreObj=g.Key.FechaCierreObj,
                     CodigoCuentaEmpresa=g.Key.CodigoCuentaEmpresa,
                     UsuarioPreNomina=g.Key.UsuarioPreNomina,
                     FechaPrenomina=g.Key.FechaPrenomina,
-                    FechaPrenominaString=g.Key.FechaPrenominaString,
+                 
                     FechaPrenominaObj=g.Key.FechaPrenominaObj,
                     CodigoPresupuesto=g.Key.CodigoPresupuesto,
                     Descripcion=g.Key.Descripcion,
                             
-                };
-            
+                };*/
+            //     FechaPreCierreString = GetFechaString( s.FECHA_PRECIERRE ?? default(DateTime)),
 
-            result = data.ToList();
+         
             return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return result;
+            }
+            
+        
 
 
 
@@ -282,7 +360,13 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Periodo no existe";
                     return result;
                 }
-
+                if (periodos.FECHA_CIERRE != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Periodo CERRADO no puede ser modificado";
+                    return result;
+                }
 
                 var codigoTipoNomina = await _rhTipoNominaRepository.GetByCodigo(dto.CodigoTipoNomina);
                 if (codigoTipoNomina==null)
@@ -320,25 +404,12 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Tipo Nomina Invalido";
                     return result;
                 }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+            
+                if (string.IsNullOrEmpty(dto.Descripcion))
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Extra2 invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 invalido";
-                    return result;
-                }
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 invalido";
+                    result.Message = "Descripcion Invalida";
                     return result;
                 }
 
@@ -346,11 +417,6 @@ namespace Convertidor.Data.Repository.Rh
                 periodos.FECHA_NOMINA = dto.FechaNomina;
                 periodos.PERIODO = dto.Periodo;
                 periodos.TIPO_NOMINA = dto.TipoNomina;
-                periodos.EXTRA1 = dto.Extra1;
-                periodos.EXTRA2 = dto.Extra2;
-                periodos.EXTRA3 = dto.Extra3;
-                periodos.CODIGO_CUENTA_EMPRESA = dto.CodigoCuentaEmpresa;
-                periodos.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 periodos.DESCRIPCION = dto.Descripcion;
 
 
@@ -360,9 +426,14 @@ namespace Convertidor.Data.Repository.Rh
                 periodos.FECHA_UPD = DateTime.Now;
 
 
-                await _repository.Update(periodos);
+                var updated=await _repository.Update(periodos);
 
-
+                if (!updated.IsValid)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = updated.Message;
+                }
                
 
                 var resultDto = await MapPeriodosDto(periodos);
@@ -529,6 +600,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Fecha PreNomina Invalida";
                     return result;
                 }
+             
                 periodos.USUARIO_PRENOMINA = dto.Usuario;
                 periodos.FECHA_PRENOMINA = dto.Fecha;
 
@@ -576,6 +648,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Codigo Tipo Nomina  Invalido";
                     return result;
                 }
+                
                
                 FechaDto fechanomina = GetFechaDto(dto.FechaNomina);
                 if (fechanomina==null)
@@ -604,29 +677,15 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Tipo Nomina Invalido";
                     return result;
                 }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+          
+                if (string.IsNullOrEmpty(dto.Descripcion))
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
+                    result.Message = "Descripcion Invalida";
                     return result;
                 }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
-
+                
                 RH_PERIODOS entity = new RH_PERIODOS();
                 
                 entity.CODIGO_PERIODO = await _repository.GetNextKey();
@@ -634,11 +693,6 @@ namespace Convertidor.Data.Repository.Rh
                 entity.FECHA_NOMINA = dto.FechaNomina;
                 entity.PERIODO = dto.Periodo;
                 entity.TIPO_NOMINA = dto.TipoNomina;
-                entity.EXTRA1 = dto.Extra1;
-                entity.EXTRA2 = dto.Extra2;
-                entity.EXTRA3 = dto.Extra3;
-                entity.CODIGO_CUENTA_EMPRESA = dto.CodigoCuentaEmpresa;
-                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 entity.DESCRIPCION = dto.Descripcion;
 
 
@@ -699,6 +753,13 @@ namespace Convertidor.Data.Repository.Rh
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Periodo no existe";
+                    return result;
+                }
+                if (periodo.FECHA_CIERRE != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Periodo CERRADO no puede ser modificado";
                     return result;
                 }
 

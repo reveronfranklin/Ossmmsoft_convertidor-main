@@ -16,13 +16,13 @@
         public int USUARIO_UPD { get; set; }
         public DateTime FECHA_UPD { get; set; }
         public int USUARIO_PRECIERRE { get; set; }
-        public DateTime FECHA_PRECIERRE { get; set; }
+        public DateTime? FECHA_PRECIERRE { get; set; }
         public int USUARIO_CIERRE { get; set; }
-        public DateTime FECHA_CIERRE { get; set; }
+        public DateTime? FECHA_CIERRE { get; set; }
         public int CODIGO_EMPRESA { get; set; }
         public int CODIGO_CUENTA_EMPRESA { get; set; }
         public int USUARIO_PRENOMINA { get; set; }
-        public DateTime FECHA_PRENOMINA { get; set; }
+        public DateTime? FECHA_PRENOMINA { get; set; }
         public int CODIGO_PRESUPUESTO { get; set; }
         public string DESCRIPCION { get; set; } = string.Empty;
 

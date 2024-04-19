@@ -685,7 +685,8 @@ namespace Convertidor.Services.Bm
                 var pathLogo = @settings.BmFiles;
                 Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacao.png")));
                 var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
-                Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+                //Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+                Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.png")));
                 
                 
                 Paragraph logos = new Paragraph();
@@ -787,6 +788,7 @@ namespace Convertidor.Services.Bm
 
             var _env = "development";
             var settings = _configuration.GetSection("Settings").Get<Settings>();
+            
             var pathFont = $"{settings.BmFiles + ("arial.ttf")}";
             FontProgram fontProgram =
                     FontProgramFactory.CreateFont(pathFont);
@@ -808,7 +810,7 @@ namespace Convertidor.Services.Bm
 
                 foreach (var item in placas)
                 {
-
+                    
                     Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
                     
                     //PdfFont  font = PdfFontFactory.CreateFont(pathFont, PdfEncodings.IDENTITY_H);
@@ -816,7 +818,8 @@ namespace Convertidor.Services.Bm
                     var pathLogo = @settings.BmFiles;
                     Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacao.png")));
                     var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
-                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+                    //Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.png")));
 
 
                     Paragraph logos = new Paragraph();

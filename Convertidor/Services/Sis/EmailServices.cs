@@ -40,7 +40,7 @@ public class EmailServices:IEmailServices
 
         if (request.FilePath.Length > 0)
         {
-            var ruta = _configuration.GetSection("settings:ExcelFiles").Value + "/"+ request.FilePath ;
+                var ruta = _configuration.GetSection("settings:ExcelFiles").Value + "/"+ request.FilePath ;
             var builder = new BodyBuilder();
             //builder.HtmlBody = htmlContent;
             builder.TextBody = request.Content;

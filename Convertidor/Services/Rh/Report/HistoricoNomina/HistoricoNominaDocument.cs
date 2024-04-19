@@ -9,7 +9,7 @@ namespace Convertidor.Services.Rh.Report.HistoricoNomina
     public class HistoricoNominaDocument : IDocument
     {
     
-        public static Image LogoImage { get; } = Image.FromFile("logo.png");
+       // public static Image LogoImage { get; } = Image.FromFile("logo.png");
         private readonly string _patchLogo;
         public List<RhReporteNominaResumenConceptoResponseDto> Model { get; }
         public List<RhReporteFirmaResponseDto> ModelFirma { get; }

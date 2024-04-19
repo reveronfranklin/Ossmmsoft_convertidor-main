@@ -27,9 +27,12 @@ public class ReportHistoricoNominaService:IReportHistoricoNominaService
     
     public async Task<string> GeneratePdf(FilterRepoteNomina filter)
     {
-        var settings = _configuration.GetSection("Settings").Get<Settings>();
         var result = "No Data";
-        var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
+        try
+        {
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+        
+        var pathLogo = @settings.BmFiles + "LogoIzquierda.png";
         var fileName= $"HistoricoDeNomina-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
         var filePath = $"{ @settings.ExcelFiles}/{fileName}.pdf";
 
@@ -47,6 +50,10 @@ public class ReportHistoricoNominaService:IReportHistoricoNominaService
                 //var model = await   _rhReporteNominaHistoricoService.GetByPeriodoTipoNominaResumenConcepto(filter);
 
                 var modelFirma = await _rhReporteFirmaService.GetAll();
+                if (modelFirma == null)
+                {
+                    return "No Data Firma";
+                }
                 var modelRecibos = await _rhReporteNominaHistoricoService.GetByPeriodoTipoNomina(filter);
                 var document = new HistoricoNominaDocument(model.Data,modelFirma.Data,modelRecibos.Data,pathLogo);
                 fileName= $"HistoricoDeNomina-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
@@ -68,6 +75,15 @@ public class ReportHistoricoNominaService:IReportHistoricoNominaService
                 result =fileName;
             }
         }
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return result;
+        }
+        
+    
       
         return result;
     }
