@@ -39,6 +39,15 @@ namespace Convertidor.Data
         public DbSet<PRE_RESUMEN_SALDOS> PRE_RESUMEN_SALDOS { get; set; }
         public DbSet<PRE_DIRECTIVOS> PRE_DIRECTIVOS { get; set; }
         public DbSet<PRE_COMPROMISOS> PRE_COMPROMISOS { get; set; }
+        public DbSet<PRE_DETALLE_COMPROMISOS> PRE_DETALLE_COMPROMISOS { get; set; }
+        public DbSet<PRE_PUC_COMPROMISOS> PRE_PUC_COMPROMISOS { get; set; }
+        public DbSet<PRE_SOL_MODIFICACION> PRE_SOL_MODIFICACION { get; set; }
+        public DbSet<PRE_MODIFICACION> PRE_MODIFICACION { get; set; }
+        public DbSet<PRE_PUC_MODIFICACION> PRE_PUC_MODIFICACION { get; set; }
+        public DbSet<PRE_METAS> PRE_METAS { get; set; }
+
+
+
 
 
 
@@ -240,9 +249,75 @@ namespace Convertidor.Data
 
                 });
                 builder.ToTable("PRE_COMPROMISOS");
-            });
-            
+            })
 
+             .Entity<PRE_DETALLE_COMPROMISOS>(builder =>
+              {
+                  //builder.HasNoKey();
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_DETALLE_COMPROMISO,
+
+                  });
+                  builder.ToTable("PRE_DETALLE_COMPROMISOS");
+              })
+            .Entity<PRE_PUC_COMPROMISOS>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_PUC_COMPROMISO,
+
+                 });
+                 builder.ToTable("PRE_PUC_COMPROMISOS");
+             })
+
+            .Entity<PRE_SOL_MODIFICACION>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_SOL_MODIFICACION,
+
+                 });
+                 builder.ToTable("PRE_SOL_MODIFICACION");
+             })
+
+            .Entity<PRE_MODIFICACION>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_MODIFICACION,
+
+                 });
+                 builder.ToTable("PRE_MODIFICACION");
+             })
+
+             .Entity<PRE_PUC_MODIFICACION>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_PUC_MODIFICACION,
+
+                 });
+                 builder.ToTable("PRE_PUC_MODIFICACION");
+             })
+
+
+             .Entity<PRE_METAS>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_META,
+
+                 });
+                 builder.ToTable("PRE_METAS");
+             });
+
+            
 
 
         }

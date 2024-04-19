@@ -6,7 +6,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
     {
 
 
-        Task<PRE_COMPROMISOS> GetByCodigo(int codigoDirectivo);
+        Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso);
         Task<List<PRE_COMPROMISOS>> GetAll();
         Task<ResultDto<PRE_COMPROMISOS>> Add(PRE_COMPROMISOS entity);
         Task<ResultDto<PRE_COMPROMISOS>> Update(PRE_COMPROMISOS entity);
