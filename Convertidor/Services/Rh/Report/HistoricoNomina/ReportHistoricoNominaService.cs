@@ -32,7 +32,7 @@ public class ReportHistoricoNominaService:IReportHistoricoNominaService
         {
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
         
-        var pathLogo = @settings.BmFiles + "LogoIzquierda.png";
+        var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
         var fileName= $"HistoricoDeNomina-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
         var filePath = $"{ @settings.ExcelFiles}/{fileName}.pdf";
 
@@ -67,7 +67,10 @@ public class ReportHistoricoNominaService:IReportHistoricoNominaService
                 if (model.Data == null) return model.Message;
         
                 var modelFirma = await _rhReporteFirmaService.GetAll();
+                if (modelFirma == null) return "No Data";
+                
                 var modelRecibos = await _rhReporteNominaTemporalService.GetByPeriodoTipoNomina(filter);
+                if (modelRecibos.Data == null) return "No Data";
                 var document = new HistoricoNominaDocument(model.Data,modelFirma.Data,modelRecibos.Data,pathLogo);
                 fileName= $"TemporalDeNomina-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
                 filePath = $"{ @settings.ExcelFiles}/{fileName}";

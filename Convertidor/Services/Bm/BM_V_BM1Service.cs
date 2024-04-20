@@ -816,10 +816,10 @@ namespace Convertidor.Services.Bm
                     //PdfFont  font = PdfFontFactory.CreateFont(pathFont, PdfEncodings.IDENTITY_H);
 
                     var pathLogo = @settings.BmFiles;
-                    Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacao.png")));
+                    Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacaoBN.png")));
                     var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
                     //Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
-                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.png")));
+                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierdaBN.png")));
 
 
                     Paragraph logos = new Paragraph();
