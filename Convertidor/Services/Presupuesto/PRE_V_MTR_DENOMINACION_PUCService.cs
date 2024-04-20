@@ -10,7 +10,7 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPRE_V_MTR_DENOMINACION_PUCRepository _repository;
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
 
-        private readonly IMapper _mapper;
+
 
         public PRE_V_MTR_DENOMINACION_PUCService(IPRE_V_MTR_DENOMINACION_PUCRepository repository,IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository)
         {

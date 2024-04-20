@@ -16,7 +16,7 @@ namespace Convertidor.Services.Adm
         private readonly IAdmDireccionProveedorRepository _repository;
         private readonly IAdmDescriptivaRepository _repositoryPreDescriptiva;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly IRhPersonaService _personaServices;
+
         private readonly IAdmProveedoresRepository _proveedorRepository;
         private readonly ISisUbicacionService _sisUbicacionService;
        
@@ -24,14 +24,14 @@ namespace Convertidor.Services.Adm
         public AdmProveedoresDireccionesService(IAdmDireccionProveedorRepository repository,
                                       IAdmDescriptivaRepository repositoryPreDescriptiva,
                                       ISisUsuarioRepository sisUsuarioRepository,
-                                      IRhPersonaService personaServices,
+                     
                                       IAdmProveedoresRepository proveedorRepository,
                                       ISisUbicacionService sisUbicacionService)
 		{
             _repository = repository;
             _repositoryPreDescriptiva = repositoryPreDescriptiva;
             _sisUsuarioRepository = sisUsuarioRepository;
-            _personaServices = personaServices;
+
             _proveedorRepository = proveedorRepository;
             _sisUbicacionService = sisUbicacionService;
         }

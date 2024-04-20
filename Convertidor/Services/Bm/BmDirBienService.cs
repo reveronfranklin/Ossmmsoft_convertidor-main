@@ -22,7 +22,6 @@ namespace Convertidor.Data.Repository.Bm
 	public class BmDirBienService: IBmDirBienService
     {
 		
-        private readonly DataContext _context;
 
 
 
@@ -33,7 +32,7 @@ namespace Convertidor.Data.Repository.Bm
         private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly ISisUbicacionService _sisUbicacionService;
-        private readonly IMapper _mapper;
+
 
         public BmDirBienService(IBmDirBienRepository repository,
                                     IBmDescriptivasService bmDescriptivaService,

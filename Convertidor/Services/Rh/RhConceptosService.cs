@@ -3,27 +3,27 @@
     public class RhConceptosService : IRhConceptosService
     {
 
-        private readonly DataContext _context;
+
 
         private readonly IRhConceptosRepository _repository;
         private readonly IRhDescriptivasService _descriptivaService;
-        private readonly IRhPersonasRepository _rhPersonasRepository;
+
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IPrePlanUnicoCuentasService _prePlanUnicoCuentasService;
         private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
 
-        private readonly IMapper _mapper;
+
 
         public RhConceptosService(IRhConceptosRepository repository,
                           IRhDescriptivasService descriptivaService,
-                          IRhPersonasRepository rhPersonasRepository,
+
                           ISisUsuarioRepository sisUsuarioRepository,
                           IPrePlanUnicoCuentasService prePlanUnicoCuentasService,
                           IRhTipoNominaRepository rhTipoNominaRepository)
         {
             _repository = repository;
             _descriptivaService = descriptivaService;
-            _rhPersonasRepository = rhPersonasRepository;
+
             _sisUsuarioRepository = sisUsuarioRepository;
             _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
             _rhTipoNominaRepository = rhTipoNominaRepository;

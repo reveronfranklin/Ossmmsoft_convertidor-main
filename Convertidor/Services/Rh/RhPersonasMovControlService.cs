@@ -3,7 +3,7 @@
 	public class RhPersonasMovControlService : IRhPersonasMovControlService
     {
 		
-        private readonly DataContext _context;
+    
 
 
 
@@ -12,7 +12,7 @@
         private readonly IRhPersonasRepository _rhPersonasRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhConceptosRepository _rhConceptosRepository;
-        private readonly IMapper _mapper;
+     
 
         public RhPersonasMovControlService(IRhPersonasMovControlRepository repository,
                           IRhPersonasRepository rhPersonasRepository,

@@ -5,27 +5,27 @@ namespace Convertidor.Data.Repository.Rh
 	public class RhDireccionesService: IRhDireccionesService
     {
 		
-        private readonly DataContext _context;
+
 
 
 
    
         private readonly IRhDireccionesRepository _repository;
-        private readonly IRhDescriptivasService _descriptivaService;
+ 
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly ISisUbicacionService _sisUbicacionService;
         private readonly IRhPersonasRepository _personasRepository;
-        private readonly IMapper _mapper;
+  
 
         public RhDireccionesService(IRhDireccionesRepository repository,
-                                    IRhDescriptivasService descriptivaService,
+
                                     ISisUsuarioRepository sisUsuarioRepository,
                                     ISisUbicacionService sisUbicacionService,
                                     IRhPersonasRepository personasRepository
                                    )
         {
             _repository = repository;
-            _descriptivaService = descriptivaService;
+
             _sisUsuarioRepository = sisUsuarioRepository;
             _sisUbicacionService = sisUbicacionService;
             _personasRepository = personasRepository;

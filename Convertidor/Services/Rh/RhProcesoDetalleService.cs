@@ -3,7 +3,7 @@
 	public class RhProcesosDetalleService:IRhProcesosDetalleService
     {
 		
-        private readonly DataContext _context;
+  
 
 
 
@@ -14,7 +14,7 @@
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
 
-        private readonly IMapper _mapper;
+
 
         public RhProcesosDetalleService(IRhProcesoDetalleRepository repository,
                                  IRhProcesoRepository rhProcesoRepository,

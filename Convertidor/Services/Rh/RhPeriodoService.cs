@@ -10,7 +10,7 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IRhPeriodoRepository _repository;
         private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly IMapper _mapper;
+      
 
         public RhPeriodoService(IRhPeriodoRepository repository,IRhTipoNominaRepository rhTipoNominaRepository,ISisUsuarioRepository sisUsuarioRepository)
         {

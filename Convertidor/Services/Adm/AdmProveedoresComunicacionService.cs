@@ -15,20 +15,20 @@ namespace Convertidor.Services.Adm
         private readonly IAdmComunicacionProveedorRepository _repository;
         private readonly IAdmDescriptivaRepository _repositoryPreDescriptiva;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly IRhPersonaService _personaServices;
+
         private readonly IAdmProveedoresRepository _proveedorRepository;
-        private IAdmProveedoresActividadService _admProveedoresActividadServiceImplementation;
+
 
         public AdmProveedoresComunicacionService(IAdmComunicacionProveedorRepository repository,
                                       IAdmDescriptivaRepository repositoryPreDescriptiva,
                                       ISisUsuarioRepository sisUsuarioRepository,
-                                      IRhPersonaService personaServices,
+                         
                                       IAdmProveedoresRepository proveedorRepository)
 		{
             _repository = repository;
             _repositoryPreDescriptiva = repositoryPreDescriptiva;
             _sisUsuarioRepository = sisUsuarioRepository;
-            _personaServices = personaServices;
+
             _proveedorRepository = proveedorRepository;
         }
 

@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Convertidor", "Convertidor\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libreria", "Libreria\Libreria.csproj", "{6016D4CE-4BBC-41E8-8C67-F6248A191AD9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{66A44E24-2AD4-4DB9-9D94-2AB93A434B56}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrearReportePdf", "CrearReportePdf\CrearReportePdf.csproj", "{80DBF6C2-D596-4130-B040-01C18AD2E9DF}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{6016D4CE-4BBC-41E8-8C67-F6248A191AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6016D4CE-4BBC-41E8-8C67-F6248A191AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6016D4CE-4BBC-41E8-8C67-F6248A191AD9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66A44E24-2AD4-4DB9-9D94-2AB93A434B56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66A44E24-2AD4-4DB9-9D94-2AB93A434B56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66A44E24-2AD4-4DB9-9D94-2AB93A434B56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66A44E24-2AD4-4DB9-9D94-2AB93A434B56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{80DBF6C2-D596-4130-B040-01C18AD2E9DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80DBF6C2-D596-4130-B040-01C18AD2E9DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80DBF6C2-D596-4130-B040-01C18AD2E9DF}.Release|Any CPU.ActiveCfg = Release|Any CPU

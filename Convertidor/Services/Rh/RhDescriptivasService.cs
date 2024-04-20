@@ -3,14 +3,14 @@
 	public class RhDescriptivasService: IRhDescriptivasService
     {
 		
-        private readonly DataContext _context;
+
 
 
 
    
         private readonly IRhDescriptivaRepository _repository;
 
-        private readonly IMapper _mapper;
+     
 
         public RhDescriptivasService(IRhDescriptivaRepository repository)
         {

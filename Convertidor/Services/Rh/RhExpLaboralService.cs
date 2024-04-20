@@ -7,19 +7,18 @@ namespace Convertidor.Data.Repository.Rh
         
    
         private readonly IRhExpLaboralRepository _repository;
-        private readonly IRhDescriptivasService _descriptivaService;
+
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhPersonasRepository _rhPersonasRepository;
-        private readonly IRhDocumentosRepository _rhDocumentosRepository;
+  
 
         public RhExpLaboralService(IRhExpLaboralRepository repository, 
-                                        IRhDescriptivasService descriptivaService, 
+                           
                                         ISisUsuarioRepository sisUsuarioRepository,
                                         IRhPersonasRepository rhPersonasRepository
                                         )
         {
             _repository = repository;
-            _descriptivaService = descriptivaService;
             _sisUsuarioRepository = sisUsuarioRepository;
             _rhPersonasRepository = rhPersonasRepository;
         }

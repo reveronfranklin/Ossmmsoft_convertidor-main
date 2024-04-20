@@ -11,18 +11,18 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPRE_V_SALDOSRepository _repository;
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository ;
         private readonly IPRE_V_DENOMINACION_PUCRepository _pRE_V_DENOMINACION_PUCRepository;
-        private readonly IMapper _mapper;
+  
 
         public PRE_V_DENOMINACION_PUCServices(IPRE_V_SALDOSRepository repository,
                                      IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
-                                    IPRE_V_DENOMINACION_PUCRepository pRE_V_DENOMINACION_PUCRepository,
-                                    IMapper mapper)
+                                    IPRE_V_DENOMINACION_PUCRepository pRE_V_DENOMINACION_PUCRepository
+                                 )
         {
             _repository = repository;
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
             _pRE_V_DENOMINACION_PUCRepository = pRE_V_DENOMINACION_PUCRepository;
 
-            _mapper = mapper;
+        
         }
 
 

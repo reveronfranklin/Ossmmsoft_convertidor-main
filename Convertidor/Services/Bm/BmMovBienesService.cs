@@ -16,16 +16,16 @@ namespace Convertidor.Services.Bm
         private readonly IBmMovBienesRepository _repository;
         private readonly IBmDescriptivaRepository _bmDescriptivaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly IConfiguration _configuration;
+ 
         public BmMovBienesService(IBmMovBienesRepository repository,
                                   IBmDescriptivaRepository bmDescriptivaRepository, 
-                                  ISisUsuarioRepository sisUsuarioRepository,
-                                  IConfiguration configuration)
+                                  ISisUsuarioRepository sisUsuarioRepository
+                             )
 		{
             _repository = repository;
             _bmDescriptivaRepository = bmDescriptivaRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
-            _configuration = configuration;
+   
            
 
         }

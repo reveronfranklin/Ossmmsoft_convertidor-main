@@ -3,17 +3,13 @@
 	public class RhProcesosService: IRhProcesosService
     {
 		
-        private readonly DataContext _context;
-
-
-
-   
+        
         private readonly IRhProcesoRepository _repository;
         private readonly IRhProcesoDetalleRepository _rhProcesoDetalleRepository;
         private readonly IRhConceptosRepository _rhConceptosRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        private readonly IMapper _mapper;
+ 
 
         public RhProcesosService(IRhProcesoRepository repository,
                                  IRhProcesoDetalleRepository rhProcesoDetalleRepository,
