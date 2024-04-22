@@ -1,7 +1,4 @@
-﻿using Convertidor.Data.Entities.Bm;
-using Convertidor.Dtos.Adm;
-
-namespace Convertidor.Services.Rh
+﻿namespace Convertidor.Services.Rh
 {
 	public interface IRhPersonasMovControlService
     {

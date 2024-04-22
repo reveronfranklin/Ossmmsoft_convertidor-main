@@ -1,6 +1,4 @@
-﻿using System;
-using System;
-using Convertidor.Data.Entities.Bm;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Services.Sis;
 using Microsoft.EntityFrameworkCore;

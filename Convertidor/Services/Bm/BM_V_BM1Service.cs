@@ -11,8 +11,6 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-
 using Path = System.IO.Path;
 
 namespace Convertidor.Services.Bm
@@ -404,9 +402,15 @@ namespace Convertidor.Services.Bm
                     searchList = allData.Data;
 
                 }
-
-                await CreateBardCodeMultiple(searchList);
-                var fileName = $"BM1.xlsx";
+                var fileName = $"";
+                if (listIcpSeleccionado.Count > 0)
+                {
+                    await CreateBardCodeMultiple(searchList);
+                    fileName = $"BM1.xlsx";
+                }
+              
+                
+                
                 response.Data = searchList;
                 response.IsValid = true;
                 response.Message = "";

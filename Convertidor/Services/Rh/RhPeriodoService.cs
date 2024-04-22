@@ -1,7 +1,4 @@
-﻿using Convertidor.Dtos.Presupuesto;
-using Microsoft.EntityFrameworkCore;
-
-namespace Convertidor.Data.Repository.Rh
+﻿namespace Convertidor.Data.Repository.Rh
 {
 	public class RhPeriodoService: IRhPeriodoService
     {

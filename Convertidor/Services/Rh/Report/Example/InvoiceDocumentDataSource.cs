@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using QuestPDF.Helpers;
 
 namespace Convertidor.Services.Rh.Report.Example

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Convertidor.Services.Rh.Report.Example
 {
     public class InvoiceModel

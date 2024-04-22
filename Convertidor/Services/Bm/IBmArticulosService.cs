@@ -1,5 +1,4 @@
-﻿using System;
-using Convertidor.Dtos.Bm;
+﻿using Convertidor.Dtos.Bm;
 namespace Convertidor.Services.Bm
 {
 	public interface IBmArticulosService

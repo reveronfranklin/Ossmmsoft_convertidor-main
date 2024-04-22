@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Convertidor.Data.Entities.Bm;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos.Bm;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging;
 
 namespace Convertidor.Services.Bm
 {

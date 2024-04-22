@@ -1,7 +1,5 @@
-using System.Globalization;
 using Convertidor.Dtos.Presupuesto;
 using QuestPDF.Fluent;
-using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using Image = QuestPDF.Infrastructure.Image;
 

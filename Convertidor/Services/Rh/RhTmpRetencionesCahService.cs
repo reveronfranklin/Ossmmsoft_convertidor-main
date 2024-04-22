@@ -1,5 +1,4 @@
 ﻿using Convertidor.Services.Sis;
-using Ganss.Excel;
 
 namespace Convertidor.Data.Repository.Rh
 {

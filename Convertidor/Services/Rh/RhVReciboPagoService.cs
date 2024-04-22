@@ -1,17 +1,9 @@
-﻿using Convertidor.Dtos.Bm;
-using Convertidor.Dtos.Presupuesto;
-using Convertidor.Services.Rh.Report.Example;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.MinimalApi;
-using NPOI.OpenXmlFormats;
-using NPOI.SS.Formula.Functions;
-using QuestPDF.Elements;
+﻿using Convertidor.Services.Rh.Report.Example;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using QuestPDF.Previewer;
 using System.Globalization;
-using System.IO.Pipelines;
 
 namespace Convertidor.Services.Rh
 {

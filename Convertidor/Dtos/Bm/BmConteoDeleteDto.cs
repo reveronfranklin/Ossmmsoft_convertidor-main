@@ -1,5 +1,4 @@
-﻿using System;
-namespace Convertidor.Dtos.Bm
+﻿namespace Convertidor.Dtos.Bm
 {
 	public class BmConteoDeleteDto
 	{

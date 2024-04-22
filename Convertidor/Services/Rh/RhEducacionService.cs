@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Convertidor.Data.Repository.Rh
+﻿namespace Convertidor.Data.Repository.Rh
 {
 	public class RhEducacionService: IRhEducacionService
     {

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Convertidor.Data.Entities.ADM
+﻿namespace Convertidor.Data.Entities.ADM
 {
 	public class ADM_SOLICITUDES
 	{

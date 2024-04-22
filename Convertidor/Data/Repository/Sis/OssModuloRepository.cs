@@ -1,6 +1,4 @@
-﻿using Convertidor.Data.Entities.ADM;
-using Convertidor.Data.Entities.Sis;
-using Convertidor.Data.Interfaces.Adm;
+﻿using Convertidor.Data.Entities.Sis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Sis

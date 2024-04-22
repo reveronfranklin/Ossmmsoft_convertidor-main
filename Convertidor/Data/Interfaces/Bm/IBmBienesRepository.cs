@@ -1,5 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Bm;
+﻿using Convertidor.Data.Entities.Bm;
 
 namespace Convertidor.Data.Interfaces.Bm
 {

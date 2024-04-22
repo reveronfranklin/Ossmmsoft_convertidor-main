@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.DirectoryServices.Protocols;
-using System.Globalization;
-using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Interfaces;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Sis;
 using Convertidor.Dtos.Bm;
-using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Adm;
 using Convertidor.Services.Bm;
 using Convertidor.Services.Sis;
-using IronPdf.Editing;
-using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Bm
 {

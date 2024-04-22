@@ -1,6 +1,4 @@
-﻿using Org.BouncyCastle.Bcpg.OpenPgp;
-
-namespace Convertidor.Data.Entities.Presupuesto
+﻿namespace Convertidor.Data.Entities.Presupuesto
 {
     public class PRE_DIRECTIVOS
     {

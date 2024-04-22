@@ -1,12 +1,6 @@
-﻿using System;
-using System;
-using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Dtos.Bm;
 using Microsoft.EntityFrameworkCore;
-using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Data.Repository.Bm
 {
