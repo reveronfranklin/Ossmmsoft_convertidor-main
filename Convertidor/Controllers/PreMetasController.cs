@@ -60,10 +60,6 @@ namespace Convertidor.Controllers
             return Ok(result);
 
 
-
-
-
-
         }
     }
 }

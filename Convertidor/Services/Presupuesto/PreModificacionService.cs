@@ -147,8 +147,17 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo Modificacion no existe";
                     return result;
                 }
+
+                if(dto.CodigoSolModificacion < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Sol Modificacion Invalido";
+                    return result;
+
+                }
                 var codigoSolModificacion = await _preSolModificacionRepository.GetByCodigo(dto.CodigoSolModificacion);
-                if (dto.CodigoSolModificacion < 0)
+                if (codigoSolModificacion.CODIGO_SOL_MODIFICACION < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -156,8 +165,17 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var tipoModificacionId = await _preDescriptivaRepository.GetByIdAndTitulo(8,dto.TipoModificacionId);
                 if (dto.TipoModificacionId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Modificacion Id Invalido";
+                    return result;
+
+                }
+
+                var tipoModificacionId = await _preDescriptivaRepository.GetByIdAndTitulo(8,dto.TipoModificacionId);
+                if (tipoModificacionId == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -241,8 +259,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (dto.CodigoPresupuesto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+
+                }
+                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -301,16 +327,17 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoModificacion = await _repository.GetByCodigo(dto.CodigoModificacion);
-                if (codigoModificacion != null)
+                
+                if (dto.CodigoSolModificacion < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Modificacion ya existe";
+                    result.Message = "Codigo Sol Modificacion Invalido";
                     return result;
+
                 }
                 var codigoSolModificacion = await _preSolModificacionRepository.GetByCodigo(dto.CodigoSolModificacion);
-                if (dto.CodigoSolModificacion < 0)
+                if (codigoSolModificacion.CODIGO_SOL_MODIFICACION < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -318,8 +345,17 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var tipoModificacionId = await _preDescriptivaRepository.GetByIdAndTitulo(8, dto.TipoModificacionId);
                 if (dto.TipoModificacionId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Modificacion Id Invalido";
+                    return result;
+
+                }
+
+                var tipoModificacionId = await _preDescriptivaRepository.GetByIdAndTitulo(8, dto.TipoModificacionId);
+                if (tipoModificacionId == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -403,14 +439,23 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (dto.CodigoPresupuesto < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
+
                 }
+                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                if (codigoPresupuesto == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
 
 
 

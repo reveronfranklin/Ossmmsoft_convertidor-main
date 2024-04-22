@@ -1,17 +1,20 @@
-﻿using Convertidor.Data.Entities.Presupuesto;
+﻿
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Microsoft.EntityFrameworkCore;
 
-namespace Convertidor.Data.Repository.Rh
+namespace Convertidor.Data.Repository.Presupuesto
 {
 	public class PreCompromisosRepository: IPreCompromisosRepository
     {
 		
         private readonly DataContextPre _context;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public PreCompromisosRepository(DataContextPre context)
+        public PreCompromisosRepository(DataContextPre context ,ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
       
         public async Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso)
@@ -166,6 +169,26 @@ namespace Convertidor.Data.Repository.Rh
             }
 
 
+
+        }
+
+        public async Task<PRE_COMPROMISOS> GetByNumeroCompromiso(string numeroCompromiso)
+        {
+            try
+            {
+                
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.NUMERO_COMPROMISO == numeroCompromiso)
+                    .FirstOrDefaultAsync();
+
+                return (PRE_COMPROMISOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
 
         }
 

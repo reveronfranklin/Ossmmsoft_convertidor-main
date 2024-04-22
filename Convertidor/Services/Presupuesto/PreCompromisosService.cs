@@ -176,20 +176,14 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
-                if (dto.CodigoSolicitud < 0)
+                if (codigoSolicitud.CODIGO_SOLICITUD < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Solicitud Invalido";
                     return result;
                 }
-                if (dto.NumeroCompromiso.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero compromiso Invalido";
-                    return result;
-                }
+               
                 if (dto.FechaCompromiso == null)
                 {
                     result.Data = null;
@@ -199,7 +193,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-                if (dto.CodigoProveedor < 0)
+                if (codigoProveedor.CODIGO_PROVEEDOR < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -254,7 +248,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (dto.CodigoPresupuesto < 0)
+                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -267,7 +261,6 @@ namespace Convertidor.Services.Presupuesto
                 codigoCompromiso.CODIGO_COMPROMISO = dto.CodigoCompromiso;
                 codigoCompromiso.ANO = dto.Ano;
                 codigoCompromiso.CODIGO_SOLICITUD = dto.CodigoSolicitud;
-                codigoCompromiso.NUMERO_COMPROMISO = dto.NumeroCompromiso;
                 codigoCompromiso.FECHA_COMPROMISO = dto.FechaCompromiso;
                 codigoCompromiso.CODIGO_PROVEEDOR =dto.CodigoProveedor;
                 codigoCompromiso.FECHA_ENTREGA =dto.FechaEntrega;
@@ -320,7 +313,7 @@ namespace Convertidor.Services.Presupuesto
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Compromiso ya existe";
+                    result.Message = "Codigo Compromiso no existe";
                     return result;
                 }
                 if (dto.Ano < 0)
@@ -332,14 +325,15 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
-                if (dto.CodigoSolicitud < 0)
+                if (codigoSolicitud.CODIGO_SOLICITUD < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Solicitud Invalido";
                     return result;
                 }
-                if (dto.NumeroCompromiso.Length > 20)
+                var numeroCompromiso = await _repository.GetByNumeroCompromiso(dto.NumeroCompromiso);
+                if (numeroCompromiso != null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -355,7 +349,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-                if (dto.CodigoProveedor < 0)
+                if (codigoProveedor.CODIGO_PROVEEDOR < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -410,7 +404,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (dto.CodigoPresupuesto < 0)
+                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
