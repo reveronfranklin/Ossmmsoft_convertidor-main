@@ -1,4 +1,21 @@
-﻿dotnet ef migrations add InitialCreate --context DestinoDataContext --output-dir Migrations/DestinoMigrations
+﻿
+//muestra los cambios pendientes
+git status
+
+//confirma cambios en local
+git add .
+
+//commit con mensaje
+git commit -m "un mensaje corto de lo que se esta subiendo a el repo"
+
+//baja del repositorio a el local lo que no tengas.
+git pull
+
+//envias el codigo a el repositorio
+git push origin main
+
+
+dotnet ef migrations add InitialCreate --context DestinoDataContext --output-dir Migrations/DestinoMigrations
 dotnet ef database update InitialCreate --context DestinoDataContext
 
 

@@ -149,7 +149,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoCompromiso = await _preCompromisosRepository.GetByCodigo(dto.CodigoCompromiso);
-                if (dto.CodigoCompromiso < 0)
+                if (codigoCompromiso.CODIGO_COMPROMISO < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -181,7 +181,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
                 var udmId = await _repositoryPreDescriptiva.GetByIdAndTitulo(5, dto.UdmId);
-                if (dto.UdmId == null)
+                if (udmId == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -214,7 +214,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var tipoImpuestoId = await _admDescriptiva.GetByIdAndTitulo(18,dto.TipoImpuestoId);
-                if (dto.TipoImpuestoId < 0)
+                if (tipoImpuestoId == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -253,7 +253,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (dto.CodigoPresupuesto < 0)
+                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -323,7 +323,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoCompromiso = await _preCompromisosRepository.GetByCodigo(dto.CodigoCompromiso);
-                if (dto.CodigoCompromiso < 0)
+                if (codigoCompromiso.CODIGO_COMPROMISO < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -355,7 +355,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
                 var udmId = await _repositoryPreDescriptiva.GetByIdAndTitulo(5, dto.UdmId);
-                if (dto.UdmId == null)
+                if (udmId == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -388,7 +388,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var tipoImpuestoId = await _admDescriptiva.GetByIdAndTitulo(18, dto.TipoImpuestoId);
-                if (dto.TipoImpuestoId < 0)
+                if (tipoImpuestoId == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -427,7 +427,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (dto.CodigoPresupuesto < 0)
+                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
