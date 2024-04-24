@@ -159,7 +159,7 @@
 
                 
 
-                if (dto.LocalidadInstituto is not null && dto.LocalidadInstituto.Length < 50)
+                if (  string.IsNullOrEmpty(dto.LocalidadInstituto)  )
                 {
                     result.Message = "Localidad invalida";
                     result.IsValid = false;
@@ -167,7 +167,7 @@
                 }
 
 
-                if (dto.NombreInstituto is not null && dto.NombreInstituto.Length < 50)
+                if (string.IsNullOrEmpty(dto.NombreInstituto) )
                 {
                     result.Message = "Instituto invalido";
                     result.IsValid = false;

@@ -12,6 +12,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<List<PreDenominacionPorPartidaDto?>>> GetPreVDenominacionPorPartidaPuc(FilterPreDenominacionDto filter);
         Task<List<PreFinanciadoDto>> GetListFinanciadoPorPresupuesto(int codigoPresupuesto);
         Task<bool> PresupuestoExiste(int codigoPresupuesto);
+        Task<List<ListIcpPucConDisponible>> GetListIcpPucConDisponible(int codigoPresupuesto);
 	}
 }
 

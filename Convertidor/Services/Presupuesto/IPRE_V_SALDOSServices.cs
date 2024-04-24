@@ -11,6 +11,7 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<List<PreVSaldosGetDto>>> GetAllByPresupuestoIpcPuc(FilterPresupuestoIpcPuc filter);
         Task<ResultDto<List<PreSaldoPorPartidaGetDto>>> GetAllByPresupuestoPucConcat(FilterPresupuestoPucConcat filter);
         Task<ResultDto<List<PreDenominacionPorPartidaDto>>> GetPreVDenominacionPuc(FilterPreDenominacionDto filter);
-    }
+        Task<ResultDto<List<ListIcpPucConDisponible>>> GetListIcpPucConDisponible(int codigoPresupuesto);
+	}
 }
 

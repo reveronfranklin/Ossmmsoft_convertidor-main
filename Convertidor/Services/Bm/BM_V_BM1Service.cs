@@ -403,10 +403,17 @@ namespace Convertidor.Services.Bm
 
                 }
                 var fileName = $"";
+                var _env = "development";
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+                var destino = @settings.ExcelFiles;
+              
+                destino = $"{destino}/placas.pdf";
+                File.Delete(destino);
                 if (listIcpSeleccionado.Count > 0)
                 {
                     await CreateBardCodeMultiple(searchList);
-                    fileName = $"BM1.xlsx";
+                    fileName = $"placas.pdf";
                 }
               
                 
@@ -414,7 +421,7 @@ namespace Convertidor.Services.Bm
                 response.Data = searchList;
                 response.IsValid = true;
                 response.Message = "";
-                response.LinkData = $"/ExcelFiles/{fileName}";
+                response.LinkData = $"{fileName}";
                 return response;
             }
             catch (Exception ex)

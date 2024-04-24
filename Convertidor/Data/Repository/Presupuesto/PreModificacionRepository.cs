@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+        
+        public async Task<PRE_MODIFICACION> GetByCodigoSolicitud(int codigoSolicitud)
+        {
+            try
+            {
+                var result = await _context.PRE_MODIFICACION.DefaultIfEmpty().Where(e => e.CODIGO_SOL_MODIFICACION == codigoSolicitud).FirstOrDefaultAsync();
+
+                return (PRE_MODIFICACION)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
 
         public async Task<List<PRE_MODIFICACION>> GetAll()
         {

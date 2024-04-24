@@ -12,16 +12,23 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
         private readonly IPreDescriptivaRepository _repositoryPreDescriptiva;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IRhPersonasRepository _personasRepository;
+        private readonly IPreModificacionRepository _preModificacionRepository;
+
         public PreSolModificacionService(IPreSolModificacionRepository repository,
                                       IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                       IPreDescriptivaRepository repositoryPreDescriptiva,
-                                      ISisUsuarioRepository sisUsuarioRepository
+                                      ISisUsuarioRepository sisUsuarioRepository,
+                                      IRhPersonasRepository personasRepository,
+                                      IPreModificacionRepository preModificacionRepository
         )
 		{
             _repository = repository;
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
             _repositoryPreDescriptiva = repositoryPreDescriptiva;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _personasRepository = personasRepository;
+            _preModificacionRepository = preModificacionRepository;
         }
 
 
@@ -72,8 +79,79 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<ResultDto<List<PreSolModificacionResponseDto>>>  GetByPresupuesto(FilterPresupuestoDto filter)
+        {
+            ResultDto<List<PreSolModificacionResponseDto>> result = new ResultDto<List<PreSolModificacionResponseDto>>(null);
+            try
+            {
+
+                var solModificacion = await _repository.GetByPresupuesto(filter.CodigoPresupuesto);
+
+               
+
+                if (solModificacion.Count() > 0)
+                {
+                    List<PreSolModificacionResponseDto> listDto = new List<PreSolModificacionResponseDto>();
+
+                    foreach (var item in solModificacion)
+                    {
+                        var dto = await MapPreSolModificacion(item);
+                        listDto.Add(dto);
+                    }
 
 
+                    result.Data = listDto.OrderByDescending(x=>x.FechaSolicitud).ToList();
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+        
+        public List<StatusSolicitudModificacion> GetListStatus()
+        {
+            List<StatusSolicitudModificacion> result = new List<StatusSolicitudModificacion>();
+            StatusSolicitudModificacion anulada = new StatusSolicitudModificacion();
+            anulada.Codigo = "AN";
+            anulada.Descripcion = "ANULADA";
+            StatusSolicitudModificacion pendiente = new StatusSolicitudModificacion();
+            pendiente.Codigo = "PE";
+            pendiente.Descripcion = "PENDIENTE";
+            
+            StatusSolicitudModificacion aprobada = new StatusSolicitudModificacion();
+            aprobada.Codigo = "AP";
+            aprobada.Descripcion = "APROBADA";
+            result.Add(anulada);
+            result.Add(pendiente);
+            result.Add(aprobada);
+          
+            return result;
+        }
+        public string GetStatus(string status)
+        {
+            string result = "";
+            var tipoNominaObj = GetListStatus().Where(x => x.Codigo == status).First();
+            result = tipoNominaObj.Descripcion;
+          
+            return result;
+        }
         
         public FechaDto GetFechaDto(DateTime fecha)
         {
@@ -86,14 +164,88 @@ namespace Convertidor.Services.Presupuesto
 
             return FechaDesdeObj;
         }
+        public string GetFechaString(DateTime? fecha)
+        {
+            var result = "";
+            try
+            {
+              
+                if (fecha != null)
+                {
+                    result = $"{fecha:MM/dd/yyyy}";
+                }
+         
 
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return result;
+              
+            }
+           
+          
+        }
+
+        public async Task<string> GetStatusProceso(PRE_SOL_MODIFICACION dto)
+        {
+            var detente = 1;
+            if (dto.CODIGO_SOL_MODIFICACION == 1597)
+            {
+                detente = 1;
+            }
+            var preModificacionAprobada = await _preModificacionRepository.GetByCodigoSolicitud(dto.CODIGO_SOL_MODIFICACION);
+            string result = "";
+            if (dto.STATUS == "AN" || ( preModificacionAprobada!=null && preModificacionAprobada.STATUS=="AN"))
+            {
+                var persona = await _personasRepository.GetCodigoPersona(dto.USUARIO_UPD);
+                var nombrePersona = "";
+                if (persona != null)
+                {
+                    nombrePersona = $"{persona.NOMBRE} {persona.APELLIDO}";
+                }
+
+                var fechaAnulado = GetFechaString(dto.FECHA_UPD);
+                if (preModificacionAprobada != null)
+                {
+                    fechaAnulado = GetFechaString(preModificacionAprobada.FECHA_INS);
+                }
+                result=$"ANULADO POR: {nombrePersona} { fechaAnulado}";
+                return result;
+            }
+
+        
+            if (preModificacionAprobada != null && preModificacionAprobada.STATUS=="AP")
+            {
+                result = $"APROBADO MODIFICACION: #{preModificacionAprobada.CODIGO_MODIFICACION} {GetFechaString(preModificacionAprobada.FECHA_INS)}";
+                return result;
+            }
+            
+            var preModificacion = await _preModificacionRepository.GetByCodigoSolicitud(dto.CODIGO_SOL_MODIFICACION);
+            if (preModificacion == null)
+            {
+                result = "PENDIENTE MODIFICACION";
+                return result;
+            }
+            
+
+
+            return result;
+        }
         public async Task<PreSolModificacionResponseDto> MapPreSolModificacion(PRE_SOL_MODIFICACION dto)
         {
             PreSolModificacionResponseDto itemResult = new PreSolModificacionResponseDto();
             itemResult.CodigoSolModificacion = dto.CODIGO_SOL_MODIFICACION;
             itemResult.TipoModificacionId = dto.TIPO_MODIFICACION_ID;
+            itemResult.DescripcionTipoModificacion = "";
+            var tipoModificacionId = await _repositoryPreDescriptiva.GetByCodigo(dto.TIPO_MODIFICACION_ID);
+            if (tipoModificacionId != null)
+            {
+                itemResult.DescripcionTipoModificacion = tipoModificacionId.DESCRIPCION;
+            }
             itemResult.FechaSolicitud = dto.FECHA_SOLICITUD;
-            itemResult.FechaSolicitudString = dto.FECHA_SOLICITUD.ToString("u");
+            itemResult.FechaSolicitudString =GetFechaString(dto.FECHA_SOLICITUD);
             FechaDto FechaSolicitudObj = GetFechaDto(dto.FECHA_SOLICITUD);
             itemResult.FechaSolicitudObj = (FechaDto)FechaSolicitudObj;
             itemResult.Ano = dto.ANO;
@@ -102,13 +254,10 @@ namespace Convertidor.Services.Presupuesto
             itemResult.CodigoSolicitante = dto.CODIGO_SOLICITANTE;
             itemResult.Motivo = dto.MOTIVO;
             itemResult.Status = dto.STATUS;
-            itemResult.Extra1 = dto.EXTRA1;
-            itemResult.Extra2 = dto.EXTRA2;
-            itemResult.Extra3 = dto.EXTRA3;
+            itemResult.DescripcionEstatus =GetStatus(dto.STATUS);
             itemResult.NumeroCorrelativo = dto.NUMERO_CORRELATIVO;
             itemResult.CodigoPresupuesto = dto.CODIGO_PRESUPUESTO;
-       
-
+            itemResult.StatusProceso = await GetStatusProceso(dto);
             return itemResult;
 
         }
@@ -133,6 +282,61 @@ namespace Convertidor.Services.Presupuesto
 
 
         }
+        
+        
+           public async Task<ResultDto<PreSolModificacionResponseDto>> UpdateStatus(int codigoSolModificacion,string status)
+        {
+
+            ResultDto<PreSolModificacionResponseDto> result = new ResultDto<PreSolModificacionResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var solModificacion = await _repository.GetByCodigo(codigoSolModificacion);
+                if (solModificacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Sol ModificaCion no existe";
+                    return result;
+                }
+                var findStatus=GetStatus(status);
+                if (findStatus == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status no existe";
+                    return result;
+                }
+
+
+
+                solModificacion.STATUS = status;
+
+
+                solModificacion.CODIGO_EMPRESA = conectado.Empresa;
+                solModificacion.USUARIO_UPD = conectado.Usuario;
+                solModificacion.FECHA_UPD = DateTime.Now;
+                await _repository.Update(solModificacion);
+
+                var resultDto =await  MapPreSolModificacion(solModificacion);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+        
 
         public async Task<ResultDto<PreSolModificacionResponseDto>> Update(PreSolModificacionUpdateDto dto)
         {
@@ -160,13 +364,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.Ano < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Año Invalido";
-                    return result;
-                }
+             
 
 
                 if (dto.NumeroSolModificacion.Length > 20)
@@ -200,36 +398,8 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Motivo Invalido";
                     return result;
                 }
-
-                if (dto.Status.Length > 2)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status Invalido";
-                    return result;
-                }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+                
+             
 
                 if (dto.CodigoPresupuesto <= 0)
                 {
@@ -254,15 +424,11 @@ namespace Convertidor.Services.Presupuesto
                 codigoSolModificacion.CODIGO_SOL_MODIFICACION = dto.CodigoSolModificacion;
                 codigoSolModificacion.TIPO_MODIFICACION_ID = dto.TipoModificacionId;
                 codigoSolModificacion.FECHA_SOLICITUD = dto.FechaSolicitud;
-                codigoSolModificacion.ANO = dto.Ano;
+                codigoSolModificacion.ANO =codigoPresupuesto.ANO;
                 codigoSolModificacion.NUMERO_SOL_MODIFICACION = dto.NumeroSolModificacion;
                 codigoSolModificacion.CODIGO_OFICIO = dto.CodigoOficio;
                 codigoSolModificacion.CODIGO_SOLICITANTE =dto.CodigoSolicitante;
                 codigoSolModificacion.MOTIVO =dto.Motivo;
-                codigoSolModificacion.STATUS = dto.Status;
-                codigoSolModificacion.EXTRA1 = dto.Extra1;
-                codigoSolModificacion.EXTRA2 = dto.Extra2;
-                codigoSolModificacion.EXTRA3 = dto.Extra3;
                 codigoSolModificacion.NUMERO_CORRELATIVO = dto.NumeroCorrelativo;
                 codigoSolModificacion.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
               
@@ -316,14 +482,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Tipo Modificaion Id Invalido";
                     return result;
                 }
-
-                if (dto.Ano < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Año Invalido";
-                    return result;
-                }
+                
 
 
                 if (dto.NumeroSolModificacion.Length > 20)
@@ -358,35 +517,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.Status.Length > 2)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status Invalido";
-                    return result;
-                }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+           
 
 
                 if(dto.CodigoPresupuesto <= 0) 
@@ -413,15 +544,12 @@ namespace Convertidor.Services.Presupuesto
                 entity.CODIGO_SOL_MODIFICACION = await _repository.GetNextKey();
                 entity.TIPO_MODIFICACION_ID = dto.TipoModificacionId;
                 entity.FECHA_SOLICITUD = dto.FechaSolicitud;
-                entity.ANO = dto.Ano;
+                entity.ANO = codigoPresupuesto.ANO;
                 entity.NUMERO_SOL_MODIFICACION = dto.NumeroSolModificacion;
                 entity.CODIGO_OFICIO = dto.CodigoOficio;
                 entity.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
                 entity.MOTIVO = dto.Motivo;
-                entity.STATUS = dto.Status;
-                entity.EXTRA1 = dto.Extra1;
-                entity.EXTRA2 = dto.Extra2;
-                entity.EXTRA3 = dto.Extra3;
+                entity.STATUS = "PE";
                 entity.NUMERO_CORRELATIVO = dto.NumeroCorrelativo;
                 entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
 

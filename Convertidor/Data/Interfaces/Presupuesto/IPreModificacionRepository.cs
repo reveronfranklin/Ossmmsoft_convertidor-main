@@ -10,6 +10,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<PRE_MODIFICACION>> Update(PRE_MODIFICACION entity);
         Task<string> Delete(int codigoModificacion);
         Task<int> GetNextKey();
+        Task<PRE_MODIFICACION> GetByCodigoSolicitud(int codigoSolicitud);
     }
 }
 

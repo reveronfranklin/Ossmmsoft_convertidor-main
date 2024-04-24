@@ -553,6 +553,7 @@ namespace Convertidor.Services.Presupuesto
         {
             PreDescriptivasGetDto dto = new PreDescriptivasGetDto();
             dto.DescripcionId = entity.DESCRIPCION_ID;
+            dto.Id = entity.DESCRIPCION_ID;
             dto.DescripcionIdFk = entity.DESCRIPCION_FK_ID;
             dto.Descripcion = entity.DESCRIPCION;
             if (entity.CODIGO == null) entity.CODIGO = "";
