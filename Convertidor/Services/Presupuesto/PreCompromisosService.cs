@@ -159,6 +159,14 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
+                if(dto.CodigoCompromiso < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Compromiso no existe";
+                    return result;
+
+                }
                 var codigoCompromiso = await _repository.GetByCodigo(dto.CodigoCompromiso);
                 if (codigoCompromiso == null)
                 {
@@ -175,15 +183,40 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
-                if (codigoSolicitud.CODIGO_SOLICITUD < 0)
+                if(dto.CodigoSolicitud < 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Solicitud Invalido";
                     return result;
                 }
-               
+                var codigoSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
+                if (codigoSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitud Invalido";
+                    return result;
+                }
+
+                if (dto.NumeroCompromiso == string.Empty)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero compromiso no puede estar vacio";
+                    return result;
+
+                }
+
+                if (dto.NumeroCompromiso.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero compromiso Invalido";
+                    return result;
+
+                }
+
                 if (dto.FechaCompromiso == null)
                 {
                     result.Data = null;
@@ -191,9 +224,19 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Fecha compromiso Invalida";
                     return result;
                 }
+                
+                
+                if(dto.CodigoProveedor < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Proveedor Invalido";
+                    return result;
+
+                }
 
                 var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-                if (codigoProveedor.CODIGO_PROVEEDOR < 0)
+                if (codigoProveedor == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -247,8 +290,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if(dto.CodigoPresupuesto < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -308,14 +359,8 @@ namespace Convertidor.Services.Presupuesto
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoCompromiso = await _repository.GetByCodigo(dto.CodigoCompromiso);
-                if (codigoCompromiso != null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Compromiso no existe";
-                    return result;
-                }
+
+
                 if (dto.Ano < 0)
                 {
                     result.Data = null;
@@ -324,21 +369,38 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
-                if (codigoSolicitud.CODIGO_SOLICITUD < 0)
+                if (dto.CodigoSolicitud < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Solicitud Invalido";
                     return result;
                 }
-                var numeroCompromiso = await _repository.GetByNumeroCompromiso(dto.NumeroCompromiso);
-                if (numeroCompromiso != null)
+                var codigoSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
+                if (codigoSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitud Invalido";
+                    return result;
+                }
+
+                if(dto.NumeroCompromiso == string.Empty) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero compromiso no puede estar vacio";
+                    return result;
+
+                }
+
+                if(dto.NumeroCompromiso.Length > 20) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Numero compromiso Invalido";
                     return result;
+
                 }
                 if (dto.FechaCompromiso == null)
                 {
@@ -348,8 +410,18 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+
+                if (dto.CodigoProveedor < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Proveedor Invalido";
+                    return result;
+
+                }
+
                 var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-                if (codigoProveedor.CODIGO_PROVEEDOR < 0)
+                if (codigoProveedor == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -403,8 +475,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.CodigoPresupuesto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;

@@ -22,7 +22,7 @@ namespace Convertidor.Services.Presupuesto
         private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly IConfiguration _configuration;
+
         public PrePucCompromisosService(IPrePucCompromisosRepository repository,
                                       IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
                                       IPRE_SALDOSRepository pRE_SALDOSRepository,
@@ -31,7 +31,7 @@ namespace Convertidor.Services.Presupuesto
                                       IPreDescriptivaRepository repositoryPreDescriptiva,
                                       IAdmPucSolicitudRepository admPucSolicitudRepository,
                                       IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
-                                      IConfiguration configuration,
+                              
                                       ISisUsuarioRepository sisUsuarioRepository
         )
 		{
@@ -40,7 +40,6 @@ namespace Convertidor.Services.Presupuesto
             _pRE_SALDOSRepository = pRE_SALDOSRepository;
             _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
-            _configuration = configuration;
             _repositoryPreDescriptiva = repositoryPreDescriptiva;
             _admPucSolicitudRepository = admPucSolicitudRepository;
            _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
@@ -151,6 +150,14 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
+                if (dto.CodigoPucCompromiso < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Compromiso no existe";
+                    return result;
+                }
+
                 var codigoPucCompromiso = await _repository.GetByCodigo(dto.CodigoPucCompromiso);
                 if (codigoPucCompromiso == null)
                 {
@@ -160,8 +167,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.CodigoDetalleCompromiso < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Compromiso Invalido";
+                    return result;
+
+                }
                 var codigoDetalleCompromiso = await _preDetalleCompromisosRepository.GetByCodigo(dto.CodigoDetalleCompromiso);
-                if (codigoDetalleCompromiso.CODIGO_DETALLE_COMPROMISO < 0)
+                if (codigoDetalleCompromiso == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -169,16 +184,32 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPucSolicitud = await _admPucSolicitudRepository.GetCodigoPucSolicitud(dto.CodigoPucSolicitud);
-                if (codigoPucSolicitud.CODIGO_PUC_SOLICITUD < 0)
+                if (dto.CodigoPucSolicitud < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Puc Solicitud Invalido";
                     return result;
                 }
+                var codigoPucSolicitud = await _admPucSolicitudRepository.GetCodigoPucSolicitud(dto.CodigoPucSolicitud);
+                if (codigoPucSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Solicitud Invalido";
+                    return result;
+                }
+
+                if (dto.CodigoSaldo < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Saldo Invalido";
+                    return result;
+
+                }
                 var codigoSaldo = await _pRE_SALDOSRepository.GetByCodigo(dto.CodigoSaldo);
-                if (codigoSaldo.CODIGO_SALDO < 0)
+                if (codigoSaldo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -186,8 +217,17 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.CodigoIcp < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Icp  Invalido";
+                    return result;
+
+                }
+
                 var codigoIcp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(dto.CodigoIcp);
-                if (codigoIcp.CODIGO_ICP  < 0)
+                if (codigoIcp == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -195,13 +235,41 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPuc = await _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
-                if (codigoPuc.Data.CodigoPuc < 0)
+
+
+                if (dto.CodigoFinanciado < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Puc Invalido";
                     return result;
+
+                }
+
+                if (dto.CodigoPuc < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+                }
+
+                var codigoPuc = await _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
+                if (codigoPuc == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+                }
+
+                if (dto.FinanciadoId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Financiado Id Invalido";
+                    return result;
+
                 }
 
                 var financiadoId = await _repositoryPreDescriptiva.GetByIdAndTitulo(3, dto.FinanciadoId);
@@ -268,8 +336,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.CodigoPresupuesto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+
+                }
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -329,17 +405,16 @@ namespace Convertidor.Services.Presupuesto
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoPucCompromiso = await _repository.GetByCodigo(dto.CodigoPucCompromiso);
-                if (codigoPucCompromiso != null)
+                if (dto.CodigoDetalleCompromiso < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Puc Compromiso ya existe";
+                    result.Message = "Codigo Detalle Compromiso Invalido";
                     return result;
-                }
 
+                }
                 var codigoDetalleCompromiso = await _preDetalleCompromisosRepository.GetByCodigo(dto.CodigoDetalleCompromiso);
-                if (codigoDetalleCompromiso.CODIGO_DETALLE_COMPROMISO < 0)
+                if (codigoDetalleCompromiso == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -347,16 +422,32 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPucSolicitud = await _admPucSolicitudRepository.GetCodigoPucSolicitud(dto.CodigoPucSolicitud);
-                if (codigoPucSolicitud.CODIGO_PUC_SOLICITUD < 0)
+                if (dto.CodigoPucSolicitud < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Puc Solicitud Invalido";
                     return result;
                 }
+                var codigoPucSolicitud = await _admPucSolicitudRepository.GetCodigoPucSolicitud(dto.CodigoPucSolicitud);
+                if (codigoPucSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Solicitud Invalido";
+                    return result;
+                }
+
+                if (dto.CodigoSaldo < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Saldo Invalido";
+                    return result;
+
+                }
                 var codigoSaldo = await _pRE_SALDOSRepository.GetByCodigo(dto.CodigoSaldo);
-                if (codigoSaldo.CODIGO_SALDO < 0)
+                if (codigoSaldo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -364,8 +455,17 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.CodigoIcp < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Icp  Invalido";
+                    return result;
+
+                }
+
                 var codigoIcp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(dto.CodigoIcp);
-                if (codigoIcp.CODIGO_ICP < 0)
+                if (codigoIcp == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -373,13 +473,41 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPuc = await _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
-                if (codigoPuc.Data.CodigoPuc < 0)
+
+
+                if (dto.CodigoFinanciado < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Puc Invalido";
                     return result;
+
+                }
+
+                if (dto.CodigoPuc < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+                }
+
+                var codigoPuc = await _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
+                if (codigoPuc == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+                }
+
+                if (dto.FinanciadoId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Financiado Id Invalido";
+                    return result;
+
                 }
 
                 var financiadoId = await _repositoryPreDescriptiva.GetByIdAndTitulo(3, dto.FinanciadoId);
@@ -446,14 +574,23 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.CodigoPresupuesto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+
+                }
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
+
 
 
 
