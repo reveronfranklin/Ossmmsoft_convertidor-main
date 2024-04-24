@@ -161,7 +161,7 @@
 
                 if (  string.IsNullOrEmpty(dto.LocalidadInstituto)  )
                 {
-                    result.Message = "Localidad invalida";
+                    result.Message = "Localidad invalida!!";
                     result.IsValid = false;
                     return result;
                 }
@@ -297,7 +297,7 @@
 
                 if(string.IsNullOrEmpty(dto.LocalidadInstituto) ) 
                 {
-                    result.Message = "Localidad invalida";
+                    result.Message = "Localidad invalida!!";
                     result.IsValid = false;
                     return result;
                 }
