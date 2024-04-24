@@ -1,15 +1,7 @@
 ﻿using Convertidor.Data.Entities.Adm;
-using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Interfaces.Sis;
-using Convertidor.Dtos;
 using Convertidor.Dtos.Adm;
-using Convertidor.Dtos.Bm;
-using Convertidor.Dtos.Presupuesto;
-using Convertidor.Dtos.Rh;
-using Convertidor.Dtos.Sis;
-using MathNet.Numerics.RootFinding;
 
 namespace Convertidor.Services.Adm
 {

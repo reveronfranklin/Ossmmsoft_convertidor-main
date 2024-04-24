@@ -17,6 +17,51 @@ namespace Convertidor.Data.Repository.Presupuesto
             _context = context;
         }
 
+        public async Task<List<ListIcpPucConDisponible>> GetListIcpPucConDisponible(int codigoPresupuesto)
+        {
+            List<ListIcpPucConDisponible> result = new List<ListIcpPucConDisponible>();
+
+            var preVSaldos = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.DISPONIBLE>0).ToListAsync();
+
+            if (preVSaldos.Count > 0)
+            {
+
+          
+
+                var resumen = from s in preVSaldos
+                    group s by new
+                    {
+                        CodigoIcp = s.CODIGO_ICP , 
+                        CodigoIcpConcat =s.CODIGO_ICP_CONCAT,
+                        DenominacionIcp=s.DENOMINACION_ICP,
+                        CodigoPuc=s.CODIGO_PUC,
+                        CodigoPucConcat=s.CODIGO_PUC_CONCAT,
+                        DenominacionPuc=s.DENOMINACION_PUC,
+                        Disponible=s.DISPONIBLE
+                        
+                    } into g
+                    select new ListIcpPucConDisponible
+                    {
+                        CodigoIcp=g.Key.CodigoIcp,
+                        CodigoIcpConcat=g.Key.CodigoIcpConcat,
+                        DenominacionIcp=g.Key.DenominacionIcp,
+                        CodigoPucConcat=g.Key.CodigoPucConcat,
+                        DenominacionPuc=g.Key.DenominacionPuc,
+                        Disponible=(decimal)g.Key.Disponible
+                        
+                               
+
+                    };
+                result = resumen.ToList();
+
+            }
+
+           
+            return result;
+        }
+
+
+        
 
         public async Task<List<PreFinanciadoDto>> GetListFinanciadoPorPresupuesto(int codigoPresupuesto)
         {

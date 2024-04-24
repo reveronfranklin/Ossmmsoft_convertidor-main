@@ -1,8 +1,4 @@
-﻿using System;
-using static NPOI.HSSF.Record.UnicodeString;
-using static NPOI.HSSF.Util.HSSFColor;
-
-namespace Convertidor.Data.Entities.Bm
+﻿namespace Convertidor.Data.Entities.Bm
 {
     public class BM_ARTICULOS
     {

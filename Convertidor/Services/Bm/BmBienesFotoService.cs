@@ -1,14 +1,11 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
-using Convertidor.Dtos.Presupuesto;
-using Convertidor.Services.Catastro;
 using iText.Barcodes;
 using iText.IO.Image;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Layout;
-using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 

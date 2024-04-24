@@ -1,5 +1,4 @@
 ﻿using Convertidor.Data.Entities.Adm;
-using Convertidor.Data.Entities.ADM;
 
 namespace Convertidor.Data.Interfaces.Adm
 {

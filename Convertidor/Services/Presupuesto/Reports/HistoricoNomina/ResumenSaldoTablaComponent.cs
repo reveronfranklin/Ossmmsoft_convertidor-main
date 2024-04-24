@@ -1,8 +1,5 @@
 using System.Globalization;
-using System.Linq;
 using Convertidor.Dtos.Presupuesto;
-using iText.Layout.Element;
-using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;

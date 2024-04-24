@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos.Bm;
-using Convertidor.Dtos.Presupuesto;
 using Convertidor.Utility;
-using NPOI.POIFS.Properties;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.UserModel;
-using NuGet.Packaging;
 
 namespace Convertidor.Services.Bm
 {

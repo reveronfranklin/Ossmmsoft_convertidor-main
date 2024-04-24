@@ -1,6 +1,5 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Presupuesto
@@ -19,6 +18,22 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
                 var result = await _context.PRE_MODIFICACION.DefaultIfEmpty().Where(e => e.CODIGO_MODIFICACION == codigoModificacion).FirstOrDefaultAsync();
+
+                return (PRE_MODIFICACION)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+        
+        public async Task<PRE_MODIFICACION> GetByCodigoSolicitud(int codigoSolicitud)
+        {
+            try
+            {
+                var result = await _context.PRE_MODIFICACION.DefaultIfEmpty().Where(e => e.CODIGO_SOL_MODIFICACION == codigoSolicitud).FirstOrDefaultAsync();
 
                 return (PRE_MODIFICACION)result;
             }

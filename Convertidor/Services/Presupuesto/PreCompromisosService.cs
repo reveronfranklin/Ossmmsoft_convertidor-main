@@ -1,11 +1,7 @@
-﻿using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Presupuesto;
-using Convertidor.Dtos.Bm;
 using Convertidor.Dtos.Presupuesto;
-using Convertidor.Services.Adm;
 
 namespace Convertidor.Services.Presupuesto
 {

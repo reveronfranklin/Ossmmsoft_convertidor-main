@@ -46,8 +46,22 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<List<PRE_SOL_MODIFICACION>> GetByPresupuesto(int codigoPresupuesto)
+        {
+            try
+            {
+                var result = await _context.PRE_SOL_MODIFICACION.DefaultIfEmpty().Where(x=> x.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
 
-       
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        
 
         public async Task<ResultDto<PRE_SOL_MODIFICACION>> Add(PRE_SOL_MODIFICACION entity)
         {

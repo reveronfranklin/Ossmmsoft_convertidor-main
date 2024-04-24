@@ -1,9 +1,5 @@
-﻿using System;
-using System;
-using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Data.Interfaces.Presupuesto;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Bm

@@ -1,10 +1,6 @@
 ﻿using System.Globalization;
-using Convertidor.Data.Entities.ADM;
-using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Repository.Rh;
-using Convertidor.Dtos.Adm;
 using Convertidor.Utility;
-using NPOI.SS.Formula.Functions;
 
 
 namespace Convertidor.Services.Adm

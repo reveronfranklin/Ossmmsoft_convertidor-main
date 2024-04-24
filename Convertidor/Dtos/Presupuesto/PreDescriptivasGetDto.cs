@@ -3,6 +3,7 @@
 	public class PreDescriptivasGetDto
 	{
 
+		public int Id { get; set; }
         public int DescripcionId { get; set; }
         public int DescripcionIdFk { get; set; }
         public int TituloId { get; set; }

@@ -3,17 +3,9 @@
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
 using Convertidor.Utility;
-using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-
-﻿
-using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Interfaces.Bm;
-using Convertidor.Dtos.Bm;
-using Convertidor.Utility;
-
 
 
 namespace Convertidor.Services.Bm

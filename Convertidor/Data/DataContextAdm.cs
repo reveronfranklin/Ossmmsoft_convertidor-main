@@ -1,5 +1,4 @@
-﻿using Convertidor.Data.Entities;
-using Convertidor.Data.Entities.Adm;
+﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Entities.ADM;
 using Microsoft.EntityFrameworkCore;
 

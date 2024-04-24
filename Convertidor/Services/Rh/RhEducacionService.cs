@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Convertidor.Data.Repository.Rh
+﻿namespace Convertidor.Data.Repository.Rh
 {
 	public class RhEducacionService: IRhEducacionService
     {
@@ -161,27 +159,21 @@ namespace Convertidor.Data.Repository.Rh
 
                 
 
-                if (dto.LocalidadInstituto is not null && dto.LocalidadInstituto.Length < 50)
+                if (  string.IsNullOrEmpty(dto.LocalidadInstituto)  )
                 {
-                    result.Message = "Localidad invalida";
+                    result.Message = "Localidad invalida!!";
                     result.IsValid = false;
                     return result;
                 }
 
 
-                if (dto.NombreInstituto is not null && dto.NombreInstituto.Length < 50)
+                if (string.IsNullOrEmpty(dto.NombreInstituto) )
                 {
                     result.Message = "Instituto invalido";
                     result.IsValid = false;
                     return result;
                 }
-                if (dto.UltimoAñoAprobado == null && dto.UltimoAñoAprobado < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Año aprobado invalido";
-                }
-
+            
                 if (dto.Graduado is not null && dto.Graduado.Length > 1)
                 {
                     result.Data = null;
@@ -303,27 +295,22 @@ namespace Convertidor.Data.Repository.Rh
 
                
 
-                if(dto.LocalidadInstituto is not null && dto.LocalidadInstituto.Length<50) 
+                if(string.IsNullOrEmpty(dto.LocalidadInstituto) ) 
                 {
-                    result.Message = "Localidad invalida";
+                    result.Message = "Localidad invalida!!";
                     result.IsValid = false;
                     return result;
                 }
                 
                 
-                if(dto.NombreInstituto is not null && dto.NombreInstituto.Length<50) 
+                if(string.IsNullOrEmpty(dto.NombreInstituto)) 
                 {
                     result.Message = "Instituto invalido";
                     result.IsValid = false;
                     return result;
                 }
 
-                if (dto.UltimoAñoAprobado == null && dto.UltimoAñoAprobado<0) 
-                {
-                  result.Data= null;
-                  result.IsValid = false;
-                  result.Message = "Año aprobado invalido";
-                }
+              
 
                 if (dto.Graduado is not null && dto.Graduado.Length>1)
                 {

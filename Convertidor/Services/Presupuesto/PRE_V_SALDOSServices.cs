@@ -228,7 +228,27 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
+        public async Task< ResultDto<List<ListIcpPucConDisponible>>> GetListIcpPucConDisponible(int codigoPresupuesto)
+        {
+            ResultDto<List<ListIcpPucConDisponible>> result = new ResultDto<List<ListIcpPucConDisponible>>(null);
 
+            await _repository.RecalcularSaldo(codigoPresupuesto);
+            var listIcpPucConDisponible = await _repository.GetListIcpPucConDisponible(codigoPresupuesto);
+            if (listIcpPucConDisponible.Count > 0)
+            {
+                result.Data = listIcpPucConDisponible;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            else
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "No existen Datos";
+            }
+            
+            return result;  
+        }
         public async Task<ResultDto<List<PreSaldoPorPartidaGetDto>>> GetAllByPresupuestoPucConcat(FilterPresupuestoPucConcat filter)
         {
             ResultDto<List<PreSaldoPorPartidaGetDto>> result = new ResultDto<List<PreSaldoPorPartidaGetDto>>(null);

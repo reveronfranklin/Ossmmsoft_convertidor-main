@@ -1,10 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
-using System.Linq;
-using iText.Layout.Element;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using NPOI.HSSF.Record;
-using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;

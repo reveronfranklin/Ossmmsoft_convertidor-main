@@ -1,7 +1,5 @@
-﻿using Convertidor.Data.Entities.Presupuesto;
-using Convertidor.Data.Interfaces.Presupuesto;
+﻿using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
-using Ganss.Excel;
 
 namespace Convertidor.Services.Presupuesto
 {

@@ -1,6 +1,4 @@
 ﻿using Convertidor.Data.Entities.Adm;
-using Convertidor.Dtos;
-using System.Threading.Tasks;
 
 namespace Convertidor.Data.Interfaces.Adm
 {

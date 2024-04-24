@@ -1,5 +1,3 @@
-using NPOI.Util;
-
 namespace Convertidor.Data.Entities.Presupuesto;
 
 public class PRE_RESUMEN_SALDOS

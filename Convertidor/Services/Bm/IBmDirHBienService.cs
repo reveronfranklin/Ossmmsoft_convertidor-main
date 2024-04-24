@@ -1,6 +1,4 @@
-﻿using System;
-using Convertidor.Data.Entities.Bm;
-using Convertidor.Dtos.Bm;
+﻿using Convertidor.Dtos.Bm;
 namespace Convertidor.Services.Bm
 {
 	public interface IBmDirHBienService

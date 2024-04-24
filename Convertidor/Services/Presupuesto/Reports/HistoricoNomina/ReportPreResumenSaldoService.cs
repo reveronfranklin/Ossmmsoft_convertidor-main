@@ -1,7 +1,7 @@
 
 using Convertidor.Dtos.Presupuesto;
 using QuestPDF.Fluent;
-using QuestPDF.Infrastructure;
+
 namespace Convertidor.Services.Rh.Report.Example;
 
 public class ReportPreResumenSaldoService:IReportPreResumenSaldoService

@@ -11,8 +11,6 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-
 using Path = System.IO.Path;
 
 namespace Convertidor.Services.Bm
@@ -404,13 +402,26 @@ namespace Convertidor.Services.Bm
                     searchList = allData.Data;
 
                 }
+                var fileName = $"";
+                var _env = "development";
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
 
-                await CreateBardCodeMultiple(searchList);
-                var fileName = $"BM1.xlsx";
+                var destino = @settings.ExcelFiles;
+              
+                destino = $"{destino}/placas.pdf";
+                File.Delete(destino);
+                if (listIcpSeleccionado.Count > 0)
+                {
+                    await CreateBardCodeMultiple(searchList);
+                    fileName = $"placas.pdf";
+                }
+              
+                
+                
                 response.Data = searchList;
                 response.IsValid = true;
                 response.Message = "";
-                response.LinkData = $"/ExcelFiles/{fileName}";
+                response.LinkData = $"{fileName}";
                 return response;
             }
             catch (Exception ex)

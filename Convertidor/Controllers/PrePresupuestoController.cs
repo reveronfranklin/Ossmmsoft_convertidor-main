@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
 using Convertidor.Dtos.Presupuesto;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

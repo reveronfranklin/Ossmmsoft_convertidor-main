@@ -1,13 +1,5 @@
-﻿using System.Data;
-using Convertidor.Data.Entities.ADM;
-using Convertidor.Data.Entities.Sis;
-using Convertidor.Data.Interfaces.Adm;
-using Convertidor.Data.Repository.Rh;
-using Convertidor.Dtos.Adm;
+﻿using Convertidor.Data.Entities.Sis;
 using Convertidor.Dtos.Sis;
-using Convertidor.Services.Sis;
-using Convertidor.Utility;
-using NPOI.SS.Formula.Functions;
 
 
 namespace Convertidor.Services.Sis

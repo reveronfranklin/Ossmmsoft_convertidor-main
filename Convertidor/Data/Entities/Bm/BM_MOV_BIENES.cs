@@ -1,7 +1,4 @@
-﻿using System;
-using MessagePack;
-
-namespace Convertidor.Data.Entities.Bm
+﻿namespace Convertidor.Data.Entities.Bm
 {
 	public class BM_MOV_BIENES
     {

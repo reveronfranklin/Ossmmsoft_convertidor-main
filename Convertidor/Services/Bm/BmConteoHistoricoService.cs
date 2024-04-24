@@ -1,9 +1,6 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
-using Convertidor.Dtos.Presupuesto;
-using Microsoft.EntityFrameworkCore;
-using NPOI.SS.Formula.Functions;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
