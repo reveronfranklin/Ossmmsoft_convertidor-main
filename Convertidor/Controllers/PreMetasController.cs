@@ -28,9 +28,9 @@ namespace Convertidor.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllByPresupuesto(FilterByPresupuestoProyectoDto filter)
         {
-            var result = await _service.GetAll();
+            var result = await _service.GetAllByPresupuesto(filter);
             return Ok(result);
         }
 
