@@ -29,15 +29,15 @@ namespace Convertidor.Services.Presupuesto
             try
             {
 
-                var preNivelesPuc = await _repository.GetAll();
+                var preObjetivos = await _repository.GetAll();
 
 
 
-                if (preNivelesPuc.Count() > 0)
+                if (preObjetivos.Count() > 0)
                 {
                     List<PreObjetivosResponseDto> listDto = new List<PreObjetivosResponseDto>();
 
-                    foreach (var item in preNivelesPuc)
+                    foreach (var item in preObjetivos)
                     {
                         var dto = await MapPreObjetivos(item);
                         listDto.Add(dto);

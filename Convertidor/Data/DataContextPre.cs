@@ -47,6 +47,8 @@ namespace Convertidor.Data
         public DbSet<PRE_METAS> PRE_METAS { get; set; }
         public DbSet<PRE_NIVELES_PUC> PRE_NIVELES_PUC { get; set; }
         public DbSet<PRE_OBJETIVOS> PRE_OBJETIVOS { get; set; }
+        public DbSet<PRE_ORGANISMOS> PRE_ORGANISMOS { get; set; }
+
 
 
 
@@ -341,8 +343,21 @@ namespace Convertidor.Data
 
                  });
                  builder.ToTable("PRE_OBJETIVOS");
+             })
+
+             .Entity<PRE_ORGANISMOS>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_ORGANISMO,
+
+                 });
+                 builder.ToTable("PRE_ORGANISMOS");
              });
-            
+             
+
+
 
 
 
