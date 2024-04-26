@@ -45,6 +45,10 @@ namespace Convertidor.Data
         public DbSet<PRE_MODIFICACION> PRE_MODIFICACION { get; set; }
         public DbSet<PRE_PUC_MODIFICACION> PRE_PUC_MODIFICACION { get; set; }
         public DbSet<PRE_METAS> PRE_METAS { get; set; }
+        public DbSet<PRE_NIVELES_PUC> PRE_NIVELES_PUC { get; set; }
+        public DbSet<PRE_OBJETIVOS> PRE_OBJETIVOS { get; set; }
+
+
 
 
 
@@ -315,9 +319,31 @@ namespace Convertidor.Data
 
                  });
                  builder.ToTable("PRE_METAS");
-             });
+             })
 
+            .Entity<PRE_NIVELES_PUC>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_GRUPO,
+
+                 });
+                 builder.ToTable("PRE_NIVELES_PUC");
+             })
+
+             .Entity<PRE_OBJETIVOS>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_OBJETIVO,
+
+                 });
+                 builder.ToTable("PRE_OBJETIVOS");
+             });
             
+
 
 
         }

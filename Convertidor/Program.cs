@@ -64,6 +64,8 @@ builder.Services.AddTransient<IPreSolModificacionRepository, PreSolModificacionR
 builder.Services.AddTransient<IPreModificacionRepository, PreModificacionRepository>();
 builder.Services.AddTransient<IPrePucModificacionRepository, PrePucModificacionRepository>();
 builder.Services.AddTransient<IPreMetasRepository, PreMetasRepository>();
+builder.Services.AddTransient<IPreNivelesPucRepository, PreNivelesPucRepository>();
+builder.Services.AddTransient<IPreObjetivosRepository, PreObjetivosRepository>();
 
 
 
@@ -118,6 +120,8 @@ builder.Services.AddTransient<IPreSolModificacionService, PreSolModificacionServ
 builder.Services.AddTransient<IPreModificacionService, PreModificacionService>();
 builder.Services.AddTransient<IPrePucModificacionService, PrePucModificacionService>();
 builder.Services.AddTransient<IPreMetasService, PreMetasService>();
+builder.Services.AddTransient<IPreNivelesPucService, PreNivelesPucService>();
+builder.Services.AddTransient<IPreObjetivosService, PreObjetivosService>();
 
 
 
