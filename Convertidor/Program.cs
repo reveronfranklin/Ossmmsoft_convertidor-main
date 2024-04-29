@@ -67,6 +67,7 @@ builder.Services.AddTransient<IPreMetasRepository, PreMetasRepository>();
 builder.Services.AddTransient<IPreNivelesPucRepository, PreNivelesPucRepository>();
 builder.Services.AddTransient<IPreObjetivosRepository, PreObjetivosRepository>();
 builder.Services.AddTransient<IPreOrganismosRepository, PreOrganismosRepository>();
+builder.Services.AddTransient<IPreParticipaFinacieraOrgRepository, PreParticipaFinacieraOrgRepository>();
 
 
 
@@ -124,6 +125,7 @@ builder.Services.AddTransient<IPreMetasService, PreMetasService>();
 builder.Services.AddTransient<IPreNivelesPucService, PreNivelesPucService>();
 builder.Services.AddTransient<IPreObjetivosService, PreObjetivosService>();
 builder.Services.AddTransient<IPreOrganismosService, PreOrganismosService>();
+builder.Services.AddTransient<IPreParticipaFinacieraOrgService, PreParticipaFinacieraOrgService>();
 
 
 

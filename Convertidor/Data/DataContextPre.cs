@@ -48,8 +48,9 @@ namespace Convertidor.Data
         public DbSet<PRE_NIVELES_PUC> PRE_NIVELES_PUC { get; set; }
         public DbSet<PRE_OBJETIVOS> PRE_OBJETIVOS { get; set; }
         public DbSet<PRE_ORGANISMOS> PRE_ORGANISMOS { get; set; }
+        public DbSet<PRE_PARTICIPA_FINANCIERA_ORG> PRE_PARTICIPA_FINANCIERA_ORG { get; set; }
 
-
+        
 
 
 
@@ -354,9 +355,19 @@ namespace Convertidor.Data
 
                  });
                  builder.ToTable("PRE_ORGANISMOS");
-             });
-             
+             })
 
+              .Entity<PRE_PARTICIPA_FINANCIERA_ORG>(builder =>
+              {
+                  //builder.HasNoKey();
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_PARTICIPA_FINANC_ORG,
+
+                  });
+                  builder.ToTable("PRE_PARTICIPA_FINANCIERA_ORG");
+              });
+            
 
 
 
