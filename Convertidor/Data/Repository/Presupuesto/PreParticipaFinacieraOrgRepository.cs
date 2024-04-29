@@ -144,7 +144,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
                 else
                 {
-                    result = last.CODIGO_ORGANISMO + 1;
+                    result = last.CODIGO_PARTICIPA_FINANC_ORG + 1;
                 }
 
                 return (int)result!;
