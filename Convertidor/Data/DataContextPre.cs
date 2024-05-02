@@ -49,8 +49,9 @@ namespace Convertidor.Data
         public DbSet<PRE_OBJETIVOS> PRE_OBJETIVOS { get; set; }
         public DbSet<PRE_ORGANISMOS> PRE_ORGANISMOS { get; set; }
         public DbSet<PRE_PARTICIPA_FINANCIERA_ORG> PRE_PARTICIPA_FINANCIERA_ORG { get; set; }
+        public DbSet<PRE_PORC_GASTOS_MENSUALES> PRE_PORC_GASTOS_MENSUALES { get; set; }
 
-        
+
 
 
 
@@ -366,8 +367,21 @@ namespace Convertidor.Data
 
                   });
                   builder.ToTable("PRE_PARTICIPA_FINANCIERA_ORG");
-              });
-            
+              })
+
+               .Entity<PRE_PORC_GASTOS_MENSUALES>(builder =>
+               {
+                   //builder.HasNoKey();
+                   builder.HasKey(table => new
+                   {
+                       table.CODIGO_POR_GASTOS_MES,
+
+                   });
+                   builder.ToTable("PRE_PORC_GASTOS_MENSUALES");
+               });
+              
+
+
 
 
 
