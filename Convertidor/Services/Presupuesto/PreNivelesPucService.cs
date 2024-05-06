@@ -10,8 +10,8 @@ namespace Convertidor.Services.Presupuesto
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
         public PreNivelesPucService(IPreNivelesPucRepository repository,
-                                        
-                                         ISisUsuarioRepository sisUsuarioRepository)
+                                    
+                                    ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
     
