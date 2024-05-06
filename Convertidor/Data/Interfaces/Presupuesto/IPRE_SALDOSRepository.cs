@@ -19,6 +19,8 @@ public interface IPRE_SALDOSRepository
     Task<bool> PresupuestoExisteConMonto(int codPresupuesto);
     Task<bool> ICPExiste(int codigoICP);
     Task<bool> PUCExiste(int codigoPUC);
-    
+
+    Task<PRE_SALDOS> GetAllByIcpPucFinanciado(int codigoPresupuesto, int codigoIcp, int codigoPuc, int financiadoId);
+
 
 }

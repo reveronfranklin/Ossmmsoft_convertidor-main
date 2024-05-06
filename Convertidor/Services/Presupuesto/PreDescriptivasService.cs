@@ -71,7 +71,48 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<ResultDto<PreDescriptivasGetDto>> GetByCodigo(int codigo)
+        {
 
+            ResultDto<PreDescriptivasGetDto> result = new ResultDto<PreDescriptivasGetDto>(null);
+            try
+            {
+
+                var descriptivas = await _repository.GetByCodigo(codigo);
+
+
+
+                if (descriptivas !=null)
+                {
+                  
+
+                   var dto = await MapPreDecriptiva(descriptivas);
+
+
+                    result.Data = dto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
         public async Task<ResultDto<List<PreDescriptivasGetDto>>> GetByTitulo(int tituloId)
         {
 
@@ -343,7 +384,7 @@ namespace Convertidor.Services.Presupuesto
 
 
         }
-
+        
 
         public async Task<ResultDto<PreDescriptivasGetDto>> Update(PreDescriptivasUpdateDto dto)
         {

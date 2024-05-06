@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using NPOI.OpenXmlFormats.Vml.Office;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -188,6 +189,20 @@ namespace Convertidor.Services.Presupuesto
           
         }
 
+        
+        public async Task<bool> SolicitudPuedeModificarseoEliminarse(int codigoSolicitudModificacion)
+        {
+            bool result = true;
+            
+            var preModificacion = await _preModificacionRepository.GetByCodigoSolicitud(codigoSolicitudModificacion);
+            if (preModificacion != null)
+            {
+                result = false;
+            }
+            return result;
+        }
+        
+        
         public async Task<string> GetStatusProceso(PRE_SOL_MODIFICACION dto)
         {
             var detente = 1;
@@ -243,6 +258,27 @@ namespace Convertidor.Services.Presupuesto
             if (tipoModificacionId != null)
             {
                 itemResult.DescripcionTipoModificacion = tipoModificacionId.DESCRIPCION;
+                string[] accionList = tipoModificacionId.EXTRA3.Split(",");
+                itemResult.Aportar = false;
+                itemResult.Descontar = false;
+                itemResult.OrigenPreSaldo = false;
+                foreach (var item in accionList)
+                {
+                    if (item == "APORTAR")
+                    {
+                        itemResult.Aportar = true;
+                    }
+                    if (item == "DESCONTAR")
+                    {
+                        itemResult.Descontar = true;
+                    }
+                    if (item == "ORIGEN_PRESALDO")
+                    {
+                        itemResult.OrigenPreSaldo = true;
+                    }
+                    
+                    
+                }
             }
             itemResult.FechaSolicitud = dto.FECHA_SOLICITUD;
             itemResult.FechaSolicitudString =GetFechaString(dto.FECHA_SOLICITUD);
@@ -308,7 +344,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Status no existe";
                     return result;
                 }
-
+                
 
 
                 solModificacion.STATUS = status;
@@ -355,6 +391,14 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+               var  puedeModificarse=await SolicitudPuedeModificarseoEliminarse(dto.CodigoSolModificacion);
+               if (!puedeModificarse)
+               {
+                   result.Data = null;
+                   result.IsValid = false;
+                   result.Message = "Solicitud no puede se alterada, ya existe en historico de modificacion";
+                   return result;
+               }
                 var tipoModificacionId = await _repositoryPreDescriptiva.GetByIdAndTitulo(8, dto.TipoModificacionId);
                 if (tipoModificacionId == false)
                 {
@@ -374,13 +418,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Numero compromiso Invalido";
                     return result;
                 }
-                if (dto.CodigoOficio.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Oficio Invalido";
-                    return result;
-                }
+              
 
 
                 if (dto.CodigoSolicitante < 0)
@@ -426,7 +464,7 @@ namespace Convertidor.Services.Presupuesto
                 codigoSolModificacion.FECHA_SOLICITUD = dto.FechaSolicitud;
                 codigoSolModificacion.ANO =codigoPresupuesto.ANO;
                 codigoSolModificacion.NUMERO_SOL_MODIFICACION = dto.NumeroSolModificacion;
-                codigoSolModificacion.CODIGO_OFICIO = dto.CodigoOficio;
+                codigoSolModificacion.CODIGO_OFICIO = $"FORMA 01-{codigoPresupuesto.ANO.ToString()}";
                 codigoSolModificacion.CODIGO_SOLICITANTE =dto.CodigoSolicitante;
                 codigoSolModificacion.MOTIVO =dto.Motivo;
                 codigoSolModificacion.NUMERO_CORRELATIVO = dto.NumeroCorrelativo;
@@ -492,13 +530,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Numero compromiso Invalido";
                     return result;
                 }
-                if (dto.CodigoOficio.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Oficio Invalido";
-                    return result;
-                }
+              
 
 
                 if (dto.CodigoSolicitante < 0)
@@ -546,7 +578,7 @@ namespace Convertidor.Services.Presupuesto
                 entity.FECHA_SOLICITUD = dto.FechaSolicitud;
                 entity.ANO = codigoPresupuesto.ANO;
                 entity.NUMERO_SOL_MODIFICACION = dto.NumeroSolModificacion;
-                entity.CODIGO_OFICIO = dto.CodigoOficio;
+                entity.CODIGO_OFICIO = $"FORMA 01-{codigoPresupuesto.ANO.ToString()}";
                 entity.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
                 entity.MOTIVO = dto.Motivo;
                 entity.STATUS = "PE";
@@ -609,7 +641,14 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo Sol Modificacion no existe";
                     return result;
                 }
-
+                var  puedeModificarse=await SolicitudPuedeModificarseoEliminarse(dto.CodigoSolModificacion);
+                if (!puedeModificarse)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Solicitud no puede se Eliminada, ya existe en historico de modificacion";
+                    return result;
+                }
 
                 var deleted = await _repository.Delete(dto.CodigoSolModificacion);
 

@@ -5,6 +5,10 @@
         public int CodigoSolModificacion { get; set; }
         public int TipoModificacionId { get; set; }
         public string DescripcionTipoModificacion { get; set; } = string.Empty;
+        public bool Descontar { get; set; }
+        public bool Aportar { get; set; }
+        public bool OrigenPreSaldo { get; set; }
+        
         public DateTime FechaSolicitud { get; set; }
         public string FechaSolicitudString { get; set; }
         public FechaDto FechaSolicitudObj { get; set; }

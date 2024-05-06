@@ -85,6 +85,24 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+        public async Task<List<PRE_PUC_SOL_MODIFICACION>> GetAllByCodigoSolicitud(int codigoSolicitud)
+        {
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.PRE_PUC_SOL_MODIFICACION.DefaultIfEmpty().Where(x=> x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_SOL_MODIFICACION==codigoSolicitud).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        
+        
         public async Task<List<PRE_PUC_SOL_MODIFICACION>> GetAllByIcpPuc(int codigoPresupuesto,int codigoIcp,int codigoPuc)
         {
             try

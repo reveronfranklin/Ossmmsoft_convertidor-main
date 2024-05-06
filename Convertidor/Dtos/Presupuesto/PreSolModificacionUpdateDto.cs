@@ -9,7 +9,7 @@
         public FechaDto FechaSolicitudObj { get; set; }
         public int Ano { get; set; }
         public string NumeroSolModificacion { get; set; } = string.Empty;
-        public string CodigoOficio { get; set; } = string.Empty;
+
         public int CodigoSolicitante { get; set; }
         public string Motivo { get; set; } = string.Empty;
         public int NumeroCorrelativo { get; set; }
