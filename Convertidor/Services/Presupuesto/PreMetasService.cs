@@ -9,35 +9,38 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPreMetasRepository _repository;
         private readonly IPRE_PRESUPUESTOSRepository _preSUPUESTOSRepository;
         private readonly IPreDescriptivaRepository _preDescriptivaRepository;
+        private readonly IPRE_INDICE_CAT_PRGRepository _preInDICE_CAT_PRGRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
         public PreMetasService(IPreMetasRepository repository,
                                       IPRE_PRESUPUESTOSRepository preSUPUESTOSRepository,
                                       IPreDescriptivaRepository preDescriptivaRepository,
+                                      IPRE_INDICE_CAT_PRGRepository preInDICE_CAT_PRGRepository,
                                       ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
             _preSUPUESTOSRepository = preSUPUESTOSRepository;
             _preDescriptivaRepository = preDescriptivaRepository;
+            _preInDICE_CAT_PRGRepository = preInDICE_CAT_PRGRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
         }
 
-        public async Task<ResultDto<List<PreMetasResponseDto>>> GetAll()
+        public async Task<ResultDto<List<PreMetasResponseDto>>> GetAllByPresupuesto(FilterByPresupuestoProyectoDto filter)
         {
 
             ResultDto<List<PreMetasResponseDto>> result = new ResultDto<List<PreMetasResponseDto>>(null);
             try
             {
 
-                var Metas = await _repository.GetAll();
+                var metas = await _repository.GetAllByPresupuesto(filter.codigoPresupuesto);
+                
 
 
-
-                if (Metas.Count() > 0)
+                if (metas.Count() > 0)
                 {
                     List<PreMetasResponseDto> listDto = new List<PreMetasResponseDto>();
 
-                    foreach (var item in Metas)
+                    foreach (var item in metas)
                     {
                         var dto = await MapPreMetas(item);
                         listDto.Add(dto);
@@ -121,6 +124,15 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
+                if(dto.CodigoMeta < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Meta no existe";
+                    return result;
+
+                }
+
                 var codigoMeta = await _repository.GetByCodigo(dto.CodigoMeta);
                 if (codigoMeta == null)
                 {
@@ -153,8 +165,16 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Denominacion Meta Invalida";
                     return result;
                 }
+                if(dto.UnidadMedidaId < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Unidad de medida Invalida";
+                    return result;
+
+                }
                 var unidadMedidaId = await _preDescriptivaRepository.GetByIdAndTitulo(5, dto.UnidadMedidaId);
-                if (dto.UnidadMedidaId < 0)
+                if (unidadMedidaId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -202,8 +222,17 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if(dto.CodigoPresupuesto < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+
+                }
+
                 var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (dto.CodigoPresupuesto < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -296,15 +325,6 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoMeta = await _repository.GetByCodigo(dto.CodigoMeta);
-                if (codigoMeta != null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Meta no existe";
-                    return result;
-                }
-
                 if (dto.CodigoProyecto < 0)
                 {
                     result.Data = null;
@@ -328,8 +348,16 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Denominacion Meta Invalida";
                     return result;
                 }
-                var unidadMedidaId = await _preDescriptivaRepository.GetByIdAndTitulo(5, dto.UnidadMedidaId);
                 if (dto.UnidadMedidaId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Unidad de medida Invalida";
+                    return result;
+
+                }
+                var unidadMedidaId = await _preDescriptivaRepository.GetByIdAndTitulo(5, dto.UnidadMedidaId);
+                if (unidadMedidaId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -377,8 +405,17 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (dto.CodigoPresupuesto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+
+                }
+
+                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;

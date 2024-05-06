@@ -139,17 +139,34 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoDetalleCompromiso = await _repository.GetByCodigo(dto.CodigoDetalleCompromiso);
-                if (codigoDetalleCompromiso == null)
+                if(dto.CodigoDetalleCompromiso < 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Detalle Compromiso no existe";
+                    result.Message = "Codigo detalle Compromiso Invalido";
+                    return result;
+                }
+
+                var codigoDetalleCompromiso = await _repository.GetByCodigo(dto.CodigoDetalleCompromiso);
+                if(codigoDetalleCompromiso == null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo detalle Compromiso Invalido";
+                    return result;
+
+                }
+
+                if(dto.CodigoCompromiso < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Compromiso Invalido";
                     return result;
                 }
 
                 var codigoCompromiso = await _preCompromisosRepository.GetByCodigo(dto.CodigoCompromiso);
-                if (codigoCompromiso.CODIGO_COMPROMISO < 0)
+                if (codigoCompromiso == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -180,6 +197,15 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Cantidad Anulada Invalida";
                     return result;
                 }
+
+                if(dto.UdmId < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "UdmID Invalido";
+                    return result;
+
+                }
                 var udmId = await _repositoryPreDescriptiva.GetByIdAndTitulo(5, dto.UdmId);
                 if (udmId == false)
                 {
@@ -205,7 +231,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.PorDescuento > 0)
+                if (dto.PorDescuento < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -213,6 +239,15 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if(dto.TipoImpuestoId < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Impuesto ID Invalido";
+                    return result;
+
+
+                }
                 var tipoImpuestoId = await _admDescriptiva.GetByIdAndTitulo(18,dto.TipoImpuestoId);
                 if (tipoImpuestoId == false)
                 {
@@ -252,8 +287,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.CodigoPresupuesto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -313,17 +356,17 @@ namespace Convertidor.Services.Presupuesto
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoDetalleCompromiso = await _repository.GetByCodigo(dto.CodigoDetalleCompromiso);
-                if (codigoDetalleCompromiso != null)
+
+                if (dto.CodigoCompromiso < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Detalle Compromiso ya existe";
+                    result.Message = "Codigo Compromiso Invalido";
                     return result;
                 }
 
                 var codigoCompromiso = await _preCompromisosRepository.GetByCodigo(dto.CodigoCompromiso);
-                if (codigoCompromiso.CODIGO_COMPROMISO < 0)
+                if (codigoCompromiso == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -353,6 +396,15 @@ namespace Convertidor.Services.Presupuesto
                     result.IsValid = false;
                     result.Message = "Cantidad Anulada Invalida";
                     return result;
+                }
+
+                if (dto.UdmId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "UdmID Invalido";
+                    return result;
+
                 }
                 var udmId = await _repositoryPreDescriptiva.GetByIdAndTitulo(5, dto.UdmId);
                 if (udmId == false)
@@ -387,6 +439,15 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (dto.TipoImpuestoId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Impuesto ID Invalido";
+                    return result;
+
+
+                }
                 var tipoImpuestoId = await _admDescriptiva.GetByIdAndTitulo(18, dto.TipoImpuestoId);
                 if (tipoImpuestoId == false)
                 {
@@ -426,8 +487,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if(dto.CodigoPresupuesto < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;

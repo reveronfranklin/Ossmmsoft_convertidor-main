@@ -29,11 +29,11 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<List<PRE_METAS>> GetAll()
+        public async Task<List<PRE_METAS>> GetAllByPresupuesto(int codigoPresupuesto)
         {
             try
             {
-                var result = await _context.PRE_METAS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.PRE_METAS.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto).DefaultIfEmpty().ToListAsync();
 
                 return result;
             }

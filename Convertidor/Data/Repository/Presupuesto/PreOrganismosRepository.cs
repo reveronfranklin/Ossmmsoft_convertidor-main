@@ -5,25 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
-	public class PreCompromisosRepository: IPreCompromisosRepository
+    public class PreOrganismosRepository : IPreOrganismosRepository
     {
-		
         private readonly DataContextPre _context;
- 
 
-        public PreCompromisosRepository(DataContextPre context )
+        public PreOrganismosRepository(DataContextPre context)
         {
             _context = context;
-            
         }
-      
-        public async Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso)
+
+        public async Task<PRE_ORGANISMOS> GetByCodigo(int codigoOrganismo)
         {
             try
             {
-                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_COMPROMISO == codigoCompromiso).FirstOrDefaultAsync();
+                var result = await _context.PRE_ORGANISMOS.DefaultIfEmpty().Where(e => e.CODIGO_ORGANISMO == codigoOrganismo).FirstOrDefaultAsync();
 
-                return (PRE_COMPROMISOS)result;
+                return (PRE_ORGANISMOS)result;
             }
             catch (Exception ex)
             {
@@ -33,12 +30,11 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-    
-        public async Task<List<PRE_COMPROMISOS>> GetAll()
+        public async Task<List<PRE_ORGANISMOS>> GetAll()
         {
             try
             {
-                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.PRE_ORGANISMOS.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -50,17 +46,15 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-       
-
-        public async Task<ResultDto<PRE_COMPROMISOS>> Add(PRE_COMPROMISOS entity)
+        public async Task<ResultDto<PRE_ORGANISMOS>> Add(PRE_ORGANISMOS entity)
         {
-            ResultDto<PRE_COMPROMISOS> result = new ResultDto<PRE_COMPROMISOS>(null);
+            ResultDto<PRE_ORGANISMOS> result = new ResultDto<PRE_ORGANISMOS>(null);
             try
             {
 
 
 
-                await _context.PRE_COMPROMISOS.AddAsync(entity);
+                await _context.PRE_ORGANISMOS.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -83,18 +77,18 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<ResultDto<PRE_COMPROMISOS>> Update(PRE_COMPROMISOS entity)
+        public async Task<ResultDto<PRE_ORGANISMOS>> Update(PRE_ORGANISMOS entity)
         {
-            ResultDto<PRE_COMPROMISOS> result = new ResultDto<PRE_COMPROMISOS>(null);
+            ResultDto<PRE_ORGANISMOS> result = new ResultDto<PRE_ORGANISMOS>(null);
 
             try
             {
-                PRE_COMPROMISOS entityUpdate = await GetByCodigo(entity.CODIGO_COMPROMISO);
+                PRE_ORGANISMOS entityUpdate = await GetByCodigo(entity.CODIGO_ORGANISMO);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.PRE_COMPROMISOS.Update(entity);
+                    _context.PRE_ORGANISMOS.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -112,21 +106,17 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
 
-
-
-
-
         }
 
-        public async Task<string> Delete(int codigoCompromiso)
+        public async Task<string> Delete(int codigoOrganismo)
         {
 
             try
             {
-                PRE_COMPROMISOS entity = await GetByCodigo(codigoCompromiso);
+                PRE_ORGANISMOS entity = await GetByCodigo(codigoOrganismo);
                 if (entity != null)
                 {
-                    _context.PRE_COMPROMISOS.Remove(entity);
+                    _context.PRE_ORGANISMOS.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -140,15 +130,13 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-
-
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_COMPROMISO)
+                var last = await _context.PRE_ORGANISMOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_ORGANISMO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -156,7 +144,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
                 else
                 {
-                    result = last.CODIGO_COMPROMISO + 1;
+                    result = last.CODIGO_ORGANISMO + 1;
                 }
 
                 return (int)result!;
@@ -171,7 +159,5 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
-
     }
 }
-

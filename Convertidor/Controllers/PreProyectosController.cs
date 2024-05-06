@@ -10,12 +10,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class PreMetasController : ControllerBase
+    public class PreProyectosController : ControllerBase
     {
 
-        private readonly IPreMetasService _service;
+        private readonly IPreProyectosService _service;
 
-        public PreMetasController(IPreMetasService service)
+        public PreProyectosController(IPreProyectosService service)
         {
 
             _service = service;
@@ -23,14 +23,11 @@ namespace Convertidor.Controllers
 
         }
 
-
-
-
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllByPresupuesto(FilterByPresupuestoProyectoDto filter)
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _service.GetAllByPresupuesto(filter);
+            var result = await _service.GetAll();
             return Ok(result);
         }
 
@@ -38,7 +35,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(PreMetasUpdateDto dto)
+        public async Task<IActionResult> Update(PreProyectosUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -46,7 +43,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(PreMetasUpdateDto dto)
+        public async Task<IActionResult> Create(PreProyectosUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -54,7 +51,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(PreMetasDeleteDto dto)
+        public async Task<IActionResult> Delete(PreProyectosDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);

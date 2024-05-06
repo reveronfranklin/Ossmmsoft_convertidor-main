@@ -1,66 +1,58 @@
-﻿
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
-	public class PreCompromisosRepository: IPreCompromisosRepository
+    public class PreProyectosRepository: IPreProyectosRepository
     {
-		
         private readonly DataContextPre _context;
- 
 
-        public PreCompromisosRepository(DataContextPre context )
+        public PreProyectosRepository(DataContextPre context)
         {
             _context = context;
-            
         }
-      
-        public async Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso)
-        {
-            try
-            {
-                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_COMPROMISO == codigoCompromiso).FirstOrDefaultAsync();
 
-                return (PRE_COMPROMISOS)result;
+        public async Task<PRE_PROYECTOS> GetByCodigo (int codigoProyecto) 
+        {
+            try 
+            {
+               var result = await _context.PRE_PROYECTOS.DefaultIfEmpty().Where(e => e.CODIGO_PROYECTO == codigoProyecto).FirstOrDefaultAsync();
+               return (PRE_PROYECTOS)result;
+            
             }
-            catch (Exception ex)
+            
+            catch (Exception ex) 
             {
                 var res = ex.Message;
                 return null;
-            }
 
+            }
         }
 
-    
-        public async Task<List<PRE_COMPROMISOS>> GetAll()
+        public async Task<List<PRE_PROYECTOS>> GetAll() 
         {
-            try
+            try 
             {
-                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().ToListAsync();
-
-                return result;
+               var result = await _context.PRE_PROYECTOS.DefaultIfEmpty().ToListAsync();
+               return result;
             }
             catch (Exception ex)
             {
                 var res = ex.InnerException.Message;
                 return null;
             }
-
         }
 
-       
-
-        public async Task<ResultDto<PRE_COMPROMISOS>> Add(PRE_COMPROMISOS entity)
+        public async Task<ResultDto<PRE_PROYECTOS>> Add(PRE_PROYECTOS entity)
         {
-            ResultDto<PRE_COMPROMISOS> result = new ResultDto<PRE_COMPROMISOS>(null);
+            ResultDto<PRE_PROYECTOS> result = new ResultDto<PRE_PROYECTOS>(null);
             try
             {
 
 
 
-                await _context.PRE_COMPROMISOS.AddAsync(entity);
+                await _context.PRE_PROYECTOS.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -83,18 +75,18 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<ResultDto<PRE_COMPROMISOS>> Update(PRE_COMPROMISOS entity)
+        public async Task<ResultDto<PRE_PROYECTOS>> Update(PRE_PROYECTOS entity)
         {
-            ResultDto<PRE_COMPROMISOS> result = new ResultDto<PRE_COMPROMISOS>(null);
+            ResultDto<PRE_PROYECTOS> result = new ResultDto<PRE_PROYECTOS>(null);
 
             try
             {
-                PRE_COMPROMISOS entityUpdate = await GetByCodigo(entity.CODIGO_COMPROMISO);
+                PRE_PROYECTOS entityUpdate = await GetByCodigo(entity.CODIGO_PROYECTO);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.PRE_COMPROMISOS.Update(entity);
+                    _context.PRE_PROYECTOS.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -118,15 +110,15 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<string> Delete(int codigoCompromiso)
+        public async Task<string> Delete(int codigoProyecto)
         {
 
             try
             {
-                PRE_COMPROMISOS entity = await GetByCodigo(codigoCompromiso);
+                PRE_PROYECTOS entity = await GetByCodigo(codigoProyecto);
                 if (entity != null)
                 {
-                    _context.PRE_COMPROMISOS.Remove(entity);
+                    _context.PRE_PROYECTOS.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -140,15 +132,13 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-
-
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_COMPROMISO)
+                var last = await _context.PRE_PROYECTOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_PROYECTO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -156,7 +146,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
                 else
                 {
-                    result = last.CODIGO_COMPROMISO + 1;
+                    result = last.CODIGO_PROYECTO + 1;
                 }
 
                 return (int)result!;
@@ -171,7 +161,5 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
-
     }
 }
-

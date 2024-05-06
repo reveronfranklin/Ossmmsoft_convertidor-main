@@ -45,6 +45,16 @@ namespace Convertidor.Data
         public DbSet<PRE_MODIFICACION> PRE_MODIFICACION { get; set; }
         public DbSet<PRE_PUC_MODIFICACION> PRE_PUC_MODIFICACION { get; set; }
         public DbSet<PRE_METAS> PRE_METAS { get; set; }
+        public DbSet<PRE_NIVELES_PUC> PRE_NIVELES_PUC { get; set; }
+        public DbSet<PRE_OBJETIVOS> PRE_OBJETIVOS { get; set; }
+        public DbSet<PRE_ORGANISMOS> PRE_ORGANISMOS { get; set; }
+        public DbSet<PRE_PARTICIPA_FINANCIERA_ORG> PRE_PARTICIPA_FINANCIERA_ORG { get; set; }
+        public DbSet<PRE_PORC_GASTOS_MENSUALES> PRE_PORC_GASTOS_MENSUALES { get; set; }
+        public DbSet<PRE_PROGRAMAS_SOCIALES> PRE_PROGRAMAS_SOCIALES { get; set; }
+        public DbSet<PRE_PROYECTOS> PRE_PROYECTOS { get; set; }
+
+        
+
 
 
 
@@ -315,9 +325,88 @@ namespace Convertidor.Data
 
                  });
                  builder.ToTable("PRE_METAS");
-             });
+             })
 
+            .Entity<PRE_NIVELES_PUC>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_GRUPO,
+
+                 });
+                 builder.ToTable("PRE_NIVELES_PUC");
+             })
+
+             .Entity<PRE_OBJETIVOS>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_OBJETIVO,
+
+                 });
+                 builder.ToTable("PRE_OBJETIVOS");
+             })
+
+             .Entity<PRE_ORGANISMOS>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_ORGANISMO,
+
+                 });
+                 builder.ToTable("PRE_ORGANISMOS");
+             })
+
+              .Entity<PRE_PARTICIPA_FINANCIERA_ORG>(builder =>
+              {
+                  //builder.HasNoKey();
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_PARTICIPA_FINANC_ORG,
+
+                  });
+                  builder.ToTable("PRE_PARTICIPA_FINANCIERA_ORG");
+              })
+
+               .Entity<PRE_PORC_GASTOS_MENSUALES>(builder =>
+               {
+                   //builder.HasNoKey();
+                   builder.HasKey(table => new
+                   {
+                       table.CODIGO_POR_GASTOS_MES,
+
+                   });
+                   builder.ToTable("PRE_PORC_GASTOS_MENSUALES");
+               })
+
+                .Entity<PRE_PROGRAMAS_SOCIALES>(builder =>
+                {
+                    //builder.HasNoKey();
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_PRG_SOCIAL,
+
+                    });
+                    builder.ToTable("PRE_PROGRAMAS_SOCIALES");
+                })
+
+            .Entity<PRE_PROYECTOS>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_PROYECTO,
+
+                 });
+                 builder.ToTable("PRE_PROYECTOS");
+             });
             
+
+
+
 
 
         }

@@ -5,25 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
-	public class PreCompromisosRepository: IPreCompromisosRepository
+    public class PreNivelesPucRepository : IPreNivelesPucRepository
     {
-		
         private readonly DataContextPre _context;
- 
 
-        public PreCompromisosRepository(DataContextPre context )
+        public PreNivelesPucRepository(DataContextPre context)
         {
             _context = context;
-            
         }
-      
-        public async Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso)
+
+        public async Task<PRE_NIVELES_PUC> GetByCodigo(int codigogRUPO)
         {
             try
             {
-                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_COMPROMISO == codigoCompromiso).FirstOrDefaultAsync();
+                var result = await _context.PRE_NIVELES_PUC.DefaultIfEmpty().Where(e => e.CODIGO_GRUPO == codigogRUPO).FirstOrDefaultAsync();
 
-                return (PRE_COMPROMISOS)result;
+                return (PRE_NIVELES_PUC)result;
             }
             catch (Exception ex)
             {
@@ -33,12 +30,11 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-    
-        public async Task<List<PRE_COMPROMISOS>> GetAll()
+        public async Task<List<PRE_NIVELES_PUC>> GetAll()
         {
             try
             {
-                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.PRE_NIVELES_PUC.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -50,17 +46,15 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-       
-
-        public async Task<ResultDto<PRE_COMPROMISOS>> Add(PRE_COMPROMISOS entity)
+        public async Task<ResultDto<PRE_NIVELES_PUC>> Add(PRE_NIVELES_PUC entity)
         {
-            ResultDto<PRE_COMPROMISOS> result = new ResultDto<PRE_COMPROMISOS>(null);
+            ResultDto<PRE_NIVELES_PUC> result = new ResultDto<PRE_NIVELES_PUC>(null);
             try
             {
 
 
 
-                await _context.PRE_COMPROMISOS.AddAsync(entity);
+                await _context.PRE_NIVELES_PUC.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -83,18 +77,18 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<ResultDto<PRE_COMPROMISOS>> Update(PRE_COMPROMISOS entity)
+        public async Task<ResultDto<PRE_NIVELES_PUC>> Update(PRE_NIVELES_PUC entity)
         {
-            ResultDto<PRE_COMPROMISOS> result = new ResultDto<PRE_COMPROMISOS>(null);
+            ResultDto<PRE_NIVELES_PUC> result = new ResultDto<PRE_NIVELES_PUC>(null);
 
             try
             {
-                PRE_COMPROMISOS entityUpdate = await GetByCodigo(entity.CODIGO_COMPROMISO);
+                PRE_NIVELES_PUC entityUpdate = await GetByCodigo(entity.CODIGO_GRUPO);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.PRE_COMPROMISOS.Update(entity);
+                    _context.PRE_NIVELES_PUC.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -112,21 +106,17 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
 
-
-
-
-
         }
 
-        public async Task<string> Delete(int codigoCompromiso)
+        public async Task<string> Delete(int codigoGrupo)
         {
 
             try
             {
-                PRE_COMPROMISOS entity = await GetByCodigo(codigoCompromiso);
+                PRE_NIVELES_PUC entity = await GetByCodigo(codigoGrupo);
                 if (entity != null)
                 {
-                    _context.PRE_COMPROMISOS.Remove(entity);
+                    _context.PRE_NIVELES_PUC.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -140,15 +130,13 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-
-
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_COMPROMISO)
+                var last = await _context.PRE_NIVELES_PUC.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_GRUPO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -156,7 +144,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
                 else
                 {
-                    result = last.CODIGO_COMPROMISO + 1;
+                    result = last.CODIGO_GRUPO + 1;
                 }
 
                 return (int)result!;
@@ -171,7 +159,5 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
-
     }
 }
-
