@@ -52,6 +52,7 @@ namespace Convertidor.Data
         public DbSet<PRE_PORC_GASTOS_MENSUALES> PRE_PORC_GASTOS_MENSUALES { get; set; }
         public DbSet<PRE_PROGRAMAS_SOCIALES> PRE_PROGRAMAS_SOCIALES { get; set; }
         public DbSet<PRE_PROYECTOS> PRE_PROYECTOS { get; set; }
+        public DbSet<PRE_PROYECTOS_INVERSION> PRE_PROYECTOS_INVERSION { get; set; }
 
         
 
@@ -402,9 +403,19 @@ namespace Convertidor.Data
 
                  });
                  builder.ToTable("PRE_PROYECTOS");
+             })
+
+            .Entity<PRE_PROYECTOS_INVERSION>(builder =>
+             {
+                 //builder.HasNoKey();
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_PROYECTO_INV,
+
+                 });
+                 builder.ToTable("PRE_PROYECTOS_INVERSION");
              });
             
-
 
 
 

@@ -71,6 +71,7 @@ builder.Services.AddTransient<IPreParticipaFinacieraOrgRepository, PreParticipaF
 builder.Services.AddTransient<IPrePorcGastosMensualesRepository, PrePorcGastosMensualesRepository>();
 builder.Services.AddTransient<IPreProgramasSocialesRepository, PreProgramasSocialesRepository>();
 builder.Services.AddTransient<IPreProyectosRepository, PreProyectosRepository>();
+builder.Services.AddTransient<IPreProyectosInversionRepository, PreProyectosInversionRepository>();
 
 
 
@@ -133,6 +134,7 @@ builder.Services.AddTransient<IPreParticipaFinacieraOrgService, PreParticipaFina
 builder.Services.AddTransient<IPrePorcGastosMensualesService, PrePorcGastosMensualesService>();
 builder.Services.AddTransient<IPreProgramasSocialesService, PreProgramasSocialesService>();
 builder.Services.AddTransient<IPreProyectosService, PreProyectosService>();
+builder.Services.AddTransient<IPreProyectosInversionService, PreProyectosInversionService>();
 
 
 
