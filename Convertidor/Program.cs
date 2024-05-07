@@ -72,6 +72,7 @@ builder.Services.AddTransient<IPrePorcGastosMensualesRepository, PrePorcGastosMe
 builder.Services.AddTransient<IPreProgramasSocialesRepository, PreProgramasSocialesRepository>();
 builder.Services.AddTransient<IPreProyectosRepository, PreProyectosRepository>();
 builder.Services.AddTransient<IPreProyectosInversionRepository, PreProyectosInversionRepository>();
+builder.Services.AddTransient<IPreDirectivosRepository, PreDirectivosRepository>();
 
 
 
@@ -135,6 +136,7 @@ builder.Services.AddTransient<IPrePorcGastosMensualesService, PrePorcGastosMensu
 builder.Services.AddTransient<IPreProgramasSocialesService, PreProgramasSocialesService>();
 builder.Services.AddTransient<IPreProyectosService, PreProyectosService>();
 builder.Services.AddTransient<IPreProyectosInversionService, PreProyectosInversionService>();
+builder.Services.AddTransient<IPreDirectivosService, PreDirectivosService>();
 
 
 
