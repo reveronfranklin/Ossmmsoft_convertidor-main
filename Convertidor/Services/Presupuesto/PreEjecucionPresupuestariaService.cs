@@ -1,43 +1,40 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Presupuesto;
+using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos.Presupuesto;
 
 namespace Convertidor.Services.Presupuesto
 {
-    public class PreDirectivosService : IPreDirectivosService
+    public class PreEjecucionPresupuestariaService : IPreEjecucionPresupuestariaService
     {
-        private readonly IPreDirectivosRepository _repository;
-        private readonly IPreDescriptivaRepository _preDescriptivaRepository;
-        private readonly IPRE_PRESUPUESTOSRepository _preSUPUESTOSRepository;
+        private readonly IPreEjecucionPresupuestariaRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
 
-        public PreDirectivosService(IPreDirectivosRepository repository,
-                                     IPreDescriptivaRepository preDescriptivaRepository,
-                                     IPRE_PRESUPUESTOSRepository preSUPUESTOSRepository,
-                                     ISisUsuarioRepository sisUsuarioRepository)
+        public PreEjecucionPresupuestariaService(IPreEjecucionPresupuestariaRepository repository,
+                                                  ISisUsuarioRepository sisUsuarioRepository,
+                                                  IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository)
         {
             _repository = repository;
-            _preDescriptivaRepository = preDescriptivaRepository;
-            _preSUPUESTOSRepository = preSUPUESTOSRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
         }
 
-        public async Task<ResultDto<List<PreDirectivosResponseDto>>> GetAll()
+        public async Task<ResultDto<List<PreEjecucionPresupuestariaResponseDto>>> GetAll()
         {
-            ResultDto<List<PreDirectivosResponseDto>> result = new ResultDto<List<PreDirectivosResponseDto>>(null);
+            ResultDto<List<PreEjecucionPresupuestariaResponseDto>> result = new ResultDto<List<PreEjecucionPresupuestariaResponseDto>>(null);
 
             try
             {
-                var directivos = await _repository.GetAll();
+                var ejecucionPresupuestaria = await _repository.GetAll();
 
-                if (directivos.Count() > 0)
+                if (ejecucionPresupuestaria.Count() > 0)
                 {
-                    List<PreDirectivosResponseDto> listDto = new List<PreDirectivosResponseDto>();
+                    List<PreEjecucionPresupuestariaResponseDto> listDto = new List<PreEjecucionPresupuestariaResponseDto>();
 
-                    foreach (var item in directivos)
+                    foreach (var item in ejecucionPresupuestaria)
                     {
-                        var dto = await MapPreDirectivos(item);
+                        var dto = await MapPreEjecucionPresupuestaria(item);
                         listDto.Add(dto);
                     }
 
@@ -68,17 +65,22 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
-        public async Task<PreDirectivosResponseDto> MapPreDirectivos(PRE_DIRECTIVOS dto)
+        public async Task<PreEjecucionPresupuestariaResponseDto> MapPreEjecucionPresupuestaria(PRE_EJECUCION_PRESUPUESTARIA dto)
         {
-            PreDirectivosResponseDto itemResult = new PreDirectivosResponseDto();
-            itemResult.CodigoDirectivo = dto.CODIGO_DIRECTIVO;
-            itemResult.CodigoIdentificacion = dto.CODIGO_IDENTIFICACION;
-            itemResult.TipoDirectivoId = dto.TIPO_DIRECTIVO_ID;
-            itemResult.TituloId = dto.TITULO_ID;
-            itemResult.Cedula = dto.CEDULA;
-            itemResult.Nombre = dto.NOMBRE;
-            itemResult.Apellido = dto.APELLIDO;
-            itemResult.Cargo = dto.CARGO;
+            PreEjecucionPresupuestariaResponseDto itemResult = new PreEjecucionPresupuestariaResponseDto();
+            itemResult.CodigoGrupo = dto.CODIGO_GRUPO;
+            itemResult.CodigoNivel1 = dto.CODIGO_NIVEL1;
+            itemResult.CodigoNivel2 = dto.CODIGO_NIVEL2;
+            itemResult.CodigoNivel3 = dto.CODIGO_NIVEL3;
+            itemResult.CodigoNivel4 = dto.CODIGO_NIVEL4;
+            itemResult.IReal = dto.I_REAL;
+            itemResult.IProyectado = dto.I_PROYECTADO;
+            itemResult.IiReal = dto.II_REAL;
+            itemResult.IiProyectado = dto.II_PROYECTADO;
+            itemResult.IiiReal = dto.III_REAL;
+            itemResult.IiiProyectado = dto.III_PROYECTADO;
+            itemResult.IvReal = dto.IV_REAL;
+            itemResult.IvProyectado = dto.IV_PROYECTADO;
             itemResult.Extra1 = dto.EXTRA1;
             itemResult.Extra2 = dto.EXTRA2;
             itemResult.Extra3 = dto.EXTRA3;
@@ -88,14 +90,14 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
-        public async Task<List<PreDirectivosResponseDto>> MapListPreDirectivos(List<PRE_DIRECTIVOS> dtos)
+        public async Task<List<PreEjecucionPresupuestariaResponseDto>> MapListPreEjecucionPresupuestaria(List<PRE_EJECUCION_PRESUPUESTARIA> dtos)
         {
-            List<PreDirectivosResponseDto> result = new List<PreDirectivosResponseDto>();
+            List<PreEjecucionPresupuestariaResponseDto> result = new List<PreEjecucionPresupuestariaResponseDto>();
 
             foreach (var item in dtos)
             {
-                PreDirectivosResponseDto itemResult = new PreDirectivosResponseDto();
-                itemResult = await MapPreDirectivos(item);
+                PreEjecucionPresupuestariaResponseDto itemResult = new PreEjecucionPresupuestariaResponseDto();
+                itemResult = await MapPreEjecucionPresupuestaria(item);
                 result.Add(itemResult);
             }
 
@@ -103,97 +105,73 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
-        public async Task<ResultDto<PreDirectivosResponseDto>> Update(PreDirectivosUpdateDto dto)
+        public async Task<ResultDto<PreEjecucionPresupuestariaResponseDto>> Update(PreEjecucionPresupuestariaUpdateDto dto)
         {
 
-            ResultDto<PreDirectivosResponseDto> result = new ResultDto<PreDirectivosResponseDto>(null);
+            ResultDto<PreEjecucionPresupuestariaResponseDto> result = new ResultDto<PreEjecucionPresupuestariaResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                if (dto.CodigoDirectivo < 0)
+                if(dto.CodigoEjePresupuestaria <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Directivo no existe";
+                    result.Message = "Codigo ejecucion Presupuestaria no existe";
                     return result;
 
+
                 }
-                var codigoDirectivo = await _repository.GetByCodigo(dto.CodigoDirectivo);
-                if (codigoDirectivo == null)
+
+                var codigoEjePresupuestaria = await _repository.GetByCodigo(dto.CodigoEjePresupuestaria);
+                if (codigoEjePresupuestaria == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Directivo no existe";
+                    result.Message = "Codigo ejecucion Presupuestaria no existe";
                     return result;
                 }
-                if (dto.CodigoIdentificacion < 0)
+
+                if (dto.CodigoGrupo.Length > 1)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Año Invalido";
+                    result.Message = "Codigo Grupo Invalido";
                     return result;
-                }
 
-                if (dto.TipoDirectivoId < 0)
+                }
+               
+                if (dto.CodigoNivel1.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Directivo Id Invalido";
+                    result.Message = "Codigo Nivel1 Invalido";
                     return result;
                 }
-                var tipoDirectivoId = await _preDescriptivaRepository.GetByIdAndTitulo(10, dto.TipoDirectivoId);
-                if (tipoDirectivoId == false)
+
+                if (dto.CodigoNivel2.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Directivo Id Invalido";
+                    result.Message = "Codigo Nivel2 Invalido";
                     return result;
                 }
-
-                if (dto.TituloId < 0)
+                if (dto.CodigoNivel3.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Titulo Id invalido";
+                    result.Message = "Codigo Nivel3 Invalido";
                     return result;
-
                 }
 
-                var tituloId = await _preDescriptivaRepository.GetByIdAndTitulo(11, dto.TituloId);
-                if (tituloId == false)
+                if (dto.CodigoNivel4.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Titulo Id invalido";
+                    result.Message = "Codigo Nivel4 Invalido";
                     return result;
-
                 }
-
-                if(dto.Nombre.Length > 100) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Nombre invalido";
-                    return result;
-
-                }
-                if (dto.Apellido.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Apellido invalido";
-                    return result;
-
-                }
-                if (dto.Cargo.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cargo invalido";
-                    return result;
-
-                }
+              
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -226,7 +204,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (codigoPresupuesto == null)
                 {
                     result.Data = null;
@@ -236,27 +214,32 @@ namespace Convertidor.Services.Presupuesto
                 }
 
 
-                codigoDirectivo.CODIGO_DIRECTIVO = dto.CodigoDirectivo;
-                codigoDirectivo.CODIGO_IDENTIFICACION = dto.CodigoIdentificacion;
-                codigoDirectivo.TIPO_DIRECTIVO_ID = dto.TipoDirectivoId;
-                codigoDirectivo.TITULO_ID = dto.TituloId;
-                codigoDirectivo.CEDULA = dto.Cedula;
-                codigoDirectivo.NOMBRE = dto.Nombre;
-                codigoDirectivo.APELLIDO = dto.Apellido;
-                codigoDirectivo.CARGO = dto.Cargo;
-                codigoDirectivo.EXTRA1 = dto.Extra1;
-                codigoDirectivo.EXTRA2 = dto.Extra2;
-                codigoDirectivo.EXTRA3 = dto.Extra3;
-                codigoDirectivo.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                codigoEjePresupuestaria.CODIGO_GRUPO = dto.CodigoGrupo;
+                codigoEjePresupuestaria.CODIGO_NIVEL1 = dto.CodigoNivel1;
+                codigoEjePresupuestaria.CODIGO_NIVEL2 = dto.CodigoNivel2;
+                codigoEjePresupuestaria.CODIGO_NIVEL3 = dto.CodigoNivel3;
+                codigoEjePresupuestaria.CODIGO_NIVEL4 = dto.CodigoNivel4;
+                codigoEjePresupuestaria.I_REAL = dto.IReal;
+                codigoEjePresupuestaria.I_PROYECTADO = dto.IProyectado;
+                codigoEjePresupuestaria.II_REAL = dto.IiReal;
+                codigoEjePresupuestaria.II_PROYECTADO = dto.IiProyectado;
+                codigoEjePresupuestaria.III_REAL = dto.IiiReal;
+                codigoEjePresupuestaria.III_PROYECTADO = dto.IiiProyectado;
+                codigoEjePresupuestaria.IV_REAL = dto.IvReal;
+                codigoEjePresupuestaria.IV_PROYECTADO = dto.IvProyectado;
+                codigoEjePresupuestaria.EXTRA1 = dto.Extra1;
+                codigoEjePresupuestaria.EXTRA2 = dto.Extra2;
+                codigoEjePresupuestaria.EXTRA3 = dto.Extra3;
+                codigoEjePresupuestaria.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
 
 
 
-                codigoDirectivo.CODIGO_EMPRESA = conectado.Empresa;
-                codigoDirectivo.USUARIO_UPD = conectado.Usuario;
-                codigoDirectivo.FECHA_UPD = DateTime.Now;
-                await _repository.Update(codigoDirectivo);
+                codigoEjePresupuestaria.CODIGO_EMPRESA = conectado.Empresa;
+                codigoEjePresupuestaria.USUARIO_UPD = conectado.Usuario;
+                codigoEjePresupuestaria.FECHA_UPD = DateTime.Now;
+                await _repository.Update(codigoEjePresupuestaria);
 
-                var resultDto = await MapPreDirectivos(codigoDirectivo);
+                var resultDto = await MapPreEjecucionPresupuestaria(codigoEjePresupuestaria);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -274,82 +257,52 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public async Task<ResultDto<PreDirectivosResponseDto>> Create(PreDirectivosUpdateDto dto)
+        public async Task<ResultDto<PreEjecucionPresupuestariaResponseDto>> Create(PreEjecucionPresupuestariaUpdateDto dto)
         {
 
-            ResultDto<PreDirectivosResponseDto> result = new ResultDto<PreDirectivosResponseDto>(null);
+            ResultDto<PreEjecucionPresupuestariaResponseDto> result = new ResultDto<PreEjecucionPresupuestariaResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-             
-                if (dto.CodigoIdentificacion < 0)
+                if (dto.CodigoGrupo.Length > 1)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Año Invalido";
-                    return result;
-                }
-
-                if (dto.TipoDirectivoId < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Directivo Id Invalido";
-                    return result;
-                }
-
-                var tipoDirectivoId = await _preDescriptivaRepository.GetByIdAndTitulo(10, dto.TipoDirectivoId);
-                if (tipoDirectivoId == false)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Directivo Id Invalido";
-                    return result;
-                }
-
-                if (dto.TituloId < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Titulo Id invalido";
+                    result.Message = "Codigo Grupo Invalido";
                     return result;
 
                 }
 
-                var tituloId = await _preDescriptivaRepository.GetByIdAndTitulo(11, dto.TituloId);
-                if (tituloId == false)
+                if (dto.CodigoNivel1.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Titulo Id invalido";
+                    result.Message = "Codigo Nivel1 Invalido";
                     return result;
-
                 }
 
-                if (dto.Nombre.Length > 100)
+                if (dto.CodigoNivel2.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Nombre invalido";
+                    result.Message = "Codigo Nivel2 Invalido";
                     return result;
-
                 }
-                if (dto.Apellido.Length > 100)
+                if (dto.CodigoNivel3.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Apellido invalido";
+                    result.Message = "Codigo Nivel3 Invalido";
                     return result;
-
                 }
-                if (dto.Cargo.Length > 100)
+
+                if (dto.CodigoNivel4.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Cargo invalido";
+                    result.Message = "Codigo Nivel4 Invalido";
                     return result;
-
                 }
 
 
@@ -384,7 +337,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (codigoPresupuesto == null)
                 {
                     result.Data = null;
@@ -393,16 +346,23 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                PRE_DIRECTIVOS entity = new PRE_DIRECTIVOS();
 
-                entity.CODIGO_DIRECTIVO = await _repository.GetNextKey();
-                entity.CODIGO_IDENTIFICACION = dto.CodigoIdentificacion;
-                entity.TIPO_DIRECTIVO_ID = dto.TipoDirectivoId;
-                entity.TITULO_ID = dto.TituloId;
-                entity.CEDULA = dto.Cedula;
-                entity.NOMBRE = dto.Nombre;
-                entity.APELLIDO = dto.Apellido;
-                entity.CARGO = dto.Cargo;
+                PRE_EJECUCION_PRESUPUESTARIA entity = new PRE_EJECUCION_PRESUPUESTARIA();
+
+                entity.CODIGO_EJE_PRESUPUESTARIA = await _repository.GetNextKey();
+                entity.CODIGO_GRUPO = dto.CodigoGrupo;
+                entity.CODIGO_NIVEL1 = dto.CodigoNivel1;
+                entity.CODIGO_NIVEL2 = dto.CodigoNivel2;
+                entity.CODIGO_NIVEL3 = dto.CodigoNivel3;
+                entity.CODIGO_NIVEL4 = dto.CodigoNivel4;
+                entity.I_REAL = dto.IReal;
+                entity.I_PROYECTADO = dto.IProyectado;
+                entity.II_REAL = dto.IiReal;
+                entity.II_PROYECTADO = dto.IiProyectado;
+                entity.III_REAL = dto.IiiReal;
+                entity.III_PROYECTADO = dto.IiiProyectado;
+                entity.IV_REAL = dto.IvReal;
+                entity.IV_PROYECTADO = dto.IvProyectado;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
@@ -417,7 +377,7 @@ namespace Convertidor.Services.Presupuesto
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapPreDirectivos(created.Data);
+                    var resultDto = await MapPreEjecucionPresupuestaria(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -449,24 +409,24 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public async Task<ResultDto<PreDirectivosDeleteDto>> Delete(PreDirectivosDeleteDto dto)
+        public async Task<ResultDto<PreEjecucionPresupuestariaDeleteDto>> Delete(PreEjecucionPresupuestariaDeleteDto dto)
         {
 
-            ResultDto<PreDirectivosDeleteDto> result = new ResultDto<PreDirectivosDeleteDto>(null);
+            ResultDto<PreEjecucionPresupuestariaDeleteDto> result = new ResultDto<PreEjecucionPresupuestariaDeleteDto>(null);
             try
             {
 
-                var codigoDirectivo = await _repository.GetByCodigo(dto.CodigoDirectivo);
-                if (codigoDirectivo == null)
+                var codigoGrupo = await _repository.GetByCodigo(dto.CodigoEjePresupuestaria);
+                if (codigoGrupo == null)
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "Codigo Directivo no existe";
+                    result.Message = "Codigo Grupo no existe";
                     return result;
                 }
 
 
-                var deleted = await _repository.Delete(dto.CodigoDirectivo);
+                var deleted = await _repository.Delete(dto.CodigoEjePresupuestaria);
 
                 if (deleted.Length > 0)
                 {
@@ -496,9 +456,6 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
     }
+
+
 }
-
-
-
-
-

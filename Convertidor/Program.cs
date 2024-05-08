@@ -73,6 +73,7 @@ builder.Services.AddTransient<IPreProgramasSocialesRepository, PreProgramasSocia
 builder.Services.AddTransient<IPreProyectosRepository, PreProyectosRepository>();
 builder.Services.AddTransient<IPreProyectosInversionRepository, PreProyectosInversionRepository>();
 builder.Services.AddTransient<IPreDirectivosRepository, PreDirectivosRepository>();
+builder.Services.AddTransient<IPreEjecucionPresupuestariaRepository, PreEjecucionPresupuestariaRepository>();
 
 
 
@@ -137,6 +138,7 @@ builder.Services.AddTransient<IPreProgramasSocialesService, PreProgramasSociales
 builder.Services.AddTransient<IPreProyectosService, PreProyectosService>();
 builder.Services.AddTransient<IPreProyectosInversionService, PreProyectosInversionService>();
 builder.Services.AddTransient<IPreDirectivosService, PreDirectivosService>();
+builder.Services.AddTransient<IPreEjecucionPresupuestariaService, PreEjecucionPresupuestariaService>();
 
 
 
