@@ -67,6 +67,56 @@ namespace Convertidor.Data.Repository.Presupuesto
             return result;
         }
 
+    public async Task<ListIcpPucConDisponible> GetListIcpPucConDisponibleCodigoSaldo(int codigoSaldo)
+        {
+           ListIcpPucConDisponible result = new ListIcpPucConDisponible();
+
+            var preVSaldos = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_SALDO == codigoSaldo && x.DISPONIBLE>0).ToListAsync();
+
+            if (preVSaldos!=null)
+            {
+
+          
+
+                var resumen = from s in preVSaldos
+                    group s by new
+                    {
+                        CodigoSaldo=s.CODIGO_SALDO,
+                        CodigoIcp = s.CODIGO_ICP , 
+                        CodigoIcpConcat =s.CODIGO_ICP_CONCAT,
+                        DenominacionIcp=s.DENOMINACION_ICP,
+                        CodigoPuc=s.CODIGO_PUC,
+                        CodigoPucConcat=s.CODIGO_PUC_CONCAT,
+                        DenominacionPuc=s.DENOMINACION_PUC,
+                        FinanciadoId=s.FINANCIADO_ID,
+                        DenominacionFinanciado=s.DESCRIPCION_FINANCIADO,
+                        Disponible=s.DISPONIBLE
+                        
+                    } into g
+                    select new ListIcpPucConDisponible
+                    {
+                        CodigoSaldo = g.Key.CodigoSaldo,
+                        CodigoIcp=g.Key.CodigoIcp,
+                        CodigoIcpConcat=g.Key.CodigoIcpConcat,
+                        DenominacionIcp=g.Key.DenominacionIcp,
+                        CodigoPucConcat=g.Key.CodigoPucConcat,
+                        CodigoPuc = g.Key.CodigoPuc,
+                        DenominacionPuc=g.Key.DenominacionPuc,
+                        FinanciadoId = (int)g.Key.FinanciadoId,
+                        DenominacionFinanciado = g.Key.DenominacionFinanciado,
+                        Disponible=(decimal)g.Key.Disponible
+                        
+                               
+
+                    };
+                result = resumen.FirstOrDefault();
+
+            }
+
+           
+            return result;
+        }
+
 
         
 

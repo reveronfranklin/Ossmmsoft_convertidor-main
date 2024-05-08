@@ -73,7 +73,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
             {
 
                 var pucSolicitud = await _repository.GetAllByCodigoSolicitud(filter.CodigoSolModificacion);
-                pucSolicitud = pucSolicitud.Where(x => x.DE_PARA == filter.DePara).ToList();
+                pucSolicitud = pucSolicitud.OrderBy(x => x.DE_PARA).ToList();
 
 
                 if (pucSolicitud.Count() > 0)
@@ -147,6 +147,16 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
             }
             itemResult.Monto = dto.MONTO;
             itemResult.DePara = dto.DE_PARA;
+            if (dto.DE_PARA == "D")
+            {
+                itemResult.Descontar = dto.MONTO;
+                itemResult.Aportar =0;
+            }
+            if (dto.DE_PARA == "P")
+            {
+                itemResult.Descontar = 0;
+                itemResult.Aportar =dto.MONTO;
+            }
             itemResult.MontoAnulado = dto.MONTO_ANULADO;
             itemResult.Monto = dto.MONTO;
             itemResult.MontoModificado = dto.MONTO_MODIFICADO;
@@ -180,6 +190,226 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     result.Message = "Codigo Sol Modificacion Invalido";
                     return result;
                 }
+                
+                
+
+                if (dto.DePara=="D" && dto.CodigoSaldo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Saldo Invalido,Seleccione de la lista de Saldos disponibles";
+                    return result;
+
+                }
+
+                if (dto.CodigoSaldo > 0)
+                {
+                    var codigoSaldo = await _preSaldosRepository.GetByCodigo(dto.CodigoSaldo);
+                    if (codigoSaldo ==null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Codigo saldo Invalido";
+                        return result;
+                    }
+                    else
+                    {
+                        dto.FinanciadoId = codigoSaldo.FINANCIADO_ID;
+                        dto.CodigoIcp = codigoSaldo.CODIGO_ICP;
+                        dto.CodigoPuc = codigoSaldo.CODIGO_PUC;
+
+                    }
+                }
+               
+                if (dto.FinanciadoId <=0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Financiado Id";
+                    return result;
+                }
+
+                var financido = await _preDescriptivasService.GetByCodigo(dto.FinanciadoId);
+                if (financido== null )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Financiado Invalido";
+                    return result;
+                }
+
+                if (dto.CodigoIcp < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo icp Invalido";
+                    return result;
+
+                }
+                var codigoIcp = await _preIndiceCatPrgRepository.GetByCodigo(dto.CodigoIcp);
+                if (codigoIcp==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Icp Invalido";
+                    return result;
+                }
+
+                if (dto.CodigoPuc < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+
+                }
+                var codigoPuc = await _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
+                if (codigoPuc==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+                }
+
+                if (dto.Monto <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoPresupuesto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+
+                }
+
+                var presupuesto = await _presupuestosService.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                if (presupuesto==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
+                var presaldo = await _preSaldosRepository
+                    .GetAllByIcpPucFinanciado(dto.CodigoPresupuesto, dto.CodigoIcp, dto.CodigoPuc, dto.FinanciadoId);
+                if (presaldo == null)
+                {
+                    PRE_SALDOS entitySaldo = new PRE_SALDOS();
+                    entitySaldo.CODIGO_SALDO = await _preSaldosRepository.GetNextKey();
+                    entitySaldo.CODIGO_ICP = dto.CodigoIcp;
+                    entitySaldo.CODIGO_PUC = dto.CodigoPuc;
+                    entitySaldo.FINANCIADO_ID =dto.FinanciadoId;
+                    entitySaldo.CODIGO_PRESUPUESTO =dto.CodigoPresupuesto;
+                    entitySaldo.ASIGNACION = 0;
+                    entitySaldo.BLOQUEADO = dto.Monto;
+                    entitySaldo.MODIFICADO =  dto.Monto;
+                    entitySaldo.COMPROMETIDO = 0;
+                    entitySaldo.CAUSADO = 0;
+                    entitySaldo.PAGADO = 0;
+                    entitySaldo.AJUSTADO = 0;
+                    entitySaldo.PRESUPUESTADO =0;
+                    entitySaldo.USUARIO_INS = conectado.Usuario;
+                    entitySaldo.FECHA_INS = DateTime.Now;
+                    entitySaldo.CODIGO_EMPRESA = conectado.Empresa;
+                    var preSaldoCreated = await _preSaldosRepository.Add(entitySaldo);
+                    if (preSaldoCreated.IsValid == true)
+                    {
+                        dto.CodigoSaldo = preSaldoCreated.Data.CODIGO_SALDO;
+                    }
+                }
+    
+
+                PRE_PUC_SOL_MODIFICACION entity = new PRE_PUC_SOL_MODIFICACION();
+                entity.CODIGO_PUC_SOL_MODIFICACION = await _repository.GetNextKey();
+                entity.CODIGO_SOL_MODIFICACION = dto.CodigoSolModificacion;
+                entity.CODIGO_SALDO = dto.CodigoSaldo;
+                entity.FINANCIADO_ID = dto.FinanciadoId.ToString();
+                entity.CODIGO_ICP = dto.CodigoIcp;
+                entity.CODIGO_PUC = dto.CodigoPuc;
+                entity.MONTO = dto.Monto;
+                entity.MONTO_MODIFICADO = 0;
+                entity.MONTO_ANULADO = 0;
+                entity.DE_PARA = dto.DePara;
+                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+                
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapPrePucSoliModificacion(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+    
+     public async Task<ResultDto<PrePucSolModificacionResponseDto>> Update(PrePucSolModificacionUpdateDto dto)
+        {
+
+            ResultDto<PrePucSolModificacionResponseDto> result = new ResultDto<PrePucSolModificacionResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoPucModificacion = await _repository.GetByCodigo(dto.CodigoPucSolModificacion);
+                if (codigoPucModificacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Modificacion no existe";
+                    return result;
+                }
+                
+             
+              
+                 if (dto.CodigoSolModificacion < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Sol Modificacion Invalido";
+                    return result;
+                }
+                var codigoModificacion = await _preSolicitudModificacionRepository.GetByCodigo(dto.CodigoSolModificacion);
+                if (codigoModificacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Sol Modificacion Invalido";
+                    return result;
+                }
 
                 if (dto.DePara=="D" && dto.CodigoSaldo <= 0)
                 {
@@ -189,14 +419,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
 
                 }
-                var CodigoSaldo = await _preSaldosRepository.GetByCodigo(dto.CodigoSaldo);
-                if (CodigoSaldo ==null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo saldo Invalido";
-                    return result;
-                }
+              
                 if (dto.FinanciadoId <=0)
                 {
                     result.Data = null;
@@ -302,42 +525,28 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                         dto.CodigoSaldo = preSaldoCreated.Data.CODIGO_SALDO;
                     }
                 }
-    
-
-                PRE_PUC_SOL_MODIFICACION entity = new PRE_PUC_SOL_MODIFICACION();
-                entity.CODIGO_PUC_SOL_MODIFICACION = await _repository.GetNextKey();
-                entity.CODIGO_SOL_MODIFICACION = dto.CodigoSolModificacion;
-                entity.CODIGO_SALDO = dto.CodigoSaldo;
-                entity.FINANCIADO_ID = dto.FinanciadoId.ToString();
-                entity.CODIGO_ICP = dto.CodigoIcp;
-                entity.CODIGO_PUC = dto.CodigoPuc;
-                entity.MONTO = dto.Monto;
-                entity.MONTO_MODIFICADO = 0;
-                entity.MONTO_ANULADO = 0;
-                entity.DE_PARA = dto.DePara;
-                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
-                entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_INS = conectado.Usuario;
-                entity.FECHA_INS = DateTime.Now;
-                
-                var created = await _repository.Add(entity);
-                if (created.IsValid && created.Data != null)
-                {
-                    var resultDto = await MapPrePucSoliModificacion(created.Data);
-                    result.Data = resultDto;
-                    result.IsValid = true;
-                    result.Message = "";
-                }
                 else
                 {
-                    result.Data = null;
-                    result.IsValid = created.IsValid;
-                    result.Message = created.Message;
+                    dto.CodigoSaldo = presaldo.CODIGO_SALDO;
                 }
+    
 
-                return result;
+                codigoPucModificacion.CODIGO_SALDO = dto.CodigoSaldo;
+                codigoPucModificacion.FINANCIADO_ID = dto.FinanciadoId.ToString();
+                codigoPucModificacion.CODIGO_ICP = dto.CodigoIcp;
+                codigoPucModificacion.CODIGO_PUC = dto.CodigoPuc;
+                codigoPucModificacion.MONTO = dto.Monto;
 
 
+                codigoPucModificacion.CODIGO_EMPRESA = conectado.Empresa;
+                codigoPucModificacion.USUARIO_UPD = conectado.Usuario;
+                codigoPucModificacion.FECHA_UPD = DateTime.Now;
+                await _repository.Update(codigoPucModificacion);
+
+                var resultDto = await MapPrePucSoliModificacion(codigoPucModificacion);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
 
             }
             catch (Exception ex)
@@ -351,6 +560,52 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
 
             return result;
         }
-        
+
+        public async Task<ResultDto<PrePucSolModificacionDeleteDto>> Delete(PrePucSolModificacionDeleteDto dto)
+        {
+
+            ResultDto<PrePucSolModificacionDeleteDto> result = new ResultDto<PrePucSolModificacionDeleteDto>(null);
+            try
+            {
+
+                var codigoPucModificacion = await _repository.GetByCodigo(dto.CodigoPucSolModificacion);
+                if (codigoPucModificacion == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Modificacion no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoPucSolModificacion);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }   
         
 }

@@ -13,6 +13,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<List<PreFinanciadoDto>> GetListFinanciadoPorPresupuesto(int codigoPresupuesto);
         Task<bool> PresupuestoExiste(int codigoPresupuesto);
         Task<List<ListIcpPucConDisponible>> GetListIcpPucConDisponible(int codigoPresupuesto);
+        Task<ListIcpPucConDisponible> GetListIcpPucConDisponibleCodigoSaldo(int codigoSaldo);
 	}
 }
 

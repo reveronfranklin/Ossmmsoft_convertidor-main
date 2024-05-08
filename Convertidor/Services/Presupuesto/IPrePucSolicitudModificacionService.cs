@@ -11,4 +11,7 @@ public interface IPrePucSolicitudModificacionService
     Task<ResultDto<List<PrePucSolModificacionResponseDto>>> GetAllByCodigoSolicitud(
         PrePucSolModificacionFilterDto filter);
 
+    Task<ResultDto<PrePucSolModificacionResponseDto>> Update(PrePucSolModificacionUpdateDto dto);
+    Task<ResultDto<PrePucSolModificacionResponseDto>> Create(PrePucSolModificacionUpdateDto dto);
+    Task<ResultDto<PrePucSolModificacionDeleteDto>> Delete(PrePucSolModificacionDeleteDto dto);
 }

@@ -15,6 +15,8 @@ public class PrePucSolModificacionResponseDto
     public string CodigoPucConcat { get; set; }
     public string DenominacionPuc { get; set; }
     public decimal Monto { get; set; }
+    public decimal Descontar { get; set; }
+    public decimal Aportar { get; set; }
     public string DePara { get; set; }
     public decimal MontoModificado { get; set; }
     public decimal MontoAnulado { get; set; }

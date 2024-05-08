@@ -59,11 +59,6 @@ namespace Convertidor.Controllers
             var result = await _service.Delete(dto);
             return Ok(result);
 
-
-
-
-
-
         }
     }
 }
