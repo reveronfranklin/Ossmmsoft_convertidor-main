@@ -130,6 +130,15 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
+                if(dto.CodigoPucModificacion <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Modificacion no existe";
+                    return result;
+
+                }
+
                 var codigoPucModificacion = await _repository.GetByCodigo(dto.CodigoPucModificacion);
                 if (codigoPucModificacion == null)
                 {
@@ -139,7 +148,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if(dto.CodigoModificacion < 0) 
+                if(dto.CodigoModificacion <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -155,7 +164,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if(dto.CodigoSaldo  < 0) 
+                if(dto.CodigoSaldo  <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -164,29 +173,32 @@ namespace Convertidor.Services.Presupuesto
 
                 }
                 var CodigoSaldo = await _pRE_SALDOSRepository.GetByCodigo(dto.CodigoSaldo);
-                if (CodigoSaldo.CODIGO_SALDO < 0)
+                if (CodigoSaldo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "codigo saldo Invalido";
                     return result;
                 }
+
                 if (dto.FinanciadoId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Financiado Id";
-                    return result;
-                }
-                if (dto.CodigoFinanciado != null && dto.CodigoFinanciado < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Financiado Invalido";
+                    result.Message = "Financiado Id invalido";
                     return result;
                 }
 
-                if (dto.CodigoIcp < 0) 
+                if (dto.CodigoFinanciado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Financiado invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoIcp <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -195,7 +207,7 @@ namespace Convertidor.Services.Presupuesto
 
                 }
                 var codigoIcp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(dto.CodigoIcp);
-                if (codigoIcp.CODIGO_ICP < 0)
+                if (codigoIcp == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -203,7 +215,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.CodigoPuc < 0)
+                if (dto.CodigoPuc <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -212,7 +224,7 @@ namespace Convertidor.Services.Presupuesto
 
                 }
                 var codigoPuc = await _pRE_PLAN_UNICO_CUENTASRepository.GetByCodigo(dto.CodigoPuc );
-                if (codigoPuc.CODIGO_PUC < 0 )
+                if (codigoPuc == null )
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -235,7 +247,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.Extra1 < 0)
+                if (dto.Extra1 <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -258,7 +270,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.CodigoPresupuesto < 0)
+                if (dto.CodigoPresupuesto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -268,7 +280,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -327,8 +339,8 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-               
-                if (dto.CodigoModificacion < 0)
+
+                if (dto.CodigoModificacion <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -344,7 +356,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.CodigoSaldo < 0)
+                if (dto.CodigoSaldo <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -353,29 +365,35 @@ namespace Convertidor.Services.Presupuesto
 
                 }
                 var CodigoSaldo = await _pRE_SALDOSRepository.GetByCodigo(dto.CodigoSaldo);
-                if (CodigoSaldo.CODIGO_SALDO < 0)
+                if (CodigoSaldo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "codigo saldo Invalido";
                     return result;
                 }
+
+
+
                 if (dto.FinanciadoId == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Financiado Id";
-                    return result;
-                }
-                if (dto.CodigoFinanciado != null && dto.CodigoFinanciado < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Financiado Invalido";
+                    result.Message = "Financiado Id invalido";
                     return result;
                 }
 
-                if (dto.CodigoIcp < 0)
+                if(dto.CodigoFinanciado <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Financiado invalido";
+                    return result;
+
+                }
+               
+
+                if (dto.CodigoIcp <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -384,7 +402,7 @@ namespace Convertidor.Services.Presupuesto
 
                 }
                 var codigoIcp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(dto.CodigoIcp);
-                if (codigoIcp.CODIGO_ICP < 0)
+                if (codigoIcp == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -392,7 +410,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.CodigoPuc < 0)
+                if (dto.CodigoPuc <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -401,7 +419,7 @@ namespace Convertidor.Services.Presupuesto
 
                 }
                 var codigoPuc = await _pRE_PLAN_UNICO_CUENTASRepository.GetByCodigo(dto.CodigoPuc);
-                if (codigoPuc.CODIGO_PUC < 0)
+                if (codigoPuc == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -424,7 +442,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.Extra1 < 0)
+                if (dto.Extra1 <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -447,7 +465,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.CodigoPresupuesto < 0)
+                if (dto.CodigoPresupuesto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -457,7 +475,7 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigoPresupuesto.CODIGO_PRESUPUESTO < 0)
+                if (codigoPresupuesto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
