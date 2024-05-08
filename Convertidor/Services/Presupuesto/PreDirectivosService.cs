@@ -111,7 +111,7 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                if (dto.CodigoDirectivo < 0)
+                if (dto.CodigoDirectivo <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
