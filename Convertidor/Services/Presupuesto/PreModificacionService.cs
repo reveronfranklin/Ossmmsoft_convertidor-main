@@ -335,8 +335,8 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                
-                if (dto.CodigoSolModificacion < 0)
+
+                if (dto.CodigoSolModificacion <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -345,7 +345,7 @@ namespace Convertidor.Services.Presupuesto
 
                 }
                 var codigoSolModificacion = await _preSolModificacionRepository.GetByCodigo(dto.CodigoSolModificacion);
-                if (codigoSolModificacion.CODIGO_SOL_MODIFICACION < 0)
+                if (codigoSolModificacion == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -353,7 +353,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.TipoModificacionId < 0)
+                if (dto.TipoModificacionId <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -447,7 +447,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.CodigoPresupuesto < 0)
+                if (dto.CodigoPresupuesto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
