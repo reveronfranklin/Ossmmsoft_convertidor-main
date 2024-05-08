@@ -101,6 +101,22 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+        public async Task<PRE_SALDOS> GetAllByIcpPucFinanciado(int codigoPresupuesto,int codigoIcp,int codigoPuc,int financiadoId)
+        {
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.PRE_SALDOS.DefaultIfEmpty().Where(x=> x.CODIGO_EMPRESA==conectado.Empresa  && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.CODIGO_ICP==codigoIcp && x.CODIGO_PUC==codigoPuc && x.FINANCIADO_ID==financiadoId).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
 
 
         public async Task<ResultDto<PRE_SALDOS>> Add(PRE_SALDOS entity)

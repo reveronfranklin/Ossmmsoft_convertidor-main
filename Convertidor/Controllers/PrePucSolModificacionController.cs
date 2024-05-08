@@ -10,35 +10,30 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class PrePucModificacionController : ControllerBase
+    public class PrePucSolModificacionController : ControllerBase
     {
+       
+        private readonly IPrePucSolicitudModificacionService _service;
 
-        private readonly IPrePucModificacionService _service;
-
-        public PrePucModificacionController(IPrePucModificacionService service)
+        public PrePucSolModificacionController(IPrePucSolicitudModificacionService service)
         {
 
             _service = service;
 
 
         }
-
-
-
-
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await _service.GetAll();
-            return Ok(result);
-        }
-
-
-
+        
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(PrePucModificacionUpdateDto dto)
+        public async Task<IActionResult>  GetAllByCodigoSolicitud(PrePucSolModificacionFilterDto filter)
+        {
+            var result = await _service.GetAllByCodigoSolicitud(filter);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Update(PrePucSolModificacionUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -46,7 +41,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(PrePucModificacionUpdateDto dto)
+        public async Task<IActionResult> Create(PrePucSolModificacionUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -54,11 +49,13 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(PrePucModificacionDeleteDto dto)
+        public async Task<IActionResult> Delete(PrePucSolModificacionDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
 
         }
+
+
     }
 }

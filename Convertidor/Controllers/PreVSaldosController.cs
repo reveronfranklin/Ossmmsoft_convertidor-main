@@ -170,12 +170,22 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> GetListIcpPucConDisponibleByCodigoSaldo(FilterByPresupuestoCodigoSaldoDto filter)
+        {
+            var result = await _service.GetListIcpPucConDisponibleByCodigoSaldo(filter.CodigoPresupuesto,filter.CodigoSaldo);
+           
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> GetAllByPresupuestoPucConcat(FilterPresupuestoPucConcat filter)
         {
             var result = await _service.GetAllByPresupuestoPucConcat( filter);
            
             return Ok(result);
         }
+        
 
     }
 }
