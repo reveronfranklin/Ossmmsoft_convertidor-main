@@ -15,6 +15,8 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPrePucSolicitudModificacionRepository _prePucSolicitudModificacionRepository;
         private readonly IPreDescriptivaRepository _preDescriptivaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+      
+
 
         public PrePucModificacionService(IPrePucModificacionRepository repository,
                                          IPRE_SALDOSRepository pRE_SALDOSRepository,
@@ -24,7 +26,9 @@ namespace Convertidor.Services.Presupuesto
                                          IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                          IPrePucSolicitudModificacionRepository prePucSolicitudModificacionRepository,
                                          IPreDescriptivaRepository preDescriptivaRepository,
-                                         ISisUsuarioRepository sisUsuarioRepository)
+                                         ISisUsuarioRepository sisUsuarioRepository
+                                     
+                                         )
         {
             _repository = repository;
             _pRE_SALDOSRepository = pRE_SALDOSRepository;
@@ -35,6 +39,7 @@ namespace Convertidor.Services.Presupuesto
             _prePucSolicitudModificacionRepository = prePucSolicitudModificacionRepository;
             _preDescriptivaRepository = preDescriptivaRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+           
         }
 
         public async Task<ResultDto<List<PrePucModificacionResponseDto>>> GetAll()
@@ -667,7 +672,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-
+            
                 var deleted = await _repository.Delete(dto.CodigoPucModificacion);
 
                 if (deleted.Length > 0)
