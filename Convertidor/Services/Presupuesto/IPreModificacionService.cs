@@ -8,7 +8,9 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<PreModificacionResponseDto>> Update(PreModificacionUpdateDto dto);
         Task<ResultDto<PreModificacionResponseDto>> Create(PreModificacionUpdateDto dto); 
         Task<ResultDto<PreModificacionDeleteDto>> Delete(PreModificacionDeleteDto dto);
-        
+        Task<PreModificacionResponseDto> GetByCodigo(int codigoModificacion);
+
+
     }
 }
 

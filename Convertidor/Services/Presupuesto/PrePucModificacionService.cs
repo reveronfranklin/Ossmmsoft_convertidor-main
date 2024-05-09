@@ -7,27 +7,33 @@ namespace Convertidor.Services.Presupuesto
     public class PrePucModificacionService : IPrePucModificacionService
     {
         private readonly IPrePucModificacionRepository _repository;
-        private readonly IPreModificacionRepository _preModificacionRepository;
         private readonly IPRE_SALDOSRepository _pRE_SALDOSRepository;
+        private readonly IPreModificacionService _preModificacionService;
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
         private readonly IPRE_PLAN_UNICO_CUENTASRepository _pRE_PLAN_UNICO_CUENTASRepository;
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
+        private readonly IPrePucSolicitudModificacionRepository _prePucSolicitudModificacionRepository;
+        private readonly IPreDescriptivaRepository _preDescriptivaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
         public PrePucModificacionService(IPrePucModificacionRepository repository,
-                                         IPreModificacionRepository preModificacionRepository,
                                          IPRE_SALDOSRepository pRE_SALDOSRepository,
+                                         IPreModificacionService preModificacionService,
                                          IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
                                          IPRE_PLAN_UNICO_CUENTASRepository pRE_PLAN_UNICO_CUENTASRepository,
                                          IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
+                                         IPrePucSolicitudModificacionRepository prePucSolicitudModificacionRepository,
+                                         IPreDescriptivaRepository preDescriptivaRepository,
                                          ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
-            _preModificacionRepository = preModificacionRepository;
             _pRE_SALDOSRepository = pRE_SALDOSRepository;
+            _preModificacionService = preModificacionService;
             _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
             _pRE_PLAN_UNICO_CUENTASRepository = pRE_PLAN_UNICO_CUENTASRepository;
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
+            _prePucSolicitudModificacionRepository = prePucSolicitudModificacionRepository;
+            _preDescriptivaRepository = preDescriptivaRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
         }
 
@@ -148,23 +154,26 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if(dto.CodigoModificacion <= 0) 
+                if (dto.CodigoModificacion <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Modificacion Invalido";
                     return result;
-                }
-                var codigoModificacion = await _preModificacionRepository.GetByCodigo(dto.CodigoModificacion);
-                if (codigoModificacion == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Modificacion Invalido";
-                    return result;
+
                 }
 
-                if(dto.CodigoSaldo  <= 0) 
+                var modificacion = await _preModificacionService.GetByCodigo(dto.CodigoModificacion);
+                if (modificacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Modificacion Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoSaldo  <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -181,12 +190,23 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.FinanciadoId == null)
+                var financiadoInt = Convert.ToInt32(dto.FinanciadoId);
+                if (financiadoInt <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Financiado Id invalido";
                     return result;
+                }
+
+                var financiadoId = await _preDescriptivaRepository.GetByIdAndTitulo(3, financiadoInt);
+                if (financiadoId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Financiado Id invalido";
+                    return result;
+
                 }
 
                 if (dto.CodigoFinanciado <= 0)
@@ -197,6 +217,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
 
                 }
+
 
                 if (dto.CodigoIcp <= 0) 
                 {
@@ -231,7 +252,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo Puc Invalido";
                     return result;
                 }
-                if (dto.Monto < 0)
+                if (dto.Monto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -268,6 +289,44 @@ namespace Convertidor.Services.Presupuesto
                     result.IsValid = false;
                     result.Message = "Extra3 Invalido";
                     return result;
+                }
+
+                if (dto.CodigoPucSolModificacion <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Sol Modificacion Invalido";
+                    return result;
+
+                }
+
+                var codigoSolModificacion = await _prePucSolicitudModificacionRepository.GetByCodigo(dto.CodigoPucSolModificacion);
+                if (codigoSolModificacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Sol Modificacion Invalido";
+                    return result;
+
+                }
+
+                if (dto.MontoAnulado > dto.Monto)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Anulado Invalido";
+                    return result;
+
+
+                }
+
+                if (dto.MontoAnulado <= 0 )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Anulado Invalido";
+                    return result;
+
                 }
 
                 if (dto.CodigoPresupuesto <= 0)
@@ -339,21 +398,23 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
+                if(dto.CodigoModificacion <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Modificacion Invalido";
+                    return result;
 
-                if (dto.CodigoModificacion <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Modificacion Invalido";
-                    return result;
                 }
-                var codigoModificacion = await _preModificacionRepository.GetByCodigo(dto.CodigoModificacion);
-                if (codigoModificacion == null)
+
+                var modificacion = await _preModificacionService.GetByCodigo(dto.CodigoModificacion);
+                if(modificacion == null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Modificacion Invalido";
                     return result;
+
                 }
 
                 if (dto.CodigoSaldo <= 0)
@@ -373,14 +434,23 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-
-
-                if (dto.FinanciadoId == null)
+                var financiadoInt = Convert.ToInt32(dto.FinanciadoId);
+                if (financiadoInt <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Financiado Id invalido";
                     return result;
+                }
+
+                var financiadoId = await _preDescriptivaRepository.GetByIdAndTitulo(3,financiadoInt);
+                if (financiadoId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Financiado Id invalido";
+                    return result;
+
                 }
 
                 if(dto.CodigoFinanciado <= 0) 
@@ -426,7 +496,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo Puc Invalido";
                     return result;
                 }
-                if (dto.Monto < 0)
+                if (dto.Monto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -465,6 +535,45 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                
+                if(dto.CodigoPucSolModificacion <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Sol Modificacion Invalido";
+                    return result;
+
+                }
+
+                var codigoSolModificacion = await _prePucSolicitudModificacionRepository.GetByCodigo(dto.CodigoPucSolModificacion);
+                if(codigoSolModificacion == null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Sol Modificacion Invalido";
+                    return result;
+
+                }
+
+                if (dto.MontoAnulado > dto.Monto)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Anulado Invalido";
+                    return result;
+
+
+                }
+
+                if (dto.MontoAnulado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Anulado Invalido";
+                    return result;
+
+                }
+
                 if (dto.CodigoPresupuesto <= 0)
                 {
                     result.Data = null;
@@ -487,6 +596,7 @@ namespace Convertidor.Services.Presupuesto
 
 
                 PRE_PUC_MODIFICACION entity = new PRE_PUC_MODIFICACION();
+
                 entity.CODIGO_PUC_MODIFICACION = await _repository.GetNextKey();
                 entity.CODIGO_MODIFICACION = dto.CodigoModificacion;
                 entity.CODIGO_SALDO = dto.CodigoSaldo;
@@ -514,7 +624,6 @@ namespace Convertidor.Services.Presupuesto
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
-
 
                 }
                 else

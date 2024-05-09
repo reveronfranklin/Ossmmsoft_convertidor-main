@@ -10,6 +10,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<PRE_PUC_MODIFICACION>> Update(PRE_PUC_MODIFICACION entity);
         Task<string> Delete(int codigoPucModificacion);
         Task<int> GetNextKey();
+
     }
 }
 

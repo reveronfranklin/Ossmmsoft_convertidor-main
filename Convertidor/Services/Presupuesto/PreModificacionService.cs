@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Dtos.Bm;
 using Convertidor.Dtos.Presupuesto;
 
 namespace Convertidor.Services.Presupuesto
@@ -70,6 +71,30 @@ namespace Convertidor.Services.Presupuesto
 
 
             return result;
+        }
+
+        public async Task<PreModificacionResponseDto> GetByCodigo (int codigoModificacion)
+        {
+            try
+            {
+                var modificacion = await _repository.GetByCodigo(codigoModificacion);
+
+                if(modificacion == null) 
+                {
+                   return null;
+                }
+                
+                var result = await MapPreModificacion(modificacion);
+
+
+                return (PreModificacionResponseDto)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
         }
 
         public FechaDto GetFechaDto(DateTime fecha)
