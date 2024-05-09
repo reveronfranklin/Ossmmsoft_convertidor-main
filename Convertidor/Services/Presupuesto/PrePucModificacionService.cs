@@ -68,7 +68,7 @@ namespace Convertidor.Services.Presupuesto
                 {
                     result.Data = null;
                     result.IsValid = true;
-                    result.Message = " No existen Datos";
+                    result.Message = "No existen Datos";
 
                 }
             }
