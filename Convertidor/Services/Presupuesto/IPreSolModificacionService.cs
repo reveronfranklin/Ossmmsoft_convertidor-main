@@ -9,7 +9,7 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<PreSolModificacionResponseDto>> Create(PreSolModificacionUpdateDto dto); 
         Task<ResultDto<PreSolModificacionDeleteDto>> Delete(PreSolModificacionDeleteDto dto);
         Task<ResultDto<List<PreSolModificacionResponseDto>>> GetByPresupuesto(FilterPresupuestoDto filter);
-
+        Task<bool> SolicitudPuedeModificarseoEliminarse(int codigoSolicitudModificacion);
     }
 }
 

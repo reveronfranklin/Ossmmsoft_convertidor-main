@@ -19,6 +19,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
         private readonly IPRE_INDICE_CAT_PRGRepository _preIndiceCatPrgRepository;
         private readonly IPreSolModificacionRepository _preSolicitudModificacionRepository;
         private readonly IPRE_SALDOSRepository _preSaldosRepository;
+        private readonly IPreSolModificacionService _preSolModificacionService;
 
         public PrePucSolicitudModificacionService(    IPrePucSolicitudModificacionRepository repository,
                                         IPRE_PRESUPUESTOSRepository presupuestosService,
@@ -30,8 +31,8 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                                         IPreDescriptivasService preDescriptivasService,
                                         IPRE_INDICE_CAT_PRGRepository preIndiceCatPrgRepository,
                                         IPreSolModificacionRepository preSolicitudModificacionRepository,
-                                        IPRE_SALDOSRepository preSaldosRepository
-                                       
+                                        IPRE_SALDOSRepository preSaldosRepository,
+                                       IPreSolModificacionService preSolModificacionService
                                         
                                         )
         {
@@ -46,6 +47,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
             _preIndiceCatPrgRepository = preIndiceCatPrgRepository;
             _preSolicitudModificacionRepository = preSolicitudModificacionRepository;
             _preSaldosRepository = preSaldosRepository;
+            _preSolModificacionService = preSolModificacionService;
         }
 
 
@@ -191,7 +193,15 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
                 }
                 
-                
+                var puedeMdificar =
+                    await _preSolModificacionService.SolicitudPuedeModificarseoEliminarse(dto.CodigoSolModificacion);
+                if (puedeMdificar == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No puede Modificar De una Solicitud de Modificacion Aprobada";
+                    return result;
+                }
 
                 if (dto.DePara=="D" && dto.CodigoSaldo <= 0)
                 {
@@ -577,7 +587,15 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
                 }
 
-
+                var puedeEliminar =
+                    await _preSolModificacionService.SolicitudPuedeModificarseoEliminarse(codigoPucModificacion.CODIGO_SOL_MODIFICACION);
+                if (puedeEliminar == false)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "No puede eliminar De una Solicitud de Modificacion Aprobada";
+                    return result;
+                }
                 var deleted = await _repository.Delete(dto.CodigoPucSolModificacion);
 
                 if (deleted.Length > 0)
