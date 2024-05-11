@@ -119,6 +119,23 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+        
+        public async Task<PRE_PUC_SOL_MODIFICACION> GetByCodigoSolModificacionCodigoSaldo(int codigoSolModificacion,int codigoSaldo)
+        {
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.PRE_PUC_SOL_MODIFICACION.DefaultIfEmpty().Where(x=> x.CODIGO_SOL_MODIFICACION==codigoSolModificacion && x.CODIGO_SALDO==codigoSaldo).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
 
 
         public async Task<ResultDto<PRE_PUC_SOL_MODIFICACION>> Add(PRE_PUC_SOL_MODIFICACION entity)

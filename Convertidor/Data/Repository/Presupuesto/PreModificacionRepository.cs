@@ -135,8 +135,11 @@ namespace Convertidor.Data.Repository.Presupuesto
                 PRE_MODIFICACION entity = await GetByCodigo(codigoModificacion);
                 if (entity != null)
                 {
-                    _context.PRE_MODIFICACION.Remove(entity);
-                    await _context.SaveChangesAsync();
+                    FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE_MODIFICACION WHERE CODIGO_MODIFICACION= {codigoModificacion};\nEND;";
+
+                    var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                   // _context.PRE_MODIFICACION.Remove(entity);
+                  //  await _context.SaveChangesAsync();
                 }
                 return "";
             }

@@ -46,6 +46,21 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<List<PRE_PUC_MODIFICACION>> GetByCodigoModificacion(int codigoModificacion)
+        {
+            try
+            {
+                var result = await _context.PRE_PUC_MODIFICACION.DefaultIfEmpty().Where(x=>x.CODIGO_MODIFICACION==codigoModificacion).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<ResultDto<PRE_PUC_MODIFICACION>> Add(PRE_PUC_MODIFICACION entity)
         {
             ResultDto<PRE_PUC_MODIFICACION> result = new ResultDto<PRE_PUC_MODIFICACION>(null);
@@ -113,12 +128,9 @@ namespace Convertidor.Data.Repository.Presupuesto
 
             try
             {
-                PRE_PUC_MODIFICACION entity = await GetByCodigo(codigoPucModificacion);
-                if (entity != null)
-                {
-                    _context.PRE_PUC_MODIFICACION.Remove(entity);
-                    await _context.SaveChangesAsync();
-                }
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE_PUC_MODIFICACION WHERE CODIGO_PUC_MODIFICACION= {codigoPucModificacion};\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 return "";
             }
             catch (Exception ex)
@@ -129,7 +141,30 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
+        public async Task<bool> DeleteRange(int codigoModificacion)
+        {
 
+            try
+            {
+             
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE_PUC_MODIFICACION WHERE CODIGO_MODIFICACION= {codigoModificacion};\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                   // _context.PRE_PUC_MODIFICACION.RemoveRange(listDto);
+                   // await _context.SaveChangesAsync();
+          
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+
+        }
+
+        
         public async Task<int> GetNextKey()
         {
             try

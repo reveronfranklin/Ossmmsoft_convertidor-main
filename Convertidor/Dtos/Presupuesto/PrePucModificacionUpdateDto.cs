@@ -9,7 +9,8 @@
         public int CodigoFinanciado { get; set; }
         public int CodigoIcp { get; set; }
         public int CodigoPuc { get; set; }
-        public int Monto { get; set; }
+        public decimal Monto { get; set; }
+        public decimal MontoModificado { get; set; }
         public string DePara { get; set; } = string.Empty;
         public int Extra1 { get; set; }
         public string Extra2 { get; set; } = string.Empty;

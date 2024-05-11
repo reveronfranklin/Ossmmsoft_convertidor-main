@@ -17,6 +17,7 @@ public interface IPrePucSolicitudModificacionRepository
     Task<bool> ICPExiste(int codigoICP);
     Task<bool> PUCExiste(int codigoPUC);
     Task<List<PRE_PUC_SOL_MODIFICACION>> GetAllByCodigoSolicitud(int codigoSolicitud);
+    Task<PRE_PUC_SOL_MODIFICACION> GetByCodigoSolModificacionCodigoSaldo(int codigoSolModificacion, int codigoSaldo);
 
 
 }
