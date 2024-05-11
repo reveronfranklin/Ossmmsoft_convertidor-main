@@ -121,10 +121,6 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
 
-
-
-
-
         }
 
         public async Task<string> Delete(int codigoModificacion)

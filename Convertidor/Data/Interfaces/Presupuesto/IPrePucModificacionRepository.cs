@@ -12,6 +12,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<string> Delete(int codigoPucModificacion);
         Task<bool> DeleteRange(int codigoModificacion);
         Task<int> GetNextKey();
+
     }
 }
 
