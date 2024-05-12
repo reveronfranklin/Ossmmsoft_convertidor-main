@@ -9,6 +9,7 @@
         public int CodigoFinanciado { get; set; }
         public int CodigoIcp { get; set; }
         public int CodigoPuc { get; set; }
+        
         public decimal Monto { get; set; }
         public string DePara { get; set; } = string.Empty;
         public int Extra1 { get; set; }

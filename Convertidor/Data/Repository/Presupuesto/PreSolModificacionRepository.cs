@@ -183,7 +183,25 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async Task<string> UpdateStatus(int codigoSolModificacion,string status)
+        {
 
+            try
+            {
+                
+                    FormattableString xqueryDiario = $"DECLARE \nBEGIN\n UPDATE  PRE_SOL_MODIFICACION SET STATUS = {status} WHERE CODIGO_SOL_MODIFICACION= {codigoSolModificacion};\nEND;";
+
+                    var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                    // _context.PRE_MODIFICACION.Remove(entity);
+                    //  await _context.SaveChangesAsync();
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }
 

@@ -75,6 +75,13 @@ namespace Convertidor.Controllers
             var result = await _service.Aprobar(dto);
             return Ok(result);
         }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Anular(PreSolModificacionDeleteDto dto)
+        {
+            var result = await _service.Anular(dto);
+            return Ok(result);
+        }
 
     }
 }

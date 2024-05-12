@@ -10,6 +10,7 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<PreModificacionDeleteDto>> Delete(PreModificacionDeleteDto dto);
 
         Task<PreModificacionResponseDto> GetByCodigo(int codigoModificacion);
+        Task<PreModificacionResponseDto> GetByCodigoSolicitud(int codigoSolicitudModificacion);
 
 
     }

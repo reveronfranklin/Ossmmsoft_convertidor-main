@@ -782,6 +782,97 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
+
+        public async Task<ResultDto<PreSolModificacionResponseDto>> Anular(PreSolModificacionDeleteDto dto)
+        {
+            ResultDto<PreSolModificacionResponseDto> result = new ResultDto<PreSolModificacionResponseDto>(null);
+            try
+            {
+                var solModificacion = await _repository.GetByCodigo(dto.CodigoSolModificacion);
+                if (solModificacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Sol ModificaCion no existe";
+                    return result;
+                }
+
+                if (solModificacion.STATUS != "AP")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "La solicitud debe estar APROBADA para poder ANULAR";
+                    return result;
+                }
+
+                var modificacion = await _preModificacionService.GetByCodigoSolicitud(dto.CodigoSolModificacion);
+                if (modificacion==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existe Modificacion Presupuestaria para  ANULAR";
+                    return result;
+                }
+                
+                //Recorremos la tabla PRE_PUC_MODIFICACION
+
+                var pucModificacion =
+                    await _prePucModificacionService.GetAllByCodigoModificacion(modificacion.CodigoModificacion);
+                foreach (var item in pucModificacion.Data)
+                {
+                    //Actualizamoos PRE_SALDO
+                    var preSaldo = await _preSaldosRepository.GetByCodigo(item.CodigoSaldo);
+                    if (preSaldo != null)
+                    {
+                        if (item.DePara == "D")
+                        {
+                            preSaldo.BLOQUEADO = preSaldo.BLOQUEADO + item.Monto;
+                            preSaldo.MODIFICADO = preSaldo.MODIFICADO + item.Monto;
+                        }
+                        else
+                        {
+                            preSaldo.MODIFICADO = preSaldo.MODIFICADO - item.Monto;
+                        }
+
+                        await _preSaldosRepository.Update(preSaldo);
+                    }
+                    
+                    //ACTUALIZAMOS EL MONTO MODIFICADO EN PRE PUC SOLICITUD MODIFICACION(PRE_PUC_SOL_MODIFICACION)
+
+                    var prePucSolModificacion =
+                        await _prePucSolicitudModificacionRepository.GetByCodigo(item.CodigoPucSolModificacion);
+                    if (prePucSolModificacion != null)
+                    {
+                        await UpdateMontoModificado(item.CodigoPucSolModificacion,
+                            prePucSolModificacion.MONTO_MODIFICADO - item.Monto);
+                    }
+                    //ACTUALIZAMOS EL MONTO ANULADO EN PRE PUC SMODIFICACION(PRE_PUC_MODIFICACION)
+                    await _prePucModificacionService.UpdateMontoAnulado(item.CodigoPucModificacion,
+                        item.MontoAnulado + item.Monto);
+
+                }
+                
+                //PRE_MODIFICACION SE LES ASIGNA EL SIGUIENTE VALOR:PRE_MODIFICACION.STATUS := "AN"
+                
+                await _preModificacionRepository.UpdateStatus(modificacion.CodigoModificacion,"AN");
+                
+                //SE CAMBIA EL ESTATUS DE PRE_SOL_MODIFICACION.STATUS A PENDIENTE “PE” =>> PRE_SOL_MODIFICACION.STATUS="PE"
+                await UpdateStatus(dto.CodigoSolModificacion, "PE");
+                
+
+            }
+            catch (Exception ex)
+            {
+               
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
         public async Task<ResultDto<PreSolModificacionResponseDto>> Aprobar(PreSolModificacionDeleteDto dto)
         {
 
