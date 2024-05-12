@@ -31,3 +31,10 @@ git branch
 
 ##regresa al ultimo commit
 git checkout -- .
+
+
+##RAMAS
+
+
+
+
