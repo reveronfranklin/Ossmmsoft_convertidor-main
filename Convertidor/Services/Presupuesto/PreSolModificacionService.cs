@@ -960,18 +960,17 @@ namespace Convertidor.Services.Presupuesto
                {
 
                    //ACTUALIZAMOS EL MONTO MODIFICADO EN PRE PUC SOLICITUD MODIFICACION(PRE_PUC_SOL_MODIFICACION)
-                   if (item.DE_PARA == "D")
-                   {
-                       item.MONTO_MODIFICADO = item.MONTO_MODIFICADO - item.MONTO;
-                   }
-                   else
-                   {
-                       item.MONTO_MODIFICADO = item.MONTO_MODIFICADO + item.MONTO;
-                   }
            
-                   await UpdateMontoModificado(item.CODIGO_PUC_SOL_MODIFICACION,
-                       item.MONTO_MODIFICADO);
-
+                   var montoModificado = await UpdateMontoModificado(item.CODIGO_PUC_SOL_MODIFICACION,
+                       item.MONTO);
+                   if (montoModificado.IsValid == false)
+                   {
+                       await RollbackSolicitudModificacion(dto.CodigoSolModificacion);
+                       result.Data = null;
+                       result.IsValid = false;
+                       result.Message = $"{montoModificado.Message} ";
+                       return result;
+                   }
                    
                    //TRANSFERIMOS PRE_PUC_SOL_MODIFICACION A PRE_PUC_MODIFICACION
                    PrePucModificacionUpdateDto prePucModificacionUpdateDto = new PrePucModificacionUpdateDto();
@@ -987,7 +986,6 @@ namespace Convertidor.Services.Presupuesto
                    prePucModificacionUpdateDto.DePara = item.DE_PARA;
                    prePucModificacionUpdateDto.CodigoPucSolModificacion = item.CODIGO_PUC_SOL_MODIFICACION;
                    prePucModificacionUpdateDto.CodigoPresupuesto = solModificacion.CODIGO_PRESUPUESTO;
-                   prePucModificacionUpdateDto.CodigoModificacion = preModificacionCreated.Data.CodigoModificacion;
                    prePucModificacionUpdateDto.CodigoFinanciado = item.CODIGO_FINANCIADO;
                    
                    var prePucModificacionCreated= await _prePucModificacionService.Create(prePucModificacionUpdateDto);
