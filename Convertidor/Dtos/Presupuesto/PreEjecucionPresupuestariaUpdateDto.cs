@@ -8,14 +8,14 @@
         public string CodigoNivel2 { get; set; }
         public string CodigoNivel3 { get; set; }
         public string CodigoNivel4 { get; set; }
-        public int IReal { get; set; }
-        public int IProyectado { get; set; }
-        public int IiReal { get; set; }
-        public int IiProyectado { get; set; }
-        public int IiiReal { get; set; }
-        public int IiiProyectado { get; set; }
-        public int IvReal { get; set; }
-        public int IvProyectado { get; set; }
+        public decimal IReal { get; set; }
+        public decimal IProyectado { get; set; }
+        public decimal IiReal { get; set; }
+        public decimal IiProyectado { get; set; }
+        public decimal IiiReal { get; set; }
+        public decimal IiiProyectado { get; set; }
+        public decimal IvReal { get; set; }
+        public decimal IvProyectado { get; set; }
         public string Extra1 { get; set; } = string.Empty;
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;

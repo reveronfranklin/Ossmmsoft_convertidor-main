@@ -111,12 +111,12 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-        public async Task<string> Delete(int codigoGrupo)
+        public async Task<string> Delete(int codigoEjePresupuestaria)
         {
 
             try
             {
-                PRE_EJECUCION_PRESUPUESTARIA entity = await GetByCodigo(codigoGrupo);
+                PRE_EJECUCION_PRESUPUESTARIA entity = await GetByCodigo(codigoEjePresupuestaria);
                 if (entity != null)
                 {
                     _context.PRE_EJECUCION_PRESUPUESTARIA.Remove(entity);

@@ -14,11 +14,11 @@ namespace Convertidor.Data.Repository.Presupuesto
             _context = context;
         }
 
-        public async Task<PRE_NIVELES_PUC> GetByCodigo(int codigogRUPO)
+        public async Task<PRE_NIVELES_PUC> GetByCodigo(int codigoGrupo)
         {
             try
             {
-                var result = await _context.PRE_NIVELES_PUC.DefaultIfEmpty().Where(e => e.CODIGO_GRUPO == codigogRUPO).FirstOrDefaultAsync();
+                var result = await _context.PRE_NIVELES_PUC.DefaultIfEmpty().Where(e => e.CODIGO_GRUPO == codigoGrupo).FirstOrDefaultAsync();
 
                 return (PRE_NIVELES_PUC)result;
             }
