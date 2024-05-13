@@ -35,6 +35,7 @@ namespace Convertidor.Services.Presupuesto
                     foreach (var item in ejecucionPresupuestaria)
                     {
                         var dto = await MapPreEjecucionPresupuestaria(item);
+                      
                         listDto.Add(dto);
                     }
 
@@ -68,6 +69,7 @@ namespace Convertidor.Services.Presupuesto
         public async Task<PreEjecucionPresupuestariaResponseDto> MapPreEjecucionPresupuestaria(PRE_EJECUCION_PRESUPUESTARIA dto)
         {
             PreEjecucionPresupuestariaResponseDto itemResult = new PreEjecucionPresupuestariaResponseDto();
+            itemResult.CodigoEjePresupuestaria = dto.CODIGO_EJE_PRESUPUESTARIA;
             itemResult.CodigoGrupo = dto.CODIGO_GRUPO;
             itemResult.CodigoNivel1 = dto.CODIGO_NIVEL1;
             itemResult.CodigoNivel2 = dto.CODIGO_NIVEL2;
@@ -117,10 +119,8 @@ namespace Convertidor.Services.Presupuesto
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo ejecucion Presupuestaria no existe";
+                    result.Message = "Codigo eje Presupuestaria Invalido";
                     return result;
-
-
                 }
 
                 var codigoEjePresupuestaria = await _repository.GetByCodigo(dto.CodigoEjePresupuestaria);
@@ -128,7 +128,15 @@ namespace Convertidor.Services.Presupuesto
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo ejecucion Presupuestaria no existe";
+                    result.Message = "Codigo eje Presupuestaria Invalido";
+                    return result;
+                }
+
+                if (String.IsNullOrEmpty(dto.CodigoGrupo))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Grupo Invalido";
                     return result;
                 }
 
@@ -140,7 +148,15 @@ namespace Convertidor.Services.Presupuesto
                     return result;
 
                 }
-               
+
+                if (String.IsNullOrEmpty(dto.CodigoNivel1))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Nivel1 Invalido";
+                    return result;
+                }
+
                 if (dto.CodigoNivel1.Length > 2)
                 {
                     result.Data = null;
@@ -149,11 +165,26 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (String.IsNullOrEmpty(dto.CodigoNivel2))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Nivel2 Invalido";
+                    return result;
+                }
                 if (dto.CodigoNivel2.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Nivel2 Invalido";
+                    return result;
+                }
+
+                if (String.IsNullOrEmpty(dto.CodigoNivel3))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Nivel3 Invalido";
                     return result;
                 }
                 if (dto.CodigoNivel3.Length > 2)
@@ -164,6 +195,14 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (String.IsNullOrEmpty(dto.CodigoNivel4))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Nivel4 Invalido";
+                    return result;
+                }
+
                 if (dto.CodigoNivel4.Length > 2)
                 {
                     result.Data = null;
@@ -171,7 +210,70 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo Nivel4 Invalido";
                     return result;
                 }
-              
+
+                if (dto.IReal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IReal Invalido";
+                    return result;
+                }
+
+                if (dto.IProyectado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IProyectado Invalido";
+                    return result;
+                }
+
+                if (dto.IiReal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IiReal Invalido";
+                    return result;
+                }
+
+                if (dto.IiProyectado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IiProyectado Invalido";
+                    return result;
+                }
+
+                if (dto.IiiReal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IiiReal Invalido";
+                    return result;
+                }
+
+                if (dto.IiiProyectado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IiiProyectado Invalido";
+                    return result;
+                }
+
+                if (dto.IvReal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IvReal Invalido";
+                    return result;
+                }
+
+                if (dto.IvProyectado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IvProyectado Invalido";
+                    return result;
+                }
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -196,7 +298,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.CodigoPresupuesto < 0)
+                if (dto.CodigoPresupuesto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -265,6 +367,15 @@ namespace Convertidor.Services.Presupuesto
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
+               
+                if (String.IsNullOrEmpty(dto.CodigoGrupo))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Grupo Invalido";
+                    return result;
+                }
+
                 if (dto.CodigoGrupo.Length > 1)
                 {
                     result.Data = null;
@@ -272,6 +383,14 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo Grupo Invalido";
                     return result;
 
+                }
+
+                if (String.IsNullOrEmpty(dto.CodigoNivel1))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Nivel1 Invalido";
+                    return result;
                 }
 
                 if (dto.CodigoNivel1.Length > 2)
@@ -282,11 +401,26 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (String.IsNullOrEmpty(dto.CodigoNivel2))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Nivel2 Invalido";
+                    return result;
+                }
                 if (dto.CodigoNivel2.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Nivel2 Invalido";
+                    return result;
+                }
+
+                if (String.IsNullOrEmpty(dto.CodigoNivel3))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Nivel3 Invalido";
                     return result;
                 }
                 if (dto.CodigoNivel3.Length > 2)
@@ -297,11 +431,83 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                if (String.IsNullOrEmpty(dto.CodigoNivel4))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Nivel4 Invalido";
+                    return result;
+                }
+
                 if (dto.CodigoNivel4.Length > 2)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Nivel4 Invalido";
+                    return result;
+                }
+
+                if(dto.IReal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IReal Invalido";
+                    return result;
+                }
+
+                if (dto.IProyectado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IProyectado Invalido";
+                    return result;
+                }
+
+                if (dto.IiReal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IiReal Invalido";
+                    return result;
+                }
+
+                if (dto.IiProyectado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IiProyectado Invalido";
+                    return result;
+                }
+
+                if (dto.IiiReal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IiiReal Invalido";
+                    return result;
+                }
+
+                if (dto.IiiProyectado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IiiProyectado Invalido";
+                    return result;
+                }
+
+                if (dto.IvReal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IvReal Invalido";
+                    return result;
+                }
+
+                if (dto.IvProyectado <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "IvProyectado Invalido";
                     return result;
                 }
 
@@ -329,7 +535,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.CodigoPresupuesto < 0)
+                if (dto.CodigoPresupuesto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -421,7 +627,7 @@ namespace Convertidor.Services.Presupuesto
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "Codigo Grupo no existe";
+                    result.Message = "Codigo Eje Presupuestaria no existe";
                     return result;
                 }
 
