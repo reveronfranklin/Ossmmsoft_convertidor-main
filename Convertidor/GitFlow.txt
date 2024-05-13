@@ -33,7 +33,90 @@ git branch
 git checkout -- .
 
 
-##RAMAS
+#RAMAS
+
+##Crear Rama
+git branch <nombre rama>
+
+##Mostrar Ramas
+git branch
+
+##cambiar de rama
+git checkout <nombre rama>
+
+
+##Merge
+##Estando en la rama receptora 
+git merge <nombre rama>
+
+
+##ejemplo unir develop a main
+#Estando en main
+git merge develop
+
+
+##Borrar rama, recomendado luego de hacer merge a la principal o receptota(develop,main)
+git branch -d  <nombre rama>
+#forzar borrado
+git branch -d  <nombre rama> -f
+
+
+###Crear rama y movernos a ella
+git checkout -b <nombre rama>
+
+
+##Tags
+##usado generalmente para marcas los commits con una etiqueta para el nombre de la version
+## Marca el Commit actual
+git tag <nombre tag>
+
+##Mostrar los tag
+git tag
+
+##Borrar tag
+git tag -d <nombre tag>
+
+ejemplo nombre
+v1.0.0
+Primer numero: version con cambio mayor
+Segundo numero: version con cambio importante
+Tercer numero: correccion de bug
+
+##agregar tag a un commit especifico
+git tag -a <nombre tag> <numero hash del commit>
+
+##hacer push de los tags
+git push --tags
+
+
+##Descargar datos de la rama actual
+git pull
+
+##Definir estrategia de pull 
+
+git config --global pull.rebase true 
+
+##Descargar todas las ramas
+git pull --all
+
+##ver todas las ramas
+git branch -a
+
+
+##limpiar ramas no necesarias
+git push origin :<nombre rama>
+git remote prune origin 
+
+###ISSUES Se podria manejar como una lista de tareas.
+
+
+
+
+
+
+
+
+
 
 
 
