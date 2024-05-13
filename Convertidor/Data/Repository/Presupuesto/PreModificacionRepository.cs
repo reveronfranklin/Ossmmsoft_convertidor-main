@@ -131,8 +131,11 @@ namespace Convertidor.Data.Repository.Presupuesto
                 PRE_MODIFICACION entity = await GetByCodigo(codigoModificacion);
                 if (entity != null)
                 {
-                    _context.PRE_MODIFICACION.Remove(entity);
-                    await _context.SaveChangesAsync();
+                    FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE_MODIFICACION WHERE CODIGO_MODIFICACION= {codigoModificacion};\nEND;";
+
+                    var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                   // _context.PRE_MODIFICACION.Remove(entity);
+                  //  await _context.SaveChangesAsync();
                 }
                 return "";
             }
@@ -144,7 +147,28 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
+        public async Task<string> UpdateStatus(int codigoModificacion,string status)
+        {
 
+            try
+            {
+                PRE_MODIFICACION entity = await GetByCodigo(codigoModificacion);
+                if (entity != null)
+                {
+                    FormattableString xqueryDiario = $"DECLARE \nBEGIN\n UPDATE  PRE_MODIFICACION SET STATUS = {status} WHERE CODIGO_MODIFICACION= {codigoModificacion};\nEND;";
+
+                    var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                    // _context.PRE_MODIFICACION.Remove(entity);
+                    //  await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        
         public async Task<int> GetNextKey()
         {
             try

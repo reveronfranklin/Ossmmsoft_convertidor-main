@@ -1,3 +1,13 @@
 {
-    "dotnet.defaultSolution": "Convertidor.sln"
+  "dotnet.defaultSolution": "Convertidor.sln",
+  "cSpell.words": [
+    "Aprobada",
+    "Convertidor",
+    "Dtos",
+    "IPRE",
+    "MODIFICACION",
+    "Presupuesto",
+    "Proceso",
+    "SALDOS"
+  ]
 }

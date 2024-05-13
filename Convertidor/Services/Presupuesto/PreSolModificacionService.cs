@@ -15,13 +15,27 @@ namespace Convertidor.Services.Presupuesto
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhPersonasRepository _personasRepository;
         private readonly IPreModificacionRepository _preModificacionRepository;
+   
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
+        private readonly IPRE_SALDOSRepository _preSaldosRepository;
+        private readonly IPreModificacionService _preModificacionService;
+        private readonly IPrePucModificacionService _prePucModificacionService;
+        private readonly IPrePucModificacionRepository _prePucModificacionRepository;
+        private readonly IPrePucSolicitudModificacionRepository _prePucSolicitudModificacionRepository;
 
         public PreSolModificacionService(IPreSolModificacionRepository repository,
                                       IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                       IPreDescriptivaRepository repositoryPreDescriptiva,
                                       ISisUsuarioRepository sisUsuarioRepository,
                                       IRhPersonasRepository personasRepository,
-                                      IPreModificacionRepository preModificacionRepository
+                                      IPreModificacionRepository preModificacionRepository,
+                                      IPrePucSolicitudModificacionRepository prePucSolicitudModificacionRepository,
+                                      IPRE_V_SALDOSRepository preVSaldosRepository,
+                                      IPRE_SALDOSRepository preSaldosRepository,
+                                      IPreModificacionService preModificacionService,
+                                      IPrePucModificacionService prePucModificacionService,
+                                      IPrePucModificacionRepository prePucModificacionRepository
+                                      
         )
 		{
             _repository = repository;
@@ -30,6 +44,12 @@ namespace Convertidor.Services.Presupuesto
             _sisUsuarioRepository = sisUsuarioRepository;
             _personasRepository = personasRepository;
             _preModificacionRepository = preModificacionRepository;
+            _prePucSolicitudModificacionRepository = prePucSolicitudModificacionRepository;
+            _preVSaldosRepository = preVSaldosRepository;
+            _preSaldosRepository = preSaldosRepository;
+            _preModificacionService = preModificacionService;
+            _prePucModificacionService = prePucModificacionService;
+            _prePucModificacionRepository = prePucModificacionRepository;
         }
 
 
@@ -64,7 +84,7 @@ namespace Convertidor.Services.Presupuesto
                 {
                     result.Data = null;
                     result.IsValid = true;
-                    result.Message = " No existen Datos";
+                    result.Message = "No existen Datos";
 
                 }
             }
@@ -205,11 +225,8 @@ namespace Convertidor.Services.Presupuesto
         
         public async Task<string> GetStatusProceso(PRE_SOL_MODIFICACION dto)
         {
-            var detente = 1;
-            if (dto.CODIGO_SOL_MODIFICACION == 1597)
-            {
-                detente = 1;
-            }
+           
+          
             var preModificacionAprobada = await _preModificacionRepository.GetByCodigoSolicitud(dto.CODIGO_SOL_MODIFICACION);
             string result = "";
             if (dto.STATUS == "AN" || ( preModificacionAprobada!=null && preModificacionAprobada.STATUS=="AN"))
@@ -248,6 +265,25 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
+
+        public async Task<bool> TipoDeModificacionDebeCuadrar(int tipoModificacionId)
+        {
+            var result = false;
+            var tipoModificacion = await _repositoryPreDescriptiva.GetByCodigo(tipoModificacionId);
+            if (tipoModificacion != null)
+            {
+                string[] accionList = tipoModificacion.EXTRA3.Split(",");
+                if (accionList.Length > 1)
+                {
+                    result = true;
+                }
+                
+            }
+
+
+            return result;
+        }
+        
         public async Task<PreSolModificacionResponseDto> MapPreSolModificacion(PRE_SOL_MODIFICACION dto)
         {
             PreSolModificacionResponseDto itemResult = new PreSolModificacionResponseDto();
@@ -320,7 +356,7 @@ namespace Convertidor.Services.Presupuesto
         }
         
         
-           public async Task<ResultDto<PreSolModificacionResponseDto>> UpdateStatus(int codigoSolModificacion,string status)
+        public async Task<ResultDto<PreSolModificacionResponseDto>> UpdateStatus(int codigoSolModificacion,string status)
         {
 
             ResultDto<PreSolModificacionResponseDto> result = new ResultDto<PreSolModificacionResponseDto>(null);
@@ -407,17 +443,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Tipo Modificaion Id Invalido";
                     return result;
                 }
-
-             
-
-
-                if (dto.NumeroSolModificacion.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero compromiso Invalido";
-                    return result;
-                }
+                
               
 
 
@@ -623,9 +649,7 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
-  
-
-
+        
         public async Task<ResultDto<PreSolModificacionDeleteDto>> Delete(PreSolModificacionDeleteDto dto)
         {
 
@@ -680,7 +704,349 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<ResultDto<bool>> UpdateMontoModificado(int codigoPucSolModificacion,decimal montoModificado)
+        {
 
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoPucModificacion = await _prePucSolicitudModificacionRepository.GetByCodigo(codigoPucSolModificacion);
+                if (codigoPucModificacion == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Modificacion no existe";
+                    return result;
+                }
+                
+             
+          
+                codigoPucModificacion.MONTO_MODIFICADO = montoModificado;
+
+
+                codigoPucModificacion.CODIGO_EMPRESA = conectado.Empresa;
+                codigoPucModificacion.USUARIO_UPD = conectado.Usuario;
+                codigoPucModificacion.FECHA_UPD = DateTime.Now;
+                await _prePucSolicitudModificacionRepository.Update(codigoPucModificacion);
+
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        private async Task<bool> RollbackSolicitudModificacion(int codigoSolicitudModificacion)
+        {
+            var result = false;
+            var prePucSolicitud =
+                await _prePucSolicitudModificacionRepository.GetAllByCodigoSolicitud(codigoSolicitudModificacion);
+            foreach (var item in prePucSolicitud)
+            {
+                await UpdateMontoModificado(item.CODIGO_PUC_SOL_MODIFICACION, 0);
+            }
+        
+            
+            
+            
+            var modificacion = await _preModificacionRepository.GetByCodigoSolicitud(codigoSolicitudModificacion);
+            if (modificacion != null)
+            {
+                var pucModificacion =
+                    await _prePucModificacionRepository.GetByCodigoModificacion(modificacion.CODIGO_MODIFICACION);
+                if (pucModificacion != null && pucModificacion.Count > 0)
+                {
+                   var deleted= await _prePucModificacionRepository.DeleteRange(modificacion.CODIGO_MODIFICACION);
+                  
+                }
+                await _preModificacionRepository.Delete(modificacion.CODIGO_MODIFICACION);
+                result = true;
+            }
+            else
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public async Task<ResultDto<PreSolModificacionResponseDto>> Anular(PreSolModificacionDeleteDto dto)
+        {
+            ResultDto<PreSolModificacionResponseDto> result = new ResultDto<PreSolModificacionResponseDto>(null);
+            try
+            {
+                var solModificacion = await _repository.GetByCodigo(dto.CodigoSolModificacion);
+                if (solModificacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Sol ModificaCion no existe";
+                    return result;
+                }
+
+                if (solModificacion.STATUS != "AP")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "La solicitud debe estar APROBADA para poder ANULAR";
+                    return result;
+                }
+
+                var modificacion = await _preModificacionService.GetByCodigoSolicitud(dto.CodigoSolModificacion);
+                if (modificacion==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existe Modificacion Presupuestaria para  ANULAR";
+                    return result;
+                }
+                
+                //Recorremos la tabla PRE_PUC_MODIFICACION
+
+                var pucModificacion =
+                    await _prePucModificacionService.GetAllByCodigoModificacion(modificacion.CodigoModificacion);
+                foreach (var item in pucModificacion.Data)
+                {
+                    //Actualizamoos PRE_SALDO
+                    var preSaldo = await _preSaldosRepository.GetByCodigo(item.CodigoSaldo);
+                    if (preSaldo != null)
+                    {
+                        if (item.DePara == "D")
+                        {
+                            preSaldo.BLOQUEADO = preSaldo.BLOQUEADO + item.Monto;
+                            preSaldo.MODIFICADO = preSaldo.MODIFICADO + item.Monto;
+                        }
+                        else
+                        {
+                            preSaldo.MODIFICADO = preSaldo.MODIFICADO - item.Monto;
+                        }
+
+                        await _preSaldosRepository.Update(preSaldo);
+                    }
+                    
+                    //ACTUALIZAMOS EL MONTO MODIFICADO EN PRE PUC SOLICITUD MODIFICACION(PRE_PUC_SOL_MODIFICACION)
+
+                    var prePucSolModificacion =
+                        await _prePucSolicitudModificacionRepository.GetByCodigo(item.CodigoPucSolModificacion);
+                    if (prePucSolModificacion != null)
+                    {
+                        await UpdateMontoModificado(item.CodigoPucSolModificacion,
+                            prePucSolModificacion.MONTO_MODIFICADO - item.Monto);
+                    }
+                    //ACTUALIZAMOS EL MONTO ANULADO EN PRE PUC SMODIFICACION(PRE_PUC_MODIFICACION)
+                    await _prePucModificacionService.UpdateMontoAnulado(item.CodigoPucModificacion,
+                        item.MontoAnulado + item.Monto);
+
+                }
+                
+                //PRE_MODIFICACION SE LES ASIGNA EL SIGUIENTE VALOR:PRE_MODIFICACION.STATUS := "AN"
+                
+                await _preModificacionRepository.UpdateStatus(modificacion.CodigoModificacion,"AN");
+                
+                //SE CAMBIA EL ESTATUS DE PRE_SOL_MODIFICACION.STATUS A PENDIENTE “PE” =>> PRE_SOL_MODIFICACION.STATUS="PE"
+                await UpdateStatus(dto.CodigoSolModificacion, "PE");
+                
+
+            }
+            catch (Exception ex)
+            {
+               
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+        public async Task<ResultDto<PreSolModificacionResponseDto>> Aprobar(PreSolModificacionDeleteDto dto)
+        {
+
+            ResultDto<PreSolModificacionResponseDto> result = new ResultDto<PreSolModificacionResponseDto>(null);
+            try
+            {
+                
+
+                var solModificacion = await _repository.GetByCodigo(dto.CodigoSolModificacion);
+                if (solModificacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Sol ModificaCion no existe";
+                    return result;
+                }
+
+               var  puedeModificarse=await SolicitudPuedeModificarseoEliminarse(dto.CodigoSolModificacion);
+               if (!puedeModificarse)
+               {
+                   result.Data = null;
+                   result.IsValid = false;
+                   result.Message = "Solicitud no puede se alterada, ya existe en historico de modificacion";
+                   return result;
+               }
+
+               PrePucSolModificacionFilterDto filter = new PrePucSolModificacionFilterDto();
+               filter.CodigoSolModificacion = dto.CodigoSolModificacion;
+               filter.DePara = "";
+               
+               var prePucSolicitud =
+                   await _prePucSolicitudModificacionRepository.GetAllByCodigoSolicitud(dto.CodigoSolModificacion);
+
+               if (prePucSolicitud != null && prePucSolicitud.Count == 0)
+               {
+                   result.Data = null;
+                   result.IsValid = false;
+                   result.Message = "No puede Aprobar solicitud sin detalle de PUC";
+                   return result;
+               }
+
+               
+               var tipoDeModificacionDebeCuadrar =
+                   await TipoDeModificacionDebeCuadrar(solModificacion.TIPO_MODIFICACION_ID);
+               if (tipoDeModificacionDebeCuadrar)
+               {
+                   decimal totalAportar = prePucSolicitud.Where(x=>x.DE_PARA=="P").Sum(val => val.MONTO);
+                   decimal totalDescontar = prePucSolicitud.Where(x=>x.DE_PARA=="D").Sum(val => val.MONTO);
+                   if (totalAportar!=totalDescontar)
+                   {
+                       result.Data = null;
+                       result.IsValid = false;
+                       result.Message = $"No puede Aprobar solicitud con dif en Aportar y Descontar: {totalAportar} dif {totalDescontar}";
+                       return result;
+                   }
+               }
+              
+               //TRANSFERIMOS PRE_SOL_MODIFICACION A PRE_MODIFICACION
+               PreModificacionUpdateDto preModificacionCreateDto = new PreModificacionUpdateDto();
+               preModificacionCreateDto.CodigoModificacion = 0;
+               preModificacionCreateDto.CodigoSolModificacion = solModificacion.CODIGO_SOL_MODIFICACION;
+               preModificacionCreateDto.FechaModificacion = solModificacion.FECHA_SOLICITUD;
+               preModificacionCreateDto.Ano = solModificacion.ANO;
+               preModificacionCreateDto.NumeroModificacion = "";
+               preModificacionCreateDto.NoResAct = "";
+               preModificacionCreateDto.CodigoOficio = solModificacion.CODIGO_OFICIO;
+               preModificacionCreateDto.CodigoSolicitante = solModificacion.CODIGO_SOLICITANTE;
+               preModificacionCreateDto.Motivo = solModificacion.MOTIVO;
+               preModificacionCreateDto.Status = "AP";
+               preModificacionCreateDto.Extra1 = "";
+               preModificacionCreateDto.Extra2 = "";
+               preModificacionCreateDto.Extra3 = "";
+               preModificacionCreateDto.CodigoPresupuesto = solModificacion.CODIGO_PRESUPUESTO;
+               preModificacionCreateDto.TipoModificacionId = solModificacion.TIPO_MODIFICACION_ID;
+               var preModificacionCreated = await _preModificacionService.Create(preModificacionCreateDto);
+               if (preModificacionCreated.IsValid == false)
+               {
+                   result.Data = null;
+                   result.IsValid = false;
+                   result.Message = preModificacionCreated.Message;
+                   return result;
+               }
+               
+               foreach (var item in prePucSolicitud)
+               {
+
+                   //ACTUALIZAMOS EL MONTO MODIFICADO EN PRE PUC SOLICITUD MODIFICACION(PRE_PUC_SOL_MODIFICACION)
+                   if (item.DE_PARA == "D")
+                   {
+                       item.MONTO_MODIFICADO = item.MONTO_MODIFICADO - item.MONTO;
+                   }
+                   else
+                   {
+                       item.MONTO_MODIFICADO = item.MONTO_MODIFICADO + item.MONTO;
+                   }
+           
+                   await UpdateMontoModificado(item.CODIGO_PUC_SOL_MODIFICACION,
+                       item.MONTO_MODIFICADO);
+
+                   
+                   //TRANSFERIMOS PRE_PUC_SOL_MODIFICACION A PRE_PUC_MODIFICACION
+                   PrePucModificacionUpdateDto prePucModificacionUpdateDto = new PrePucModificacionUpdateDto();
+                   prePucModificacionUpdateDto.CodigoPucModificacion = 0;
+                   prePucModificacionUpdateDto.CodigoModificacion = preModificacionCreated.Data.CodigoModificacion;
+                   prePucModificacionUpdateDto.CodigoSaldo = item.CODIGO_SALDO;
+                   prePucModificacionUpdateDto.FinanciadoId = item.FINANCIADO_ID;
+                   prePucModificacionUpdateDto.CodigoIcp = item.CODIGO_ICP;
+                   prePucModificacionUpdateDto.CodigoPuc = item.CODIGO_PUC;
+                   prePucModificacionUpdateDto.Monto = item.MONTO;
+                   prePucModificacionUpdateDto.MontoModificado = item.MONTO_MODIFICADO;
+                   prePucModificacionUpdateDto.MontoAnulado = 0;
+                   prePucModificacionUpdateDto.DePara = item.DE_PARA;
+                   prePucModificacionUpdateDto.CodigoPucSolModificacion = item.CODIGO_PUC_SOL_MODIFICACION;
+                   prePucModificacionUpdateDto.CodigoPresupuesto = solModificacion.CODIGO_PRESUPUESTO;
+                   prePucModificacionUpdateDto.CodigoModificacion = preModificacionCreated.Data.CodigoModificacion;
+                   prePucModificacionUpdateDto.CodigoFinanciado = item.CODIGO_FINANCIADO;
+                   
+                   var prePucModificacionCreated= await _prePucModificacionService.Create(prePucModificacionUpdateDto);
+                   if (prePucModificacionCreated.IsValid == false)
+                   {
+                       await RollbackSolicitudModificacion(dto.CodigoSolModificacion);
+                       result.Data = null;
+                       result.IsValid = false;
+                       result.Message = $"{prePucModificacionCreated.Message} ";
+                       return result;
+                   }
+
+                   
+                   //ACTUALIZAMOS PRE SALDOS LOS CAMPOS DE BLOQUEADO Y MODIFICADO
+                   var preSaldo = await _preSaldosRepository.GetByCodigo(item.CODIGO_SALDO);
+                   if (preSaldo != null)
+                   {
+                       if (item.DE_PARA == "D")
+                       {
+                           preSaldo.BLOQUEADO = preSaldo.BLOQUEADO - item.MONTO;
+                           preSaldo.MODIFICADO = preSaldo.MODIFICADO - item.MONTO;
+                       }
+                       else
+                       {
+                           preSaldo.MODIFICADO = preSaldo.MODIFICADO + item.MONTO;
+                       }
+
+                       await _preSaldosRepository.Update(preSaldo);
+                   }
+                   
+                   
+               }
+             
+               
+               //COLOCAMOS EL ESTATUS DE LA SOLICITUD EN APROBADO "AP"
+               solModificacion.STATUS = "AP";
+               var modified = await UpdateStatus(dto.CodigoSolModificacion, "AP");
+               
+               //RECALCULAMOS PRE_SALDO
+               await _preVSaldosRepository.RecalcularSaldo(solModificacion.CODIGO_PRESUPUESTO);
+
+               var resultDto = modified.Data;
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                await RollbackSolicitudModificacion(dto.CodigoSolModificacion);
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
 
     }

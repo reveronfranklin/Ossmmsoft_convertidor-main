@@ -96,7 +96,29 @@ namespace Convertidor.Services.Presupuesto
             }
 
         }
+        public async Task<PreModificacionResponseDto> GetByCodigoSolicitud (int codigoSolicitudModificacion)
+        {
+            try
+            {
+                var modificacion = await _repository.GetByCodigoSolicitud(codigoSolicitudModificacion);
 
+                if(modificacion == null) 
+                {
+                    return null;
+                }
+                
+                var result = await MapPreModificacion(modificacion);
+
+
+                return (PreModificacionResponseDto)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public FechaDto GetFechaDto(DateTime fecha)
         {
             var FechaDesdeObj = new FechaDto();

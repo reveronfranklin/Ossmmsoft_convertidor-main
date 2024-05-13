@@ -1,0 +1,40 @@
+
+
+##Inicializa repositorio local
+git init
+
+## adicionar archivo al stage
+git add <nombre archivo>
+
+## adicionar todos los  archivos al stage
+git add .
+
+## crear registro historico
+git commit -m "mensaje"
+
+##Agregar al stage y hacer commit si  ya el archivo esta adicionado
+git commit -am "mensaje"
+
+
+##ver status del stage
+git status
+
+##Cambiar nombre de la rama master a main, o cualquier rama
+git branch -m master main
+
+##Configurar rama por defecto al hacer init global
+git config --global init.defaultBranch main
+
+## ver rama actual
+git branch
+
+
+##regresa al ultimo commit
+git checkout -- .
+
+
+##RAMAS
+
+
+
+

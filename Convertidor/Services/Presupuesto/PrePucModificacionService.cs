@@ -89,7 +89,52 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-       
+        public async Task<ResultDto<List<PrePucModificacionResponseDto>>> GetAllByCodigoModificacion(int codigoModificacion)
+        {
+
+            ResultDto<List<PrePucModificacionResponseDto>> result = new ResultDto<List<PrePucModificacionResponseDto>>(null);
+            try
+            {
+
+                var pucModificacion = await _repository.GetByCodigoModificacion(codigoModificacion);
+
+
+
+                if (pucModificacion.Count() > 0)
+                {
+                    List<PrePucModificacionResponseDto> listDto = new List<PrePucModificacionResponseDto>();
+
+                    foreach (var item in pucModificacion)
+                    {
+                        var dto = await MapPrePucModificacion(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
         public async Task<PrePucModificacionResponseDto> MapPrePucModificacion(PRE_PUC_MODIFICACION dto)
         {
             PrePucModificacionResponseDto itemResult = new PrePucModificacionResponseDto();
@@ -517,28 +562,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-                if (dto.Extra1 <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+              
 
                 
                 if(dto.CodigoPucSolModificacion <= 0) 
@@ -694,6 +718,51 @@ namespace Convertidor.Services.Presupuesto
             catch (Exception ex)
             {
                 result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+        
+        public async Task<ResultDto<bool>> UpdateMontoAnulado(int codigoPuModificacion,decimal montoAnulado)
+        {
+
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoPucModificacion = await _repository.GetByCodigo(codigoPuModificacion);
+                if (codigoPucModificacion == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Modificacion no existe";
+                    return result;
+                }
+                
+             
+          
+                codigoPucModificacion.MONTO_ANULADO = montoAnulado;
+
+
+                codigoPucModificacion.CODIGO_EMPRESA = conectado.Empresa;
+                codigoPucModificacion.USUARIO_UPD = conectado.Usuario;
+                codigoPucModificacion.FECHA_UPD = DateTime.Now;
+                await _repository.Update(codigoPucModificacion);
+
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
                 result.IsValid = false;
                 result.Message = ex.Message;
             }

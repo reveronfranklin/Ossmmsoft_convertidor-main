@@ -159,8 +159,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                 PRE_SALDOS entityUpdate = await GetByCodigo(entity.CODIGO_SALDO);
                 if (entityUpdate != null)
                 {
-
-
                     _context.PRE_SALDOS.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
