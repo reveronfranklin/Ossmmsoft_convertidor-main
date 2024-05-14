@@ -370,14 +370,7 @@ namespace Convertidor.Services.Presupuesto
 
                 }
 
-                if (dto.MontoAnulado <= 0 )
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto Anulado Invalido";
-                    return result;
-
-                }
+             
 
                 if (dto.CodigoPresupuesto <= 0)
                 {
@@ -407,6 +400,7 @@ namespace Convertidor.Services.Presupuesto
                 codigoPucModificacion.CODIGO_ICP = dto.CodigoIcp;
                 codigoPucModificacion.CODIGO_PUC = dto.CodigoPuc;
                 codigoPucModificacion.MONTO = dto.Monto;
+                codigoPucModificacion.MONTO_ANULADO = dto.MontoAnulado;
                 codigoPucModificacion.DE_PARA = dto.DePara;
                 codigoPucModificacion.EXTRA1 = dto.Extra1;
                 codigoPucModificacion.EXTRA2 = dto.Extra2;
@@ -594,14 +588,6 @@ namespace Convertidor.Services.Presupuesto
 
                 }
 
-                if (dto.MontoAnulado <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto Anulado Invalido";
-                    return result;
-
-                }
 
                 if (dto.CodigoPresupuesto <= 0)
                 {
@@ -634,6 +620,7 @@ namespace Convertidor.Services.Presupuesto
                 entity.CODIGO_ICP = dto.CodigoIcp;
                 entity.CODIGO_PUC = dto.CodigoPuc;
                 entity.MONTO = dto.Monto;
+            
                 entity.DE_PARA = dto.DePara;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
