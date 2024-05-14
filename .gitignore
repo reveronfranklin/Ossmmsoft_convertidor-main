@@ -366,4 +366,4 @@ FodyWeavers.xsd
 **/appsettings.*
 **/appsettings.Development.json
 **/appsettings.json
-.DS_Store
+**/.DS_Store
