@@ -227,6 +227,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                         dto.FinanciadoId = codigoSaldo.FINANCIADO_ID;
                         dto.CodigoIcp = codigoSaldo.CODIGO_ICP;
                         dto.CodigoPuc = codigoSaldo.CODIGO_PUC;
+                        dto.CodigoFinanciado = codigoSaldo.CODIGO_FINANCIADO;
 
                     }
                 }
@@ -342,6 +343,11 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                 {
                     dto.CodigoSaldo = presaldo.CODIGO_SALDO;
                     dto.CodigoFinanciado = presaldo.CODIGO_FINANCIADO;
+                }
+
+                if (dto.CodigoFinanciado == 0)
+                {
+                    dto.CodigoFinanciado = dto.CodigoSolModificacion;
                 }
 
                 var pucSolModificacion = await _repository.GetByCodigoSolModificacionCodigoSaldo(dto.CodigoSolModificacion,dto.CodigoSaldo);

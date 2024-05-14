@@ -857,8 +857,14 @@ namespace Convertidor.Services.Presupuesto
                 await _preModificacionRepository.UpdateStatus(modificacion.CodigoModificacion,"AN");
                 
                 //SE CAMBIA EL ESTATUS DE PRE_SOL_MODIFICACION.STATUS A PENDIENTE “PE” =>> PRE_SOL_MODIFICACION.STATUS="PE"
-                await UpdateStatus(dto.CodigoSolModificacion, "PE");
-                
+                var modified = await UpdateStatus(dto.CodigoSolModificacion, "PE");
+                //RECALCULAMOS PRE_SALDO
+                await _preVSaldosRepository.RecalcularSaldo(solModificacion.CODIGO_PRESUPUESTO);
+
+                var resultDto = modified.Data;
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
 
             }
             catch (Exception ex)
@@ -890,14 +896,18 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-               var  puedeModificarse=await SolicitudPuedeModificarseoEliminarse(dto.CodigoSolModificacion);
-               if (!puedeModificarse)
-               {
-                   result.Data = null;
-                   result.IsValid = false;
-                   result.Message = "Solicitud no puede se alterada, ya existe en historico de modificacion";
-                   return result;
-               }
+                var preModificacion = await _preModificacionRepository.GetByCodigoSolicitud(dto.CodigoSolModificacion);
+                if (preModificacion != null)
+                {
+                    if (preModificacion.STATUS != "AN")
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Solicitud no puede se alterada, ya existe en historico de modificacion como APROBADA";
+                        return result;
+                    }
+                }
+             
 
                PrePucSolModificacionFilterDto filter = new PrePucSolModificacionFilterDto();
                filter.CodigoSolModificacion = dto.CodigoSolModificacion;
@@ -960,19 +970,18 @@ namespace Convertidor.Services.Presupuesto
                {
 
                    //ACTUALIZAMOS EL MONTO MODIFICADO EN PRE PUC SOLICITUD MODIFICACION(PRE_PUC_SOL_MODIFICACION)
-                   if (item.DE_PARA == "D")
-                   {
-                       item.MONTO_MODIFICADO = item.MONTO_MODIFICADO - item.MONTO;
-                   }
-                   else
-                   {
-                       item.MONTO_MODIFICADO = item.MONTO_MODIFICADO + item.MONTO;
-                   }
            
-                   await UpdateMontoModificado(item.CODIGO_PUC_SOL_MODIFICACION,
-                       item.MONTO_MODIFICADO);
-
-                   
+                   var montoModificado = await UpdateMontoModificado(item.CODIGO_PUC_SOL_MODIFICACION,
+                       item.MONTO);
+                   if (montoModificado.IsValid == false)
+                   {
+                       await RollbackSolicitudModificacion(dto.CodigoSolModificacion);
+                       result.Data = null;
+                       result.IsValid = false;
+                       result.Message = $"{montoModificado.Message} ";
+                       return result;
+                   }
+                    
                    //TRANSFERIMOS PRE_PUC_SOL_MODIFICACION A PRE_PUC_MODIFICACION
                    PrePucModificacionUpdateDto prePucModificacionUpdateDto = new PrePucModificacionUpdateDto();
                    prePucModificacionUpdateDto.CodigoPucModificacion = 0;
@@ -987,7 +996,6 @@ namespace Convertidor.Services.Presupuesto
                    prePucModificacionUpdateDto.DePara = item.DE_PARA;
                    prePucModificacionUpdateDto.CodigoPucSolModificacion = item.CODIGO_PUC_SOL_MODIFICACION;
                    prePucModificacionUpdateDto.CodigoPresupuesto = solModificacion.CODIGO_PRESUPUESTO;
-                   prePucModificacionUpdateDto.CodigoModificacion = preModificacionCreated.Data.CodigoModificacion;
                    prePucModificacionUpdateDto.CodigoFinanciado = item.CODIGO_FINANCIADO;
                    
                    var prePucModificacionCreated= await _prePucModificacionService.Create(prePucModificacionUpdateDto);
