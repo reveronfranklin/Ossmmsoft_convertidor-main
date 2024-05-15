@@ -56,6 +56,7 @@ namespace Convertidor.Data
         public DbSet<PRE_EJECUCION_PRESUPUESTARIA> PRE_EJECUCION_PRESUPUESTARIA { get; set; }
 
         public DbSet<PRE_EQUIPOS> PRE_EQUIPOS { get; set; }
+        public DbSet<PRE_ESCALA> PRE_ESCALA { get; set; }
 
 
 
@@ -435,11 +436,23 @@ namespace Convertidor.Data
 
                 });
                 builder.ToTable("PRE_EQUIPOS");
+            })
+
+            .Entity<PRE_ESCALA>(builder =>
+            {
+                //builder.HasNoKey();
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_ESCALA,
+
+                });
+                builder.ToTable("PRE_ESCALA");
             });
-
-         
-
             
+
+
+
+
 
 
 
