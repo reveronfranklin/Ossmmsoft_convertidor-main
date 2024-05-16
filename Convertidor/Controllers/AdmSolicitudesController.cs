@@ -24,11 +24,11 @@ namespace Convertidor.Controllers
 
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
-            var result = await _service.GetAll();
+            var result = await _service.GetByPresupuesto(filter);
             return Ok(result);
         }
 

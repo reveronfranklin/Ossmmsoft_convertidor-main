@@ -204,6 +204,29 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<bool> DeleteByCodigoSolicitud(int codigoSolModificacion)
+        {
+
+            try
+            {
+             
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n DELETE FROM PRE_PUC_SOL_MODIFICACION WHERE CODIGO_SOL_MODIFICACION= {codigoSolModificacion};\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                // _context.PRE_PUC_MODIFICACION.RemoveRange(listDto);
+                // await _context.SaveChangesAsync();
+          
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+
+        }
+        
         public async Task<string> Delete(int codigo)
         {
 

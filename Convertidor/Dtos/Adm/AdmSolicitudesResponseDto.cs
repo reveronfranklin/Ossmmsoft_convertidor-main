@@ -14,9 +14,18 @@
         public string Motivo { get; set; } = string.Empty;
         public string Nota { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
-        public string Extra1 { get; set; } = string.Empty;
-        public string Extra2 { get; set; } = string.Empty;
-        public string Extra3 { get; set; } = string.Empty;
         public int CodigoPresupuesto { get; set; }
+        
+        public string DescripcionStatus { get; set; } = string.Empty;
+        
+        public string NombreProveedor { get; set; }
+        
+        public string DenominacionSolicitante { get; set; }
+        public string DescripcionTipoSolicitud { get; set; }
+        
+        public string SearchText { get { return $"{CodigoSolicitud}-{NumeroSolicitud}-{FechaSolicitudString}-{Motivo}-{Nota}-{DescripcionStatus}-{NombreProveedor}-{DenominacionSolicitante}-{DescripcionTipoSolicitud}"; } }
+
+        
+        
     }
 }

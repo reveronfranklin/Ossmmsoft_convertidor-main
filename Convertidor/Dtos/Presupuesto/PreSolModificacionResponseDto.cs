@@ -22,6 +22,8 @@
         public int NumeroCorrelativo { get; set; }
         public int CodigoPresupuesto { get; set; }
         public string StatusProceso { get; set; } = string.Empty;
+        public decimal TotalAportar { get; set; }
+        public decimal TotalDescontar { get; set; }
         public string SearchText { get { return $"{DescripcionTipoModificacion}-{FechaSolicitudString}-{Ano}-{NumeroSolModificacion}-{Motivo}-{DescripcionEstatus}-{NumeroCorrelativo}"; } }
 
     }

@@ -110,16 +110,25 @@ namespace Convertidor.Services.Sis
         public string GetMenuPre()
         {
 
-            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            try
+            {
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
 
 
          
 
-            string jsonFilePath = @settings.MenuFiles;
+                string jsonFilePath = @settings.MenuFiles;
 
-            string json = File.ReadAllText(jsonFilePath + "/MenuPre.json");
+                string json = File.ReadAllText(jsonFilePath + "/MenuPre.json");
 
-            return json;
+                return json;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+            
+           
 
         }
 
