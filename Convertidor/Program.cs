@@ -76,6 +76,7 @@ builder.Services.AddTransient<IPreDirectivosRepository, PreDirectivosRepository>
 builder.Services.AddTransient<IPreEjecucionPresupuestariaRepository, PreEjecucionPresupuestariaRepository>();
 
 builder.Services.AddTransient<IPreEquiposRepository, PreEquiposRepository>();
+builder.Services.AddTransient<IPreEscalaRepository, PreEscalaRepository>();
 
 
 
@@ -144,6 +145,7 @@ builder.Services.AddTransient<IPreDirectivosService, PreDirectivosService>();
 builder.Services.AddTransient<IPreEjecucionPresupuestariaService, PreEjecucionPresupuestariaService>();
 
 builder.Services.AddTransient<IPreEquiposService, PreEquiposService>();
+builder.Services.AddTransient<IPreEscalaService, PreEscalaService>();
 
 
 
