@@ -93,7 +93,7 @@ namespace Convertidor.Controllers
                 var refreshToken = refreshTokento.RefreshToken;
             // Request.Cookies["X-Refresh-Token"];
             //var token = Request.Cookies["osmmasoftToken"];
-            string? userName = string.Empty;
+                string? userName = string.Empty;
             userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name); 
             var sisUsuario = await _service.GetByLogin(userName);
             if (sisUsuario==null)

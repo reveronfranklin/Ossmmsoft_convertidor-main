@@ -316,6 +316,27 @@ namespace Convertidor.Services.Presupuesto
                     
                 }
             }
+
+            itemResult.TotalDescontar = 0;
+            itemResult.TotalAportar = 0;
+            var pucSolModificacion =
+                await _prePucSolicitudModificacionRepository.GetAllByCodigoSolicitud(itemResult.CodigoSolModificacion);
+
+            if (pucSolModificacion != null && pucSolModificacion.Count > 0)
+            {
+                foreach (var itemSol in pucSolModificacion)
+                {
+                    if (itemSol.DE_PARA == "D")
+                    {
+                        itemResult.TotalDescontar = itemResult.TotalDescontar + itemSol.MONTO;
+                    }
+                    if (itemSol.DE_PARA == "P")
+                    {
+                        itemResult.TotalAportar = itemResult.TotalAportar + itemSol.MONTO;
+                    }
+                }
+            }
+            
             itemResult.FechaSolicitud = dto.FECHA_SOLICITUD;
             itemResult.FechaSolicitudString =GetFechaString(dto.FECHA_SOLICITUD);
             FechaDto FechaSolicitudObj = GetFechaDto(dto.FECHA_SOLICITUD);
@@ -673,9 +694,19 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Solicitud no puede se Eliminada, ya existe en historico de modificacion";
                     return result;
                 }
-
+                
+                var deletedPuc = await _prePucSolicitudModificacionRepository.DeleteByCodigoSolicitud(dto.CodigoSolModificacion);
+                if (deletedPuc == false)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Error al borrar detalle de PUC";
+                }
                 var deleted = await _repository.Delete(dto.CodigoSolModificacion);
-
+                
+                //RECALCULAMOS PRE_SALDO
+                await _preVSaldosRepository.RecalcularSaldo(codigoSolModificacion.CODIGO_PRESUPUESTO);
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;

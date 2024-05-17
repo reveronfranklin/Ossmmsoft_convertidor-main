@@ -12,6 +12,7 @@ public interface IPrePucSolicitudModificacionRepository
     Task<ResultDto<PRE_PUC_SOL_MODIFICACION>> Add(PRE_PUC_SOL_MODIFICACION entity);
     Task<ResultDto<PRE_PUC_SOL_MODIFICACION>> Update(PRE_PUC_SOL_MODIFICACION entity);
     Task<string> Delete(int codigo);
+    Task<bool> DeleteByCodigoSolicitud(int codigoSolModificacion);
     Task<int> GetNextKey();
     Task<bool> PresupuestoExiste(int codPresupuesto);
     Task<bool> ICPExiste(int codigoICP);
