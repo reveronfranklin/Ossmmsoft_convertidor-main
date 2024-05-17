@@ -33,45 +33,7 @@ namespace Convertidor.Services.Adm
         }
 
       
-        public List<StatusSolicitudModificacion> GetListStatus()
-        {
-            List<StatusSolicitudModificacion> result = new List<StatusSolicitudModificacion>();
-            StatusSolicitudModificacion anulada = new StatusSolicitudModificacion();
-            anulada.Codigo = "AN";
-            anulada.Descripcion = "ANULADA";
-            anulada.Modificable = false;
-            StatusSolicitudModificacion pendiente = new StatusSolicitudModificacion();
-            pendiente.Codigo = "PE";
-            pendiente.Descripcion = "PENDIENTE";
-            pendiente.Modificable = true;
-            
-            StatusSolicitudModificacion aprobada = new StatusSolicitudModificacion();
-            aprobada.Codigo = "AP";
-            aprobada.Descripcion = "APROBADA";
-            aprobada.Modificable = false;
-            result.Add(anulada);
-            result.Add(pendiente);
-            result.Add(aprobada);
-          
-            return result;
-        }
-        public string GetStatus(string status)
-        {
-            string result = "";
-            var tipoNominaObj = GetListStatus().Where(x => x.Codigo == status).First();
-            result = tipoNominaObj.Descripcion;
-          
-            return result;
-        }
-        
-        public StatusSolicitudModificacion GetStatusObj(string status)
-        {
-            StatusSolicitudModificacion result ;
-            result = GetListStatus().Where(x => x.Codigo == status).First();
-          
-            return result;
-        }
-        
+
         
         public async Task<AdmSolicitudesResponseDto> MapSolicitudesDto(ADM_SOLICITUDES dtos,PRE_PRESUPUESTOS presupuesto)
         {
@@ -94,7 +56,7 @@ namespace Convertidor.Services.Adm
                 }
                 itemResult.TipoSolicitudId = dtos.TIPO_SOLICITUD_ID;
                 itemResult.DescripcionTipoSolicitud = "";
-                var descriptiva = await _admDescriptivaRepository.GetByCodigo(dtos.TIPO_SOLICITUD_ID);
+                var descriptiva = await _admDescriptivaRepository.GetByCodigo((int)dtos.TIPO_SOLICITUD_ID);
                 if (descriptiva != null)
                 {
                     itemResult.DescripcionTipoSolicitud = descriptiva.DESCRIPCION.Trim();
@@ -102,7 +64,7 @@ namespace Convertidor.Services.Adm
                 itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
                 itemResult.NombreProveedor = "";
             
-                var proveedor = await _admProveedoresRepository.GetByCodigo(dtos.CODIGO_PROVEEDOR);
+                var proveedor = await _admProveedoresRepository.GetByCodigo((int)dtos.CODIGO_PROVEEDOR);
                 if ( proveedor!=null)
                 {
                     itemResult.NombreProveedor = proveedor.NOMBRE_PROVEEDOR.Trim();
@@ -113,7 +75,7 @@ namespace Convertidor.Services.Adm
                 if (dtos.NOTA == null) dtos.NOTA = "";
                 itemResult.Nota = dtos.NOTA.Trim();
                 itemResult.Status = dtos.STATUS;
-                itemResult.DescripcionStatus = GetStatus(dtos.STATUS);
+                itemResult.DescripcionStatus = Estatus.GetStatus(dtos.STATUS);
                 itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             }
             catch (Exception e)
@@ -142,6 +104,16 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public string GetDenominacionIcp(List<PRE_INDICE_CAT_PRG> listIcp,int codigoIcp)
+        {
+            var result = "";
+            var icp = listIcp.Where(x => x.CODIGO_ICP == codigoIcp).FirstOrDefault();
+            if (icp != null)
+            {
+                result = icp.DENOMINACION;
+            }
+            return result;
+        }
         public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
 
@@ -159,12 +131,39 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                
-                var solicitudes = await _repository.GetByPresupuesto(filter.CodigoPresupuesto);
+                var icps = await _preIndiceCatPrgRepository.GetAll();
+                var listIcp = icps.ToList();
+                var solicitudes =  _repository.GetByPresupuesto(filter.CodigoPresupuesto);
                
                 if (solicitudes.Count() > 0)
                 {
-                    var listDto = await MapListSolicitudesDto(solicitudes,codigoPresupuesto);
+                    
+                    
+                    var linqQuery = from sol in solicitudes
+                   
+                       
+                 
+                        select new AdmSolicitudesResponseDto() {
+                            CodigoSolicitud = sol.CodigoSolicitud,
+                            Ano = codigoPresupuesto.ANO ,
+                            NumeroSolicitud=sol.NumeroSolicitud,
+                            FechaSolicitud=sol.FechaSolicitud,
+                            FechaSolicitudString= sol.FechaSolicitudString,
+                            FechaSolicitudObj = sol.FechaSolicitudObj,
+                            CodigoSolicitante=sol.CodigoSolicitante,
+                            DenominacionSolicitante=GetDenominacionIcp(listIcp,sol.CodigoSolicitante),
+                            TipoSolicitudId=sol.CodigoSolicitante,
+                            DescripcionTipoSolicitud=sol.DescripcionTipoSolicitud,
+                            CodigoProveedor=sol.CodigoProveedor,
+                            NombreProveedor = sol.NombreProveedor,
+                            Motivo=sol.Motivo,
+                            Nota = sol.Nota,
+                            DescripcionStatus=sol.DescripcionStatus,
+                            CodigoPresupuesto=sol.CodigoPresupuesto
+                        
+                        };
+                    
+                    var listDto = linqQuery.ToList();
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -206,7 +205,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Solicitud no existe";
                     return result;
                 }
-                var status = GetStatusObj(solicitud.STATUS);
+                var status = Estatus.GetStatusObj(solicitud.STATUS);
                 if (status.Modificable == false)
                 {
                     result.Data = null;
@@ -368,7 +367,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Solicitud no existe";
                     return result;
                 }
-                var status = GetStatusObj(solicitud.STATUS);
+                var status = Estatus.GetStatusObj(solicitud.STATUS);
                 if (status.Modificable == false)
                 {
                     result.Data = false;
@@ -577,7 +576,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Solicitud no existe";
                     return result;
                 }
-                var status = GetStatusObj(codigoSolicitud.STATUS);
+                var status = Estatus.GetStatusObj(codigoSolicitud.STATUS);
                 if (status.Modificable == false)
                 {
                     result.Data = null;

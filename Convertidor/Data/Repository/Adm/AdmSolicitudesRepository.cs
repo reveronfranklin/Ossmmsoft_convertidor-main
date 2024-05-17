@@ -1,5 +1,7 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Adm
@@ -7,9 +9,12 @@ namespace Convertidor.Data.Repository.Adm
     public class AdmSolicitudesRepository:IAdmSolicitudesRepository
     {
         private readonly DataContextAdm _context;
+
+
         public AdmSolicitudesRepository(DataContextAdm context)
         {
             _context = context;
+            
         }
 
         public async Task<ADM_SOLICITUDES> GetByCodigoSolicitud(int codigoSolicitud)
@@ -30,11 +35,43 @@ namespace Convertidor.Data.Repository.Adm
         }
 
       
-        public async Task<List<ADM_SOLICITUDES>> GetByPresupuesto(int codigoPresupuesto) 
+        public List<AdmSolicitudesResponseDto> GetByPresupuesto(int codigoPresupuesto) 
         {
             try
             {
-                var result = await _context.ADM_SOLICITUDES.DefaultIfEmpty().Where(x =>x.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
+                /*var LambdaQuery = _context.ADM_SOLICITUDES
+                    .Join(_context.ADM_PROVEEDORES, e => e.CODIGO_PROVEEDOR, d => d.CODIGO_PROVEEDOR, (e, d) 
+                        => new {
+                                    e, d.NOMBRE_PROVEEDOR
+                                });
+                var res = LambdaQuery.ToList();*/
+                
+                
+                var linqQuery = from sol in _context.ADM_SOLICITUDES
+                    join prov in _context.ADM_PROVEEDORES on sol.CODIGO_PROVEEDOR equals prov.CODIGO_PROVEEDOR
+                    join descTipoSol in _context.ADM_DESCRIPTIVAS on sol.TIPO_SOLICITUD_ID equals descTipoSol.DESCRIPCION_ID
+                 
+                    select new AdmSolicitudesResponseDto() {
+                        CodigoSolicitud = sol.CODIGO_SOLICITUD,
+                        Ano = sol.ANO ,
+                        NumeroSolicitud=sol.NUMERO_SOLICITUD,
+                        FechaSolicitud=sol.FECHA_SOLICITUD,
+                        FechaSolicitudString= Fecha.GetFechaString(sol.FECHA_SOLICITUD),
+                        FechaSolicitudObj = Fecha.GetFechaDto(sol.FECHA_SOLICITUD),
+                        CodigoSolicitante=sol.CODIGO_SOLICITANTE,
+                        DenominacionSolicitante="",
+                        TipoSolicitudId=sol.TIPO_SOLICITUD_ID,
+                        DescripcionTipoSolicitud=descTipoSol.DESCRIPCION,
+                        CodigoProveedor=sol.CODIGO_PROVEEDOR,
+                        NombreProveedor = prov.NOMBRE_PROVEEDOR,
+                        Motivo=sol.MOTIVO.Trim(),
+                        Nota = sol.NOTA,
+                        DescripcionStatus=Estatus.GetStatus(sol.STATUS),
+                        CodigoPresupuesto=sol.CODIGO_PRESUPUESTO
+                        
+                    };
+                var result = linqQuery.Where(x=>x.CodigoPresupuesto==codigoPresupuesto).ToList();
+                //var result = await _context.ADM_SOLICITUDES.DefaultIfEmpty().Where(x =>x.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
                 return result;
             }
             catch (Exception ex) 
