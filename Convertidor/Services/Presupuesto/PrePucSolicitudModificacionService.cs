@@ -249,7 +249,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
                 }
 
-                if (dto.CodigoIcp < 0)
+                if (dto.CodigoIcp <=0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -266,7 +266,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
                 }
 
-                if (dto.CodigoPuc < 0)
+                if (dto.CodigoPuc <=0)
                 {
                     result.Data = null;
                     result.IsValid = false;
