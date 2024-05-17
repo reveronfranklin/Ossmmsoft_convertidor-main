@@ -15,6 +15,30 @@
     
             return fechaDesdeObj;
         }
+        
+        public static string GetFechaString(DateTime? fecha)
+        {
+            var result = "";
+            try
+            {
+              
+                if (fecha != null)
+                {
+                    result = $"{fecha:MM/dd/yyyy}";
+                }
+         
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return result;
+              
+            }
+           
+          
+        }
 
 
     }

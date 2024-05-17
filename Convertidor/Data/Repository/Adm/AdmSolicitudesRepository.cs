@@ -29,11 +29,12 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
-        public async Task<List<ADM_SOLICITUDES>> GetAll() 
+      
+        public async Task<List<ADM_SOLICITUDES>> GetByPresupuesto(int codigoPresupuesto) 
         {
             try
             {
-                var result = await _context.ADM_SOLICITUDES.DefaultIfEmpty().ToListAsync();
+                var result = await _context.ADM_SOLICITUDES.DefaultIfEmpty().Where(x =>x.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
                 return result;
             }
             catch (Exception ex) 
@@ -139,5 +140,26 @@ namespace Convertidor.Data.Repository.Adm
 
 
         }
+        
+        public async Task<string> UpdateStatus(int codigoSolicitud,string status)
+        {
+
+            try
+            {
+                
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\n UPDATE  ADM_SOLICITUDESSET STATUS = {status} WHERE CODIGO_SOLICITUD= {codigoSolicitud};\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                // _context.PRE_MODIFICACION.Remove(entity);
+                //  await _context.SaveChangesAsync();
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
     }
 }

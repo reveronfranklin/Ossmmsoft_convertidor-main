@@ -19,7 +19,7 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-        public async Task<AdmDetalleSolicitudResponseDto> MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
+        public AdmDetalleSolicitudResponseDto MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
         {
             AdmDetalleSolicitudResponseDto itemResult = new AdmDetalleSolicitudResponseDto();
             itemResult.CodigoDetalleSolicitud = dtos.CODIGO_DETALLE_SOLICITUD;
@@ -35,21 +35,18 @@ namespace Convertidor.Services.Adm
             itemResult.TipoImpuestoId = dtos.TIPO_IMPUESTO_ID;
             itemResult.PorImpuesto = dtos.POR_IMPUESTO;
             itemResult.MontoImpuesto = dtos.MONTO_IMPUESTO;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             return itemResult;
         }
 
-        public async Task<List<AdmDetalleSolicitudResponseDto>> MapListDetalleSolicitudDto(List<ADM_DETALLE_SOLICITUD> dtos)
+        public  List<AdmDetalleSolicitudResponseDto> MapListDetalleSolicitudDto(List<ADM_DETALLE_SOLICITUD> dtos)
         {
             List<AdmDetalleSolicitudResponseDto> result = new List<AdmDetalleSolicitudResponseDto>();
             {
                 foreach (var item in dtos)
                 {
 
-                    var itemResult = await MapDetalleSolicitudDto(item);
+                    var itemResult =  MapDetalleSolicitudDto(item);
 
                     result.Add(itemResult);
                 }
@@ -64,10 +61,10 @@ namespace Convertidor.Services.Adm
             try
             {
                 var detalleSolicitud = await _repository.GetAll();
-                var cant = detalleSolicitud.Count();
+          
                 if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
                 {
-                    var listDto = await MapListDetalleSolicitudDto(detalleSolicitud);
+                    var listDto =  MapListDetalleSolicitudDto(detalleSolicitud);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -95,6 +92,43 @@ namespace Convertidor.Services.Adm
 
         }
 
+        public async Task<ResultDto<List<AdmDetalleSolicitudResponseDto>>> GetByCodigoSolicitud(int codigoSolicitud)
+        {
+
+            ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
+            try
+            {
+                var detalleSolicitud = await _repository.GetByCodigoSolicitud(codigoSolicitud);
+          
+                if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
+                {
+                    var listDto =  MapListDetalleSolicitudDto(detalleSolicitud);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
         public async Task<ResultDto<AdmDetalleSolicitudResponseDto>> Update(AdmDetalleSolicitudUpdateDto dto)
         {
             ResultDto<AdmDetalleSolicitudResponseDto> result = new ResultDto<AdmDetalleSolicitudResponseDto>(null);
@@ -180,8 +214,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Monto Descuento Invalido";
                     return result;
                 }
-                var tipoImpuestoID = await _admDescriptivaRepository.GetByIdAndTitulo(18,dto.TipoImpuestoId);
-                if(tipoImpuestoID == false) 
+                var tipoImpuesto = await _admDescriptivaRepository.GetByIdAndTitulo(18,dto.TipoImpuestoId);
+                if(tipoImpuesto == false) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -260,7 +294,7 @@ namespace Convertidor.Services.Adm
 
                 await _repository.Update(codigoDetallesolicitud);
 
-                var resultDto = await MapDetalleSolicitudDto(codigoDetallesolicitud);
+                var resultDto =  MapDetalleSolicitudDto(codigoDetallesolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -360,12 +394,13 @@ namespace Convertidor.Services.Adm
                     result.Message = "Monto Descuento Invalido";
                     return result;
                 }
-                var tipoImpuestoID = await _admDescriptivaRepository.GetByIdAndTitulo(18, dto.TipoImpuestoId);
-                if (tipoImpuestoID == false)
+                var tipoImpuesto = await _admDescriptivaRepository.GetByIdAndTitulo(18, dto.TipoImpuestoId);
+                if (tipoImpuesto == false)
                 {
+                 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Impuesto Id Invalido";
+                    result.Message = $"Tipo Impuesto Id Invalido";
                     return result;
                 }
 
@@ -384,28 +419,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Monto Impuesto Invalido";
                     return result;
                 }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+            
                 if (dto.CodigoPresupuesto < 0)
                 {
 
@@ -444,7 +458,7 @@ namespace Convertidor.Services.Adm
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
-                var resultDto = await MapDetalleSolicitudDto(created.Data);
+                var resultDto =  MapDetalleSolicitudDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";

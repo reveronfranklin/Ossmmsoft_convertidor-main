@@ -1,6 +1,10 @@
 ﻿using Convertidor.Data.Entities.ADM;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -9,58 +13,128 @@ namespace Convertidor.Services.Adm
         private readonly IAdmSolicitudesRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IPRE_PRESUPUESTOSRepository _presupuestosRepository;
+        private readonly IPRE_INDICE_CAT_PRGRepository _preIndiceCatPrgRepository;
+        private readonly IAdmProveedoresRepository _admProveedoresRepository;
 
         public AdmSolicitudesService(IAdmSolicitudesRepository repository,
-                                     ISisUsuarioRepository sisUsuarioRepository,
-                                     IAdmDescriptivaRepository admDescriptivaRepository)
+            ISisUsuarioRepository sisUsuarioRepository,
+            IAdmDescriptivaRepository admDescriptivaRepository,
+            IPRE_PRESUPUESTOSRepository presupuestosRepository,
+            IPRE_INDICE_CAT_PRGRepository preIndiceCatPrgRepository,
+            IAdmProveedoresRepository admProveedoresRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _presupuestosRepository = presupuestosRepository;
+            _preIndiceCatPrgRepository = preIndiceCatPrgRepository;
+            _admProveedoresRepository = admProveedoresRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
+      
+        public List<StatusSolicitudModificacion> GetListStatus()
         {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
+            List<StatusSolicitudModificacion> result = new List<StatusSolicitudModificacion>();
+            StatusSolicitudModificacion anulada = new StatusSolicitudModificacion();
+            anulada.Codigo = "AN";
+            anulada.Descripcion = "ANULADA";
+            anulada.Modificable = false;
+            StatusSolicitudModificacion pendiente = new StatusSolicitudModificacion();
+            pendiente.Codigo = "PE";
+            pendiente.Descripcion = "PENDIENTE";
+            pendiente.Modificable = true;
+            
+            StatusSolicitudModificacion aprobada = new StatusSolicitudModificacion();
+            aprobada.Codigo = "AP";
+            aprobada.Descripcion = "APROBADA";
+            aprobada.Modificable = false;
+            result.Add(anulada);
+            result.Add(pendiente);
+            result.Add(aprobada);
+          
+            return result;
         }
-        public async Task<AdmSolicitudesResponseDto> MapSolicitudesDto(ADM_SOLICITUDES dtos)
+        public string GetStatus(string status)
+        {
+            string result = "";
+            var tipoNominaObj = GetListStatus().Where(x => x.Codigo == status).First();
+            result = tipoNominaObj.Descripcion;
+          
+            return result;
+        }
+        
+        public StatusSolicitudModificacion GetStatusObj(string status)
+        {
+            StatusSolicitudModificacion result ;
+            result = GetListStatus().Where(x => x.Codigo == status).First();
+          
+            return result;
+        }
+        
+        
+        public async Task<AdmSolicitudesResponseDto> MapSolicitudesDto(ADM_SOLICITUDES dtos,PRE_PRESUPUESTOS presupuesto)
         {
             AdmSolicitudesResponseDto itemResult = new AdmSolicitudesResponseDto();
-            itemResult.CodigoSolicitud = dtos.CODIGO_SOLICITUD;
-            itemResult.Ano = dtos.ANO;
-            itemResult.NumeroSolicitud = dtos.NUMERO_SOLICITUD;
-            itemResult.FechaSolicitud = dtos.FECHA_SOLICITUD;
-            itemResult.FechaSolicitudString = dtos.FECHA_SOLICITUD.ToString("u");
-            FechaDto fechaSolicitudObj = GetFechaDto(dtos.FECHA_SOLICITUD);
-            itemResult.FechaSolicitudObj = (FechaDto)fechaSolicitudObj;
-            itemResult.CodigoSolicitante = dtos.CODIGO_SOLICITANTE;
-            itemResult.TipoSolicitudId = dtos.TIPO_SOLICITUD_ID;
-            itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
-            itemResult.Motivo = dtos.MOTIVO;
-            itemResult.Nota = dtos.NOTA;
-            itemResult.Status = dtos.STATUS;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
-            itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            try
+            {
+                itemResult.CodigoSolicitud = dtos.CODIGO_SOLICITUD;
+                itemResult.Ano = presupuesto.ANO;
+                itemResult.NumeroSolicitud = dtos.NUMERO_SOLICITUD;
+                itemResult.FechaSolicitud = dtos.FECHA_SOLICITUD;
+                itemResult.FechaSolicitudString =  Fecha.GetFechaString(dtos.FECHA_SOLICITUD);
+                FechaDto fechaSolicitudObj = Fecha.GetFechaDto(dtos.FECHA_SOLICITUD);
+                itemResult.FechaSolicitudObj = (FechaDto)fechaSolicitudObj;
+                itemResult.CodigoSolicitante = dtos.CODIGO_SOLICITANTE;
+                itemResult.DenominacionSolicitante = "";
+                var icp = await _preIndiceCatPrgRepository.GetByCodigo(dtos.CODIGO_SOLICITANTE);
+                if (icp != null)
+                {
+                    itemResult.DenominacionSolicitante = icp.DENOMINACION.Trim();
+                }
+                itemResult.TipoSolicitudId = dtos.TIPO_SOLICITUD_ID;
+                itemResult.DescripcionTipoSolicitud = "";
+                var descriptiva = await _admDescriptivaRepository.GetByCodigo(dtos.TIPO_SOLICITUD_ID);
+                if (descriptiva != null)
+                {
+                    itemResult.DescripcionTipoSolicitud = descriptiva.DESCRIPCION.Trim();
+                }
+                itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
+                itemResult.NombreProveedor = "";
+            
+                var proveedor = await _admProveedoresRepository.GetByCodigo(dtos.CODIGO_PROVEEDOR);
+                if ( proveedor!=null)
+                {
+                    itemResult.NombreProveedor = proveedor.NOMBRE_PROVEEDOR.Trim();
+                }
+
+                if (dtos.MOTIVO == null) dtos.MOTIVO = "";
+                itemResult.Motivo = dtos.MOTIVO.Trim();
+                if (dtos.NOTA == null) dtos.NOTA = "";
+                itemResult.Nota = dtos.NOTA.Trim();
+                itemResult.Status = dtos.STATUS;
+                itemResult.DescripcionStatus = GetStatus(dtos.STATUS);
+                itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+          
+            
+            
             return itemResult;
         }
 
-        public async Task<List<AdmSolicitudesResponseDto>> MapListSolicitudesDto(List<ADM_SOLICITUDES> dtos)
+        public async Task<List<AdmSolicitudesResponseDto>> MapListSolicitudesDto(List<ADM_SOLICITUDES> dtos,PRE_PRESUPUESTOS presupuesto)
         {
             List<AdmSolicitudesResponseDto> result = new List<AdmSolicitudesResponseDto>();
             {
                 foreach (var item in dtos)
                 {
 
-                    var itemResult = await MapSolicitudesDto(item);
+                    var itemResult = await MapSolicitudesDto(item,presupuesto);
 
                     result.Add(itemResult);
                 }
@@ -68,17 +142,29 @@ namespace Convertidor.Services.Adm
             }
         }
 
-        public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetAll()
+        public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
 
             ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
             try
             {
-                var solicitudes = await _repository.GetAll();
-                var cant = solicitudes.Count();
-                if (solicitudes != null && solicitudes.Count() > 0)
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var codigoPresupuesto = await _presupuestosRepository.GetByCodigo(conectado.Empresa, filter.CodigoPresupuesto);
+
+                if (codigoPresupuesto == null)
                 {
-                    var listDto = await MapListSolicitudesDto(solicitudes);
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
+                
+                var solicitudes = await _repository.GetByPresupuesto(filter.CodigoPresupuesto);
+               
+                if (solicitudes.Count() > 0)
+                {
+                    var listDto = await MapListSolicitudesDto(solicitudes,codigoPresupuesto);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -111,6 +197,7 @@ namespace Convertidor.Services.Adm
             ResultDto<AdmSolicitudesResponseDto> result = new ResultDto<AdmSolicitudesResponseDto>(null);
             try
             {
+                var conectado = await _sisUsuarioRepository.GetConectado();
                 var solicitud = await _repository.GetByCodigoSolicitud(dto.CodigoSolicitud);
                 if (solicitud == null)
                 {
@@ -119,13 +206,16 @@ namespace Convertidor.Services.Adm
                     result.Message = "Solicitud no existe";
                     return result;
                 }
-                if (dto.Ano < 0)
+                var status = GetStatusObj(solicitud.STATUS);
+                if (status.Modificable == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Año invalido";
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
                     return result;
                 }
+                
+               
 
                 if (dto.NumeroSolicitud is not null && dto.NumeroSolicitud.Length>20)
                 {
@@ -143,25 +233,43 @@ namespace Convertidor.Services.Adm
                     result.Message = "Fecha Solicitud Invalida";
                     return result;
                 }
-                if (dto.CodigoSolicitante < 0)
+                if (dto.CodigoSolicitante <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Solicitante Invalido";
                     return result;
                 }
-
-                var tipoSolicitud = await _admDescriptivaRepository.GetByTitulo(35);
-                if (dto.TipoSolicitudId < 0)
+                var icp = await _preIndiceCatPrgRepository.GetByCodigo(dto.CodigoSolicitante);
+                if (icp==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitante Invalido";
+                    return result;
+                }
+                
+                var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
+                var descriptivaSolicitud =
+                    tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == dto.TipoSolicitudId).FirstOrDefault();
+                if (descriptivaSolicitud == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo Solicitud Id no existe";
                     return result;
-
                 }
 
-                if (dto.CodigoProveedor < 0)
+                if (dto.CodigoProveedor <=0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Proveedor Invalido";
+                    return result;
+                }
+
+                var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
+                if ( proveedor==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -191,28 +299,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Status Invalido";
                     return result;
                 }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
+          
 
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
                 if (dto.CodigoPresupuesto < 0)
                 {
 
@@ -221,9 +309,19 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
+                var codigoPresupuesto = await _presupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
 
+                if (codigoPresupuesto == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
+                
                 solicitud.CODIGO_SOLICITUD = dto.CodigoSolicitud;
-                solicitud.ANO = dto.Ano;
+                solicitud.ANO = codigoPresupuesto.ANO;
                 solicitud.NUMERO_SOLICITUD = dto.NumeroSolicitud;
                 solicitud.FECHA_SOLICITUD = dto.FechaSolicitud;
                 solicitud.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
@@ -231,20 +329,17 @@ namespace Convertidor.Services.Adm
                 solicitud.CODIGO_PROVEEDOR = dto.CodigoProveedor;
                 solicitud.MOTIVO = dto.Motivo;
                 solicitud.NOTA = dto.Nota;
-                solicitud.STATUS = dto.Status;
-                solicitud.EXTRA1 = dto.Extra1;
-                solicitud.EXTRA2 = dto.Extra2;
-                solicitud.EXTRA3 = dto.Extra3;
+             
                 solicitud.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
 
-                var conectado = await _sisUsuarioRepository.GetConectado();
+                
                 solicitud.CODIGO_EMPRESA = conectado.Empresa;
                 solicitud.USUARIO_UPD = conectado.Usuario;
                 solicitud.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(solicitud);
 
-                var resultDto = await MapSolicitudesDto(solicitud);
+                var resultDto = await MapSolicitudesDto(solicitud,codigoPresupuesto);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -259,11 +354,53 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+        public async Task<ResultDto<bool>> UpdateStatus(AdmSolicitudesUpdateDto dto)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var solicitud = await _repository.GetByCodigoSolicitud(dto.CodigoSolicitud);
+                if (solicitud == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Solicitud no existe";
+                    return result;
+                }
+                var status = GetStatusObj(solicitud.STATUS);
+                if (status.Modificable == false)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
+                    return result;
+                }
+                
+                await _repository.UpdateStatus(solicitud.CODIGO_SOLICITUD,dto.Status);
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
+        
         public async Task<ResultDto<AdmSolicitudesResponseDto>> Create(AdmSolicitudesUpdateDto dto)
         {
             ResultDto<AdmSolicitudesResponseDto> result = new ResultDto<AdmSolicitudesResponseDto>(null);
             try
             {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
                 var codigoSolicitud = await _repository.GetByCodigoSolicitud(dto.CodigoSolicitud);
                 if (codigoSolicitud != null)
                 {
@@ -272,14 +409,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Solicitud ya existe";
                     return result;
                 }
-                if (dto.Ano < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Año invalido";
-                    return result;
-                }
 
+   
                 if (dto.NumeroSolicitud is not null && dto.NumeroSolicitud.Length > 20)
                 {
                     result.Data = null;
@@ -296,7 +427,15 @@ namespace Convertidor.Services.Adm
                     result.Message = "Fecha Solicitud Invalida";
                     return result;
                 }
-                if (dto.CodigoSolicitante < 0)
+                if (dto.CodigoSolicitante <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitante Invalido";
+                    return result;
+                }
+                var icp = await _preIndiceCatPrgRepository.GetByCodigo(dto.CodigoSolicitante);
+                if (icp==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -304,8 +443,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                var tipoSolicitud = await _admDescriptivaRepository.GetByTitulo(35);
-                if (dto.TipoSolicitudId < 0)
+               
+                if (dto.TipoSolicitudId <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -313,8 +452,18 @@ namespace Convertidor.Services.Adm
                     return result;
 
                 }
-
-                if (dto.CodigoProveedor < 0)
+                
+                var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
+                var descriptivaSolicitud =
+                    tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == dto.TipoSolicitudId).FirstOrDefault();
+                if (descriptivaSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Solicitud Id no existe";
+                    return result;
+                }
+                if (dto.CodigoProveedor <=0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -322,7 +471,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Motivo is not null && dto.Motivo.Length > 1150)
+                var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
+                if ( proveedor==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Proveedor Invalido";
+                    return result;
+                }
+
+                if (  dto.Motivo is not null && dto.Motivo.Length > 1150)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -336,36 +494,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Nota invalida";
                     return result;
                 }
-
-                if (dto.Status is not null && dto.Status.Length > 2)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status Invalido";
-                    return result;
-                }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+                
+             
                 if (dto.CodigoPresupuesto < 0)
                 {
 
@@ -374,47 +504,50 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
+                var codigoPresupuesto = await _presupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
 
+                if (codigoPresupuesto == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+            
 
                 ADM_SOLICITUDES entity = new ADM_SOLICITUDES();
-            entity.CODIGO_SOLICITUD = await _repository.GetNextKey();
-            entity.ANO = dto.Ano;
-            entity.NUMERO_SOLICITUD=dto.NumeroSolicitud;
-            entity.FECHA_SOLICITUD = dto.FechaSolicitud;
-            entity.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
-            entity.TIPO_SOLICITUD_ID = dto.TipoSolicitudId;
-            entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
-            entity.MOTIVO = dto.Motivo;
-            entity.NOTA=dto.Nota;
-            entity.STATUS = dto.Status;
-            entity.EXTRA1 = dto.Extra1;
-            entity.EXTRA2 = dto.Extra2;
-            entity.EXTRA3 = dto.Extra3;
-            entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                entity.CODIGO_SOLICITUD = await _repository.GetNextKey();
+                entity.ANO = codigoPresupuesto.ANO;
+                entity.NUMERO_SOLICITUD=dto.NumeroSolicitud;
+                entity.FECHA_SOLICITUD = dto.FechaSolicitud;
+                entity.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
+                entity.TIPO_SOLICITUD_ID = dto.TipoSolicitudId;
+                entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
+                entity.MOTIVO = dto.Motivo;
+                entity.NOTA=dto.Nota;
+                entity.STATUS = "PE";
+                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
 
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapSolicitudesDto(created.Data,codigoPresupuesto);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
 
-            var conectado = await _sisUsuarioRepository.GetConectado();
-            entity.CODIGO_EMPRESA = conectado.Empresa;
-            entity.USUARIO_INS = conectado.Usuario;
-            entity.FECHA_INS = DateTime.Now;
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
 
-            var created = await _repository.Add(entity);
-            if (created.IsValid && created.Data != null)
-            {
-                var resultDto = await MapSolicitudesDto(created.Data);
-                result.Data = resultDto;
-                result.IsValid = true;
-                result.Message = "";
-            }
-            else
-            {
-
-                result.Data = null;
-                result.IsValid = created.IsValid;
-                result.Message = created.Message;
-            }
-
-            return result;
+                return result;
 
 
             }
@@ -444,7 +577,14 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Solicitud no existe";
                     return result;
                 }
-
+                var status = GetStatusObj(codigoSolicitud.STATUS);
+                if (status.Modificable == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
+                    return result;
+                }
 
                 var deleted = await _repository.Delete(dto.CodigoSolicitud);
 
@@ -476,5 +616,4 @@ namespace Convertidor.Services.Adm
             return result;
         }
     }
- }
-
+}
