@@ -249,49 +249,6 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
                 }
 
-                if (dto.CodigoIcp <=0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo icp Invalido";
-                    return result;
-
-                }
-                var codigoIcp = await _preIndiceCatPrgRepository.GetByCodigo(dto.CodigoIcp);
-                if (codigoIcp==null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Icp Invalido";
-                    return result;
-                }
-
-                if (dto.CodigoPuc <=0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Puc Invalido";
-                    return result;
-
-                }
-                var codigoPuc = await _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
-                if (codigoPuc==null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Puc Invalido";
-                    return result;
-                }
-
-                if (dto.Monto <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto Invalido";
-                    return result;
-
-                }
-
                 if (dto.CodigoPresupuesto < 0)
                 {
                     result.Data = null;
@@ -309,6 +266,69 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
+                
+                if (dto.CodigoIcp <=0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo icp Invalido";
+                    return result;
+
+                }
+                var codigoIcp = await _preIndiceCatPrgRepository.GetByCodigo(dto.CodigoIcp);
+                if (codigoIcp==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Icp Invalido";
+                    return result;
+                }
+                if (dto.CodigoPresupuesto !=codigoIcp.CODIGO_PRESUPUESTO)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Icp Invalido,no corresponde al presupuesto seleccionado";
+                    return result;
+
+                }
+                
+
+                if (dto.CodigoPuc <=0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+
+                }
+                var codigoPuc = await _prePlanUnicoCuentasService.GetById(dto.CodigoPuc);
+                if (codigoPuc.Data==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+                }
+                
+                if (dto.CodigoPresupuesto !=codigoPuc.Data.CodigoPresupuesto)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido,no corresponde al presupuesto seleccionado";
+                    return result;
+
+                }
+
+                if (dto.Monto <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Invalido";
+                    return result;
+
+                }
+
+            
 
                 var presaldo = await _preSaldosRepository
                     .GetAllByIcpPucFinanciado(dto.CodigoPresupuesto, dto.CodigoIcp, dto.CodigoPuc, dto.FinanciadoId);
