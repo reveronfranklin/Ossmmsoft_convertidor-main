@@ -43,8 +43,8 @@ namespace Convertidor.Data
         public DbSet<ADM_DETALLE_VAL_CONTRATO> ADM_DETALLE_VAL_CONTRATO { get; set; }
         public DbSet<ADM_PUC_CONTRATO> ADM_PUC_CONTRATO { get; set; }
         public DbSet<ADM_CHEQUES> ADM_CHEQUES { get; set; }
-
-
+        public DbSet<ADM_PRODUCTOS> ADM_PRODUCTOS { get; set; }
+        
 
 
 
@@ -60,13 +60,24 @@ namespace Convertidor.Data
             modelBuilder
                 .Entity<ADM_DESCRIPTIVAS>(builder =>
                 {
-                    //builder.HasNoKey();
+                  
                     builder.HasKey(table => new
                     {
                         table.DESCRIPCION_ID,
 
                     });
                     builder.ToTable("ADM_DESCRIPTIVAS");
+                });
+            modelBuilder
+                .Entity<ADM_PRODUCTOS>(builder =>
+                {
+                 
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_PRODUCTO,
+
+                    });
+                    builder.ToTable("ADM_PRODUCTOS");
                 });
 
             modelBuilder

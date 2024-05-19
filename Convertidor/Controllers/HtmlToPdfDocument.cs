@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Controllers
 {
-    internal class HtmlToPdfDocument
+    public class HtmlToPdfDocument
     {
     }
 }
