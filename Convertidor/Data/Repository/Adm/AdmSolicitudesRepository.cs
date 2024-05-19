@@ -35,8 +35,14 @@ namespace Convertidor.Data.Repository.Adm
         }
 
       
-        public List<AdmSolicitudesResponseDto> GetByPresupuesto(int codigoPresupuesto) 
+        public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter) 
         {
+            ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
+
+            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageSize == 0) filter.PageSize = 100;
+            if (filter.PageSize >100) filter.PageSize = 100;
+            
             try
             {
                 /*var LambdaQuery = _context.ADM_SOLICITUDES
@@ -47,13 +53,66 @@ namespace Convertidor.Data.Repository.Adm
                 var res = LambdaQuery.ToList();*/
                 
                 
-                var linqQuery = from sol in _context.ADM_SOLICITUDES
+                /*if (filter.SearchText != null && filter.SearchText.Length > 0)
+                {
+                    result = await _context.AppGeneralQuotes
+                        .AsNoTracking()
+                        .Include(x => x.IdClienteNavigation)
+                        .Include(x => x.IdVendedorNavigation)
+                        .Include(x => x.IdContactoNavigation)
+                        .Include(x => x.IdEstatusNavigation)
+                        .Include(x => x.IdMtrTipoMonedaNavigation)
+                        .Where(x => x.IdVendedor == filter.UsuarioConectado.ToString() && x.Fecha >= fechaDesde && x.Fecha <= fechaHasta && x.SearchText.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .OrderByDescending(x => x.Fecha)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+
+                }*/
+                
+                
+                
+                var totalRegistros = _context.ADM_SOLICITUDES.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto).Count();
+
+                var totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                
+                var pageData = await _context.ADM_SOLICITUDES.DefaultIfEmpty()
+                    .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto)
+                    .OrderByDescending(x => x.FECHA_SOLICITUD)
+                    .Skip((filter.PageNumber - 1) * filter.PageSize)
+                    .Take(filter.PageSize)
+                    .ToListAsync();
+                List<AdmSolicitudesResponseDto> resultData = new List<AdmSolicitudesResponseDto>();
+                foreach (var item in pageData)
+                {
+                    AdmSolicitudesResponseDto itemData = new AdmSolicitudesResponseDto();
+                    itemData.CodigoSolicitud = item.CODIGO_SOLICITUD;
+                    itemData.Ano = 0;
+                    itemData.NumeroSolicitud = item.NUMERO_SOLICITUD;
+                    itemData.FechaSolicitud = item.FECHA_SOLICITUD;
+                    itemData.FechaSolicitudString = Fecha.GetFechaString(item.FECHA_SOLICITUD);
+                    itemData.FechaSolicitudObj = Fecha.GetFechaDto(item.FECHA_SOLICITUD);
+                    itemData.CodigoSolicitante = item.CODIGO_SOLICITANTE;
+                    itemData.DenominacionSolicitante = "";
+                    itemData.TipoSolicitudId = item.TIPO_SOLICITUD_ID;
+                    itemData.DescripcionTipoSolicitud = "";
+                    itemData.CodigoProveedor = item.CODIGO_PROVEEDOR;
+                    itemData.NombreProveedor = "";
+                    itemData.Motivo = item.MOTIVO.Trim();
+                    itemData.Nota = item.NOTA;
+                    itemData.DescripcionStatus = Estatus.GetStatus(item.STATUS);
+                    itemData.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+                    
+                    resultData.Add(itemData);
+                }
+                
+               /* var linqQuery = from sol in pageData
                     join prov in _context.ADM_PROVEEDORES on sol.CODIGO_PROVEEDOR equals prov.CODIGO_PROVEEDOR
                     join descTipoSol in _context.ADM_DESCRIPTIVAS on sol.TIPO_SOLICITUD_ID equals descTipoSol.DESCRIPCION_ID
                  
                     select new AdmSolicitudesResponseDto() {
                         CodigoSolicitud = sol.CODIGO_SOLICITUD,
-                        Ano = sol.ANO ,
+                        Ano = 0 ,
                         NumeroSolicitud=sol.NUMERO_SOLICITUD,
                         FechaSolicitud=sol.FECHA_SOLICITUD,
                         FechaSolicitudString= Fecha.GetFechaString(sol.FECHA_SOLICITUD),
@@ -65,19 +124,30 @@ namespace Convertidor.Data.Repository.Adm
                         CodigoProveedor=sol.CODIGO_PROVEEDOR,
                         NombreProveedor = prov.NOMBRE_PROVEEDOR,
                         Motivo=sol.MOTIVO.Trim(),
-                        Nota = sol.NOTA,
+                        Nota = "",
                         DescripcionStatus=Estatus.GetStatus(sol.STATUS),
                         CodigoPresupuesto=sol.CODIGO_PRESUPUESTO
                         
-                    };
-                var result = linqQuery.Where(x=>x.CodigoPresupuesto==codigoPresupuesto).ToList();
-                //var result = await _context.ADM_SOLICITUDES.DefaultIfEmpty().Where(x =>x.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
+                    };*/
+                
+                
+             
+                result.CantidadRegistros = totalRegistros;
+                result.TotalPage = totalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = resultData;
                 return result;
+                
             }
             catch (Exception ex) 
             {
-                var res = ex.InnerException.Message;
-                return null;
+                result.CantidadRegistros = 0;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                result.Data = null;
+                return result;
             }
         }
 

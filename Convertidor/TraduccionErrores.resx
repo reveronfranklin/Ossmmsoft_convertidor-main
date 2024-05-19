@@ -18,10 +18,7 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="AdmDetalleSolicitudNoExiste" xml:space="preserve">
-        <value>Codigo Detalle Solicitud no existe</value>
-    </data>
-    <data name="AdmSolictudNoExiste" xml:space="preserve">
-        <value>Adm Solicitud No Existe</value>
+    <data name="AdmDetalleSolicitudNoexiste" xml:space="preserve">
+        <value>Detalle de Solicitud No Existe</value>
     </data>
 </root>
