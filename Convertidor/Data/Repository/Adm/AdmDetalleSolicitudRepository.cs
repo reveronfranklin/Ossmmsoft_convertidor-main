@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Dtos.Adm;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Adm
@@ -42,12 +43,39 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
-        public async Task<List<ADM_DETALLE_SOLICITUD>> GetByCodigoSolicitud(int codigoSolicitud) 
+        public List<AdmDetalleSolicitudResponseDto> GetByCodigoSolicitud(int codigoSolicitud) 
         {
             try
             {
-                var result = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x=>x.CODIGO_SOLICITUD==codigoSolicitud).ToListAsync();
+                
+                var linqQuery = from sol in _context.ADM_DETALLE_SOLICITUD
+                    join descTipoSol in _context.ADM_DESCRIPTIVAS on sol.UDM_ID equals descTipoSol.DESCRIPCION_ID
+                 
+                    select new AdmDetalleSolicitudResponseDto() {
+                        CodigoDetalleSolicitud=sol.CODIGO_DETALLE_SOLICITUD,
+                        CodigoSolicitud = sol.CODIGO_SOLICITUD,
+                        Cantidad=sol.CANTIDAD,
+                        CantidadComprada=sol.CANTIDAD_COMPRADA,
+                        CantidadAnulada=sol.CANTIDAD_ANULADA,
+                        UdmId=sol.UDM_ID,
+                        DescripcionUnidad=descTipoSol.DESCRIPCION,
+                        Descripcion=sol.DESCRIPCION,
+                        CodigoPresupuesto=sol.CODIGO_PRESUPUESTO,
+                        PrecioUnitario=sol.PRECIO_UNITARIO,
+                        PorDescuento=sol.POR_DESCUENTO,
+                        MontoDescuento=sol.MONTO_DESCUENTO ==null ? 0: sol.MONTO_DESCUENTO,
+                        TipoImpuestoId=sol.TIPO_IMPUESTO_ID,
+                        PorImpuesto=sol.POR_IMPUESTO,
+                        MontoImpuesto=sol.MONTO_IMPUESTO ==null? 0 : sol.MONTO_IMPUESTO  ,
+                        CodigoProducto = sol.CODIGO_PRODUCTO ==null ? 0 : sol.CODIGO_PRODUCTO
+                   
+                        
+                    };
+                var result = linqQuery.Where(x=>x.CodigoSolicitud==codigoSolicitud).ToList();
+                //var result = await _context.ADM_SOLICITUDES.DefaultIfEmpty().Where(x =>x.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
                 return result;
+
+
             }
             catch (Exception ex) 
             {

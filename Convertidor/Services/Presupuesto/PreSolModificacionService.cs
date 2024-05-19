@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 using NPOI.OpenXmlFormats.Vml.Office;
 
 namespace Convertidor.Services.Presupuesto
@@ -212,13 +213,14 @@ namespace Convertidor.Services.Presupuesto
         
         public async Task<bool> SolicitudPuedeModificarseoEliminarse(int codigoSolicitudModificacion)
         {
-            bool result = true;
-            
-            var preModificacion = await _preModificacionRepository.GetByCodigoSolicitud(codigoSolicitudModificacion);
-            if (preModificacion != null)
+            bool result = false;
+            var preSolModificacion = await _repository.GetByCodigo(codigoSolicitudModificacion);
+            if (preSolModificacion != null)
             {
-                result = false;
+                var status = Estatus.GetStatusObj(preSolModificacion.STATUS);
+                result = status.Modificable;
             }
+            
             return result;
         }
         
@@ -243,7 +245,7 @@ namespace Convertidor.Services.Presupuesto
                 {
                     fechaAnulado = GetFechaString(preModificacionAprobada.FECHA_INS);
                 }
-                result=$"ANULADO POR: {nombrePersona} { fechaAnulado}";
+                result=$"ANULADO MODIFICACION POR: {nombrePersona} { fechaAnulado}";
                 return result;
             }
 
@@ -874,12 +876,10 @@ namespace Convertidor.Services.Presupuesto
                         await _prePucSolicitudModificacionRepository.GetByCodigo(item.CodigoPucSolModificacion);
                     if (prePucSolModificacion != null)
                     {
-                        await UpdateMontoModificado(item.CodigoPucSolModificacion,
-                            prePucSolModificacion.MONTO_MODIFICADO - item.Monto);
+                        await UpdateMontoModificado(item.CodigoPucSolModificacion, 0);
                     }
                     //ACTUALIZAMOS EL MONTO ANULADO EN PRE PUC SMODIFICACION(PRE_PUC_MODIFICACION)
-                    await _prePucModificacionService.UpdateMontoAnulado(item.CodigoPucModificacion,
-                        item.MontoAnulado + item.Monto);
+                    await _prePucModificacionService.UpdateMontoAnulado(item.CodigoPucModificacion,item.Monto);
 
                 }
                 

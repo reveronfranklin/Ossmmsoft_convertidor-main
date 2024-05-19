@@ -33,9 +33,9 @@ namespace Convertidor.Controllers
         }
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetByCodigoSolicitud(AdmDetalleSolicitudFilterDto filter)
+        public IActionResult GetByCodigoSolicitud(AdmDetalleSolicitudFilterDto filter)
         {
-            var result = await _service.GetByCodigoSolicitud(filter.CodigoSolicitud);
+            var result = _service.GetByCodigoSolicitud(filter.CodigoSolicitud);
             return Ok(result);
         }
 

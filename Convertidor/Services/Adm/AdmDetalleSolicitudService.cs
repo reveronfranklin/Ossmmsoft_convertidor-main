@@ -1,6 +1,8 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Translation;
 
 namespace Convertidor.Services.Adm
 {
@@ -9,17 +11,22 @@ namespace Convertidor.Services.Adm
         private readonly IAdmDetalleSolicitudRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
 
         public AdmDetalleSolicitudService(IAdmDetalleSolicitudRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
-                                     IAdmDescriptivaRepository admDescriptivaRepository)
+                                     IAdmDescriptivaRepository admDescriptivaRepository,
+                                     IAdmSolicitudesRepository admSolicitudesRepository
+                                
+                                     )
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _admSolicitudesRepository = admSolicitudesRepository;
         }
 
-        public AdmDetalleSolicitudResponseDto MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
+        public async Task<AdmDetalleSolicitudResponseDto> MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
         {
             AdmDetalleSolicitudResponseDto itemResult = new AdmDetalleSolicitudResponseDto();
             itemResult.CodigoDetalleSolicitud = dtos.CODIGO_DETALLE_SOLICITUD;
@@ -28,6 +35,12 @@ namespace Convertidor.Services.Adm
             itemResult.CantidadComprada = dtos.CANTIDAD_COMPRADA;
             itemResult.CantidadAnulada = dtos.CANTIDAD_ANULADA;
             itemResult.UdmId = dtos.UDM_ID;
+            itemResult.DescripcionUnidad = "";
+            var unidadDescriptiva = await _admDescriptivaRepository.GetByCodigo(dtos.UDM_ID);
+            if (unidadDescriptiva != null)
+            {
+                itemResult.DescripcionUnidad =unidadDescriptiva.DESCRIPCION ;
+            }
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.PrecioUnitario = dtos.PRECIO_UNITARIO;
             itemResult.PorDescuento = dtos.POR_DESCUENTO;
@@ -36,17 +49,18 @@ namespace Convertidor.Services.Adm
             itemResult.PorImpuesto = dtos.POR_IMPUESTO;
             itemResult.MontoImpuesto = dtos.MONTO_IMPUESTO;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            itemResult.CodigoProducto = dtos.CODIGO_PRODUCTO == null ? 0 : dtos.CODIGO_PRODUCTO ;
             return itemResult;
         }
 
-        public  List<AdmDetalleSolicitudResponseDto> MapListDetalleSolicitudDto(List<ADM_DETALLE_SOLICITUD> dtos)
+        public  async Task<List<AdmDetalleSolicitudResponseDto>> MapListDetalleSolicitudDto(List<ADM_DETALLE_SOLICITUD> dtos)
         {
             List<AdmDetalleSolicitudResponseDto> result = new List<AdmDetalleSolicitudResponseDto>();
             {
                 foreach (var item in dtos)
                 {
 
-                    var itemResult =  MapDetalleSolicitudDto(item);
+                    var itemResult = await MapDetalleSolicitudDto(item);
 
                     result.Add(itemResult);
                 }
@@ -64,7 +78,7 @@ namespace Convertidor.Services.Adm
           
                 if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
                 {
-                    var listDto =  MapListDetalleSolicitudDto(detalleSolicitud);
+                    var listDto = await MapListDetalleSolicitudDto(detalleSolicitud);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -92,19 +106,19 @@ namespace Convertidor.Services.Adm
 
         }
 
-        public async Task<ResultDto<List<AdmDetalleSolicitudResponseDto>>> GetByCodigoSolicitud(int codigoSolicitud)
+        public ResultDto<List<AdmDetalleSolicitudResponseDto>> GetByCodigoSolicitud(int codigoSolicitud)
         {
 
             ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
             try
             {
-                var detalleSolicitud = await _repository.GetByCodigoSolicitud(codigoSolicitud);
+                var detalleSolicitud = _repository.GetByCodigoSolicitud(codigoSolicitud);
           
                 if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
                 {
-                    var listDto =  MapListDetalleSolicitudDto(detalleSolicitud);
+                   
 
-                    result.Data = listDto;
+                    result.Data = detalleSolicitud;
                     result.IsValid = true;
                     result.Message = "";
 
@@ -139,7 +153,7 @@ namespace Convertidor.Services.Adm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Detalle Solicitud no existe";
+                    result.Message = TraduccionErrores.AdmDetalleSolicitudNoExiste; 
                     return result;
                 }
                 if (dto.CodigoSolicitud<0)
@@ -149,8 +163,16 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo solicitud invalido";
                     return result;
                 }
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
+                if (solicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo solicitud invalido";
+                    return result;
+                }
 
-                if (dto.Cantidad <0)
+                if (dto.Cantidad <=0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -166,6 +188,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Cantidad comprada Invalida";
                     return result;
                 }
+                
                 if (dto.CantidadAnulada < 0)
                 {
                     result.Data = null;
@@ -179,12 +202,12 @@ namespace Convertidor.Services.Adm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Udm Id no existe";
+                    result.Message = "Unidad de medida  no existe";
                     return result;
 
                 }
 
-                if (dto.Descripcion==string.Empty && dto.Descripcion.Length>2000)
+                if (string.IsNullOrEmpty(dto.Descripcion))
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -192,7 +215,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.PrecioUnitario <0)
+                if (dto.PrecioUnitario <=0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -238,38 +261,12 @@ namespace Convertidor.Services.Adm
                     result.Message = "Monto Impuesto Invalido";
                     return result;
                 }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
 
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                if (dto.CodigoProducto > 0)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
+                    //TODO Validar Producto 
                 }
-                if (dto.CodigoPresupuesto < 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Presupuesto Invalido";
-                    return result;
-                }
-
-                codigoDetallesolicitud.CODIGO_DETALLE_SOLICITUD = dto.CodigoDetalleSolicitud;
+                
                 codigoDetallesolicitud.CODIGO_SOLICITUD = dto.CodigoSolicitud;
                 codigoDetallesolicitud.CANTIDAD = dto.Cantidad;
                 codigoDetallesolicitud.CANTIDAD_COMPRADA = dto.CantidadComprada;
@@ -282,10 +279,9 @@ namespace Convertidor.Services.Adm
                 codigoDetallesolicitud.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
                 codigoDetallesolicitud.POR_IMPUESTO = dto.PorImpuesto;
                 codigoDetallesolicitud.MONTO_IMPUESTO = dto.MontoImpuesto;
-                codigoDetallesolicitud.EXTRA1 = dto.Extra1;
-                codigoDetallesolicitud.EXTRA2 = dto.Extra2;
-                codigoDetallesolicitud.EXTRA3 = dto.Extra3;
-                codigoDetallesolicitud.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+              
+                codigoDetallesolicitud.CODIGO_PRESUPUESTO =(int)solicitud.CODIGO_PRESUPUESTO;
+                codigoDetallesolicitud.CODIGO_PRODUCTO =dto.CodigoProducto;
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 codigoDetallesolicitud.CODIGO_EMPRESA = conectado.Empresa;
@@ -294,7 +290,7 @@ namespace Convertidor.Services.Adm
 
                 await _repository.Update(codigoDetallesolicitud);
 
-                var resultDto =  MapDetalleSolicitudDto(codigoDetallesolicitud);
+                var resultDto =  await MapDetalleSolicitudDto(codigoDetallesolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -322,7 +318,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Detalle Solicitud ya existe";
                     return result;
                 }
-                if (dto.CodigoSolicitud < 0)
+               
+                if (dto.CodigoSolicitud <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -330,7 +327,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Cantidad < 0)
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
+                if (solicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo solicitud invalido";
+                    return result;
+                }
+
+                if (dto.Cantidad <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -364,13 +370,14 @@ namespace Convertidor.Services.Adm
 
                 }
 
-                if (dto.Descripcion == string.Empty && dto.Descripcion.Length > 2000)
+                if (string.IsNullOrEmpty(dto.Descripcion))
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Descripcion Invalida";
                     return result;
                 }
+
 
                 if (dto.PrecioUnitario < 0)
                 {
@@ -419,16 +426,12 @@ namespace Convertidor.Services.Adm
                     result.Message = "Monto Impuesto Invalido";
                     return result;
                 }
-            
-                if (dto.CodigoPresupuesto < 0)
+
+                if (dto.CodigoProducto > 0)
                 {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Presupuesto Invalido";
-                    return result;
+                    //TODO Validar Producto 
                 }
-
+              
 
             ADM_DETALLE_SOLICITUD entity = new ADM_DETALLE_SOLICITUD();
             entity.CODIGO_DETALLE_SOLICITUD = await _repository.GetNextKey();
@@ -444,11 +447,9 @@ namespace Convertidor.Services.Adm
             entity.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
             entity.POR_IMPUESTO = dto.PorImpuesto;
             entity.MONTO_IMPUESTO = dto.MontoImpuesto;
-            entity.EXTRA1 = dto.Extra1;
-            entity.EXTRA2 = dto.Extra2;
-            entity.EXTRA3 = dto.Extra3;
-            entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
-
+            entity.CODIGO_PRODUCTO = dto.CodigoProducto;
+            entity.CODIGO_PRESUPUESTO = (int)solicitud.CODIGO_PRESUPUESTO;
+            entity.CODIGO_PRODUCTO = dto.CodigoProducto;
 
             var conectado = await _sisUsuarioRepository.GetConectado();
             entity.CODIGO_EMPRESA = conectado.Empresa;
@@ -458,7 +459,7 @@ namespace Convertidor.Services.Adm
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
-                var resultDto =  MapDetalleSolicitudDto(created.Data);
+                var resultDto = await MapDetalleSolicitudDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";

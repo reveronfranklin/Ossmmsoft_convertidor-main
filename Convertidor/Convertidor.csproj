@@ -87,4 +87,7 @@
       <DependentUpon>recursos.cshtml</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Translation\Translation.csproj" />
+  </ItemGroup>
 </Project>
