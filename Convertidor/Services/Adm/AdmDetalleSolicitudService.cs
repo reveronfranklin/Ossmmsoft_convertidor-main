@@ -2,7 +2,6 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
-using Translation;
 
 namespace Convertidor.Services.Adm
 {
@@ -153,7 +152,7 @@ namespace Convertidor.Services.Adm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = TraduccionErrores.AdmDetalleSolicitudNoExiste; 
+                    result.Message = TraduccionErrores.AdmDetalleSolicitudNoexiste; 
                     return result;
                 }
                 if (dto.CodigoSolicitud<0)
