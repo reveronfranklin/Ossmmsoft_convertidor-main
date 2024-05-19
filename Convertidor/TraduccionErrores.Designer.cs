@@ -7,14 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Translation {
+namespace Convertidor {
     using System;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class TraduccionErrores {
+    internal class TraduccionErrores {
         
         private static System.Resources.ResourceManager resourceMan;
         
@@ -28,7 +28,7 @@ namespace Translation {
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Translation.TraduccionErrores", typeof(TraduccionErrores).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Convertidor.TraduccionErrores", typeof(TraduccionErrores).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -45,15 +45,9 @@ namespace Translation {
             }
         }
         
-        public static string AdmDetalleSolicitudNoExiste {
+        internal static string AdmDetalleSolicitudNoexiste {
             get {
-                return ResourceManager.GetString("AdmDetalleSolicitudNoExiste", resourceCulture);
-            }
-        }
-        
-        public static string AdmSolictudNoExiste {
-            get {
-                return ResourceManager.GetString("AdmSolictudNoExiste", resourceCulture);
+                return ResourceManager.GetString("AdmDetalleSolicitudNoexiste", resourceCulture);
             }
         }
     }

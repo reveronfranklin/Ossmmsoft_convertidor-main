@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 EXPOSE 80
-EXPOSE 443
+EXPOSE 5000 
 
 #COPY PROJECT FILES
 COPY ./*.csproj ./
@@ -18,3 +18,5 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0
 WORKDIR /app
 COPY --from=build /app/out .
 ENTRYPOINT ["dotnet","Convertidor.dll"]
+
+#EJECUTAR EN TERMINAL docker build -t ossmmasoftapp .

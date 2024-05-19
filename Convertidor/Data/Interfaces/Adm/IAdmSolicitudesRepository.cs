@@ -7,7 +7,7 @@ namespace Convertidor.Data.Interfaces.Adm
     {
         Task<ADM_SOLICITUDES> GetByCodigoSolicitud(int codigoSolicitud);
 
-        List<AdmSolicitudesResponseDto> GetByPresupuesto(int codigoPresupuesto);
+        Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter);
         Task<ResultDto<ADM_SOLICITUDES>> Add(ADM_SOLICITUDES entity);
         Task<ResultDto<ADM_SOLICITUDES>> Update(ADM_SOLICITUDES entity);
         Task<string> Delete(int codigoSolicitud);

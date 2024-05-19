@@ -15,6 +15,8 @@
         public string LinkDataArlternative { get; set; }
         public string Message { get; set; } = string.Empty;
         public int Page { get; set; }
+        public int TotalPage { get; set; }
+        
         public int CantidadRegistros { get; set; }
 
 

@@ -116,7 +116,8 @@ namespace Convertidor.Services.Adm
         }
         public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
-
+            
+            
             ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
             try
             {
@@ -133,13 +134,13 @@ namespace Convertidor.Services.Adm
 
                 var icps = await _preIndiceCatPrgRepository.GetAll();
                 var listIcp = icps.ToList();
-                var solicitudes =  _repository.GetByPresupuesto(filter.CodigoPresupuesto);
+                var solicitudes = await  _repository.GetByPresupuesto(filter);
                
-                if (solicitudes.Count() > 0)
+                if (solicitudes.Data.Count > 0)
                 {
                     
                     
-                    var linqQuery = from sol in solicitudes
+                    var linqQuery = from sol in solicitudes.Data
                    
                        
                  
@@ -167,8 +168,10 @@ namespace Convertidor.Services.Adm
 
                     result.Data = listDto;
                     result.IsValid = true;
-                    result.Message = "";
-
+                    result.Message = solicitudes.Message;
+                    result.Page = solicitudes.Page;
+                    result.TotalPage = solicitudes.TotalPage;
+                    result.CantidadRegistros = solicitudes.CantidadRegistros;
 
                     return result;
                 }
