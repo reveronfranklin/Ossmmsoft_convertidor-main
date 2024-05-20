@@ -336,6 +336,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                 {
                     PRE_SALDOS entitySaldo = new PRE_SALDOS();
                     entitySaldo.CODIGO_SALDO = await _preSaldosRepository.GetNextKey();
+                    entitySaldo.ANO = presupuesto.ANO;
                     entitySaldo.CODIGO_ICP = dto.CodigoIcp;
                     entitySaldo.CODIGO_PUC = dto.CodigoPuc;
                     entitySaldo.FINANCIADO_ID =dto.FinanciadoId;
