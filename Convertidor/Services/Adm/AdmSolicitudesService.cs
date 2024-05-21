@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.ADM;
+﻿using Convertidor.Data.Entities.Adm;
+using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
@@ -114,6 +115,26 @@ namespace Convertidor.Services.Adm
             }
             return result;
         }
+        public string GetDenominacionDescriptiva(List<ADM_DESCRIPTIVAS> list,int id)
+        {
+            var result = "";
+            var descriptiva = list.Where(x => x.DESCRIPCION_ID == id).FirstOrDefault();
+            if (descriptiva != null)
+            {
+                result = descriptiva.DESCRIPCION;
+            }
+            return result;
+        }
+        public string proveedor(List<ADM_PROVEEDORES> list,int id)
+        {
+            var result = "";
+            var proveedor = list.Where(x => x.CODIGO_PROVEEDOR == id).FirstOrDefault();
+            if (proveedor != null)
+            {
+                result = proveedor.NOMBRE_PROVEEDOR;
+            }
+            return result;
+        }
         public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
             
@@ -131,9 +152,12 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
-
+                //generamos las listas pra pasar a las busquedas
                 var icps = await _preIndiceCatPrgRepository.GetAll();
                 var listIcp = icps.ToList();
+                var listTipoSolicitud = await _admDescriptivaRepository.GetByTitulo(35);
+                var proveedores = await _admProveedoresRepository.GetByAll();
+                
                 var solicitudes = await  _repository.GetByPresupuesto(filter);
                
                 if (solicitudes.Data.Count > 0)
@@ -153,10 +177,10 @@ namespace Convertidor.Services.Adm
                             FechaSolicitudObj = sol.FechaSolicitudObj,
                             CodigoSolicitante=sol.CodigoSolicitante,
                             DenominacionSolicitante=GetDenominacionIcp(listIcp,sol.CodigoSolicitante),
-                            TipoSolicitudId=sol.CodigoSolicitante,
-                            DescripcionTipoSolicitud=sol.DescripcionTipoSolicitud,
+                            TipoSolicitudId=sol.TipoSolicitudId,
+                            DescripcionTipoSolicitud=GetDenominacionDescriptiva(listTipoSolicitud,(int)sol.TipoSolicitudId),
                             CodigoProveedor=sol.CodigoProveedor,
-                            NombreProveedor = sol.NombreProveedor,
+                            NombreProveedor = proveedor(proveedores,(int)sol.CodigoProveedor),
                             Motivo=sol.Motivo,
                             Nota = sol.Nota,
                             DescripcionStatus=sol.DescripcionStatus,
@@ -192,7 +216,7 @@ namespace Convertidor.Services.Adm
                 return result;
             }
 
-        }
+            }
 
         public async Task<ResultDto<AdmSolicitudesResponseDto>> Update(AdmSolicitudesUpdateDto dto)
         {
