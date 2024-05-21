@@ -152,7 +152,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
-
+                //generamos las listas pra pasar a las busquedas
                 var icps = await _preIndiceCatPrgRepository.GetAll();
                 var listIcp = icps.ToList();
                 var listTipoSolicitud = await _admDescriptivaRepository.GetByTitulo(35);
