@@ -162,6 +162,12 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
             itemResult.MontoAnulado = dto.MONTO_ANULADO;
             itemResult.Monto = dto.MONTO;
             itemResult.MontoModificado = dto.MONTO_MODIFICADO;
+            itemResult.Status = "";
+            var solicitud = await _preSolicitudModificacionRepository.GetByCodigo(dto.CODIGO_SOL_MODIFICACION);
+            if (solicitud != null)
+            {
+                itemResult.Status = solicitud.STATUS;
+            }
         
 
             return itemResult;
