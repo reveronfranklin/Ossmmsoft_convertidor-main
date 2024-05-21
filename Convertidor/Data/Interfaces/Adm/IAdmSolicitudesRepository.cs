@@ -13,5 +13,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> Delete(int codigoSolicitud);
         Task<int> GetNextKey();
         Task<string> UpdateStatus(int codigoSolicitud, string status);
+        Task<string> UpdateSearchText(int codigoPresupuesto);
     }
 }

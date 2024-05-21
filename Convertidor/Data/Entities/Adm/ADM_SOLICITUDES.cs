@@ -21,7 +21,8 @@
         public DateTime? FECHA_UPD { get; set; }
         public int? CODIGO_EMPRESA { get; set; }
         public int? CODIGO_PRESUPUESTO { get; set; }
-
+        
+        public string? SEARCH_TEXT { get; set; } = string.Empty;
 
     }
 }
