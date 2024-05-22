@@ -349,7 +349,7 @@ namespace Convertidor.Services.Bm
                 mapper.Save(newFile, excelData, $"BM1", true);
 
 
-x
+
 
                 response.Data = listaResult.ToList();
 
