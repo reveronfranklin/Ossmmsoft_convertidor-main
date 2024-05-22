@@ -340,7 +340,7 @@ namespace Convertidor.Services.Bm
 
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
-
+                //SE GENERA EXCEL PRA LA DESCARGA
                 var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
                 var fileName = $"BM1.xlsx";
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
