@@ -63,7 +63,7 @@ namespace Convertidor.Services.Presupuesto
 
                 var solModificacion = await _repository.GetAll();
 
-               
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
                 if (solModificacion.Count() > 0)
                 {
@@ -71,7 +71,7 @@ namespace Convertidor.Services.Presupuesto
 
                     foreach (var item in solModificacion)
                     {
-                        var dto = await MapPreSolModificacion(item);
+                        var dto = await MapPreSolModificacion(item,descriptivaTipoSolicitud);
                         listDto.Add(dto);
                     }
 
@@ -109,7 +109,7 @@ namespace Convertidor.Services.Presupuesto
 
                 var solModificacion = await _repository.GetByPresupuesto(filter.CodigoPresupuesto);
 
-               
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
                 if (solModificacion.Count() > 0)
                 {
@@ -117,7 +117,7 @@ namespace Convertidor.Services.Presupuesto
 
                     foreach (var item in solModificacion)
                     {
-                        var dto = await MapPreSolModificacion(item);
+                        var dto = await MapPreSolModificacion(item,descriptivaTipoSolicitud);
                         listDto.Add(dto);
                     }
 
@@ -286,13 +286,34 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
         
-        public async Task<PreSolModificacionResponseDto> MapPreSolModificacion(PRE_SOL_MODIFICACION dto)
+        public string GetDenominacionIcp(List<PRE_INDICE_CAT_PRG> listIcp,int codigoIcp)
+        {
+            var result = "";
+            var icp = listIcp.Where(x => x.CODIGO_ICP == codigoIcp).FirstOrDefault();
+            if (icp != null)
+            {
+                result = icp.DENOMINACION;
+            }
+            return result;
+        }
+        public string GetDenominacionDescriptiva(List<PRE_DESCRIPTIVAS> list,int id)
+        {
+            var result = "";
+            var descriptiva = list.Where(x => x.DESCRIPCION_ID == id).FirstOrDefault();
+            if (descriptiva != null)
+            {
+                result = descriptiva.DESCRIPCION;
+            }
+            return result;
+        }
+        
+        public async Task<PreSolModificacionResponseDto> MapPreSolModificacion(PRE_SOL_MODIFICACION dto,List<PRE_DESCRIPTIVAS> listDescriptiva)
         {
             PreSolModificacionResponseDto itemResult = new PreSolModificacionResponseDto();
             itemResult.CodigoSolModificacion = dto.CODIGO_SOL_MODIFICACION;
             itemResult.TipoModificacionId = dto.TIPO_MODIFICACION_ID;
             itemResult.DescripcionTipoModificacion = "";
-            var tipoModificacionId = await _repositoryPreDescriptiva.GetByCodigo(dto.TIPO_MODIFICACION_ID);
+            var tipoModificacionId = listDescriptiva.Where(x=>x.DESCRIPCION_ID== dto.TIPO_MODIFICACION_ID).FirstOrDefault();
             if (tipoModificacionId != null)
             {
                 itemResult.DescripcionTipoModificacion = tipoModificacionId.DESCRIPCION;
@@ -361,6 +382,7 @@ namespace Convertidor.Services.Presupuesto
         public async Task<List<PreSolModificacionResponseDto>> MapListPreSolModificacionDto(List<PRE_SOL_MODIFICACION> dtos)
         {
             List<PreSolModificacionResponseDto> result = new List<PreSolModificacionResponseDto>();
+            var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
 
             foreach (var item in dtos)
@@ -368,7 +390,7 @@ namespace Convertidor.Services.Presupuesto
 
                 PreSolModificacionResponseDto itemResult = new PreSolModificacionResponseDto();
 
-                itemResult = await MapPreSolModificacion(item);
+                itemResult = await MapPreSolModificacion(item,descriptivaTipoSolicitud);
 
                 result.Add(itemResult);
             }
@@ -413,8 +435,9 @@ namespace Convertidor.Services.Presupuesto
                 solModificacion.USUARIO_UPD = conectado.Usuario;
                 solModificacion.FECHA_UPD = DateTime.Now;
                 await _repository.Update(solModificacion);
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
-                var resultDto =await  MapPreSolModificacion(solModificacion);
+                var resultDto =await  MapPreSolModificacion(solModificacion,descriptivaTipoSolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -525,8 +548,9 @@ namespace Convertidor.Services.Presupuesto
                 codigoSolModificacion.USUARIO_UPD = conectado.Usuario;
                 codigoSolModificacion.FECHA_UPD = DateTime.Now;
                 await _repository.Update(codigoSolModificacion);
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
-                var resultDto =await  MapPreSolModificacion(codigoSolModificacion);
+                var resultDto =await  MapPreSolModificacion(codigoSolModificacion,descriptivaTipoSolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -641,7 +665,9 @@ namespace Convertidor.Services.Presupuesto
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapPreSolModificacion(created.Data);
+                    var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
+
+                    var resultDto = await MapPreSolModificacion(created.Data,descriptivaTipoSolicitud);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";

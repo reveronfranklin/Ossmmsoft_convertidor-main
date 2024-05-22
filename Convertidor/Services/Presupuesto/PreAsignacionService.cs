@@ -33,7 +33,7 @@ public class PreAsignacionService: IPreAsignacionService
             _preAsignacionesDetalleRepository = preAsignacionesDetalleRepository;
         }
 
-        public async Task<PreAsignacionesGetDto> MapPreAsignacionDto(PRE_ASIGNACIONES asignacion)
+        public async Task<PreAsignacionesGetDto> MapPreAsignacionDto(PRE_ASIGNACIONES asignacion,List<PreIndiceCategoriaProgramaticaGetDto> listIcp,List<PrePlanUnicoCuentasGetDto> listPuc)
         {
             PreAsignacionesGetDto result = new PreAsignacionesGetDto();
 
@@ -44,19 +44,19 @@ public class PreAsignacionService: IPreAsignacionService
             result.Escenario = asignacion.ESCENARIO;
             result.CodigoIcp = asignacion.CODIGO_ICP;
             result.DenominacionIcp = "";
-            var icp = await _indiceCategoriaProgramaService.GetByCodigo(result.CodigoIcp);
+            var icp = listIcp.Where(x=>x.CodigoIcp==asignacion.CODIGO_ICP).FirstOrDefault();
             if (icp != null)
             {
                 result.DenominacionIcp = icp.Denominacion;
                 result.CodigoIcpConcat = icp.CodigoIcpConcat;
             }
             result.CodigoPuc = asignacion.CODIGO_PUC;
-            result.DenominacionPuc = ""; 
-            var puc = await _prePlanUnicoCuentasService.GetById(result.CodigoPuc);
-            if (puc.Data != null)
+            result.DenominacionPuc = "";
+            var puc = listPuc.Where(x => x.CodigoPuc == asignacion.CODIGO_PUC).FirstOrDefault();
+            if (puc != null)
             {
-                result.DenominacionPuc = puc.Data.Denominacion;
-                result.CodigoPucConcat = puc.Data.CodigoPucConcat;
+                result.DenominacionPuc = puc.Denominacion;
+                result.CodigoPucConcat = puc.CodigoPucConcat;
             }
             result.Ordinario = asignacion.ORDINARIO;
             result.Coordinado = asignacion.COORDINADO;
@@ -144,8 +144,13 @@ public class PreAsignacionService: IPreAsignacionService
                 asignacionUpdate.ORDINARIO = totalDesembolso;
                 asignacionUpdate.FECHA_UPD = DateTime.Now;
                 await _repository.Update(asignacionUpdate);
-
-                var resultDto =await  MapPreAsignacionDto(asignacionUpdate);
+                FilterByPresupuestoDto filterPresupuesto = new FilterByPresupuestoDto();
+                filterPresupuesto.CodigoPresupuesto = asignacionUpdate
+                    .CODIGO_PRESUPUESTO;
+                var icp = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filterPresupuesto);
+                var puc = await _prePlanUnicoCuentasService.GetAllByCodigoPresupuesto(asignacionUpdate
+                    .CODIGO_PRESUPUESTO);
+                var resultDto =await  MapPreAsignacionDto(asignacionUpdate,icp.Data,puc.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -174,7 +179,14 @@ public class PreAsignacionService: IPreAsignacionService
                 var asignacion = await _repository.GetByCodigo(codigo);
                 if (asignacion != null)
                 {
-                    var dto = await MapPreAsignacionDto(asignacion);
+                    FilterByPresupuestoDto filterPresupuesto = new FilterByPresupuestoDto();
+                    filterPresupuesto.CodigoPresupuesto = asignacion
+                        .CODIGO_PRESUPUESTO;
+                    var icp = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filterPresupuesto);
+                    var puc = await _prePlanUnicoCuentasService.GetAllByCodigoPresupuesto(asignacion
+                        .CODIGO_PRESUPUESTO);
+
+                    var dto = await MapPreAsignacionDto(asignacion,icp.Data,puc.Data);
                     result.Data = dto;
                     result.IsValid = true;
                     result.Message = "";
@@ -213,10 +225,17 @@ public class PreAsignacionService: IPreAsignacionService
                 var asignacion = await _repository.GetAllByPresupuesto(filterDto.CodigoPresupuesto);
                 if (asignacion != null && asignacion.Count>0)
                 {
+                    
+                    FilterByPresupuestoDto filterPresupuesto = new FilterByPresupuestoDto();
+                    filterPresupuesto.CodigoPresupuesto = filterDto.CodigoPresupuesto;
+                    var icp = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filterPresupuesto);
+                    var puc = await _prePlanUnicoCuentasService.GetAllByCodigoPresupuesto(filterDto.CodigoPresupuesto);
+
+                    
                     List<PreAsignacionesGetDto> list = new List<PreAsignacionesGetDto>();
                     foreach (var item in asignacion)
                     {
-                        list.Add(await MapPreAsignacionDto(item));
+                        list.Add(await MapPreAsignacionDto(item,icp.Data,puc.Data));
                     }
                    
                     result.Data =list;
@@ -255,10 +274,15 @@ public class PreAsignacionService: IPreAsignacionService
                 var asignacion = await _repository.GetAllByIcp(filter.CodigoPresupuesto,filter.CodigoIcp);
                 if (asignacion != null && asignacion.Count>0)
                 {
+                    FilterByPresupuestoDto filterPresupuesto = new FilterByPresupuestoDto();
+                    filterPresupuesto.CodigoPresupuesto = filter.CodigoPresupuesto;
+                    var icp = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filterPresupuesto);
+                    var puc = await _prePlanUnicoCuentasService.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+
                     List<PreAsignacionesGetDto> list = new List<PreAsignacionesGetDto>();
                     foreach (var item in asignacion)
                     {
-                        list.Add(await MapPreAsignacionDto(item));
+                        list.Add(await MapPreAsignacionDto(item,icp.Data,puc.Data));
                     }
                    
                     result.Data =list;
@@ -296,10 +320,15 @@ public class PreAsignacionService: IPreAsignacionService
                 var asignacion = await _repository.GetAllByIcpPuc(filter.CodigoPresupuesto,filter.CodigoIcp,filter.CodigoPuc);
                 if (asignacion != null && asignacion.Count>0)
                 {
+                    FilterByPresupuestoDto filterPresupuesto = new FilterByPresupuestoDto();
+                    filterPresupuesto.CodigoPresupuesto = filter.CodigoPresupuesto;
+                    var icp = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filterPresupuesto);
+                    var puc = await _prePlanUnicoCuentasService.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+
                     List<PreAsignacionesGetDto> list = new List<PreAsignacionesGetDto>();
                     foreach (var item in asignacion)
                     {
-                        list.Add(await MapPreAsignacionDto(item));
+                        list.Add(await MapPreAsignacionDto(item,icp.Data,puc.Data));
                     }
                    
                     result.Data =list;
@@ -609,7 +638,12 @@ public class PreAsignacionService: IPreAsignacionService
                 var created = await _repository.Add(asignacionNew);
                 if (created.IsValid && created.Data!=null)
                 {
-                    var resultDto = await MapPreAsignacionDto(created.Data);
+                    FilterByPresupuestoDto filterPresupuesto = new FilterByPresupuestoDto();
+                    filterPresupuesto.CodigoPresupuesto = entity.CodigoPresupuesto;
+                    var icp = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filterPresupuesto);
+                    var puc = await _prePlanUnicoCuentasService.GetAllByCodigoPresupuesto(entity.CodigoPresupuesto);
+
+                    var resultDto = await MapPreAsignacionDto(created.Data,icp.Data,puc.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -707,7 +741,13 @@ public class PreAsignacionService: IPreAsignacionService
                 var created = await _repository.Update(asignacion);
                 if (created.IsValid && created.Data!=null)
                 {
-                    var resultDto = await MapPreAsignacionDto(created.Data);
+                    
+                    FilterByPresupuestoDto filterPresupuesto = new FilterByPresupuestoDto();
+                    filterPresupuesto.CodigoPresupuesto = entity.CodigoPresupuesto;
+                    var icp = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filterPresupuesto);
+                    var puc = await _prePlanUnicoCuentasService.GetAllByCodigoPresupuesto(entity.CodigoPresupuesto);
+
+                    var resultDto = await MapPreAsignacionDto(created.Data,icp.Data,puc.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
