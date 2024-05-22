@@ -349,7 +349,7 @@ namespace Convertidor.Services.Bm
                 mapper.Save(newFile, excelData, $"BM1", true);
 
 
-
+x
 
                 response.Data = listaResult.ToList();
 
@@ -401,7 +401,8 @@ namespace Convertidor.Services.Bm
                     var allData = await GetAll(filter.FechaDesde,filter.FechaHasta);
                     searchList = allData.Data;
 
-                } var fileName = $"";
+                } 
+                var fileName = $"";
                 var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
