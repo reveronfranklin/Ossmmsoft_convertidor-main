@@ -2,6 +2,7 @@
 {
 	public interface IRhComunicacionesRepository
 	{
+		Task<List<RH_COMUNICACIONES>> GetAll();
         Task<List<RH_COMUNICACIONES>> GetByCodigoPersona(int codigoPersona);
         Task<RH_COMUNICACIONES> GetByCodigo(int codigoComunicacion);
         Task<ResultDto<RH_COMUNICACIONES>> Add(RH_COMUNICACIONES entity);

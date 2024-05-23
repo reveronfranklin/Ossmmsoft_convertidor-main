@@ -11,6 +11,23 @@ namespace Convertidor.Data.Repository.Rh
         {
             _context = context;
         }
+        public async Task<List<RH_COMUNICACIONES>> GetAll()
+        {
+            try
+            {
+                var result = await _context.RH_COMUNICACIONES.DefaultIfEmpty().ToListAsync();
+        
+                return (List<RH_COMUNICACIONES>)result; 
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        
         public async Task<List<RH_COMUNICACIONES>> GetByCodigoPersona(int codigoPersona)
         {
             try
