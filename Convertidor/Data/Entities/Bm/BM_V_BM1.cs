@@ -21,6 +21,7 @@ public class BM_V_BM1
     public int CODIGO_BIEN { get; set; }
 
     public int CODIGO_MOV_BIEN { get; set; }
+    public string NRO_PLACA { get; set; } = string.Empty;
 
     
         
