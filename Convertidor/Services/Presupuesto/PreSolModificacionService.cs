@@ -175,41 +175,7 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
         
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
-        public string GetFechaString(DateTime? fecha)
-        {
-            var result = "";
-            try
-            {
-              
-                if (fecha != null)
-                {
-                    result = $"{fecha:MM/dd/yyyy}";
-                }
-         
-
-                return result;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return result;
-              
-            }
-           
-          
-        }
-
+      
         
         public async Task<bool> SolicitudPuedeModificarseoEliminarse(int codigoSolicitudModificacion)
         {
@@ -240,10 +206,10 @@ namespace Convertidor.Services.Presupuesto
                     nombrePersona = $"{persona.NOMBRE} {persona.APELLIDO}";
                 }
 
-                var fechaAnulado = GetFechaString(dto.FECHA_UPD);
+                var fechaAnulado = Fecha.GetFechaString(dto.FECHA_UPD);
                 if (preModificacionAprobada != null)
                 {
-                    fechaAnulado = GetFechaString(preModificacionAprobada.FECHA_INS);
+                    fechaAnulado = Fecha.GetFechaString(preModificacionAprobada.FECHA_INS);
                 }
                 result=$"ANULADO MODIFICACION POR: {nombrePersona} { fechaAnulado}";
                 return result;
@@ -252,7 +218,7 @@ namespace Convertidor.Services.Presupuesto
         
             if (preModificacionAprobada != null && preModificacionAprobada.STATUS=="AP")
             {
-                result = $"APROBADO MODIFICACION: #{preModificacionAprobada.CODIGO_MODIFICACION} {GetFechaString(preModificacionAprobada.FECHA_INS)}";
+                result = $"APROBADO MODIFICACION: #{preModificacionAprobada.CODIGO_MODIFICACION} {Fecha.GetFechaString(preModificacionAprobada.FECHA_INS)}";
                 return result;
             }
             
@@ -361,8 +327,8 @@ namespace Convertidor.Services.Presupuesto
             }
             
             itemResult.FechaSolicitud = dto.FECHA_SOLICITUD;
-            itemResult.FechaSolicitudString =GetFechaString(dto.FECHA_SOLICITUD);
-            FechaDto FechaSolicitudObj = GetFechaDto(dto.FECHA_SOLICITUD);
+            itemResult.FechaSolicitudString =Fecha.GetFechaString(dto.FECHA_SOLICITUD);
+            FechaDto FechaSolicitudObj = Fecha.GetFechaDto(dto.FECHA_SOLICITUD);
             itemResult.FechaSolicitudObj = (FechaDto)FechaSolicitudObj;
             itemResult.Ano = dto.ANO;
             itemResult.NumeroSolModificacion = dto.NUMERO_SOL_MODIFICACION;

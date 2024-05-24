@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Data.Repository.Rh
+﻿using Convertidor.Utility;
+
+namespace Convertidor.Data.Repository.Rh
 {
 	public class RhPeriodoService: IRhPeriodoService
     {
@@ -85,52 +87,8 @@
 
        
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            try
-            {
-              
-                FechaDesdeObj.Year = fecha.Year.ToString();
-                string month = "00" + fecha.Month.ToString();
-                string day = "00" + fecha.Day.ToString();
-                FechaDesdeObj.Month = month.Substring(month.Length - 2);
-                FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-                return FechaDesdeObj;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return FechaDesdeObj;
-
-            }
-           
-        }
-        public string GetFechaString(DateTime? fecha)
-        {
-            var result = "";
-            try
-            {
-              
-                if (fecha != null)
-                {
-                    result = $"{fecha:MM/dd/yyyy}";
-                }
-         
-
-                return result;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return result;
-              
-            }
-           
-          
-        }
-        
+       
+      
       
         
 
@@ -146,8 +104,8 @@
             itemResult.DescripcionTipoNomina = GetTipoNomina(dtos.TIPO_NOMINA);
             
             itemResult.FechaNomina = dtos.FECHA_NOMINA;
-            itemResult.FechaNominaString =$"{dtos.FECHA_NOMINA:MM/dd/yyyy}";
-            FechaDto fechaNominaObj = GetFechaDto(dtos.FECHA_NOMINA);
+            itemResult.FechaNominaString =Fecha.GetFechaString(dtos.FECHA_NOMINA);
+            FechaDto fechaNominaObj = Fecha.GetFechaDto(dtos.FECHA_NOMINA);
             itemResult.FechaNominaObj = (FechaDto)fechaNominaObj;
             itemResult.Periodo = dtos.PERIODO;
             itemResult.TipoNomina = dtos.TIPO_NOMINA;
@@ -161,8 +119,8 @@
             itemResult.FechaPreCierreObj = null;
             if (dtos.FECHA_PRECIERRE != null)
             {
-                itemResult.FechaPreCierreString =$"{dtos.FECHA_PRECIERRE:MM/dd/yyyy}";
-                FechaDto fechaPrecierreObj = GetFechaDto((DateTime)dtos.FECHA_PRECIERRE);
+                itemResult.FechaPreCierreString =Fecha.GetFechaString(dtos.FECHA_PRECIERRE);
+                FechaDto fechaPrecierreObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_PRECIERRE);
                 itemResult.FechaPreCierreObj = (FechaDto)fechaPrecierreObj;
             }    
            
@@ -174,8 +132,8 @@
             if (dtos.FECHA_CIERRE!=null)
             {
                 itemResult.FechaCierre = dtos.FECHA_CIERRE;
-                itemResult.FechaCierreString =$"{dtos.FECHA_CIERRE:MM/dd/yyyy}";
-                FechaDto fechaCierreObj = GetFechaDto((DateTime)dtos.FECHA_CIERRE);
+                itemResult.FechaCierreString =Fecha.GetFechaString(dtos.FECHA_CIERRE);
+                FechaDto fechaCierreObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_CIERRE);
                 itemResult.FechaCierreObj = (FechaDto)fechaCierreObj;
             }
         
@@ -187,8 +145,8 @@
             itemResult.FechaPrenominaObj = null;
             if (dtos.FECHA_PRENOMINA != null)
             {
-                itemResult.FechaPrenominaString = $"{dtos.FECHA_PRENOMINA:MM/dd/yyyy}";
-                FechaDto fechaPrenominaObj = GetFechaDto((DateTime)dtos.FECHA_PRENOMINA);
+                itemResult.FechaPrenominaString =Fecha.GetFechaString(dtos.FECHA_PRENOMINA);
+                FechaDto fechaPrenominaObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_PRENOMINA);
                 itemResult.FechaPrenominaObj = (FechaDto)fechaPrenominaObj;
             }
            
@@ -374,7 +332,7 @@
                     return result;
                 }
                
-                FechaDto fechanomina = GetFechaDto(dto.FechaNomina);
+                FechaDto fechanomina = Fecha.GetFechaDto(dto.FechaNomina);
                 if (fechanomina==null)
                 {
                     result.Data = null;
@@ -470,7 +428,7 @@
 
 
 
-                FechaDto fechaCierre = GetFechaDto(dto.Fecha);
+                FechaDto fechaCierre = Fecha.GetFechaDto(dto.Fecha);
                 if (fechaCierre==null)
                 {
                     result.Data = null;
@@ -530,7 +488,7 @@
                 }
 
 
-                FechaDto fechaPreCierre = GetFechaDto(dto.Fecha);
+                FechaDto fechaPreCierre = Fecha.GetFechaDto(dto.Fecha);
                 if (fechaPreCierre==null)
                 {
                     result.Data = null;
@@ -589,7 +547,7 @@
                     return result;
                 }
 
-                FechaDto fechaPreNomina = GetFechaDto(dto.Fecha);
+                FechaDto fechaPreNomina = Fecha.GetFechaDto(dto.Fecha);
                 if (fechaPreNomina==null)
                 {
                     result.Data = null;
@@ -647,7 +605,7 @@
                 }
                 
                
-                FechaDto fechanomina = GetFechaDto(dto.FechaNomina);
+                FechaDto fechanomina = Fecha.GetFechaDto(dto.FechaNomina);
                 if (fechanomina==null)
                 {
                     result.Data = null;

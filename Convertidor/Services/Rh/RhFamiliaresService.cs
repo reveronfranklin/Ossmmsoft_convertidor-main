@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Convertidor.Services.Sis;
+using Convertidor.Utility;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -53,17 +54,7 @@ namespace Convertidor.Data.Repository.Rh
       
 
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+      
        
         public async  Task<RhFamiliarResponseDto> MapFamiliaresDto(RH_FAMILIARES dtos)
         {
@@ -76,9 +67,9 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Nombre = dtos.NOMBRE;
                 itemResult.Apellido = dtos.APELLIDO;
                 itemResult.FechaNacimiento = dtos.FECHA_NACIMIENTO;
-                itemResult.FechaNacimientoString = dtos.FECHA_NACIMIENTO.ToString("u"); 
+                itemResult.FechaNacimientoString = Fecha.GetFechaString( dtos.FECHA_NACIMIENTO); 
             
-                FechaDto FechaNacimientoObj = GetFechaDto(dtos.FECHA_NACIMIENTO);
+                FechaDto FechaNacimientoObj = Fecha.GetFechaDto(dtos.FECHA_NACIMIENTO);
                 itemResult.FechaNacimientoObj = (FechaDto)FechaNacimientoObj;
                 
                 DateTime fechaActual = DateTime.Now;

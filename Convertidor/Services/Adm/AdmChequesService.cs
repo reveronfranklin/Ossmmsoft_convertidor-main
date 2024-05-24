@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -29,17 +30,7 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+       
 
         public async Task<AdmChequesResponseDto> MapChequesDto(ADM_CHEQUES dtos)
         {
@@ -51,16 +42,16 @@ namespace Convertidor.Services.Adm
             itemResult.NumeroChequera = dtos.NUMERO_CHEQUERA;
             itemResult.NumeroCheque = dtos.NUMERO_CHEQUE;
             itemResult.FechaCheque = dtos.FECHA_CHEQUE;
-            itemResult.FechaChequeString = dtos.FECHA_CHEQUE.ToString("u");
-            FechaDto fechaChequeObj = GetFechaDto(dtos.FECHA_CHEQUE);
+            itemResult.FechaChequeString = Fecha.GetFechaString(dtos.FECHA_CHEQUE);
+            FechaDto fechaChequeObj = Fecha.GetFechaDto(dtos.FECHA_CHEQUE);
             itemResult.FechaChequeObj =(FechaDto) fechaChequeObj;
             itemResult.FechaConciliacion = dtos.FECHA_CONCILIACION;
-            itemResult.FechaConciliacionString = dtos.FECHA_CONCILIACION.ToString("u");
-            FechaDto fechaConciliacionObj = GetFechaDto(dtos.FECHA_CONCILIACION);
+            itemResult.FechaConciliacionString = Fecha.GetFechaString(dtos.FECHA_CONCILIACION);
+            FechaDto fechaConciliacionObj = Fecha.GetFechaDto(dtos.FECHA_CONCILIACION);
             itemResult.FechaConciliacionObj =(FechaDto)fechaConciliacionObj;
             itemResult.FechaAnulacion = dtos.FECHA_ANULACION;
-            itemResult.FechaAnulacionString = dtos.FECHA_ANULACION.ToString("u");
-            FechaDto fechaanulacionObj = GetFechaDto(dtos.FECHA_ANULACION);
+            itemResult.FechaAnulacionString =Fecha.GetFechaString(dtos.FECHA_ANULACION);
+            FechaDto fechaanulacionObj = Fecha.GetFechaDto(dtos.FECHA_ANULACION);
             itemResult.FechaAnulacionObj = (FechaDto)fechaanulacionObj;
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
             itemResult.CodigoContactoProveedor = dtos.CODIGO_CONTACTO_PROVEEDOR;
@@ -75,8 +66,8 @@ namespace Convertidor.Services.Adm
             itemResult.TipoBeneficiario = dtos.TIPO_BENEFICIARIO;
             itemResult.TipoChequeID = dtos.TIPO_CHEQUE_ID;
             itemResult.FechaEntrega =dtos.FECHA_ENTREGA;
-            itemResult.FechaEntregaString = dtos.FECHA_ENTREGA.ToString("u");
-            FechaDto fechaEntregaObj = GetFechaDto(dtos.FECHA_ENTREGA);
+            itemResult.FechaEntregaString =Fecha.GetFechaString(dtos.FECHA_ENTREGA);
+            FechaDto fechaEntregaObj = Fecha.GetFechaDto(dtos.FECHA_ENTREGA);
             itemResult.FechaEntregaObj = (FechaDto) fechaEntregaObj;
            
 

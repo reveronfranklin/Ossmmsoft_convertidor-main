@@ -24,17 +24,7 @@ namespace Convertidor.Data.Repository.Rh
        
        
         
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+      
 
         
 
@@ -51,12 +41,12 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Extra2 = dtos.EXTRA2;
                 itemResult.Extra3 = dtos.EXTRA3;
                 itemResult.FechaFinal = dtos.FECHA_FINAL;
-                itemResult.FechaFinalString = dtos.FECHA_FINAL.ToString("u");
-                FechaDto fechaFinalObj = GetFechaDto(dtos.FECHA_FINAL);
+                itemResult.FechaFinalString =Fecha.GetFechaString(dtos.FECHA_FINAL);
+                FechaDto fechaFinalObj = Fecha.GetFechaDto(dtos.FECHA_FINAL);
                 itemResult.FechaFinalObj = (FechaDto)fechaFinalObj;
                 itemResult.FechaInicial = dtos.FECHA_INICIAL;
-                itemResult.FechaInicialString = dtos.FECHA_INICIAL.ToString("u");
-                FechaDto fechaInicialObj = GetFechaDto(dtos.FECHA_INICIAL);
+                itemResult.FechaInicialString =Fecha.GetFechaString(dtos.FECHA_INICIAL);
+                FechaDto fechaInicialObj = Fecha.GetFechaDto(dtos.FECHA_INICIAL);
                 itemResult.FechaInicialObj = (FechaDto)fechaInicialObj;
 
 

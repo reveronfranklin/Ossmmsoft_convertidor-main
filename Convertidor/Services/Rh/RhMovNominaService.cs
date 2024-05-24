@@ -32,28 +32,7 @@ namespace Convertidor.Services.Adm
         }
 
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            try
-            {
-                FechaDesdeObj.Year = fecha.Year.ToString();
-                string month = "00" + fecha.Month.ToString();
-                string day = "00" + fecha.Day.ToString();
-                FechaDesdeObj.Month = month.Substring(month.Length - 2);
-                FechaDesdeObj.Day = day.Substring(day.Length - 2);
-                return FechaDesdeObj;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return FechaDesdeObj;
-            }
-           
-         
-    
-          
-        }
+      
        
         public List<ListTipoMovimiento> GetListTipo()
         {

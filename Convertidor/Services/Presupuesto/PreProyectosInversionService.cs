@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -73,17 +74,7 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+      
         public async Task<PreProyectosInversionResponseDto> MapPreProyectosInversion(PRE_PROYECTOS_INVERSION dto)
         {
             PreProyectosInversionResponseDto itemResult = new PreProyectosInversionResponseDto();
@@ -96,12 +87,12 @@ namespace Convertidor.Services.Presupuesto
             itemResult.Denominacion = dto.DENOMINACION;
             itemResult.CodigoFuncionario = dto.CODIGO_FUNCIONARIO;
             itemResult.FechaIni = dto.FECHA_INI;
-            itemResult.FechaIniString = dto.FECHA_INI.ToString();
-            FechaDto fechaIniObj = GetFechaDto(dto.FECHA_INI);
+            itemResult.FechaIniString = Fecha.GetFechaString( dto.FECHA_INI);
+            FechaDto fechaIniObj = Fecha.GetFechaDto(dto.FECHA_INI);
             itemResult.FechaIniObj=(FechaDto)fechaIniObj;
             itemResult.FechaFin = dto.FECHA_FIN;
-            itemResult.FechaFinString = dto.FECHA_INI.ToString();
-            FechaDto fechaFinObj = GetFechaDto(dto.FECHA_FIN);
+            itemResult.FechaFinString = Fecha.GetFechaString( dto.FECHA_INI);
+            FechaDto fechaFinObj = Fecha.GetFechaDto(dto.FECHA_FIN);
             itemResult.FechaFinObj = (FechaDto)fechaFinObj;
             itemResult.Extra1 = dto.EXTRA1;
             itemResult.Extra2 = dto.EXTRA2;

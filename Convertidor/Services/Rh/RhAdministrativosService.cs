@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Convertidor.Utility;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -58,17 +59,7 @@ namespace Convertidor.Data.Repository.Rh
         }
 
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+       
        
         public async  Task<RhAdministrativosResponseDto> MapAdministrativosDto(RH_ADMINISTRATIVOS dtos)
         {
@@ -77,8 +68,8 @@ namespace Convertidor.Data.Repository.Rh
                 RhAdministrativosResponseDto itemResult = new RhAdministrativosResponseDto();
                 itemResult.CodigoAdministrativo = dtos.CODIGO_ADMINISTRATIVO;
                 itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
-                itemResult.FechaIngreso = dtos.FECHA_INGRESO.ToString("u");          
-                FechaDto FechaIngresoObj = GetFechaDto(dtos.FECHA_INGRESO);
+                itemResult.FechaIngreso = Fecha.GetFechaString(dtos.FECHA_INGRESO);          
+                FechaDto FechaIngresoObj = Fecha.GetFechaDto(dtos.FECHA_INGRESO);
                 itemResult.FechaIngresoObj = (FechaDto)FechaIngresoObj;
                 
                 itemResult.TipoPago = dtos.TIPO_PAGO;

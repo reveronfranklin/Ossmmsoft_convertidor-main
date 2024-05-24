@@ -25,17 +25,7 @@ namespace Convertidor.Data.Repository.Rh
        
        
         
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+       
 
         public async Task<List<RhExpLaboralResponseDto>> GetByCodigoPersona(int codigoPersona)
         {
@@ -72,11 +62,11 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Cargo = dtos.CARGO;
                 itemResult.FechaDesde = dtos.FECHA_DESDE;
                 itemResult.FechaHasta = dtos.FECHA_HASTA;
-                itemResult.FechaDesdeString = dtos.FECHA_DESDE.ToString("u"); 
-                itemResult.FechaHastaString = dtos.FECHA_HASTA.ToString("u"); 
-                FechaDto FechaDesdeObj = GetFechaDto(dtos.FECHA_DESDE);
+                itemResult.FechaDesdeString = Fecha.GetFechaString( dtos.FECHA_DESDE); 
+                itemResult.FechaHastaString = Fecha.GetFechaString( dtos.FECHA_HASTA); 
+                FechaDto FechaDesdeObj = Fecha.GetFechaDto(dtos.FECHA_DESDE);
                 itemResult.FechaDesdeObj = (FechaDto)FechaDesdeObj;
-                FechaDto FechaHastaObj = GetFechaDto(dtos.FECHA_HASTA);
+                FechaDto FechaHastaObj =Fecha.GetFechaDto(dtos.FECHA_HASTA);
                 itemResult.FechaHastaObj = FechaHastaObj;
                 itemResult.UltimoSueldo = dtos.ULTIMO_SUELDO;
                 if(dtos.SUPERVISOR == null)  dtos.SUPERVISOR = "";

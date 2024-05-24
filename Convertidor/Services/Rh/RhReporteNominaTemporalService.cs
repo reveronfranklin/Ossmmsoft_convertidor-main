@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Data.Repository.Rh
+﻿using Convertidor.Utility;
+
+namespace Convertidor.Data.Repository.Rh
 {
 	public class RhReporteNominaTemporalService: IRhReporteNominaTemporalService
     {
@@ -256,17 +258,7 @@
         }
 
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+      
        
     public async  Task<List<RhReporteNominaResumenResponseDto>> MapListHistoricoResumen(List<RH_V_REPORTE_NOMINA_TEMPORAL> dtos)
         {
@@ -277,8 +269,8 @@
                                 CodigoPeriodo=s.CODIGO_PERIODO,
                                 Periodo=s.PERIODO,
                                 FechaNomina = s.FECHA_NOMINA,
-                                FechaNominaString=s.FECHA_NOMINA.ToString("u"),
-                                FechaNominaObj= GetFechaDto(s.FECHA_NOMINA),
+                                FechaNominaString=Fecha.GetFechaString(s.FECHA_NOMINA),
+                                FechaNominaObj= Fecha.GetFechaDto(s.FECHA_NOMINA),
                                 CodigoIcpConcat=s.CODIGO_ICP_CONCAT,
                                 CodigoIcp=s.CODIGO_ICP,
                                 Denominacion=s.DENOMINACION,
@@ -311,8 +303,8 @@
                             group s by new
                             {
                                 FechaNomina = s.FECHA_NOMINA,
-                                FechaNominaString=s.FECHA_NOMINA.ToString("u"),
-                                FechaNominaObj= GetFechaDto(s.FECHA_NOMINA),
+                                FechaNominaString=Fecha.GetFechaString(s.FECHA_NOMINA),
+                                FechaNominaObj= Fecha.GetFechaDto(s.FECHA_NOMINA),
                                 CodigoPeriodo=s.CODIGO_PERIODO,
                                 CodigoTipoNomina=s.CODIGO_TIPO_NOMINA,
                                 CodigoIcpConcat=s.CODIGO_ICP_CONCAT,
@@ -335,8 +327,8 @@
                                 DescripcionStatus=s.DESCRIPCION_STATUS,
                                 CodigoPersona=s.CODIGO_PERSONA,
                                 FechaIngreso=s.FECHA_INGRESO,
-                                FechaIngresoString=s.FECHA_INGRESO.ToString("u"),
-                                FechaIngresoObj=GetFechaDto(s.FECHA_INGRESO),
+                                FechaIngresoString=Fecha.GetFechaString(s.FECHA_INGRESO),
+                                FechaIngresoObj=Fecha.GetFechaDto(s.FECHA_INGRESO),
                                 CargoCodigo=s.CARGO_CODIGO,
                                 Banco=s.BANCO,
                                 CodigoConcepto=s.CODIGO_CONCEPTO,
