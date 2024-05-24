@@ -28,29 +28,7 @@ namespace Convertidor.Services.Adm
         }
 
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            try
-            {
-                FechaDesdeObj.Year = fecha.Year.ToString();
-                string month = "00" + fecha.Month.ToString();
-                string day = "00" + fecha.Day.ToString();
-                FechaDesdeObj.Month = month.Substring(month.Length - 2);
-                FechaDesdeObj.Day = day.Substring(day.Length - 2);
-                return FechaDesdeObj;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return FechaDesdeObj;
-            }
-           
-         
-    
-          
-        }
-       
+        
        
         public  async Task<RhConceptosAcumulaResponseDto> MapRhConceptosAcumulaDto(RH_CONCEPTOS_ACUMULA dtos)
         {
@@ -65,14 +43,14 @@ namespace Convertidor.Services.Adm
                 itemResult.CodigoConcepto = dtos.CODIGO_CONCEPTO;
                 itemResult.CodigoConceptoAcumula = dtos.CODIGO_CONCEPTO_ACUMULA;
                 itemResult.FechaDesde = dtos.FECHA_DESDE;
-                itemResult.FechaDesdeString = dtos.FECHA_DESDE.ToString("u"); 
-                FechaDto FechaDesdeObj = GetFechaDto(dtos.FECHA_DESDE);
+                itemResult.FechaDesdeString =Fecha.GetFechaString(dtos.FECHA_DESDE); 
+                FechaDto FechaDesdeObj = Fecha.GetFechaDto(dtos.FECHA_DESDE);
                 itemResult.FechaDesdeObj = FechaDesdeObj;
                 if (dtos.FECHA_HASTA != null)
                 {
                     itemResult.FechaHasta = (DateTime)dtos.FECHA_HASTA;
-                    itemResult.FechaHastaString =  itemResult.FechaHasta.ToString("u"); 
-                    FechaDto FechaHastaObj = GetFechaDto((DateTime)dtos.FECHA_HASTA);
+                    itemResult.FechaHastaString =Fecha.GetFechaString(itemResult.FechaHasta); 
+                    FechaDto FechaHastaObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_HASTA);
                     itemResult.FechaHastaObj = FechaHastaObj;
                 }
             

@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -31,18 +32,7 @@ namespace Convertidor.Services.Adm
            
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
-
+       
         public async Task<AdmComprobantesDocumentosOpResponseDto> MapComprobantesDocumentosOpDto(ADM_COMPROBANTES_DOCUMENTOS_OP dtos)
         {
             AdmComprobantesDocumentosOpResponseDto itemResult = new AdmComprobantesDocumentosOpResponseDto();
@@ -52,8 +42,8 @@ namespace Convertidor.Services.Adm
             itemResult.CodigoProveedor=dtos.CODIGO_PROVEEDOR;
             itemResult.NumeroComprobante=dtos.NUMERO_COMPROBANTE;
             itemResult.FechaComprobante = dtos.FECHA_COMPROBANTE;
-            itemResult.FechaComprobanteString = dtos.FECHA_COMPROBANTE.ToString("u");
-            FechaDto fechaComprobanteObj = GetFechaDto( dtos.FECHA_COMPROBANTE);
+            itemResult.FechaComprobanteString =Fecha.GetFechaString(dtos.FECHA_COMPROBANTE);
+            FechaDto fechaComprobanteObj = Fecha.GetFechaDto( dtos.FECHA_COMPROBANTE);
             itemResult.FechaComprobanteObj = (FechaDto) fechaComprobanteObj;    
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;

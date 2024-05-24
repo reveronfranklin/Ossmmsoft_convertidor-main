@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -26,17 +27,7 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+      
         public async Task<AdmOrdenPagoResponseDto> MapOrdenPagoDto(ADM_ORDEN_PAGO dtos)
         {
             AdmOrdenPagoResponseDto itemResult = new AdmOrdenPagoResponseDto();
@@ -49,17 +40,17 @@ namespace Convertidor.Services.Adm
             itemResult.NumeroOrdenPago = dtos.NUMERO_ORDEN_PAGO;
             itemResult.ReferenciaOrdenPago = dtos.REFERENCIA_ORDEN_PAGO;
             itemResult.FechaOrdenPago = dtos.FECHA_ORDEN_PAGO;
-            itemResult.FechaOrdenPagoString = dtos.FECHA_ORDEN_PAGO.ToString("u");
-            FechaDto fechaOrdenPagoObj = GetFechaDto(dtos.FECHA_ORDEN_PAGO);
+            itemResult.FechaOrdenPagoString =Fecha.GetFechaString(dtos.FECHA_ORDEN_PAGO);
+            FechaDto fechaOrdenPagoObj = Fecha.GetFechaDto(dtos.FECHA_ORDEN_PAGO);
             itemResult.FechaOrdenPagoObj = (FechaDto)fechaOrdenPagoObj;
             itemResult.TipoOrdenPagoId = dtos.TIPO_ORDEN_PAGO_ID;
             itemResult.FechaPlazoDesde = dtos.FECHA_PLAZO_DESDE;
-            itemResult.FechaPlazoDesdeString = dtos.FECHA_PLAZO_DESDE.ToString("u");
-            FechaDto fechaPlazoDesdeObj = GetFechaDto(dtos.FECHA_PLAZO_DESDE);
+            itemResult.FechaPlazoDesdeString = Fecha.GetFechaString(dtos.FECHA_PLAZO_DESDE);
+            FechaDto fechaPlazoDesdeObj = Fecha.GetFechaDto(dtos.FECHA_PLAZO_DESDE);
             itemResult.FechaPlazoDesdeObj = (FechaDto)fechaPlazoDesdeObj;
             itemResult.FechaPlazoHasta = dtos.FECHA_PLAZO_HASTA;
-            itemResult.FechaPlazoHastaString = dtos.FECHA_PLAZO_HASTA.ToString("u");
-            FechaDto fechaPlazoHastaObj = GetFechaDto(dtos.FECHA_PLAZO_HASTA);
+            itemResult.FechaPlazoHastaString = Fecha.GetFechaString(dtos.FECHA_PLAZO_HASTA);
+            FechaDto fechaPlazoHastaObj = Fecha.GetFechaDto(dtos.FECHA_PLAZO_HASTA);
             itemResult.FechaPlazoHastaObj = (FechaDto)fechaPlazoHastaObj;
             itemResult.CantidadPago = dtos.CANTIDAD_PAGO;
             itemResult.NumeroPago = dtos.NUMERO_PAGO;
@@ -85,8 +76,8 @@ namespace Convertidor.Services.Adm
             itemResult.Extra3 = dtos.EXTRA15;
             itemResult.NumeroComprobante = dtos.NUMERO_COMPROBANTE;
             itemResult.FechaComprobante = dtos.FECHA_COMPROBANTE;
-            itemResult.FechaComprobanteString = dtos.FECHA_COMPROBANTE.ToString("u");
-            FechaDto fechaComprobanteObj = GetFechaDto(dtos.FECHA_COMPROBANTE);
+            itemResult.FechaComprobanteString = Fecha.GetFechaString(dtos.FECHA_COMPROBANTE);
+            FechaDto fechaComprobanteObj = Fecha.GetFechaDto(dtos.FECHA_COMPROBANTE);
             itemResult.FechaComprobanteObj = (FechaDto)fechaComprobanteObj;
             itemResult.NumeroComprobante2 = dtos.NUMERO_COMPROBANTE2;
             itemResult.numeroComprobante3 = dtos.NUMERO_COMPROBANTE3;

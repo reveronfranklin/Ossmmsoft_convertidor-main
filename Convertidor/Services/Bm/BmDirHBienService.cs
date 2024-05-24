@@ -4,6 +4,7 @@ using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
 using Convertidor.Services.Bm;
 using Convertidor.Services.Sis;
+using Convertidor.Utility;
 
 namespace Convertidor.Data.Repository.Bm
 {
@@ -63,18 +64,7 @@ namespace Convertidor.Data.Repository.Bm
       
 
         
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaIObj = new FechaDto();
-            FechaIObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaIObj.Month = month.Substring(month.Length - 2);
-            FechaIObj.Day = day.Substring(day.Length - 2);
-
-            return FechaIObj;
-        }
-
+       
 
         public async Task<BmDirHBienResponseDto> MapDirHBienDto(BM_DIR_H_BIEN dtos)
         {
@@ -105,12 +95,12 @@ namespace Convertidor.Data.Repository.Bm
             itemResult.TenenciaId = dtos.TENENCIA_ID;
             itemResult.CodigoPostal = dtos.CODIGO_POSTAL;
             itemResult.FechaIni = dtos.FECHA_INI;
-            itemResult.FechaIniString = dtos.FECHA_INI.ToString("u");
-            FechaDto fechaIniObj = GetFechaDto(dtos.FECHA_INI);
+            itemResult.FechaIniString =Fecha.GetFechaString(dtos.FECHA_INI);
+            FechaDto fechaIniObj = Fecha.GetFechaDto(dtos.FECHA_INI);
             itemResult.FechaIniObj = (FechaDto)fechaIniObj;
             itemResult.FechaFin = dtos.FECHA_FIN;
-            itemResult.FechaFinString = dtos.FECHA_FIN.ToString("u");
-            FechaDto fechaFIn = GetFechaDto(dtos.FECHA_FIN);
+            itemResult.FechaFinString = Fecha.GetFechaString(dtos.FECHA_FIN);
+            FechaDto fechaFIn = Fecha.GetFechaDto(dtos.FECHA_FIN);
             itemResult.FechaFinObj = (FechaDto)fechaFIn;
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;

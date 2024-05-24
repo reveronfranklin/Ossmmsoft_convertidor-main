@@ -2,6 +2,7 @@ using System.Globalization;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto;
 
@@ -27,17 +28,7 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
             _preAsignacionesRepository = preAsignacionesRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+       
         public async Task<PreAsignacionesDetalleGetDto> MapPreAsignacionDetalleDto(PRE_ASIGNACIONES_DETALLE asignacion)
         {
             PreAsignacionesDetalleGetDto result = new PreAsignacionesDetalleGetDto();
@@ -53,8 +44,8 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
             result.CodigoAsignacion = asignacion.CODIGO_ASIGNACION;
             result.CodigoAsignacionDetalle = asignacion.CODIGO_ASIGNACION_DETALLE;
             result.FechaDesembolso = asignacion.FECHA_DESEMBOLSO;
-            result.FechaDesembolsoString= asignacion.FECHA_DESEMBOLSO.ToString("u");
-            result.FechaDesembolsoObj= GetFechaDto(asignacion.FECHA_DESEMBOLSO);
+            result.FechaDesembolsoString= Fecha.GetFechaString(asignacion.FECHA_DESEMBOLSO);
+            result.FechaDesembolsoObj= Fecha.GetFechaDto(asignacion.FECHA_DESEMBOLSO);
             result.Monto = asignacion.MONTO;
             result.Notas = asignacion.NOTAS;
             return result;

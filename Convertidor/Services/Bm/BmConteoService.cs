@@ -47,17 +47,7 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+      
         public async Task<BmConteoResponseDto> MapBmConteo(BM_CONTEO dtos)
         {
 
@@ -77,8 +67,8 @@ namespace Convertidor.Services.Bm
           
             itemResult.ConteoId = dtos.CANTIDAD_CONTEOS_ID;
             itemResult.Fecha = dtos.FECHA;
-            itemResult.FechaString = dtos.FECHA.ToString("u");
-            FechaDto fechaObj = GetFechaDto(dtos.FECHA);
+            itemResult.FechaString = Fecha.GetFechaString(dtos.FECHA);
+            FechaDto fechaObj = Fecha.GetFechaDto(dtos.FECHA);
             itemResult.FechaObj = (FechaDto)fechaObj;
             var resumen = await _conteoDetalleService.GetResumen(dtos.CODIGO_BM_CONTEO);
             itemResult.ResumenConteo = resumen.Data;

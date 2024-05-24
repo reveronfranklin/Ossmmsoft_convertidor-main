@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Bm
 {
@@ -25,17 +26,7 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+      
         public async Task<BmSolMovBienesResponseDto> MapBmMovBienesDto(BM_SOL_MOV_BIENES dtos)
         {
 
@@ -45,8 +36,8 @@ namespace Convertidor.Services.Bm
             itemResult.CodigoBien = dtos.CODIGO_BIEN;
             itemResult.TipoMovimiento = dtos.TIPO_MOVIMIENTO;
             itemResult.FechaMovimiento = dtos.FECHA_MOVIMIENTO;
-            itemResult.FechaMovimientoString = dtos.FECHA_MOVIMIENTO.ToString("u");
-            FechaDto fechaMovimientoObj = GetFechaDto(dtos.FECHA_MOVIMIENTO);
+            itemResult.FechaMovimientoString =Fecha.GetFechaString(dtos.FECHA_MOVIMIENTO) ;
+            FechaDto fechaMovimientoObj = Fecha.GetFechaDto(dtos.FECHA_MOVIMIENTO);
             itemResult.FechaMovimientoObj = (FechaDto)fechaMovimientoObj;
             itemResult.CodigoDirBien = dtos.CODIGO_DIR_BIEN;
             itemResult.Extra1 = dtos.EXTRA1;
@@ -59,7 +50,7 @@ namespace Convertidor.Services.Bm
             itemResult.UsuarioSolicita = dtos.USUARIO_SOLICITA;
             itemResult.FechaSolicita = dtos.FECHA_SOLICITA;
             itemResult.FechaSolicitaString = dtos.FECHA_SOLICITA.ToString("u");
-            FechaDto fechaSolicitaObj = GetFechaDto(dtos.FECHA_SOLICITA);
+            FechaDto fechaSolicitaObj = Fecha.GetFechaDto(dtos.FECHA_SOLICITA);
             itemResult.FechaSolicitaObj = (FechaDto)fechaSolicitaObj;
 
 

@@ -28,28 +28,7 @@ namespace Convertidor.Services.Adm
         }
 
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            try
-            {
-                FechaDesdeObj.Year = fecha.Year.ToString();
-                string month = "00" + fecha.Month.ToString();
-                string day = "00" + fecha.Day.ToString();
-                FechaDesdeObj.Month = month.Substring(month.Length - 2);
-                FechaDesdeObj.Day = day.Substring(day.Length - 2);
-                return FechaDesdeObj;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return FechaDesdeObj;
-            }
-           
-         
-    
-          
-        }
+      
        
       
         public  async Task<RhConceptosFormulaResponseDto> MapRhConceptosFormulaDto(RH_FORMULA_CONCEPTOS dtos)
@@ -65,12 +44,12 @@ namespace Convertidor.Services.Adm
                 itemResult.CodigoConcepto = dtos.CODIGO_CONCEPTO;
                 itemResult.CodigoFormulaConcepto = dtos.CODIGO_FORMULA_CONCEPTO;
                 itemResult.FechaDesde = (DateTime)dtos.FECHA_DESDE;
-                itemResult.FechaDesdeString =  itemResult.FechaDesde.ToString("u"); 
-                FechaDto FechaDesdeObj = GetFechaDto((DateTime)dtos.FECHA_DESDE);
+                itemResult.FechaDesdeString =Fecha.GetFechaString(  itemResult.FechaDesde); 
+                FechaDto FechaDesdeObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_DESDE);
                 itemResult.FechaDesdeObj = FechaDesdeObj;
                 itemResult.FechaHasta = (DateTime)dtos.FECHA_HASTA;
-                itemResult.FechaHastaString =    itemResult.FechaHasta.ToString("u"); 
-                FechaDto FechaHastaObj = GetFechaDto((DateTime)dtos.FECHA_HASTA);
+                itemResult.FechaHastaString =Fecha.GetFechaString(itemResult.FechaHasta) ; 
+                FechaDto FechaHastaObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_HASTA);
                 itemResult.FechaHastaObj = FechaHastaObj;
                 if (dtos.PORCENTAJE == null) dtos.PORCENTAJE = 0;
                 itemResult.Porcentaje = dtos.PORCENTAJE;

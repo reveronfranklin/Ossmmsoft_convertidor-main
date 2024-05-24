@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -19,17 +20,7 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+      
         public async Task<AdmReintegrosResponseDto> MapReintegrosDto(ADM_REINTEGROS dtos)
         {
             AdmReintegrosResponseDto itemResult = new AdmReintegrosResponseDto();
@@ -37,15 +28,15 @@ namespace Convertidor.Services.Adm
             itemResult.ANO = dtos.ANO;
             itemResult.CodigoCompromiso = dtos.CODIGO_COMPROMISO;
             itemResult.FechaReintegro = dtos.FECHA_REINTEGRO;
-            itemResult.FechaReintegroString = dtos.FECHA_REINTEGRO.ToString("u");
-            FechaDto fechaReintegroObj = GetFechaDto(dtos.FECHA_REINTEGRO);
+            itemResult.FechaReintegroString =Fecha.GetFechaString(dtos.FECHA_REINTEGRO);
+            FechaDto fechaReintegroObj = Fecha.GetFechaDto(dtos.FECHA_REINTEGRO);
             itemResult.FechaReintegroObj = (FechaDto)fechaReintegroObj;
             itemResult.NumeroReintegro = dtos.NUMERO_REINTEGRO;
             itemResult.CodigoCuentaBanco = dtos.CODIGO_CUENTA_BANCO;
             itemResult.NumeroDeposito = dtos.NUMERO_DEPOSITO;
             itemResult.FechaDeposito = dtos.FECHA_DEPOSITO;
-            itemResult.FechaDepositoString = dtos.FECHA_DEPOSITO.ToString("u");
-            FechaDto fechaDepositoObj = GetFechaDto(dtos.FECHA_DEPOSITO);
+            itemResult.FechaDepositoString =Fecha.GetFechaString(dtos.FECHA_DEPOSITO);
+            FechaDto fechaDepositoObj = Fecha.GetFechaDto(dtos.FECHA_DEPOSITO);
             itemResult.FechaDepositoObj = (FechaDto)fechaDepositoObj;
             itemResult.Motivo = dtos.MOTIVO;
             itemResult.Extra1 = dtos.EXTRA1;
