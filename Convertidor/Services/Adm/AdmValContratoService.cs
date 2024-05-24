@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -26,18 +27,7 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
-
+      
         public async Task<AdmValContratoResponseDto> MapValContratoDto(ADM_VAL_CONTRATO dtos)
         {
             AdmValContratoResponseDto itemResult = new AdmValContratoResponseDto();
@@ -45,21 +35,21 @@ namespace Convertidor.Services.Adm
             itemResult.CodigoContrato = dtos.CODIGO_CONTRATO;
             itemResult.TipoValuacion = dtos.TIPO_VALUACION;
             itemResult.FechaValuacion = dtos.FECHA_VALUACION;
-            itemResult.FechaValuacionString = dtos.FECHA_VALUACION.ToString("u");
-            FechaDto fechaValuacionObj = GetFechaDto(dtos.FECHA_VALUACION);
+            itemResult.FechaValuacionString = Fecha.GetFechaString(dtos.FECHA_VALUACION);
+            FechaDto fechaValuacionObj = Fecha.GetFechaDto(dtos.FECHA_VALUACION);
             itemResult.FechaValuacionObj = (FechaDto)fechaValuacionObj;
             itemResult.NumeroValuacion = dtos.NUMERO_VALUACION;
             itemResult.FechaIni = dtos.FECHA_INI;
-            itemResult.FechaIniString = dtos.FECHA_INI.ToString("u");
-            FechaDto fechaIniObj = GetFechaDto(dtos.FECHA_INI);
+            itemResult.FechaIniString =Fecha.GetFechaString(dtos.FECHA_INI);
+            FechaDto fechaIniObj = Fecha.GetFechaDto(dtos.FECHA_INI);
             itemResult.FechaIniObj = (FechaDto)fechaIniObj;
             itemResult.FechaFin = dtos.FECHA_FIN;
-            itemResult.FechaFinString = dtos.FECHA_FIN.ToString("u");
-            FechaDto fechaFinObj = GetFechaDto(dtos.FECHA_FIN);
+            itemResult.FechaFinString = Fecha.GetFechaString(dtos.FECHA_FIN);
+            FechaDto fechaFinObj = Fecha.GetFechaDto(dtos.FECHA_FIN);
             itemResult.FechaFinObj = (FechaDto)fechaFinObj;
             itemResult.FechaAprobacion = dtos.FECHA_APROBACION;
-            itemResult.FechaAprobacionString = dtos.FECHA_APROBACION.ToString("u");
-            FechaDto fechaAprobacionObj = GetFechaDto(dtos.FECHA_APROBACION);
+            itemResult.FechaAprobacionString = Fecha.GetFechaString(dtos.FECHA_APROBACION);
+            FechaDto fechaAprobacionObj = Fecha.GetFechaDto(dtos.FECHA_APROBACION);
             itemResult.FechaAprobacionObj = (FechaDto)fechaAprobacionObj;
             itemResult.NumeroAprobacion = dtos.NUMERO_APROBACION; 
             itemResult.Extra1 = dtos.EXTRA1;

@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Data.Repository.Rh
+﻿using Convertidor.Utility;
+
+namespace Convertidor.Data.Repository.Rh
 {
 	public class RhDocumentosService: IRhDocumentosService
     {
@@ -41,17 +43,7 @@
 
         }
         
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+   
        
         public async  Task<RhDocumentosResponseDto> MapDocumentosDto(RH_DOCUMENTOS dtos)
         {
@@ -63,8 +55,8 @@
                 itemResult.TipodocumentoId = dtos.TIPO_DOCUMENTO_ID;
                 itemResult.NumeroDocumento = dtos.NUMERO_DOCUMENTO;
                 itemResult.FechaVencimiento = dtos.FECHA_VENCIMIENTO;
-                itemResult.FechaVencimientoString = dtos.FECHA_VENCIMIENTO.ToString("u");
-                FechaDto fechaVencimientoObj = GetFechaDto(dtos.FECHA_VENCIMIENTO);
+                itemResult.FechaVencimientoString =Fecha.GetFechaString(dtos.FECHA_VENCIMIENTO);
+                FechaDto fechaVencimientoObj = Fecha.GetFechaDto(dtos.FECHA_VENCIMIENTO);
                 itemResult.FechaVencimientoObj = (FechaDto)fechaVencimientoObj;
                 itemResult.TipoGradoid = dtos.TIPO_GRADO_ID;
                 itemResult.GradoId = dtos.GRADO_ID;

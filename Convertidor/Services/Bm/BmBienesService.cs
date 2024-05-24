@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Bm
 {
@@ -31,17 +32,7 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+     
         public async Task<BmBienesResponseDto> MapBmBienes(BM_BIENES dtos)
         {
 
@@ -53,13 +44,13 @@ namespace Convertidor.Services.Bm
             itemResult.CodigoOrdenCompra = dtos.CODIGO_ORDEN_COMPRA;
             itemResult.OrigenId = dtos.ORIGEN_ID;
             itemResult.FechaFabricacion = dtos.FECHA_FABRICACION;
-            itemResult.FechaFabricacionString = dtos.FECHA_FABRICACION.ToString("u");
-            FechaDto fechaFabricacionObj = GetFechaDto(dtos.FECHA_FABRICACION);
+            itemResult.FechaFabricacionString =Fecha.GetFechaString(dtos.FECHA_FABRICACION);
+            FechaDto fechaFabricacionObj = Fecha.GetFechaDto(dtos.FECHA_FABRICACION);
             itemResult.FechaFabricacionObj = (FechaDto)fechaFabricacionObj;
             itemResult.NumeroOrdenCompra = dtos.NUMERO_ORDEN_COMPRA;
             itemResult.FechaCompra = dtos.FECHA_COMPRA;
-            itemResult.FechaCompraString = dtos.FECHA_COMPRA.ToString("u");
-            FechaDto fechaCompraObj = GetFechaDto(dtos.FECHA_COMPRA);
+            itemResult.FechaCompraString =Fecha.GetFechaString(dtos.FECHA_COMPRA);
+            FechaDto fechaCompraObj = Fecha.GetFechaDto(dtos.FECHA_COMPRA);
             itemResult.FechaCompraObj = (FechaDto)fechaFabricacionObj;
             itemResult.NumeroPlaca = dtos.NUMERO_PLACA;
             itemResult.NumeroLote = dtos.NUMERO_LOTE;

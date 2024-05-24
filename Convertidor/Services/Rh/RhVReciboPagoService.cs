@@ -4,6 +4,7 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using QuestPDF.Previewer;
 using System.Globalization;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Rh
 {
@@ -26,29 +27,19 @@ namespace Convertidor.Services.Rh
            
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+       
         public async Task<RhVReciboPagoResponseDto> MapReciboPagoDto(RH_V_RECIBO_PAGO dtos)
         {
 
 
             RhVReciboPagoResponseDto itemResult = new RhVReciboPagoResponseDto();
             itemResult.FechaPeriodoNomina = dtos.FECHA_PERIODO_NOMINA;
-            itemResult.FechaPeriodoNominaString = dtos.FECHA_PERIODO_NOMINA.ToString("u");
-            FechaDto fechaPeriodoNominaObj = GetFechaDto(dtos.FECHA_PERIODO_NOMINA);
+            itemResult.FechaPeriodoNominaString =Fecha.GetFechaString( dtos.FECHA_PERIODO_NOMINA);
+            FechaDto fechaPeriodoNominaObj = Fecha.GetFechaDto(dtos.FECHA_PERIODO_NOMINA);
             itemResult.FechaPeriodoNominaObj = (FechaDto)fechaPeriodoNominaObj;
             itemResult.FechaNomina = dtos.FECHA_NOMINA;
-            itemResult.FechaNominaString = dtos.FECHA_NOMINA.ToString("u");
-            FechaDto fechaNominaObj = GetFechaDto(dtos.FECHA_NOMINA);
+            itemResult.FechaNominaString = Fecha.GetFechaString(dtos.FECHA_NOMINA);
+            FechaDto fechaNominaObj = Fecha.GetFechaDto(dtos.FECHA_NOMINA);
             itemResult.FechaNominaObj = (FechaDto)fechaNominaObj;
             itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
             itemResult.CodigoTipoNomina = dtos.CODIGO_TIPO_NOMINA;

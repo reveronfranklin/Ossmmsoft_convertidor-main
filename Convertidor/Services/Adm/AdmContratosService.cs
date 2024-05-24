@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -26,17 +27,7 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+   
 
         public async Task<AdmContratosResponseDto> MapContratosDto(ADM_CONTRATOS dtos)
         {
@@ -44,27 +35,27 @@ namespace Convertidor.Services.Adm
             itemResult.CodigoContrato = dtos.CODIGO_CONTRATO;
             itemResult.ANO = dtos.ANO;
             itemResult.FechaContrato = dtos.FECHA_CONTRATO;
-            itemResult.FechaContratoString = dtos.FECHA_CONTRATO.ToString("u");
-            FechaDto fechaContratoObj = GetFechaDto(dtos.FECHA_CONTRATO);
+            itemResult.FechaContratoString = Fecha.GetFechaString(dtos.FECHA_CONTRATO);
+            FechaDto fechaContratoObj = Fecha.GetFechaDto(dtos.FECHA_CONTRATO);
             itemResult.FechaContratoObj = (FechaDto)fechaContratoObj;
             itemResult.NumeroContrato = dtos.NUMERO_CONTRATO;
             itemResult.CodigoSolicitante = dtos.CODIGO_SOLICITANTE;
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
             itemResult.FechaAprobacion = dtos.FECHA_APROBACION;
-            itemResult.FechaAprobacionString = dtos.FECHA_APROBACION.ToString("u");
-            FechaDto fechaAprobacionObj = GetFechaDto(dtos.FECHA_APROBACION);
+            itemResult.FechaAprobacionString = Fecha.GetFechaString(dtos.FECHA_APROBACION);
+            FechaDto fechaAprobacionObj = Fecha.GetFechaDto(dtos.FECHA_APROBACION);
             itemResult.FechaAprobacionObj = (FechaDto)fechaAprobacionObj;
             itemResult.NumeroAprobacion = dtos.NUMERO_APROBACION;
             itemResult.Obra = dtos.OBRA;
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.Parroquiaid = dtos.PARROQUIA_ID;
             itemResult.FechaIniObra = dtos.FECHA_INI_OBRA;
-            itemResult.FechaIniObraString = dtos.FECHA_INI_OBRA.ToString("u");
-            FechaDto fechaIniObraObj = GetFechaDto(dtos.FECHA_INI_OBRA);
+            itemResult.FechaIniObraString =Fecha.GetFechaString(dtos.FECHA_INI_OBRA);
+            FechaDto fechaIniObraObj = Fecha.GetFechaDto(dtos.FECHA_INI_OBRA);
             itemResult.FechaIniObraObj = (FechaDto)fechaIniObraObj;
             itemResult.FechaFinObra = dtos.FECHA_FIN_OBRA;
-            itemResult.FechaFinObraString = dtos.FECHA_FIN_OBRA.ToString("u");
-            FechaDto fechaFinObraObj = GetFechaDto(dtos.FECHA_FIN_OBRA);
+            itemResult.FechaFinObraString =Fecha.GetFechaString(dtos.FECHA_FIN_OBRA);
+            FechaDto fechaFinObraObj = Fecha.GetFechaDto(dtos.FECHA_FIN_OBRA);
             itemResult.FechaFinObraObj = (FechaDto)fechaFinObraObj;
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;

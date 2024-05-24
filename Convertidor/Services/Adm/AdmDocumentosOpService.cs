@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -26,33 +27,22 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
-
+      
         public async Task<AdmDocumentosOpResponseDto> MapDocumentosOpDto(ADM_DOCUMENTOS_OP dtos)
         {
             AdmDocumentosOpResponseDto itemResult = new AdmDocumentosOpResponseDto();
             itemResult.CodigoDocumentoOp = dtos.CODIGO_DOCUMENTO_OP;
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.FechaComprobante = dtos.FECHA_COMPROBANTE;
-            itemResult.FechaComprobanteString = dtos.FECHA_COMPROBANTE.ToString("u");
-            FechaDto fechaComprobanteObj = GetFechaDto( dtos.FECHA_COMPROBANTE);
+            itemResult.FechaComprobanteString = Fecha.GetFechaString(dtos.FECHA_COMPROBANTE);
+            FechaDto fechaComprobanteObj = Fecha.GetFechaDto( dtos.FECHA_COMPROBANTE);
             itemResult.FechaComprobanteObj = (FechaDto) fechaComprobanteObj;    
             itemResult.PeriodoImpositivo = dtos.PERIODO_IMPOSITIVO;
             itemResult.TipoOperacionId = dtos.TIPO_OPERACION_ID;
             itemResult.TipoDocumentoId = dtos.TIPO_DOCUMENTO_ID;
             itemResult.FechaDocumento = dtos.FECHA_DOCUMENTO;
-            itemResult.FechaDocumentoString = dtos.FECHA_DOCUMENTO.ToString("u");
-            FechaDto fechaDocumentoObj = GetFechaDto(dtos.FECHA_DOCUMENTO);
+            itemResult.FechaDocumentoString =Fecha.GetFechaString(dtos.FECHA_DOCUMENTO);
+            FechaDto fechaDocumentoObj = Fecha.GetFechaDto(dtos.FECHA_DOCUMENTO);
             itemResult.FechaDocumentoObj = (FechaDto)fechaDocumentoObj;
             itemResult.NumeroDocumento = dtos.NUMERO_DOCUMENTO;
             itemResult.NumeroControlDocumento = dtos.NUMERO_CONTROL_DOCUMENTO;

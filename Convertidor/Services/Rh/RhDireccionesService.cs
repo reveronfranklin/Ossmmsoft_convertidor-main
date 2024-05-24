@@ -51,17 +51,7 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaIObj = new FechaDto();
-            FechaIObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaIObj.Month = month.Substring(month.Length - 2);
-            FechaIObj.Day = day.Substring(day.Length - 2);
-
-            return FechaIObj;
-        }
+       
 
 
         public async Task<RhDireccionesResponseDto> MapDireccionesDto(RH_DIRECCIONES dtos)

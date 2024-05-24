@@ -634,17 +634,7 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+     
 
         public async Task<GetPRE_PRESUPUESTOSDto> MapPrePresupuestoToGetPrePresupuestoDto(PRE_PRESUPUESTOS entity, FilterPRE_PRESUPUESTOSDto filterDto)
         {
@@ -656,21 +646,21 @@ namespace Convertidor.Services.Presupuesto
             dto.MontoPresupuesto = entity.MONTO_PRESUPUESTO;
             dto.FechaDesde = entity.FECHA_DESDE;          
             dto.FechaHasta = entity.FECHA_HASTA;  
-            dto.FechaDesdeString = entity.FECHA_DESDE.ToString("u");          
-            dto.FechaHastaString = entity.FECHA_HASTA.ToString("u");  
-            FechaDto FechaDesdeObj = GetFechaDto(entity.FECHA_DESDE);
+            dto.FechaDesdeString = Fecha.GetFechaString(entity.FECHA_DESDE);          
+            dto.FechaHastaString = Fecha.GetFechaString(entity.FECHA_HASTA);  
+            FechaDto FechaDesdeObj = Fecha.GetFechaDto(entity.FECHA_DESDE);
             dto.FechaDesdeObj = (FechaDto)FechaDesdeObj;
-            FechaDto FechaHastaObj = GetFechaDto(entity.FECHA_HASTA);
+            FechaDto FechaHastaObj = Fecha.GetFechaDto(entity.FECHA_HASTA);
             dto.FechaHastaObj = (FechaDto)FechaHastaObj;
 
             if (entity.FECHA_APROBACION != null)
             {
                 dto.FechaAprobacion= (DateTime)entity.FECHA_APROBACION;
          
-                dto.FechaAprobacionString=  dto.FechaAprobacion.ToString("u");
+                dto.FechaAprobacionString=  Fecha.GetFechaString(dto.FechaAprobacion);
             
           
-                FechaDto FechaAprobacionObj = GetFechaDto((DateTime)entity.FECHA_APROBACION);
+                FechaDto FechaAprobacionObj = Fecha.GetFechaDto((DateTime)entity.FECHA_APROBACION);
                 dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
             }
            
@@ -678,8 +668,8 @@ namespace Convertidor.Services.Presupuesto
             dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
 
             dto.FechaOrdenanza = entity.FECHA_ORDENANZA;
-            dto.FechaOrdenanzaString = entity.FECHA_ORDENANZA.ToString("u");
-            FechaDto FechaOrdenanzaObj = GetFechaDto(entity.FECHA_ORDENANZA);
+            dto.FechaOrdenanzaString = Fecha.GetFechaString(entity.FECHA_ORDENANZA);
+            FechaDto FechaOrdenanzaObj = Fecha.GetFechaDto(entity.FECHA_ORDENANZA);
             dto.FechaOrdenanzaObj = (FechaDto)FechaOrdenanzaObj;
             dto.presupuestoEnEjecucion = false;
             var presupuestoExiste = await _pre_V_SALDOSRepository.PresupuestoExiste(entity.CODIGO_PRESUPUESTO);
@@ -804,19 +794,19 @@ namespace Convertidor.Services.Presupuesto
             dto.Ano = entity.ANO;
             dto.MontoPresupuesto = entity.MONTO_PRESUPUESTO;
             dto.FechaDesde = entity.FECHA_DESDE;
-            dto.FechaDesdeString = entity.FECHA_DESDE.ToString("u");
-            FechaDto FechaDesdeObj = GetFechaDto(entity.FECHA_DESDE);
+            dto.FechaDesdeString = Fecha.GetFechaString( entity.FECHA_DESDE);
+            FechaDto FechaDesdeObj = Fecha.GetFechaDto(entity.FECHA_DESDE);
             dto.FechaDesdeObj = (FechaDto)FechaDesdeObj;
             
             dto.FechaHasta = entity.FECHA_HASTA;
-            dto.FechaHastaString = entity.FECHA_HASTA.ToString("u");
-            FechaDto FechaHastaObj = GetFechaDto(entity.FECHA_HASTA);
+            dto.FechaHastaString = Fecha.GetFechaString( entity.FECHA_HASTA);
+            FechaDto FechaHastaObj = Fecha.GetFechaDto(entity.FECHA_HASTA);
             dto.FechaHastaObj = (FechaDto)FechaHastaObj;
             if (entity.FECHA_APROBACION != null)
             {
                 dto.FechaAprobacion = (DateTime)entity.FECHA_APROBACION;
-                dto.FechaAprobacionString = dto.FechaAprobacion .ToString("u");
-                FechaDto FechaAprobacionObj = GetFechaDto((DateTime)entity.FECHA_APROBACION);
+                dto.FechaAprobacionString = Fecha.GetFechaString( dto.FechaAprobacion);
+                FechaDto FechaAprobacionObj = Fecha.GetFechaDto((DateTime)entity.FECHA_APROBACION);
                 dto.FechaAprobacionObj = (FechaDto)FechaAprobacionObj;
             }
        
@@ -826,8 +816,8 @@ namespace Convertidor.Services.Presupuesto
             dto.NumeroOrdenanza = entity.NUMERO_ORDENANZA;
 
             dto.FechaOrdenanza = entity.FECHA_ORDENANZA;
-            dto.FechaOrdenanzaString = entity.FECHA_ORDENANZA.ToString("u");
-            FechaDto FechaOrdenanzaObj = GetFechaDto(entity.FECHA_ORDENANZA);
+            dto.FechaOrdenanzaString = Fecha.GetFechaString( entity.FECHA_ORDENANZA);
+            FechaDto FechaOrdenanzaObj = Fecha.GetFechaDto(entity.FECHA_ORDENANZA);
             dto.FechaOrdenanzaObj = (FechaDto)FechaOrdenanzaObj;
             
             dto.Extra1 = entity.EXTRA1;

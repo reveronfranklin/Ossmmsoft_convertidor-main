@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Data.Repository.Rh
+﻿using Convertidor.Utility;
+
+namespace Convertidor.Data.Repository.Rh
 {
 	public class RhHPeriodoService: IRhHPeriodoService
     {
@@ -68,17 +70,7 @@
 
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+     
 
         public async Task<RhHPeriodosResponseDto> MapHPeriodosDto(RH_H_PERIODOS dtos)
         {
@@ -88,14 +80,14 @@
             itemResult.CodigoHPeriodo = dtos.CODIGO_H_PERIODO;
             itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
             itemResult.FechaInsH = dtos.FECHA_INS_H;
-            itemResult.FechaInsHString = dtos.FECHA_INS_H.ToString("u");
-            FechaDto fechaInsHObj = GetFechaDto(dtos.FECHA_INS_H);
+            itemResult.FechaInsHString =Fecha.GetFechaString(dtos.FECHA_INS_H);
+            FechaDto fechaInsHObj =Fecha.GetFechaDto(dtos.FECHA_INS_H);
             itemResult.FechaInsHObj = (FechaDto)fechaInsHObj;
             itemResult.UsuarioInsH = dtos.USUARIO_INS_H;
             itemResult.CodigoTipoNomina = dtos.CODIGO_TIPO_NOMINA;
             itemResult.FechaNomina = dtos.FECHA_NOMINA;
-            itemResult.FechaNominaString = dtos.FECHA_NOMINA.ToString("u");
-            FechaDto fechaNominaObj = GetFechaDto(dtos.FECHA_NOMINA);
+            itemResult.FechaNominaString =Fecha.GetFechaString(dtos.FECHA_NOMINA);
+            FechaDto fechaNominaObj = Fecha.GetFechaDto(dtos.FECHA_NOMINA);
             itemResult.FechaNominaObj = (FechaDto)fechaNominaObj;
             itemResult.Periodo = dtos.PERIODO;
             itemResult.TipoNomina = dtos.TIPO_NOMINA;
@@ -104,19 +96,19 @@
             itemResult.Extra3 = dtos.EXTRA3;
             itemResult.UsuarioPreCierre = dtos.USUARIO_PRECIERRE;
             itemResult.FechaPreCierre = dtos.FECHA_PRECIERRE;
-            itemResult.FechaPreCierreString = dtos.FECHA_PRECIERRE.ToString("u");
-            FechaDto fechaPreCierreObj = GetFechaDto(dtos.FECHA_PRECIERRE);
+            itemResult.FechaPreCierreString =Fecha.GetFechaString(dtos.FECHA_PRECIERRE);
+            FechaDto fechaPreCierreObj = Fecha.GetFechaDto(dtos.FECHA_PRECIERRE);
             itemResult.FechaPreCierreObj = (FechaDto)fechaPreCierreObj;
             itemResult.UsuarioCierre = dtos.USUARIO_CIERRE;
             itemResult.FechaCierre = dtos.FECHA_CIERRE;
-            itemResult.FechaCierreString = dtos.FECHA_CIERRE.ToString("u");
-            FechaDto fechaCierreObj = GetFechaDto(dtos.FECHA_CIERRE);
+            itemResult.FechaCierreString =Fecha.GetFechaString(dtos.FECHA_CIERRE);
+            FechaDto fechaCierreObj = Fecha.GetFechaDto(dtos.FECHA_CIERRE);
             itemResult.FechaCierreObj = (FechaDto)fechaCierreObj;
             itemResult.CodigoCuentaEmpresa = dtos.CODIGO_CUENTA_EMPRESA;
             itemResult.UsuarioPreNomina = dtos.USUARIO_PRENOMINA;
             itemResult.FechaPrenomina = dtos.FECHA_PRENOMINA;
-            itemResult.FechaPrenominaString = dtos.FECHA_PRENOMINA.ToString("u");
-            FechaDto fechaPrenominaobj = GetFechaDto(dtos.FECHA_PRENOMINA);
+            itemResult.FechaPrenominaString =Fecha.GetFechaString(dtos.FECHA_PRENOMINA);
+            FechaDto fechaPrenominaobj = Fecha.GetFechaDto(dtos.FECHA_PRENOMINA);
             itemResult.FechaPrenominaObj = (FechaDto) fechaPrenominaobj;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             itemResult.Descripcion = dtos.DESCRIPCION;
@@ -376,7 +368,7 @@
                     return result;
                 }
 
-                FechaDto fechanomina = GetFechaDto(dto.FechaNomina);
+                FechaDto fechanomina = Fecha.GetFechaDto(dto.FechaNomina);
                 if (fechanomina == null)
                 {
                     result.Data = null;

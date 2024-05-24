@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -28,18 +29,7 @@ namespace Convertidor.Services.Adm
             
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
-
+       
         public async Task<AdmPeriodicoOpResponseDto> MapPeriodicoOpDto(ADM_PERIODICO_OP dtos)
         {
             AdmPeriodicoOpResponseDto itemResult = new AdmPeriodicoOpResponseDto();
@@ -48,8 +38,8 @@ namespace Convertidor.Services.Adm
             itemResult.CantidadPago=dtos.CANTIDAD_PAGO;
             itemResult.NumeroPago = dtos.NUMERO_PAGO;
             itemResult.FechaPago = dtos.FECHA_PAGO;
-            itemResult.FechaPagoString = dtos.FECHA_PAGO.ToString("u");
-            FechaDto fechaPagoObj = GetFechaDto(dtos.FECHA_PAGO);
+            itemResult.FechaPagoString = Fecha.GetFechaString(dtos.FECHA_PAGO);
+            FechaDto fechaPagoObj = Fecha.GetFechaDto(dtos.FECHA_PAGO);
             itemResult.FechaPagoObj =(FechaDto)fechaPagoObj;
             itemResult.Motivo = dtos.MOTIVO;
             itemResult.Monto = dtos.MONTO;
