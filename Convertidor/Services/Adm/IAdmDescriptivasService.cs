@@ -7,6 +7,7 @@ namespace Convertidor.Services.Adm
 	{
         Task<ResultDto<List<TreePUC>>> GetTreeDecriptiva();
         Task<ResultDto<List<AdmDescriptivasGetDto>>> GetAll();
+        Task<ResultDto<List<SelectListDescriptivaDto>>> GetSelectDescriptiva(int tituloId);
         Task<ResultDto<AdmDescriptivasGetDto>> Update(AdmDescriptivasUpdateDto dto);
         Task<ResultDto<AdmDescriptivasGetDto>> Create(AdmDescriptivasUpdateDto dto);
         Task<ResultDto<AdmDescriptivaDeleteDto>> Delete(AdmDescriptivaDeleteDto dto);
