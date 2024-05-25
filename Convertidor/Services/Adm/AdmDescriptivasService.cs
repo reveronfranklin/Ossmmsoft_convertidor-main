@@ -120,6 +120,55 @@ namespace Convertidor.Services.Adm
 
             return result;
         }
+        
+        public async Task<ResultDto<List<SelectListDescriptivaDto>>> GetSelectDescriptiva(int tituloId)
+        {
+
+            ResultDto<List<SelectListDescriptivaDto>> result = new ResultDto<List<SelectListDescriptivaDto>>(null);
+            try
+            {
+
+                var titulos = await _repository.GetByTitulo(tituloId);
+
+
+
+                if (titulos.Count() > 0)
+                {
+                    List<SelectListDescriptivaDto> listDto = new List<SelectListDescriptivaDto>();
+
+                    foreach (var item in titulos)
+                    {
+                        SelectListDescriptivaDto dto = new SelectListDescriptivaDto();
+                        dto = await MapSelectPreDecriptiva(item);
+
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
         public async Task<ResultDto<List<AdmDescriptivasGetDto>>> GetByCodigoTitulo(string codigo)
         {
 
@@ -624,7 +673,15 @@ namespace Convertidor.Services.Adm
 
         }
 
+ public async Task<SelectListDescriptivaDto> MapSelectPreDecriptiva(ADM_DESCRIPTIVAS entity)
+        {
+            SelectListDescriptivaDto dto = new SelectListDescriptivaDto();
+            dto.Id = entity.DESCRIPCION_ID;
+            dto.Descripcion = entity.DESCRIPCION;
+            
+            return dto;
 
+        }
         public async Task<ResultDto<AdmDescriptivaDeleteDto>> Delete(AdmDescriptivaDeleteDto dto)
         {
 
