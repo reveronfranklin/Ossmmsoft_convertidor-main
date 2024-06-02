@@ -6,7 +6,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
 {
     public interface IReporteSolicitudModificacionPresupuestariaService
     {
-        Task<string> ReportData(FilterBySolicitud filter);
+        Task<string> ReportData(int codigoSolModificacion, string dePara);
         
     }
 }

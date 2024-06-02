@@ -4,6 +4,8 @@ using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
 using Convertidor.Services.Rh.Report.Example;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using NuGet.Protocol.Core.Types;
+using QuestPDF.Fluent;
 using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria
@@ -156,6 +158,11 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
             filter.CodigoSolModificacion = codigoSolModificacion;
             filter.DePara = dePara;
 
+            if(dePara == null) 
+            {
+                IOException ex = new IOException("no hay datos");
+            }
+
             var pucSolModificacion = await _prePucSolicitudModificacionService.GetAllByCodigoSolicitud(filter);
 
             var listDto = pucSolModificacion.Data.Where(x => x.DePara == dePara).ToList();
@@ -194,35 +201,73 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
 
             return result;
         }
-        public async Task<string> ReportData(FilterBySolicitud filter)
+        public async Task<string> ReportData(int codigoSolModificacion , string dePara)
         {
+            FilterDto filter = new FilterDto();
+
+            filter.CodigoSolModificacion = codigoSolModificacion;
+            filter.DePara  = dePara; 
 
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var result = "No Data";
             var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
             var fileName = $"ReporteSolicitudModificacionPresupuestaria-{filter.CodigoSolModificacion}.pdf";
             var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
-            
+
            
-            
-            var reporteSolicitudModificacionPresupuestariaDto = await GenerateData(filter.CodigoSolModificacion);
-
-            if (reporteSolicitudModificacionPresupuestariaDto == null)
+            if (filter == null)
             {
-                return "No Data";
+                return null;
             }
-            else
+            
+                
+                var general = await GenerateDataGeneralReporte(filter.CodigoSolModificacion);
+                var detalle = await GenerateDataDetalleReporte(filter.CodigoSolModificacion, filter.DePara);
+                var reporte = await GenerateData(filter.CodigoSolModificacion);
+            if (reporte != null)
             {
-                
-                fileName = $"ReporteSolicitudModificacionPresupuestaria-{filter.CodigoSolModificacion}.pdf";
-                filePath = $"{@settings.ExcelFiles}/{fileName}";
-                
+                List<ReporteSolicitudModificacionPresupuestariaDto> reporteSolicitud = new List<ReporteSolicitudModificacionPresupuestariaDto>();
 
-                result = fileName;
+                reporteSolicitud.Add(reporte);
 
+                foreach (var item in detalle)
+                {
+
+                    if (item.DePara == null)
+                    {
+                        return null;
+
+                    }
+                    else
+                    {
+                        detalle.Where(x => x.CodigoSolModificacion == item.CodigoSolModificacion).Where(x => x.DePara == filter.DePara);
+                    }
+                }
+
+
+                //var generalReporteSolicitudModificacion = await GenerateDataGeneralReporte(filter.CodigoSolModificacion);
+
+                if (reporteSolicitud == null)
+                {
+                    return "No Data";
+                }
+                else
+                {
+
+
+                    filePath = $"{@settings.ExcelFiles}/{fileName}";
+
+
+                    result = fileName;
+                    var document = new ReporteSolicitudModificacionPresupuestariaDocument(reporteSolicitud, general, detalle, pathLogo);
+                    document.GeneratePdf(filePath);
+                }
+
+                return result;
             }
 
             return result;
         }
+
     }
 }

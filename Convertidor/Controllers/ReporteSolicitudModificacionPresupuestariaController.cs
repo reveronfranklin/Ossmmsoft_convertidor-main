@@ -30,9 +30,10 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult>  GeneratePdf(FilterBySolicitud filter)
+        public async Task<IActionResult> ReportData(FilterDto filter)
         {
-           var result =await  _service.GeneratePdf(filter);
+          
+           var result =await  _service.ReportData(filter.CodigoSolModificacion,filter.DePara);
            return Ok(result);
         }
        

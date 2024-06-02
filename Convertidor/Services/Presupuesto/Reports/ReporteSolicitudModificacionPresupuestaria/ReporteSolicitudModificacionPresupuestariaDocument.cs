@@ -1,26 +1,38 @@
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
+using Convertidor.Services.Presupuesto.Report.Example;
+using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
+using MathNet.Numerics.Distributions;
+using Org.BouncyCastle.Asn1.X509;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
+using System.ComponentModel.DataAnnotations;
 using Image = QuestPDF.Infrastructure.Image;
 
 namespace Convertidor.Services.Rh.Report.Example
 {
-    public class ResumenSaldoDocument : IDocument
+    public class ReporteSolicitudModificacionPresupuestariaDocument : IDocument
     {
 
         public static Image LogoImage { get; } = Image.FromFile("logo.png");
-        private readonly string _title;
+        public List<ReporteSolicitudModificacionPresupuestariaDto> Model { get; }
+        private readonly GeneralReporteSolicitudModificacionDto ModelGeneral;
+        private readonly List<DetalleReporteSolicitudModificacionDto> ModelDetalle;
         private readonly string _patchLogo;
-        public List<PreResumenSaldoGetDto> Model { get; }
+       
 
-        public ResumenSaldoDocument(
-            string Title,
-            List<PreResumenSaldoGetDto> model,
+        public ReporteSolicitudModificacionPresupuestariaDocument(
+       
+           List<ReporteSolicitudModificacionPresupuestariaDto> model,
+            GeneralReporteSolicitudModificacionDto modelGeneral,
+            List<DetalleReporteSolicitudModificacionDto> modelDetalle,
             string patchLogo)
         {
 
             Model = model;
-            _title = Title;
+            ModelGeneral = modelGeneral;
+            ModelDetalle = modelDetalle;
+          
             _patchLogo = patchLogo;
         }
 
@@ -31,13 +43,14 @@ namespace Convertidor.Services.Rh.Report.Example
             container
                 .Page(page =>
                 {
-                    page.Margin(50);
+                    page.Margin(20);
 
                     page.Header().Element(ComposeHeader);
                     page.Content().Element(ComposeContent);
 
                     page.Footer().AlignCenter().Text(text =>
                     {
+                        
                         text.CurrentPageNumber();
                         text.Span(" / ");
                         text.TotalPages();
@@ -48,24 +61,23 @@ namespace Convertidor.Services.Rh.Report.Example
         void ComposeHeader(IContainer container)
         {
 
-            var descripcion = "";
-            var firstResumen = Model.FirstOrDefault();
+            //var descripcion = "";
+            //var firstResumen = Model.FirstOrDefault();
 
-            container.Row(row =>
+            container.PaddingVertical(10).Column(column =>
             {
-                row.RelativeItem().Column(column =>
-                {
-                    column.Item().Text($"REPORTE RESUMEN SALDO PRESUPUESTO")
-                        .FontSize(7).SemiBold();
+                
+                column.Spacing(20);
+                column.Item().PaddingLeft(50).Width(100).AlignLeft().ScaleToFit().Image(_patchLogo);
+                //column.Item().Element(ComposeTableFirma);
+                column.Item().AlignCenter().Text("SOLICITUD DE MODIFICACIONES PRESUPUESTARIAS").SemiBold().FontSize(8);
+                column.Item().PaddingLeft(25).AlignLeft().Text("DIRECCION  DE PLANIFICACIÓN Y \n "+"      "+"       "+ "       "+ "PRESUPUESTO").ExtraBold().FontSize(8);
 
-                    column.Item().Text(text =>
-                    {
-                        text.Span($"{_title}").FontSize(7).SemiBold();
-                        ;
+                //column.Item().Element(ComposeTableResumenConcepto);
+              
 
-                    });
 
-                });
+
                 /*row.RelativeItem().Column(column =>
                 {
 
@@ -87,62 +99,81 @@ namespace Convertidor.Services.Rh.Report.Example
                 });*/
 
 
-                row.ConstantItem(125).Image(_patchLogo);
+
             });
         }
 
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(40).Column(column =>
+            container.PaddingVertical(20).Column(async column =>
             {
-                column.Spacing(20);
+                
 
-               // column.Item().AlignCenter().Text($"RECIBOS").SemiBold();
-                var listaTitulos = from s in Model
-                    group s by new
-                    {
-                        Titulo = s.Titulo,
+                var datos = from s in Model
+                              group s by new
+                              {
+                                 
+                                  detalle = s.DetalleDe , s.DetallePara
+                                             
+                                               
 
-
-                    }
+                              }
                     into g
-                    select new
-                    {
-                        Titulo = g.Key.Titulo,
+                              select new
+                              {
+                                  
+                                  detalle = g.Key.detalle,
 
 
-                    };
-                foreach (var itemTitulo in listaTitulos)
+
+                              };
+
+
+
+                var reporte = Model.ToList();
+                var general = ModelGeneral;
+               
+                var codigoSolicitud = general.CodigoSolModificacion;
+                
+
+                foreach (var item in datos.ToList())
                 {
-                    //var persona = Model.Where(x => x.Titulo == itemTitulo.Titulo).FirstOrDefault();
-                    column.Item().Row(row => { row.RelativeItem().Component(new TituloComponent(itemTitulo.Titulo)); });
+                    var SolicitudDetalle = item.detalle;
+                    column.Item().Row(row =>
+                    {
+                    row.RelativeItem().Component(new GeneralReporteSolicitudModificacionTablaComponent(general));
 
-                    var data = Model.Where(x => x.Titulo == itemTitulo.Titulo).ToList();
-                    column.Item()
-                        .Row(row => { row.RelativeItem().Component(new ResumenSaldoTablaComponent("", data)); });
+                        if (SolicitudDetalle != null )
+                        {
+                            var data = SolicitudDetalle.ToList();
 
+                            column.Item()
+                                    .Row(row =>
+                                    {
+                                        row.RelativeItem().Component(new DetalleComponent(data));
+                                    });
 
+                        }
+                    });
                 }
-
-
-
-                //column.Item().Element(ComposeTableRecibo);
-
-
-
-
             });
 
+
         }
+            //column.Item().Element(ComposeTableRecibo);
 
 
 
-
+        }            
     }
+    
+
+
+            
+
+        
 
 
 
 
-
-}
   
