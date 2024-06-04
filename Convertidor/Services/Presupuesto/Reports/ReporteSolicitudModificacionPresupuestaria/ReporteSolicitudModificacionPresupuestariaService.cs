@@ -221,33 +221,17 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
             }
             
                 
-                var general = await GenerateDataGeneralReporte(filter.CodigoSolModificacion);
-                var detalle = await GenerateDataDetalleReporte(filter.CodigoSolModificacion, filter.DePara);
-                var reporte = await GenerateData(filter.CodigoSolModificacion);
+             
+            var reporte = await GenerateData(filter.CodigoSolModificacion);
             if (reporte != null)
             {
-                List<ReporteSolicitudModificacionPresupuestariaDto> reporteSolicitud = new List<ReporteSolicitudModificacionPresupuestariaDto>();
+                
 
-                reporteSolicitud.Add(reporte);
-
-                foreach (var item in detalle)
-                {
-
-                    if (item.DePara == null)
-                    {
-                        return null;
-
-                    }
-                    else
-                    {
-                        detalle.Where(x => x.CodigoSolModificacion == item.CodigoSolModificacion).Where(x => x.DePara == filter.DePara);
-                    }
-                }
-
+               
 
                 //var generalReporteSolicitudModificacion = await GenerateDataGeneralReporte(filter.CodigoSolModificacion);
 
-                if (reporteSolicitud == null)
+                if (reporte == null)
                 {
                     return "No Data";
                 }
@@ -259,7 +243,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
 
 
                     result = fileName;
-                    var document = new ReporteSolicitudModificacionPresupuestariaDocument(reporteSolicitud, general, detalle, pathLogo);
+                    var document = new ReporteSolicitudModificacionPresupuestariaDocument(reporte, pathLogo);
                     document.GeneratePdf(filePath);
                 }
 

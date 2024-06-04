@@ -12,9 +12,9 @@ namespace Convertidor.Services.Presupuesto.Report.Example;
        
         public  GeneralReporteSolicitudModificacionDto  ModelGeneral { get; }
        
-        public GeneralReporteSolicitudModificacionTablaComponent(/*string title*/ GeneralReporteSolicitudModificacionDto modelGeneral)
+        public GeneralReporteSolicitudModificacionTablaComponent( GeneralReporteSolicitudModificacionDto modelGeneral)
         {
-        //Title = title;
+        
           ModelGeneral = modelGeneral;
         }
         

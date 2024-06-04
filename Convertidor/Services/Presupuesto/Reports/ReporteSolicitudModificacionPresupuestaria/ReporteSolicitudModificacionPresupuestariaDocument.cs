@@ -2,9 +2,11 @@ using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
 using Convertidor.Services.Presupuesto.Report.Example;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
+using iText.Kernel.Geom;
 using MathNet.Numerics.Distributions;
 using Org.BouncyCastle.Asn1.X509;
 using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 using Image = QuestPDF.Infrastructure.Image;
@@ -15,24 +17,21 @@ namespace Convertidor.Services.Rh.Report.Example
     {
 
         public static Image LogoImage { get; } = Image.FromFile("logo.png");
-        public List<ReporteSolicitudModificacionPresupuestariaDto> Model { get; }
-        private readonly GeneralReporteSolicitudModificacionDto ModelGeneral;
-        private readonly List<DetalleReporteSolicitudModificacionDto> ModelDetalle;
+        public ReporteSolicitudModificacionPresupuestariaDto Model { get; }
+
         private readonly string _patchLogo;
-       
+
 
         public ReporteSolicitudModificacionPresupuestariaDocument(
-       
-           List<ReporteSolicitudModificacionPresupuestariaDto> model,
-            GeneralReporteSolicitudModificacionDto modelGeneral,
-            List<DetalleReporteSolicitudModificacionDto> modelDetalle,
+
+           ReporteSolicitudModificacionPresupuestariaDto model,
+
             string patchLogo)
         {
 
             Model = model;
-            ModelGeneral = modelGeneral;
-            ModelDetalle = modelDetalle;
-          
+
+
             _patchLogo = patchLogo;
         }
 
@@ -44,13 +43,13 @@ namespace Convertidor.Services.Rh.Report.Example
                 .Page(page =>
                 {
                     page.Margin(20);
-
+                    page.Size(PageSizes.A4.Landscape());
                     page.Header().Element(ComposeHeader);
                     page.Content().Element(ComposeContent);
 
                     page.Footer().AlignCenter().Text(text =>
                     {
-                        
+
                         text.CurrentPageNumber();
                         text.Span(" / ");
                         text.TotalPages();
@@ -66,15 +65,15 @@ namespace Convertidor.Services.Rh.Report.Example
 
             container.PaddingVertical(10).Column(column =>
             {
-                
+
                 column.Spacing(20);
                 column.Item().PaddingLeft(50).Width(100).AlignLeft().ScaleToFit().Image(_patchLogo);
                 //column.Item().Element(ComposeTableFirma);
                 column.Item().AlignCenter().Text("SOLICITUD DE MODIFICACIONES PRESUPUESTARIAS").SemiBold().FontSize(8);
-                column.Item().PaddingLeft(25).AlignLeft().Text("DIRECCION  DE PLANIFICACIÓN Y \n "+"      "+"       "+ "       "+ "PRESUPUESTO").ExtraBold().FontSize(8);
+                column.Item().PaddingLeft(25).AlignLeft().Text("DIRECCION  DE PLANIFICACIÓN Y \n " + "      " + "       " + "       " + "PRESUPUESTO").ExtraBold().FontSize(8);
 
                 //column.Item().Element(ComposeTableResumenConcepto);
-              
+
 
 
 
@@ -107,65 +106,35 @@ namespace Convertidor.Services.Rh.Report.Example
         {
             container.PaddingVertical(20).Column(async column =>
             {
-                
-
-                var datos = from s in Model
-                              group s by new
-                              {
-                                 
-                                  detalle = s.DetalleDe , s.DetallePara
-                                             
-                                               
-
-                              }
-                    into g
-                              select new
-                              {
-                                  
-                                  detalle = g.Key.detalle,
 
 
 
-                              };
-
-
-
-                var reporte = Model.ToList();
-                var general = ModelGeneral;
-               
-                var codigoSolicitud = general.CodigoSolModificacion;
-                
-
-                foreach (var item in datos.ToList())
+                column.Item().Row(row =>
                 {
-                    var SolicitudDetalle = item.detalle;
-                    column.Item().Row(row =>
-                    {
-                    row.RelativeItem().Component(new GeneralReporteSolicitudModificacionTablaComponent(general));
+                    row.RelativeItem().Component(new GeneralReporteSolicitudModificacionTablaComponent(Model.General));
 
-                        if (SolicitudDetalle != null )
-                        {
-                            var data = SolicitudDetalle.ToList();
+                });
 
-                            column.Item()
-                                    .Row(row =>
-                                    {
-                                        row.RelativeItem().Component(new DetalleComponent(data));
-                                    });
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem().Component(new DetalleComponent(Model.DetallePara));
 
-                        }
-                    });
-                }
+                });
+
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem().Component(new DetalleComponent(Model.DetalleDe));
+
+                });
+
             });
-
-
-        }
             //column.Item().Element(ComposeTableRecibo);
 
 
 
-        }            
+        }
     }
+}
     
 
 
