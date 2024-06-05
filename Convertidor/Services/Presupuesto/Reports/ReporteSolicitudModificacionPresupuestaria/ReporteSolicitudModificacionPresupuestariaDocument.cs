@@ -104,7 +104,7 @@ namespace Convertidor.Services.Rh.Report.Example
 
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(20).Column(async column =>
+            container.PaddingVertical(5).Column(async column =>
             {
 
 
