@@ -42,7 +42,7 @@ namespace Convertidor.Services.Rh.Report.Example
             container
                 .Page(page =>
                 {
-                    page.Margin(20);
+                    page.Margin(10);
                     page.Size(PageSizes.A4.Landscape());
                     page.Header().Element(ComposeHeader);
                     page.Content().Element(ComposeContent);
@@ -63,10 +63,10 @@ namespace Convertidor.Services.Rh.Report.Example
             //var descripcion = "";
             //var firstResumen = Model.FirstOrDefault();
 
-            container.PaddingVertical(10).Column(column =>
+            container.PaddingVertical(1).Column(column =>
             {
 
-                column.Spacing(20);
+                column.Spacing(2);
                 column.Item().PaddingLeft(50).Width(100).AlignLeft().ScaleToFit().Image(_patchLogo);
                 //column.Item().Element(ComposeTableFirma);
                 column.Item().AlignCenter().Text("SOLICITUD DE MODIFICACIONES PRESUPUESTARIAS").SemiBold().FontSize(8);
@@ -104,7 +104,7 @@ namespace Convertidor.Services.Rh.Report.Example
 
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(5).Column(async column =>
+            container.PaddingVertical(2).Column(async column =>
             {
 
 

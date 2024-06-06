@@ -51,7 +51,11 @@
         public decimal Descontar { get; set; }
         public decimal Aportar { get; set; }
         public string DePara { get; set; }
+        public decimal Presupuestado { get; set; }
         public decimal MontoModificado { get; set; }
+        public decimal TotalDesembolso { get; set; }
+        public int Ejecutado { get; set; }
+        public decimal? Disponible { get; set; }
         public decimal MontoAnulado { get; set; }
     }
 }

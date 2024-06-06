@@ -33,7 +33,7 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> ReportData(FilterDto filter)
         {
           
-           var result =await  _service.ReportData(filter.CodigoSolModificacion,filter.DePara);
+           var result =await  _service.ReportData(filter.CodigoSolModificacion);
            return Ok(result);
         }
        

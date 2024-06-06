@@ -4,6 +4,7 @@ using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
 using Convertidor.Services.Rh.Report.Example;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using NPOI.SS.Formula.Functions;
 using NuGet.Protocol.Core.Types;
 using QuestPDF.Fluent;
 using static SkiaSharp.HarfBuzz.SKShaper;
@@ -15,17 +16,23 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
         private readonly IPreSolModificacionRepository _preSolModificacionRepository;
         private readonly IPreSolModificacionService _preSolModificacionService;
         private readonly IPrePucSolicitudModificacionService _prePucSolicitudModificacionService;
+        private readonly IPRE_V_SALDOSRepository _pRE_V_SALDOSRepository;
+        private readonly IPRE_ASIGNACIONESRepository _pRE_ASIGNACIONESRepository;
         private readonly IConfiguration _configuration;
 
         public ReporteSolicitudModificacionPresupuestariaService(IPreSolModificacionRepository preSolModificacionRepository,
                                                                  IPreSolModificacionService preSolModificacionService,
                                                                  IPrePucSolicitudModificacionService  prePucSolicitudModificacionService,
+                                                                 IPRE_V_SALDOSRepository pRE_V_SALDOSRepository,
+                                                                 IPRE_ASIGNACIONESRepository pRE_ASIGNACIONESRepository,
                                                                  IConfiguration configuration)
         {
 
             _preSolModificacionRepository = preSolModificacionRepository;
             _preSolModificacionService = preSolModificacionService;
             _prePucSolicitudModificacionService = prePucSolicitudModificacionService;
+            _pRE_V_SALDOSRepository = pRE_V_SALDOSRepository;
+            _pRE_ASIGNACIONESRepository = pRE_ASIGNACIONESRepository;
             _configuration = configuration;
         }
 
@@ -155,6 +162,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
 
             PrePucSolModificacionFilterDto filter = new PrePucSolModificacionFilterDto();
 
+
+
             filter.CodigoSolModificacion = codigoSolModificacion;
             filter.DePara = dePara;
 
@@ -163,16 +172,27 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
                 IOException ex = new IOException("no hay datos");
             }
 
+          
+
             var pucSolModificacion = await _prePucSolicitudModificacionService.GetAllByCodigoSolicitud(filter);
+
+          
 
             var listDto = pucSolModificacion.Data.Where(x => x.DePara == dePara).ToList();
 
             if (listDto.Count > 0)
             {
-
+              
+                
                 foreach (var item in listDto)
                 {
+                   
+                   
+
                     DetalleReporteSolicitudModificacionDto resultItem = new DetalleReporteSolicitudModificacionDto();
+
+                   
+
                     resultItem.CodigoPucSolModificacion = item.CodigoPucSolModificacion;
                     resultItem.CodigoSolModificacion = item.CodigoSolModificacion;
                     resultItem.CodigoSaldo = item.CodigoSaldo;
@@ -186,11 +206,17 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
                     resultItem.CodigoPucConcat = item.CodigoPucConcat;
                     resultItem.DenominacionPuc = item.DenominacionPuc;
                     resultItem.Monto = item.Monto;
+                    resultItem.MontoModificado = item.MontoModificado;
+                    resultItem.MontoAnulado = item.MontoAnulado;
                     resultItem.Descontar = item.Descontar;
                     resultItem.Aportar = item.Aportar;
                     resultItem.DePara = item.DePara;
-                    resultItem.MontoModificado = item.MontoModificado;
+                  
                     resultItem.MontoAnulado = item.MontoAnulado;
+
+                    
+                    
+
 
                     result.Add(resultItem);
 
@@ -201,12 +227,12 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
 
             return result;
         }
-        public async Task<string> ReportData(int codigoSolModificacion , string dePara)
+        public async Task<string> ReportData(int codigoSolModificacion)
         {
-            FilterDto filter = new FilterDto();
+            FilterBySolicitud filter = new FilterBySolicitud();
 
             filter.CodigoSolModificacion = codigoSolModificacion;
-            filter.DePara  = dePara; 
+            
 
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var result = "No Data";

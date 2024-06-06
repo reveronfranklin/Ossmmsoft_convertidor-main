@@ -53,9 +53,6 @@ namespace Convertidor.Services.Rh.Report.Example;
                     });
                     
 
-                    
-
-
                 });
 
                 header.Cell().Column(col => 
@@ -65,16 +62,16 @@ namespace Convertidor.Services.Rh.Report.Example;
                     {
                         row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("PRESUPUESTADO").FontSize(7);
                         
-                        row.RelativeItem().Column(subCol => 
+                        row.ConstantItem(220).Column(subCol => 
                         {
                             subCol.Item().Border(1).AlignCenter().Element(CellStyle).Text("A LA FECHA").FontSize(7);
                             subCol.Item().Row(subrow => 
                             {
                                 
-                                subrow.RelativeItem().Border(1).AlignCenter().ScaleToFit().Element(CellStyle).Text("MOD").FontSize(7);
-                                subrow.RelativeItem().Border(1).AlignCenter().ScaleToFit().Element(CellStyle).Text("DESEM").FontSize(7);
-                                subrow.RelativeItem().Border(1).AlignCenter().ScaleToFit().Element(CellStyle).Text("EJEC").FontSize(7);
-                                subrow.RelativeItem().Border(1).AlignCenter().ScaleToFit().Element(CellStyle).Text("DISP").FontSize(7);
+                                subrow.RelativeItem().Border(1).AlignCenter().ScaleToFit().Element(CellStyle).Text("MODIFICADO").FontSize(7);
+                                subrow.RelativeItem().Border(1).AlignCenter().ScaleToFit().Element(CellStyle).Text("DESEMBOLSO").FontSize(7);
+                                subrow.RelativeItem().Border(1).AlignCenter().ScaleToFit().Element(CellStyle).Text("EJECUTADO").FontSize(7);
+                                subrow.RelativeItem().Border(1).AlignCenter().ScaleToFit().Element(CellStyle).Text("DISPONIBLE").FontSize(7);
 
                             });
 
@@ -83,44 +80,11 @@ namespace Convertidor.Services.Rh.Report.Example;
                         });
                         row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("SUB-PARTIDA CEDENTE").FontSize(7);
 
-                        //row.RelativeItem().Column(subCol =>
-                        //{
-                        //    subCol.Item().Row(subColHeader => 
-                        //    {
-                        //        subColHeader.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("PRESUPUESTADO").FontSize(7);
-                        //        //subColHeader.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("A LA FECHA").FontSize(7);
-                        //        subCol.Item().Column(subColfecha =>
-                        //        {
-                        //            subColfecha.Item().Border(1).AlignCenter().Element(CellStyle).Text("A LA FECHA").FontSize(7);
-                        //            subColfecha.Item().Border(1).AlignCenter().Element(CellStyle).Text("MODIFICACION").FontSize(7);
-                        //            subColfecha.Item().Border(1).AlignCenter().Element(CellStyle).Text("DESEMBOLSO").FontSize(7);
-                        //            subColfecha.Item().Border(1).AlignCenter().Element(CellStyle).Text("EJECUTADO").FontSize(7);
-                        //            subColfecha.Item().Border(1).AlignCenter().Element(CellStyle).Text("DISPONIBILIDAD").FontSize(7);
-                        //        });
-
-                        //        subColHeader.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("SUB-PARTIDA CEDENTE").FontSize(7);
-                        //    });
-                           
-
-                        //    //subCol.Item().Row(subRow =>
-                        //    //{
-                        //    //    subRow.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("MODIFICACION").FontSize(7);
-                        //    //    subRow.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("DESEMBOLSO").FontSize(7);
-                        //    //    subRow.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("EJECUTADO").FontSize(7);
-                        //    //    subRow.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("DISPONIBILIDAD").FontSize(7);
-                        //    //});
-
-                        //});
-                        //row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("SUB-PARTIDA CEDENTE").FontSize(7);
-
                        
-                        
-                        
-                        
                     });
 
                 });
-                ////header.Cell().Border(1).AlignCenter().Element(CellStyle).Text("MONTO (Bs)").FontSize(7);
+               
 
             });
 
@@ -134,7 +98,7 @@ namespace Convertidor.Services.Rh.Report.Example;
                     column.Item().Border(1).AlignCenter().Padding(1).Element(CellStyle).Text(item.DenominacionIcp).FontSize(7);
 
                     column.Item().Border(1).AlignCenter().Padding(1).Element(CellStyle).Text(item.DenominacionPuc).FontSize(7);
-                  
+                   
                 });
 
                 
@@ -145,13 +109,25 @@ namespace Convertidor.Services.Rh.Report.Example;
                 {
                     row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Monto).FontSize(7);
                     row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.MontoModificado).FontSize(7);
+                    row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.TotalDesembolso).FontSize(7);
+                    row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Ejecutado).FontSize(7);
+                    row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Disponible).FontSize(7);
+                    row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Descontar).FontSize(7);
+
+
+                    table.ExtendLastCellsToTableBottom();
                 });
                
 
 
             }
-          
-
+            table.Cell().ColumnSpan(3).Border(1).AlignCenter().Element(CellStyle).Text("TOTALES").FontSize(7);
+            table.Cell().ColumnSpan(4).Row(row => 
+            {
+                row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("N°").FontSize(7);
+                row.RelativeColumn(2).Border(1).AlignCenter().Element(CellStyle).Text("METAS BENEFICIADAS").FontSize(7);
+                row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("GRADO DE \n"+" "+"AFECTACION(%)").FontSize(7);
+            });
         });
 
         }
