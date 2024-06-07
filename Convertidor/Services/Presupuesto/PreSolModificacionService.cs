@@ -996,7 +996,11 @@ namespace Convertidor.Services.Presupuesto
                    prePucModificacionUpdateDto.DePara = item.DE_PARA;
                    prePucModificacionUpdateDto.CodigoPucSolModificacion = item.CODIGO_PUC_SOL_MODIFICACION;
                    prePucModificacionUpdateDto.CodigoPresupuesto = solModificacion.CODIGO_PRESUPUESTO;
-                   prePucModificacionUpdateDto.CodigoFinanciado = item.CODIGO_FINANCIADO;
+                    if(item.CODIGO_FINANCIADO == null) 
+                    {
+                        item.CODIGO_FINANCIADO = 0;
+                    }
+                   prePucModificacionUpdateDto.CodigoFinanciado = (int)item.CODIGO_FINANCIADO;
                    
                    var prePucModificacionCreated= await _prePucModificacionService.Create(prePucModificacionUpdateDto);
                    if (prePucModificacionCreated.IsValid == false)

@@ -127,7 +127,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
 
             GeneralReporteSolicitudModificacionDto result = new GeneralReporteSolicitudModificacionDto();
             var solicitudModificacion = await _preSolModificacionService.GetByCodigoSolicitud(codigoSolModificacion);
-            if(solicitudModificacion != null) 
+            if(solicitudModificacion.Data != null) 
             {
                 result.CodigoSolModificacion = solicitudModificacion.Data.CodigoSolModificacion;
                 result.TipoModificacionId = solicitudModificacion.Data.TipoModificacionId;
@@ -165,15 +165,15 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
             filter.CodigoSolModificacion = codigoSolModificacion;
             filter.DePara = dePara;
 
-            if (dePara == null)
-            {
-                IOException ex = new IOException("no hay datos");
-            }
-
+        
             
 
             var pucSolModificacion = await _prePucSolicitudModificacionService.GetAllByCodigoSolicitud(filter);
 
+            if(pucSolModificacion.Data == null) 
+            {
+                return null;
+            }
             var listDto = pucSolModificacion.Data.Where(x => x.DePara == dePara).ToList();
 
 
@@ -204,14 +204,20 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
                         resultItem.CodigoPucConcat = item.CodigoPucConcat;
                         resultItem.DenominacionPuc = item.DenominacionPuc;
                         resultItem.Monto = item.Monto;
-                        var saldos = await _pRE_V_SALDOSRepository.GetByCodigo(item.CodigoSaldo);
+                        resultItem.Presupuestado = 0;
+                        resultItem.MontoModificado = 0;
+                        resultItem.Disponible = 0;
+                       var saldos = await _pRE_V_SALDOSRepository.GetByCodigo(item.CodigoSaldo);
                         if(saldos != null) 
                         {
+
                             resultItem.Presupuestado = saldos.PRESUPUESTADO;
                             resultItem.MontoModificado = saldos.MODIFICADO;
                             resultItem.Disponible = saldos.DISPONIBLE;
                         }
-                        
+
+                        var totalDesembolso = await _preAsignacionService.GetTotalAsignacionByIcpPuc(item.CodigoPresupuesto,item.CodigoIcp, item.CodigoPuc);
+                        resultItem.TotalDesembolso = totalDesembolso;
                         resultItem.MontoAnulado = item.MontoAnulado;
                         resultItem.Descontar = item.Descontar;
                         resultItem.Aportar = item.Aportar;

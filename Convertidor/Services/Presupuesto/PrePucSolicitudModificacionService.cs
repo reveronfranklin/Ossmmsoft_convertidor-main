@@ -113,10 +113,12 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
 
             return result;
         }
-        
-        public async Task<PrePucSolModificacionResponseDto> MapPrePucSoliModificacion(PRE_PUC_SOL_MODIFICACION dto)
+
+    public async Task<PrePucSolModificacionResponseDto> MapPrePucSoliModificacion(PRE_PUC_SOL_MODIFICACION dto)
+    {
+        PrePucSolModificacionResponseDto itemResult = new PrePucSolModificacionResponseDto();
+        try
         {
-            PrePucSolModificacionResponseDto itemResult = new PrePucSolModificacionResponseDto();
             itemResult.CodigoPucSolModificacion = dto.CODIGO_PUC_SOL_MODIFICACION;
             itemResult.CodigoSolModificacion = dto.CODIGO_SOL_MODIFICACION;
             itemResult.CodigoSaldo = dto.CODIGO_SALDO;
@@ -126,12 +128,17 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
             var financiadoIdObj = await _preDescriptivasService.GetByCodigo(intFinanciadoId);
             if (financiadoIdObj.Data != null)
             {
-                itemResult.DescripcionFinanciado =financiadoIdObj.Data.Descripcion;
+                itemResult.DescripcionFinanciado = financiadoIdObj.Data.Descripcion;
             }
-            
-            itemResult.CodigoFinanciado = dto.CODIGO_FINANCIADO;
+
+            if (dto.CODIGO_FINANCIADO == null) 
+            {
+                dto.CODIGO_FINANCIADO = 0;
+            }
+
+            itemResult.CodigoFinanciado = (int)dto.CODIGO_FINANCIADO;
             itemResult.CodigoIcp = dto.CODIGO_ICP;
-       
+
             itemResult.DenominacionIcp = "";
             var icp = await _indiceCategoriaProgramaService.GetByCodigo(dto.CODIGO_ICP);
             if (icp != null)
@@ -152,22 +159,27 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
             if (dto.DE_PARA == "D")
             {
                 itemResult.Descontar = dto.MONTO;
-                itemResult.Aportar =0;
+                itemResult.Aportar = 0;
             }
             if (dto.DE_PARA == "P")
             {
                 itemResult.Descontar = 0;
-                itemResult.Aportar =dto.MONTO;
+                itemResult.Aportar = dto.MONTO;
             }
             itemResult.MontoAnulado = dto.MONTO_ANULADO;
             itemResult.Monto = dto.MONTO;
             itemResult.MontoModificado = dto.MONTO_MODIFICADO;
-        
+            itemResult.CodigoPresupuesto = dto.CODIGO_PRESUPUESTO;
 
             return itemResult;
 
         }
-        
+        catch (Exception ex)
+        {
+            var m = ex.Message;
+            return null;
+        }
+    }
      public async Task<ResultDto<PrePucSolModificacionResponseDto>> Create(PrePucSolModificacionUpdateDto dto)
         {
 

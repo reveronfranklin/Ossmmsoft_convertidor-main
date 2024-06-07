@@ -202,9 +202,25 @@ public class PreAsignacionService: IPreAsignacionService
             return result;
         }
 
-      
 
-        public async Task<ResultDto<List<PreAsignacionesGetDto>>> GetAllByPresupuesto(PreAsignacionesFilterDto filterDto)
+
+    public async Task<decimal> GetTotalAsignacionByIcpPuc(int codigoPresupuesto, int codigoIcp, int codigoPuc)
+    {
+        decimal totalAsignacion = 0;
+        try
+        {
+            totalAsignacion = await _repository.GetTotalAsignacionByIcpPuc(codigoPresupuesto, codigoIcp, codigoPuc);
+            return totalAsignacion;
+        }
+        catch (Exception ex)
+        {
+            var res = ex.InnerException.Message;
+            return 0;
+        }
+
+    }
+
+    public async Task<ResultDto<List<PreAsignacionesGetDto>>> GetAllByPresupuesto(PreAsignacionesFilterDto filterDto)
         {
             ResultDto<List<PreAsignacionesGetDto>> result = new ResultDto<List<PreAsignacionesGetDto>>(null);
             

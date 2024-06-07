@@ -42,7 +42,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
                 .Page(page =>
                 {
                     page.Margin(10);
-                    page.Size(PageSizes.A4.Landscape());
+                    page.Size(PageSizes.A3.Landscape());
                     page.Header().Element(ComposeHeader);
                     page.Content().Element(ComposeContent);
 
@@ -89,7 +89,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
 
                 });
 
-                if(Model.DetallePara == )
+                
 
                 column.Item().Row(row =>
                 {
