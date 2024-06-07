@@ -31,6 +31,14 @@ namespace Convertidor.Controllers
             var result = await _service.GetAll();
             return Ok(result);
         }
+        [HttpPost]
+        [Route("[action]")]
+        public IActionResult GetByCodigoSolicitud(AdmDetalleSolicitudFilterDto filter)
+        {
+            var result = _service.GetByCodigoSolicitud(filter.CodigoSolicitud);
+            return Ok(result);
+        }
+
 
 
         [HttpPost]

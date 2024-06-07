@@ -86,5 +86,16 @@
     <Compile Update="recursos.cs">
       <DependentUpon>recursos.cshtml</DependentUpon>
     </Compile>
+    <Compile Update="TraduccionErrores.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TraduccionErrores.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="TraduccionErrores.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TraduccionErrores.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

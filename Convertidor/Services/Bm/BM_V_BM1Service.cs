@@ -68,7 +68,8 @@ namespace Convertidor.Services.Bm
                                 CodigoBien = s.CODIGO_BIEN,
                                 CodigoMovBien = s.CODIGO_MOV_BIEN,
                                 FechaMovimiento = s.FECHA_MOVIMIENTO,
-                                FechaMovimientoFiltro=s.FECHA_MOVIMIENTO
+                                FechaMovimientoFiltro=s.FECHA_MOVIMIENTO,
+                                NroPlaca=s.NRO_PLACA
 
                             } into g
                             select new Bm1GetDto()
@@ -90,7 +91,8 @@ namespace Convertidor.Services.Bm
                                 CodigoBien = g.Key.CodigoBien,
                                 CodigoMovBien = g.Key.CodigoMovBien,
                                 FechaMovimiento = g.Key.FechaMovimiento,
-                                FechaMovimientoFiltro= g.Key.FechaMovimientoFiltro
+                                FechaMovimientoFiltro= g.Key.FechaMovimientoFiltro,
+                                NroPlaca = g.Key.NroPlaca
                                
 
                             };
@@ -133,7 +135,9 @@ namespace Convertidor.Services.Bm
                                      FechaMovimiento = s.FechaMovimiento,
                                      FechaMovimientoFiltro=s.FechaMovimientoFiltro,
                                      Year=s.Year,
-                                     Month=s.Month
+                                     Month=s.Month,
+                                     NroPlaca=s.NroPlaca
+                                     
 
                                  } into g
                                  select new Bm1ExcelGetDto()
@@ -152,7 +156,8 @@ namespace Convertidor.Services.Bm
                                      FechaMovimiento = g.Key.FechaMovimiento,
                                      FechaMovimientoFiltro = (DateTime)g.Key.FechaMovimientoFiltro,
                                      Year = g.Key.Year,
-                                     Month = g.Key.Month
+                                     Month = g.Key.Month,
+                                     NroPlaca=g.Key.NroPlaca
 
                                  };
                 /*if (listaExcel != null && listaExcel.Count() > 0)
@@ -230,7 +235,8 @@ namespace Convertidor.Services.Bm
                                 ResponsableBien = s.RESPONSABLE_BIEN,
                                 CodigoBien = s.CODIGO_BIEN,
                                 CodigoMovBien = s.CODIGO_MOV_BIEN,
-                                FechaMovimiento = s.FECHA_MOVIMIENTO
+                                FechaMovimiento = s.FECHA_MOVIMIENTO,
+                                NroPlaca=s.NRO_PLACA
                                 
 
 
@@ -256,6 +262,7 @@ namespace Convertidor.Services.Bm
                                 FechaMovimiento = g.Key.FechaMovimiento,
                                 Year = g.Key.FechaMovimiento.Year,
                                 Month = g.Key.FechaMovimiento.Month,
+                                NroPlaca = g.Key.NroPlaca
                              
 
                             };
@@ -296,7 +303,8 @@ namespace Convertidor.Services.Bm
                                      FechaMovimiento = s.FechaMovimiento,
                                      FechaMovimientoFiltro=s.FechaMovimientoFiltro,
                                      Year=s.Year,
-                                     Month=s.Month
+                                     Month=s.Month,
+                                     NroPlaca=s.NroPlaca
 
 
                                  } into g
@@ -318,6 +326,7 @@ namespace Convertidor.Services.Bm
                                      FechaMovimientoFiltro = (DateTime)g.Key.FechaMovimientoFiltro,
                                      Year = g.Key.Year,
                                      Month = g.Key.Month,
+                                     NroPlaca = g.Key.NroPlaca
 
 
                                  };
@@ -340,7 +349,7 @@ namespace Convertidor.Services.Bm
 
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
-
+                //SE GENERA EXCEL PRA LA DESCARGA
                 var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
                 var fileName = $"BM1.xlsx";
                 string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
@@ -401,7 +410,7 @@ namespace Convertidor.Services.Bm
                     var allData = await GetAll(filter.FechaDesde,filter.FechaHasta);
                     searchList = allData.Data;
 
-                }
+                } 
                 var fileName = $"";
                 var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
@@ -511,7 +520,8 @@ namespace Convertidor.Services.Bm
                                 ResponsableBien = s.RESPONSABLE_BIEN,
                                 CodigoBien = s.CODIGO_BIEN,
                                 CodigoMovBien = s.CODIGO_MOV_BIEN,
-                                FechaMovimiento = s.FECHA_MOVIMIENTO
+                                FechaMovimiento = s.FECHA_MOVIMIENTO,
+                                NroPlaca=s.NRO_PLACA
 
                             } into g
                             select new Bm1GetDto()
@@ -531,7 +541,8 @@ namespace Convertidor.Services.Bm
                                 ResponsableBien = g.Key.ResponsableBien,
                                 CodigoBien = g.Key.CodigoBien,
                                 CodigoMovBien = g.Key.CodigoMovBien,
-                                FechaMovimiento = g.Key.FechaMovimiento
+                                FechaMovimiento = g.Key.FechaMovimiento,
+                                NroPlaca = g.Key.NroPlaca
                             };
                 return lista.ToList();
 

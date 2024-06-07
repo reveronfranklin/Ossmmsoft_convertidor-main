@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Utility;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -36,17 +37,7 @@ namespace Convertidor.Services.Bm
 
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+      
         public async Task<BmConteoHistoricoResponseDto> MapBmConteo(BM_CONTEO_HISTORICO dtos)
         {
 
@@ -66,8 +57,8 @@ namespace Convertidor.Services.Bm
           
             itemResult.ConteoId = dtos.CANTIDAD_CONTEOS_ID;
             itemResult.Fecha = dtos.FECHA;
-            itemResult.FechaString = dtos.FECHA.ToString("u");
-            FechaDto fechaObj = GetFechaDto(dtos.FECHA);
+            itemResult.FechaString = Fecha.GetFechaString(dtos.FECHA);
+            FechaDto fechaObj = Fecha.GetFechaDto(dtos.FECHA);
             itemResult.FechaObj = (FechaDto)fechaObj;
             itemResult.TotalCantidad = dtos.TOTAL_CANTIDAD;
             itemResult.TotalCantidadContada = dtos.TOTAL_CANTIDAD_CONTADA;

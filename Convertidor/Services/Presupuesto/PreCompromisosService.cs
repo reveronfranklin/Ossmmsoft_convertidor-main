@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -85,17 +86,7 @@ namespace Convertidor.Services.Presupuesto
 
 
         
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+      
 
         public async Task<PreCompromisosResponseDto> MapPreCompromisos(PRE_COMPROMISOS dto)
         {
@@ -105,13 +96,13 @@ namespace Convertidor.Services.Presupuesto
             itemResult.CodigoSolicitud = dto.CODIGO_SOLICITUD;
             itemResult.NumeroCompromiso = dto.NUMERO_COMPROMISO;
             itemResult.FechaCompromiso = dto.FECHA_COMPROMISO;
-            itemResult.FechaCompromisoString = dto.FECHA_COMPROMISO.ToString("u");
-            FechaDto fechaCompromisoObj = GetFechaDto(dto.FECHA_COMPROMISO);
+            itemResult.FechaCompromisoString = Fecha.GetFechaString( dto.FECHA_COMPROMISO);
+            FechaDto fechaCompromisoObj = Fecha.GetFechaDto(dto.FECHA_COMPROMISO);
             itemResult.FechaCompromisoObj = (FechaDto)fechaCompromisoObj;
             itemResult.CodigoProveedor = dto.CODIGO_PROVEEDOR;
             itemResult.FechaEntrega = dto.FECHA_ENTREGA;
-            itemResult.FechaEntregaString = dto.FECHA_ENTREGA.ToString("u");
-            FechaDto fechaEntregaObj = GetFechaDto(dto.FECHA_ENTREGA);
+            itemResult.FechaEntregaString = Fecha.GetFechaString( dto.FECHA_ENTREGA);
+            FechaDto fechaEntregaObj = Fecha.GetFechaDto(dto.FECHA_ENTREGA);
             itemResult.FechaEntregaObj = (FechaDto) fechaEntregaObj;
             itemResult.CodigoDirEntrega = dto.CODIGO_DIR_ENTREGA;
             itemResult.TipoPagoId = dto.TIPO_PAGO_ID;

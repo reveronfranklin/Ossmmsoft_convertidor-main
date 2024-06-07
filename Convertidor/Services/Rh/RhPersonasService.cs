@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
 using System.Text;
+using Convertidor.Data.Entities.Sis;
 using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Utility;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Convertidor.Data.Repository.Rh
@@ -67,31 +69,42 @@ namespace Convertidor.Data.Repository.Rh
         public async Task<ResultDto<List<ListSimplePersonaDto>>> AddPersonaCache(int codigoPersona)
         {
             List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
-            var persona = await GetPersona(codigoPersona);
-            if (persona != null)
+            try
             {
-                var cacheKey = "GetAllListSimplePersonaDto";
-                var listPersonas= await _distributedCache.GetAsync(cacheKey);
-                if (listPersonas != null)
+               
+                var persona = await GetPersona(codigoPersona);
+                if (persona != null)
                 {
-                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>>(listPersonas);
-                    var personaFind = resultData.Where(x => x.CodigoPersona == codigoPersona).FirstOrDefault();
-                    if (personaFind == null)
+                    var cacheKey = "GetAllListSimplePersonaDto";
+                    var listPersonas= await _distributedCache.GetAsync(cacheKey);
+                    if (listPersonas != null)
                     {
-                        resultData.Add(personaFind);
-                        var options = new DistributedCacheEntryOptions()
-                            .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
-                            .SetSlidingExpiration(TimeSpan.FromDays(10));
-                        var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
-                        var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
-                        await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                        resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>>(listPersonas);
+                        var personaFind = resultData.Where(x => x.CodigoPersona == codigoPersona).FirstOrDefault();
+                        if (personaFind == null)
+                        {
+                            resultData.Add(personaFind);
+                            var options = new DistributedCacheEntryOptions()
+                                .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
+                                .SetSlidingExpiration(TimeSpan.FromDays(10));
+                            var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
+                            var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                            await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                        }
                     }
-                }
                 
-            }
+                }
 
-            var result = await GetAll();
-            return result;
+                var result = await GetAll();
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+         
         }
       
          public async  Task<ResultDto<List<ListSimplePersonaDto>>> GetAll()
@@ -99,45 +112,13 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<List<ListSimplePersonaDto>> result = new ResultDto<List<ListSimplePersonaDto>>(null);
             try
             {
-              
-                var cacheKey = "GetAllListSimplePersonaDto";
-                List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
-                personas = await _repository.GetAll();
-
-                List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
-             
-                var listPersonas= await _distributedCache.GetAsync(cacheKey);
-                if (listPersonas != null)
-                {
-                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>>(listPersonas);
-                }
-                if (listPersonas != null && resultData != null && resultData.Count == personas.Count)
-                {
                 
-                    result.Data =resultData;
-
-                    result.IsValid = true;
-                    result.Message = "";
-                    return result;
-                }
-                else
-                {
-                    
-
-                    resultData =await  MapListSimplePersonasDto(personas);
-                    var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
-                        .SetSlidingExpiration(TimeSpan.FromDays(10));
-                   var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
-                   var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
-                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
-                  
-                    result.Data = resultData;
-                    result.IsValid = true;
-                    result.Message = "";
-                    return result;
-                }
-
+                var personas = await _repository.GetAll();
+                var resultData =await MapListSimplePersonasDto(personas);
+                result.Data =resultData;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
                
             }
             catch (Exception ex)
@@ -158,39 +139,12 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 
-                var cacheKey = "GetAllSimpleListSimplePersonaDto";
-                List<RH_PERSONAS> personas = new List<RH_PERSONAS>();
-                List<ListSimplePersonaDto> resultData = new List<ListSimplePersonaDto>();
-                
-
-                var listPersonas= await _distributedCache.GetAsync(cacheKey);
-                
-                if (listPersonas != null)
-                {
-                    resultData = System.Text.Json.JsonSerializer.Deserialize<List<ListSimplePersonaDto>> (listPersonas);
-                    result.Data =resultData;
-
-                    result.IsValid = true;
-                    result.Message = "";
-                    return result;
-                }
-                else
-                {
-                    personas = await _repository.GetAll();
-
-                    resultData =await MapListSimplePersonasDto(personas);
-                    var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
-                        .SetSlidingExpiration(TimeSpan.FromDays(19));
-                    var serializedList = System.Text.Json.JsonSerializer.Serialize(resultData);
-                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
-                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
-                    result.Data =resultData;
-                    result.IsValid = true;
-                    result.Message = "";
-                    return result;
-                }
-
+                var personas = await _repository.GetAll();
+                var resultData =await MapListSimplePersonasDto(personas);
+                result.Data =resultData;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
               
             }
             catch (Exception ex)
@@ -298,17 +252,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+     
         public async Task<PersonasDto> MapObjPersonasDto(RH_PERSONAS dtos)
         {
             var settings = _configuration.GetSection("Settings").Get<Settings>();
@@ -325,8 +269,8 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Nacionalidad = dtos.NACIONALIDAD;
                 itemResult.Sexo = dtos.SEXO;
                 itemResult.FechaNacimiento = dtos.FECHA_NACIMIENTO; 
-                itemResult.FechaNacimientoString = dtos.FECHA_NACIMIENTO.ToString("u");
-                FechaDto FechaNacimientoObj = GetFechaDto(dtos.FECHA_NACIMIENTO);
+                itemResult.FechaNacimientoString = Fecha.GetFechaString(dtos.FECHA_NACIMIENTO);
+                FechaDto FechaNacimientoObj = Fecha.GetFechaDto(dtos.FECHA_NACIMIENTO);
                 itemResult.FechaNacimientoObj = (FechaDto)FechaNacimientoObj;
                 var desdeEdad = dtos.FECHA_NACIMIENTO;
           
@@ -367,16 +311,26 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 }
-                if (itemResult.Sexo == "F")
+
+                if (dtos.FILE_NAME == null)
                 {
-                    itemResult.Avatar = $"{destino}4.png";
+                    dtos.FILE_NAME = "";
+                    if (itemResult.Sexo == "F")
+                    {
+                        itemResult.Avatar = $"{destino}4.png";
+                    }
+                    else
+                    {
+                        itemResult.Avatar = $"{destino}1.png";
+                    }
                 }
                 else
                 {
-                    itemResult.Avatar = $"{destino}1.png";
+                    itemResult.Avatar = $"{destino}{dtos.FILE_NAME.ToString()}";
                 }
-
-                itemResult.Avatar = $"{destino}{dtos.FILE_NAME.ToString()}";
+                
+           
+                
                 var desde = DateTime.Now;
                 //var primerMovimiento = await _rhHistoricoPersonalCargorepository.GetPrimerMovimientoByCodigoPersona(dtos.CODIGO_PERSONA);
                 //desde = primerMovimiento.FECHA_NOMINA;
@@ -473,7 +427,53 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public string GetPais(List<SIS_UBICACION_NACIONAL> list,int paisId)
+        {
+            var result = "";
+            var pais = list.Where(x => x.PAIS == paisId).FirstOrDefault();
+            if (pais != null)
+            {
+                result = pais.EXTRA1!;
+            }
+            return result;
 
+
+        }
+        public string GetEmail(List<RH_COMUNICACIONES> list,int id)
+        {
+            var result = "";
+            var comunicacion = list.Where(x => x.CODIGO_PERSONA==id && x.LINEA_COMUNICACION.Contains("@")).FirstOrDefault();;
+            if (comunicacion != null)
+            {
+                result = comunicacion.LINEA_COMUNICACION!;
+            }
+            return result;
+
+
+        }
+        public string GetFileName(string filename,string sexo,string destino)
+        {
+            var result = "";
+            if (String.IsNullOrEmpty(filename))
+            {
+                if (sexo == "F")
+                {
+                    result = $"{destino}4.png";    
+                }
+                else
+                {
+                    result = $"{destino}1.png";
+                }
+            }
+            else
+            {
+                result = $"{destino}{filename.ToString()}";
+            }
+
+            return result;
+
+
+        }
         public async Task<List<ListSimplePersonaDto>> MapListSimplePersonasDto(List<RH_PERSONAS> dtos)
         {
             
@@ -481,6 +481,8 @@ namespace Convertidor.Data.Repository.Rh
             var destino = @settings.IMagesFront; 
             List<ListSimplePersonaDto> result = new List<ListSimplePersonaDto>();
 
+            var paises = await _sisUbicacionNacionalRepository.GetPaises();
+            var comunicaciones = await _rhComunicacionessRepository.GetAll();
             foreach (var item in dtos)
             {
 
@@ -500,43 +502,10 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Sexo = item.SEXO;
                 itemResult.FechaNacimiento = item.FECHA_NACIMIENTO.ToShortDateString();
                 itemResult.Email = "";
-                
-           
-                var pais = await _sisUbicacionNacionalRepository.GetPais(item.PAIS_NACIMIENTO_ID);
-                if(pais is not null)
-                {
-                    itemResult.PaisNacimiento = pais.EXTRA1!;
-                }
-                var comunicaciones = await _rhComunicacionessRepository.GetByCodigoPersona(item.CODIGO_PERSONA);
-                if (comunicaciones.Count > 0)
-                {
-                    var email = comunicaciones.Where(x => x.LINEA_COMUNICACION.Contains("@")).FirstOrDefault();
-                    if (email is not null) itemResult.Email = email.LINEA_COMUNICACION;
-                
-
-                }
-
-                if (String.IsNullOrEmpty(item.FILE_NAME))
-                {
-                    if (item.SEXO == "F")
-                    {
-                        itemResult.Avatar = $"{destino}4.png";    
-                    }
-                    else
-                    {
-                        itemResult.Avatar = $"{destino}1.png";
-                    }
-                }
-                else
-                {
-                    itemResult.Avatar = $"{destino}{item.FILE_NAME.ToString()}";
-                }
-               
-              
-
+                itemResult.PaisNacimiento = GetPais(paises, item.PAIS_NACIMIENTO_ID);
+                itemResult.Email = GetEmail(comunicaciones, item.CODIGO_PERSONA);
+                itemResult.Avatar = GetFileName(item.FILE_NAME, item.SEXO, destino);
                 result.Add(itemResult);
-
-
             }
                 return result.OrderBy(p=>p.NombreCompleto).ToList();
 
@@ -780,7 +749,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Peso Invalido";
                     return result;
                 }
-                var status = GetListStatus().Where(x => x== dto.Status).FirstOrDefault();
+                /*var status = GetListStatus().Where(x => x== dto.Status).FirstOrDefault();
                 if (String.IsNullOrEmpty(status))
                 {
                     result.Data = null;
@@ -788,7 +757,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Status Invalido";
                     return result;
                     
-                }
+                }*/
                 var manoHabil = GetListManoHabil().Where(x => x == dto.ManoHabil).FirstOrDefault();
                 if (String.IsNullOrEmpty(manoHabil))
                 {
@@ -796,8 +765,26 @@ namespace Convertidor.Data.Repository.Rh
                     result.IsValid = false;
                     result.Message = "Mano Habil Invalida";
                     return result;
+
+                }
+                var identificacion = await _rhDescriptivasServices.GetByCodigoDescriptiva(dto.IdentificacionId);
+                if (identificacion==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo de Identificacion Invalido";
+                    return result;
                     
                 }
+
+                if (dto.NumeroIdentificacion<=0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero de Identificacion Invalido";
+                    return result;
+                }
+
                 var estadoCivil = await _rhDescriptivasServices.GetDescripcionByCodigoDescriptiva(dto.EstadoCivilId);
                 if (String.IsNullOrEmpty(estadoCivil))
                 {
@@ -876,6 +863,16 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<PersonasDto> result = new ResultDto<PersonasDto>(null);
             try
             {
+                
+                var personaFind = await _repository.GetCedula(dto.Cedula);
+                if (personaFind != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cedula de Identidad ya existe";
+                    return result;
+                }
+                
                 if (dto.Cedula <= 0)
                 {
                     result.Data = null;
@@ -898,15 +895,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
-                var nacionalidad = GetListNacionalidad().Where(x => x== dto.Nacionalidad).FirstOrDefault();
-                if (String.IsNullOrEmpty(nacionalidad))
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Nacionalidad Invalida";
-                    return result;
-                    
-                }
+               
                 var sexo = GetListSexo().Where(x=> x== dto.Sexo).FirstOrDefault();
                 if (String.IsNullOrEmpty(sexo))
                 {
@@ -931,7 +920,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Peso Invalido";
                     return result;
                 }
-                var status = GetListStatus().Where(x => x== dto.Status).FirstOrDefault();
+                /*var status = GetListStatus().Where(x => x== dto.Status).FirstOrDefault();
                 if (String.IsNullOrEmpty(status))
                 {
                     result.Data = null;
@@ -939,6 +928,23 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Status Invalido";
                     return result;
                     
+                }*/
+                var identificacion = await _rhDescriptivasServices.GetByCodigoDescriptiva(dto.IdentificacionId);
+                if (identificacion==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo de Identificacion Invalido";
+                    return result;
+                    
+                }
+
+                if (dto.NumeroIdentificacion<=0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero de Identificacion Invalido";
+                    return result;
                 }
                 var manoHabil = GetListManoHabil().Where(x => x== dto.ManoHabil).FirstOrDefault();
                 if (String.IsNullOrEmpty(manoHabil))
@@ -1004,18 +1010,13 @@ namespace Convertidor.Data.Repository.Rh
                 
                 if (created.IsValid && created.Data != null)
                 {
-                    await AddPersonaCache(persona.CODIGO_PERSONA);
-                    
                     var resultDto = await GetPersona(persona.CODIGO_PERSONA );
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
-
-
                 }
                 else
                 {
-
                     result.Data = null;
                     result.IsValid = created.IsValid;
                     result.Message = created.Message;

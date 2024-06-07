@@ -42,12 +42,20 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-   
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GetAllByTitulo(FilterPreTituloDto dto)
         {
             var result = await _service.GetByTitulo(dto.TituloId);
+            return Ok(result);
+        }
+            
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetSelectDescriptiva(FilterPreTituloDto dto)
+        {
+            var result = await _service.GetSelectDescriptiva(dto.TituloId);
             return Ok(result);
         }
         [HttpPost]

@@ -28,6 +28,7 @@ public class Bm1GetDto
     public int CantidadFotos { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }
+    public string NroPlaca { get; set; } = string.Empty;
 
 
 }
@@ -48,7 +49,7 @@ public class Bm1ExcelGetDto
     public DateTime FechaMovimientoFiltro { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }
-    
+    public string NroPlaca { get; set; } = string.Empty;
   
     
 }

@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Data.Repository.Rh
+﻿using Convertidor.Utility;
+
+namespace Convertidor.Data.Repository.Rh
 {
 	public class RhEducacionService: IRhEducacionService
     {
@@ -55,17 +57,7 @@
             }
 
         }
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+       
         public async Task<RhEducacionResponseDto> MapEducacionDto(RH_EDUCACION dtos)
         {
 
@@ -81,10 +73,10 @@
             itemResult.FechaIni = dtos.FECHA_INI;
             itemResult.FechaIniString = dtos.FECHA_INI.ToString("u"); 
             itemResult.FechaFin = dtos.FECHA_FIN;
-            itemResult.FechaFinString = dtos.FECHA_FIN.ToString("u"); 
-            FechaDto FechaIniObj = GetFechaDto(dtos.FECHA_INI);
+            itemResult.FechaFinString = Fecha.GetFechaString( dtos.FECHA_FIN); 
+            FechaDto FechaIniObj = Fecha.GetFechaDto(dtos.FECHA_INI);
             itemResult.FechaIniObj = (FechaDto)FechaIniObj;
-            FechaDto FechaFinObj = GetFechaDto(dtos.FECHA_FIN);
+            FechaDto FechaFinObj = Fecha.GetFechaDto(dtos.FECHA_FIN);
             itemResult.FechaFinObj = (FechaDto)FechaFinObj;
             itemResult.UltimoAñoAprobado = dtos.ULTIMO_ANO_APROBADO;
             itemResult.Graduado = dtos.GRADUADO;

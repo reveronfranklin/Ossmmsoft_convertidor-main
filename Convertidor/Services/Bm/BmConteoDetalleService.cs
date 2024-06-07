@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Bm
 {
@@ -35,17 +36,7 @@ namespace Convertidor.Services.Bm
 
         }
 
-    public FechaDto GetFechaDto(DateTime fecha)
-    {
-        var FechaDesdeObj = new FechaDto();
-        FechaDesdeObj.Year = fecha.Year.ToString();
-        string month = "00" + fecha.Month.ToString();
-        string day = "00" + fecha.Day.ToString();
-        FechaDesdeObj.Month = month.Substring(month.Length - 2);
-        FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-        return FechaDesdeObj;
-    }
+  
 
     public async Task<List<BM_CONTEO_DETALLE>> GetByCodigoConteo(int codigoConteo)
     {
@@ -140,8 +131,8 @@ namespace Convertidor.Services.Bm
                                       Servicio=s.SERVICIO,
                                       ResponsableBien=s.RESPONSABLE_BIEN,
                                       FechaMovimiento=s.FECHA_MOVIMIENTO,
-                                      FechaMovimientoString=s.FECHA_MOVIMIENTO.ToString("u"),
-                                      FechaMovimientoObj = GetFechaDto(s.FECHA_MOVIMIENTO),
+                                      FechaMovimientoString=Fecha.GetFechaString(s.FECHA_MOVIMIENTO),
+                                      FechaMovimientoObj = Fecha.GetFechaDto(s.FECHA_MOVIMIENTO),
                                       CodigoBien=s.CODIGO_BIEN,
                                       CodigoMovBien=s.CODIGO_MOV_BIEN,
                                       Comentario=s.COMENTARIO
@@ -233,8 +224,8 @@ namespace Convertidor.Services.Bm
                                       Servicio=s.SERVICIO,
                                       ResponsableBien=s.RESPONSABLE_BIEN,
                                       FechaMovimiento=s.FECHA_MOVIMIENTO,
-                                      FechaMovimientoString=s.FECHA_MOVIMIENTO.ToString("u"),
-                                      FechaMovimientoObj = GetFechaDto(s.FECHA_MOVIMIENTO),
+                                      FechaMovimientoString=Fecha.GetFechaString(s.FECHA_MOVIMIENTO),
+                                      FechaMovimientoObj = Fecha.GetFechaDto(s.FECHA_MOVIMIENTO),
                                       CodigoBien=s.CODIGO_BIEN,
                                       CodigoMovBien=s.CODIGO_MOV_BIEN,
                                       Comentario=s.COMENTARIO

@@ -1,4 +1,6 @@
-﻿namespace Convertidor.Data.Repository.Rh
+﻿using Convertidor.Utility;
+
+namespace Convertidor.Data.Repository.Rh
 {
 	public class RhAriService : IRhAriService
     {
@@ -35,17 +37,7 @@
 
         }
        
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-    
-            return FechaDesdeObj;
-        }
+      
 
         public async Task<RhAriResponseDto> MapAriDto(RH_ARI dtos)
         {
@@ -55,8 +47,8 @@
             itemResult.CodigoAri = dtos.CODIGO_ARI;
             itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
             itemResult.FechaAri = dtos.FECHA_ARI;
-            itemResult.FechaAriString = dtos.FECHA_ARI.ToString("u");
-            FechaDto fechaAriObj = GetFechaDto(dtos.FECHA_ARI);
+            itemResult.FechaAriString =Fecha.GetFechaString(dtos.FECHA_ARI);
+            FechaDto fechaAriObj = Fecha.GetFechaDto(dtos.FECHA_ARI);
             itemResult.FechaAriObj = (FechaDto)fechaAriObj;
             itemResult.Mes = dtos.MES;
             itemResult.Ano = dtos.ANO;

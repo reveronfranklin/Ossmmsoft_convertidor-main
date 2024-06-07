@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Bm;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -119,17 +120,7 @@ namespace Convertidor.Services.Presupuesto
             }
 
         }
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+       
 
         public async Task<PreModificacionResponseDto> MapPreModificacion(PRE_MODIFICACION dto)
         {
@@ -139,8 +130,8 @@ namespace Convertidor.Services.Presupuesto
             itemResult.TipoModificacionId = dto.TIPO_MODIFICACION_ID;
             
             itemResult.FechaModificacion = dto.FECHA_MODIFICACION;
-            itemResult.FechaModificacionString = dto.FECHA_MODIFICACION.ToString("u");
-            FechaDto fechaModificacionObj = GetFechaDto(dto.FECHA_MODIFICACION);
+            itemResult.FechaModificacionString = Fecha.GetFechaString( dto.FECHA_MODIFICACION);
+            FechaDto fechaModificacionObj = Fecha.GetFechaDto(dto.FECHA_MODIFICACION);
             itemResult.FechaModificacionObj = (FechaDto)fechaModificacionObj;
             itemResult.Ano = dto.ANO;
             itemResult.NumeroModificacion = dto.NUMERO_MODIFICACION;
