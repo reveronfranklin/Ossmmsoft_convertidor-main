@@ -1,6 +1,5 @@
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
-using Convertidor.Services.Presupuesto.Report.Example;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using iText.Kernel.Geom;
 using MathNet.Numerics.Distributions;
@@ -11,7 +10,7 @@ using QuestPDF.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 using Image = QuestPDF.Infrastructure.Image;
 
-namespace Convertidor.Services.Rh.Report.Example
+namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria
 {
     public class ReporteSolicitudModificacionPresupuestariaDocument : IDocument
     {
@@ -72,32 +71,7 @@ namespace Convertidor.Services.Rh.Report.Example
                 column.Item().AlignCenter().Text("SOLICITUD DE MODIFICACIONES PRESUPUESTARIAS").SemiBold().FontSize(8);
                 column.Item().PaddingLeft(25).AlignLeft().Text("DIRECCION  DE PLANIFICACIÓN Y \n " + "      " + "       " + "       " + "PRESUPUESTO").ExtraBold().FontSize(8);
 
-                //column.Item().Element(ComposeTableResumenConcepto);
-
-
-
-
-                /*row.RelativeItem().Column(column =>
-                {
-
-                    column.Item().Text(text =>
-                    {
-                        text.Span($"").FontSize(7).SemiBold();
-                        ;
-                    });
-                    column.Item().Text(text =>
-                    {
-                        text.Span($"PRESUPUESTO: {firstResumen.CodigoPresupuesto}").FontSize(10).SemiBold();
-                        ;
-                    });
-                    column.Item().Text(text =>
-                    {
-                        text.Span($"{descripcion}").FontSize(7).SemiBold();
-                        ;
-                    });
-                });*/
-
-
+               
 
             });
         }
@@ -114,6 +88,8 @@ namespace Convertidor.Services.Rh.Report.Example
                     row.RelativeItem().Component(new GeneralReporteSolicitudModificacionTablaComponent(Model.General));
 
                 });
+
+                if(Model.DetallePara == )
 
                 column.Item().Row(row =>
                 {

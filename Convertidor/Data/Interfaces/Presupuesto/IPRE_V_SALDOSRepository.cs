@@ -14,6 +14,8 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<bool> PresupuestoExiste(int codigoPresupuesto);
         Task<List<ListIcpPucConDisponible>> GetListIcpPucConDisponible(int codigoPresupuesto);
         Task<ListIcpPucConDisponible> GetListIcpPucConDisponibleCodigoSaldo(int codigoSaldo);
-	}
+        Task<PRE_V_SALDOS> GetByCodigo(int codigo);
+
+    }
 }
 

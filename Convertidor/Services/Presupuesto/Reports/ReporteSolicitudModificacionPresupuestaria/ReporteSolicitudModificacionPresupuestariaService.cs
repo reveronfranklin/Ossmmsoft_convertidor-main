@@ -17,14 +17,14 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
         private readonly IPreSolModificacionService _preSolModificacionService;
         private readonly IPrePucSolicitudModificacionService _prePucSolicitudModificacionService;
         private readonly IPRE_V_SALDOSRepository _pRE_V_SALDOSRepository;
-        private readonly IPRE_ASIGNACIONESRepository _pRE_ASIGNACIONESRepository;
+        private readonly IPreAsignacionService _preAsignacionService;
         private readonly IConfiguration _configuration;
 
         public ReporteSolicitudModificacionPresupuestariaService(IPreSolModificacionRepository preSolModificacionRepository,
                                                                  IPreSolModificacionService preSolModificacionService,
                                                                  IPrePucSolicitudModificacionService  prePucSolicitudModificacionService,
                                                                  IPRE_V_SALDOSRepository pRE_V_SALDOSRepository,
-                                                                 IPRE_ASIGNACIONESRepository pRE_ASIGNACIONESRepository,
+                                                                  IPreAsignacionService preAsignacionService,
                                                                  IConfiguration configuration)
         {
 
@@ -32,7 +32,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
             _preSolModificacionService = preSolModificacionService;
             _prePucSolicitudModificacionService = prePucSolicitudModificacionService;
             _pRE_V_SALDOSRepository = pRE_V_SALDOSRepository;
-            _pRE_ASIGNACIONESRepository = pRE_ASIGNACIONESRepository;
+            _preAsignacionService = preAsignacionService;
             _configuration = configuration;
         }
 
@@ -156,76 +156,79 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
         
         }
 
-        public async Task<List<DetalleReporteSolicitudModificacionDto>> GenerateDataDetalleReporte (int codigoSolModificacion,string dePara) 
+        public async Task<List<DetalleReporteSolicitudModificacionDto>> GenerateDataDetalleReporte(int codigoSolModificacion, string dePara)
         {
             List<DetalleReporteSolicitudModificacionDto> result = new List<DetalleReporteSolicitudModificacionDto>();
 
             PrePucSolModificacionFilterDto filter = new PrePucSolModificacionFilterDto();
-
-
-
+            
             filter.CodigoSolModificacion = codigoSolModificacion;
             filter.DePara = dePara;
 
-            if(dePara == null) 
+            if (dePara == null)
             {
                 IOException ex = new IOException("no hay datos");
             }
 
-          
+            
 
             var pucSolModificacion = await _prePucSolicitudModificacionService.GetAllByCodigoSolicitud(filter);
 
-          
-
             var listDto = pucSolModificacion.Data.Where(x => x.DePara == dePara).ToList();
 
-            if (listDto.Count > 0)
-            {
-              
-                
-                foreach (var item in listDto)
+
+           
+                if (listDto.Count > 0)
                 {
-                   
-                   
-
-                    DetalleReporteSolicitudModificacionDto resultItem = new DetalleReporteSolicitudModificacionDto();
-
-                   
-
-                    resultItem.CodigoPucSolModificacion = item.CodigoPucSolModificacion;
-                    resultItem.CodigoSolModificacion = item.CodigoSolModificacion;
-                    resultItem.CodigoSaldo = item.CodigoSaldo;
-                    resultItem.FinanciadoId = item.FinanciadoId;
-                    resultItem.DescripcionFinanciado = item.DescripcionFinanciado;
-                    resultItem.CodigoFinanciado = item.CodigoFinanciado;
-                    resultItem.CodigoIcp = item.CodigoIcp;
-                    resultItem.CodigoIcpConcat = item.CodigoIcpConcat;
-                    resultItem.DenominacionIcp = item.DenominacionIcp;
-                    resultItem.CodigoPuc = item.CodigoPuc;
-                    resultItem.CodigoPucConcat = item.CodigoPucConcat;
-                    resultItem.DenominacionPuc = item.DenominacionPuc;
-                    resultItem.Monto = item.Monto;
-                    resultItem.MontoModificado = item.MontoModificado;
-                    resultItem.MontoAnulado = item.MontoAnulado;
-                    resultItem.Descontar = item.Descontar;
-                    resultItem.Aportar = item.Aportar;
-                    resultItem.DePara = item.DePara;
-                  
-                    resultItem.MontoAnulado = item.MontoAnulado;
-
-                    
-                    
 
 
-                    result.Add(resultItem);
+                    foreach (var item in listDto)
+                    {
+                        
+                        DetalleReporteSolicitudModificacionDto resultItem = new DetalleReporteSolicitudModificacionDto();
 
+
+
+
+
+                        resultItem.CodigoPucSolModificacion = item.CodigoPucSolModificacion;
+                        resultItem.CodigoSolModificacion = item.CodigoSolModificacion;
+                        resultItem.CodigoSaldo = item.CodigoSaldo;
+                        resultItem.FinanciadoId = item.FinanciadoId;
+                        resultItem.DescripcionFinanciado = item.DescripcionFinanciado;
+                        resultItem.CodigoFinanciado = item.CodigoFinanciado;
+                        resultItem.CodigoIcp = item.CodigoIcp;
+                        resultItem.CodigoIcpConcat = item.CodigoIcpConcat;
+                        resultItem.DenominacionIcp = item.DenominacionIcp;
+                        resultItem.CodigoPuc = item.CodigoPuc;
+                        resultItem.CodigoPucConcat = item.CodigoPucConcat;
+                        resultItem.DenominacionPuc = item.DenominacionPuc;
+                        resultItem.Monto = item.Monto;
+                        var saldos = await _pRE_V_SALDOSRepository.GetByCodigo(item.CodigoSaldo);
+                        if(saldos != null) 
+                        {
+                            resultItem.Presupuestado = saldos.PRESUPUESTADO;
+                            resultItem.MontoModificado = saldos.MODIFICADO;
+                            resultItem.Disponible = saldos.DISPONIBLE;
+                        }
+                        
+                        resultItem.MontoAnulado = item.MontoAnulado;
+                        resultItem.Descontar = item.Descontar;
+                        resultItem.Aportar = item.Aportar;
+                        resultItem.DePara = item.DePara;
+                        resultItem.MontoAnulado = item.MontoAnulado;
+
+
+                        result.Add(resultItem);
+
+                    }
+
+                    return result;
                 }
 
                 return result;
-            }
-
-            return result;
+            
+          
         }
         public async Task<string> ReportData(int codigoSolModificacion)
         {

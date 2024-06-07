@@ -1,10 +1,11 @@
 using System.Globalization;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
+using NPOI.SS.Formula.Functions;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-namespace Convertidor.Services.Rh.Report.Example;
+namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 
   public class DetalleComponent : IComponent
   {
@@ -17,11 +18,11 @@ namespace Convertidor.Services.Rh.Report.Example;
             
         public void Compose(IContainer container)
         {
-            TextDescriptor text = new TextDescriptor();
+            
             
             var headerStyle = TextStyle.Default.SemiBold().FontSize(7);
             NumberFormatInfo formato = new CultureInfo("es-AR").NumberFormat;
-            static IContainer CellStyle(IContainer container) => container.BorderBottom(1).BorderColor(Colors.Grey.Lighten2);
+        static IContainer CellStyle(IContainer container) => container;
             formato.CurrencyGroupSeparator = ".";
             formato.NumberDecimalSeparator = ",";
             formato.NumberDecimalDigits = 2;
@@ -38,16 +39,19 @@ namespace Convertidor.Services.Rh.Report.Example;
 
             table.Header(header =>
             {
+                table.ExtendLastCellsToTableBottom();
+                
                 header.Cell().Border(1).AlignCenter().Element(CellStyle).Text("CONCEPTO DE LO PRESUPUESTADO").FontSize(7);
 
-                //header.Cell().ColumnSpan(2).RowSpan(2).Border(1).AlignCenter().Element(CellStyle).Text("IMPUTACION PRESUPUESTARIA").FontSize(7);
-
-                header.Cell().ColumnSpan(2).Column(col =>
+                header.Cell().ColumnSpan(2).RowSpan(3).Column(col =>
                 {
-                    col.Item().Border(1).AlignCenter().Element(CellStyle).Text("IMPUTACION PRESUPUESTARIA").FontSize(7);
+                    
+                    col.Item().Border(1).AlignCenter().PaddingBottom(10).Element(CellStyle).Text("IMPUTACION PRESUPUESTARIA").FontSize(7);
+                    
 
                     col.Item().Row(row => 
                     {
+                        
                         row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("ICP").FontSize(7);
                         row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("PUC").FontSize(7);
                     });
@@ -107,28 +111,60 @@ namespace Convertidor.Services.Rh.Report.Example;
 
                 table.Cell().Row(row =>
                 {
-                    row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Monto).FontSize(7);
+                    row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Presupuestado).FontSize(7);
                     row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.MontoModificado).FontSize(7);
                     row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.TotalDesembolso).FontSize(7);
                     row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Ejecutado).FontSize(7);
                     row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Disponible).FontSize(7);
-                    row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Descontar).FontSize(7);
+                    row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(item.Monto).FontSize(7);
 
+                   
 
-                    table.ExtendLastCellsToTableBottom();
                 });
                
-
-
             }
-            table.Cell().ColumnSpan(3).Border(1).AlignCenter().Element(CellStyle).Text("TOTALES").FontSize(7);
+            table.Cell().ColumnSpan(3).RowSpan(2).Border(1).AlignCenter().Element(CellStyle).Text("TOTALES").FontSize(7);
+
+                    var presupuestado = ModelDetalle.Sum(x => x.Presupuestado);
+                    var montoModificado = ModelDetalle.Sum(x => x.MontoModificado);
+                    var totalDesembolso = ModelDetalle.Sum(x => x.TotalDesembolso);
+                    var ejecutado = ModelDetalle.Sum(x => x.Ejecutado);
+                    var disponible = ModelDetalle.Sum(x => x.Disponible);
+                    var monto = ModelDetalle.Sum(x => x.Monto);
+            table.Cell().Row(row =>
+            {
+                row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(presupuestado).FontSize(7);
+                row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(montoModificado).FontSize(7);
+                row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(totalDesembolso).FontSize(7);
+                row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(ejecutado).FontSize(7);
+                row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(disponible).FontSize(7);
+                row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text(monto).FontSize(7);
+            });
+
+               
+
+            
+
             table.Cell().ColumnSpan(4).Row(row => 
             {
-                row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("N°").FontSize(7);
+                row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("N°").FontSize(7);
                 row.RelativeColumn(2).Border(1).AlignCenter().Element(CellStyle).Text("METAS BENEFICIADAS").FontSize(7);
                 row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("GRADO DE \n"+" "+"AFECTACION(%)").FontSize(7);
             });
-        });
 
-        }
+            table.Cell().ColumnSpan(4).Row(row => 
+            {
+                row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("   ").FontSize(7);
+                row.RelativeColumn(2).Border(1).AlignCenter().Element(CellStyle).Text("Control y Gestión de la relación de H.C.M, Seguro de Vida y Accidentes Personales, Servicio Funerario," +
+                    " Servicio de Prevención y Salud Laboral. Seguimiento y Control en la Relación de Aportes de Ley \n" +"  " +
+                    ""+ "(S.S.O. R.P.E, F.A.O.V, F.E.J.P), Caja de Ahorro y Seguimiento y Control en la Relación de Bono de Alimentaciòn y Bono Salud. ").FontSize(7);
+                row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("%").FontSize(7);
+            });
+
+            table.Cell().ColumnSpan(4).Border(1).AlignLeft().Element(CellStyle).Text("   EFECTO FINANCIERO: SE CUENTA CON RECURSOS DISPONIBLES DEL PRESUPUESTO ORDINARIO").FontSize(7);
+
+            
+        });
+       
+    }
   }

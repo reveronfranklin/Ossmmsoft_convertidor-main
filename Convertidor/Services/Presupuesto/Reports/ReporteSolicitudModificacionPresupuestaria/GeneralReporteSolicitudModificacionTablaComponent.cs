@@ -4,7 +4,7 @@ using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-namespace Convertidor.Services.Presupuesto.Report.Example;
+namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 
     public class GeneralReporteSolicitudModificacionTablaComponent : IComponent
     {
