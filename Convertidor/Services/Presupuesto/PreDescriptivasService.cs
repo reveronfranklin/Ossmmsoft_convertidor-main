@@ -615,8 +615,10 @@ namespace Convertidor.Services.Presupuesto
 
             List<PreDescriptivasGetDto> listDto = new List<PreDescriptivasGetDto>();
             var hijos = await _repository.GetByFKID(entity.DESCRIPCION_ID);
-            if (hijos.Count > 0)
+
+            if (hijos != null && hijos.Count > 0 )
             {
+
                 PreDescriptivasGetDto itemDefault = new PreDescriptivasGetDto();
                 itemDefault = GetDefaultDecriptiva();
                 List<PreDescriptivasGetDto> lista = new List<PreDescriptivasGetDto>();
