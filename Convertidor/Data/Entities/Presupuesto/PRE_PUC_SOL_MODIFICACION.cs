@@ -6,7 +6,7 @@ public class PRE_PUC_SOL_MODIFICACION
  public int CODIGO_SOL_MODIFICACION { get; set; }
  public int CODIGO_SALDO { get; set; }
  public string FINANCIADO_ID { get; set; }
- public int CODIGO_FINANCIADO { get; set; }
+ public int? CODIGO_FINANCIADO { get; set; }
  public int CODIGO_ICP { get; set; }
  public int CODIGO_PUC { get; set; }
  public decimal MONTO { get; set; }

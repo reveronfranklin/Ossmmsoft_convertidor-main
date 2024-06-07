@@ -5,7 +5,7 @@ namespace Convertidor.Services.Presupuesto;
 public interface IPreAsignacionService
 {
     Task<ResultDto<PreAsignacionesGetDto>> GetByCodigo(int codigo);
-    
+    Task<decimal> GetTotalAsignacionByIcpPuc(int codigoPresupuesto, int codigoIcp, int codigoPuc);
     Task<ResultDto<List<PreAsignacionesGetDto>>> GetAllByPresupuesto(PreAsignacionesFilterDto filterDto);
     Task<ResultDto<List<PreAsignacionesGetDto>>> GetAllByIcp(PreAsignacionesFilterDto filter);
     

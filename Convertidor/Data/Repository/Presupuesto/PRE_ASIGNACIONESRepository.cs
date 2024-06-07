@@ -102,6 +102,31 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
+        public async Task<decimal> GetTotalAsignacionByIcpPuc(int codigoPresupuesto, int codigoIcp, int codigoPuc)
+        {
+            decimal totalAsignacion = 0;
+            try
+            {
+                
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var asignaciones = await _context.PRE_ASIGNACIONES.DefaultIfEmpty().Where(x => x.CODIGO_EMPRESA == conectado.Empresa && x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_ICP == codigoIcp && x.CODIGO_PUC == codigoPuc).ToListAsync();
+                if (asignaciones.Count > 0)
+                {
+                    foreach (var item in asignaciones)
+                    {
+                        totalAsignacion = totalAsignacion + item.TOTAL_DESEMBOLSO;
+                    }
+                }
+                return totalAsignacion;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return 0;
+            }
+
+        }
+
 
         public async Task<ResultDto<PRE_ASIGNACIONES>> Add(PRE_ASIGNACIONES entity)
         {
