@@ -1,7 +1,9 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 using NPOI.OpenXmlFormats.Vml.Office;
+using System.Collections.Generic;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -62,7 +64,7 @@ namespace Convertidor.Services.Presupuesto
 
                 var solModificacion = await _repository.GetAll();
 
-               
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
                 if (solModificacion.Count() > 0)
                 {
@@ -70,7 +72,7 @@ namespace Convertidor.Services.Presupuesto
 
                     foreach (var item in solModificacion)
                     {
-                        var dto = await MapPreSolModificacion(item);
+                        var dto = await MapPreSolModificacion(item,descriptivaTipoSolicitud);
                         listDto.Add(dto);
                     }
 
@@ -108,7 +110,7 @@ namespace Convertidor.Services.Presupuesto
 
                 var solModificacion = await _repository.GetByPresupuesto(filter.CodigoPresupuesto);
 
-               
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
                 if (solModificacion.Count() > 0)
                 {
@@ -116,7 +118,7 @@ namespace Convertidor.Services.Presupuesto
 
                     foreach (var item in solModificacion)
                     {
-                        var dto = await MapPreSolModificacion(item);
+                        var dto = await MapPreSolModificacion(item,descriptivaTipoSolicitud);
                         listDto.Add(dto);
                     }
 
@@ -174,51 +176,18 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
         
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
-        public string GetFechaString(DateTime? fecha)
-        {
-            var result = "";
-            try
-            {
-              
-                if (fecha != null)
-                {
-                    result = $"{fecha:MM/dd/yyyy}";
-                }
-         
-
-                return result;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return result;
-              
-            }
-           
-          
-        }
-
+      
         
         public async Task<bool> SolicitudPuedeModificarseoEliminarse(int codigoSolicitudModificacion)
         {
-            bool result = true;
-            
-            var preModificacion = await _preModificacionRepository.GetByCodigoSolicitud(codigoSolicitudModificacion);
-            if (preModificacion != null)
+            bool result = false;
+            var preSolModificacion = await _repository.GetByCodigo(codigoSolicitudModificacion);
+            if (preSolModificacion != null)
             {
-                result = false;
+                var status = Estatus.GetStatusObj(preSolModificacion.STATUS);
+                result = status.Modificable;
             }
+            
             return result;
         }
         
@@ -238,19 +207,19 @@ namespace Convertidor.Services.Presupuesto
                     nombrePersona = $"{persona.NOMBRE} {persona.APELLIDO}";
                 }
 
-                var fechaAnulado = GetFechaString(dto.FECHA_UPD);
+                var fechaAnulado = Fecha.GetFechaString(dto.FECHA_UPD);
                 if (preModificacionAprobada != null)
                 {
-                    fechaAnulado = GetFechaString(preModificacionAprobada.FECHA_INS);
+                    fechaAnulado = Fecha.GetFechaString(preModificacionAprobada.FECHA_INS);
                 }
-                result=$"ANULADO POR: {nombrePersona} { fechaAnulado}";
+                result=$"ANULADO MODIFICACION POR: {nombrePersona} { fechaAnulado}";
                 return result;
             }
 
         
             if (preModificacionAprobada != null && preModificacionAprobada.STATUS=="AP")
             {
-                result = $"APROBADO MODIFICACION: #{preModificacionAprobada.CODIGO_MODIFICACION} {GetFechaString(preModificacionAprobada.FECHA_INS)}";
+                result = $"APROBADO MODIFICACION: #{preModificacionAprobada.CODIGO_MODIFICACION} {Fecha.GetFechaString(preModificacionAprobada.FECHA_INS)}";
                 return result;
             }
             
@@ -284,7 +253,28 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
         
-        public async Task<PreSolModificacionResponseDto> MapPreSolModificacion(PRE_SOL_MODIFICACION dto)
+        public string GetDenominacionIcp(List<PRE_INDICE_CAT_PRG> listIcp,int codigoIcp)
+        {
+            var result = "";
+            var icp = listIcp.Where(x => x.CODIGO_ICP == codigoIcp).FirstOrDefault();
+            if (icp != null)
+            {
+                result = icp.DENOMINACION;
+            }
+            return result;
+        }
+        public string GetDenominacionDescriptiva(List<PRE_DESCRIPTIVAS> list,int id)
+        {
+            var result = "";
+            var descriptiva = list.Where(x => x.DESCRIPCION_ID == id).FirstOrDefault();
+            if (descriptiva != null)
+            {
+                result = descriptiva.DESCRIPCION;
+            }
+            return result;
+        }
+        
+        public async Task<PreSolModificacionResponseDto> MapPreSolModificacion(PRE_SOL_MODIFICACION dto,List<PRE_DESCRIPTIVAS> listDescriptiva)
         {
             PreSolModificacionResponseDto itemResult = new PreSolModificacionResponseDto();
             itemResult.CodigoSolModificacion = dto.CODIGO_SOL_MODIFICACION;
@@ -317,9 +307,30 @@ namespace Convertidor.Services.Presupuesto
                     
                 }
             }
+
+            itemResult.TotalDescontar = 0;
+            itemResult.TotalAportar = 0;
+            var pucSolModificacion =
+                await _prePucSolicitudModificacionRepository.GetAllByCodigoSolicitud(itemResult.CodigoSolModificacion);
+
+            if (pucSolModificacion != null && pucSolModificacion.Count > 0)
+            {
+                foreach (var itemSol in pucSolModificacion)
+                {
+                    if (itemSol.DE_PARA == "D")
+                    {
+                        itemResult.TotalDescontar = itemResult.TotalDescontar + itemSol.MONTO;
+                    }
+                    if (itemSol.DE_PARA == "P")
+                    {
+                        itemResult.TotalAportar = itemResult.TotalAportar + itemSol.MONTO;
+                    }
+                }
+            }
+            
             itemResult.FechaSolicitud = dto.FECHA_SOLICITUD;
-            itemResult.FechaSolicitudString =GetFechaString(dto.FECHA_SOLICITUD);
-            FechaDto FechaSolicitudObj = GetFechaDto(dto.FECHA_SOLICITUD);
+            itemResult.FechaSolicitudString =Fecha.GetFechaString(dto.FECHA_SOLICITUD);
+            FechaDto FechaSolicitudObj = Fecha.GetFechaDto(dto.FECHA_SOLICITUD);
             itemResult.FechaSolicitudObj = (FechaDto)FechaSolicitudObj;
             itemResult.Ano = dto.ANO;
             itemResult.NumeroSolModificacion = dto.NUMERO_SOL_MODIFICACION;
@@ -339,6 +350,7 @@ namespace Convertidor.Services.Presupuesto
         public async Task<List<PreSolModificacionResponseDto>> MapListPreSolModificacionDto(List<PRE_SOL_MODIFICACION> dtos)
         {
             List<PreSolModificacionResponseDto> result = new List<PreSolModificacionResponseDto>();
+            var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
 
             foreach (var item in dtos)
@@ -346,7 +358,7 @@ namespace Convertidor.Services.Presupuesto
 
                 PreSolModificacionResponseDto itemResult = new PreSolModificacionResponseDto();
 
-                itemResult = await MapPreSolModificacion(item);
+                itemResult = await MapPreSolModificacion(item,descriptivaTipoSolicitud);
 
                 result.Add(itemResult);
             }
@@ -391,8 +403,9 @@ namespace Convertidor.Services.Presupuesto
                 solModificacion.USUARIO_UPD = conectado.Usuario;
                 solModificacion.FECHA_UPD = DateTime.Now;
                 await _repository.Update(solModificacion);
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
-                var resultDto =await  MapPreSolModificacion(solModificacion);
+                var resultDto =await  MapPreSolModificacion(solModificacion,descriptivaTipoSolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -503,8 +516,9 @@ namespace Convertidor.Services.Presupuesto
                 codigoSolModificacion.USUARIO_UPD = conectado.Usuario;
                 codigoSolModificacion.FECHA_UPD = DateTime.Now;
                 await _repository.Update(codigoSolModificacion);
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
-                var resultDto =await  MapPreSolModificacion(codigoSolModificacion);
+                var resultDto =await  MapPreSolModificacion(codigoSolModificacion,descriptivaTipoSolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -619,7 +633,9 @@ namespace Convertidor.Services.Presupuesto
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapPreSolModificacion(created.Data);
+                    var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
+
+                    var resultDto = await MapPreSolModificacion(created.Data,descriptivaTipoSolicitud);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -674,9 +690,19 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Solicitud no puede se Eliminada, ya existe en historico de modificacion";
                     return result;
                 }
-
+                
+                var deletedPuc = await _prePucSolicitudModificacionRepository.DeleteByCodigoSolicitud(dto.CodigoSolModificacion);
+                if (deletedPuc == false)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Error al borrar detalle de PUC";
+                }
                 var deleted = await _repository.Delete(dto.CodigoSolModificacion);
-
+                
+                //RECALCULAMOS PRE_SALDO
+                await _preVSaldosRepository.RecalcularSaldo(codigoSolModificacion.CODIGO_PRESUPUESTO);
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;
@@ -844,12 +870,10 @@ namespace Convertidor.Services.Presupuesto
                         await _prePucSolicitudModificacionRepository.GetByCodigo(item.CodigoPucSolModificacion);
                     if (prePucSolModificacion != null)
                     {
-                        await UpdateMontoModificado(item.CodigoPucSolModificacion,
-                            prePucSolModificacion.MONTO_MODIFICADO - item.Monto);
+                        await UpdateMontoModificado(item.CodigoPucSolModificacion, 0);
                     }
                     //ACTUALIZAMOS EL MONTO ANULADO EN PRE PUC SMODIFICACION(PRE_PUC_MODIFICACION)
-                    await _prePucModificacionService.UpdateMontoAnulado(item.CodigoPucModificacion,
-                        item.MontoAnulado + item.Monto);
+                    await _prePucModificacionService.UpdateMontoAnulado(item.CodigoPucModificacion,item.Monto);
 
                 }
                 
@@ -1069,12 +1093,13 @@ namespace Convertidor.Services.Presupuesto
 
                 var solModificacion = await _repository.GetByCodigo(codigoSolicitud);
 
+                var descriptivaTipoSolicitud = await _repositoryPreDescriptiva.GetByTitulo(8);
 
 
                 if (solModificacion != null)
                 {
                     
-                    var dto = await MapPreSolModificacion(solModificacion);
+                    var dto = await MapPreSolModificacion(solModificacion,descriptivaTipoSolicitud);
 
                     result.Data = dto;
 
