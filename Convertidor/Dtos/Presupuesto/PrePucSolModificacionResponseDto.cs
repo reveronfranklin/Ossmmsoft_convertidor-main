@@ -21,4 +21,5 @@ public class PrePucSolModificacionResponseDto
     public decimal MontoModificado { get; set; }
     public decimal MontoAnulado { get; set; }
     public int CodigoPresupuesto { get; set; }
+    public string Status { get; set; }
 }
