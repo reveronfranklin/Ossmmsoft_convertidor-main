@@ -291,6 +291,7 @@ namespace Convertidor.Services.Presupuesto
             itemResult.TipoModificacionId = dto.TIPO_MODIFICACION_ID;
             itemResult.DescripcionTipoModificacion = "";
             var tipoModificacionId = await _repositoryPreDescriptiva.GetByCodigo(dto.TIPO_MODIFICACION_ID);
+            tipoModificacionId.EXTRA3 = " ";
             if (tipoModificacionId != null)
             {
                 itemResult.DescripcionTipoModificacion = tipoModificacionId.DESCRIPCION;

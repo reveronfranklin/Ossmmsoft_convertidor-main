@@ -7,6 +7,7 @@ using Org.BouncyCastle.Asn1.X509;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using Spire.Xls;
 using System.ComponentModel.DataAnnotations;
 using Image = QuestPDF.Infrastructure.Image;
 
@@ -45,10 +46,10 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
                     page.Size(PageSizes.A3.Landscape());
                     page.Header().Element(ComposeHeader);
                     page.Content().Element(ComposeContent);
-
+                    
                     page.Footer().AlignCenter().Text(text =>
                     {
-
+                        
                         text.CurrentPageNumber();
                         text.Span(" / ");
                         text.TotalPages();
@@ -103,12 +104,54 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
 
                 });
 
+                column.Item().Element(ComposeFooter);
             });
-            //column.Item().Element(ComposeTableRecibo);
+            
 
 
 
         }
+
+        void ComposeFooter(IContainer container)
+        {
+            container.Table(async tableFooter =>
+            {
+                tableFooter.ColumnsDefinition(column =>
+                {
+                    column.RelativeColumn();
+                    column.RelativeColumn();
+                    column.RelativeColumn();
+                    column.RelativeColumn();
+                });
+
+
+                tableFooter.Cell().ColumnSpan(2).Border(1).AlignLeft().Text("   Unidad Solicitante").FontSize(7);
+                tableFooter.Cell().ColumnSpan(2).Border(1).AlignLeft().Text("   Recibido por la Dirección  de Planificacion y Presupuesto").FontSize(8);
+
+                tableFooter.Cell().ColumnSpan(2).Column(col => 
+                {
+                    col.Item().Border(1).AlignLeft().Text("   ").FontSize(7);
+                    col.Item().Border(1).AlignLeft().Text(" ").FontSize(7);
+                });
+
+                tableFooter.Cell().ColumnSpan(2).Column(col =>
+                {
+                    col.Item().Border(1).AlignLeft().Text("   ").FontSize(7);
+                    col.Item().Border(1).AlignLeft().Text(" ").FontSize(7);
+                });
+                tableFooter.Cell().ColumnSpan(4).Row(row =>
+                {
+                    row.RelativeItem().AlignCenter().ShowOnce().Text("Firma y Sello").FontSize(14).ExtraBold();
+                 
+                    row.RelativeItem().AlignCenter().ShowOnce().Text("Firma y Sello").FontSize(14).ExtraBold();
+                });
+                tableFooter.Cell().ColumnSpan(2).Column(col => 
+                {
+                    col.Item().AlignLeft().Text("Nota: Colocar(*)en la imputacion presupeustaria receptora cuando la partida o sub-partida sea una creacion. ").FontSize(8);
+                });
+            });
+        }
+
     }
 }
     
