@@ -1053,7 +1053,7 @@ namespace Convertidor.Services.Presupuesto
                }
              
                
-               //COLOCAMOS EL ESTATUS DE LA SOLICITUD EN APROBADO "AP"
+               //COLOCAMOS EL ESTATUS DE LA SOLICITUD EN APROBADO "AP"..
                solModificacion.STATUS = "AP";
                var modified = await UpdateStatus(dto.CodigoSolModificacion, "AP");
                
