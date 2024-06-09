@@ -11,12 +11,32 @@ namespace Convertidor.Data.Repository.Presupuesto
 		
 
         private readonly DataContextPre _context;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public PRE_V_SALDOSRepository(DataContextPre context)
+        public PRE_V_SALDOSRepository(DataContextPre context,ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
+        public async Task<PRE_V_SALDOS> GetByCodigo(int codigo)
+        {
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.CODIGO_SALDO == codigo).FirstOrDefaultAsync();
+
+                return (PRE_V_SALDOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<List<ListIcpPucConDisponible>> GetListIcpPucConDisponible(int codigoPresupuesto)
         {
             List<ListIcpPucConDisponible> result = new List<ListIcpPucConDisponible>();

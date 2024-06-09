@@ -1019,7 +1019,11 @@ namespace Convertidor.Services.Presupuesto
                    prePucModificacionUpdateDto.DePara = item.DE_PARA;
                    prePucModificacionUpdateDto.CodigoPucSolModificacion = item.CODIGO_PUC_SOL_MODIFICACION;
                    prePucModificacionUpdateDto.CodigoPresupuesto = solModificacion.CODIGO_PRESUPUESTO;
-                   prePucModificacionUpdateDto.CodigoFinanciado = item.CODIGO_FINANCIADO;
+                    if(item.CODIGO_FINANCIADO == null) 
+                    {
+                        item.CODIGO_FINANCIADO = 0;
+                    }
+                   prePucModificacionUpdateDto.CodigoFinanciado = (int)item.CODIGO_FINANCIADO;
                    
                    var prePucModificacionCreated= await _prePucModificacionService.Create(prePucModificacionUpdateDto);
                    if (prePucModificacionCreated.IsValid == false)
@@ -1079,6 +1083,45 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<ResultDto<PreSolModificacionResponseDto>> GetByCodigoSolicitud(int codigoSolicitud)
+        {
+            ResultDto<PreSolModificacionResponseDto> result = new ResultDto<PreSolModificacionResponseDto>(null);
+            try
+            {
+
+                var solModificacion = await _repository.GetByCodigo(codigoSolicitud);
+
+
+
+                if (solModificacion != null)
+                {
+                    
+                    var dto = await MapPreSolModificacion(solModificacion);
+
+                    result.Data = dto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
     }
 }
