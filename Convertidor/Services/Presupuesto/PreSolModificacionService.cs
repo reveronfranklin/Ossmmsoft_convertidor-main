@@ -1091,12 +1091,12 @@ namespace Convertidor.Services.Presupuesto
 
                 var solModificacion = await _repository.GetByCodigo(codigoSolicitud);
 
-
+                var descriptivas = await _repositoryPreDescriptiva.GetByTitulo(8);
 
                 if (solModificacion != null)
                 {
                     
-                    var dto = await MapPreSolModificacion(solModificacion);
+                    var dto = await MapPreSolModificacion(solModificacion,descriptivas);
 
                     result.Data = dto;
 
