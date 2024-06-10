@@ -43,9 +43,9 @@ namespace Convertidor.Data
         public DbSet<ADM_DETALLE_VAL_CONTRATO> ADM_DETALLE_VAL_CONTRATO { get; set; }
         public DbSet<ADM_PUC_CONTRATO> ADM_PUC_CONTRATO { get; set; }
         public DbSet<ADM_CHEQUES> ADM_CHEQUES { get; set; }
+        public DbSet<ADM_SOL_COMPROMISO> ADM_SOL_COMPROMISO { get; set; }
 
-
-
+        
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -492,17 +492,17 @@ namespace Convertidor.Data
                     .HasColumnName("USUARIO_UPD");
             });
 
-            //            modelBuilder
-            //.Entity<ADM_CHEQUES>(builder =>
-            //{
-            //    //builder.HasNoKey();
-            //    builder.HasKey(table => new
-            //    {
-            //        table.CODIGO_CHEQUE,
+            modelBuilder
+.Entity<ADM_SOL_COMPROMISO>(builder =>
+{
+    //builder.HasNoKey();
+    builder.HasKey(table => new
+    {
+        table.CODIGO_SOL_COMPROMISO,
 
-            //    });
-            //    builder.ToTable("ADM_CHEQUES");
-            //});
+    });
+    builder.ToTable("ADM_SOL_COMPROMISO");
+});
 
         }
 

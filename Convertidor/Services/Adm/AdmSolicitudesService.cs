@@ -106,6 +106,32 @@ namespace Convertidor.Services.Adm
 
         }
 
+        public async Task<AdmSolicitudesResponseDto> GetByCodigoSolicitud(int codigoSolicitud)
+        {
+            AdmSolicitudesResponseDto result = new AdmSolicitudesResponseDto();
+            try
+            {
+                var Solicitud = await _repository.GetByCodigoSolicitud(codigoSolicitud);
+                if (Solicitud != null)
+                {
+                    var dto = await MapSolicitudesDto(Solicitud);
+                    result = dto;
+                }
+                else
+                {
+                    result = null;
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<AdmSolicitudesResponseDto>> Update(AdmSolicitudesUpdateDto dto)
         {
             ResultDto<AdmSolicitudesResponseDto> result = new ResultDto<AdmSolicitudesResponseDto>(null);
