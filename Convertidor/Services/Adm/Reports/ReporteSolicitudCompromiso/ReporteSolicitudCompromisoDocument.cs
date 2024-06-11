@@ -1,4 +1,5 @@
 using Convertidor.Data.Entities.ADM;
+using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
 using Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso;
@@ -19,14 +20,14 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupues
     {
 
         public static Image LogoImage { get; } = Image.FromFile("logo.png");
-        public ADM_DETALLE_SOLICITUD Model { get; }
+        public AdmSolCompromisoResponseDto Model { get; }
 
         private readonly string _patchLogo;
 
 
         public ReporteSolicitudCompromisoDocument(
 
-          ADM_DETALLE_SOLICITUD model,
+          AdmSolCompromisoResponseDto model,
 
             string patchLogo)
         {

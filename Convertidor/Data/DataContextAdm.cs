@@ -44,8 +44,9 @@ namespace Convertidor.Data
         public DbSet<ADM_PUC_CONTRATO> ADM_PUC_CONTRATO { get; set; }
         public DbSet<ADM_CHEQUES> ADM_CHEQUES { get; set; }
         public DbSet<ADM_SOL_COMPROMISO> ADM_SOL_COMPROMISO { get; set; }
+        public DbSet<ADM_DETALLE_SOL_COMPROMISO> ADM_DETALLE_SOL_COMPROMISO { get; set; }
 
-        
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -504,6 +505,18 @@ namespace Convertidor.Data
     builder.ToTable("ADM_SOL_COMPROMISO");
 });
 
+            modelBuilder
+.Entity<ADM_DETALLE_SOL_COMPROMISO>(builder =>
+{
+    //builder.HasNoKey();
+    builder.HasKey(table => new
+    {
+        table.CODIGO_DETALLE_SOLICITUD,
+
+    });
+    builder.ToTable("ADM_DETALLE_SOL_COMPROMISO");
+});
+            
         }
 
         

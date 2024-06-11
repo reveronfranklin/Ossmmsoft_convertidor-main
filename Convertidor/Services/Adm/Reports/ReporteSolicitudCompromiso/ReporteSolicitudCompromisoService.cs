@@ -11,8 +11,7 @@ using NuGet.Protocol.Core.Types;
 using QuestPDF.Fluent;
 using static SkiaSharp.HarfBuzz.SKShaper;
 
-namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupuestaria
-{
+namespace Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso;
     public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoService
     {
         private readonly IPreSolModificacionRepository _preSolModificacionRepository;
@@ -158,13 +157,13 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupues
 
         }
 
-        public async Task<List<AdmSolicitudesResponseDto>> GenerateDataDetalle(int codigoSolicitud)
+        public async Task<List<AdmSolCompromisoResponseDto>> GenerateDataDetalle(int codigoSolCompromiso)
         {
-            List<AdmSolicitudesResponseDto> result = new List<AdmSolicitudesResponseDto>();
+            List<AdmSolCompromisoResponseDto> result = new List<AdmSolCompromisoResponseDto>();
 
-            AdmSolicitudesResponseDto filter = new AdmSolicitudesResponseDto();
+        AdmSolCompromisoResponseDto filter = new AdmSolCompromisoResponseDto();
 
-            filter.CodigoSolicitud = codigoSolicitud;
+            filter.CodigoSolCompromiso = codigoSolCompromiso;
 
 
 
@@ -237,7 +236,8 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupues
 
     }
 
-    }   
+    
+ 
 //    public async Task<string> ReportData(int codigoSolicitud)
 //    {
 //        AdmSolicitudesResponseDto filter = new AdmSolicitudesResponseDto();
