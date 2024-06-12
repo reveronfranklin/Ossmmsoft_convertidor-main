@@ -383,6 +383,7 @@ builder.Services.AddTransient<IAdmPucContratoRepository, AdmPucContratoRepositor
 builder.Services.AddTransient<IAdmChequesRepository, AdmChequesRepository>();
 builder.Services.AddTransient<IAdmSolCompromisoRepository, AdmSolCompromisoRepository>();
 builder.Services.AddTransient<IAdmDetalleSolCompromisoRepository, AdmDetalleSolCompromisoRepository>();
+builder.Services.AddTransient<IAdmPucSolCompromisoRepository, AdmPucSolCompromisoRepository>();
 
 
 
@@ -421,6 +422,7 @@ builder.Services.AddTransient<IAdmPucContratoService, AdmPucContratoService>();
 builder.Services.AddTransient<IAdmChequesService, AdmChequesService>();
 builder.Services.AddTransient<IAdmSolCompromisoService, AdmSolCompromisoService>();
 builder.Services.AddTransient<IAdmDetalleSolCompromisoService, AdmDetalleSolCompromisoService>();
+builder.Services.AddTransient<IAdmPucSolCompromisoService, AdmPucSolCompromisoService>();
 
 
 

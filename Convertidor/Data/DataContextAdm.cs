@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data
 {
-    public class DataContextAdm: DbContext
+    public class DataContextAdm : DbContext
     {
         public DataContextAdm(DbContextOptions<DataContextAdm> options) : base(options)
         {
 
         }
 
-       
+
 
         public DbSet<ADM_DESCRIPTIVAS> ADM_DESCRIPTIVAS { get; set; }
 
@@ -45,13 +45,14 @@ namespace Convertidor.Data
         public DbSet<ADM_CHEQUES> ADM_CHEQUES { get; set; }
         public DbSet<ADM_SOL_COMPROMISO> ADM_SOL_COMPROMISO { get; set; }
         public DbSet<ADM_DETALLE_SOL_COMPROMISO> ADM_DETALLE_SOL_COMPROMISO { get; set; }
+        public DbSet<ADM_PUC_SOL_COMPROMISO> ADM_PUC_SOL_COMPROMISO { get; set; }
 
 
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-         
+
             base.OnModelCreating(modelBuilder);
 
 
@@ -316,54 +317,54 @@ namespace Convertidor.Data
         });
         builder.ToTable("ADM_H_ORDEN_PAGO");
     });
-                modelBuilder
-       .Entity<ADM_CONTRATOS>(builder =>
+            modelBuilder
+   .Entity<ADM_CONTRATOS>(builder =>
+   {
+       //builder.HasNoKey();
+       builder.HasKey(table => new
        {
-           //builder.HasNoKey();
-           builder.HasKey(table => new
-           {
-               table.CODIGO_CONTRATO,
+           table.CODIGO_CONTRATO,
 
-           });
-           builder.ToTable("ADM_CONTRATOS");
        });
-                modelBuilder
-      .Entity<ADM_VAL_CONTRATO>(builder =>
+       builder.ToTable("ADM_CONTRATOS");
+   });
+            modelBuilder
+  .Entity<ADM_VAL_CONTRATO>(builder =>
+  {
+      //builder.HasNoKey();
+      builder.HasKey(table => new
       {
-          //builder.HasNoKey();
-          builder.HasKey(table => new
-          {
-              table.CODIGO_VAL_CONTRATO,
+          table.CODIGO_VAL_CONTRATO,
 
-          });
-          builder.ToTable("ADM_VAL_CONTRATO");
       });
-                modelBuilder
-     .Entity<ADM_DETALLE_VAL_CONTRATO>(builder =>
+      builder.ToTable("ADM_VAL_CONTRATO");
+  });
+            modelBuilder
+ .Entity<ADM_DETALLE_VAL_CONTRATO>(builder =>
+ {
+     //builder.HasNoKey();
+     builder.HasKey(table => new
      {
-         //builder.HasNoKey();
-         builder.HasKey(table => new
-         {
-             table.CODIGO_DETALLE_VAL_CONTRATO,
+         table.CODIGO_DETALLE_VAL_CONTRATO,
 
-         });
-         builder.ToTable("ADM_DETALLE_VAL_CONTRATO");
      });
-                modelBuilder
-    .Entity<ADM_PUC_CONTRATO>(builder =>
+     builder.ToTable("ADM_DETALLE_VAL_CONTRATO");
+ });
+            modelBuilder
+.Entity<ADM_PUC_CONTRATO>(builder =>
+{
+    //builder.HasNoKey();
+    builder.HasKey(table => new
     {
-        //builder.HasNoKey();
-        builder.HasKey(table => new
-        {
-            table.CODIGO_PUC_CONTRATO,
+        table.CODIGO_PUC_CONTRATO,
 
-        });
-        builder.ToTable("ADM_PUC_CONTRATO");
     });
+    builder.ToTable("ADM_PUC_CONTRATO");
+});
 
             modelBuilder.Entity<ADM_CHEQUES>(entity =>
             {
-              
+
 
                 entity.ToTable("ADM_CHEQUES");
                 entity.HasKey(table => new
@@ -516,9 +517,20 @@ namespace Convertidor.Data
     });
     builder.ToTable("ADM_DETALLE_SOL_COMPROMISO");
 });
-            
-        }
+            modelBuilder
+.Entity<ADM_PUC_SOL_COMPROMISO>(builder =>
+{
+    //builder.HasNoKey();
+    builder.HasKey(table => new
+    {
+        table.CODIGO_PUC_SOLICITUD,
 
-        
+    });
+    builder.ToTable("ADM_PUC_SOL_COMPROMISO");
+
+});
+
+
+        }
     }
 }
