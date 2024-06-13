@@ -1,293 +1,239 @@
 ﻿using Convertidor.Data.Interfaces.Presupuesto;
-using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos.Adm;
-using Convertidor.Dtos.Presupuesto;
-using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
-using Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso;
-using Convertidor.Services.Rh.Report.Example;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-using NPOI.SS.Formula.Functions;
-using NuGet.Protocol.Core.Types;
+using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
 using QuestPDF.Fluent;
-using static SkiaSharp.HarfBuzz.SKShaper;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso;
-    public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoService
+public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoService
+{
+    private readonly IAdmSolCompromisoService _admSolCompromisoService;
+    private readonly IAdmDetalleSolCompromisoService _admDetalleSolCompromisoService;
+    private readonly IAdmPucSolCompromisoService _admPucSolCompromisoService;
+    private readonly IPRE_PRESUPUESTOSRepository _preSUPUESTOSRepository;
+    private readonly IAdmProveedoresService _admProveedoresService;
+    private readonly IConfiguration _configuration;
+
+    public ReporteSolicitudCompromisoService(IAdmSolCompromisoService admSolCompromisoService,
+                                             IAdmDetalleSolCompromisoService admDetalleSolCompromisoService,
+                                             IAdmPucSolCompromisoService admPucSolCompromisoService,
+                                                       IPRE_PRESUPUESTOSRepository preSUPUESTOSRepository,
+                                                       IAdmProveedoresService admProveedoresService,
+                                                             IConfiguration configuration)
     {
-        private readonly IPreSolModificacionRepository _preSolModificacionRepository;
-        private readonly IPreSolModificacionService _preSolModificacionService;
-        private readonly IPrePucSolicitudModificacionService _prePucSolicitudModificacionService;
-        private readonly IPRE_V_SALDOSRepository _pRE_V_SALDOSRepository;
-        private readonly IPreAsignacionService _preAsignacionService;
-        private readonly IConfiguration _configuration;
+        _admSolCompromisoService = admSolCompromisoService;
+        _admDetalleSolCompromisoService = admDetalleSolCompromisoService;
+        _admPucSolCompromisoService = admPucSolCompromisoService;
+        _preSUPUESTOSRepository = preSUPUESTOSRepository;
+        _admProveedoresService = admProveedoresService;
+        _configuration = configuration;
+    }
 
-        public ReporteSolicitudCompromisoService(IPreSolModificacionRepository preSolModificacionRepository,
-                                                                 IPreSolModificacionService preSolModificacionService,
-                                                                 IPrePucSolicitudModificacionService prePucSolicitudModificacionService,
-                                                                 IPRE_V_SALDOSRepository pRE_V_SALDOSRepository,
-                                                                  IPreAsignacionService preAsignacionService,
-                                                                 IConfiguration configuration)
+   
+
+    public async Task<ReporteSolicitudCompromisoDto> GenerateData(int codigosolCompromiso,int codigoDetalleSolicitud , int codigoPucSolicitud)
+    {
+        ReporteSolicitudCompromisoDto result = new ReporteSolicitudCompromisoDto();
+        
+
+        var solicitud = await GenerateDatasolicitud(codigosolCompromiso);
+        var detalle = await GenerateDataDetalle(codigoDetalleSolicitud);
+        var pucSolCompromiso = await GenerateDataPucsolicitud(codigoPucSolicitud);
+        result.SolicitudCompromiso = solicitud;
+        result.DetalleSolicitud = detalle.Where(e => e.CodigoPresupuesto == solicitud.CodigoPresupuesto).ToList();
+        result.PucSolicitudCompromiso = pucSolCompromiso.Where(x => x.CodigoSolicitud == solicitud.CodigoSolCompromiso && x.CodigoIcp == solicitud.CodigoSolicitante).ToList();
+
+        return result;
+
+    }
+
+    public FechaDto GetFechaDto(DateTime fecha)
+    {
+        var FechaDesdeObj = new FechaDto();
+        FechaDesdeObj.Year = fecha.Year.ToString();
+        string month = "00" + fecha.Month.ToString();
+        string day = "00" + fecha.Day.ToString();
+        FechaDesdeObj.Month = month.Substring(month.Length - 2);
+        FechaDesdeObj.Day = day.Substring(day.Length - 2);
+
+        return FechaDesdeObj;
+    }
+
+    public async Task<SolicitudcompromisoDto> GenerateDatasolicitud(int codigosolCompromiso)
+    {
+
+        SolicitudcompromisoDto result = new SolicitudcompromisoDto();
+        var solicitudCompromiso = await _admSolCompromisoService.GetByCodigo(codigosolCompromiso);
+        if (solicitudCompromiso != null)
         {
-
-            _preSolModificacionRepository = preSolModificacionRepository;
-            _preSolModificacionService = preSolModificacionService;
-            _prePucSolicitudModificacionService = prePucSolicitudModificacionService;
-            _pRE_V_SALDOSRepository = pRE_V_SALDOSRepository;
-            _preAsignacionService = preAsignacionService;
-            _configuration = configuration;
+            result.CodigoSolCompromiso = solicitudCompromiso.CodigoSolCompromiso;
+            result.TipoSolCompromisoId = solicitudCompromiso.TipoSolCompromisoId;
+            result.FechaSolicitud = solicitudCompromiso.FechaSolicitud;
+            result.FechaSolicitudString = solicitudCompromiso.FechaSolicitud.ToString("u");
+            FechaDto fechaSolicitudObj = GetFechaDto(solicitudCompromiso.FechaSolicitud);
+            result.FechaSolicitudObj = (FechaDto)fechaSolicitudObj;
+            result.NumeroSolicitud = solicitudCompromiso.NumeroSolicitud;
+            result.CodigoSolicitante = solicitudCompromiso.CodigoSolicitante;
+            result.CodigoProveedor = solicitudCompromiso.CodigoProveedor;
+            result.Motivo = solicitudCompromiso.Motivo;
+            result.Status = solicitudCompromiso.Status;
+            result.CodigoPresupuesto = solicitudCompromiso.CodigoPresupuesto;
+            result.Ano = solicitudCompromiso.Ano;
+            result.Extra1 = solicitudCompromiso.Extra1;
+            result.Extra2 = solicitudCompromiso.Extra2;
+            result.Extra3 = solicitudCompromiso.Extra3;
         }
 
-        //public async Task<ResultDto<List<DetalleReporteSolicitudModificacionDto>>> GetDataSolicitudModificacion(int codigoSolModificacion)
-        //{
-        //    ResultDto<List<DetalleReporteSolicitudModificacionDto>> result = new ResultDto<List<DetalleReporteSolicitudModificacionDto>>(null);
-        //    try
-        //    {
-
-
-
-        //        var solicitudModificacion = await _preSolModificacionService.GetByCodigoSolicitud(codigoSolModificacion);
-        //        if (solicitudModificacion != null)
-        //        {
-        //            GeneralReporteSolicitudModificacionDto generalDto = new GeneralReporteSolicitudModificacionDto();
-        //            solicitudModificacion.Data.CodigoSolModificacion = generalDto.CodigoSolModificacion;
-
-
-
-
-        //            var pucSolModificacion = _prePucSolicitudModificacionRepository.GetAllByCodigoSolicitud(generalDto.CodigoSolModificacion);
-        //            if (pucSolModificacion  !=  null)
-        //            {
-        //                List<DetalleReporteSolicitudModificacionDto> lisDto = new List<DetalleReporteSolicitudModificacionDto>();
-        //                foreach (var item in lisDto)
-        //                {
-
-        //                    var dto = item;
-        //                    lisDto.Add(dto);
-
-        //                }
-
-        //                result.Data = lisDto;
-
-        //                result.IsValid = true;
-        //                result.Message = "";
-        //            }
-
-        //            else
-        //            {
-        //                result.Data = null;
-        //                result.IsValid = true;
-        //                result.Message = " No existen Datos";
-
-        //            }
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result.Data = null;
-        //        result.IsValid = false;
-        //        result.Message = ex.Message;
-
-        //    }
-
-        //    return result;
-
-        //}
-
-        public async Task<AdmSolicitudesResponseDto> GenerateData(int codigoSolicitud)
-        {
-            AdmSolicitudesResponseDto result = new AdmSolicitudesResponseDto();
-
-
-            var solicitud = await GenerateDatasolicitud(codigoSolicitud);
-            var detalle = await GenerateDataDetalle(codigoSolicitud);
-
-
-            result.CodigoSolicitud = codigoSolicitud;
-            result.TipoSolicitudId = codigoSolicitud;
-
-
-            return result;
-
-        }
-
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
-
-        public async Task<AdmSolicitudesResponseDto> GenerateDatasolicitud(int codigoSolicitud)
-        {
-
-            AdmSolicitudesResponseDto result = new AdmSolicitudesResponseDto();
-            //var solicitudModificacion = await _preSolModificacionService.GetByCodigoSolicitud(codigoSolModificacion);
-            //if(solicitudModificacion.Data != null) 
-            //{
-            //    result.CodigoSolModificacion = solicitudModificacion.Data.CodigoSolModificacion;
-            //    result.TipoModificacionId = solicitudModificacion.Data.TipoModificacionId;
-            //    result.DescripcionTipoModificacion = solicitudModificacion.Data.DescripcionTipoModificacion;
-            //    result.Descontar = solicitudModificacion.Data.Descontar;
-            //    result.Aportar = solicitudModificacion.Data.Aportar;
-            //    result.OrigenPreSaldo = solicitudModificacion.Data.OrigenPreSaldo;
-            //    result.FechaSolicitud = solicitudModificacion.Data.FechaSolicitud;
-            //    result.FechaSolicitudString = solicitudModificacion.Data.FechaSolicitud.ToString("u");
-            //    FechaDto fechaSolicitudObj = GetFechaDto(solicitudModificacion.Data.FechaSolicitud);
-            //    result.FechaSolicitudObj = (FechaDto)fechaSolicitudObj;
-            //    result.Ano = solicitudModificacion.Data.Ano;
-            //    result.NumeroSolModificacion = solicitudModificacion.Data.NumeroSolModificacion;
-            //    result.CodigoOficio = solicitudModificacion.Data.CodigoOficio;
-            //    result.CodigoSolicitante = solicitudModificacion.Data.CodigoSolicitante;
-            //    result.Motivo = solicitudModificacion.Data.Motivo;
-            //    result.Status = solicitudModificacion.Data.Status;
-            //    result.DescripcionEstatus = solicitudModificacion.Data.DescripcionEstatus;
-            //    result.NumeroCorrelativo = solicitudModificacion.Data.NumeroCorrelativo;
-            //    result.CodigoPresupuesto = solicitudModificacion.Data.CodigoPresupuesto;
-            //    result.StatusProceso = solicitudModificacion.Data.StatusProceso;
-            //}
-
-            return result;
-
-
-        }
-
-        public async Task<List<AdmSolCompromisoResponseDto>> GenerateDataDetalle(int codigoSolCompromiso)
-        {
-            List<AdmSolCompromisoResponseDto> result = new List<AdmSolCompromisoResponseDto>();
-
-        AdmSolCompromisoResponseDto filter = new AdmSolCompromisoResponseDto();
-
-            filter.CodigoSolCompromiso = codigoSolCompromiso;
-
-
-
-
-
-            //var pucSolModificacion = await _prePucSolicitudModificacionService.GetAllByCodigoSolicitud(filter);
-
-            //if(pucSolModificacion.Data == null) 
-            //{
-            //    return null;
-            //}
-            //var listDto = pucSolModificacion.Data.Where(x => x.DePara == dePara).ToList();
-
-
-
-            //    if (listDto.Count > 0)
-            //    {
-
-
-            //        foreach (var item in listDto)
-            //        {
-
-            //            DetalleReporteSolicitudModificacionDto resultItem = new DetalleReporteSolicitudModificacionDto();
-
-
-
-
-
-            //            resultItem.CodigoPucSolModificacion = item.CodigoPucSolModificacion;
-            //            resultItem.CodigoSolModificacion = item.CodigoSolModificacion;
-            //            resultItem.CodigoSaldo = item.CodigoSaldo;
-            //            resultItem.FinanciadoId = item.FinanciadoId;
-            //            resultItem.DescripcionFinanciado = item.DescripcionFinanciado;
-            //            resultItem.CodigoFinanciado = item.CodigoFinanciado;
-            //            resultItem.CodigoIcp = item.CodigoIcp;
-            //            resultItem.CodigoIcpConcat = item.CodigoIcpConcat;
-            //            resultItem.DenominacionIcp = item.DenominacionIcp;
-            //            resultItem.CodigoPuc = item.CodigoPuc;
-            //            resultItem.CodigoPucConcat = item.CodigoPucConcat;
-            //            resultItem.DenominacionPuc = item.DenominacionPuc;
-            //            resultItem.Monto = item.Monto;
-            //            resultItem.Presupuestado = 0;
-            //            resultItem.MontoModificado = 0;
-            //            resultItem.Disponible = 0;
-            //           var saldos = await _pRE_V_SALDOSRepository.GetByCodigo(item.CodigoSaldo);
-            //            if(saldos != null) 
-            //            {
-
-            //                resultItem.Presupuestado = saldos.PRESUPUESTADO;
-            //                resultItem.MontoModificado = saldos.MODIFICADO;
-            //                resultItem.Disponible = saldos.DISPONIBLE;
-            //            }
-
-            //            var totalDesembolso = await _preAsignacionService.GetTotalAsignacionByIcpPuc(item.CodigoPresupuesto,item.CodigoIcp, item.CodigoPuc);
-            //            resultItem.TotalDesembolso = totalDesembolso;
-            //            resultItem.MontoAnulado = item.MontoAnulado;
-            //            resultItem.Descontar = item.Descontar;
-            //            resultItem.Aportar = item.Aportar;
-            //            resultItem.DePara = item.DePara;
-            //            resultItem.MontoAnulado = item.MontoAnulado;
-
-
-            //            result.Add(resultItem);
-
-            //}
-
-            return result;
-        }
+        return result;
 
 
     }
 
-    
- 
-//    public async Task<string> ReportData(int codigoSolicitud)
-//    {
-//        AdmSolicitudesResponseDto filter = new AdmSolicitudesResponseDto();
-
-//        ////filter.CodigoSolModificacion = codigoSolModificacion;
-
-
-//        ////var settings = _configuration.GetSection("Settings").Get<Settings>();
-//        var result = "No Data";
-//        ////var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
-//        //var fileName = $"ReporteSolicitudModificacionPresupuestaria-{filter.CodigoSolicitud}.pdf";
-//        ////var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
-
-
-//        if (filter == null)
-//        {
-//            return null;
-//        }
-
-
-
-//        ////var reporte = await (filter.CodigoSolicitud);
-//        ////if (reporte != null)
-//        ////{
+    public async Task<List<DetalleSolicitudcompromisoDto>> GenerateDataDetalle(int codigoDetalleSolicitud)
+    {
+        List<DetalleSolicitudcompromisoDto> result = new List<DetalleSolicitudcompromisoDto>();
 
 
 
 
-//        ////    var SolicitudCompromiso = await GenerateDatasolicitud(filter.CodigoSolicitud);
+        var Detalle = await _admDetalleSolCompromisoService.GetAllByCodigoDetalleSolicitud(codigoDetalleSolicitud);
 
-//        ////    if (reporte == null)
-//        ////    {
-//        ////        return "No Data";
-//        ////    }
-//        ////    else
-//        ////    {
+        if (Detalle == null)
+        {
+            return null;
+        }
 
-
-//        ////        filePath = fileName;
+        var listDto = Detalle;
 
 
-//        result = fileName;
-//        ////        ////var document = new ReporteSolicitudCompromisoDocument(reporte, pathLogo);
-//        ////        ////document.GeneratePdf(filePath);
-//    }
-
-//        return result;
+       if (listDto != null)
+       {
 
 
+            foreach (var item in listDto)
+            {
 
-//    }
-//}
+               DetalleSolicitudcompromisoDto resultItem = new DetalleSolicitudcompromisoDto();
 
+
+                resultItem.CodigoDetalleSolicitud = item.CodigoDetalleSolicitud;
+                resultItem.CodigoPucSolicitud = item.CodigoPucSolicitud;
+                resultItem.Cantidad = item.Cantidad;
+                resultItem.UdmId = item.UdmId;
+                resultItem.Denominacion = item.Denominacion;
+                resultItem.PrecioUnitario = item.PrecioUnitario;
+                resultItem.TipoImpuestoId = item.TipoImpuestoId;
+                resultItem.PORIMPUESTO = item.PORIMPUESTO;
+                resultItem.CantidadAprobada = item.CantidadAprobada;
+                resultItem.CantidadAnulada = item.CantidadAnulada;
+                resultItem.Extra1 = item.Extra1;
+                resultItem.Extra2 = item.Extra2;
+                resultItem.Extra3 = item.Extra3;
+                resultItem.CodigoPresupuesto = item.CodigoPresupuesto;
+
+
+
+                result.Add(resultItem);
+
+            }
+
+            return result;
+        }
+
+        return result;
+
+    }
+
+    public async Task<List<PucSolCompromisoDto>> GenerateDataPucsolicitud(int codigoPucSolicitud)
+    {
+        List<PucSolCompromisoDto> result = new List<PucSolCompromisoDto>();
+       
+        
+       
+        var solicitudCompromiso = await _admPucSolCompromisoService.GetAllbyCodigoPucSolcicitud(codigoPucSolicitud);
+        if (solicitudCompromiso != null)
+        {
+            foreach (var item in solicitudCompromiso)
+            {
+                PucSolCompromisoDto resultItem = new PucSolCompromisoDto();
+
+                resultItem.CodigoPucSolicitud = item.CodigoSolicitud;
+                resultItem.CodigoSolicitud = item.CodigoSolicitud;
+                resultItem.CodigoSaldo = item.CodigoSaldo;
+                resultItem.CodigoIcp = item.CodigoIcp;
+                resultItem.CodigoPuc = item.CodigoPuc;
+                resultItem.FinanciadoId = item.FinanciadoId;
+                resultItem.CodigoFinanciado = item.CodigoFinanciado;
+                resultItem.Monto = item.Monto;
+                resultItem.MontoComprometido = item.MontoComprometido;
+                resultItem.MontoAnulado = item.MontoAnulado;
+                resultItem.Extra1 = item.Extra1;
+                resultItem.Extra2 = item.Extra2;
+                resultItem.Extra3 = item.Extra3;
+                resultItem.CodigoPresupuesto = item.CodigoPresupuesto;
+
+                result.Add(resultItem);
+            }
+        }
+
+        return result;
+
+
+    }
+
+
+
+    public async Task<string> ReportData(FilterSolicitudCompromisoDto filter)
+    {
+       
+
+        
+
+
+        var settings = _configuration.GetSection("Settings").Get<Settings>();
+        var result = "No Data";
+        var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
+        var fileName = $"ReporteSolicitudCompromiso-{filter.CodigoSolCompromiso}.pdf";
+        var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
+
+
+        if (filter == null)
+        {
+            return null;
+        }
+
+
+
+        var reporte = await GenerateData(filter.CodigoSolCompromiso,filter.CodigoDetallesolicitud,filter.CodigoPucSolicitud);
+        if (reporte != null)
+        {
+
+
+
+
+            
+            if (reporte == null)
+            {
+                return "No Data";
+            }
+            else
+            {
+
+
+                filePath = $"{@settings.ExcelFiles}/{fileName}";
+
+
+                result = fileName;
+                var document = new ReporteSolicitudCompromisoDocument(reporte, pathLogo);
+                document.GeneratePdf(filePath);
+            }
+
+            return result;
+
+        }
+
+        return result;
+    }
+
+}

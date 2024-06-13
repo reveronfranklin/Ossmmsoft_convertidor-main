@@ -18,7 +18,7 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
                 var result = await _context.ADM_DETALLE_SOL_COMPROMISO.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_DETALLE_SOLICITUD == codigoDetalleSolicitud).FirstOrDefaultAsync();
+                    .Where(e => e.CODIGO_DETALLE_SOLICITUD == codigoDetalleSolicitud ).FirstOrDefaultAsync();
 
                 return (ADM_DETALLE_SOL_COMPROMISO)result;
             }
@@ -30,6 +30,23 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
+        public async Task<List<ADM_DETALLE_SOL_COMPROMISO>> GetAllByDetalleSolicitudPucSolicitud(int codigoDetalleSolicitud, int codigoPucSolicitud)
+        {
+            try
+            {
+                var result = await _context.ADM_DETALLE_SOL_COMPROMISO.DefaultIfEmpty()
+                             .Where(e => e.CODIGO_DETALLE_SOLICITUD == codigoDetalleSolicitud && e.CODIGO_PUC_SOLICITUD == codigoPucSolicitud).ToListAsync();
+                    
+
+                return  result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
         public async Task<List<ADM_DETALLE_SOL_COMPROMISO>> GetAll() 
         {
             try

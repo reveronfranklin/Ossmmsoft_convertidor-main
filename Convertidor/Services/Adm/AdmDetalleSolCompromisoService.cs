@@ -66,16 +66,16 @@ namespace Convertidor.Services.Adm
             }
         }
 
-        public async Task<AdmDetalleSolCompromisoResponseDto> GetByCodigo(int codigoDetalleSolicitud)
+        public async Task<List< AdmDetalleSolCompromisoResponseDto>> GetAllByCodigoDetalleSolicitud(int codigoDetalleSolicitud)
         {
-            AdmDetalleSolCompromisoResponseDto result = new AdmDetalleSolCompromisoResponseDto();
+           List<AdmDetalleSolCompromisoResponseDto> result = new List<AdmDetalleSolCompromisoResponseDto>();
             try
             {
                 var detalleSolCompromiso = await _repository.GetByCodigo(codigoDetalleSolicitud);
                 if(detalleSolCompromiso != null) 
                 {
                   var dto = await MapDetalleSolCompromisoDto(detalleSolCompromiso);
-                  result = dto;
+                  result.Add(dto);
                 }
                 else 
                 {
@@ -91,6 +91,7 @@ namespace Convertidor.Services.Adm
             }
 
         }
+
 
         public async Task<ResultDto<List<AdmDetalleSolCompromisoResponseDto>>> GetAll()
         {

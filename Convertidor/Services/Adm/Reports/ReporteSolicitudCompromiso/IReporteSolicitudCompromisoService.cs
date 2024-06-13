@@ -6,7 +6,7 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso
 {
     public interface IReporteSolicitudCompromisoService
     {
-        //Task<string> ReportData(int codigoSolicitud);
-        
+        Task<string> ReportData(FilterSolicitudCompromisoDto filter);
+
     }
 }

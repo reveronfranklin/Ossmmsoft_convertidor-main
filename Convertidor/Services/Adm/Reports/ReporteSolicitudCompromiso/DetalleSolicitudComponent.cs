@@ -1,6 +1,7 @@
 using System.Globalization;
 using AutoMapper.Internal;
 using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
 using NPOI.HSSF.Record;
@@ -12,10 +13,10 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso;
 
   public class DetalleSolicitudComponent : IComponent
   {
-    private readonly List<AdmSolicitudesResponseDto> ModelDetalle;
+    private readonly List<DetalleSolicitudcompromisoDto> ModelDetalle;
 
 
-    public DetalleSolicitudComponent(List<AdmSolicitudesResponseDto> modelDetalle)
+    public DetalleSolicitudComponent(List<DetalleSolicitudcompromisoDto> modelDetalle)
     {
         ModelDetalle = modelDetalle;
         

@@ -4,6 +4,8 @@ using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Presupuesto;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace Convertidor.Services.Adm
 {
@@ -73,6 +75,32 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<AdmPucSolCompromisoResponseDto> GetbyCodigoPucSolicitud(int codigoPucSolicitud)
+        {
+            AdmPucSolCompromisoResponseDto result = new AdmPucSolCompromisoResponseDto();
+            try
+            {
+                var pucSolicitud = await _repository.GetbyCodigoPucSolicitud(codigoPucSolicitud);
+                if (pucSolicitud != null)
+                {
+                    var dto = await MapPucSolCompromisoDto(pucSolicitud);
+                    result = dto;
+                }
+                else
+                {
+                    result = null;
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<List<AdmPucSolCompromisoResponseDto>>> GetAll()
         {
 
@@ -110,7 +138,50 @@ namespace Convertidor.Services.Adm
             }
 
         }
-       
+
+        public async Task<List<AdmPucSolCompromisoResponseDto>> GetAllbyCodigoPucSolcicitud(int codigoPucSolicitud)
+        {
+            List<AdmPucSolCompromisoResponseDto> result = new List<AdmPucSolCompromisoResponseDto>();
+            try
+            {
+
+                var pucSolicitud = await _repository.GetAllbyCodigoPucSolicitud(codigoPucSolicitud);
+                pucSolicitud = pucSolicitud.OrderBy(x => x.CODIGO_PUC_SOLICITUD).ToList();
+
+
+                if (pucSolicitud.Count() > 0)
+                {
+                    List<AdmPucSolCompromisoResponseDto> listDto = new List<AdmPucSolCompromisoResponseDto>();
+
+                    foreach (var item in pucSolicitud)
+                    {
+                        var dto = await MapPucSolCompromisoDto(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result = listDto;
+
+                   
+                }
+                else
+                {
+                    result = null;
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
+                result = null;
+                
+            }
+
+
+
+            return result;
+        }
+
 
         public async Task<ResultDto<AdmPucSolCompromisoResponseDto>> Update(AdmPucSolCompromisoUpdateDto dto)
         {
@@ -119,7 +190,7 @@ namespace Convertidor.Services.Adm
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoPucsolicitud = await _repository.GetCodigoPucSolicitud(dto.CodigoPucSolicitud);
+                var codigoPucsolicitud = await _repository.GetbyCodigoPucSolicitud(dto.CodigoPucSolicitud);
                 if (codigoPucsolicitud == null)
                 {
                     result.Data = null;
@@ -550,7 +621,7 @@ namespace Convertidor.Services.Adm
             try
             {
 
-                var codigoPucSolicitud = await _repository.GetCodigoPucSolicitud(dto.CodigoPucSolicitud);
+                var codigoPucSolicitud = await _repository.GetbyCodigoPucSolicitud(dto.CodigoPucSolicitud);
                 if (codigoPucSolicitud == null)
                 {
                     result.Data = dto;

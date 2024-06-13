@@ -1,33 +1,23 @@
-using Convertidor.Data.Entities.ADM;
-using Convertidor.Dtos.Adm;
-using Convertidor.Dtos.Presupuesto;
-using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
-using Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso;
-using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
-using iText.Kernel.Geom;
-using MathNet.Numerics.Distributions;
-using Org.BouncyCastle.Asn1.X509;
+using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using Spire.Xls;
-using System.ComponentModel.DataAnnotations;
 using Image = QuestPDF.Infrastructure.Image;
 
-namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupuestaria
+namespace Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso
 {
     public class ReporteSolicitudCompromisoDocument : IDocument
     {
 
         public static Image LogoImage { get; } = Image.FromFile("logo.png");
-        public AdmSolCompromisoResponseDto Model { get; }
+        public ReporteSolicitudCompromisoDto Model { get; }
 
         private readonly string _patchLogo;
 
 
         public ReporteSolicitudCompromisoDocument(
 
-          AdmSolCompromisoResponseDto model,
+          ReporteSolicitudCompromisoDto model,
 
             string patchLogo)
         {
@@ -46,7 +36,7 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupues
                 .Page(page =>
                 {
                     page.Margin(10);
-                    page.Size(PageSizes.A3.Landscape());
+                    page.Size(PageSizes.A4);
                     page.Header().Element(ComposeHeader);
                     page.Content().Element(ComposeContent);
                     
@@ -72,8 +62,8 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupues
                 column.Spacing(2);
                 column.Item().PaddingLeft(50).Width(100).AlignLeft().ScaleToFit().Image(_patchLogo);
                 //column.Item().Element(ComposeTableFirma);
-                column.Item().AlignCenter().Text("SOLICITUD DE MODIFICACIONES PRESUPUESTARIAS").SemiBold().FontSize(8);
-                column.Item().PaddingLeft(25).AlignLeft().Text("DIRECCION  DE PLANIFICACIÓN Y \n " + "      " + "       " + "       " + "PRESUPUESTO").ExtraBold().FontSize(8);
+                column.Item().AlignCenter().Text("SOLICITUD DE COMPROMISO").SemiBold().FontSize(8);
+                column.Item().PaddingLeft(25).AlignLeft().Text("").ExtraBold().FontSize(8);
 
                
 
@@ -87,19 +77,19 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupues
 
 
 
-                //column.Item().Row(row =>
-                //{
-                //    row.RelativeItem().Component(new SolicitudCompromisoComponent (Model.CODIGO_SOLICITUD));
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem().Component(new SolicitudCompromisoComponent(Model.SolicitudCompromiso));
 
-                //});
+                });
 
-                
 
-                //column.Item().Row(row =>
-                //{
-                //    row.RelativeItem().Component(new DetalleComponent(Model));
 
-                //});
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem().Component(new DetalleSolicitudComponent(Model.DetalleSolicitud));
+
+                });
 
                 //column.Item().Row(row =>
                 //{
@@ -115,45 +105,45 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudModificacionPresupues
 
         }
 
-        void ComposeFooter(IContainer container)
-        {
-            container.Table(async tableFooter =>
-            {
-                tableFooter.ColumnsDefinition(column =>
-                {
-                    column.RelativeColumn();
-                    column.RelativeColumn();
-                    column.RelativeColumn();
-                    column.RelativeColumn();
-                });
+        //void ComposeFooter(IContainer container)
+        //{
+        //    container.Table(async tableFooter =>
+        //    {
+        //        tableFooter.ColumnsDefinition(column =>
+        //        {
+        //            column.RelativeColumn();
+        //            column.RelativeColumn();
+        //            column.RelativeColumn();
+        //            column.RelativeColumn();
+        //        });
 
 
-                tableFooter.Cell().ColumnSpan(2).Border(1).AlignLeft().Text("   Unidad Solicitante").FontSize(7);
-                tableFooter.Cell().ColumnSpan(2).Border(1).AlignLeft().Text("   Recibido por la Dirección  de Planificacion y Presupuesto").FontSize(8);
+        //        tableFooter.Cell().ColumnSpan(2).Border(1).AlignLeft().Text("   Unidad Solicitante").FontSize(7);
+        //        tableFooter.Cell().ColumnSpan(2).Border(1).AlignLeft().Text("   Recibido por la Dirección  de Planificacion y Presupuesto").FontSize(8);
 
-                tableFooter.Cell().ColumnSpan(2).Column(col => 
-                {
-                    col.Item().Border(1).AlignLeft().Text("   ").FontSize(7);
-                    col.Item().Border(1).AlignLeft().Text(" ").FontSize(7);
-                });
+        //        tableFooter.Cell().ColumnSpan(2).Column(col => 
+        //        {
+        //            col.Item().Border(1).AlignLeft().Text("   ").FontSize(7);
+        //            col.Item().Border(1).AlignLeft().Text(" ").FontSize(7);
+        //        });
 
-                tableFooter.Cell().ColumnSpan(2).Column(col =>
-                {
-                    col.Item().Border(1).AlignLeft().Text("   ").FontSize(7);
-                    col.Item().Border(1).AlignLeft().Text(" ").FontSize(7);
-                });
-                tableFooter.Cell().ColumnSpan(4).Row(row =>
-                {
-                    row.RelativeItem().AlignCenter().ShowOnce().Text("Firma y Sello").FontSize(14).ExtraBold();
+        //        tableFooter.Cell().ColumnSpan(2).Column(col =>
+        //        {
+        //            col.Item().Border(1).AlignLeft().Text("   ").FontSize(7);
+        //            col.Item().Border(1).AlignLeft().Text(" ").FontSize(7);
+        //        });
+        //        tableFooter.Cell().ColumnSpan(4).Row(row =>
+        //        {
+        //            row.RelativeItem().AlignCenter().ShowOnce().Text("Firma y Sello").FontSize(14).ExtraBold();
                  
-                    row.RelativeItem().AlignCenter().ShowOnce().Text("Firma y Sello").FontSize(14).ExtraBold();
-                });
-                tableFooter.Cell().ColumnSpan(2).Column(col => 
-                {
-                    col.Item().AlignLeft().Text("Nota: Colocar(*)en la imputacion presupeustaria receptora cuando la partida o sub-partida sea una creacion. ").FontSize(8);
-                });
-            });
-        }
+        //            row.RelativeItem().AlignCenter().ShowOnce().Text("Firma y Sello").FontSize(14).ExtraBold();
+        //        });
+        //        tableFooter.Cell().ColumnSpan(2).Column(col => 
+        //        {
+        //            col.Item().AlignLeft().Text("Nota: Colocar(*)en la imputacion presupeustaria receptora cuando la partida o sub-partida sea una creacion. ").FontSize(8);
+        //        });
+        //    });
+        //}
 
     }
 }

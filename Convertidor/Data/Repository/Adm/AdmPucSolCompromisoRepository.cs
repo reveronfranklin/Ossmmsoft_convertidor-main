@@ -8,19 +8,38 @@ namespace Convertidor.Data.Repository.Adm
     public class AdmPucSolCompromisoRepository: IAdmPucSolCompromisoRepository
     {
         private readonly DataContextAdm _context;
-        public AdmPucSolCompromisoRepository(DataContextAdm context)
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+
+        public AdmPucSolCompromisoRepository(DataContextAdm context, ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
-        public async Task<ADM_PUC_SOL_COMPROMISO> GetCodigoPucSolicitud(int codigoPucSolicitud)
+        public async Task<ADM_PUC_SOL_COMPROMISO> GetbyCodigoPucSolicitud(int codigoPucSolicitud)
         {
             try
             {
-                var result = await _context.ADM_PUC_SOL_COMPROMISO.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_PUC_SOLICITUD == codigoPucSolicitud).FirstOrDefaultAsync();
+                
+                var result = await _context.ADM_PUC_SOL_COMPROMISO.DefaultIfEmpty().Where(x => x.CODIGO_PUC_SOLICITUD == codigoPucSolicitud).FirstOrDefaultAsync();
 
-                return (ADM_PUC_SOL_COMPROMISO)result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+        public async Task<List<ADM_PUC_SOL_COMPROMISO>> GetAllbyCodigoPucSolicitud(int codigoPucSolicitud)
+        {
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.ADM_PUC_SOL_COMPROMISO.DefaultIfEmpty().Where(x => x.CODIGO_EMPRESA == conectado.Empresa && x.CODIGO_PUC_SOLICITUD == codigoPucSolicitud).ToListAsync();
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -30,6 +49,7 @@ namespace Convertidor.Data.Repository.Adm
 
         }
        
+
 
         public async Task<List<ADM_PUC_SOL_COMPROMISO>> GetAll() 
         {
@@ -75,7 +95,7 @@ namespace Convertidor.Data.Repository.Adm
 
             try
             {
-                ADM_PUC_SOL_COMPROMISO entityUpdate = await GetCodigoPucSolicitud(entity.CODIGO_PUC_SOLICITUD);
+                ADM_PUC_SOL_COMPROMISO entityUpdate = await GetbyCodigoPucSolicitud(entity.CODIGO_PUC_SOLICITUD);
                 if (entityUpdate != null)
                 {
                     _context.ADM_PUC_SOL_COMPROMISO.Update(entity);
@@ -99,7 +119,7 @@ namespace Convertidor.Data.Repository.Adm
         {
             try
             {
-                ADM_PUC_SOL_COMPROMISO entity = await GetCodigoPucSolicitud(codigoPucSolicitud);
+                ADM_PUC_SOL_COMPROMISO entity = await GetbyCodigoPucSolicitud(codigoPucSolicitud);
                 if (entity != null)
                 {
                     _context.ADM_PUC_SOL_COMPROMISO.Remove(entity);
