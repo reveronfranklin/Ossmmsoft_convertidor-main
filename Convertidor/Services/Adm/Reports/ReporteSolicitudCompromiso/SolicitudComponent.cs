@@ -27,6 +27,7 @@ public class SolicitudCompromisoComponent : IComponent
             formato.NumberDecimalSeparator = ",";
             formato.NumberDecimalDigits = 2;
             
+        
             container.Table(table =>
             {
                 table.ColumnsDefinition(columns =>
@@ -43,17 +44,22 @@ public class SolicitudCompromisoComponent : IComponent
                 
                 table.Header(header =>
                 {
-                    header.Cell().ColumnSpan(3);
-                    header.Cell().Border(1).AlignCenter().PaddingRight(2).Text("N° Solicitud Compromiso").Style(headerStyle);
+                    
+                    //header.Cell().ColumnSpan(2).Border(1).PaddingTop(-5).AlignCenter().Text("N° Solicitud Compromiso").Style(headerStyle);
                    
                  
                     
                 });
 
-                table.Cell().Border(1).AlignCenter().Text("Fecha Compromiso").Style(headerStyle);
+               
+                //table.Cell().ColumnSpan(2).Column(col =>
+                //{
+                //    col.Item().Border(1).AlignCenter().Element(CellStyle).Text(ModelSolicitud.NumeroSolicitud).FontSize(7);
 
-                table.Cell().ColumnSpan(3);
-                table.Cell().Border(1).AlignCenter().PaddingRight(2).Element(CellStyle).Text(ModelSolicitud.NumeroSolicitud).FontSize(7);
+                //    col.Item().Border(1).AlignCenter().Text("Fecha Compromiso").Style(headerStyle);
+                //    col.Item().Border(1).AlignCenter().Element(CellStyle).Text(ModelSolicitud.FechaSolicitud.ToShortDateString()).FontSize(7);
+                //});
+               
                 //table.Cell().Border(1).ScaleToFit().AlignLeft().PaddingLeft(5).Element(CellStyle).Text(ModelGeneral.NumeroSolicitud).FontSize(7);
                 //table.Cell().ColumnSpan(2).Border(1).AlignCenter().Element(CellStyle).Text(ModelGeneral.FechaSolicitud.ToShortDateString()).FontSize(7);
                 //table.Cell().ColumnSpan(8).Border(1).PaddingLeft(5).Element(CellStyle).Text(ModelGeneral.Motivo).FontSize(7);

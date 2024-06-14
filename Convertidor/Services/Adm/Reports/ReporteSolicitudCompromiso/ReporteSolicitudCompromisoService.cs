@@ -32,17 +32,17 @@ public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoServ
 
    
 
-    public async Task<ReporteSolicitudCompromisoDto> GenerateData(int codigosolCompromiso,int codigoDetalleSolicitud , int codigoPucSolicitud)
+    public async Task<ReporteSolicitudCompromisoDto> GenerateData(int codigosolCompromiso,int codigoDetalleSolicitud,int codigoPucSolicitud)
     {
         ReporteSolicitudCompromisoDto result = new ReporteSolicitudCompromisoDto();
         
 
-        var solicitud = await GenerateDatasolicitud(codigosolCompromiso);
+        var solicitud = await GenerateDataSolicitud(codigosolCompromiso);
         var detalle = await GenerateDataDetalle(codigoDetalleSolicitud);
         var pucSolCompromiso = await GenerateDataPucsolicitud(codigoPucSolicitud);
         result.SolicitudCompromiso = solicitud;
-        result.DetalleSolicitud = detalle.Where(e => e.CodigoPresupuesto == solicitud.CodigoPresupuesto).ToList();
-        result.PucSolicitudCompromiso = pucSolCompromiso.Where(x => x.CodigoSolicitud == solicitud.CodigoSolCompromiso && x.CodigoIcp == solicitud.CodigoSolicitante).ToList();
+        result.DetalleSolicitud = detalle;
+        result.PucSolicitudCompromiso = pucSolCompromiso;
 
         return result;
 
@@ -60,7 +60,7 @@ public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoServ
         return FechaDesdeObj;
     }
 
-    public async Task<SolicitudcompromisoDto> GenerateDatasolicitud(int codigosolCompromiso)
+    public async Task<SolicitudcompromisoDto> GenerateDataSolicitud(int codigosolCompromiso)
     {
 
         SolicitudcompromisoDto result = new SolicitudcompromisoDto();
@@ -93,9 +93,6 @@ public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoServ
     public async Task<List<DetalleSolicitudcompromisoDto>> GenerateDataDetalle(int codigoDetalleSolicitud)
     {
         List<DetalleSolicitudcompromisoDto> result = new List<DetalleSolicitudcompromisoDto>();
-
-
-
 
         var Detalle = await _admDetalleSolCompromisoService.GetAllByCodigoDetalleSolicitud(codigoDetalleSolicitud);
 
@@ -149,8 +146,8 @@ public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoServ
     {
         List<PucSolCompromisoDto> result = new List<PucSolCompromisoDto>();
        
-        
-       
+
+
         var solicitudCompromiso = await _admPucSolCompromisoService.GetAllbyCodigoPucSolcicitud(codigoPucSolicitud);
         if (solicitudCompromiso != null)
         {
@@ -158,7 +155,7 @@ public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoServ
             {
                 PucSolCompromisoDto resultItem = new PucSolCompromisoDto();
 
-                resultItem.CodigoPucSolicitud = item.CodigoSolicitud;
+                resultItem.CodigoPucSolicitud = item.CodigoPucSolicitud;
                 resultItem.CodigoSolicitud = item.CodigoSolicitud;
                 resultItem.CodigoSaldo = item.CodigoSaldo;
                 resultItem.CodigoIcp = item.CodigoIcp;
@@ -205,7 +202,7 @@ public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoServ
 
 
 
-        var reporte = await GenerateData(filter.CodigoSolCompromiso,filter.CodigoDetallesolicitud,filter.CodigoPucSolicitud);
+        var reporte = await GenerateData(filter.CodigoSolCompromiso,filter.CodigoDetalleSolicitud,filter.CodigoPucSolicitud);
         if (reporte != null)
         {
 

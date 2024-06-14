@@ -1,7 +1,9 @@
 using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
+using MimeKit;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using Spire.Xls;
 using Image = QuestPDF.Infrastructure.Image;
 
 namespace Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso
@@ -53,17 +55,26 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso
         void ComposeHeader(IContainer container)
         {
 
-            //var descripcion = "";
+            var solicitud = Model.SolicitudCompromiso; ;
             //var firstResumen = Model.FirstOrDefault();
 
-            container.PaddingVertical(1).Column(column =>
+            container.PaddingVertical(1).Row(row =>
             {
 
-                column.Spacing(2);
-                column.Item().PaddingLeft(50).Width(100).AlignLeft().ScaleToFit().Image(_patchLogo);
+                //row.Spacing(2);
+                row.ConstantItem(200).BorderLeft(1).BorderTop(1).BorderBottom(1).PaddingVertical(4).PaddingLeft(50).AlignLeft().ScaleToFit().Image(_patchLogo);
                 //column.Item().Element(ComposeTableFirma);
-                column.Item().AlignCenter().Text("SOLICITUD DE COMPROMISO").SemiBold().FontSize(8);
-                column.Item().PaddingLeft(25).AlignLeft().Text("").ExtraBold().FontSize(8);
+                row.ConstantItem(285).BorderTop(1).BorderBottom(1).PaddingTop(20).PaddingRight(20).PaddingVertical(4).AlignCenter().Text("SOLICITUD DE COMPROMISO").SemiBold().FontSize(8);
+                
+                row.RelativeItem().Column(col =>
+                {
+                    col.Item().Border(1).AlignCenter().Text("N° Solicitud Compromiso");
+                    col.Item().Border(1).AlignCenter().Text(solicitud.NumeroSolicitud).FontSize(7);
+
+                    col.Item().Border(1).AlignCenter().Text("Fecha Compromiso");
+                    col.Item().Border(1).AlignCenter().Text(solicitud.FechaSolicitud.ToShortDateString()).FontSize(7);
+
+                });
 
                
 
@@ -72,7 +83,7 @@ namespace Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso
 
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(2).Column(async column =>
+            container.Column(async column =>
             {
 
 
