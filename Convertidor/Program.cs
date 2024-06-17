@@ -30,6 +30,9 @@ using Convertidor.Services.Rh.Report.HistoricoNomina;
 using Microsoft.Extensions.DependencyInjection;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Services.Adm.Reports.ReporteSolicitudCompromiso;
+using Convertidor.Data.Interfaces.Cnt;
+using Convertidor.Data.Repository.Cnt;
+using Convertidor.Services.Cnt;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -429,9 +432,16 @@ builder.Services.AddTransient<IReporteSolicitudCompromisoService, ReporteSolicit
 
 
 
+//CNT Repository
+
+builder.Services.AddTransient<ICntDescriptivaRepository, CntDescriptivaRepository>();
+builder.Services.AddTransient<ICntTitulosRepository, CntTitulosRepository>();
 
 
+//CNT Services
 
+builder.Services.AddTransient<ICntDescriptivasService, CntDescriptivasService>();
+builder.Services.AddTransient<ICntTituloService, CntTituloService>();
 
 
 
@@ -493,7 +503,9 @@ var admConnectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddDbContext<DataContextAdm>(options =>
     options.UseOracle(admConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
-
+var cntConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionCNT");
+builder.Services.AddDbContext<DataContextCnt>(options =>
+    options.UseOracle(cntConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 var destinoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionPostgres");
 builder.Services.AddDbContext<DestinoDataContext>(options =>
