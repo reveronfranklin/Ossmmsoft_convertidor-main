@@ -126,32 +126,6 @@ namespace Convertidor.Data.Repository.Adm
                     resultData.Add(itemData);
                 }
                 
-               /* var linqQuery = from sol in pageData
-                    join prov in _context.ADM_PROVEEDORES on sol.CODIGO_PROVEEDOR equals prov.CODIGO_PROVEEDOR
-                    join descTipoSol in _context.ADM_DESCRIPTIVAS on sol.TIPO_SOLICITUD_ID equals descTipoSol.DESCRIPCION_ID
-                 
-                    select new AdmSolicitudesResponseDto() {
-                        CodigoSolicitud = sol.CODIGO_SOLICITUD,
-                        Ano = 0 ,
-                        NumeroSolicitud=sol.NUMERO_SOLICITUD,
-                        FechaSolicitud=sol.FECHA_SOLICITUD,
-                        FechaSolicitudString= Fecha.GetFechaString(sol.FECHA_SOLICITUD),
-                        FechaSolicitudObj = Fecha.GetFechaDto(sol.FECHA_SOLICITUD),
-                        CodigoSolicitante=sol.CODIGO_SOLICITANTE,
-                        DenominacionSolicitante="",
-                        TipoSolicitudId=sol.TIPO_SOLICITUD_ID,
-                        DescripcionTipoSolicitud=descTipoSol.DESCRIPCION,
-                        CodigoProveedor=sol.CODIGO_PROVEEDOR,
-                        NombreProveedor = prov.NOMBRE_PROVEEDOR,
-                        Motivo=sol.MOTIVO.Trim(),
-                        Nota = "",
-                        DescripcionStatus=Estatus.GetStatus(sol.STATUS),
-                        CodigoPresupuesto=sol.CODIGO_PRESUPUESTO
-                        
-                    };*/
-                
-                
-             
                 result.CantidadRegistros = totalRegistros;
                 result.TotalPage = totalPage;
                 result.Page = filter.PageNumber;

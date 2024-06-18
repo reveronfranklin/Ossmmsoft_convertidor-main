@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Dtos.Bm.Mobil;
 using Ganss.Excel;
 using iText.Barcodes;
 using iText.IO.Font;
@@ -378,6 +379,16 @@ namespace Convertidor.Services.Bm
         }
 
 
+        public async Task<ProductResponse> GetProductMobilById(ProductFilterDto filter)
+        {
+            var result = await _repository.GetProductMobilById(filter);
+            return result;
+        }
+        public async Task<List<ProductResponse>> GetProductMobil(ProductFilterDto filter)
+        {
+            var result = await _repository.GetProductMobil(filter);
+            return result;
+        }
         public async Task<ResultDto<List<Bm1GetDto>>> GetByListIcp(Bm1Filter filter)
         {
 

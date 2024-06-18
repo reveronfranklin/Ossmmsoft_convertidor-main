@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using ImageMagick;
 using iText.Barcodes;
 using iText.IO.Image;
 using iText.Kernel.Geom;
@@ -8,6 +9,8 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Microsoft.AspNetCore.Mvc;
+using TextAlignment = iText.Layout.Properties.TextAlignment;
 
 
 namespace Convertidor.Services.Bm
@@ -397,6 +400,8 @@ namespace Convertidor.Services.Bm
                             dtoCreate.Titulo = titulo;
                             var created = await Create(dtoCreate);
 
+                            MinFile(numeroPlacaObj.NUMERO_PLACA, fileName);
+
                         }
                     }
                 }
@@ -417,6 +422,27 @@ namespace Convertidor.Services.Bm
             }
 
             return result;
+        }
+
+
+
+        public void MinFile(string nroPlaca,string foto)
+        {
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.BmFiles;
+            var filePatch = $"{destino}{nroPlaca}/{foto}";
+            var newFoto = $"min_{foto}";
+            var newfilePatch = $"{destino}{nroPlaca}/{newFoto}";
+
+            if (System.IO.File.Exists(filePatch))
+            {
+                using (MagickImage oMagickImage = new MagickImage(filePatch))
+                {
+                    oMagickImage.Resize(900,0);
+                    oMagickImage.Write(newfilePatch);
+                }
+                
+            }
         }
 
         public async Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImageModel(BmBienesimageUpdateDto dto)

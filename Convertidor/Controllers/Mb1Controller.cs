@@ -1,4 +1,5 @@
 ﻿using Convertidor.Dtos.Bm;
+using Convertidor.Dtos.Bm.Mobil;
 using Convertidor.Services.Bm;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,5 +52,46 @@ namespace Convertidor.Controllers
             var result = await _service.GetByListIcp(filter);
             return Ok(result);
         }
+        
+        
+        
+        [HttpPost]
+        [Route("[action]")] 
+        public async Task<IActionResult>  GetProductMobil(ProductFilterDto filter)
+        {
+            var result = await _service.GetProductMobil(filter);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")] 
+        public async Task<IActionResult>  GetProductMobilById(ProductFilterDto filter)
+        {
+            var result = await _service.GetProductMobilById(filter);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")] 
+        public async Task<IActionResult>  UpdateProductMobil(ProductResponse dto)
+        {
+            ProductFilterDto filter = new ProductFilterDto();
+            filter.CodigoBien = dto.Id;
+            var result = await _service.GetProductMobilById(filter);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")] 
+        public async Task<IActionResult>  CreateProductMobil(ProductResponse dto)
+        {
+            ProductFilterDto filter = new ProductFilterDto();
+            filter.CodigoBien = dto.Id;
+            var result = await _service.GetProductMobilById(filter);
+            return Ok(result);
+        }
+      
+    
+        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Convertidor.Utility;
+using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -189,6 +190,9 @@ namespace Convertidor.Data.Repository.Rh
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 administrativo.CODIGO_EMPRESA = conectado.Empresa;
                 administrativo.USUARIO_UPD = conectado.Usuario;
+                administrativo.FECHA_UPD = DateTime.Now;
+                
+            
 
 
                 await _repository.Update(administrativo);
@@ -283,11 +287,14 @@ namespace Convertidor.Data.Repository.Rh
                 entity.NO_CUENTA = dto.NoCuenta;
                 var fechaIngreso = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
                 entity.FECHA_INGRESO = fechaIngreso;
-                entity.FECHA_INS = DateTime.Now;
-             
+                
                 var conectado = await _sisUsuarioRepository.GetConectado();
+                entity.FECHA_INS = DateTime.Now;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_UPD = null;
+                entity.USUARIO_UPD = 0;
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario;
+                
 
 
                 var created=await _repository.Add(entity);

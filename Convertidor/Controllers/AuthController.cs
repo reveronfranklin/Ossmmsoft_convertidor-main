@@ -83,6 +83,44 @@ namespace Convertidor.Controllers
            
           
         }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult>  LoginMobil(LoginDto dto)
+        {
+
+            try
+            {
+                var result = await _service.Login(dto);
+                if (result.AccessToken.Length > 10)
+                {
+                    var refreshToken = GenerateRefreshToken(result.AccessToken);
+                    refreshToken.Login = dto.Login;
+                    result.RefreshToken = refreshToken.Refresh_Token;
+                    await SetRefreshToken(refreshToken);
+                    AuthResponse authResponse = new AuthResponse();
+                    authResponse.Id = result.UserData.Id.ToString();
+                    authResponse.Email = result.UserData.Email;
+                    authResponse.FullName = result.UserData.FullName;
+                    authResponse.Roles = result.UserData.Roles;
+                    authResponse.Token = result.AccessToken;
+                    authResponse.RefreshToken = result.RefreshToken;
+                    return Ok(authResponse);
+                }
+                else
+                {
+                    return BadRequest("Usuario o clave invalida");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+           
+           
+          
+        }
 
         [HttpPost]
         [Route("[action]"), Authorize]
@@ -148,7 +186,62 @@ namespace Convertidor.Controllers
 
             return refreshToken;
         }
-       
+        
+        [HttpPost]
+        [Route("[action]"), Authorize]
+        public async Task<ActionResult<ResultLoginDto>> CheckStatus(ResultRefreshTokenDto refreshTokento)
+        {
+            ResultLoginDto resultLogin = new ResultLoginDto();
+            //3mBx+k508wTfnpi0K+txwKWz64QFdTfsd6cP6G634khKNzs11W6zSaa2ffzx4B7D2LyXppCQcgU9odwFjK2iSQ==
+                var refreshToken = refreshTokento.RefreshToken;
+            // Request.Cookies["X-Refresh-Token"];
+            //var token = Request.Cookies["osmmasoftToken"];
+                string? userName = string.Empty;
+            userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name); 
+            var sisUsuario = await _service.GetByLogin(userName);
+            if (sisUsuario==null)
+            {
+                return Unauthorized("Invalid Refresh Token.");
+            }
+            if (!sisUsuario.REFRESHTOKEN.Equals(refreshToken))
+            {
+                return Unauthorized("Invalid Refresh Token.");
+                //var esDiferente = "";
+            }
+            if (sisUsuario.TOKENEXPIRES < DateTime.Now)
+            {
+                return Unauthorized("Token expired.");
+            }
+
+            string token = _service.GetToken(sisUsuario);
+            var newRefreshToken = GenerateRefreshToken(token);
+            SetRefreshToken(newRefreshToken);
+
+            resultLogin.Message = "";
+            resultLogin.RefreshToken = newRefreshToken.Refresh_Token; 
+            resultLogin.AccessToken = token;
+            resultLogin.Name = sisUsuario.LOGIN;
+            UserData userData = new UserData();
+            userData.Id = sisUsuario.CODIGO_USUARIO;
+            userData.username = sisUsuario.LOGIN;
+            userData.FullName = sisUsuario.USUARIO;
+            userData.Role = "admin";
+            userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
+            resultLogin.UserData = userData;
+
+            AuthResponse authResponse = new AuthResponse();
+            authResponse.Id = resultLogin.UserData.Id.ToString();
+            authResponse.Email = resultLogin.UserData.Email;
+            authResponse.FullName = resultLogin.UserData.FullName;
+            authResponse.Roles = resultLogin.UserData.Roles;
+            authResponse.Token = resultLogin.AccessToken;
+            authResponse.RefreshToken = resultLogin.RefreshToken;
+            
+
+            return Ok(authResponse);
+        }
+
+      
 
         private async Task SetRefreshToken(RefreshToken newRefreshToken)
         {
