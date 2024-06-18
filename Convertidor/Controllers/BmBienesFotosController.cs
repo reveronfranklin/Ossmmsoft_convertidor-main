@@ -45,6 +45,17 @@ namespace Convertidor.Controllers
             var result = await _service.GetByNumeroPlaca(dto.NumeroPlaca);
             return Ok(result);
         }
+       
+        [HttpGet]
+        [Route("[action]:id")]
+        public async Task<IActionResult> GetImage(string  id)
+        {
+            var result = await _service.GetByNumeroPlaca(id);
+            return Ok(result);
+        }
+        
+      
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Create(BmBienesFotoUpdateDto dto)
