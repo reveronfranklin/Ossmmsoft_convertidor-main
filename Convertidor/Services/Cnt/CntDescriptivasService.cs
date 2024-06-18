@@ -11,17 +11,44 @@ namespace Convertidor.Services.Cnt
       
         private readonly ICntDescriptivaRepository _repository;
         private readonly ICntTitulosRepository _CntTitulosRepository;
+        private readonly ISisUsuarioRepository _sisuarioRepository;
         private readonly IConfiguration _configuration;
         public CntDescriptivasService(ICntDescriptivaRepository repository,
             ICntTitulosRepository CntTitulosRepository,
+            ISisUsuarioRepository sisuarioRepository,
                                       IConfiguration configuration)
 		{
             _repository = repository;
             _configuration = configuration;
             _CntTitulosRepository = CntTitulosRepository;
-
+            _sisuarioRepository = sisuarioRepository;
         }
 
+        public async Task<CntDescriptivasResponseDto> MapCntDescriptiva(CNT_DESCRIPTIVAS entity)
+        {
+            CntDescriptivasResponseDto dto = new CntDescriptivasResponseDto();
+            dto.DescripcionId = entity.DESCRIPCION_ID;
+            dto.DescripcionFkId = entity.DESCRIPCION_FK_ID;
+            dto.Descripcion = entity.DESCRIPCION;
+            if (entity.CODIGO == null) entity.CODIGO = "";
+            dto.Codigo = entity.CODIGO;
+            dto.TituloId = entity.TITULO_ID;
+            dto.Descripcion = "";
+            var titulo = await _CntTitulosRepository.GetByCodigo(entity.TITULO_ID);
+            if (titulo != null) dto.Descripcion = titulo.TITULO;
+
+            if (entity.EXTRA1 == null) entity.EXTRA1 = "";
+            if (entity.EXTRA2 == null) entity.EXTRA2 = "";
+            if (entity.EXTRA3 == null) entity.EXTRA3 = "";
+            dto.Extra1 = entity.EXTRA1;
+            dto.Extra2 = entity.EXTRA2;
+            dto.Extra3 = entity.EXTRA3;
+
+
+
+            return dto;
+
+        }
         public async Task<ResultDto<List<CntDescriptivasResponseDto>>> GetAll()
         {
 
@@ -72,7 +99,112 @@ namespace Convertidor.Services.Cnt
         }
 
 
-       
+        public async Task<ResultDto<CntDescriptivasResponseDto>> Create(CntDescriptivasUpdateDto dto)
+        {
+
+            ResultDto<CntDescriptivasResponseDto> result = new ResultDto<CntDescriptivasResponseDto>(null);
+            try
+            {
+
+                var descriptiva = await _repository.GetByCodigo(dto.DescripcionId);
+                if (descriptiva != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Decriptiva existe";
+                    return result;
+                }
+                if (dto.Descripcion.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+                }
+
+                var titulo = await _CntTitulosRepository.GetByCodigo(dto.TituloId);
+                if (titulo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalido";
+                    return result;
+                }
+
+                if (dto.DescripcionFkId > 0)
+                {
+                    var padre = await _repository.GetByCodigo(dto.DescripcionFkId);
+                    if (padre == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Padre Invalido";
+                        return result;
+                    }
+
+                }
+                var descriptivaCodigo = await _repository.GetByCodigoDescriptivaTexto(dto.Codigo);
+                if (descriptivaCodigo != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Ya existe Descriptiva con ese codigo: {dto.Codigo}";
+                    return result;
+                }
+
+                CNT_DESCRIPTIVAS entity = new CNT_DESCRIPTIVAS();
+                entity.DESCRIPCION_ID = await _repository.GetNextKey();
+                entity.DESCRIPCION_FK_ID = dto.DescripcionFkId;
+                entity.TITULO_ID = dto.TituloId;
+                entity.CODIGO = dto.Codigo;
+                entity.DESCRIPCION = dto.Descripcion;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+
+
+                var conectado = await _sisuarioRepository.GetConectado();   
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+                var created = await _repository.Add(entity);
+                
+              
+
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapCntDescriptiva(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
 
         public async Task<ResultDto<CntDescriptivasResponseDto>> Update(CntDescriptivasUpdateDto dto)
@@ -141,11 +273,11 @@ namespace Convertidor.Services.Cnt
                
                 descriptiva.EXTRA2 = dto.Extra2;
                 descriptiva.EXTRA3 = dto.Extra3;
-                descriptiva.FECHA_UPD = DateTime.Now;
-
-              
                 
-
+                var conectado = await _sisuarioRepository.GetConectado();
+                descriptiva.USUARIO_UPD = conectado.Usuario;
+                descriptiva.CODIGO_EMPRESA = conectado.Empresa;
+                descriptiva.FECHA_UPD = DateTime.Now;
                 await _repository.Update(descriptiva);
 
                 var resultDto = await MapCntDescriptiva(descriptiva);
@@ -166,102 +298,7 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntDescriptivasResponseDto>> Create(CntDescriptivasUpdateDto dto)
-        {
-
-            ResultDto<CntDescriptivasResponseDto> result = new ResultDto<CntDescriptivasResponseDto>(null);
-            try
-            {
-
-                var descriptiva = await _repository.GetByCodigo(dto.DescripcionId);
-                if (descriptiva != null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Decriptiva existe";
-                    return result;
-                }
-                if (dto.Descripcion.Trim().Length <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Descripcion Invalida";
-                    return result;
-                }
-
-                var titulo = await _CntTitulosRepository.GetByCodigo(dto.TituloId);
-                if (titulo == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Titulo Invalido";
-                    return result;
-                }
-
-                if (dto.DescripcionFkId > 0)
-                {
-                    var padre = await _repository.GetByCodigo(dto.DescripcionFkId);
-                    if (padre == null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Padre Invalido";
-                        return result;
-                    }
-
-                }
-                var descriptivaCodigo = await _repository.GetByCodigoDescriptivaTexto(dto.Codigo);
-                if (descriptivaCodigo != null )
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = $"Ya existe Descriptiva con ese codigo: {dto.Codigo}";
-                    return result;
-                }
-
-                CNT_DESCRIPTIVAS entity = new CNT_DESCRIPTIVAS();        
-                entity.DESCRIPCION_ID = await _repository.GetNextKey();
-                entity.DESCRIPCION_FK_ID = dto.DescripcionFkId;
-                entity.TITULO_ID = dto.TituloId;
-                entity.CODIGO = dto.Codigo;
-                entity.DESCRIPCION = dto.Descripcion;
-                entity.EXTRA1 = dto.Extra1;
-                entity.EXTRA2 = dto.Extra2;
-                entity.EXTRA3 = dto.Extra3;
-                var created = await _repository.Add(entity);
-                if (created.IsValid && created.Data!=null)
-                {
-                    var resultDto = await MapCntDescriptiva(created.Data);
-                    result.Data = resultDto;
-                    result.IsValid = true;
-                    result.Message = "";
-
-
-                }
-                else
-                {
-                    
-                    result.Data = null;
-                    result.IsValid = created.IsValid;
-                    result.Message = created.Message;
-                }
-
-                return result;
-              
-               
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-            }
-
-
-
-            return result;
-        }
+        
 
         public CntDescriptivasResponseDto GetDefaultDecriptiva()
         {
@@ -279,31 +316,7 @@ namespace Convertidor.Services.Cnt
           
         }
 
-        public async Task<CntDescriptivasResponseDto> MapCntDescriptiva(CNT_DESCRIPTIVAS entity)
-        {
-            CntDescriptivasResponseDto dto = new CntDescriptivasResponseDto();
-            dto.DescripcionId = entity.DESCRIPCION_ID;
-            dto.DescripcionFkId = entity.DESCRIPCION_FK_ID;
-            dto.Descripcion = entity.DESCRIPCION;
-            if (entity.CODIGO == null) entity.CODIGO = "";
-            dto.Codigo = entity.CODIGO;
-            dto.TituloId = entity.TITULO_ID;
-            dto.Descripcion = "";
-            var titulo = await _CntTitulosRepository.GetByCodigo(entity.TITULO_ID);
-            if (titulo != null) dto.Descripcion = titulo.TITULO;
-
-            if (entity.EXTRA1 == null) entity.EXTRA1 = "";
-            if (entity.EXTRA2 == null) entity.EXTRA2 = "";
-            if (entity.EXTRA3 == null) entity.EXTRA3 = "";
-            dto.Extra1 = entity.EXTRA1;
-            dto.Extra2 = entity.EXTRA2;
-            dto.Extra3 = entity.EXTRA3;
-
-
-
-            return dto;
-
-        }
+       
 
 
         public async Task<ResultDto<CntDescriptivasDeleteDto>> Delete(CntDescriptivasDeleteDto dto)

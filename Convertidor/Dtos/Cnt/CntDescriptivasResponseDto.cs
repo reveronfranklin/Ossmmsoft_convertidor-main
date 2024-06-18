@@ -12,6 +12,6 @@ namespace Convertidor.Dtos.Cnt
         public string Extra1 { get; set; } = string.Empty;
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
-        public List<CntDescriptivasResponseDto>? ListaDescriptiva { get; set; }
+       
     }
 }
