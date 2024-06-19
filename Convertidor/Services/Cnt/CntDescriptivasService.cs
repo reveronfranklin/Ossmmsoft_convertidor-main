@@ -298,6 +298,79 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
+        public async Task<ResultDto<List<CntDescriptivasResponseDto>>> GetByCodigoTitulo(string codigo)
+        {
+
+            ResultDto<List<CntDescriptivasResponseDto>> result = new ResultDto<List<CntDescriptivasResponseDto>>(null);
+            try
+            {
+
+
+
+
+                var titulo = await _CntTitulosRepository.GetByCodigoString(codigo);
+
+
+                var titulos = await _repository.GetByTitulo(titulo.TITULO_ID);
+                if (titulos.Count() > 0)
+                {
+                    List<CntDescriptivasResponseDto> listDto = new List<CntDescriptivasResponseDto>();
+
+                    CntDescriptivasResponseDto itemDefault = new CntDescriptivasResponseDto();
+                    itemDefault.DescripcionId = 0;
+                    itemDefault.DescripcionFkId = 0;
+                    itemDefault.Descripcion = "Seleccione";
+                    itemDefault.Codigo = "";
+                    itemDefault.TituloId = 0;
+                    itemDefault.Descripcion = "";
+                    itemDefault.Extra1 = "";
+                    itemDefault.Extra2 = "";
+                    itemDefault.Extra3 = "";
+
+                    List<CntDescriptivasResponseDto> lista = new List<CntDescriptivasResponseDto>();
+                    lista.Add(GetDefaultDecriptiva());
+                    itemDefault.ListaDescriptiva = lista;
+
+                    listDto.Add(itemDefault);
+
+
+
+
+
+                    foreach (var item in titulos)
+                    {
+                        CntDescriptivasResponseDto dto = new CntDescriptivasResponseDto();
+                        dto = await MapCntDescriptiva(item);
+
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
         public async Task<ResultDto<CntDescriptivasResponseDto>> Create(CntDescriptivasUpdateDto dto)
         {
 

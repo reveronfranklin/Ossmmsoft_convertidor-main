@@ -43,9 +43,17 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllByTitulo(FilterTituloDto dto)
+        public async Task<IActionResult> GetAllByTitulo(FilterCntTituloDto dto)
         {
             var result = await _service.GetByTitulo(dto.TituloId);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllByCodigoTitulo(FilterCntTituloDto dto)
+        {
+            var result = await _service.GetByCodigoTitulo(dto.Codigo);
             return Ok(result);
         }
 
