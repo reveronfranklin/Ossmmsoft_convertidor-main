@@ -25,6 +25,14 @@ namespace Convertidor.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        public async Task<IActionResult> GetTreeDescriptiva()
+        {
+            var result = await _service.GetTreeDescriptiva();
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAll();
