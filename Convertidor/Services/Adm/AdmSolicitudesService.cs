@@ -17,13 +17,17 @@ namespace Convertidor.Services.Adm
         private readonly IPRE_PRESUPUESTOSRepository _presupuestosRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _preIndiceCatPrgRepository;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
+        private readonly ISisSerieDocumentosRepository _serieDocumentosRepository;
+        private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
 
         public AdmSolicitudesService(IAdmSolicitudesRepository repository,
             ISisUsuarioRepository sisUsuarioRepository,
             IAdmDescriptivaRepository admDescriptivaRepository,
             IPRE_PRESUPUESTOSRepository presupuestosRepository,
             IPRE_INDICE_CAT_PRGRepository preIndiceCatPrgRepository,
-            IAdmProveedoresRepository admProveedoresRepository)
+            IAdmProveedoresRepository admProveedoresRepository,
+            ISisSerieDocumentosRepository serieDocumentosRepository,
+            ISisDescriptivaRepository sisDescriptivaRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -31,6 +35,8 @@ namespace Convertidor.Services.Adm
             _presupuestosRepository = presupuestosRepository;
             _preIndiceCatPrgRepository = preIndiceCatPrgRepository;
             _admProveedoresRepository = admProveedoresRepository;
+            _serieDocumentosRepository = serieDocumentosRepository;
+            _sisDescriptivaRepository = sisDescriptivaRepository;
         }
 
       
@@ -440,14 +446,7 @@ namespace Convertidor.Services.Adm
                 }
 
    
-                if (dto.NumeroSolicitud is not null && dto.NumeroSolicitud.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Solicitud invalido";
-                    return result;
-
-                }
+             
 
                 if (dto.FechaSolicitud == null)
                 {
@@ -543,11 +542,15 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
             
-
+                
+                
                 ADM_SOLICITUDES entity = new ADM_SOLICITUDES();
                 entity.CODIGO_SOLICITUD = await _repository.GetNextKey();
                 entity.ANO = codigoPresupuesto.ANO;
-                entity.NUMERO_SOLICITUD=dto.NumeroSolicitud;
+                var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
+                var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+
+                entity.NUMERO_SOLICITUD = numeroSolicitud;
                 entity.FECHA_SOLICITUD = dto.FechaSolicitud;
                 entity.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
                 entity.TIPO_SOLICITUD_ID = dto.TipoSolicitudId;
