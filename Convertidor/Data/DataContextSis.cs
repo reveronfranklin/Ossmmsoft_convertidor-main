@@ -28,6 +28,10 @@ namespace Convertidor.Data
         public virtual DbSet<SIS_SOURCE> SIS_SOURCE { get; set; } = null!;
         public virtual DbSet<SIS_P_SOURCE> SIS_P_SOURCE { get; set; } = null!;
         public virtual DbSet<SIS_DET_SOURCE> SIS_DET_SOURCE { get; set; } = null!;
+        public virtual DbSet<SIS_SERIE_DOCUMENTOS> SIS_SERIE_DOCUMENTOS { get; set; } = null!;
+        public virtual DbSet<SIS_DESCRIPTIVAS> SIS_DESCRIPTIVAS { get; set; } = null!;
+        
+        
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -475,6 +479,30 @@ namespace Convertidor.Data
                 builder.HasNoKey();
                 builder.ToTable("SIS_UBICACION_NACIONAL");
             });
+                
+            modelBuilder.Entity<SIS_SERIE_DOCUMENTOS>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_SERIE_DOCUMENTO,
+
+                });
+                builder.ToTable("SIS_SERIE_DOCUMENTOS");
+            });
+            
+            modelBuilder.Entity<SIS_DESCRIPTIVAS>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_DESCRIPCION,
+
+                });
+                builder.ToTable("SIS_DESCRIPTIVAS");
+            });
+
+            
+            
+            
 
         }
 

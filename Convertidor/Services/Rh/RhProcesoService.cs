@@ -268,7 +268,8 @@
              
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.USUARIO_UPD = conectado.Usuario;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS=DateTime.Now;
 
 
                 var created=await _repository.Add(entity);

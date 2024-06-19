@@ -11,15 +11,18 @@ namespace Convertidor.Data.Repository.Rh
         private readonly IRhAdministrativosRepository _repository;
         private readonly IRhDescriptivasService _descriptivaService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-   
+        private readonly IRhHistoricoMovimientoRepository _rhHistoricoMovimientoRepository;
+
 
         public RhAdministrativosService(IRhAdministrativosRepository repository, 
                                         IRhDescriptivasService descriptivaService, 
-                                        ISisUsuarioRepository sisUsuarioRepository)
+                                        ISisUsuarioRepository sisUsuarioRepository,
+                                        IRhHistoricoMovimientoRepository rhHistoricoMovimientoRepository)
         {
             _repository = repository;
             _descriptivaService = descriptivaService;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _rhHistoricoMovimientoRepository = rhHistoricoMovimientoRepository;
         }
        
         public async Task<List<RhAdministrativosResponseDto>> GetByCodigoPersona(int codigoPersona)
@@ -183,10 +186,16 @@ namespace Convertidor.Data.Repository.Rh
                 administrativo.TIPO_PAGO = dto.TipoPago;
                 administrativo.TIPO_CUENTA_ID = dto.TipoCuentaId;
                 administrativo.NO_CUENTA = dto.NoCuenta;
-                administrativo.FECHA_UPD = DateTime.Now;
-                var fechaIngreso = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
-                administrativo.FECHA_INGRESO = fechaIngreso;
-
+                
+                //VALIDAMOS SI TIENE MOVIMIENTO HISTORICO
+                //PARA PERMITIR MODIFICAR LA FECHA DE INGRESO
+                var historicoNomina = await _rhHistoricoMovimientoRepository.GetPrimerMovimientoByCodigoPersona(administrativo.CODIGO_PERSONA);
+                if (historicoNomina == null)
+                {
+                    var fechaIngreso = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
+                    administrativo.FECHA_INGRESO = fechaIngreso;
+                }
+                
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 administrativo.CODIGO_EMPRESA = conectado.Empresa;
                 administrativo.USUARIO_UPD = conectado.Usuario;
