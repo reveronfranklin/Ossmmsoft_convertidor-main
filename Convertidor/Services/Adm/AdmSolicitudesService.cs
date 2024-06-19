@@ -547,6 +547,7 @@ namespace Convertidor.Services.Adm
                 ADM_SOLICITUDES entity = new ADM_SOLICITUDES();
                 entity.CODIGO_SOLICITUD = await _repository.GetNextKey();
                 entity.ANO = codigoPresupuesto.ANO;
+                //SE GENERA EL PROXIMO NUMERO DE SOLICITUD
                 var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
                 var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
 
