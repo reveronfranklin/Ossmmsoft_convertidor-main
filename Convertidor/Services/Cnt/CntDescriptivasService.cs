@@ -249,6 +249,55 @@ namespace Convertidor.Services.Cnt
 
 
         }
+
+        public async Task<ResultDto<List<CntDescriptivasResponseDto>>> GetByTitulo(int tituloId)
+        {
+
+            ResultDto<List<CntDescriptivasResponseDto>> result = new ResultDto<List<CntDescriptivasResponseDto>>(null);
+            try
+            {
+
+                var titulos = await _repository.GetByTitulo(tituloId);
+
+
+
+                if (titulos.Count() > 0)
+                {
+                    List<CntDescriptivasResponseDto> listDto = new List<CntDescriptivasResponseDto>();
+
+                    foreach (var item in titulos)
+                    {
+                        CntDescriptivasResponseDto dto = new CntDescriptivasResponseDto();
+                        dto = await MapCntDescriptiva(item);
+
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
         public async Task<ResultDto<CntDescriptivasResponseDto>> Create(CntDescriptivasUpdateDto dto)
         {
 

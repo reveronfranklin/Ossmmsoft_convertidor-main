@@ -8,6 +8,7 @@ namespace Convertidor.Services.Cnt
     {
 
         Task<ResultDto<List<TreePUC>>> GetTreeDescriptiva();
+        Task<ResultDto<List<CntDescriptivasResponseDto>>> GetByTitulo(int tituloId);
         Task<ResultDto<List<CntDescriptivasResponseDto>>> GetAll();
         Task<ResultDto<CntDescriptivasResponseDto>> Update(CntDescriptivasUpdateDto dto);
         Task<ResultDto<CntDescriptivasResponseDto>> Create(CntDescriptivasUpdateDto dto);
