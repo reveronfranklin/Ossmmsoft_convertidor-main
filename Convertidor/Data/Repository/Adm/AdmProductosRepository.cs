@@ -1,8 +1,11 @@
-﻿using Convertidor.Data.Entities.Adm;
+﻿using System.Text;
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace Convertidor.Data.Repository.Adm
 {
@@ -10,10 +13,12 @@ namespace Convertidor.Data.Repository.Adm
     {
 		
         private readonly DataContextAdm _context;
+        private readonly IDistributedCache _distributedCache;
 
-        public AdmProductosRepository(DataContextAdm context)
+        public AdmProductosRepository(DataContextAdm context,IDistributedCache distributedCache)
         {
             _context = context;
+            _distributedCache = distributedCache;
         }
       
         public async Task<ADM_PRODUCTOS> GetByCodigo(int codigoProducto)
@@ -31,7 +36,45 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
-        
+        public async Task<List<ADM_PRODUCTOS>> GetProductosCache()
+        {
+            try
+            {
+                var listHistorico = new List<ADM_PRODUCTOS>();
+
+                var cacheKey = "listProductos";
+
+                var serializedListNominaPeriodo = string.Empty;
+
+                var redisListNominaPeriodo = await _distributedCache.GetAsync(cacheKey);
+                if (redisListNominaPeriodo != null)
+                {
+                    serializedListNominaPeriodo = System.Text.Encoding.UTF8.GetString(redisListNominaPeriodo);
+                    listHistorico = JsonConvert.DeserializeObject<List<ADM_PRODUCTOS>>(serializedListNominaPeriodo);
+                 
+                }
+                else
+                {
+                    listHistorico = await GetAll();
+                    serializedListNominaPeriodo = JsonConvert.SerializeObject(listHistorico);
+                    redisListNominaPeriodo = Encoding.UTF8.GetBytes(serializedListNominaPeriodo);
+
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(60))
+                        .SetSlidingExpiration(TimeSpan.FromDays(30));
+                    await _distributedCache.SetAsync(cacheKey, redisListNominaPeriodo, options);
+
+                }
+
+                return listHistorico;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+        }
 
         public async Task<List<ADM_PRODUCTOS>> GetAll()
         {
@@ -52,7 +95,84 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
-          public async Task<ResultDto<List<AdmProductosResponse>>> GetAllPaginate(AdmProductosFilterDto filter) 
+        public async Task<ResultDto<List<AdmProductosResponse>>> GetAllPaginate(AdmProductosFilterDto filter) 
+        {
+            ResultDto<List<AdmProductosResponse>> result = new ResultDto<List<AdmProductosResponse>>(null);
+
+            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageSize == 0) filter.PageSize = 100;
+            if (filter.PageSize >100) filter.PageSize = 100;
+            
+            try
+            {
+
+                var productos = await GetProductosCache();
+                var totalRegistros = 0;
+                var totalPage = 0;
+              
+                List<ADM_PRODUCTOS> pageData;
+                if (filter.SearchText.Length > 0)
+                {
+                    totalRegistros =productos
+                        .Where(x => x.CODIGO_PRODUCTO4!="00" && x.DESCRIPCION.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = productos
+                        .Where(x => x.CODIGO_PRODUCTO4!="00" && x.DESCRIPCION.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .OrderBy(x => x.DESCRIPCION)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToList();
+                }
+                else
+                {
+                    totalRegistros = productos.Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    pageData = productos
+                        .DefaultIfEmpty()
+                        .Where(x=>x.CODIGO_PRODUCTO4!="00")
+                        .OrderBy(x => x.DESCRIPCION)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToList();
+                }
+             
+                
+                
+                
+                List<AdmProductosResponse> resultData = new List<AdmProductosResponse>();
+                foreach (var item in pageData)
+                {
+                    AdmProductosResponse itemData = new AdmProductosResponse();
+                    itemData.Codigo = item.CODIGO_PRODUCTO;
+                    itemData.Descripcion = item.DESCRIPCION;
+                    resultData.Add(itemData);
+                }
+                
+                result.CantidadRegistros = totalRegistros;
+                result.TotalPage = totalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = resultData;
+                return result;
+                
+            }
+            catch (Exception ex) 
+            {
+                result.CantidadRegistros = 0;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                result.Data = null;
+                return result;
+            }
+        }
+
+        
+   public async Task<ResultDto<List<AdmProductosResponse>>> GetAllPaginateCopia(AdmProductosFilterDto filter) 
         {
             ResultDto<List<AdmProductosResponse>> result = new ResultDto<List<AdmProductosResponse>>(null);
 
@@ -127,8 +247,6 @@ namespace Convertidor.Data.Repository.Adm
                 return result;
             }
         }
-
-        
 
         public async Task<ResultDto<ADM_PRODUCTOS>> Add(ADM_PRODUCTOS entity)
         {
