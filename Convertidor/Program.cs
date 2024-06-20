@@ -25,6 +25,9 @@ using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using Convertidor.Data.Interfaces.Cnt;
+using Convertidor.Data.Repository.Cnt;
+using Convertidor.Services.Cnt;
 using Convertidor.Services.Rh.Report.Example;
 using Convertidor.Services.Rh.Report.HistoricoNomina;
 using Microsoft.Extensions.DependencyInjection;
@@ -430,6 +433,18 @@ builder.Services.AddTransient<IAdmProductosService, AdmProductosService>();
 
 
 
+//CNT Repository
+
+builder.Services.AddTransient<ICntDescriptivaRepository, CntDescriptivaRepository>();
+builder.Services.AddTransient<ICntTitulosRepository, CntTitulosRepository>();
+
+
+//CNT Services
+
+builder.Services.AddTransient<ICntDescriptivasService, CntDescriptivasService>();
+builder.Services.AddTransient<ICntTituloService, CntTituloService>();
+
+
 
 
 
@@ -488,6 +503,10 @@ builder.Services.AddDbContext<DataContextBm>(options =>
 var admConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionADM");
 builder.Services.AddDbContext<DataContextAdm>(options =>
     options.UseOracle(admConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
+var cntConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionCNT");
+builder.Services.AddDbContext<DataContextCnt>(options =>
+    options.UseOracle(cntConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 
 

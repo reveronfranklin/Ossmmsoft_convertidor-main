@@ -13,6 +13,7 @@ namespace Convertidor.Services.Rh.Report.Example;
           
         _contador = contador;
     }
+    
 
     public void Compose(IContainer container)
     {

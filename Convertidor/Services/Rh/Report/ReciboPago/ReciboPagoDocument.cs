@@ -11,6 +11,7 @@ namespace Convertidor.Services.Rh.Report.Example
 
         public static Image LogoImage { get; } = Image.FromFile("logo.png");
 
+        
 
         private readonly string _patchLogo;
         private readonly string _descripcionTipoNomina;
