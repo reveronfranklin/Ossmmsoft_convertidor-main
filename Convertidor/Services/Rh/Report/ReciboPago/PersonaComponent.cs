@@ -18,6 +18,7 @@ namespace Convertidor.Services.Rh.Report.Example;
         _descripcionTipoNomina = descripcionTipoNomina;
     }
             
+        
         public void Compose(IContainer container)
         {
             var headerStyle = TextStyle.Default.SemiBold().FontSize(7);

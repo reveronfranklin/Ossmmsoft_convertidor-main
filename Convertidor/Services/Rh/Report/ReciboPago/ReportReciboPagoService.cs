@@ -20,6 +20,9 @@ public class ReportReciboPagoService : IReportReciboPagoService
         _rhTipoNominaService = rhTipoNominaService;
         _serviceTemporal = serviceTemporal;
     }
+    
+    
+    
 
     public async Task GeneratePdf(FilterRepoteNomina filter)
     {
