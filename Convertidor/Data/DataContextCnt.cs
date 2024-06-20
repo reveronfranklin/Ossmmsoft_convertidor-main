@@ -14,6 +14,7 @@ namespace Convertidor.Data
         public DbSet<CNT_DESCRIPTIVAS> CNT_DESCRIPTIVAS { get; set; }
         public DbSet<CNT_TITULOS> CNT_TITULOS { get; set; }
         public DbSet<CNT_BANCO_ARCHIVO> CNT_BANCO_ARCHIVO { get; set; }
+        public DbSet<CNT_BANCO_ARCHIVO_CONTROL> CNT_BANCO_ARCHIVO_CONTROL { get; set; }
 
 
 
@@ -58,7 +59,16 @@ namespace Convertidor.Data
           });
           builder.ToTable("CNT_BANCO_ARCHIVO");
       });
+            modelBuilder
+ .Entity<CNT_BANCO_ARCHIVO_CONTROL>(builder =>
+ {
+     builder.HasKey(table => new
+     {
+         table.CODIGO_BANCO_ARCHIVO_CONTROL,
 
+     });
+     builder.ToTable("CNT_BANCO_ARCHIVO_CONTROL");
+ });
 
         }
     }
