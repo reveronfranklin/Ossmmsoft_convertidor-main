@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.Cnt;
+﻿using Convertidor.Data.Entities.Adm;
+using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,5 +32,75 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_BANCO_ARCHIVO> GetCodigoBeneficiarioOp(int codigoBancoArchivo)
+        {
+            try
+            {
+                var result = await _context.CNT_BANCO_ARCHIVO
+                    .Where(e => e.CODIGO_BANCO_ARCHIVO == codigoBancoArchivo).FirstOrDefaultAsync();
+
+                return (CNT_BANCO_ARCHIVO)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<ResultDto<CNT_BANCO_ARCHIVO>> Add(CNT_BANCO_ARCHIVO entity)
+        {
+
+            ResultDto<CNT_BANCO_ARCHIVO> result = new ResultDto<CNT_BANCO_ARCHIVO>(null);
+            try
+            {
+                await _context.CNT_BANCO_ARCHIVO.AddAsync(entity);
+                await _context.SaveChangesAsync();
+
+
+                result.Data = entity;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<int> GetNextKey()
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.CNT_BANCO_ARCHIVO.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_BANCO_ARCHIVO)
+                    .FirstOrDefaultAsync();
+                if (last == null)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = last.CODIGO_BANCO_ARCHIVO + 1;
+                }
+
+                return (int)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return 0;
+            }
+
+
+
+        }
     }
 }

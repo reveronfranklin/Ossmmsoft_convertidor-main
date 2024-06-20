@@ -1,4 +1,5 @@
-﻿using Convertidor.Dtos.Cnt;
+﻿using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
 
 // HTML to PDF
@@ -30,6 +31,14 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAll();
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(CntBancoArchivoUpdateDto dto)
+        {
+            var result = await _service.Create(dto); 
             return Ok(result);
         }
 
