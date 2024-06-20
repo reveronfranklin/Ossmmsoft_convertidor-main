@@ -32,7 +32,7 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_BANCO_ARCHIVO> GetCodigoBeneficiarioOp(int codigoBancoArchivo)
+        public async Task<CNT_BANCO_ARCHIVO> GetByCodigo(int codigoBancoArchivo)
         {
             try
             {
@@ -62,6 +62,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_BANCO_ARCHIVO>> Update(CNT_BANCO_ARCHIVO entity)
+        {
+            ResultDto<CNT_BANCO_ARCHIVO> result = new ResultDto<CNT_BANCO_ARCHIVO>(null);
+
+            try
+            {
+                CNT_BANCO_ARCHIVO entityUpdate = await GetByCodigo(entity.CODIGO_BANCO_ARCHIVO);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_BANCO_ARCHIVO.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)

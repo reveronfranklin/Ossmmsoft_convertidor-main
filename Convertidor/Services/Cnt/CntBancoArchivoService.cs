@@ -312,5 +312,202 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
+        public async Task<ResultDto<CntBancoArchivoResponseDto>> Update(CntBancoArchivoUpdateDto dto)
+        {
+            ResultDto<CntBancoArchivoResponseDto> result = new ResultDto<CntBancoArchivoResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoBancoArchivo = await _repository.GetByCodigo(dto.CodigoBancoArchivo);
+                if (codigoBancoArchivo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Banco Archivo no existe";
+                    return result;
+                }
+
+                if (dto.CodigoBancoArchivoControl <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Banco Archivo Control no existe";
+                    return result;
+                }
+
+
+                if (dto.NumeroBanco.Length > 4)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Banco invalido";
+                    return result;
+
+                }
+
+                var numeroBanco = dto.NumeroBanco;
+
+                var comienzo = numeroBanco.IndexOf("1");
+
+                if (comienzo != 01)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Banco invalido";
+                    return result;
+                }
+
+
+                if (dto.NumeroCuenta.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Cuenta invalido";
+                    return result;
+                }
+
+                if (numeroBanco != "0134" && numeroBanco != "0140")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Banco invalido";
+                    return result;
+                }
+
+
+                if (dto.FechaTransaccion == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "fecha transaccion invalida";
+                    return result;
+                }
+
+                if (dto.NumeroTransaccion.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Transaccion invalido";
+                    return result;
+                }
+
+                if (dto.TipoTransaccionId <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalido";
+                    return result;
+
+                }
+
+                var tipoTransaccionId = await _cntDescriptivaRepository.GetByIdAndTitulo(6, dto.TipoTransaccionId);
+                if (tipoTransaccionId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalido";
+                    return result;
+
+                }
+
+                if (dto.TipoTransaccion.Length > 10)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion invalido";
+                    return result;
+
+                }
+
+                if (dto.DescripcionTransaccion.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Transaccion invalido";
+                    return result;
+
+                }
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+                if (dto.CodigoDetalleEdoCta <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo detalle estado Cuenta invalido";
+                    return result;
+                }
+
+
+
+
+                codigoBancoArchivo.CODIGO_BANCO_ARCHIVO = dto.CodigoBancoArchivo;
+                codigoBancoArchivo.CODIGO_BANCO_ARCHIVO_CONTROL = dto.CodigoBancoArchivoControl;
+                codigoBancoArchivo.NUMERO_BANCO = dto.NumeroBanco;
+                codigoBancoArchivo.NUMERO_CUENTA = dto.NumeroCuenta;
+                codigoBancoArchivo.FECHA_TRANSACCION = dto.FechaTransaccion;
+                codigoBancoArchivo.NUMERO_TRANSACCION = dto.NumeroTransaccion;
+                codigoBancoArchivo.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
+                codigoBancoArchivo.TIPO_TRANSACCION = dto.TipoTransaccion;
+                codigoBancoArchivo.DESCRIPCION_TRANSACCION = dto.DescripcionTransaccion;
+                codigoBancoArchivo.EXTRA1 = dto.Extra1;
+                codigoBancoArchivo.EXTRA2 = dto.Extra2;
+                codigoBancoArchivo.EXTRA3 = dto.Extra3;
+                codigoBancoArchivo.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
+
+
+
+
+                codigoBancoArchivo.CODIGO_EMPRESA = dto.CodigoBancoArchivo;
+                codigoBancoArchivo.USUARIO_UPD = dto.CodigoBancoArchivo;
+                codigoBancoArchivo.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoBancoArchivo);
+
+                var resultDto = await MapCntBancoArchivo(codigoBancoArchivo);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }
