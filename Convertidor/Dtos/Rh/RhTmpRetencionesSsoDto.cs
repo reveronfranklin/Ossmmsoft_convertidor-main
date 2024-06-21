@@ -10,14 +10,14 @@
         public string NombresApellidos { get; set; }
         public string DescripcionCargo { get; set; }
         public DateTime FechaIngreso { get; set; }
-        public int MontoSsoTrabajador { get; set; }
-        public int MontoRpeTrabajador { get; set; }
+        public decimal MontoSsoTrabajador { get; set; }
+        public decimal MontoRpeTrabajador { get; set; }
 
-        public int MontoSsoPatrono { get; set; }
+        public decimal MontoSsoPatrono { get; set; }
 
-        public int MontoRpePatrono { get; set; }
+        public decimal MontoRpePatrono { get; set; }
 
-        public int MontoTotalRetencion { get; set; }
+        public decimal MontoTotalRetencion { get; set; }
 
         public string FechaNomina { get; set; }
 

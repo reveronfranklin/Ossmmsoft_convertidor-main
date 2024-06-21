@@ -9,9 +9,9 @@
         public string NOMBRES_APELLIDOS { get; set; }
         public string DESCRIPCION_CARGO { get; set; }
         public DateTime FECHA_INGRESO { get; set; }
-        public int MONTO_FAOV_TRABAJADOR { get; set; }
-        public int MONTO_FAOV_PATRONO { get; set; }
-        public int MONTO_TOTAL_RETENCION { get; set; }
+        public decimal MONTO_FAOV_TRABAJADOR { get; set; }
+        public decimal MONTO_FAOV_PATRONO { get; set; }
+        public decimal MONTO_TOTAL_RETENCION { get; set; }
         public string FECHA_NOMINA { get; set; }
         public string SIGLAS_TIPO_NOMINA { get; set; }
         public string REGISTRO_CONCAT { get; set; }

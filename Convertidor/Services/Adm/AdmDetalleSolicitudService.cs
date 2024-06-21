@@ -42,6 +42,7 @@ namespace Convertidor.Services.Adm
             }
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.PrecioUnitario = dtos.PRECIO_UNITARIO;
+            itemResult.PrecioTotal = itemResult.PrecioUnitario * itemResult.Cantidad;
             itemResult.PorDescuento = dtos.POR_DESCUENTO;
             itemResult.MontoDescuento = dtos.MONTO_DESCUENTO;
             itemResult.TipoImpuestoId = dtos.TIPO_IMPUESTO_ID;

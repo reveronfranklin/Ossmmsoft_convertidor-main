@@ -9,10 +9,10 @@
         public string NOMBRES_APELLIDOS { get; set; }
         public string DESCRIPCION_CARGO { get; set; }
         public DateTime FECHA_INGRESO { get; set; }
-        public int MONTO_CAH_TRABAJADOR { get; set; }
-        public int MONTO_CAH_PATRONO { get; set; }
+        public decimal MONTO_CAH_TRABAJADOR { get; set; }
+        public decimal MONTO_CAH_PATRONO { get; set; }
 
-        public int MONTO_TOTAL_RETENCION { get; set; }
+        public decimal MONTO_TOTAL_RETENCION { get; set; }
 
         public string FECHA_NOMINA { get; set; }
 

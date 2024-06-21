@@ -11,9 +11,9 @@
         public string NombresApellidos { get; set; }
         public string DescripcionCargo { get; set; }
         public DateTime FechaIngreso { get; set; }
-        public int MontoIncesTrabajador { get; set; }
-        public int MontoIncesPatrono { get; set; }
-        public int MontoTotalRetencion { get; set; }
+        public decimal MontoIncesTrabajador { get; set; }
+        public decimal MontoIncesPatrono { get; set; }
+        public decimal MontoTotalRetencion { get; set; }
         public string FechaNomina { get; set; }
         public string SiglasTipoNomina { get; set; }
         public DateTime FechaDesde { get; set; }
