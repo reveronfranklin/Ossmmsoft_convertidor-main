@@ -34,6 +34,12 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-       
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(CntBancoArchivoControlUpdateDto dto)
+        {
+            var result = await _service.Create(dto);
+            return Ok(result);
+        }
     }
 }
