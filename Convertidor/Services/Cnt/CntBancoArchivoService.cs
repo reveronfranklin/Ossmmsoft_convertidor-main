@@ -488,8 +488,8 @@ namespace Convertidor.Services.Cnt
 
 
 
-                codigoBancoArchivo.CODIGO_EMPRESA = dto.CodigoBancoArchivo;
-                codigoBancoArchivo.USUARIO_UPD = dto.CodigoBancoArchivo;
+                codigoBancoArchivo.CODIGO_EMPRESA = conectado.Empresa;
+                codigoBancoArchivo.USUARIO_UPD = conectado.Usuario;
                 codigoBancoArchivo.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoBancoArchivo);
