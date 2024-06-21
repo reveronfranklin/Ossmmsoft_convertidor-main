@@ -30,6 +30,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_BANCO_ARCHIVO_CONTROL> GetByCodigo(int codigoBancoArchivoControl)
+        {
+            try
+            {
+                var result = await _context.CNT_BANCO_ARCHIVO_CONTROL
+                    .Where(e => e.CODIGO_BANCO_ARCHIVO_CONTROL == codigoBancoArchivoControl).FirstOrDefaultAsync();
+
+                return (CNT_BANCO_ARCHIVO_CONTROL)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
         public async Task<ResultDto<CNT_BANCO_ARCHIVO_CONTROL>> Add(CNT_BANCO_ARCHIVO_CONTROL entity)
         {
 
@@ -54,7 +70,32 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<ResultDto<CNT_BANCO_ARCHIVO_CONTROL>> Update(CNT_BANCO_ARCHIVO_CONTROL entity)
+        {
+            ResultDto<CNT_BANCO_ARCHIVO_CONTROL> result = new ResultDto<CNT_BANCO_ARCHIVO_CONTROL>(null);
 
+            try
+            {
+                CNT_BANCO_ARCHIVO_CONTROL entityUpdate = await GetByCodigo(entity.CODIGO_BANCO_ARCHIVO_CONTROL);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_BANCO_ARCHIVO_CONTROL.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try
