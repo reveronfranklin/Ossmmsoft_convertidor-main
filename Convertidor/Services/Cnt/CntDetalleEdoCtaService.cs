@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Dtos.Cnt;
+using Convertidor.Dtos.Presupuesto;
 namespace Convertidor.Services.Cnt
 {
     public class CntDetalleEdoCtaService : ICntDetalleEdoCtaService
@@ -99,6 +100,53 @@ namespace Convertidor.Services.Cnt
             }
 
         }
+        public async Task<ResultDto<List<CntDetalleEdoCtaResponseDto>>> GetAllByCodigoEstadoCuenta(int codigoEstadoCuenta)
+        {
+
+            ResultDto<List<CntDetalleEdoCtaResponseDto>> result = new ResultDto<List<CntDetalleEdoCtaResponseDto>>(null);
+            try
+            {
+
+                var estadoCuenta = await _repository.GetByCodigoEstadoCuenta(codigoEstadoCuenta);
+
+
+
+                if (estadoCuenta.Count() > 0)
+                {
+                    List<CntDetalleEdoCtaResponseDto> listDto = new List<CntDetalleEdoCtaResponseDto>();
+
+                    foreach (var item in estadoCuenta)
+                    {
+                        var dto = await MapDetalleEdoCuenta(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
 
     }
 }
