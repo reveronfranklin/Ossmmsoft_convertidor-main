@@ -12,14 +12,17 @@ namespace Convertidor.Services.Cnt
         private readonly ICntBancoArchivoRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly ICntDescriptivaRepository _cntDescriptivaRepository;
+        private readonly ICntBancoArchivoControlRepository _cntBancoArchivoControlRepository;
 
         public CntBancoArchivoService(ICntBancoArchivoRepository repository,
                                       ISisUsuarioRepository sisUsuarioRepository,
-                                      ICntDescriptivaRepository cntDescriptivaRepository)
+                                      ICntDescriptivaRepository cntDescriptivaRepository,
+                                      ICntBancoArchivoControlRepository cntBancoArchivoControlRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _cntDescriptivaRepository = cntDescriptivaRepository;
+            _cntBancoArchivoControlRepository = cntBancoArchivoControlRepository;
         }
 
 
@@ -337,7 +340,16 @@ namespace Convertidor.Services.Cnt
                     return result;
                 }
 
+                var codigoBancoArchivoControl = await _cntBancoArchivoControlRepository.GetByCodigo(dto.CodigoBancoArchivoControl);
+                if(codigoBancoArchivoControl == null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Banco Archivo Control no existe";
+                    return result;
 
+
+                }
                 if (dto.NumeroBanco.Length > 4)
                 {
                     result.Data = null;
