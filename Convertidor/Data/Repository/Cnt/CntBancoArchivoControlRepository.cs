@@ -96,6 +96,24 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
         }
+
+        public async Task<string> Delete(int codigoBancoArchivoControl)
+        {
+            try
+            {
+                CNT_BANCO_ARCHIVO_CONTROL entity = await GetByCodigo(codigoBancoArchivoControl);
+                if (entity != null)
+                {
+                    _context.CNT_BANCO_ARCHIVO_CONTROL.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try

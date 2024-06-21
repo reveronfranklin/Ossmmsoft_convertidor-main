@@ -432,5 +432,51 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+
+        public async Task<ResultDto<CntBancoArchivoControlDeleteDto>> Delete(CntBancoArchivoControlDeleteDto dto)
+        {
+            ResultDto<CntBancoArchivoControlDeleteDto> result = new ResultDto<CntBancoArchivoControlDeleteDto>(null);
+            try
+            {
+
+                var codigoBancoArchivoControl = await _repository.GetByCodigo(dto.CodigoBancoArchivoControl);
+                if (codigoBancoArchivoControl == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Banco Archivo Control no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoBancoArchivoControl);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }

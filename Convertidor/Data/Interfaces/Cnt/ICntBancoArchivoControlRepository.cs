@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<CNT_BANCO_ARCHIVO_CONTROL> GetByCodigo(int codigoBancoArchivoControl);
         Task<ResultDto<CNT_BANCO_ARCHIVO_CONTROL>> Add(CNT_BANCO_ARCHIVO_CONTROL entity);
         Task<ResultDto<CNT_BANCO_ARCHIVO_CONTROL>> Update(CNT_BANCO_ARCHIVO_CONTROL entity);
+        Task<string> Delete(int codigoBancoArchivoControl);
         Task<int> GetNextKey();
     }
 }

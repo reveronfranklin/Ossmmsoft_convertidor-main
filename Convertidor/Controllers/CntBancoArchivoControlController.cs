@@ -15,7 +15,7 @@ namespace Convertidor.Controllers
     //[Authorize]
     public class CntBancoArchivoControlController : ControllerBase
     {
-       
+
         private readonly ICntBancoArchivoControlService _service;
 
         public CntBancoArchivoControlController(ICntBancoArchivoControlService service)
@@ -50,5 +50,12 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete(CntBancoArchivoControlDeleteDto dto)
+        {
+            var result = await _service.Delete(dto);
+            return Ok(result);
+        }
     }
 }
