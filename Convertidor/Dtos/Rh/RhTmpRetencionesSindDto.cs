@@ -10,9 +10,9 @@
         public string NombresApellidos { get; set; }
         public string DescripcionCargo { get; set; }
         public DateTime FechaIngreso { get; set; }
-        public int MontoSindTrabajador { get; set; }
-        public int MontoSindPatrono { get; set; }
-        public int MontoTotalRetencion { get; set; }
+        public decimal MontoSindTrabajador { get; set; }
+        public decimal MontoSindPatrono { get; set; }
+        public decimal MontoTotalRetencion { get; set; }
         public string FechaNomina { get; set; }
         public string SiglasTipoNomina { get; set; }
         public DateTime FechaDesde { get; set; }

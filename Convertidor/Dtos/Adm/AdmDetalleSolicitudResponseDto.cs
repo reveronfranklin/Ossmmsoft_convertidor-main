@@ -12,6 +12,9 @@
         public string DescripcionUnidad { get; set; } = string.Empty;
         public string Descripcion { get; set; } = string.Empty;
         public decimal PrecioUnitario { get; set; }
+        
+        public decimal PrecioTotal { get; set; }
+        
         public decimal? PorDescuento { get; set; }
         public decimal? MontoDescuento { get; set; }
         public int TipoImpuestoId { get; set; }
