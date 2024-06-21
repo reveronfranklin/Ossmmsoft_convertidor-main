@@ -437,6 +437,7 @@ builder.Services.AddTransient<IReporteSolicitudCompromisoService, ReporteSolicit
 builder.Services.AddTransient<ICntDescriptivaRepository, CntDescriptivaRepository>();
 builder.Services.AddTransient<ICntTitulosRepository, CntTitulosRepository>();
 builder.Services.AddTransient<ICntBancoArchivoRepository, CntBancoArchivoRepository>();
+builder.Services.AddTransient<ICntBancoArchivoControlRepository, CntBancoArchivoControlRepository>();
 
 
 //CNT Services
@@ -444,6 +445,7 @@ builder.Services.AddTransient<ICntBancoArchivoRepository, CntBancoArchivoReposit
 builder.Services.AddTransient<ICntDescriptivasService, CntDescriptivasService>();
 builder.Services.AddTransient<ICntTituloService, CntTituloService>();
 builder.Services.AddTransient<ICntBancoArchivoService, CntBancoArchivoService>();
+builder.Services.AddTransient<ICntBancoArchivoControlService, CntBancoArchivoControlService>();
 
 
 
