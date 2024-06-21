@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
+using Convertidor.Data.Repository.Cnt;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
 namespace Convertidor.Services.Cnt
@@ -7,10 +8,16 @@ namespace Convertidor.Services.Cnt
     public class CntDetalleEdoCtaService : ICntDetalleEdoCtaService
     {
         private readonly ICntDetalleEdoCtaRepository _repository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICntDescriptivaRepository _cntDescriptivaRepository;
 
-        public CntDetalleEdoCtaService(ICntDetalleEdoCtaRepository repository)
+        public CntDetalleEdoCtaService(ICntDetalleEdoCtaRepository repository,
+                                        ISisUsuarioRepository sisUsuarioRepository,
+                                        ICntDescriptivaRepository cntDescriptivaRepository)
         {
             _repository = repository;
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _cntDescriptivaRepository = cntDescriptivaRepository;
         }
 
         public FechaDto GetFechaDto(DateTime fecha)
@@ -134,6 +141,163 @@ namespace Convertidor.Services.Cnt
                     result.Message = "No existen Datos";
 
                 }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        public async Task<ResultDto<CntDetalleEdoCtaResponseDto>> Create(CntDetalleEdoCtaUpdateDto dto)
+        {
+            ResultDto<CntDetalleEdoCtaResponseDto> result = new ResultDto<CntDetalleEdoCtaResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+
+                if (dto.CodigoEstadoCuenta <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Estado cuenta no existe";
+                    return result;
+                }
+
+                if(dto.TipoTransaccionId <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalido";
+                    return result;
+
+                }
+
+                var tipoTransaccionId = await _cntDescriptivaRepository.GetByIdAndTitulo(6,dto.TipoTransaccionId);
+                if(tipoTransaccionId == false) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalido";
+                    return result;
+
+                }
+
+                if (dto.NumeroTransaccion.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Banco invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaTransaccion == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "fecha transaccion invalida";
+                    return result;
+                }
+
+                if (dto.Descripcion.Length > 1000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion invalida";
+                    return result;
+
+                }
+
+                if(dto.Monto < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if (dto.Status.Length > 1)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status invalido";
+                    return result;
+
+                }
+
+
+
+
+                CNT_DETALLE_EDO_CTA entity = new CNT_DETALLE_EDO_CTA();
+                entity.CODIGO_DETALLE_EDO_CTA = await _repository.GetNextKey();
+                entity.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
+                entity.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
+                entity.NUMERO_TRANSACCION = dto.NumeroTransaccion;
+                entity.DESCRIPCION = dto.Descripcion;
+                entity.MONTO = dto.Monto;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+                entity.STATUS = dto.Status;
+            
+
+
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapDetalleEdoCuenta(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
             }
             catch (Exception ex)
             {
