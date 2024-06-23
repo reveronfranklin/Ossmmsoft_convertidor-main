@@ -32,6 +32,21 @@ namespace Convertidor.Data.Repository.Cnt
         
         }
 
+        public async Task<CNT_DETALLE_EDO_CTA> GetByCodigo(int codigoDetalleEdoCuenta)
+        {
+            try
+            {
+                var result = await _context.CNT_DETALLE_EDO_CTA.DefaultIfEmpty().Where(x => x.CODIGO_DETALLE_EDO_CTA == codigoDetalleEdoCuenta).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<List<CNT_DETALLE_EDO_CTA>> GetByCodigoEstadoCuenta(int codigoEstadoCuenta)
         {
             try
@@ -61,6 +76,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_DETALLE_EDO_CTA>> Update(CNT_DETALLE_EDO_CTA entity)
+        {
+            ResultDto<CNT_DETALLE_EDO_CTA> result = new ResultDto<CNT_DETALLE_EDO_CTA>(null);
+
+            try
+            {
+                CNT_DETALLE_EDO_CTA entityUpdate = await GetByCodigo(entity.CODIGO_DETALLE_EDO_CTA);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_DETALLE_EDO_CTA.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)

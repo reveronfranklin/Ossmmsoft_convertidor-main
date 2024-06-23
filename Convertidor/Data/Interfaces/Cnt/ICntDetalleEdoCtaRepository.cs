@@ -7,7 +7,9 @@ namespace Convertidor.Data.Interfaces.Cnt
 
         Task<List<CNT_DETALLE_EDO_CTA>> GetAll();
         Task<List<CNT_DETALLE_EDO_CTA>> GetByCodigoEstadoCuenta(int codigoEstadoCuenta);
+        Task<CNT_DETALLE_EDO_CTA> GetByCodigo(int codigoDetalleEdoCuenta);
         Task<ResultDto<CNT_DETALLE_EDO_CTA>> Add(CNT_DETALLE_EDO_CTA entity);
+        Task<ResultDto<CNT_DETALLE_EDO_CTA>> Update(CNT_DETALLE_EDO_CTA entity);
         Task<int> GetNextKey();
     }
 }

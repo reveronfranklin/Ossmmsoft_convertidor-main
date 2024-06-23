@@ -32,9 +32,9 @@ namespace Convertidor.Services.Cnt
             return FechaDesdeObj;
         }
 
-        public async Task<CntDetalleEdoCtaResponseDto> MapDetalleEdoCuenta(CNT_DETALLE_EDO_CTA dtos) 
+        public async Task<CntDetalleEdoCtaResponseDto> MapDetalleEdoCuenta(CNT_DETALLE_EDO_CTA dtos)
         {
-           CntDetalleEdoCtaResponseDto itemResult = new CntDetalleEdoCtaResponseDto();
+            CntDetalleEdoCtaResponseDto itemResult = new CntDetalleEdoCtaResponseDto();
             itemResult.CodigoDetalleEdoCta = dtos.CODIGO_DETALLE_EDO_CTA;
             itemResult.CodigoEstadoCuenta = dtos.CODIGO_ESTADO_CUENTA;
             itemResult.TipoTransaccionId = dtos.TIPO_TRANSACCION_ID;
@@ -42,7 +42,7 @@ namespace Convertidor.Services.Cnt
             itemResult.FechaTransaccion = dtos.FECHA_TRANSACCION;
             itemResult.FechaTransaccionString = dtos.FECHA_TRANSACCION.ToString("u");
             FechaDto fechaTransaccionObj = GetFechaDto(dtos.FECHA_TRANSACCION);
-            itemResult.FechaTransaccionObj =(FechaDto)fechaTransaccionObj;
+            itemResult.FechaTransaccionObj = (FechaDto)fechaTransaccionObj;
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.Monto = dtos.MONTO;
             itemResult.Extra1 = dtos.EXTRA1;
@@ -170,7 +170,7 @@ namespace Convertidor.Services.Cnt
                     return result;
                 }
 
-                if(dto.TipoTransaccionId <= 0) 
+                if (dto.TipoTransaccionId <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -179,12 +179,22 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                var tipoTransaccionId = await _cntDescriptivaRepository.GetByIdAndTitulo(6,dto.TipoTransaccionId);
-                if(tipoTransaccionId == false) 
+                var tipoTransaccionId = await _cntDescriptivaRepository.GetByIdAndTitulo(6, dto.TipoTransaccionId);
+                if (tipoTransaccionId == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo Transaccion Id invalido";
+                    return result;
+
+                }
+
+                var numeroTransaccion = Convert.ToInt32(dto.NumeroTransaccion);
+                if (numeroTransaccion < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero transaccion invalido";
                     return result;
 
                 }
@@ -193,7 +203,7 @@ namespace Convertidor.Services.Cnt
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Numero Banco invalido";
+                    result.Message = "Numero transaccion invalido";
                     return result;
 
                 }
@@ -216,7 +226,7 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                if(dto.Monto < 0) 
+                if (dto.Monto < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -248,6 +258,16 @@ namespace Convertidor.Services.Cnt
                     return result;
                 }
 
+                if (dto.Status != "C" && dto.Status != "T")
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status invalido";
+                    return result;
+
+                }
+
                 if (dto.Status.Length > 1)
                 {
                     result.Data = null;
@@ -271,7 +291,7 @@ namespace Convertidor.Services.Cnt
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
                 entity.STATUS = dto.Status;
-            
+
 
 
 
@@ -312,5 +332,175 @@ namespace Convertidor.Services.Cnt
         }
 
 
+        public async Task<ResultDto<CntDetalleEdoCtaResponseDto>> Update(CntDetalleEdoCtaUpdateDto dto)
+        {
+            ResultDto<CntDetalleEdoCtaResponseDto> result = new ResultDto<CntDetalleEdoCtaResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+
+                var codigoEdoDetalleEdoCta = await _repository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                if (codigoEdoDetalleEdoCta == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Edo cta no existe";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoEstadoCuenta <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Estado cuenta no existe";
+                    return result;
+                }
+
+                if (dto.TipoTransaccionId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalido";
+                    return result;
+
+                }
+
+                var tipoTransaccionId = await _cntDescriptivaRepository.GetByIdAndTitulo(6, dto.TipoTransaccionId);
+                if (tipoTransaccionId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalido";
+                    return result;
+
+                }
+
+                var numeroTransaccion = Convert.ToInt32(dto.NumeroTransaccion);
+                if(numeroTransaccion < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero transaccion invalido";
+                    return result;
+
+                }
+
+                if (dto.NumeroTransaccion.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero transaccion invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaTransaccion == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "fecha transaccion invalida";
+                    return result;
+                }
+
+                if (dto.Descripcion.Length > 1000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion invalida";
+                    return result;
+
+                }
+
+                if (dto.Monto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if(dto.Status != "C" && dto.Status != "T") 
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status invalido";
+                    return result;
+
+                }
+                if (dto.Status.Length > 1)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status invalido";
+                    return result;
+
+                }
+
+
+
+                codigoEdoDetalleEdoCta.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
+                codigoEdoDetalleEdoCta.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
+                codigoEdoDetalleEdoCta.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
+                codigoEdoDetalleEdoCta.NUMERO_TRANSACCION = dto.NumeroTransaccion;
+                codigoEdoDetalleEdoCta.DESCRIPCION = dto.Descripcion;
+                codigoEdoDetalleEdoCta.MONTO = dto.Monto;
+                codigoEdoDetalleEdoCta.EXTRA1 = dto.Extra1;
+                codigoEdoDetalleEdoCta.EXTRA2 = dto.Extra2;
+                codigoEdoDetalleEdoCta.EXTRA3 = dto.Extra3;
+                codigoEdoDetalleEdoCta.STATUS = dto.Status;
+
+
+
+
+                codigoEdoDetalleEdoCta.CODIGO_EMPRESA = conectado.Empresa;
+                codigoEdoDetalleEdoCta.USUARIO_UPD = conectado.Usuario;
+                codigoEdoDetalleEdoCta.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoEdoDetalleEdoCta);
+
+                var resultDto = await MapDetalleEdoCuenta(codigoEdoDetalleEdoCta);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
     }
 }
