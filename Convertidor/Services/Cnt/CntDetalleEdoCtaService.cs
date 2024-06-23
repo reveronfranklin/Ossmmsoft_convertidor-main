@@ -502,5 +502,51 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
+        public async Task<ResultDto<CntDetalleEdoCtaDeleteDto>> Delete(CntDetalleEdoCtaDeleteDto dto)
+        {
+            ResultDto<CntDetalleEdoCtaDeleteDto> result = new ResultDto<CntDetalleEdoCtaDeleteDto>(null);
+            try
+            {
+
+                var codigoDetalleEdoCta = await _repository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                if (codigoDetalleEdoCta == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Edo Cta no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoDetalleEdoCta);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }
