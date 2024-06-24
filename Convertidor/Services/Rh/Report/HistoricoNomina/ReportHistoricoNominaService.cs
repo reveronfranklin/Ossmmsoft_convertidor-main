@@ -34,13 +34,16 @@ public class ReportHistoricoNominaService:IReportHistoricoNominaService
         
         var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
         var fileName= $"HistoricoDeNomina-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
-        var filePath = $"{ @settings.ExcelFiles}/{fileName}.pdf";
-
+        var filePath = $"{ @settings.ExcelFiles}/{fileName}";
+        if (File.Exists(filePath))
+        {
+            return fileName;
+        }
 
         var periodo = await _rhPeriodoService.GetByPeriodo(filter.CodigoPeriodo);
         if (periodo == null)
         {
-            return "No Data";
+            return "NO_DATA.pdf";
         }
         else
         {
