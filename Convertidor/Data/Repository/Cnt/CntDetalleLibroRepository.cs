@@ -48,5 +48,57 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<ResultDto<CNT_DETALLE_LIBRO>> Add(CNT_DETALLE_LIBRO entity)
+        {
+
+            ResultDto<CNT_DETALLE_LIBRO> result = new ResultDto<CNT_DETALLE_LIBRO>(null);
+            try
+            {
+                await _context.CNT_DETALLE_LIBRO.AddAsync(entity);
+                await _context.SaveChangesAsync();
+
+
+                result.Data = entity;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+        public async Task<int> GetNextKey()
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.CNT_DETALLE_LIBRO.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_DETALLE_LIBRO)
+                    .FirstOrDefaultAsync();
+                if (last == null)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = last.CODIGO_DETALLE_LIBRO + 1;
+                }
+
+                return (int)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return 0;
+            }
+
+
+
+        }
     }
 }
