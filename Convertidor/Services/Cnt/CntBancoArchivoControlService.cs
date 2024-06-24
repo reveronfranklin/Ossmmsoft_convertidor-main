@@ -4,6 +4,7 @@ using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Data.Repository.Cnt;
 using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Cnt;
+using Convertidor.Utility;
 using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Services.Cnt
@@ -25,18 +26,7 @@ namespace Convertidor.Services.Cnt
 
         }
 
- //
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+ 
         public async Task<CntBancoArchivoControlResponseDto> MapCntBancoArchivoControl(CNT_BANCO_ARCHIVO_CONTROL dtos) 
         {
             CntBancoArchivoControlResponseDto itemResult = new CntBancoArchivoControlResponseDto();
@@ -47,11 +37,11 @@ namespace Convertidor.Services.Cnt
             itemResult.NombreArchivo = dtos.NOMBRE_ARCHIVO;
             itemResult.FechaDesde = dtos.FECHA_DESDE;
             itemResult.FechaDesdeString = dtos.FECHA_DESDE.ToString("u");
-            FechaDto fechaDesdeObj = GetFechaDto(dtos.FECHA_DESDE);
+            FechaDto fechaDesdeObj = FechaObj.GetFechaDto(dtos.FECHA_DESDE);
             itemResult.FechaDesdeObj = (FechaDto)fechaDesdeObj;
             itemResult.FechaHasta = dtos.FECHA_HASTA;
             itemResult.FechaHastaString = dtos.FECHA_HASTA.ToString("u");
-            FechaDto fechaHastaObj = GetFechaDto(dtos.FECHA_HASTA);
+            FechaDto fechaHastaObj = FechaObj.GetFechaDto(dtos.FECHA_HASTA);
             itemResult.FechaHastaObj =(FechaDto) fechaHastaObj;
             itemResult.SaldoInicial = dtos.SALDO_INICIAL;
             itemResult.SaldoFinal = dtos.SALDO_FINAL;
