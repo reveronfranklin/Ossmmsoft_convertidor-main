@@ -17,6 +17,7 @@ namespace Convertidor.Data
         public DbSet<CNT_BANCO_ARCHIVO_CONTROL> CNT_BANCO_ARCHIVO_CONTROL { get; set; }
         public DbSet<CNT_DETALLE_EDO_CTA> CNT_DETALLE_EDO_CTA { get; set; }
         public DbSet<CNT_DETALLE_LIBRO> CNT_DETALLE_LIBRO { get; set; }
+        public DbSet<CNT_ESTADO_CUENTAS> CNT_ESTADO_CUENTAS { get; set; }
 
 
 
@@ -85,13 +86,24 @@ namespace Convertidor.Data
             modelBuilder
      .Entity<CNT_DETALLE_LIBRO>(builder =>
      {
-       builder.HasKey(table => new
-       {
-           table.CODIGO_DETALLE_LIBRO,
+         builder.HasKey(table => new
+         {
+             table.CODIGO_DETALLE_LIBRO,
 
-       });
-       builder.ToTable("CNT_DETALLE_LIBRO");
+         });
+         builder.ToTable("CNT_DETALLE_LIBRO");
      });
+      modelBuilder
+     .Entity<CNT_ESTADO_CUENTAS>(builder =>
+     {
+         builder.HasKey(table => new
+         {
+             table.CODIGO_ESTADO_CUENTA,
+
+         });
+         builder.ToTable("CNT_ESTADO_CUENTAS");
+     });
+            
         }
 
         
