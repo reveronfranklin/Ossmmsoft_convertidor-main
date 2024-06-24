@@ -4,15 +4,15 @@ namespace Convertidor.Data.Repository.Rh
 {
 	public class RhPeriodoService: IRhPeriodoService
     {
-
-   
+        private readonly IConfiguration _configuration;
         private readonly IRhPeriodoRepository _repository;
         private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
       
 
-        public RhPeriodoService(IRhPeriodoRepository repository,IRhTipoNominaRepository rhTipoNominaRepository,ISisUsuarioRepository sisUsuarioRepository)
+        public RhPeriodoService(IConfiguration configuration,IRhPeriodoRepository repository,IRhTipoNominaRepository rhTipoNominaRepository,ISisUsuarioRepository sisUsuarioRepository)
         {
+            _configuration = configuration;
             _repository = repository;
             _rhTipoNominaRepository = rhTipoNominaRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -153,6 +153,12 @@ namespace Convertidor.Data.Repository.Rh
             
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             itemResult.Descripcion = dtos.DESCRIPCION;
+
+            
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+        
+            var url = @settings.Url;
+            itemResult.FileName =$"{url}/Files/GetPdfFiles/HistoricoDeNomina-{itemResult.CodigoTipoNomina}-{itemResult.CodigoPeriodo}.pdf";
 
 
 

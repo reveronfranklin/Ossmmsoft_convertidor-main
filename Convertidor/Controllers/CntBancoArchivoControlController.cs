@@ -1,4 +1,7 @@
-﻿using Convertidor.Dtos.Cnt;
+﻿using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Cnt;
+using Convertidor.Dtos.Presupuesto;
+
 // HTML to PDF
 using Convertidor.Services.Cnt;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +12,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CntTitulosController : ControllerBase
+    public class CntBancoArchivoControlController : ControllerBase
     {
-       
-        private readonly ICntTituloService _service;
 
-        public CntTitulosController(ICntTituloService service)
+        private readonly ICntBancoArchivoControlService _service;
+
+        public CntBancoArchivoControlController(ICntBancoArchivoControlService service)
         {
 
             _service = service;
@@ -22,7 +25,6 @@ namespace Convertidor.Controllers
 
         }
 
-     
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetAll()
@@ -31,18 +33,9 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(CntTitulosUpdateDto dto)
-        {
-            var result = await _service.Update(dto);
-            return Ok(result);
-        }
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Create(CntTitulosUpdateDto dto)
+        public async Task<IActionResult> Create(CntBancoArchivoControlUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -50,16 +43,18 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(CntTitulosDeleteDto dto)
+        public async Task<IActionResult> Update(CntBancoArchivoControlUpdateDto dto)
+        {
+            var result = await _service.Update(dto);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete(CntBancoArchivoControlDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
-
         }
-
-
-
-
-
     }
 }

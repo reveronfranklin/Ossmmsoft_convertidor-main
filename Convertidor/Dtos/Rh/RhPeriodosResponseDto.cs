@@ -30,9 +30,14 @@
         public int CodigoPresupuesto { get; set; }
         public string Descripcion { get; set; } = string.Empty;
         public string SearchText { get { return $"{CodigoTipoNomina}-{FechaNominaString}-{DescripcionPeriodo}-{DescripcionTipoNomina}"; } }
+        
         public int Year { get { return FechaNomina.Year; } }
-
+        
+        public string FileName { get; set; } = string.Empty;
+  
 
     }
+    
+    
 }
 

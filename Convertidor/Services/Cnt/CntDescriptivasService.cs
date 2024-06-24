@@ -7,7 +7,7 @@ namespace Convertidor.Services.Cnt
 {
     public class CntDescriptivasService: ICntDescriptivasService
     {
-
+//
       
         private readonly ICntDescriptivaRepository _repository;
         private readonly ICntTitulosRepository _CntTitulosRepository;

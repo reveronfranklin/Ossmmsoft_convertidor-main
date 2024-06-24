@@ -433,16 +433,27 @@ builder.Services.AddTransient<IAdmProductosService, AdmProductosService>();
 
 
 
+
+
 //CNT Repository
 
 builder.Services.AddTransient<ICntDescriptivaRepository, CntDescriptivaRepository>();
 builder.Services.AddTransient<ICntTitulosRepository, CntTitulosRepository>();
+builder.Services.AddTransient<ICntBancoArchivoRepository, CntBancoArchivoRepository>();
+builder.Services.AddTransient<ICntBancoArchivoControlRepository, CntBancoArchivoControlRepository>();
+builder.Services.AddTransient<ICntDetalleEdoCtaRepository, CntDetalleEdoCtaRepository>();
+builder.Services.AddTransient<ICntDetalleLibroRepository, CntDetalleLibroRepository>();
 
 
 //CNT Services
 
 builder.Services.AddTransient<ICntDescriptivasService, CntDescriptivasService>();
 builder.Services.AddTransient<ICntTituloService, CntTituloService>();
+builder.Services.AddTransient<ICntBancoArchivoService, CntBancoArchivoService>();
+builder.Services.AddTransient<ICntBancoArchivoControlService, CntBancoArchivoControlService>();
+builder.Services.AddTransient<ICntDetalleEdoCtaService, CntDetalleEdoCtaService>();
+builder.Services.AddTransient<ICntDetalleLibroService, CntDetalleLibroService>();
+
 
 
 
