@@ -3,6 +3,7 @@ using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Data.Repository.Cnt;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 namespace Convertidor.Services.Cnt
 {
     //
@@ -21,17 +22,7 @@ namespace Convertidor.Services.Cnt
             _cntDescriptivaRepository = cntDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+       
 
         public async Task<CntDetalleEdoCtaResponseDto> MapDetalleEdoCuenta(CNT_DETALLE_EDO_CTA dtos)
         {
@@ -42,7 +33,7 @@ namespace Convertidor.Services.Cnt
             itemResult.NumeroTransaccion = dtos.NUMERO_TRANSACCION;
             itemResult.FechaTransaccion = dtos.FECHA_TRANSACCION;
             itemResult.FechaTransaccionString = dtos.FECHA_TRANSACCION.ToString("u");
-            FechaDto fechaTransaccionObj = GetFechaDto(dtos.FECHA_TRANSACCION);
+            FechaDto fechaTransaccionObj = FechaObj.GetFechaDto(dtos.FECHA_TRANSACCION);
             itemResult.FechaTransaccionObj = (FechaDto)fechaTransaccionObj;
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.Monto = dtos.MONTO;
