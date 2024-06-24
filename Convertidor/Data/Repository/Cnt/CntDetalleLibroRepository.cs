@@ -32,5 +32,21 @@ namespace Convertidor.Data.Repository.Cnt
         
         }
 
+        public async Task<List<CNT_DETALLE_LIBRO>> GetByCodigoLibro(int codigoLibro)
+        {
+            try
+            {
+                var result = await _context.CNT_DETALLE_LIBRO.DefaultIfEmpty().Where(x => x.CODIGO_LIBRO == codigoLibro).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
     }
 }

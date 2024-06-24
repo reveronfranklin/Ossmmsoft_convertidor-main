@@ -5,5 +5,6 @@ namespace Convertidor.Services.Cnt
     public interface ICntDetalleLibroService
     {
         Task<ResultDto<List<CntDetalleLibroResponseDto>>> GetAll();
+        Task<ResultDto<List<CntDetalleLibroResponseDto>>> GetAllByCodigoLibro(int codigoLibro);
     }
 }

@@ -6,6 +6,8 @@ namespace Convertidor.Data.Interfaces.Cnt
     {
 
         Task<List<CNT_DETALLE_LIBRO>> GetAll();
-       
+        Task<List<CNT_DETALLE_LIBRO>> GetByCodigoLibro(int codigoLibro);
+
+
     }
 }

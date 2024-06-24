@@ -34,6 +34,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllByCodigoLibro(FilterDetalleLibro filter) 
+        {
+            var result = await _service.GetAllByCodigoLibro(filter.CodigoLibro);
+            return Ok(result);
+        
+        }
         
     }
 }

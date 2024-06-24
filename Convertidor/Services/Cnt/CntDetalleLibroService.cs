@@ -97,6 +97,52 @@ namespace Convertidor.Services.Cnt
             }
 
         }
-        
+
+        public async Task<ResultDto<List<CntDetalleLibroResponseDto>>> GetAllByCodigoLibro(int codigoLibro)
+        {
+
+            ResultDto<List<CntDetalleLibroResponseDto>> result = new ResultDto<List<CntDetalleLibroResponseDto>>(null);
+            try
+            {
+
+                var detalleLibro = await _repository.GetByCodigoLibro(codigoLibro);
+
+
+
+                if (detalleLibro.Count() > 0)
+                {
+                    List<CntDetalleLibroResponseDto> listDto = new List<CntDetalleLibroResponseDto>();
+
+                    foreach (var item in detalleLibro)
+                    {
+                        var dto = await MapDetalleLibro(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }
