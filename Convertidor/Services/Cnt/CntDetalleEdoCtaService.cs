@@ -332,8 +332,8 @@ namespace Convertidor.Services.Cnt
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
 
-                var codigoEdoDetalleEdoCta = await _repository.GetByCodigo(dto.CodigoDetalleEdoCta);
-                if (codigoEdoDetalleEdoCta == null)
+                var codigoDetalleEdoCta = await _repository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                if (codigoDetalleEdoCta == null)
                 {
 
                     result.Data = null;
@@ -460,27 +460,27 @@ namespace Convertidor.Services.Cnt
 
 
 
-                codigoEdoDetalleEdoCta.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
-                codigoEdoDetalleEdoCta.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
-                codigoEdoDetalleEdoCta.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
-                codigoEdoDetalleEdoCta.NUMERO_TRANSACCION = dto.NumeroTransaccion;
-                codigoEdoDetalleEdoCta.DESCRIPCION = dto.Descripcion;
-                codigoEdoDetalleEdoCta.MONTO = dto.Monto;
-                codigoEdoDetalleEdoCta.EXTRA1 = dto.Extra1;
-                codigoEdoDetalleEdoCta.EXTRA2 = dto.Extra2;
-                codigoEdoDetalleEdoCta.EXTRA3 = dto.Extra3;
-                codigoEdoDetalleEdoCta.STATUS = dto.Status;
+                codigoDetalleEdoCta.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
+                codigoDetalleEdoCta.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
+                codigoDetalleEdoCta.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
+                codigoDetalleEdoCta.NUMERO_TRANSACCION = dto.NumeroTransaccion;
+                codigoDetalleEdoCta.DESCRIPCION = dto.Descripcion;
+                codigoDetalleEdoCta.MONTO = dto.Monto;
+                codigoDetalleEdoCta.EXTRA1 = dto.Extra1;
+                codigoDetalleEdoCta.EXTRA2 = dto.Extra2;
+                codigoDetalleEdoCta.EXTRA3 = dto.Extra3;
+                codigoDetalleEdoCta.STATUS = dto.Status;
 
 
 
 
-                codigoEdoDetalleEdoCta.CODIGO_EMPRESA = conectado.Empresa;
-                codigoEdoDetalleEdoCta.USUARIO_UPD = conectado.Usuario;
-                codigoEdoDetalleEdoCta.FECHA_UPD = DateTime.Now;
+                codigoDetalleEdoCta.CODIGO_EMPRESA = conectado.Empresa;
+                codigoDetalleEdoCta.USUARIO_UPD = conectado.Usuario;
+                codigoDetalleEdoCta.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(codigoEdoDetalleEdoCta);
+                await _repository.Update(codigoDetalleEdoCta);
 
-                var resultDto = await MapDetalleEdoCuenta(codigoEdoDetalleEdoCta);
+                var resultDto = await MapDetalleEdoCuenta(codigoDetalleEdoCta);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";

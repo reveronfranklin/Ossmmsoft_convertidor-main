@@ -340,5 +340,191 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntDetalleLibroResponseDto>> Update(CntDetalleLibroUpdateDto dto)
+        {
+            ResultDto<CntDetalleLibroResponseDto> result = new ResultDto<CntDetalleLibroResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+
+                var codigoDetalleLibro = await _repository.GetByCodigo(dto.CodigoDetalleLibro);
+                if (codigoDetalleLibro == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Libro no existe";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoLibro < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Libro ya existe";
+                    return result;
+                }
+
+                if (dto.TipoDocumentoId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Documento Id invalido";
+                    return result;
+
+                }
+
+                var tipodocumentoId = await _cntDescriptivaRepository.GetByIdAndTitulo(7, dto.TipoDocumentoId);
+                if (tipodocumentoId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Documento Id invalido";
+                    return result;
+
+                }
+
+
+
+                if (dto.CodigoIdentificador <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Identificador invalido";
+                    return result;
+
+                }
+
+                if (dto.OrigenId <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Origen Id invalida";
+                    return result;
+                }
+
+                var origenId = await _cntDescriptivaRepository.GetByIdAndTitulo(8, dto.OrigenId);
+                if (origenId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Origen Id invalido";
+                    return result;
+                }
+
+                if (dto.NumeroDocumento.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Documento invalido";
+                    return result;
+
+                }
+
+                if (dto.Descripcion.Length > 1000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion invalida";
+                    return result;
+
+                }
+
+                if (dto.Monto < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto invalido";
+                    return result;
+
+                }
+
+                if (dto.Status != "C" && dto.Status != "T" && dto.Status != "A")
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status invalido";
+                    return result;
+
+                }
+
+                if (dto.Status.Length > 1)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+                codigoDetalleLibro.CODIGO_DETALLE_LIBRO = dto.CodigoDetalleLibro;
+                codigoDetalleLibro.CODIGO_LIBRO = dto.CodigoLibro;
+                codigoDetalleLibro.TIPO_DOCUMENTO_ID = dto.TipoDocumentoId;
+                codigoDetalleLibro.CODIGO_CHEQUE = dto.CodigoCheque;
+                codigoDetalleLibro.CODIGO_IDENTIFICADOR = dto.CodigoIdentificador;
+                codigoDetalleLibro.ORIGEN_ID = dto.OrigenId;
+                codigoDetalleLibro.NUMERO_DOCUMENTO = dto.NumeroDocumento;
+                codigoDetalleLibro.DESCRIPCION = dto.Descripcion;
+                codigoDetalleLibro.MONTO = dto.Monto;
+                codigoDetalleLibro.STATUS = dto.Status;
+                codigoDetalleLibro.EXTRA1 = dto.Extra1;
+                codigoDetalleLibro.EXTRA2 = dto.Extra2;
+                codigoDetalleLibro.EXTRA3 = dto.Extra3;
+                codigoDetalleLibro.STATUS = dto.Status;
+
+
+
+
+                codigoDetalleLibro.CODIGO_EMPRESA = conectado.Empresa;
+                codigoDetalleLibro.USUARIO_UPD = conectado.Usuario;
+                codigoDetalleLibro.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoDetalleLibro);
+
+                var resultDto = await MapDetalleLibro(codigoDetalleLibro);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }
