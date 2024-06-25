@@ -30,6 +30,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_ESTADO_CUENTAS> GetByCodigo(int codigoEstadoCuenta)
+        {
+            try
+            {
+                var result = await _context.CNT_ESTADO_CUENTAS.DefaultIfEmpty().Where(x => x.CODIGO_ESTADO_CUENTA == codigoEstadoCuenta).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CNT_ESTADO_CUENTAS>> Add(CNT_ESTADO_CUENTAS entity)
         {
 
@@ -54,6 +70,32 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<ResultDto<CNT_ESTADO_CUENTAS>> Update(CNT_ESTADO_CUENTAS entity)
+        {
+            ResultDto<CNT_ESTADO_CUENTAS> result = new ResultDto<CNT_ESTADO_CUENTAS>(null);
+
+            try
+            {
+                CNT_ESTADO_CUENTAS entityUpdate = await GetByCodigo(entity.CODIGO_ESTADO_CUENTA);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_ESTADO_CUENTAS.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try
