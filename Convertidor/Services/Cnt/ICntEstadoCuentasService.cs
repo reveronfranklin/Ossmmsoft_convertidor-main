@@ -7,5 +7,6 @@ namespace Convertidor.Services.Cnt
         Task<ResultDto<List<CntEstadoCuentasResponseDto>>> GetAll();
         Task<ResultDto<CntEstadoCuentasResponseDto>> Create(CntEstadoCuentasUpdateDto dto);
         Task<ResultDto<CntEstadoCuentasResponseDto>> Update(CntEstadoCuentasUpdateDto dto);
+        Task<ResultDto<CntEstadoCuentasDeleteDto>> Delete(CntEstadoCuentasDeleteDto dto);
     }
 }

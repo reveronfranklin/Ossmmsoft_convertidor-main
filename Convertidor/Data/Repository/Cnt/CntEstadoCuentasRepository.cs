@@ -96,6 +96,24 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
         }
+
+        public async Task<string> Delete(int codigoEstadoCuenta)
+        {
+            try
+            {
+                CNT_ESTADO_CUENTAS entity = await GetByCodigo(codigoEstadoCuenta);
+                if (entity != null)
+                {
+                    _context.CNT_ESTADO_CUENTAS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try
