@@ -27,5 +27,21 @@ namespace Convertidor.Data.Repository.Cnt
             }
 
         }
+
+        public async Task<List<CNT_HIST_CONCILIACION>> GetByCodigoConciliacion(int codigoConciliacion)
+        {
+            try
+            {
+                var result = await _context.CNT_HIST_CONCILIACION.DefaultIfEmpty().Where(x => x.CODIGO_CONCILIACION == codigoConciliacion).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
     }
 }

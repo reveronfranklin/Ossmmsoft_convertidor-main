@@ -5,5 +5,6 @@ namespace Convertidor.Data.Interfaces.Cnt
     public interface ICntHistConciliacionRepository
     {
         Task<List<CNT_HIST_CONCILIACION>> GetAll();
+        Task<List<CNT_HIST_CONCILIACION>> GetByCodigoConciliacion(int codigoConciliacion);
     }
 }

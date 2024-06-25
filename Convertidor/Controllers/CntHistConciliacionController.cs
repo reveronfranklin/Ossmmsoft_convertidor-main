@@ -33,7 +33,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-       
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllByCodigoConciliacion(FilterHistoricoConciliacionDto filter)
+        {
+            var result = await _service.GetAllByCodigoConciliacion(filter.CodigoConciliacion);
+            return Ok(result);
+        }
 
     }
 }

@@ -93,5 +93,52 @@ namespace Convertidor.Services.Cnt
             }
 
         }
+
+        public async Task<ResultDto<List<CntHistConciliacionResponseDto>>> GetAllByCodigoConciliacion(int codigoConciliacion)
+        {
+
+            ResultDto<List<CntHistConciliacionResponseDto>> result = new ResultDto<List<CntHistConciliacionResponseDto>>(null);
+            try
+            {
+
+                var conciliacion = await _repository.GetByCodigoConciliacion(codigoConciliacion);
+
+
+
+                if (conciliacion.Count() > 0)
+                {
+                    List<CntHistConciliacionResponseDto> listDto = new List<CntHistConciliacionResponseDto>();
+
+                    foreach (var item in conciliacion)
+                    {
+                        var dto = await MapCntHistConciliacion(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }
