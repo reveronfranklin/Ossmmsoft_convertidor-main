@@ -11,14 +11,17 @@ namespace Convertidor.Services.Cnt
     {
         private readonly ICntDetalleEdoCtaRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICntEstadoCuentasRepository _cntEstadoCuentasRepository;
         private readonly ICntDescriptivaRepository _cntDescriptivaRepository;
 
         public CntDetalleEdoCtaService(ICntDetalleEdoCtaRepository repository,
                                         ISisUsuarioRepository sisUsuarioRepository,
+                                        ICntEstadoCuentasRepository cntEstadoCuentasRepository,
                                         ICntDescriptivaRepository cntDescriptivaRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _cntEstadoCuentasRepository = cntEstadoCuentasRepository;
             _cntDescriptivaRepository = cntDescriptivaRepository;
         }
 
@@ -153,13 +156,22 @@ namespace Convertidor.Services.Cnt
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-
                 if (dto.CodigoEstadoCuenta <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Estado cuenta no existe";
                     return result;
+                }
+
+                var codigoEstadoCuenta = _cntEstadoCuentasRepository.GetByCodigo(dto.CodigoEstadoCuenta);
+                if(codigoEstadoCuenta== null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Estado cuenta no existe";
+                    return result;
+
                 }
 
                 if (dto.TipoTransaccionId <= 0)
@@ -350,6 +362,16 @@ namespace Convertidor.Services.Cnt
                     result.IsValid = false;
                     result.Message = "Codigo Estado cuenta no existe";
                     return result;
+                }
+
+                var codigoEstadoCuenta = _cntEstadoCuentasRepository.GetByCodigo(dto.CodigoEstadoCuenta);
+                if (codigoEstadoCuenta == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Estado cuenta no existe";
+                    return result;
+
                 }
 
                 if (dto.TipoTransaccionId <= 0)
