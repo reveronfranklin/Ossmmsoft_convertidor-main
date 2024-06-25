@@ -18,6 +18,7 @@ namespace Convertidor.Data
         public DbSet<CNT_DETALLE_EDO_CTA> CNT_DETALLE_EDO_CTA { get; set; }
         public DbSet<CNT_DETALLE_LIBRO> CNT_DETALLE_LIBRO { get; set; }
         public DbSet<CNT_ESTADO_CUENTAS> CNT_ESTADO_CUENTAS { get; set; }
+        public DbSet<CNT_HIST_CONCILIACION> CNT_HIST_CONCILIACION { get; set; }
 
 
 
@@ -103,6 +104,16 @@ namespace Convertidor.Data
          });
          builder.ToTable("CNT_ESTADO_CUENTAS");
      });
+            modelBuilder
+   .Entity<CNT_HIST_CONCILIACION>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_HIST_CONCILIACION,
+
+       });
+       builder.ToTable("CNT_HIST_CONCILIACION");
+   });
             
         }
 
