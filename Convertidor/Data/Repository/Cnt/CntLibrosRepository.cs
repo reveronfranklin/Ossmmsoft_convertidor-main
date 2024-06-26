@@ -27,6 +27,21 @@ namespace Convertidor.Data.Repository.Cnt
             }
 
         }
+        public async Task<CNT_LIBROS> GetByCodigo(int codigoLibro)
+        {
+            try
+            {
+                var result = await _context.CNT_LIBROS.DefaultIfEmpty().Where(x => x.CODIGO_LIBRO == codigoLibro).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
 
         public async Task<ResultDto<CNT_LIBROS>> Add(CNT_LIBROS entity)
         {
@@ -41,6 +56,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_LIBROS>> Update(CNT_LIBROS entity)
+        {
+            ResultDto<CNT_LIBROS> result = new ResultDto<CNT_LIBROS>(null);
+
+            try
+            {
+                CNT_LIBROS entityUpdate = await GetByCodigo(entity.CODIGO_LIBRO);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_LIBROS.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)
