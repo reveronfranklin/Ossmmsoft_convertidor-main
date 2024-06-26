@@ -9,6 +9,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<CNT_HIST_CONCILIACION> GetByCodigo(int codigoHistConciliacion);
         Task<ResultDto<CNT_HIST_CONCILIACION>> Add(CNT_HIST_CONCILIACION entity);
         Task<ResultDto<CNT_HIST_CONCILIACION>> Update(CNT_HIST_CONCILIACION entity);
+        Task<string> Delete(int codigoHistConciliacion);
         Task<int> GetNextKey();
     }
 }

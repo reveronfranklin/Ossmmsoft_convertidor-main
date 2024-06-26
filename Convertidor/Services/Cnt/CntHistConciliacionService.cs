@@ -352,7 +352,7 @@ namespace Convertidor.Services.Cnt
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Hist conciliacion Invalido";
+                    result.Message = "Codigo Historico conciliacion Invalido";
                     return result;
 
                 }
@@ -515,6 +515,52 @@ namespace Convertidor.Services.Cnt
                 result.IsValid = false;
                 result.Message = ex.Message;
             }
+
+            return result;
+        }
+
+        public async Task<ResultDto<CntHistConciliacionDeleteDto>> Delete(CntHistConciliacionDeleteDto dto)
+        {
+            ResultDto<CntHistConciliacionDeleteDto> result = new ResultDto<CntHistConciliacionDeleteDto>(null);
+            try
+            {
+
+                var codigoHistConciliacion = await _repository.GetByCodigo(dto.CodigoHistConciliacion);
+                if (codigoHistConciliacion == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Historico Conciliacion no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoHistConciliacion);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
 
             return result;
         }
