@@ -1,42 +1,40 @@
-﻿using Convertidor.Data.Entities.Cnt;
-using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.Adm;
+using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Cnt
 {
-    public class CntDetalleLibroRepository : ICntDetalleLibroRepository
+    public class CntEstadoCuentasRepository : ICntEstadoCuentasRepository
     {
         private readonly DataContextCnt _context;
 
-        public CntDetalleLibroRepository(DataContextCnt context)
+        public CntEstadoCuentasRepository(DataContextCnt context)
         {
             _context = context;
         }
 
-        public async Task<List<CNT_DETALLE_LIBRO>> GetAll() 
-        {
-            try 
-            {
-            
-                var result = await _context.CNT_DETALLE_LIBRO.DefaultIfEmpty().ToListAsync();
-                return result;
 
-            }
-            catch (Exception ex) 
-            {
-                var res = ex.InnerException.Message;
-                return null;
-
-            }
-        
-        }
-
-        public async Task<List<CNT_DETALLE_LIBRO>> GetByCodigoLibro(int codigoLibro)
+        public async Task<List<CNT_ESTADO_CUENTAS>> GetAll() 
         {
             try
             {
-                var result = await _context.CNT_DETALLE_LIBRO.DefaultIfEmpty().Where(x => x.CODIGO_LIBRO == codigoLibro).ToListAsync();
+                var result = await _context.CNT_ESTADO_CUENTAS.DefaultIfEmpty().ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<CNT_ESTADO_CUENTAS> GetByCodigo(int codigoEstadoCuenta)
+        {
+            try
+            {
+                var result = await _context.CNT_ESTADO_CUENTAS.DefaultIfEmpty().Where(x => x.CODIGO_ESTADO_CUENTA == codigoEstadoCuenta).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -48,29 +46,13 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_DETALLE_LIBRO> GetByCodigo(int codigoDetalleLibro)
-        {
-            try
-            {
-                var result = await _context.CNT_DETALLE_LIBRO.DefaultIfEmpty().Where(x => x.CODIGO_DETALLE_LIBRO == codigoDetalleLibro).FirstOrDefaultAsync();
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
-
-        public async Task<ResultDto<CNT_DETALLE_LIBRO>> Add(CNT_DETALLE_LIBRO entity)
+        public async Task<ResultDto<CNT_ESTADO_CUENTAS>> Add(CNT_ESTADO_CUENTAS entity)
         {
 
-            ResultDto<CNT_DETALLE_LIBRO> result = new ResultDto<CNT_DETALLE_LIBRO>(null);
+            ResultDto<CNT_ESTADO_CUENTAS> result = new ResultDto<CNT_ESTADO_CUENTAS>(null);
             try
             {
-                await _context.CNT_DETALLE_LIBRO.AddAsync(entity);
+                await _context.CNT_ESTADO_CUENTAS.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -88,16 +70,16 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<ResultDto<CNT_DETALLE_LIBRO>> Update(CNT_DETALLE_LIBRO entity)
+        public async Task<ResultDto<CNT_ESTADO_CUENTAS>> Update(CNT_ESTADO_CUENTAS entity)
         {
-            ResultDto<CNT_DETALLE_LIBRO> result = new ResultDto<CNT_DETALLE_LIBRO>(null);
+            ResultDto<CNT_ESTADO_CUENTAS> result = new ResultDto<CNT_ESTADO_CUENTAS>(null);
 
             try
             {
-                CNT_DETALLE_LIBRO entityUpdate = await GetByCodigo(entity.CODIGO_DETALLE_LIBRO);
+                CNT_ESTADO_CUENTAS entityUpdate = await GetByCodigo(entity.CODIGO_ESTADO_CUENTA);
                 if (entityUpdate != null)
                 {
-                    _context.CNT_DETALLE_LIBRO.Update(entity);
+                    _context.CNT_ESTADO_CUENTAS.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -115,14 +97,14 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<string> Delete(int codigoDetalleLibro)
+        public async Task<string> Delete(int codigoEstadoCuenta)
         {
             try
             {
-                CNT_DETALLE_LIBRO entity = await GetByCodigo(codigoDetalleLibro);
+                CNT_ESTADO_CUENTAS entity = await GetByCodigo(codigoEstadoCuenta);
                 if (entity != null)
                 {
-                    _context.CNT_DETALLE_LIBRO.Remove(entity);
+                    _context.CNT_ESTADO_CUENTAS.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -137,8 +119,8 @@ namespace Convertidor.Data.Repository.Cnt
             try
             {
                 int result = 0;
-                var last = await _context.CNT_DETALLE_LIBRO.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_DETALLE_LIBRO)
+                var last = await _context.CNT_ESTADO_CUENTAS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_ESTADO_CUENTA)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -146,7 +128,7 @@ namespace Convertidor.Data.Repository.Cnt
                 }
                 else
                 {
-                    result = last.CODIGO_DETALLE_LIBRO + 1;
+                    result = last.CODIGO_ESTADO_CUENTA + 1;
                 }
 
                 return (int)result!;
@@ -163,3 +145,4 @@ namespace Convertidor.Data.Repository.Cnt
         }
     }
 }
+

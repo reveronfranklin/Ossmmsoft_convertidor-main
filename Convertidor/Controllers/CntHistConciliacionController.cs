@@ -12,12 +12,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CntDetalleLibroController : ControllerBase
+    public class CntHistConciliacionController : ControllerBase
     {
 
-        private readonly ICntDetalleLibroService _service;
+        private readonly ICntHistConciliacionService _service;
 
-        public CntDetalleLibroController(ICntDetalleLibroService service)
+        public CntHistConciliacionController(ICntHistConciliacionService service)
         {
 
             _service = service;
@@ -35,16 +35,15 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllByCodigoLibro(FilterDetalleLibro filter) 
+        public async Task<IActionResult> GetAllByCodigoConciliacion(FilterHistoricoConciliacionDto filter)
         {
-            var result = await _service.GetAllByCodigoLibro(filter.CodigoLibro);
+            var result = await _service.GetAllByCodigoConciliacion(filter.CodigoConciliacion);
             return Ok(result);
-        
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(CntDetalleLibroUpdateDto dto)
+        public async Task<IActionResult> Create (CntHistConciliacionUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -52,7 +51,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(CntDetalleLibroUpdateDto dto)
+        public async Task<IActionResult> Update(CntHistConciliacionUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -60,7 +59,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(CntDetalleLibroDeleteDto dto)
+        public async Task<IActionResult> Delete(CntHistConciliacionDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);

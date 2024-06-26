@@ -1,60 +1,63 @@
 ﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
-using Convertidor.Data.Repository.Cnt;
 using Convertidor.Dtos.Cnt;
-using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
+
 namespace Convertidor.Services.Cnt
 {
-    
-    //
-    public class CntDetalleLibroService : ICntDetalleLibroService
+    public class CntHistConciliacionService : ICntHistConciliacionService
     {
-        private readonly ICntDetalleLibroRepository _repository;
+        private readonly ICntHistConciliacionRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly ICntDescriptivaRepository _cntDescriptivaRepository;
+        private readonly ICntDetalleLibroRepository _cntDetalleLibroRepository;
+        private readonly ICntDetalleEdoCtaRepository _cntDetalleEdoCtaRepository;
 
-        public CntDetalleLibroService(ICntDetalleLibroRepository repository,
-                                        ISisUsuarioRepository sisUsuarioRepository,
-                                        ICntDescriptivaRepository cntDescriptivaRepository)
+        public CntHistConciliacionService(ICntHistConciliacionRepository repository,
+                                           ISisUsuarioRepository sisUsuarioRepository,
+                                           ICntDetalleLibroRepository cntDetalleLibroRepository,
+                                           ICntDetalleEdoCtaRepository cntDetalleEdoCtaRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
-            _cntDescriptivaRepository = cntDescriptivaRepository;
+            _cntDetalleLibroRepository = cntDetalleLibroRepository;
+            _cntDetalleEdoCtaRepository = cntDetalleEdoCtaRepository;
         }
 
-       
 
-        public async Task<CntDetalleLibroResponseDto> MapDetalleLibro(CNT_DETALLE_LIBRO dtos)
+
+
+        public async Task<CntHistConciliacionResponseDto> MapCntHistConciliacion(CNT_HIST_CONCILIACION dtos)
         {
-            CntDetalleLibroResponseDto itemResult = new CntDetalleLibroResponseDto();
+            CntHistConciliacionResponseDto itemResult = new CntHistConciliacionResponseDto();
+            itemResult.CodigoHistConciliacion = dtos.CODIGO_HIST_CONCILIACION;
+            itemResult.CodigoConciliacion = dtos.CODIGO_CONCILIACION;
+            itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
+            itemResult.CodigoCuentaBanco = dtos.CODIGO_CUENTA_BANCO;
             itemResult.CodigoDetalleLibro = dtos.CODIGO_DETALLE_LIBRO;
-            itemResult.CodigoLibro = dtos.CODIGO_LIBRO;
-            itemResult.TipoDocumentoId = dtos.TIPO_DOCUMENTO_ID;
-            itemResult.CodigoCheque = dtos.CODIGO_CHEQUE;
-            itemResult.CodigoIdentificador = dtos.CODIGO_IDENTIFICADOR;
-            itemResult.OrigenId = dtos.ORIGEN_ID;
-            itemResult.NumeroDocumento = dtos.NUMERO_DOCUMENTO;
-            itemResult.Descripcion = dtos.DESCRIPCION;
+            itemResult.CodigoDetalleEdoCta = dtos.CODIGO_DETALLE_EDO_CTA;
+            itemResult.Fecha = dtos.FECHA;
+            itemResult.FechaString = dtos.FECHA.ToString("u");
+            FechaDto fechaObj = FechaObj.GetFechaDto(dtos.FECHA);
+            itemResult.FechaObj = (FechaDto)fechaObj;
+            itemResult.Numero = dtos.NUMERO;
             itemResult.Monto = dtos.MONTO;
-            itemResult.Status = dtos.STATUS;
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;
             itemResult.Extra3 = dtos.EXTRA3;
-            itemResult.Status = dtos.STATUS;
+
 
             return itemResult;
-
         }
 
-        public async Task<List<CntDetalleLibroResponseDto>> MapListDetalleLibro(List<CNT_DETALLE_LIBRO> dtos)
+        public async Task<List<CntHistConciliacionResponseDto>> MapListCntHistoricoConciliacion(List<CNT_HIST_CONCILIACION> dtos)
         {
-            List<CntDetalleLibroResponseDto> result = new List<CntDetalleLibroResponseDto>();
+            List<CntHistConciliacionResponseDto> result = new List<CntHistConciliacionResponseDto>();
 
 
             foreach (var item in dtos)
             {
                 if (item == null) continue;
-                var itemResult = await MapDetalleLibro(item);
+                var itemResult = await MapCntHistConciliacion(item);
 
                 result.Add(itemResult);
             }
@@ -62,17 +65,17 @@ namespace Convertidor.Services.Cnt
 
         }
 
-        public async Task<ResultDto<List<CntDetalleLibroResponseDto>>> GetAll()
+        public async Task<ResultDto<List<CntHistConciliacionResponseDto>>> GetAll()
         {
 
-            ResultDto<List<CntDetalleLibroResponseDto>> result = new ResultDto<List<CntDetalleLibroResponseDto>>(null);
+            ResultDto<List<CntHistConciliacionResponseDto>> result = new ResultDto<List<CntHistConciliacionResponseDto>>(null);
             try
             {
-                var detalleLibro = await _repository.GetAll();
-                var cant = detalleLibro.Count();
-                if (detalleLibro != null && detalleLibro.Count() > 0)
+                var historicoConciliacion = await _repository.GetAll();
+                var cant = historicoConciliacion.Count();
+                if (historicoConciliacion != null && historicoConciliacion.Count() > 0)
                 {
-                    var listDto = await MapListDetalleLibro(detalleLibro);
+                    var listDto = await MapListCntHistoricoConciliacion(historicoConciliacion);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -100,24 +103,24 @@ namespace Convertidor.Services.Cnt
 
         }
 
-        public async Task<ResultDto<List<CntDetalleLibroResponseDto>>> GetAllByCodigoLibro(int codigoLibro)
+        public async Task<ResultDto<List<CntHistConciliacionResponseDto>>> GetAllByCodigoConciliacion(int codigoConciliacion)
         {
 
-            ResultDto<List<CntDetalleLibroResponseDto>> result = new ResultDto<List<CntDetalleLibroResponseDto>>(null);
+            ResultDto<List<CntHistConciliacionResponseDto>> result = new ResultDto<List<CntHistConciliacionResponseDto>>(null);
             try
             {
 
-                var detalleLibro = await _repository.GetByCodigoLibro(codigoLibro);
+                var conciliacion = await _repository.GetByCodigoConciliacion(codigoConciliacion);
 
 
 
-                if (detalleLibro.Count() > 0)
+                if (conciliacion.Count() > 0)
                 {
-                    List<CntDetalleLibroResponseDto> listDto = new List<CntDetalleLibroResponseDto>();
+                    List<CntHistConciliacionResponseDto> listDto = new List<CntHistConciliacionResponseDto>();
 
-                    foreach (var item in detalleLibro)
+                    foreach (var item in conciliacion)
                     {
-                        var dto = await MapDetalleLibro(item);
+                        var dto = await MapCntHistConciliacion(item);
                         listDto.Add(dto);
                     }
 
@@ -147,112 +150,111 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntDetalleLibroResponseDto>> Create(CntDetalleLibroUpdateDto dto)
+        public async Task<ResultDto<CntHistConciliacionResponseDto>> Create(CntHistConciliacionUpdateDto dto)
         {
-            ResultDto<CntDetalleLibroResponseDto> result = new ResultDto<CntDetalleLibroResponseDto>(null);
+            ResultDto<CntHistConciliacionResponseDto> result = new ResultDto<CntHistConciliacionResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
 
-                if (dto.CodigoLibro < 0 )
+                if (dto.CodigoConciliacion <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Libro ya existe";
+                    result.Message = "Codigo conciliacion Invalido";
                     return result;
                 }
 
-                if (dto.TipoDocumentoId <= 0)
+                if (dto.CodigoPeriodo <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Documento Id invalido";
+                    result.Message = "codigo periodo invalido";
                     return result;
-
                 }
 
-                var tipodocumentoId = await _cntDescriptivaRepository.GetByIdAndTitulo(7, dto.TipoDocumentoId);
-                if (tipodocumentoId == false)
+
+                if (dto.CodigoCuentaBanco <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Documento Id invalido";
-                    return result;
-
-                }
-
-              
-
-                if (dto.CodigoIdentificador <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Identificador invalido";
+                    result.Message = "codigo Cuenta Banco invalido";
                     return result;
 
                 }
 
-                if (dto.OrigenId <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Origen Id invalida";
-                    return result;
-                }
-
-                var origenId = await _cntDescriptivaRepository.GetByIdAndTitulo(8, dto.OrigenId);
-                if(origenId == false) 
+                if (dto.CodigoDetalleLibro <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Origen Id invalido";
-                    return result;
-                }
-
-                if(dto.NumeroDocumento.Length > 20) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Documento invalido";
+                    result.Message = "codigo Detalle Libro Invalido";
                     return result;
 
                 }
 
-                if (dto.Descripcion.Length > 1000)
+                var codigoDetalleLibro = await _cntDetalleLibroRepository.GetByCodigo(dto.CodigoDetalleLibro);
+                if (codigoDetalleLibro == null)
                 {
+
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Descripcion invalida";
+                    result.Message = "codigo Detalle Libro Invalido";
                     return result;
 
                 }
 
-                if (dto.Monto < 0)
+                if (dto.CodigoDetalleEdoCta <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Detalle Edo Cta invalido";
+                    return result;
+
+                }
+
+                var codigoDetalleEdoCta = await _cntDetalleEdoCtaRepository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                if (codigoDetalleEdoCta == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Detalle Edo Cta invalido";
+                    return result;
+
+                }
+
+                if (dto.Fecha == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha invalida";
+                    return result;
+                }
+
+                var numero = Convert.ToInt32(dto.Numero);
+                if (numero < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero invalido";
+                    return result;
+
+                }
+
+                if (dto.Numero.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero invalido";
+                    return result;
+                }
+
+                if (dto.Monto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Monto invalido";
-                    return result;
-
-                }
-
-                if (dto.Status != "C" && dto.Status != "T" && dto.Status != "A")
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status invalido";
-                    return result;
-
-                }
-
-                if (dto.Status.Length > 1)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status invalido";
                     return result;
 
                 }
@@ -280,26 +282,24 @@ namespace Convertidor.Services.Cnt
                     return result;
                 }
 
-                
 
 
 
 
-                CNT_DETALLE_LIBRO entity = new CNT_DETALLE_LIBRO();
-                entity.CODIGO_DETALLE_LIBRO = await _repository.GetNextKey();
-                entity.CODIGO_LIBRO = dto.CodigoLibro;
-                entity.TIPO_DOCUMENTO_ID = dto.TipoDocumentoId;
-                entity.CODIGO_CHEQUE = dto.CodigoCheque;
-                entity.CODIGO_IDENTIFICADOR = dto.CodigoIdentificador;
-                entity.ORIGEN_ID = dto.OrigenId;
-                entity.NUMERO_DOCUMENTO = dto.NumeroDocumento;
-                entity.DESCRIPCION = dto.Descripcion;
-                entity.MONTO = dto.Monto;
-                entity.STATUS = dto.Status;
+
+                CNT_HIST_CONCILIACION entity = new CNT_HIST_CONCILIACION();
+                entity.CODIGO_HIST_CONCILIACION = await _repository.GetNextKey();
+                entity.CODIGO_CONCILIACION = dto.CodigoConciliacion;
+                entity.CODIGO_PERIODO = dto.CodigoPeriodo;
+                entity.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
+                entity.CODIGO_DETALLE_LIBRO = dto.CodigoDetalleLibro;
+                entity.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
+                entity.FECHA = dto.Fecha;
+                entity.NUMERO = dto.Numero;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
-              
+
 
 
 
@@ -311,7 +311,7 @@ namespace Convertidor.Services.Cnt
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapDetalleLibro(created.Data);
+                    var resultDto = await MapCntHistConciliacion(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -340,124 +340,120 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntDetalleLibroResponseDto>> Update(CntDetalleLibroUpdateDto dto)
+        public async Task<ResultDto<CntHistConciliacionResponseDto>> Update(CntHistConciliacionUpdateDto dto)
         {
-            ResultDto<CntDetalleLibroResponseDto> result = new ResultDto<CntDetalleLibroResponseDto>(null);
+            ResultDto<CntHistConciliacionResponseDto> result = new ResultDto<CntHistConciliacionResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
+                var codigoHistConciliacion = await _repository.GetByCodigo(dto.CodigoHistConciliacion);
+                if (codigoHistConciliacion == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Historico conciliacion Invalido";
+                    return result;
 
-                var codigoDetalleLibro = await _repository.GetByCodigo(dto.CodigoDetalleLibro);
+                }
+
+                if (dto.CodigoConciliacion <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo conciliacion Invalido";
+                    return result;
+                }
+
+                if (dto.CodigoPeriodo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo periodo invalido";
+                    return result;
+                }
+
+
+                if (dto.CodigoCuentaBanco <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Cuenta Banco invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoDetalleLibro <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Detalle Libro Invalido";
+                    return result;
+
+                }
+
+                var codigoDetalleLibro = await _cntDetalleLibroRepository.GetByCodigo(dto.CodigoDetalleLibro);
                 if (codigoDetalleLibro == null)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Detalle Libro no existe";
+                    result.Message = "codigo Detalle Libro Invalido";
                     return result;
 
                 }
 
-
-                if (dto.CodigoLibro < 0)
+                if (dto.CodigoDetalleEdoCta <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Libro ya existe";
+                    result.Message = "codigo Detalle Edo Cta invalido";
                     return result;
+
                 }
 
-                if (dto.TipoDocumentoId <= 0)
+                var codigoDetalleEdoCta = await _cntDetalleEdoCtaRepository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                if (codigoDetalleEdoCta == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Documento Id invalido";
+                    result.Message = "codigo Detalle Edo Cta invalido";
                     return result;
 
                 }
 
-                var tipodocumentoId = await _cntDescriptivaRepository.GetByIdAndTitulo(7, dto.TipoDocumentoId);
-                if (tipodocumentoId == false)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Documento Id invalido";
-                    return result;
-
-                }
-
-
-
-                if (dto.CodigoIdentificador <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Identificador invalido";
-                    return result;
-
-                }
-
-                if (dto.OrigenId <= 0)
+                if (dto.Fecha == null)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Origen Id invalida";
+                    result.Message = "Fecha invalida";
                     return result;
                 }
 
-                var origenId = await _cntDescriptivaRepository.GetByIdAndTitulo(8, dto.OrigenId);
-                if (origenId == false)
+                var numero = Convert.ToInt32(dto.Numero);
+                if (numero < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Origen Id invalido";
+                    result.Message = "Numero invalido";
                     return result;
+
                 }
 
-                if (dto.NumeroDocumento.Length > 20)
+                if (dto.Numero.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Numero Documento invalido";
+                    result.Message = "Numero invalido";
                     return result;
-
                 }
 
-                if (dto.Descripcion.Length > 1000)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Descripcion invalida";
-                    return result;
-
-                }
-
-                if (dto.Monto < 0)
+                if (dto.Monto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Monto invalido";
-                    return result;
-
-                }
-
-                if (dto.Status != "C" && dto.Status != "T" && dto.Status != "A")
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status invalido";
-                    return result;
-
-                }
-
-                if (dto.Status.Length > 1)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status invalido";
                     return result;
 
                 }
@@ -487,31 +483,28 @@ namespace Convertidor.Services.Cnt
 
 
 
-                codigoDetalleLibro.CODIGO_DETALLE_LIBRO = dto.CodigoDetalleLibro;
-                codigoDetalleLibro.CODIGO_LIBRO = dto.CodigoLibro;
-                codigoDetalleLibro.TIPO_DOCUMENTO_ID = dto.TipoDocumentoId;
-                codigoDetalleLibro.CODIGO_CHEQUE = dto.CodigoCheque;
-                codigoDetalleLibro.CODIGO_IDENTIFICADOR = dto.CodigoIdentificador;
-                codigoDetalleLibro.ORIGEN_ID = dto.OrigenId;
-                codigoDetalleLibro.NUMERO_DOCUMENTO = dto.NumeroDocumento;
-                codigoDetalleLibro.DESCRIPCION = dto.Descripcion;
-                codigoDetalleLibro.MONTO = dto.Monto;
-                codigoDetalleLibro.STATUS = dto.Status;
-                codigoDetalleLibro.EXTRA1 = dto.Extra1;
-                codigoDetalleLibro.EXTRA2 = dto.Extra2;
-                codigoDetalleLibro.EXTRA3 = dto.Extra3;
-                codigoDetalleLibro.STATUS = dto.Status;
+
+                codigoHistConciliacion.CODIGO_HIST_CONCILIACION = dto.CodigoHistConciliacion;
+                codigoHistConciliacion.CODIGO_CONCILIACION = dto.CodigoConciliacion;
+                codigoHistConciliacion.CODIGO_PERIODO = dto.CodigoPeriodo;
+                codigoHistConciliacion.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
+                codigoHistConciliacion.CODIGO_DETALLE_LIBRO = dto.CodigoDetalleLibro;
+                codigoHistConciliacion.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
+                codigoHistConciliacion.FECHA = dto.Fecha;
+                codigoHistConciliacion.EXTRA1 = dto.Extra1;
+                codigoHistConciliacion.EXTRA2 = dto.Extra2;
+                codigoHistConciliacion.EXTRA3 = dto.Extra3;
 
 
 
 
-                codigoDetalleLibro.CODIGO_EMPRESA = conectado.Empresa;
-                codigoDetalleLibro.USUARIO_UPD = conectado.Usuario;
-                codigoDetalleLibro.FECHA_UPD = DateTime.Now;
+                codigoHistConciliacion.CODIGO_EMPRESA = conectado.Empresa;
+                codigoHistConciliacion.USUARIO_UPD = conectado.Usuario;
+                codigoHistConciliacion.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(codigoDetalleLibro);
+                await _repository.Update(codigoHistConciliacion);
 
-                var resultDto = await MapDetalleLibro(codigoDetalleLibro);
+                var resultDto = await MapCntHistConciliacion(codigoHistConciliacion);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -526,23 +519,23 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntDetalleLibroDeleteDto>> Delete(CntDetalleLibroDeleteDto dto)
+        public async Task<ResultDto<CntHistConciliacionDeleteDto>> Delete(CntHistConciliacionDeleteDto dto)
         {
-            ResultDto<CntDetalleLibroDeleteDto> result = new ResultDto<CntDetalleLibroDeleteDto>(null);
+            ResultDto<CntHistConciliacionDeleteDto> result = new ResultDto<CntHistConciliacionDeleteDto>(null);
             try
             {
 
-                var codigoDetalleLibro = await _repository.GetByCodigo(dto.CodigoDetalleLibro);
-                if (codigoDetalleLibro == null)
+                var codigoHistConciliacion = await _repository.GetByCodigo(dto.CodigoHistConciliacion);
+                if (codigoHistConciliacion == null)
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "Codigo Detalle Libro no existe";
+                    result.Message = "Codigo Historico Conciliacion no existe";
                     return result;
                 }
 
 
-                var deleted = await _repository.Delete(dto.CodigoDetalleLibro);
+                var deleted = await _repository.Delete(dto.CodigoHistConciliacion);
 
                 if (deleted.Length > 0)
                 {

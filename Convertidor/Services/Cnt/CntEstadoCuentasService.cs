@@ -9,59 +9,55 @@ using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Services.Cnt
 {
-    public class CntBancoArchivoControlService : ICntBancoArchivoControlService
+    //
+    public class CntEstadoCuentasService : ICntEstadoCuentasService
     {
-        private readonly ICntBancoArchivoControlRepository _repository;
-        private readonly ICntBancoArchivoRepository _cntBancoArchivoRepository;
+        private readonly ICntEstadoCuentasRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
 
-        public CntBancoArchivoControlService(ICntBancoArchivoControlRepository repository,
-                                             ICntBancoArchivoRepository cntBancoArchivoRepository,
-                                             ISisUsuarioRepository sisUsuarioRepository)
+        public CntEstadoCuentasService(ICntEstadoCuentasRepository repository,
+                                      ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
-            _cntBancoArchivoRepository = cntBancoArchivoRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
 
         }
 
- 
-        public async Task<CntBancoArchivoControlResponseDto> MapCntBancoArchivoControl(CNT_BANCO_ARCHIVO_CONTROL dtos) 
-        {
-            CntBancoArchivoControlResponseDto itemResult = new CntBancoArchivoControlResponseDto();
 
-            itemResult.CodigoBancoArchivoControl = dtos.CODIGO_BANCO_ARCHIVO_CONTROL;
-            itemResult.CodigoBanco = dtos.CODIGO_BANCO;
+       
+        public async Task<CntEstadoCuentasResponseDto> MapCntEstadoCuentas(CNT_ESTADO_CUENTAS dtos) 
+        {
+            CntEstadoCuentasResponseDto itemResult = new CntEstadoCuentasResponseDto();
+            itemResult.CodigoEstadoCuenta = dtos.CODIGO_ESTADO_CUENTA;
             itemResult.CodigoCuentaBanco = dtos.CODIGO_CUENTA_BANCO;
-            itemResult.NombreArchivo = dtos.NOMBRE_ARCHIVO;
+            itemResult.NumeroEstadoCuenta = dtos.NUMERO_ESTADO_CUENTA;
             itemResult.FechaDesde = dtos.FECHA_DESDE;
             itemResult.FechaDesdeString = dtos.FECHA_DESDE.ToString("u");
             FechaDto fechaDesdeObj = FechaObj.GetFechaDto(dtos.FECHA_DESDE);
             itemResult.FechaDesdeObj = (FechaDto)fechaDesdeObj;
             itemResult.FechaHasta = dtos.FECHA_HASTA;
             itemResult.FechaHastaString = dtos.FECHA_HASTA.ToString("u");
-            FechaDto fechaHastaObj = FechaObj.GetFechaDto(dtos.FECHA_HASTA);
-            itemResult.FechaHastaObj =(FechaDto) fechaHastaObj;
-            itemResult.SaldoInicial = dtos.SALDO_INICIAL;
-            itemResult.SaldoFinal = dtos.SALDO_FINAL;
+            FechaDto fechaHastaObj =FechaObj.GetFechaDto(dtos.FECHA_HASTA);
+            itemResult.FechaHastaObj = (FechaDto)fechaHastaObj;
+            itemResult.SaldoInicial = dtos.SALDO_FINAL;
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;
             itemResult.Extra3 = dtos.EXTRA3;
-            itemResult.CodigoEstadoCuenta = dtos.CODIGO_ESTADO_CUENTA;
+
         
             return itemResult;
         }
 
-        public async Task<List<CntBancoArchivoControlResponseDto>> MapListCntBancoArchivoControl(List<CNT_BANCO_ARCHIVO_CONTROL> dtos)
+        public async Task<List<CntEstadoCuentasResponseDto>> MapListCntEstadoCuentas(List<CNT_ESTADO_CUENTAS> dtos)
         {
-            List<CntBancoArchivoControlResponseDto> result = new List<CntBancoArchivoControlResponseDto>();
+            List<CntEstadoCuentasResponseDto> result = new List<CntEstadoCuentasResponseDto>();
 
 
             foreach (var item in dtos)
             {
                 if (item == null) continue;
-                var itemResult = await MapCntBancoArchivoControl(item);
+                var itemResult = await MapCntEstadoCuentas(item);
 
                 result.Add(itemResult);
             }
@@ -69,17 +65,17 @@ namespace Convertidor.Services.Cnt
 
         }
 
-        public async Task<ResultDto<List<CntBancoArchivoControlResponseDto>>> GetAll()
+        public async Task<ResultDto<List<CntEstadoCuentasResponseDto>>> GetAll()
         {
 
-            ResultDto<List<CntBancoArchivoControlResponseDto>> result = new ResultDto<List<CntBancoArchivoControlResponseDto>>(null);
+            ResultDto<List<CntEstadoCuentasResponseDto>> result = new ResultDto<List<CntEstadoCuentasResponseDto>>(null);
             try
             {
-                var bancoArchivoControl = await _repository.GetAll();
-                var cant = bancoArchivoControl.Count();
-                if (bancoArchivoControl != null && bancoArchivoControl.Count() > 0)
+                var estadoCuentas = await _repository.GetAll();
+                var cant = estadoCuentas.Count();
+                if (estadoCuentas != null && estadoCuentas.Count() > 0)
                 {
-                    var listDto = await MapListCntBancoArchivoControl(bancoArchivoControl);
+                    var listDto = await MapListCntEstadoCuentas(estadoCuentas);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -108,67 +104,60 @@ namespace Convertidor.Services.Cnt
         }
 
 
-        public async Task<ResultDto<CntBancoArchivoControlResponseDto>> Create(CntBancoArchivoControlUpdateDto dto)
+        public async Task<ResultDto<CntEstadoCuentasResponseDto>> Create(CntEstadoCuentasUpdateDto dto)
         {
-            ResultDto<CntBancoArchivoControlResponseDto> result = new ResultDto<CntBancoArchivoControlResponseDto>(null);
+            ResultDto<CntEstadoCuentasResponseDto> result = new ResultDto<CntEstadoCuentasResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                if (dto.CodigoBanco <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Banco invalido";
-                    return result;
-
-                }
 
                 if (dto.CodigoCuentaBanco <= 0)
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Cuenta Banco invalido";
+                    result.Message = "Codigo cuenta Banco no existe";
                     return result;
                 }
 
-                if (dto.NombreArchivo.Length > 255)
+                if (dto.NumeroEstadoCuenta.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Nombre Archivo invalido";
+                    result.Message = "Numero Estado Cuenta invalido";
                     return result;
                 }
 
-
+             
                 if (dto.FechaDesde == null)
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "fecha desde invalida";
+                    result.Message = "Fecha desde invalida";
                     return result;
+
                 }
 
+                
                 if (dto.FechaHasta == null)
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "fecha hasta invalida";
+                    result.Message = "Fecha Hasta invalida";
                     return result;
+
                 }
-                if (dto.SaldoInicial < 0)
+
+                if (dto.SaldoInicial < 0 )
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Saldo Inicial invalido";
+                    result.Message = "saldo Inicial invalido";
                     return result;
+
                 }
 
-                if (dto.SaldoFinal <= 0)
+                if (dto.SaldoFinal < 0)
                 {
 
                     result.Data = null;
@@ -176,6 +165,8 @@ namespace Convertidor.Services.Cnt
                     result.Message = "Saldo Final invalido";
                     return result;
                 }
+
+                
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -200,21 +191,15 @@ namespace Convertidor.Services.Cnt
                     return result;
                 }
 
-
-                if (dto.CodigoEstadoCuenta <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo estado Cuenta invalido";
-                    return result;
-                }
+             
 
 
-                CNT_BANCO_ARCHIVO_CONTROL entity = new CNT_BANCO_ARCHIVO_CONTROL();
-                entity.CODIGO_BANCO_ARCHIVO_CONTROL = await _repository.GetNextKey();
-                entity.CODIGO_BANCO = dto.CodigoBanco;
+
+
+                CNT_ESTADO_CUENTAS entity = new CNT_ESTADO_CUENTAS();
+                entity.CODIGO_ESTADO_CUENTA = await _repository.GetNextKey();
                 entity.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
-                entity.NOMBRE_ARCHIVO = dto.NombreArchivo;
+                entity.NUMERO_ESTADO_CUENTA = dto.NumeroEstadoCuenta;
                 entity.FECHA_DESDE = dto.FechaDesde;
                 entity.FECHA_HASTA = dto.FechaHasta;
                 entity.SALDO_INICIAL = dto.SaldoInicial;
@@ -222,7 +207,8 @@ namespace Convertidor.Services.Cnt
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
-                entity.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
+          
+
 
 
 
@@ -233,7 +219,7 @@ namespace Convertidor.Services.Cnt
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapCntBancoArchivoControl(created.Data);
+                    var resultDto = await MapCntEstadoCuentas(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -262,86 +248,69 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntBancoArchivoControlResponseDto>> Update(CntBancoArchivoControlUpdateDto dto)
+        public async Task<ResultDto<CntEstadoCuentasResponseDto>> Update(CntEstadoCuentasUpdateDto dto)
         {
-            ResultDto<CntBancoArchivoControlResponseDto> result = new ResultDto<CntBancoArchivoControlResponseDto>(null);
+            ResultDto<CntEstadoCuentasResponseDto> result = new ResultDto<CntEstadoCuentasResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                if (dto.CodigoBancoArchivoControl <= 0)
+                var codigoEstadoCuenta = await _repository.GetByCodigo(dto.CodigoEstadoCuenta);
+                if(codigoEstadoCuenta== null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Banco Archivo Control no existe";
-                    return result;
-                }
-
-                var codigoBancoArchivoControl = await _repository.GetByCodigo(dto.CodigoBancoArchivoControl);
-                if (codigoBancoArchivoControl == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Banco Archivo Control no existe";
-                    return result;
-                }
-
-
-
-                if (dto.CodigoBanco <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Banco invalido";
+                    result.Message = "Codigo Estado cuenta no existe";
                     return result;
 
                 }
 
                 if (dto.CodigoCuentaBanco <= 0)
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Cuenta Banco invalido";
+                    result.Message = "Codigo cuenta Banco no existe";
                     return result;
                 }
 
-                if (dto.NombreArchivo.Length > 255)
+                if (dto.NumeroEstadoCuenta.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Nombre Archivo invalido";
+                    result.Message = "Numero Estado Cuenta invalido";
                     return result;
                 }
 
 
                 if (dto.FechaDesde == null)
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "fecha desde invalida";
+                    result.Message = "Fecha desde invalida";
                     return result;
+
                 }
+
 
                 if (dto.FechaHasta == null)
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "fecha hasta invalida";
+                    result.Message = "Fecha Hasta invalida";
                     return result;
+
                 }
+
                 if (dto.SaldoInicial < 0)
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Saldo Inicial invalido";
+                    result.Message = "saldo Inicial invalido";
                     return result;
+
                 }
 
-                if (dto.SaldoFinal <= 0)
+                if (dto.SaldoFinal < 0)
                 {
 
                     result.Data = null;
@@ -349,6 +318,8 @@ namespace Convertidor.Services.Cnt
                     result.Message = "Saldo Final invalido";
                     return result;
                 }
+
+
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -374,40 +345,28 @@ namespace Convertidor.Services.Cnt
                 }
 
 
-                if (dto.CodigoEstadoCuenta <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo estado Cuenta invalido";
-                    return result;
-                }
+
+                codigoEstadoCuenta.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
+                codigoEstadoCuenta.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
+                codigoEstadoCuenta.NUMERO_ESTADO_CUENTA = dto.NumeroEstadoCuenta;
+                codigoEstadoCuenta.FECHA_DESDE = dto.FechaDesde;
+                codigoEstadoCuenta.FECHA_HASTA = dto.FechaHasta;
+                codigoEstadoCuenta.SALDO_INICIAL = dto.SaldoInicial;
+                codigoEstadoCuenta.SALDO_FINAL = dto.SaldoFinal;
+                codigoEstadoCuenta.EXTRA1 = dto.Extra1;
+                codigoEstadoCuenta.EXTRA2 = dto.Extra2;
+                codigoEstadoCuenta.EXTRA3 = dto.Extra3;
 
 
 
 
-                codigoBancoArchivoControl.CODIGO_BANCO_ARCHIVO_CONTROL = dto.CodigoBancoArchivoControl;
-                codigoBancoArchivoControl.CODIGO_BANCO = dto.CodigoBanco;
-                codigoBancoArchivoControl.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
-                codigoBancoArchivoControl.NOMBRE_ARCHIVO = dto.NombreArchivo;
-                codigoBancoArchivoControl.FECHA_DESDE = dto.FechaDesde;
-                codigoBancoArchivoControl.FECHA_HASTA = dto.FechaHasta;
-                codigoBancoArchivoControl.SALDO_INICIAL = dto.SaldoInicial;
-                codigoBancoArchivoControl.SALDO_FINAL = dto.SaldoFinal;
-                codigoBancoArchivoControl.EXTRA1 = dto.Extra1;
-                codigoBancoArchivoControl.EXTRA2 = dto.Extra2;
-                codigoBancoArchivoControl.EXTRA3 = dto.Extra3;
-                codigoBancoArchivoControl.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
+                codigoEstadoCuenta.CODIGO_EMPRESA = conectado.Empresa;
+                codigoEstadoCuenta.USUARIO_UPD = conectado.Usuario;
+                codigoEstadoCuenta.FECHA_UPD = DateTime.Now;
 
+                await _repository.Update(codigoEstadoCuenta);
 
-
-
-                codigoBancoArchivoControl.CODIGO_EMPRESA = conectado.Empresa;
-                codigoBancoArchivoControl.USUARIO_UPD = conectado.Usuario;
-                codigoBancoArchivoControl.FECHA_UPD = DateTime.Now;
-
-                await _repository.Update(codigoBancoArchivoControl);
-
-                var resultDto = await MapCntBancoArchivoControl(codigoBancoArchivoControl);
+                var resultDto = await MapCntEstadoCuentas(codigoEstadoCuenta);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -422,24 +381,23 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-
-        public async Task<ResultDto<CntBancoArchivoControlDeleteDto>> Delete(CntBancoArchivoControlDeleteDto dto)
+        public async Task<ResultDto<CntEstadoCuentasDeleteDto>> Delete(CntEstadoCuentasDeleteDto dto)
         {
-            ResultDto<CntBancoArchivoControlDeleteDto> result = new ResultDto<CntBancoArchivoControlDeleteDto>(null);
+            ResultDto<CntEstadoCuentasDeleteDto> result = new ResultDto<CntEstadoCuentasDeleteDto>(null);
             try
             {
 
-                var codigoBancoArchivoControl = await _repository.GetByCodigo(dto.CodigoBancoArchivoControl);
-                if (codigoBancoArchivoControl == null)
+                var codigoEstadoCuenta = await _repository.GetByCodigo(dto.CodigoEstadoCuenta);
+                if (codigoEstadoCuenta == null)
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "Codigo Banco Archivo Control no existe";
+                    result.Message = "Codigo estado Cuenta no existe";
                     return result;
                 }
 
 
-                var deleted = await _repository.Delete(dto.CodigoBancoArchivoControl);
+                var deleted = await _repository.Delete(dto.CodigoEstadoCuenta);
 
                 if (deleted.Length > 0)
                 {
@@ -468,5 +426,6 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
     }
 }

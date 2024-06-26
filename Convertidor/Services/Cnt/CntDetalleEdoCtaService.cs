@@ -3,6 +3,7 @@ using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Data.Repository.Cnt;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 namespace Convertidor.Services.Cnt
 {
     //
@@ -10,28 +11,21 @@ namespace Convertidor.Services.Cnt
     {
         private readonly ICntDetalleEdoCtaRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICntEstadoCuentasRepository _cntEstadoCuentasRepository;
         private readonly ICntDescriptivaRepository _cntDescriptivaRepository;
 
         public CntDetalleEdoCtaService(ICntDetalleEdoCtaRepository repository,
                                         ISisUsuarioRepository sisUsuarioRepository,
+                                        ICntEstadoCuentasRepository cntEstadoCuentasRepository,
                                         ICntDescriptivaRepository cntDescriptivaRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _cntEstadoCuentasRepository = cntEstadoCuentasRepository;
             _cntDescriptivaRepository = cntDescriptivaRepository;
         }
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+       
 
         public async Task<CntDetalleEdoCtaResponseDto> MapDetalleEdoCuenta(CNT_DETALLE_EDO_CTA dtos)
         {
@@ -42,7 +36,7 @@ namespace Convertidor.Services.Cnt
             itemResult.NumeroTransaccion = dtos.NUMERO_TRANSACCION;
             itemResult.FechaTransaccion = dtos.FECHA_TRANSACCION;
             itemResult.FechaTransaccionString = dtos.FECHA_TRANSACCION.ToString("u");
-            FechaDto fechaTransaccionObj = GetFechaDto(dtos.FECHA_TRANSACCION);
+            FechaDto fechaTransaccionObj = FechaObj.GetFechaDto(dtos.FECHA_TRANSACCION);
             itemResult.FechaTransaccionObj = (FechaDto)fechaTransaccionObj;
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.Monto = dtos.MONTO;
@@ -162,13 +156,22 @@ namespace Convertidor.Services.Cnt
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-
                 if (dto.CodigoEstadoCuenta <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Estado cuenta no existe";
                     return result;
+                }
+
+                var codigoEstadoCuenta = _cntEstadoCuentasRepository.GetByCodigo(dto.CodigoEstadoCuenta);
+                if(codigoEstadoCuenta== null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Estado cuenta no existe";
+                    return result;
+
                 }
 
                 if (dto.TipoTransaccionId <= 0)
@@ -341,8 +344,8 @@ namespace Convertidor.Services.Cnt
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
 
-                var codigoEdoDetalleEdoCta = await _repository.GetByCodigo(dto.CodigoDetalleEdoCta);
-                if (codigoEdoDetalleEdoCta == null)
+                var codigoDetalleEdoCta = await _repository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                if (codigoDetalleEdoCta == null)
                 {
 
                     result.Data = null;
@@ -359,6 +362,16 @@ namespace Convertidor.Services.Cnt
                     result.IsValid = false;
                     result.Message = "Codigo Estado cuenta no existe";
                     return result;
+                }
+
+                var codigoEstadoCuenta = _cntEstadoCuentasRepository.GetByCodigo(dto.CodigoEstadoCuenta);
+                if (codigoEstadoCuenta == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Estado cuenta no existe";
+                    return result;
+
                 }
 
                 if (dto.TipoTransaccionId <= 0)
@@ -469,27 +482,27 @@ namespace Convertidor.Services.Cnt
 
 
 
-                codigoEdoDetalleEdoCta.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
-                codigoEdoDetalleEdoCta.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
-                codigoEdoDetalleEdoCta.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
-                codigoEdoDetalleEdoCta.NUMERO_TRANSACCION = dto.NumeroTransaccion;
-                codigoEdoDetalleEdoCta.DESCRIPCION = dto.Descripcion;
-                codigoEdoDetalleEdoCta.MONTO = dto.Monto;
-                codigoEdoDetalleEdoCta.EXTRA1 = dto.Extra1;
-                codigoEdoDetalleEdoCta.EXTRA2 = dto.Extra2;
-                codigoEdoDetalleEdoCta.EXTRA3 = dto.Extra3;
-                codigoEdoDetalleEdoCta.STATUS = dto.Status;
+                codigoDetalleEdoCta.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
+                codigoDetalleEdoCta.CODIGO_ESTADO_CUENTA = dto.CodigoEstadoCuenta;
+                codigoDetalleEdoCta.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
+                codigoDetalleEdoCta.NUMERO_TRANSACCION = dto.NumeroTransaccion;
+                codigoDetalleEdoCta.DESCRIPCION = dto.Descripcion;
+                codigoDetalleEdoCta.MONTO = dto.Monto;
+                codigoDetalleEdoCta.EXTRA1 = dto.Extra1;
+                codigoDetalleEdoCta.EXTRA2 = dto.Extra2;
+                codigoDetalleEdoCta.EXTRA3 = dto.Extra3;
+                codigoDetalleEdoCta.STATUS = dto.Status;
 
 
 
 
-                codigoEdoDetalleEdoCta.CODIGO_EMPRESA = conectado.Empresa;
-                codigoEdoDetalleEdoCta.USUARIO_UPD = conectado.Usuario;
-                codigoEdoDetalleEdoCta.FECHA_UPD = DateTime.Now;
+                codigoDetalleEdoCta.CODIGO_EMPRESA = conectado.Empresa;
+                codigoDetalleEdoCta.USUARIO_UPD = conectado.Usuario;
+                codigoDetalleEdoCta.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(codigoEdoDetalleEdoCta);
+                await _repository.Update(codigoDetalleEdoCta);
 
-                var resultDto = await MapDetalleEdoCuenta(codigoEdoDetalleEdoCta);
+                var resultDto = await MapDetalleEdoCuenta(codigoDetalleEdoCta);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";

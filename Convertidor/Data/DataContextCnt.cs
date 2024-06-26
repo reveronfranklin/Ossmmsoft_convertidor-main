@@ -17,6 +17,9 @@ namespace Convertidor.Data
         public DbSet<CNT_BANCO_ARCHIVO_CONTROL> CNT_BANCO_ARCHIVO_CONTROL { get; set; }
         public DbSet<CNT_DETALLE_EDO_CTA> CNT_DETALLE_EDO_CTA { get; set; }
         public DbSet<CNT_DETALLE_LIBRO> CNT_DETALLE_LIBRO { get; set; }
+        public DbSet<CNT_ESTADO_CUENTAS> CNT_ESTADO_CUENTAS { get; set; }
+        public DbSet<CNT_HIST_CONCILIACION> CNT_HIST_CONCILIACION { get; set; }
+        public DbSet<CNT_LIBROS> CNT_LIBROS { get; set; }
 
 
 
@@ -85,13 +88,43 @@ namespace Convertidor.Data
             modelBuilder
      .Entity<CNT_DETALLE_LIBRO>(builder =>
      {
+         builder.HasKey(table => new
+         {
+             table.CODIGO_DETALLE_LIBRO,
+
+         });
+         builder.ToTable("CNT_DETALLE_LIBRO");
+     });
+      modelBuilder
+     .Entity<CNT_ESTADO_CUENTAS>(builder =>
+     {
+         builder.HasKey(table => new
+         {
+             table.CODIGO_ESTADO_CUENTA,
+
+         });
+         builder.ToTable("CNT_ESTADO_CUENTAS");
+     });
+            modelBuilder
+   .Entity<CNT_HIST_CONCILIACION>(builder =>
+   {
        builder.HasKey(table => new
        {
-           table.CODIGO_DETALLE_LIBRO,
+           table.CODIGO_HIST_CONCILIACION,
 
        });
-       builder.ToTable("CNT_DETALLE_LIBRO");
-     });
+       builder.ToTable("CNT_HIST_CONCILIACION");
+   });
+            modelBuilder
+   .Entity<CNT_LIBROS>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_LIBRO,
+
+       });
+       builder.ToTable("CNT_LIBROS");
+   });
         }
 
         

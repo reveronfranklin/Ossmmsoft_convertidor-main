@@ -12,12 +12,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CntDetalleLibroController : ControllerBase
+    public class CntLibrosController : ControllerBase
     {
 
-        private readonly ICntDetalleLibroService _service;
+        private readonly ICntLibrosService _service;
 
-        public CntDetalleLibroController(ICntDetalleLibroService service)
+        public CntLibrosController(ICntLibrosService service)
         {
 
             _service = service;
@@ -35,16 +35,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllByCodigoLibro(FilterDetalleLibro filter) 
-        {
-            var result = await _service.GetAllByCodigoLibro(filter.CodigoLibro);
-            return Ok(result);
-        
-        }
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Create(CntDetalleLibroUpdateDto dto)
+        public async Task<IActionResult> Create(CntLibrosUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -52,18 +43,21 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(CntDetalleLibroUpdateDto dto)
+        public async Task<IActionResult> Update(CntLibrosUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
         }
 
+
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(CntDetalleLibroDeleteDto dto)
+        public async Task<IActionResult> Delete(CntLibrosDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
         }
+
+
     }
 }

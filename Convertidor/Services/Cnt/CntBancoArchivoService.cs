@@ -3,6 +3,7 @@ using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Cnt;
+using Convertidor.Utility;
 using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Services.Cnt
@@ -27,17 +28,7 @@ namespace Convertidor.Services.Cnt
         }
 
 
-        public FechaDto GetFechaDto(DateTime fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            FechaDesdeObj.Year = fecha.Year.ToString();
-            string month = "00" + fecha.Month.ToString();
-            string day = "00" + fecha.Day.ToString();
-            FechaDesdeObj.Month = month.Substring(month.Length - 2);
-            FechaDesdeObj.Day = day.Substring(day.Length - 2);
-
-            return FechaDesdeObj;
-        }
+       
         public async Task<CntBancoArchivoResponseDto> MapCntBancoArchivo(CNT_BANCO_ARCHIVO dtos) 
         {
            CntBancoArchivoResponseDto itemResult = new CntBancoArchivoResponseDto();
@@ -47,7 +38,7 @@ namespace Convertidor.Services.Cnt
             itemResult.NumeroCuenta = dtos.NUMERO_CUENTA;
             itemResult.FechaTransaccion = dtos.FECHA_TRANSACCION;
             itemResult.FechaTransaccionString = dtos.FECHA_TRANSACCION.ToString("u");
-            FechaDto fechaTransaccionObj = GetFechaDto(dtos.FECHA_TRANSACCION);
+            FechaDto fechaTransaccionObj = FechaObj.GetFechaDto(dtos.FECHA_TRANSACCION);
             itemResult.FechaTransaccionObj = (FechaDto)fechaTransaccionObj;
             itemResult.NumeroTransaccion = dtos.NUMERO_TRANSACCION;
             itemResult.TipoTransaccionId = dtos.TIPO_TRANSACCION_ID;
