@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_HIST_CONCILIACION> GetByCodigo(int codigoHistConciliacion)
+        {
+            try
+            {
+                var result = await _context.CNT_HIST_CONCILIACION.DefaultIfEmpty().Where(x => x.CODIGO_HIST_CONCILIACION == codigoHistConciliacion).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<List<CNT_HIST_CONCILIACION>> GetByCodigoConciliacion(int codigoConciliacion)
         {
             try
@@ -57,6 +73,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_HIST_CONCILIACION>> Update(CNT_HIST_CONCILIACION entity)
+        {
+            ResultDto<CNT_HIST_CONCILIACION> result = new ResultDto<CNT_HIST_CONCILIACION>(null);
+
+            try
+            {
+                CNT_HIST_CONCILIACION entityUpdate = await GetByCodigo(entity.CODIGO_HIST_CONCILIACION);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_HIST_CONCILIACION.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)
