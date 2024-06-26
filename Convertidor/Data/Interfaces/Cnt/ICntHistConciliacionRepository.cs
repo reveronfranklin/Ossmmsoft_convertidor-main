@@ -6,5 +6,7 @@ namespace Convertidor.Data.Interfaces.Cnt
     {
         Task<List<CNT_HIST_CONCILIACION>> GetAll();
         Task<List<CNT_HIST_CONCILIACION>> GetByCodigoConciliacion(int codigoConciliacion);
+        Task<ResultDto<CNT_HIST_CONCILIACION>> Add(CNT_HIST_CONCILIACION entity);
+        Task<int> GetNextKey();
     }
 }

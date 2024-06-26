@@ -8,10 +8,19 @@ namespace Convertidor.Services.Cnt
     public class CntHistConciliacionService : ICntHistConciliacionService
     {
         private readonly ICntHistConciliacionRepository _repository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICntDetalleLibroRepository _cntDetalleLibroRepository;
+        private readonly ICntDetalleEdoCtaRepository _cntDetalleEdoCtaRepository;
 
-        public CntHistConciliacionService(ICntHistConciliacionRepository repository)
+        public CntHistConciliacionService(ICntHistConciliacionRepository repository,
+                                           ISisUsuarioRepository sisUsuarioRepository,
+                                           ICntDetalleLibroRepository cntDetalleLibroRepository,
+                                           ICntDetalleEdoCtaRepository cntDetalleEdoCtaRepository)
         {
             _repository = repository;
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _cntDetalleLibroRepository = cntDetalleLibroRepository;
+            _cntDetalleEdoCtaRepository = cntDetalleEdoCtaRepository;
         }
 
 
@@ -140,5 +149,196 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
+        public async Task<ResultDto<CntHistConciliacionResponseDto>> Create(CntHistConciliacionUpdateDto dto)
+        {
+            ResultDto<CntHistConciliacionResponseDto> result = new ResultDto<CntHistConciliacionResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+
+                if (dto.CodigoConciliacion <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo conciliacion Invalido";
+                    return result;
+                }
+
+                if (dto.CodigoPeriodo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo periodo invalido";
+                    return result;
+                }
+
+
+                if (dto.CodigoCuentaBanco <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Cuenta Banco invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoDetalleLibro <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Detalle Libro Invalido";
+                    return result;
+
+                }
+
+                var codigoDetalleLibro = await _cntDetalleLibroRepository.GetByCodigo(dto.CodigoDetalleLibro);
+                if(codigoDetalleLibro == null) 
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Detalle Libro Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoDetalleEdoCta <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Detalle Edo Cta invalido";
+                    return result;
+
+                }
+
+                var codigoDetalleEdoCta = await _cntDetalleEdoCtaRepository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                if(codigoDetalleEdoCta == null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Detalle Edo Cta invalido";
+                    return result;
+
+                }
+
+                if (dto.Fecha == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha invalida";
+                    return result;
+                }
+
+                var numero = Convert.ToInt32(dto.Numero);
+                if (numero < 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero invalido";
+                    return result;
+
+                }
+
+                if(dto.Numero.Length > 20) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero invalido";
+                    return result;
+                }
+
+                if(dto.Monto <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+
+                CNT_HIST_CONCILIACION entity = new CNT_HIST_CONCILIACION();
+                entity.CODIGO_HIST_CONCILIACION = await _repository.GetNextKey();
+                entity.CODIGO_CONCILIACION = dto.CodigoConciliacion;
+                entity.CODIGO_PERIODO = dto.CodigoPeriodo;
+                entity.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
+                entity.CODIGO_DETALLE_LIBRO = dto.CodigoDetalleLibro;
+                entity.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
+                entity.FECHA = dto.Fecha;
+                entity.NUMERO = dto.Numero;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+
+
+
+
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapCntHistConciliacion(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }
