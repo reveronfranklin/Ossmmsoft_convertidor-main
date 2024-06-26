@@ -307,5 +307,50 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntLibrosDeleteDto>> Delete(CntLibrosDeleteDto dto)
+        {
+            ResultDto<CntLibrosDeleteDto> result = new ResultDto<CntLibrosDeleteDto>(null);
+            try
+            {
+
+                var codigoLibro = await _repository.GetByCodigo(dto.CodigoLibro);
+                if (codigoLibro == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Libro no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoLibro);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }
