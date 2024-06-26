@@ -12,12 +12,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CntEstadoCuentasController : ControllerBase
+    public class CntHistConciliacionController : ControllerBase
     {
 
-        private readonly ICntEstadoCuentasService _service;
+        private readonly ICntHistConciliacionService _service;
 
-        public CntEstadoCuentasController(ICntEstadoCuentasService service)
+        public CntHistConciliacionController(ICntHistConciliacionService service)
         {
 
             _service = service;
@@ -35,7 +35,15 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(CntEstadoCuentasUpdateDto dto)
+        public async Task<IActionResult> GetAllByCodigoConciliacion(FilterHistoricoConciliacionDto filter)
+        {
+            var result = await _service.GetAllByCodigoConciliacion(filter.CodigoConciliacion);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create (CntHistConciliacionUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -43,20 +51,18 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(CntEstadoCuentasUpdateDto dto)
+        public async Task<IActionResult> Update(CntHistConciliacionUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
         }
 
-
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(CntEstadoCuentasDeleteDto dto)
+        public async Task<IActionResult> Delete(CntHistConciliacionDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
         }
-
     }
 }

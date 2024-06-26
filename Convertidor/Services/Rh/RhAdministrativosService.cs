@@ -32,7 +32,7 @@ namespace Convertidor.Data.Repository.Rh
                 
                 var administrativos = await _repository.GetByCodigoPersona(codigoPersona);
 
-                var result = await MapListAdministrativosDto(administrativos);
+                    var result = await MapListAdministrativosDto(administrativos);
 
 
                 return (List<RhAdministrativosResponseDto>)result;

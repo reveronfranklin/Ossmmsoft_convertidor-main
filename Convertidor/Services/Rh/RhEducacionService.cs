@@ -159,9 +159,9 @@ namespace Convertidor.Data.Repository.Rh
                 }
 
 
-                if (string.IsNullOrEmpty(dto.NombreInstituto) )
+                if (string.IsNullOrEmpty(dto.NombreInstituto) || dto.NombreInstituto.Length>150 )
                 {
-                    result.Message = "Instituto invalido";
+                    result.Message = "Instituto invalido, no puede estar vacio ni su longitud mayor a 150 caranteres";
                     result.IsValid = false;
                     return result;
                 }
@@ -295,7 +295,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 
                 
-                if(string.IsNullOrEmpty(dto.NombreInstituto)) 
+                if (string.IsNullOrEmpty(dto.NombreInstituto) || dto.NombreInstituto.Length>150 )
                 {
                     result.Message = "Instituto invalido";
                     result.IsValid = false;

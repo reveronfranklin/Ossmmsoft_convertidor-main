@@ -1,25 +1,23 @@
-﻿using Convertidor.Data.Entities.Adm;
-using Convertidor.Data.Entities.Cnt;
+﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Cnt
 {
-    public class CntEstadoCuentasRepository : ICntEstadoCuentasRepository
+    public class CntHistConciliacionRepository : ICntHistConciliacionRepository
     {
         private readonly DataContextCnt _context;
 
-        public CntEstadoCuentasRepository(DataContextCnt context)
+        public CntHistConciliacionRepository(DataContextCnt context)
         {
             _context = context;
         }
 
-
-        public async Task<List<CNT_ESTADO_CUENTAS>> GetAll() 
+        public async Task<List<CNT_HIST_CONCILIACION>> GetAll()
         {
             try
             {
-                var result = await _context.CNT_ESTADO_CUENTAS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CNT_HIST_CONCILIACION.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -30,11 +28,11 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_ESTADO_CUENTAS> GetByCodigo(int codigoEstadoCuenta)
+        public async Task<CNT_HIST_CONCILIACION> GetByCodigo(int codigoHistConciliacion)
         {
             try
             {
-                var result = await _context.CNT_ESTADO_CUENTAS.DefaultIfEmpty().Where(x => x.CODIGO_ESTADO_CUENTA == codigoEstadoCuenta).FirstOrDefaultAsync();
+                var result = await _context.CNT_HIST_CONCILIACION.DefaultIfEmpty().Where(x => x.CODIGO_HIST_CONCILIACION == codigoHistConciliacion).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -46,13 +44,29 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<ResultDto<CNT_ESTADO_CUENTAS>> Add(CNT_ESTADO_CUENTAS entity)
+        public async Task<List<CNT_HIST_CONCILIACION>> GetByCodigoConciliacion(int codigoConciliacion)
         {
-
-            ResultDto<CNT_ESTADO_CUENTAS> result = new ResultDto<CNT_ESTADO_CUENTAS>(null);
             try
             {
-                await _context.CNT_ESTADO_CUENTAS.AddAsync(entity);
+                var result = await _context.CNT_HIST_CONCILIACION.DefaultIfEmpty().Where(x => x.CODIGO_CONCILIACION == codigoConciliacion).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<ResultDto<CNT_HIST_CONCILIACION>> Add(CNT_HIST_CONCILIACION entity)
+        {
+
+            ResultDto<CNT_HIST_CONCILIACION> result = new ResultDto<CNT_HIST_CONCILIACION>(null);
+            try
+            {
+                await _context.CNT_HIST_CONCILIACION.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -70,16 +84,16 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<ResultDto<CNT_ESTADO_CUENTAS>> Update(CNT_ESTADO_CUENTAS entity)
+        public async Task<ResultDto<CNT_HIST_CONCILIACION>> Update(CNT_HIST_CONCILIACION entity)
         {
-            ResultDto<CNT_ESTADO_CUENTAS> result = new ResultDto<CNT_ESTADO_CUENTAS>(null);
+            ResultDto<CNT_HIST_CONCILIACION> result = new ResultDto<CNT_HIST_CONCILIACION>(null);
 
             try
             {
-                CNT_ESTADO_CUENTAS entityUpdate = await GetByCodigo(entity.CODIGO_ESTADO_CUENTA);
+                CNT_HIST_CONCILIACION entityUpdate = await GetByCodigo(entity.CODIGO_HIST_CONCILIACION);
                 if (entityUpdate != null)
                 {
-                    _context.CNT_ESTADO_CUENTAS.Update(entity);
+                    _context.CNT_HIST_CONCILIACION.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -97,14 +111,14 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<string> Delete(int codigoEstadoCuenta)
+        public async Task<string> Delete(int codigoHistConciliacion)
         {
             try
             {
-                CNT_ESTADO_CUENTAS entity = await GetByCodigo(codigoEstadoCuenta);
+                CNT_HIST_CONCILIACION entity = await GetByCodigo(codigoHistConciliacion);
                 if (entity != null)
                 {
-                    _context.CNT_ESTADO_CUENTAS.Remove(entity);
+                    _context.CNT_HIST_CONCILIACION.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -114,13 +128,14 @@ namespace Convertidor.Data.Repository.Cnt
                 return ex.Message;
             }
         }
+
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.CNT_ESTADO_CUENTAS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_ESTADO_CUENTA)
+                var last = await _context.CNT_HIST_CONCILIACION.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_HIST_CONCILIACION)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -128,7 +143,7 @@ namespace Convertidor.Data.Repository.Cnt
                 }
                 else
                 {
-                    result = last.CODIGO_ESTADO_CUENTA + 1;
+                    result = last.CODIGO_HIST_CONCILIACION + 1;
                 }
 
                 return (int)result!;
@@ -145,4 +160,3 @@ namespace Convertidor.Data.Repository.Cnt
         }
     }
 }
-
