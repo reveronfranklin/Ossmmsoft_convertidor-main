@@ -219,6 +219,8 @@ namespace Convertidor.Services.Adm
                 }
 
               
+                var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
+
 
                 if (dto.CodigoProducto > 0)
                 {
@@ -233,9 +235,9 @@ namespace Convertidor.Services.Adm
                 codigoDetallesolicitud.POR_DESCUENTO = 0;
                 codigoDetallesolicitud.MONTO_DESCUENTO =0;
                 codigoDetallesolicitud.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-                //TODO:BUSCAR PORCENTA Y CALCULAR MONTO IMPUESTO
-                codigoDetallesolicitud.POR_IMPUESTO = 0;
-                codigoDetallesolicitud.MONTO_IMPUESTO =0;
+
+                codigoDetallesolicitud.POR_IMPUESTO = ConvertStringToDecimal(descriptivaImpuesto.EXTRA1);
+                codigoDetallesolicitud.MONTO_IMPUESTO =  ((codigoDetallesolicitud.PRECIO_UNITARIO * codigoDetallesolicitud.CANTIDAD) * codigoDetallesolicitud.POR_IMPUESTO )/100 ;
               
                 codigoDetallesolicitud.CODIGO_PRESUPUESTO =(int)solicitud.CODIGO_PRESUPUESTO;
                 codigoDetallesolicitud.CODIGO_PRODUCTO =dto.CodigoProducto;
@@ -262,6 +264,25 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+
+        public decimal ConvertStringToDecimal(string numberString)
+        {
+            
+        
+            try
+            {
+                decimal numeroDecimal = Convert.ToDecimal(numberString);
+                return numeroDecimal;
+            }
+            catch (FormatException)
+            {
+                return 0;
+            }
+            catch (OverflowException)
+            {
+                return 0;
+            }
+        }
         public async Task<ResultDto<AdmDetalleSolicitudResponseDto>> Create(AdmDetalleSolicitudUpdateDto dto)
         {
             ResultDto<AdmDetalleSolicitudResponseDto> result = new ResultDto<AdmDetalleSolicitudResponseDto>(null);
@@ -340,6 +361,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
+                
             
 
                 if (dto.CodigoProducto > 0)
@@ -360,9 +383,9 @@ namespace Convertidor.Services.Adm
             entity.POR_DESCUENTO=0;
             entity.MONTO_DESCUENTO = 0;
             entity.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-            //TODO:BUSCAR PORCENTA Y CALCULAR MONTO IMPUESTO
-            entity.POR_IMPUESTO = 0;
-            entity.MONTO_IMPUESTO = 0;
+
+            entity.POR_IMPUESTO = ConvertStringToDecimal(descriptivaImpuesto.EXTRA1);
+            entity.MONTO_IMPUESTO =  ((entity.PRECIO_UNITARIO * entity.CANTIDAD) * entity.POR_IMPUESTO )/100 ;
             entity.CODIGO_PRODUCTO = dto.CodigoProducto;
             entity.CODIGO_PRESUPUESTO = (int)solicitud.CODIGO_PRESUPUESTO;
             entity.CODIGO_PRODUCTO = dto.CodigoProducto;

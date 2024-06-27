@@ -195,6 +195,20 @@ namespace Convertidor.Data.Repository.Rh
                     var fechaIngreso = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
                     administrativo.FECHA_INGRESO = fechaIngreso;
                 }
+                else
+                {
+                    
+                    var fechaIngreso = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
+                    if (fechaIngreso < historicoNomina.FECHA_NOMINA_MOV)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = $"Fecha de Ingreso no puede ser Menor a la fecha de su primera nomina:{historicoNomina.FECHA_NOMINA_MOV.ToString()}";
+                        return result;
+                    }
+                    administrativo.FECHA_INGRESO = fechaIngreso;
+                    
+                }
                 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 administrativo.CODIGO_EMPRESA = conectado.Empresa;
