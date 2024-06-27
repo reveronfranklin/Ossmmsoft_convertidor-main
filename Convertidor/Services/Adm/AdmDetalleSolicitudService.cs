@@ -181,21 +181,7 @@ namespace Convertidor.Services.Adm
 
                 }
 
-                if (dto.CantidadComprada <0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cantidad comprada Invalida";
-                    return result;
-                }
-                
-                if (dto.CantidadAnulada < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cantidad anulada Invalida";
-                    return result;
-                }
+               
 
                 var udmId = await _admDescriptivaRepository.GetByIdAndTitulo(21,dto.UdmId);
                 if (udmId == false)
@@ -222,21 +208,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Precio unitario Invalido";
                     return result;
                 }
-                if (dto.PorDescuento<0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Por descuento invalido";
-                    return result;
-                }
-
-                if (dto.MontoDescuento <0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto Descuento Invalido";
-                    return result;
-                }
+             
                 var tipoImpuesto = await _admDescriptivaRepository.GetByIdAndTitulo(18,dto.TipoImpuestoId);
                 if(tipoImpuesto == false) 
                 {
@@ -246,21 +218,9 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.PorImpuesto <0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Por Impuesto Invalido";
-                    return result;
-                }
+              
+                var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
 
-                if (dto.MontoImpuesto < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto Impuesto Invalido";
-                    return result;
-                }
 
                 if (dto.CodigoProducto > 0)
                 {
@@ -269,16 +229,15 @@ namespace Convertidor.Services.Adm
                 
                 codigoDetallesolicitud.CODIGO_SOLICITUD = dto.CodigoSolicitud;
                 codigoDetallesolicitud.CANTIDAD = dto.Cantidad;
-                codigoDetallesolicitud.CANTIDAD_COMPRADA = dto.CantidadComprada;
-                codigoDetallesolicitud.CANTIDAD_ANULADA = dto.CantidadAnulada;
                 codigoDetallesolicitud.UDM_ID = dto.UdmId;
                 codigoDetallesolicitud.DESCRIPCION = dto.Descripcion;
                 codigoDetallesolicitud.PRECIO_UNITARIO = dto.PrecioUnitario;
-                codigoDetallesolicitud.POR_DESCUENTO = dto.PorDescuento;
-                codigoDetallesolicitud.MONTO_DESCUENTO = dto.MontoDescuento;
+                codigoDetallesolicitud.POR_DESCUENTO = 0;
+                codigoDetallesolicitud.MONTO_DESCUENTO =0;
                 codigoDetallesolicitud.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-                codigoDetallesolicitud.POR_IMPUESTO = dto.PorImpuesto;
-                codigoDetallesolicitud.MONTO_IMPUESTO = dto.MontoImpuesto;
+
+                codigoDetallesolicitud.POR_IMPUESTO = ConvertStringToDecimal(descriptivaImpuesto.EXTRA1);
+                codigoDetallesolicitud.MONTO_IMPUESTO =  ((codigoDetallesolicitud.PRECIO_UNITARIO * codigoDetallesolicitud.CANTIDAD) * codigoDetallesolicitud.POR_IMPUESTO )/100 ;
               
                 codigoDetallesolicitud.CODIGO_PRESUPUESTO =(int)solicitud.CODIGO_PRESUPUESTO;
                 codigoDetallesolicitud.CODIGO_PRODUCTO =dto.CodigoProducto;
@@ -305,6 +264,25 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+
+        public decimal ConvertStringToDecimal(string numberString)
+        {
+            
+        
+            try
+            {
+                decimal numeroDecimal = Convert.ToDecimal(numberString);
+                return numeroDecimal;
+            }
+            catch (FormatException)
+            {
+                return 0;
+            }
+            catch (OverflowException)
+            {
+                return 0;
+            }
+        }
         public async Task<ResultDto<AdmDetalleSolicitudResponseDto>> Create(AdmDetalleSolicitudUpdateDto dto)
         {
             ResultDto<AdmDetalleSolicitudResponseDto> result = new ResultDto<AdmDetalleSolicitudResponseDto>(null);
@@ -345,21 +323,7 @@ namespace Convertidor.Services.Adm
 
                 }
 
-                if (dto.CantidadComprada < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cantidad comprada Invalida";
-                    return result;
-                }
-                if (dto.CantidadAnulada < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cantidad anulada Invalida";
-                    return result;
-                }
-
+            
                 var udmId = await _admDescriptivaRepository.GetByIdAndTitulo(21, dto.UdmId);
                 if (udmId == false)
                 {
@@ -386,21 +350,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Precio unitario Invalido";
                     return result;
                 }
-                if (dto.PorDescuento < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Por descuento invalido";
-                    return result;
-                }
-
-                if (dto.MontoDescuento < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto Descuento Invalido";
-                    return result;
-                }
+              
                 var tipoImpuesto = await _admDescriptivaRepository.GetByIdAndTitulo(18, dto.TipoImpuestoId);
                 if (tipoImpuesto == false)
                 {
@@ -411,21 +361,9 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.PorImpuesto < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Por Impuesto Invalido";
-                    return result;
-                }
-
-                if (dto.MontoImpuesto < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto Impuesto Invalido";
-                    return result;
-                }
+                var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
+                
+            
 
                 if (dto.CodigoProducto > 0)
                 {
@@ -437,16 +375,17 @@ namespace Convertidor.Services.Adm
             entity.CODIGO_DETALLE_SOLICITUD = await _repository.GetNextKey();
             entity.CODIGO_SOLICITUD = dto.CodigoSolicitud;
             entity.CANTIDAD = dto.Cantidad;
-            entity.CANTIDAD_COMPRADA = dto.CantidadComprada;
-            entity.CANTIDAD_ANULADA = dto.CantidadAnulada;
+            entity.CANTIDAD_COMPRADA = 0;
+            entity.CANTIDAD_ANULADA = 0;
             entity.UDM_ID = dto.UdmId;
             entity.DESCRIPCION = dto.Descripcion;
             entity.PRECIO_UNITARIO = dto.PrecioUnitario;
-            entity.POR_DESCUENTO=dto.PorDescuento;
-            entity.MONTO_DESCUENTO = dto.MontoDescuento;
+            entity.POR_DESCUENTO=0;
+            entity.MONTO_DESCUENTO = 0;
             entity.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-            entity.POR_IMPUESTO = dto.PorImpuesto;
-            entity.MONTO_IMPUESTO = dto.MontoImpuesto;
+
+            entity.POR_IMPUESTO = ConvertStringToDecimal(descriptivaImpuesto.EXTRA1);
+            entity.MONTO_IMPUESTO =  ((entity.PRECIO_UNITARIO * entity.CANTIDAD) * entity.POR_IMPUESTO )/100 ;
             entity.CODIGO_PRODUCTO = dto.CodigoProducto;
             entity.CODIGO_PRESUPUESTO = (int)solicitud.CODIGO_PRESUPUESTO;
             entity.CODIGO_PRODUCTO = dto.CodigoProducto;
