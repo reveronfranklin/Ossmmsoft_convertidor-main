@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Data.Repository.Cnt;
+using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
 namespace Convertidor.Services.Cnt
@@ -568,6 +569,37 @@ namespace Convertidor.Services.Cnt
             }
 
 
+
+            return result;
+        }
+
+        public async Task<ResultDto<CntDetalleLibroResponseDto>> GetByCodigo(int codigoDetalleLibro)
+        {
+            ResultDto<CntDetalleLibroResponseDto> result = new ResultDto<CntDetalleLibroResponseDto>(null);
+            try
+            {
+
+                var libro = await _repository.GetByCodigo(codigoDetalleLibro);
+                if (libro == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Libro no existe";
+                    return result;
+                }
+
+                var resultDto = await MapDetalleLibro(libro);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
 
             return result;
         }

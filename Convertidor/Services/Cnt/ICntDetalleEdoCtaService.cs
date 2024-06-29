@@ -6,6 +6,7 @@ namespace Convertidor.Services.Cnt
     {
         Task<ResultDto<List<CntDetalleEdoCtaResponseDto>>> GetAll();
         Task<ResultDto<List<CntDetalleEdoCtaResponseDto>>> GetAllByCodigoEstadoCuenta(int codigoEstadoCuenta);
+        Task<ResultDto<CntDetalleEdoCtaResponseDto>> GetByCodigo(int codigoDetalleEdoCta);
         Task<ResultDto<CntDetalleEdoCtaResponseDto>> Create(CntDetalleEdoCtaUpdateDto dto);
         Task<ResultDto<CntDetalleEdoCtaResponseDto>> Update(CntDetalleEdoCtaUpdateDto dto);
         Task<ResultDto<CntDetalleEdoCtaDeleteDto>> Delete(CntDetalleEdoCtaDeleteDto dto);
