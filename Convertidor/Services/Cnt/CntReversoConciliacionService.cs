@@ -480,5 +480,50 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntReversoConciliacionDeleteDto>> Delete(CntReversoConciliacionDeleteDto dto)
+        {
+            ResultDto<CntReversoConciliacionDeleteDto> result = new ResultDto<CntReversoConciliacionDeleteDto>(null);
+            try
+            {
+
+                var codigoHistConciliacion = await _repository.GetByCodigo(dto.CodigoHistConciliacion);
+                if (codigoHistConciliacion == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Historico Conciliacion no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoHistConciliacion);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }

@@ -111,6 +111,24 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<string> Delete(int codigoHistConciliacion)
+        {
+            try
+            {
+                CNT_REVERSO_CONCILIACION entity = await GetByCodigo(codigoHistConciliacion);
+                if (entity != null)
+                {
+                    _context.CNT_REVERSO_CONCILIACION.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<int> GetNextKey()
         {
             try
