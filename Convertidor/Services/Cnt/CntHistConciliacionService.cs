@@ -296,6 +296,7 @@ namespace Convertidor.Services.Cnt
                 entity.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
                 entity.FECHA = dto.Fecha;
                 entity.NUMERO = dto.Numero;
+                entity.MONTO = dto.Monto;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
@@ -491,6 +492,8 @@ namespace Convertidor.Services.Cnt
                 codigoHistConciliacion.CODIGO_DETALLE_LIBRO = dto.CodigoDetalleLibro;
                 codigoHistConciliacion.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
                 codigoHistConciliacion.FECHA = dto.Fecha;
+                codigoHistConciliacion.NUMERO = dto.Numero;
+                codigoHistConciliacion.MONTO = dto.Monto;
                 codigoHistConciliacion.EXTRA1 = dto.Extra1;
                 codigoHistConciliacion.EXTRA2 = dto.Extra2;
                 codigoHistConciliacion.EXTRA3 = dto.Extra3;

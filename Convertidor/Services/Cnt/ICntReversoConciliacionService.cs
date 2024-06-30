@@ -7,5 +7,6 @@ namespace Convertidor.Services.Cnt
         
         Task<ResultDto<List<CntReversoConciliacionResponseDto>>> GetAllByCodigoConciliacion(int codigoConciliacion);
         Task<ResultDto<CntReversoConciliacionResponseDto>> Create(CntReversoConciliacionUpdateDto dto);
+        Task<ResultDto<CntReversoConciliacionResponseDto>> Update(CntReversoConciliacionUpdateDto dto);
     }
 }
