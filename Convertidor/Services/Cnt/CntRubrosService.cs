@@ -316,5 +316,51 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntRubrosDeleteDto>> Delete(CntRubrosDeleteDto dto)
+        {
+            ResultDto<CntRubrosDeleteDto> result = new ResultDto<CntRubrosDeleteDto>(null);
+            try
+            {
+
+                var codigoRubro = await _repository.GetByCodigo(dto.CodigoRubro);
+                if (codigoRubro == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Rubro no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoRubro);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }
