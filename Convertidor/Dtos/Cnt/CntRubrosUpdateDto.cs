@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Cnt
 {
-    public class CntRubrosResponseDto
+    public class CntRubrosUpdateDto
     {
         public int CodigoRubro { get; set; }
         public string NumeroRubro { get; set; } = string.Empty;

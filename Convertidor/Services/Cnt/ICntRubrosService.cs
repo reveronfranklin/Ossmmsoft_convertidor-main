@@ -5,5 +5,6 @@ namespace Convertidor.Services.Cnt
     public interface ICntRubrosService
     {
         Task<ResultDto<List<CntRubrosResponseDto>>> GetAll();
+        Task<ResultDto<CntRubrosResponseDto>> Create(CntRubrosUpdateDto dto);
     }
 }
