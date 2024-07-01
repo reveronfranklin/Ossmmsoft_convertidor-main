@@ -209,5 +209,112 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
+        public async Task<ResultDto<CntRubrosResponseDto>> Update(CntRubrosUpdateDto dto)
+        {
+            ResultDto<CntRubrosResponseDto> result = new ResultDto<CntRubrosResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoRubro = await _repository.GetByCodigo(dto.CodigoRubro);
+                if (codigoRubro == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Rubro Invalido";
+                    return result;
+
+                }
+
+
+                var numeroRubro = Convert.ToInt32(dto.NumeroRubro);
+                if (numeroRubro <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Rubro invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.NumeroRubro.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Rubro invalido";
+                    return result;
+                }
+
+                if (dto.Denominacion.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Denominacion Invalida";
+                    return result;
+                }
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoRubro.CODIGO_RUBRO = dto.CodigoRubro;
+                codigoRubro.NUMERO_RUBRO = dto.NumeroRubro;
+                codigoRubro.DENOMINACION = dto.Denominacion;
+                codigoRubro.DESCRIPCION = dto.Descripcion;
+                codigoRubro.EXTRA1 = dto.Extra1;
+                codigoRubro.EXTRA2 = dto.Extra2;
+                codigoRubro.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoRubro.CODIGO_EMPRESA = conectado.Empresa;
+                codigoRubro.USUARIO_UPD = conectado.Usuario;
+                codigoRubro.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoRubro);
+
+                var resultDto = await MapRubros(codigoRubro);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }

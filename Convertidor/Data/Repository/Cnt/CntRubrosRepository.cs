@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_RUBROS> GetByCodigo(int codigoRubro)
+        {
+            try
+            {
+                var result = await _context.CNT_RUBROS.DefaultIfEmpty().Where(x => x.CODIGO_RUBRO == codigoRubro).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CNT_RUBROS>> Add(CNT_RUBROS entity)
         {
 
@@ -41,6 +57,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_RUBROS>> Update(CNT_RUBROS entity)
+        {
+            ResultDto<CNT_RUBROS> result = new ResultDto<CNT_RUBROS>(null);
+
+            try
+            {
+                CNT_RUBROS entityUpdate = await GetByCodigo(entity.CODIGO_RUBRO);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_RUBROS.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)
