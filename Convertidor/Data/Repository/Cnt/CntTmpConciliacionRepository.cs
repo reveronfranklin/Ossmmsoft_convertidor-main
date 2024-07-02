@@ -28,6 +28,21 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_TMP_CONCILIACION> GetByCodigo(int codigoTmpConciliacion)
+        {
+            try
+            {
+                var result = await _context.CNT_TMP_CONCILIACION.DefaultIfEmpty().Where(x => x.CODIGO_TMP_CONCILIACION == codigoTmpConciliacion).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<ResultDto<CNT_TMP_CONCILIACION>> Add(CNT_TMP_CONCILIACION entity)
         {
 
@@ -52,6 +67,32 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<ResultDto<CNT_TMP_CONCILIACION>> Update(CNT_TMP_CONCILIACION entity)
+        {
+            ResultDto<CNT_TMP_CONCILIACION> result = new ResultDto<CNT_TMP_CONCILIACION>(null);
+
+            try
+            {
+                CNT_TMP_CONCILIACION entityUpdate = await GetByCodigo(entity.CODIGO_TMP_CONCILIACION);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_TMP_CONCILIACION.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try
