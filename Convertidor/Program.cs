@@ -450,6 +450,7 @@ builder.Services.AddTransient<ICntReversoConciliacionRepository, CntReversoConci
 builder.Services.AddTransient<ICntRubrosRepository, CntRubrosRepository>();
 builder.Services.AddTransient<ICntTmpConciliacionRepository, CntTmpConciliacionRepository>();
 builder.Services.AddTransient<ICntBalancesRepository, CntBalancesRepository>();
+builder.Services.AddTransient<ICntMayoresRepository, CntMayoresRepository>();
 
 
 //CNT Services
@@ -467,6 +468,7 @@ builder.Services.AddTransient<ICntReversoConciliacionService, CntReversoConcilia
 builder.Services.AddTransient<ICntRubrosService, CntRubrosService>();
 builder.Services.AddTransient<ICntTmpConciliacionService, CntTmpConciliacionService>();
 builder.Services.AddTransient<ICntBalancesService, CntBalancesService>();
+builder.Services.AddTransient<ICntMayoresService, CntMayoresService>();
 
 
 

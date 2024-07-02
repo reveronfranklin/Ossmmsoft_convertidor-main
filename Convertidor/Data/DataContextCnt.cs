@@ -24,6 +24,7 @@ namespace Convertidor.Data
         public DbSet<CNT_RUBROS> CNT_RUBROS { get; set; }
         public DbSet<CNT_TMP_CONCILIACION> CNT_TMP_CONCILIACION { get; set; }
         public DbSet<CNT_BALANCES> CNT_BALANCES { get; set; }
+        public DbSet<CNT_MAYORES> CNT_MAYORES { get; set; }
 
 
 
@@ -150,7 +151,7 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_RUBROS");
    });
-                     modelBuilder
+           modelBuilder
    .Entity<CNT_TMP_CONCILIACION>(builder =>
    {
        builder.HasKey(table => new
@@ -160,7 +161,7 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_TMP_CONCILIACION");
    });
-                               modelBuilder
+           modelBuilder
    .Entity<CNT_BALANCES>(builder =>
    {
        builder.HasKey(table => new
@@ -170,7 +171,16 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_BALANCES");
    });
+              modelBuilder
+   .Entity<CNT_MAYORES>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_MAYOR,
 
+       });
+       builder.ToTable("CNT_MAYORES");
+   });
             
         }
 
