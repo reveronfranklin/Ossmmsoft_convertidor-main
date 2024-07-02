@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<CNT_BALANCES> GetByCodigo(int codigoBalance);
         Task<ResultDto<CNT_BALANCES>> Add(CNT_BALANCES entity);
         Task<ResultDto<CNT_BALANCES>> Update(CNT_BALANCES entity);
+        Task<string> Delete(int codigoBalance);
         Task<int> GetNextKey();
     }
 }

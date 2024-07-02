@@ -95,6 +95,23 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<string> Delete(int codigoBalance)
+        {
+            try
+            {
+                CNT_BALANCES entity = await GetByCodigo(codigoBalance);
+                if (entity != null)
+                {
+                    _context.CNT_BALANCES.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try
