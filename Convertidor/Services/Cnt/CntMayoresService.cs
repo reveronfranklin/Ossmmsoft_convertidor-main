@@ -7,10 +7,16 @@ namespace Convertidor.Services.Cnt
     public class CntMayoresService : ICntMayoresService
     {
         private readonly ICntMayoresRepository _repository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICntBalancesService _cntBalancesService;
 
-        public CntMayoresService(ICntMayoresRepository repository)
+        public CntMayoresService(ICntMayoresRepository repository,
+                                ISisUsuarioRepository sisUsuarioRepository,
+                                ICntBalancesService cntBalancesService)
         {
             _repository = repository;
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _cntBalancesService = cntBalancesService;
         }
 
         public async Task<CntMayoresResponseDto> MapMayores(CNT_MAYORES dtos)
@@ -82,5 +88,158 @@ namespace Convertidor.Services.Cnt
             }
 
         }
+
+        public async Task<ResultDto<CntMayoresResponseDto>> Create(CntMayoresUpdateDto dto)
+        {
+            ResultDto<CntMayoresResponseDto> result = new ResultDto<CntMayoresResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                if (dto.NumeroMayor.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero mayor invalido";
+                    return result;
+                }
+
+                var numeroMayor = Convert.ToInt32(dto.NumeroMayor);
+                if (numeroMayor <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero mayor invalido";
+                    return result;
+
+                }
+
+
+                if (dto.Denominacion.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Denominacion Invalida";
+                    return result;
+                }
+
+                if (dto.Descripcion is not null && dto.Descripcion.Length > 1000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+
+                }
+
+                if(dto.CodigoBalance <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo balance Invalido";
+                    return result;
+
+
+                }
+
+                var codigoBalance = await _cntBalancesService.GetByCodigo(dto.CodigoBalance);
+                if(codigoBalance == null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo balance Invalido";
+                    return result;
+
+                }
+
+                if (dto.ColumnaBalance.Length > 1 && dto.ColumnaBalance != "D" && dto.ColumnaBalance != "H") 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Columna balance Invalida";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+               
+
+
+
+
+
+                CNT_MAYORES entity = new CNT_MAYORES();
+                entity.CODIGO_MAYOR = await _repository.GetNextKey();
+                entity.NUMERO_MAYOR = dto.NumeroMayor;
+                entity.DENOMINACION = dto.Denominacion;
+                entity.DESCRIPCION = dto.Descripcion;
+                entity.CODIGO_BALANCE = dto.CodigoBalance;
+                entity.COLUMNA_BALANCE = dto.ColumnaBalance;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+            
+
+
+
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapMayores(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }

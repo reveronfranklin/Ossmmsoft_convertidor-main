@@ -33,5 +33,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+
+        public async Task<IActionResult> Create (CntMayoresUpdateDto dto) 
+        {
+            var result = await _service.Create(dto);
+            return Ok(result);
+
+        }
     }
 }
