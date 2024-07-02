@@ -7,10 +7,16 @@ namespace Convertidor.Services.Cnt
     public class CntBalancesService : ICntBalancesService
     {
         private readonly ICntBalancesRepository _repository;
+        private readonly ICntRubrosService _cntRubrosService;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public CntBalancesService(ICntBalancesRepository repository)
+        public CntBalancesService(ICntBalancesRepository repository
+                             ,ICntRubrosService cntRubrosService,
+                              ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
+            _cntRubrosService = cntRubrosService;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
         public async Task<CntBalancesResponseDto> MapBalances(CNT_BALANCES dtos)
@@ -82,5 +88,146 @@ namespace Convertidor.Services.Cnt
             }
 
         }
+
+        public async Task<ResultDto<CntBalancesResponseDto>> Create(CntBalancesUpdateDto dto)
+        {
+            ResultDto<CntBalancesResponseDto> result = new ResultDto<CntBalancesResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                if (dto.NumeroBalance.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Balance invalido";
+                    return result;
+                }
+
+                var numeroBalance = Convert.ToInt32(dto.NumeroBalance);
+                if (numeroBalance <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Balance invalido";
+                    return result;
+
+                }
+
+
+                if (dto.Denominacion.Length > 1000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Denominacion Invalida";
+                    return result;
+                }
+
+                if(dto.Descripcion is not null && dto.Descripcion.Length > 1000) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if(dto.CodigoRubro <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Rubro Invalido";
+                    return result;
+
+                }
+
+                var rubro = await _cntRubrosService.GetByCodigo(dto.CodigoRubro);
+                if(rubro == null) 
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Rubro Invalido";
+                    return result;
+
+                }
+
+
+
+
+
+                CNT_BALANCES entity = new CNT_BALANCES();
+                entity.CODIGO_BALANCE = await _repository.GetNextKey();
+                entity.NUMERO_BALANCE = dto.NumeroBalance;
+                entity.DENOMINACION = dto.Denominacion;
+                entity.DESCRIPCION = dto.Descripcion;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+                entity.CODIGO_RUBRO = dto.CodigoRubro;  
+
+
+
+
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapBalances(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }

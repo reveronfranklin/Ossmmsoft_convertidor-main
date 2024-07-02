@@ -362,5 +362,36 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntRubrosResponseDto>> GetByCodigo(int codigoRubro)
+        {
+            ResultDto<CntRubrosResponseDto> result = new ResultDto<CntRubrosResponseDto>(null);
+            try
+            {
+
+                var rubro = await _repository.GetByCodigo(codigoRubro);
+                if (rubro == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Rubro no existe";
+                    return result;
+                }
+
+                var resultDto = await MapRubros(rubro);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }
