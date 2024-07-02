@@ -184,8 +184,7 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                var numero = Convert.ToInt32(dto.Numero);
-                if(numero <= 0) 
+                if (dto.Numero.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -194,7 +193,8 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                if(dto.Numero.Length > 20) 
+                var numero = Convert.ToInt32(dto.Numero);
+                if(numero <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -389,16 +389,6 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                var numero = Convert.ToInt64(dto.Numero);
-                if (numero <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Invalido";
-                    return result;
-
-                }
-
                 if (dto.Numero.Length > 20)
                 {
                     result.Data = null;
@@ -408,6 +398,15 @@ namespace Convertidor.Services.Cnt
 
                 }
 
+                var numero = Convert.ToInt64(dto.Numero);
+                if (numero <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Invalido";
+                    return result;
+
+                }
 
                 if (dto.Monto <= 0)
                 {
@@ -478,6 +477,52 @@ namespace Convertidor.Services.Cnt
                 result.IsValid = false;
                 result.Message = ex.Message;
             }
+
+            return result;
+        }
+
+        public async Task<ResultDto<CntTmpConciliacionDeleteDto>> Delete(CntTmpConciliacionDeleteDto dto)
+        {
+            ResultDto<CntTmpConciliacionDeleteDto> result = new ResultDto<CntTmpConciliacionDeleteDto>(null);
+            try
+            {
+
+                var codigoTmpConciliacion = await _repository.GetByCodigo(dto.CodigoTmpConciliacion);
+                if (codigoTmpConciliacion == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Temporal Conciliacion no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoTmpConciliacion);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
 
             return result;
         }

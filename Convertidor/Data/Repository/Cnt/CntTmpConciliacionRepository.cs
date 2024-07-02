@@ -93,6 +93,24 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
         }
+
+        public async Task<string> Delete(int codigoTmpConciliacion)
+        {
+            try
+            {
+                CNT_TMP_CONCILIACION entity = await GetByCodigo(codigoTmpConciliacion);
+                if (entity != null)
+                {
+                    _context.CNT_TMP_CONCILIACION.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try

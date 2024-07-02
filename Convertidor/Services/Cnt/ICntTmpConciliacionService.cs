@@ -7,5 +7,6 @@ namespace Convertidor.Services.Cnt
         Task<ResultDto<List<CntTmpConciliacionResponseDto>>> GetAll();
         Task<ResultDto<CntTmpConciliacionResponseDto>> Create(CntTmpConciliacionUpdateDto dto);
         Task<ResultDto<CntTmpConciliacionResponseDto>> Update(CntTmpConciliacionUpdateDto dto);
+        Task<ResultDto<CntTmpConciliacionDeleteDto>> Delete(CntTmpConciliacionDeleteDto dto);
     }
 }

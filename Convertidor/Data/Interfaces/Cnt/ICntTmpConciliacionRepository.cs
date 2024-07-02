@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<CNT_TMP_CONCILIACION> GetByCodigo(int codigoTmpConciliacion);
         Task<ResultDto<CNT_TMP_CONCILIACION>> Add(CNT_TMP_CONCILIACION entity);
         Task<ResultDto<CNT_TMP_CONCILIACION>> Update(CNT_TMP_CONCILIACION entity);
+        Task<string> Delete(int codigoTmpConciliacion);
         Task<int> GetNextKey();
     }
 }
