@@ -115,7 +115,7 @@ namespace Convertidor.Services.Cnt
                 }
 
 
-                if (dto.Denominacion.Length > 1000)
+                if (dto.Denominacion.Length > 100)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -225,6 +225,140 @@ namespace Convertidor.Services.Cnt
             }
 
 
+
+            return result;
+        }
+
+        public async Task<ResultDto<CntBalancesResponseDto>> Update(CntBalancesUpdateDto dto)
+        {
+            ResultDto<CntBalancesResponseDto> result = new ResultDto<CntBalancesResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoBalance = await _repository.GetByCodigo(dto.CodigoBalance);
+                if (codigoBalance == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Balance Invalido";
+                    return result;
+
+                }
+
+
+                if (dto.NumeroBalance.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Balance invalido";
+                    return result;
+                }
+
+                var numeroBalance = Convert.ToInt32(dto.NumeroBalance);
+                if (numeroBalance <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Balance invalido";
+                    return result;
+
+                }
+
+
+                if (dto.Denominacion.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Denominacion Invalida";
+                    return result;
+                }
+
+                if (dto.Descripcion is not null && dto.Descripcion.Length > 1000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if (dto.CodigoRubro <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Rubro Invalido";
+                    return result;
+
+                }
+
+                var rubro = await _cntRubrosService.GetByCodigo(dto.CodigoRubro);
+                if (rubro == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Rubro Invalido";
+                    return result;
+
+                }
+
+
+
+
+
+                codigoBalance.CODIGO_BALANCE = dto.CodigoBalance;
+                codigoBalance.NUMERO_BALANCE = dto.NumeroBalance;
+                codigoBalance.DENOMINACION = dto.Denominacion;
+                codigoBalance.DESCRIPCION = dto.Descripcion;
+                codigoBalance.EXTRA1 = dto.Extra1;
+                codigoBalance.EXTRA2 = dto.Extra2;
+                codigoBalance.EXTRA3 = dto.Extra3;
+                codigoBalance.CODIGO_RUBRO = dto.CodigoRubro; ;
+
+
+
+
+                codigoBalance.CODIGO_EMPRESA = conectado.Empresa;
+                codigoBalance.USUARIO_UPD = conectado.Usuario;
+                codigoBalance.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoBalance);
+
+                var resultDto = await MapBalances(codigoBalance);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
 
             return result;
         }
