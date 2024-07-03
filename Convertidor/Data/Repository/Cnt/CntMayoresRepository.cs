@@ -95,6 +95,24 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
         }
+
+        public async Task<string> Delete(int codigoMayor)
+        {
+            try
+            {
+                CNT_MAYORES entity = await GetByCodigo(codigoMayor);
+                if (entity != null)
+                {
+                    _context.CNT_MAYORES.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try

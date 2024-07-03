@@ -386,6 +386,53 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntMayoresDeleteDto>> Delete(CntMayoresDeleteDto dto)
+        {
+            ResultDto<CntMayoresDeleteDto> result = new ResultDto<CntMayoresDeleteDto>(null);
+            try
+            {
+
+                var codigoMayor = await _repository.GetByCodigo(dto.CodigoMayor);
+                if (codigoMayor == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Mayor no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoMayor);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
 
     }
 }
