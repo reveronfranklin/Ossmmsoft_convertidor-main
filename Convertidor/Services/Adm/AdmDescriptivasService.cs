@@ -672,12 +672,33 @@ namespace Convertidor.Services.Adm
             return dto;
 
         }
-
- public async Task<SelectListDescriptivaDto> MapSelectPreDecriptiva(ADM_DESCRIPTIVAS entity)
+        public decimal ConvertStringToDecimal(string numberString)
+        {
+            
+        
+            try
+            {
+                decimal numeroDecimal = Convert.ToDecimal(numberString);
+                return numeroDecimal;
+            }
+            catch (FormatException)
+            {
+                return 0;
+            }
+            catch (OverflowException)
+            {
+                return 0;
+            }
+        }
+        
+        
+        public async Task<SelectListDescriptivaDto> MapSelectPreDecriptiva(ADM_DESCRIPTIVAS entity)
         {
             SelectListDescriptivaDto dto = new SelectListDescriptivaDto();
             dto.Id = entity.DESCRIPCION_ID;
             dto.Descripcion = entity.DESCRIPCION;
+            dto.Value = ConvertStringToDecimal(entity.EXTRA1);
+            
             
             return dto;
 
