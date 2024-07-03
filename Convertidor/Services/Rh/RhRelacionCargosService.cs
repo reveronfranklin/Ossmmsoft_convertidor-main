@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Rh;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -586,38 +587,7 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public FechaDto GetFechaDto(DateTime? fecha)
-        {
-            var FechaDesdeObj = new FechaDto();
-            try
-            {
-                if (fecha != null)
-                {
-                    FechaDesdeObj.Year = fecha.Value.Year.ToString();
-                    string month = "00" + fecha.Value.Month.ToString();
-                    string day = "00" + fecha.Value.Day.ToString();
-                    FechaDesdeObj.Month = month.Substring(month.Length - 2);
-                    FechaDesdeObj.Day = day.Substring(month.Length - 2);
-                }
-                else
-                {
-                    FechaDesdeObj.Year = "1900";
-                    FechaDesdeObj.Month = "01";
-                    FechaDesdeObj.Day = "01";
-                }
-                return FechaDesdeObj;
-            }
-            catch (Exception ex)
-            {
-                FechaDesdeObj.Year = "1900";
-                FechaDesdeObj.Month = "01";
-                FechaDesdeObj.Day = "01";
-                return FechaDesdeObj;
-            }
-         
-
-           
-        }
+   
 
         public async Task<RhRelacionCargoDto> MapRhRelacionCargo(RH_RELACION_CARGOS item)
         {
@@ -641,11 +611,11 @@ namespace Convertidor.Services.Presupuesto
             
             
             
-            dto.FechaIniString = item.FECHA_INI.Value.ToString("u");
-            dto.FechaFinString = item.FECHA_FIN.Value.ToString("u");
-            FechaDto FechaIniObj = GetFechaDto(item.FECHA_INI);
+            dto.FechaIniString = FechaObj.GetFechaString(item.FECHA_INI);
+            dto.FechaFinString =  FechaObj.GetFechaString( item.FECHA_FIN);
+            FechaDto FechaIniObj = FechaObj.GetFechaDto((DateTime)item.FECHA_INI);
             dto.FechaIniObj = (FechaDto)FechaIniObj;
-            FechaDto FechaFinObj = GetFechaDto(item.FECHA_FIN);
+            FechaDto FechaFinObj =  FechaObj.GetFechaDto((DateTime)item.FECHA_FIN);
             dto.FechaFinObj = (FechaDto)FechaFinObj;
 
             var cargo = await _preCargoRepository.GetByCodigo(dto.CodigoCargo);

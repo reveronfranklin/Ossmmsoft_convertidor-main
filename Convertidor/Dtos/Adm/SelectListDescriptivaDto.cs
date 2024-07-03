@@ -10,4 +10,6 @@ public class SelectListDescriptivaDto
         set;
     }  
     
+    public decimal  Value { get; set; }
+    
 }
