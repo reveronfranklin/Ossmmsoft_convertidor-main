@@ -1,34 +1,32 @@
 ﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
+using Convertidor.Data.Repository.Cnt;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Cnt
 {
-    public class CntHistConciliacionService : ICntHistConciliacionService
+    public class CntReversoConciliacionService : ICntReversoConciliacionService
     {
-        private readonly ICntHistConciliacionRepository _repository;
+        private readonly ICntReversoConciliacionRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly ICntDetalleLibroRepository _cntDetalleLibroRepository;
-        private readonly ICntDetalleEdoCtaRepository _cntDetalleEdoCtaRepository;
+        private readonly ICntDetalleLibroService _cntDetalleLibroService;
+        private readonly ICntDetalleEdoCtaService _cntDetalleEdoCtaService;
 
-        public CntHistConciliacionService(ICntHistConciliacionRepository repository,
-                                           ISisUsuarioRepository sisUsuarioRepository,
-                                           ICntDetalleLibroRepository cntDetalleLibroRepository,
-                                           ICntDetalleEdoCtaRepository cntDetalleEdoCtaRepository)
+        public CntReversoConciliacionService(ICntReversoConciliacionRepository repository,
+                                              ISisUsuarioRepository sisUsuarioRepository,
+                                              ICntDetalleLibroService cntDetalleLibroService,
+                                              ICntDetalleEdoCtaService cntDetalleEdoCtaService)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
-            _cntDetalleLibroRepository = cntDetalleLibroRepository;
-            _cntDetalleEdoCtaRepository = cntDetalleEdoCtaRepository;
+            _cntDetalleLibroService = cntDetalleLibroService;
+            _cntDetalleEdoCtaService = cntDetalleEdoCtaService;
         }
 
-
-
-
-        public async Task<CntHistConciliacionResponseDto> MapCntHistConciliacion(CNT_HIST_CONCILIACION dtos)
+        public async Task<CntReversoConciliacionResponseDto> MapCntReversoConciliacion(CNT_REVERSO_CONCILIACION dtos)
         {
-            CntHistConciliacionResponseDto itemResult = new CntHistConciliacionResponseDto();
+            CntReversoConciliacionResponseDto itemResult = new CntReversoConciliacionResponseDto();
             itemResult.CodigoHistConciliacion = dtos.CODIGO_HIST_CONCILIACION;
             itemResult.CodigoConciliacion = dtos.CODIGO_CONCILIACION;
             itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
@@ -49,15 +47,15 @@ namespace Convertidor.Services.Cnt
             return itemResult;
         }
 
-        public async Task<List<CntHistConciliacionResponseDto>> MapListCntHistoricoConciliacion(List<CNT_HIST_CONCILIACION> dtos)
+        public async Task<List<CntReversoConciliacionResponseDto>> MapListCntReversoConciliacion(List<CNT_REVERSO_CONCILIACION> dtos)
         {
-            List<CntHistConciliacionResponseDto> result = new List<CntHistConciliacionResponseDto>();
+            List<CntReversoConciliacionResponseDto> result = new List<CntReversoConciliacionResponseDto>();
 
 
             foreach (var item in dtos)
             {
                 if (item == null) continue;
-                var itemResult = await MapCntHistConciliacion(item);
+                var itemResult = await MapCntReversoConciliacion(item);
 
                 result.Add(itemResult);
             }
@@ -65,48 +63,10 @@ namespace Convertidor.Services.Cnt
 
         }
 
-        public async Task<ResultDto<List<CntHistConciliacionResponseDto>>> GetAll()
+        public async Task<ResultDto<List<CntReversoConciliacionResponseDto>>> GetAllByCodigoConciliacion(int codigoConciliacion)
         {
 
-            ResultDto<List<CntHistConciliacionResponseDto>> result = new ResultDto<List<CntHistConciliacionResponseDto>>(null);
-            try
-            {
-                var historicoConciliacion = await _repository.GetAll();
-                var cant = historicoConciliacion.Count();
-                if (historicoConciliacion != null && historicoConciliacion.Count() > 0)
-                {
-                    var listDto = await MapListCntHistoricoConciliacion(historicoConciliacion);
-
-                    result.Data = listDto;
-                    result.IsValid = true;
-                    result.Message = "";
-
-
-                    return result;
-                }
-                else
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "No data";
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-                return result;
-            }
-
-        }
-
-        public async Task<ResultDto<List<CntHistConciliacionResponseDto>>> GetAllByCodigoConciliacion(int codigoConciliacion)
-        {
-
-            ResultDto<List<CntHistConciliacionResponseDto>> result = new ResultDto<List<CntHistConciliacionResponseDto>>(null);
+            ResultDto<List<CntReversoConciliacionResponseDto>> result = new ResultDto<List<CntReversoConciliacionResponseDto>>(null);
             try
             {
 
@@ -116,11 +76,11 @@ namespace Convertidor.Services.Cnt
 
                 if (conciliacion.Count() > 0)
                 {
-                    List<CntHistConciliacionResponseDto> listDto = new List<CntHistConciliacionResponseDto>();
+                    List<CntReversoConciliacionResponseDto> listDto = new List<CntReversoConciliacionResponseDto>();
 
                     foreach (var item in conciliacion)
                     {
-                        var dto = await MapCntHistConciliacion(item);
+                        var dto = await MapCntReversoConciliacion(item);
                         listDto.Add(dto);
                     }
 
@@ -150,9 +110,9 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntHistConciliacionResponseDto>> Create(CntHistConciliacionUpdateDto dto)
+        public async Task<ResultDto<CntReversoConciliacionResponseDto>> Create(CntReversoConciliacionUpdateDto dto)
         {
-            ResultDto<CntHistConciliacionResponseDto> result = new ResultDto<CntHistConciliacionResponseDto>(null);
+            ResultDto<CntReversoConciliacionResponseDto> result = new ResultDto<CntReversoConciliacionResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -190,10 +150,9 @@ namespace Convertidor.Services.Cnt
                     result.IsValid = false;
                     result.Message = "codigo Detalle Libro Invalido";
                     return result;
-
                 }
 
-                var codigoDetalleLibro = await _cntDetalleLibroRepository.GetByCodigo(dto.CodigoDetalleLibro);
+                var codigoDetalleLibro = await _cntDetalleLibroService.GetByCodigo(dto.CodigoDetalleLibro);
                 if (codigoDetalleLibro == null)
                 {
 
@@ -210,10 +169,9 @@ namespace Convertidor.Services.Cnt
                     result.IsValid = false;
                     result.Message = "codigo Detalle Edo Cta invalido";
                     return result;
-
                 }
 
-                var codigoDetalleEdoCta = await _cntDetalleEdoCtaRepository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                var codigoDetalleEdoCta = await _cntDetalleEdoCtaService.GetByCodigo(dto.CodigoDetalleEdoCta);
                 if (codigoDetalleEdoCta == null)
                 {
                     result.Data = null;
@@ -259,6 +217,7 @@ namespace Convertidor.Services.Cnt
 
                 }
 
+
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
@@ -287,7 +246,7 @@ namespace Convertidor.Services.Cnt
 
 
 
-                CNT_HIST_CONCILIACION entity = new CNT_HIST_CONCILIACION();
+                CNT_REVERSO_CONCILIACION entity = new CNT_REVERSO_CONCILIACION();
                 entity.CODIGO_HIST_CONCILIACION = await _repository.GetNextKey();
                 entity.CODIGO_CONCILIACION = dto.CodigoConciliacion;
                 entity.CODIGO_PERIODO = dto.CodigoPeriodo;
@@ -312,7 +271,7 @@ namespace Convertidor.Services.Cnt
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapCntHistConciliacion(created.Data);
+                    var resultDto = await MapCntReversoConciliacion(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -340,10 +299,9 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
-
-        public async Task<ResultDto<CntHistConciliacionResponseDto>> Update(CntHistConciliacionUpdateDto dto)
+        public async Task<ResultDto<CntReversoConciliacionResponseDto>> Update(CntReversoConciliacionUpdateDto dto)
         {
-            ResultDto<CntHistConciliacionResponseDto> result = new ResultDto<CntHistConciliacionResponseDto>(null);
+            ResultDto<CntReversoConciliacionResponseDto> result = new ResultDto<CntReversoConciliacionResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -393,7 +351,7 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                var codigoDetalleLibro = await _cntDetalleLibroRepository.GetByCodigo(dto.CodigoDetalleLibro);
+                var codigoDetalleLibro = await _cntDetalleLibroService.GetByCodigo(dto.CodigoDetalleLibro);
                 if (codigoDetalleLibro == null)
                 {
 
@@ -413,7 +371,7 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                var codigoDetalleEdoCta = await _cntDetalleEdoCtaRepository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                var codigoDetalleEdoCta = await _cntDetalleEdoCtaService.GetByCodigo(dto.CodigoDetalleEdoCta);
                 if (codigoDetalleEdoCta == null)
                 {
                     result.Data = null;
@@ -507,7 +465,7 @@ namespace Convertidor.Services.Cnt
 
                 await _repository.Update(codigoHistConciliacion);
 
-                var resultDto = await MapCntHistConciliacion(codigoHistConciliacion);
+                var resultDto = await MapCntReversoConciliacion(codigoHistConciliacion);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -522,9 +480,9 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntHistConciliacionDeleteDto>> Delete(CntHistConciliacionDeleteDto dto)
+        public async Task<ResultDto<CntReversoConciliacionDeleteDto>> Delete(CntReversoConciliacionDeleteDto dto)
         {
-            ResultDto<CntHistConciliacionDeleteDto> result = new ResultDto<CntHistConciliacionDeleteDto>(null);
+            ResultDto<CntReversoConciliacionDeleteDto> result = new ResultDto<CntReversoConciliacionDeleteDto>(null);
             try
             {
 

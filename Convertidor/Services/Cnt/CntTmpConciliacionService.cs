@@ -2,34 +2,32 @@
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Utility;
+using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Services.Cnt
 {
-    public class CntHistConciliacionService : ICntHistConciliacionService
+    public class CntTmpConciliacionService : ICntTmpConciliacionService
     {
-        private readonly ICntHistConciliacionRepository _repository;
+        private readonly ICntTmpConciliacionRepository _repository;
+        private readonly ICntDetalleLibroService _cntDetalleLibroService;
+        private readonly ICntDetalleEdoCtaService _cntDetalleEdoCtaService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly ICntDetalleLibroRepository _cntDetalleLibroRepository;
-        private readonly ICntDetalleEdoCtaRepository _cntDetalleEdoCtaRepository;
 
-        public CntHistConciliacionService(ICntHistConciliacionRepository repository,
-                                           ISisUsuarioRepository sisUsuarioRepository,
-                                           ICntDetalleLibroRepository cntDetalleLibroRepository,
-                                           ICntDetalleEdoCtaRepository cntDetalleEdoCtaRepository)
+        public CntTmpConciliacionService(ICntTmpConciliacionRepository repository,
+                                          ICntDetalleLibroService cntDetalleLibroService,
+                                          ICntDetalleEdoCtaService cntDetalleEdoCtaService,
+                                          ISisUsuarioRepository sisUsuarioRepository)
         {
             _repository = repository;
+            _cntDetalleLibroService = cntDetalleLibroService;
+            _cntDetalleEdoCtaService = cntDetalleEdoCtaService;
             _sisUsuarioRepository = sisUsuarioRepository;
-            _cntDetalleLibroRepository = cntDetalleLibroRepository;
-            _cntDetalleEdoCtaRepository = cntDetalleEdoCtaRepository;
         }
 
-
-
-
-        public async Task<CntHistConciliacionResponseDto> MapCntHistConciliacion(CNT_HIST_CONCILIACION dtos)
+        public async Task<CntTmpConciliacionResponseDto> MapCntTmpConciliacion(CNT_TMP_CONCILIACION dtos)
         {
-            CntHistConciliacionResponseDto itemResult = new CntHistConciliacionResponseDto();
-            itemResult.CodigoHistConciliacion = dtos.CODIGO_HIST_CONCILIACION;
+            CntTmpConciliacionResponseDto itemResult = new CntTmpConciliacionResponseDto();
+            itemResult.CodigoTmpConciliacion = dtos.CODIGO_TMP_CONCILIACION;
             itemResult.CodigoConciliacion = dtos.CODIGO_CONCILIACION;
             itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
             itemResult.CodigoCuentaBanco = dtos.CODIGO_CUENTA_BANCO;
@@ -49,15 +47,15 @@ namespace Convertidor.Services.Cnt
             return itemResult;
         }
 
-        public async Task<List<CntHistConciliacionResponseDto>> MapListCntHistoricoConciliacion(List<CNT_HIST_CONCILIACION> dtos)
+        public async Task<List<CntTmpConciliacionResponseDto>> MapListCntTmpConciliacion(List<CNT_TMP_CONCILIACION> dtos)
         {
-            List<CntHistConciliacionResponseDto> result = new List<CntHistConciliacionResponseDto>();
+            List<CntTmpConciliacionResponseDto> result = new List<CntTmpConciliacionResponseDto>();
 
 
             foreach (var item in dtos)
             {
                 if (item == null) continue;
-                var itemResult = await MapCntHistConciliacion(item);
+                var itemResult = await MapCntTmpConciliacion(item);
 
                 result.Add(itemResult);
             }
@@ -65,17 +63,17 @@ namespace Convertidor.Services.Cnt
 
         }
 
-        public async Task<ResultDto<List<CntHistConciliacionResponseDto>>> GetAll()
+        public async Task<ResultDto<List<CntTmpConciliacionResponseDto>>> GetAll()
         {
 
-            ResultDto<List<CntHistConciliacionResponseDto>> result = new ResultDto<List<CntHistConciliacionResponseDto>>(null);
+            ResultDto<List<CntTmpConciliacionResponseDto>> result = new ResultDto<List<CntTmpConciliacionResponseDto>>(null);
             try
             {
-                var historicoConciliacion = await _repository.GetAll();
-                var cant = historicoConciliacion.Count();
-                if (historicoConciliacion != null && historicoConciliacion.Count() > 0)
+                var tmpConciliacion = await _repository.GetAll();
+                var cant = tmpConciliacion.Count();
+                if (tmpConciliacion != null && tmpConciliacion.Count() > 0)
                 {
-                    var listDto = await MapListCntHistoricoConciliacion(historicoConciliacion);
+                    var listDto = await MapListCntTmpConciliacion(tmpConciliacion);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -103,141 +101,85 @@ namespace Convertidor.Services.Cnt
 
         }
 
-        public async Task<ResultDto<List<CntHistConciliacionResponseDto>>> GetAllByCodigoConciliacion(int codigoConciliacion)
+        public async Task<ResultDto<CntTmpConciliacionResponseDto>> Create(CntTmpConciliacionUpdateDto dto)
         {
-
-            ResultDto<List<CntHistConciliacionResponseDto>> result = new ResultDto<List<CntHistConciliacionResponseDto>>(null);
-            try
-            {
-
-                var conciliacion = await _repository.GetByCodigoConciliacion(codigoConciliacion);
-
-
-
-                if (conciliacion.Count() > 0)
-                {
-                    List<CntHistConciliacionResponseDto> listDto = new List<CntHistConciliacionResponseDto>();
-
-                    foreach (var item in conciliacion)
-                    {
-                        var dto = await MapCntHistConciliacion(item);
-                        listDto.Add(dto);
-                    }
-
-
-                    result.Data = listDto;
-
-                    result.IsValid = true;
-                    result.Message = "";
-                }
-                else
-                {
-                    result.Data = null;
-                    result.IsValid = true;
-                    result.Message = "No existen Datos";
-
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-            }
-
-
-
-            return result;
-        }
-
-        public async Task<ResultDto<CntHistConciliacionResponseDto>> Create(CntHistConciliacionUpdateDto dto)
-        {
-            ResultDto<CntHistConciliacionResponseDto> result = new ResultDto<CntHistConciliacionResponseDto>(null);
+            ResultDto<CntTmpConciliacionResponseDto> result = new ResultDto<CntTmpConciliacionResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-
+                
                 if (dto.CodigoConciliacion <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo conciliacion Invalido";
+                    result.Message = "Codigo conciliacion invalido";
                     return result;
+
+
                 }
+
 
                 if (dto.CodigoPeriodo <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo periodo invalido";
+                    result.Message = "Codigo Periodo invalido";
                     return result;
                 }
-
 
                 if (dto.CodigoCuentaBanco <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Cuenta Banco invalido";
+                    result.Message = "Codigo Cuenta Banco Invalida";
+                    return result;
+                }
+
+                if(dto.CodigoDetalleLibro <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Libro Invalido";
                     return result;
 
                 }
 
-                if (dto.CodigoDetalleLibro <= 0)
+                var codigoDetalleLibro = await _cntDetalleLibroService.GetByCodigo(dto.CodigoDetalleLibro);
+                if (codigoDetalleLibro == null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Detalle Libro Invalido";
+                    result.Message = "Codigo Detalle Libro Invalido";
                     return result;
 
                 }
 
-                var codigoDetalleLibro = await _cntDetalleLibroRepository.GetByCodigo(dto.CodigoDetalleLibro);
-                if (codigoDetalleLibro == null)
+                if(dto.CodigoDetalleEdoCta <= 0) 
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Detalle Libro Invalido";
+                    result.Message = "Codigo Detalle Edo Cta Invalido";
                     return result;
 
                 }
 
-                if (dto.CodigoDetalleEdoCta <= 0)
+                var codigoDetalleEdoCta = await _cntDetalleEdoCtaService.GetByCodigo(dto.CodigoDetalleEdoCta);
+                if(codigoDetalleEdoCta == null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Detalle Edo Cta invalido";
+                    result.Message = "Codigo Detalle Edo Cta Invalido";
                     return result;
 
                 }
 
-                var codigoDetalleEdoCta = await _cntDetalleEdoCtaRepository.GetByCodigo(dto.CodigoDetalleEdoCta);
-                if (codigoDetalleEdoCta == null)
+                var fecha = dto.Fecha.ToShortDateString();
+                if(fecha == "1/1/0001") 
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Detalle Edo Cta invalido";
-                    return result;
-
-                }
-
-                if (dto.Fecha == null)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha invalida";
-                    return result;
-                }
-
-                var numero = Convert.ToInt32(dto.Numero);
-                if (numero < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero invalido";
+                    result.Message = "Fecha Invalida";
                     return result;
 
                 }
@@ -246,18 +188,32 @@ namespace Convertidor.Services.Cnt
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Numero invalido";
+                    result.Message = "Numero Invalido";
                     return result;
+
                 }
 
-                if (dto.Monto <= 0)
+                var numero = Convert.ToInt32(dto.Numero);
+                if(numero <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Monto invalido";
+                    result.Message = "Numero Invalido";
                     return result;
 
                 }
+
+
+                if(dto.Monto <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Invalido";
+                    return result;
+
+                }
+               
+
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -287,8 +243,8 @@ namespace Convertidor.Services.Cnt
 
 
 
-                CNT_HIST_CONCILIACION entity = new CNT_HIST_CONCILIACION();
-                entity.CODIGO_HIST_CONCILIACION = await _repository.GetNextKey();
+                CNT_TMP_CONCILIACION entity = new CNT_TMP_CONCILIACION();
+                entity.CODIGO_TMP_CONCILIACION = await _repository.GetNextKey();
                 entity.CODIGO_CONCILIACION = dto.CodigoConciliacion;
                 entity.CODIGO_PERIODO = dto.CodigoPeriodo;
                 entity.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
@@ -312,7 +268,7 @@ namespace Convertidor.Services.Cnt
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapCntHistConciliacion(created.Data);
+                    var resultDto = await MapCntTmpConciliacion(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -341,19 +297,19 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntHistConciliacionResponseDto>> Update(CntHistConciliacionUpdateDto dto)
+        public async Task<ResultDto<CntTmpConciliacionResponseDto>> Update(CntTmpConciliacionUpdateDto dto)
         {
-            ResultDto<CntHistConciliacionResponseDto> result = new ResultDto<CntHistConciliacionResponseDto>(null);
+            ResultDto<CntTmpConciliacionResponseDto> result = new ResultDto<CntTmpConciliacionResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoHistConciliacion = await _repository.GetByCodigo(dto.CodigoHistConciliacion);
-                if (codigoHistConciliacion == null)
+                var codigoTmpConciliacion = await _repository.GetByCodigo(dto.CodigoTmpConciliacion);
+                if (codigoTmpConciliacion == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Historico conciliacion Invalido";
+                    result.Message = "Codigo Temporal conciliacion Invalido";
                     return result;
 
                 }
@@ -362,44 +318,44 @@ namespace Convertidor.Services.Cnt
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo conciliacion Invalido";
+                    result.Message = "Codigo conciliacion invalido";
                     return result;
+
+
                 }
+
 
                 if (dto.CodigoPeriodo <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo periodo invalido";
+                    result.Message = "Codigo Periodo invalido";
                     return result;
                 }
-
 
                 if (dto.CodigoCuentaBanco <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Cuenta Banco invalido";
+                    result.Message = "Codigo Cuenta Banco Invalida";
                     return result;
-
                 }
 
                 if (dto.CodigoDetalleLibro <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Detalle Libro Invalido";
+                    result.Message = "Codigo Detalle Libro Invalido";
                     return result;
 
                 }
 
-                var codigoDetalleLibro = await _cntDetalleLibroRepository.GetByCodigo(dto.CodigoDetalleLibro);
+                var codigoDetalleLibro = await _cntDetalleLibroService.GetByCodigo(dto.CodigoDetalleLibro);
                 if (codigoDetalleLibro == null)
                 {
-
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Detalle Libro Invalido";
+                    result.Message = "Codigo Detalle Libro Invalido";
                     return result;
 
                 }
@@ -408,36 +364,27 @@ namespace Convertidor.Services.Cnt
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Detalle Edo Cta invalido";
+                    result.Message = "Codigo Detalle Edo Cta Invalido";
                     return result;
 
                 }
 
-                var codigoDetalleEdoCta = await _cntDetalleEdoCtaRepository.GetByCodigo(dto.CodigoDetalleEdoCta);
+                var codigoDetalleEdoCta = await _cntDetalleEdoCtaService.GetByCodigo(dto.CodigoDetalleEdoCta);
                 if (codigoDetalleEdoCta == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Detalle Edo Cta invalido";
+                    result.Message = "Codigo Detalle Edo Cta Invalido";
                     return result;
 
                 }
 
-                if (dto.Fecha == null)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha invalida";
-                    return result;
-                }
-
-                var numero = Convert.ToInt32(dto.Numero);
-                if (numero < 0)
+                var fecha = dto.Fecha.ToShortDateString();
+                if (fecha == "1/1/0001")
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Numero invalido";
+                    result.Message = "Fecha Invalida";
                     return result;
 
                 }
@@ -446,18 +393,30 @@ namespace Convertidor.Services.Cnt
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Numero invalido";
+                    result.Message = "Numero Invalido";
                     return result;
+
+                }
+
+                var numero = Convert.ToInt64(dto.Numero);
+                if (numero <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Invalido";
+                    return result;
+
                 }
 
                 if (dto.Monto <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Monto invalido";
+                    result.Message = "Numero Invalido";
                     return result;
 
                 }
+
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -485,29 +444,29 @@ namespace Convertidor.Services.Cnt
 
 
 
-                codigoHistConciliacion.CODIGO_HIST_CONCILIACION = dto.CodigoHistConciliacion;
-                codigoHistConciliacion.CODIGO_CONCILIACION = dto.CodigoConciliacion;
-                codigoHistConciliacion.CODIGO_PERIODO = dto.CodigoPeriodo;
-                codigoHistConciliacion.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
-                codigoHistConciliacion.CODIGO_DETALLE_LIBRO = dto.CodigoDetalleLibro;
-                codigoHistConciliacion.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
-                codigoHistConciliacion.FECHA = dto.Fecha;
-                codigoHistConciliacion.NUMERO = dto.Numero;
-                codigoHistConciliacion.MONTO = dto.Monto;
-                codigoHistConciliacion.EXTRA1 = dto.Extra1;
-                codigoHistConciliacion.EXTRA2 = dto.Extra2;
-                codigoHistConciliacion.EXTRA3 = dto.Extra3;
+                codigoTmpConciliacion.CODIGO_TMP_CONCILIACION = dto.CodigoTmpConciliacion;
+                codigoTmpConciliacion.CODIGO_CONCILIACION = dto.CodigoConciliacion;
+                codigoTmpConciliacion.CODIGO_PERIODO = dto.CodigoPeriodo;
+                codigoTmpConciliacion.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
+                codigoTmpConciliacion.CODIGO_DETALLE_LIBRO = dto.CodigoDetalleLibro;
+                codigoTmpConciliacion.CODIGO_DETALLE_EDO_CTA = dto.CodigoDetalleEdoCta;
+                codigoTmpConciliacion.FECHA = dto.Fecha;
+                codigoTmpConciliacion.NUMERO = dto.Numero;
+                codigoTmpConciliacion.MONTO = dto.Monto;
+                codigoTmpConciliacion.EXTRA1 = dto.Extra1;
+                codigoTmpConciliacion.EXTRA2 = dto.Extra2;
+                codigoTmpConciliacion.EXTRA3 = dto.Extra3;
 
 
 
 
-                codigoHistConciliacion.CODIGO_EMPRESA = conectado.Empresa;
-                codigoHistConciliacion.USUARIO_UPD = conectado.Usuario;
-                codigoHistConciliacion.FECHA_UPD = DateTime.Now;
+                codigoTmpConciliacion.CODIGO_EMPRESA = conectado.Empresa;
+                codigoTmpConciliacion.USUARIO_UPD = conectado.Usuario;
+                codigoTmpConciliacion.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(codigoHistConciliacion);
+                await _repository.Update(codigoTmpConciliacion);
 
-                var resultDto = await MapCntHistConciliacion(codigoHistConciliacion);
+                var resultDto = await MapCntTmpConciliacion(codigoTmpConciliacion);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -522,23 +481,23 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntHistConciliacionDeleteDto>> Delete(CntHistConciliacionDeleteDto dto)
+        public async Task<ResultDto<CntTmpConciliacionDeleteDto>> Delete(CntTmpConciliacionDeleteDto dto)
         {
-            ResultDto<CntHistConciliacionDeleteDto> result = new ResultDto<CntHistConciliacionDeleteDto>(null);
+            ResultDto<CntTmpConciliacionDeleteDto> result = new ResultDto<CntTmpConciliacionDeleteDto>(null);
             try
             {
 
-                var codigoHistConciliacion = await _repository.GetByCodigo(dto.CodigoHistConciliacion);
-                if (codigoHistConciliacion == null)
+                var codigoTmpConciliacion = await _repository.GetByCodigo(dto.CodigoTmpConciliacion);
+                if (codigoTmpConciliacion == null)
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "Codigo Historico Conciliacion no existe";
+                    result.Message = "Codigo Temporal Conciliacion no existe";
                     return result;
                 }
 
 
-                var deleted = await _repository.Delete(dto.CodigoHistConciliacion);
+                var deleted = await _repository.Delete(dto.CodigoTmpConciliacion);
 
                 if (deleted.Length > 0)
                 {
@@ -567,5 +526,6 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
     }
 }

@@ -20,6 +20,12 @@ namespace Convertidor.Data
         public DbSet<CNT_ESTADO_CUENTAS> CNT_ESTADO_CUENTAS { get; set; }
         public DbSet<CNT_HIST_CONCILIACION> CNT_HIST_CONCILIACION { get; set; }
         public DbSet<CNT_LIBROS> CNT_LIBROS { get; set; }
+        public DbSet<CNT_REVERSO_CONCILIACION> CNT_REVERSO_CONCILIACION { get; set; }
+        public DbSet<CNT_RUBROS> CNT_RUBROS { get; set; }
+        public DbSet<CNT_TMP_CONCILIACION> CNT_TMP_CONCILIACION { get; set; }
+        public DbSet<CNT_BALANCES> CNT_BALANCES { get; set; }
+        public DbSet<CNT_MAYORES> CNT_MAYORES { get; set; }
+
 
 
 
@@ -125,6 +131,57 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_LIBROS");
    });
+                modelBuilder
+    .Entity<CNT_REVERSO_CONCILIACION>(builder =>
+    {
+    builder.HasKey(table => new
+    {
+      table.CODIGO_HIST_CONCILIACION,
+
+    });
+    builder.ToTable("CNT_REVERSO_CONCILIACION");
+    });
+            modelBuilder
+   .Entity<CNT_RUBROS>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_RUBRO,
+
+       });
+       builder.ToTable("CNT_RUBROS");
+   });
+           modelBuilder
+   .Entity<CNT_TMP_CONCILIACION>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_TMP_CONCILIACION,
+
+       });
+       builder.ToTable("CNT_TMP_CONCILIACION");
+   });
+           modelBuilder
+   .Entity<CNT_BALANCES>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_BALANCE,
+
+       });
+       builder.ToTable("CNT_BALANCES");
+   });
+              modelBuilder
+   .Entity<CNT_MAYORES>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_MAYOR,
+
+       });
+       builder.ToTable("CNT_MAYORES");
+   });
+            
         }
 
         

@@ -446,6 +446,11 @@ builder.Services.AddTransient<ICntDetalleLibroRepository, CntDetalleLibroReposit
 builder.Services.AddTransient<ICntEstadoCuentasRepository, CntEstadoCuentasRepository>();
 builder.Services.AddTransient<ICntHistConciliacionRepository, CntHistConciliacionRepository>();
 builder.Services.AddTransient<ICntLibrosRepository, CntLibrosRepository>();
+builder.Services.AddTransient<ICntReversoConciliacionRepository, CntReversoConciliacionRepository>();
+builder.Services.AddTransient<ICntRubrosRepository, CntRubrosRepository>();
+builder.Services.AddTransient<ICntTmpConciliacionRepository, CntTmpConciliacionRepository>();
+builder.Services.AddTransient<ICntBalancesRepository, CntBalancesRepository>();
+builder.Services.AddTransient<ICntMayoresRepository, CntMayoresRepository>();
 
 
 //CNT Services
@@ -459,6 +464,11 @@ builder.Services.AddTransient<ICntDetalleLibroService, CntDetalleLibroService>()
 builder.Services.AddTransient<ICntEstadoCuentasService, CntEstadoCuentasService>();
 builder.Services.AddTransient<ICntHistConciliacionService, CntHistConciliacionService>();
 builder.Services.AddTransient<ICntLibrosService, CntLibrosService>();
+builder.Services.AddTransient<ICntReversoConciliacionService, CntReversoConciliacionService>();
+builder.Services.AddTransient<ICntRubrosService, CntRubrosService>();
+builder.Services.AddTransient<ICntTmpConciliacionService, CntTmpConciliacionService>();
+builder.Services.AddTransient<ICntBalancesService, CntBalancesService>();
+builder.Services.AddTransient<ICntMayoresService, CntMayoresService>();
 
 
 
