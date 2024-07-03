@@ -27,5 +27,21 @@ namespace Convertidor.Data.Repository.Cnt
             }
 
         }
+
+        public async Task<List<CNT_AUXILIARES>> GetByCodigoMayor(int codigoMayor)
+        {
+            try
+            {
+                var result = await _context.CNT_AUXILIARES.DefaultIfEmpty().Where(x => x.CODIGO_MAYOR == codigoMayor).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
     }
 }

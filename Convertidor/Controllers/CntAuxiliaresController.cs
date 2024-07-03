@@ -33,6 +33,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllByCodigoMayor(FilterAuxiliares filter)
+        {
+            var result = await _service.GetAllByCodigoMayor(filter.codigoMayor);
+            return Ok(result);
+        }
+
     }
 }

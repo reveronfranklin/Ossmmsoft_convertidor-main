@@ -8,10 +8,13 @@ namespace Convertidor.Services.Cnt
     public class CntAuxiliaresService : ICntAuxiliaresService
     {
         private readonly ICntAuxiliaresRepository _repository;
+        private readonly ICntMayoresService _cntMayoresService;
 
-        public CntAuxiliaresService(ICntAuxiliaresRepository repository)
+        public CntAuxiliaresService(ICntAuxiliaresRepository repository,
+                                     ICntMayoresService cntMayoresService)
         {
             _repository = repository;
+            _cntMayoresService = cntMayoresService;
         }
 
         public async Task<CntAuxiliaresResponseDto> MapAuxiliares(CNT_AUXILIARES dtos)
@@ -96,5 +99,53 @@ namespace Convertidor.Services.Cnt
             }
 
         }
+
+        public async Task<ResultDto<List<CntAuxiliaresResponseDto>>> GetAllByCodigoMayor(int codigoMayor)
+        {
+
+            ResultDto<List<CntAuxiliaresResponseDto>> result = new ResultDto<List<CntAuxiliaresResponseDto>>(null);
+            try
+            {
+
+                var mayores = await _repository.GetByCodigoMayor(codigoMayor);
+
+
+
+                if (mayores.Count() > 0)
+                {
+                    List<CntAuxiliaresResponseDto> listDto = new List<CntAuxiliaresResponseDto>();
+
+                    foreach (var item in mayores)
+                    {
+                        var dto = await MapAuxiliares(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }

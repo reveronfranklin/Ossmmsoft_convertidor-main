@@ -420,7 +420,7 @@ namespace Convertidor.Services.Cnt
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Rubro no existe";
+                    result.Message = "Codigo Balance no existe";
                     return result;
                 }
 
