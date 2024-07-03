@@ -179,21 +179,21 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                if (dto.Segmento1 is not null && dto.Extra1.Length > 20)
+                if (dto.Segmento1 is not null && dto.Segmento1.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Segmento1 Invalido";
                     return result;
                 }
-                if (dto.Segmento2 is not null && dto.Extra1.Length > 20)
+                if (dto.Segmento2 is not null && dto.Segmento2.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Segmento2 Invalido";
                     return result;
                 }
-                if (dto.Segmento3 is not null && dto.Extra1.Length > 20)
+                if (dto.Segmento3 is not null && dto.Segmento3.Length > 20)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -326,6 +326,172 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+
+        public async Task<ResultDto<CntAuxiliaresResponseDto>> Update(CntAuxiliaresUpdateDto dto)
+        {
+            ResultDto<CntAuxiliaresResponseDto> result = new ResultDto<CntAuxiliaresResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoAuxiliar = await _repository.GetByCodigo(dto.CodigoAuxiliar);
+                if (codigoAuxiliar == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar Invalido";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoMayor <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Mayor invalido";
+                    return result;
+                }
+
+                var codigoMayor = await _cntMayoresService.GetByCodigo(dto.CodigoMayor);
+                if (codigoMayor == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Mayor invalido";
+                    return result;
+
+                }
+
+                if (dto.Segmento1 is not null && dto.Segmento1.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Segmento1 Invalido";
+                    return result;
+                }
+                if (dto.Segmento2 is not null && dto.Segmento2.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Segmento2 Invalido";
+                    return result;
+                }
+                if (dto.Segmento3 is not null && dto.Segmento3.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Segmento3 Invalido";
+                    return result;
+                }
+
+
+                if (dto.Denominacion.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Denominacion Invalida";
+                    return result;
+                }
+
+                if (dto.Descripcion is not null && dto.Descripcion.Length > 1000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if (dto.CodigoProveedor <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Proveedor Invalido";
+                    return result;
+
+                }
+
+                var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
+                if (codigoProveedor == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Proveedor Invalido";
+                    return result;
+
+                }
+
+
+
+
+
+                codigoAuxiliar.CODIGO_AUXILIAR = dto.CodigoAuxiliar;
+                codigoAuxiliar.CODIGO_MAYOR = dto.CodigoMayor;
+                codigoAuxiliar.SEGMENTO1 = dto.Segmento1;
+                codigoAuxiliar.SEGMENTO2 = dto.Segmento2;
+                codigoAuxiliar.SEGMENTO3 = dto.Segmento3;
+                codigoAuxiliar.SEGMENTO4 = dto.Segmento4;
+                codigoAuxiliar.SEGMENTO5 = dto.Segmento5;
+                codigoAuxiliar.SEGMENTO6 = dto.Segmento6;
+                codigoAuxiliar.SEGMENTO7 = dto.Segmento7;
+                codigoAuxiliar.SEGMENTO8 = dto.Segmento8;
+                codigoAuxiliar.SEGMENTO9 = dto.Segmento9;
+                codigoAuxiliar.SEGMENTO10 = dto.Segmento10;
+                codigoAuxiliar.DENOMINACION = dto.Denominacion;
+                codigoAuxiliar.DESCRIPCION = dto.Descripcion;
+                codigoAuxiliar.EXTRA1 = dto.Extra1;
+                codigoAuxiliar.EXTRA2 = dto.Extra2;
+                codigoAuxiliar.EXTRA3 = dto.Extra3;
+                codigoAuxiliar.CODIGO_PROVEEDOR = dto.CodigoProveedor;
+
+
+
+
+                codigoAuxiliar.CODIGO_EMPRESA = conectado.Empresa;
+                codigoAuxiliar.USUARIO_UPD = conectado.Usuario;
+                codigoAuxiliar.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoAuxiliar);
+
+                var resultDto = await MapAuxiliares(codigoAuxiliar);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
 
     }
 }

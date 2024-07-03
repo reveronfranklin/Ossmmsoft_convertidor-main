@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_AUXILIARES> GetByCodigo(int codigoAuxiliar)
+        {
+            try
+            {
+                var result = await _context.CNT_AUXILIARES.DefaultIfEmpty().Where(x => x.CODIGO_AUXILIAR == codigoAuxiliar).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<List<CNT_AUXILIARES>> GetByCodigoMayor(int codigoMayor)
         {
             try
@@ -57,6 +73,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_AUXILIARES>> Update(CNT_AUXILIARES entity)
+        {
+            ResultDto<CNT_AUXILIARES> result = new ResultDto<CNT_AUXILIARES>(null);
+
+            try
+            {
+                CNT_AUXILIARES entityUpdate = await GetByCodigo(entity.CODIGO_AUXILIAR);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_AUXILIARES.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)
