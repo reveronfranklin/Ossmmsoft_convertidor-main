@@ -432,6 +432,36 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntMayoresResponseDto>> GetByCodigo(int codigoMayor)
+        {
+            ResultDto<CntMayoresResponseDto> result = new ResultDto<CntMayoresResponseDto>(null);
+            try
+            {
+
+                var mayores = await _repository.GetByCodigo(codigoMayor);
+                if (mayores == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Mayor no existe";
+                    return result;
+                }
+
+                var resultDto = await MapMayores(mayores);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
 
 
     }
