@@ -111,6 +111,24 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<string> Delete(int codigoAuxiliar)
+        {
+            try
+            {
+                CNT_AUXILIARES entity = await GetByCodigo(codigoAuxiliar);
+                if (entity != null)
+                {
+                    _context.CNT_AUXILIARES.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<int> GetNextKey()
         {
             try

@@ -9,6 +9,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<List<CNT_AUXILIARES>> GetByCodigoMayor(int codigoMayor);
         Task<ResultDto<CNT_AUXILIARES>> Add(CNT_AUXILIARES entity);
         Task<ResultDto<CNT_AUXILIARES>> Update(CNT_AUXILIARES entity);
+        Task<string> Delete(int codigoAuxiliar);
         Task<int> GetNextKey();
     }
 }
