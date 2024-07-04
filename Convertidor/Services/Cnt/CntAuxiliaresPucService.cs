@@ -311,6 +311,53 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntAuxiliaresPucDeleteDto>> Delete(CntAuxiliaresPucDeleteDto dto)
+        {
+            ResultDto<CntAuxiliaresPucDeleteDto> result = new ResultDto<CntAuxiliaresPucDeleteDto>(null);
+            try
+            {
+
+                var codigoAuxiliarPuc = await _repository.GetByCodigo(dto.CodigoAuxiliarPuc);
+                if (codigoAuxiliarPuc == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar Puc no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoAuxiliarPuc);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
 
     }
 }
