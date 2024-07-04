@@ -1,6 +1,9 @@
-﻿using Convertidor.Data.Entities.Presupuesto;
+﻿using System.Text;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -8,10 +11,12 @@ namespace Convertidor.Data.Repository.Rh
     {
 		
         private readonly DataContextPre _context;
+        private readonly IDistributedCache _distributedCache;
 
-        public PreCargosRepository(DataContextPre context)
+        public PreCargosRepository(DataContextPre context,IDistributedCache distributedCache)
         {
             _context = context;
+            _distributedCache = distributedCache;
         }
       
         public async Task<PRE_CARGOS> GetByCodigo(int codigoCargo)
@@ -51,9 +56,35 @@ namespace Convertidor.Data.Repository.Rh
         {
             try
             {
-                var result = await _context.PRE_CARGOS.Where(x=>x.CODIGO_PRESUPUESTO==codigoPresupuesto).DefaultIfEmpty().ToListAsync();
+                
+                
+                var listCargos = new List<PRE_CARGOS>();
 
-                return result;
+                var cacheKey = $"listCargosPresupuesto-{codigoPresupuesto}";
+
+                var serializedListNominaPeriodo = string.Empty;
+
+                var redisListNominaPeriodo = await _distributedCache.GetAsync(cacheKey);
+                if (redisListNominaPeriodo != null)
+                {
+                    serializedListNominaPeriodo = System.Text.Encoding.UTF8.GetString(redisListNominaPeriodo);
+                    listCargos = JsonConvert.DeserializeObject<List<PRE_CARGOS>>(serializedListNominaPeriodo);
+                 
+                }
+                else
+                {
+                    listCargos = await _context.PRE_CARGOS.Where(x=>x.CODIGO_PRESUPUESTO==codigoPresupuesto).DefaultIfEmpty().ToListAsync();
+                    serializedListNominaPeriodo = JsonConvert.SerializeObject(listCargos);
+                    redisListNominaPeriodo = Encoding.UTF8.GetBytes(serializedListNominaPeriodo);
+
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(60))
+                        .SetSlidingExpiration(TimeSpan.FromDays(30));
+                    await _distributedCache.SetAsync(cacheKey, redisListNominaPeriodo, options);
+
+                }
+                
+                return listCargos;
             }
             catch (Exception ex)
             {

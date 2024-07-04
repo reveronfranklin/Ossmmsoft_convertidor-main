@@ -43,7 +43,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
        
-
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> CopiarArchivos()
+        {
+            var result = await _service.CopiarArchivos();
+            return Ok(result);
+        }
 
 
         [HttpPost]

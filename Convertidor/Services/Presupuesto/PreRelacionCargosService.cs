@@ -96,29 +96,29 @@ namespace Convertidor.Services.Presupuesto
             try
             {
 
-                if (filter.CodigoPresupuesto == 0)
+                if (filter.CodigoPresupuesto == 0 && filter.CodigoIcp==0)
                 {
-                    var lastPresupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
-                    if (lastPresupuesto != null) filter.CodigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
+                    
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+                    result.LinkData = "";
+                    return result;
+                    //var lastPresupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
+                    //if (lastPresupuesto != null) filter.CodigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
 
                 var cargos = await _repository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
 
-                /*if (filter.CodigoIcp == 0)
-                {
-                    var icps  = await _preICPRepository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
-                    if (icps.Count > 0)
-                    {
-                        filter.CodigoIcp = icps.FirstOrDefault().CODIGO_ICP;
-                    }
-                    
-                }*/
+          
 
                 if (filter.CodigoIcp != null && filter.CodigoIcp > 0)
                 {
                     cargos = cargos.Where(x => x.CODIGO_ICP == filter.CodigoIcp).ToList();
                 }
 
+             
+                
 
                 if (cargos.Count() > 0)
                 {

@@ -14,6 +14,8 @@
         Task<ResultDto<RhPersonaDeleteDto>> Delete(RhPersonaDeleteDto dto);
         List<string> GetListNacionalidad();
         Task<ResultDto<PersonasDto>> AddImage(int codigoPersona, List<IFormFile> files);
+
+        Task<string> CopiarArchivos();
 	}
 }
 
