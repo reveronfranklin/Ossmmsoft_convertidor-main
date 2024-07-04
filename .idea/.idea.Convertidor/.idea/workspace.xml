@@ -9,11 +9,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCargosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCargosRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/SelectListDescriptivaDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/SelectListDescriptivaDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDescriptivasService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDescriptivasService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Settings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Settings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/IRhPersonaService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/IRhPersonaService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +38,19 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -183,7 +195,7 @@
       <workItem from="1719005732786" duration="23597000" />
       <workItem from="1719428708703" duration="12828000" />
       <workItem from="1719682443953" duration="803000" />
-      <workItem from="1719877535999" duration="24787000" />
+      <workItem from="1719877535999" duration="33984000" />
     </task>
     <servers />
   </component>
@@ -366,26 +378,26 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs</url>
-          <line>68</line>
+          <line>74</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="1618" />
+              <option value="1830" />
             </startOffsets>
             <endOffsets>
-              <option value="1658" />
+              <option value="1870" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs</url>
-          <line>79</line>
+          <line>85</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="1861" />
+              <option value="2073" />
             </startOffsets>
             <endOffsets>
-              <option value="1901" />
+              <option value="2113" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="52" />
@@ -431,13 +443,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs</url>
-          <line>97</line>
+          <line>103</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" containingFunctionPresentation="Method 'AddImage'">
             <startOffsets>
-              <option value="2382" />
+              <option value="2594" />
             </startOffsets>
             <endOffsets>
-              <option value="2429" />
+              <option value="2641" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="88" />
@@ -915,19 +927,50 @@
           <option name="timeStamp" value="168" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDescriptivasService.cs</url>
-          <line>696</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDescriptivasService.cs" containingFunctionPresentation="Method 'MapSelectPreDecriptiva'">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs</url>
+          <line>49</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" containingFunctionPresentation="Method 'CopiarArchivos'">
             <startOffsets>
-              <option value="23234" />
+              <option value="1078" />
             </startOffsets>
             <endOffsets>
-              <option value="23296" />
+              <option value="1123" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="169" />
+          <option name="timeStamp" value="170" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
+          <line>1121</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" containingFunctionPresentation="Method 'CopiarArchivos'">
+            <startOffsets>
+              <option value="41354" />
+            </startOffsets>
+            <endOffsets>
+              <option value="41385" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="172" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
+          <line>1113</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" containingFunctionPresentation="Method 'CopiarArchivos'">
+            <startOffsets>
+              <option value="41117" />
+            </startOffsets>
+            <endOffsets>
+              <option value="41135" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="173" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="Type#Convertidor.Data.Entities.Rh.RH_PERSONAS" memberName="CEDULA" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

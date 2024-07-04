@@ -1088,6 +1088,98 @@ namespace Convertidor.Data.Repository.Rh
             return result;
         }
         
+        public string[] GetFicheros(string ruta)
+        {
+
+            string[] ficheros = Directory.GetFiles(ruta);
+            string[] sorted = ficheros.OrderByDescending(o => o).ToArray();
+            return sorted;
+        }
+        
+        public  int ConvertStringToInt(string input)
+        {
+            if (int.TryParse(input, out int result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0; // Retorna null si la conversión falla
+            }
+        }
+
+        public async Task<string> CopiarArchivos()
+        {
+
+            string text1 = "";
+            try
+            {
+
+                string outFileName = @"";
+
+                var _env = "development";
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+                var destino = @settings.Images;
+                var origen = @settings.RhFilesProceso;
+
+                var ficheros = GetFicheros(origen);
+                foreach (string file in ficheros)
+                {
+                    var srcFileArr = file.Split("/");
+                    if (_env == "producction")
+                    {
+                        srcFileArr = file.Split("\\");
+                    }
+                    var fileName = srcFileArr[srcFileArr.Length - 1];
+                    var controlArray = fileName.Split("_");
+                    var controlFinalArray = controlArray[controlArray.Length - 1].Split(".");
+           
+                    var cedula = ConvertStringToInt(controlFinalArray[0]);
+                
+
+                    var persona = await _repository.GetCedula(cedula);
+                    if (persona != null)
+                    {
+                     
+                        File.Delete($"{destino}/{fileName}");
+                       
+                        if (!File.Exists($"{destino}/{fileName}"))
+                        {
+
+                            File.Copy(file, $"{destino}/{fileName}");
+                            if (File.Exists($"{destino}/{fileName}"))
+                            {
+                                persona.FILE_NAME = fileName;
+
+                                await _repository.Update(persona);
+                                File.Delete($"{origen}/{fileName}");
+                            }
+                        }
+
+                    }else{
+                        File.Delete($"{origen}/{fileName}");
+                    }
+
+
+                }
+                
+                
+
+
+
+                return text1;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return text1;
+            }
+
+
+        }
+
+
+        
     }
 }
 
