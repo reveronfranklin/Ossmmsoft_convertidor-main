@@ -12,12 +12,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CntMayoresController : ControllerBase
+    public class CntAuxiliaresController : ControllerBase
     {
 
-        private readonly ICntMayoresService _service;
+        private readonly ICntAuxiliaresService _service;
 
-        public CntMayoresController(ICntMayoresService service)
+        public CntAuxiliaresController(ICntAuxiliaresService service)
         {
 
             _service = service;
@@ -35,32 +35,34 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> GetAllByCodigoMayor(FilterAuxiliares filter)
+        {
+            var result = await _service.GetAllByCodigoMayor(filter.codigoMayor);
+            return Ok(result);
+        }
 
-        public async Task<IActionResult> Create (CntMayoresUpdateDto dto) 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(CntAuxiliaresUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
-
         }
 
         [HttpPost]
         [Route("[action]")]
-
-        public async Task<IActionResult> Update(CntMayoresUpdateDto dto)
+        public async Task<IActionResult> Update(CntAuxiliaresUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
-
         }
 
         [HttpPost]
         [Route("[action]")]
-
-        public async Task<IActionResult> Delete(CntMayoresDeleteDto dto)
+        public async Task<IActionResult> Delete(CntAuxiliaresDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
-
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Convertidor.Data
         public DbSet<CNT_TMP_CONCILIACION> CNT_TMP_CONCILIACION { get; set; }
         public DbSet<CNT_BALANCES> CNT_BALANCES { get; set; }
         public DbSet<CNT_MAYORES> CNT_MAYORES { get; set; }
+        public DbSet<CNT_AUXILIARES> CNT_AUXILIARES { get; set; }
 
 
 
@@ -181,7 +182,16 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_MAYORES");
    });
-            
+              modelBuilder
+   .Entity<CNT_AUXILIARES>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_AUXILIAR,
+
+       });
+       builder.ToTable("CNT_AUXILIARES");
+   });
         }
 
         

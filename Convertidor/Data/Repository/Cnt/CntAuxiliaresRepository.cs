@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Cnt
 {
-    public class CntMayoresRepository : ICntMayoresRepository
+    public class CntAuxiliaresRepository : ICntAuxiliaresRepository
     {
         private readonly DataContextCnt _context;
 
-        public CntMayoresRepository(DataContextCnt context)
+        public CntAuxiliaresRepository(DataContextCnt context)
         {
             _context = context;
         }
 
-        public async Task<List<CNT_MAYORES>> GetAll()
+        public async Task<List<CNT_AUXILIARES>> GetAll()
         {
             try
             {
-                var result = await _context.CNT_MAYORES.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CNT_AUXILIARES.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -28,11 +28,11 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_MAYORES> GetByCodigo(int codigoMayor)
+        public async Task<CNT_AUXILIARES> GetByCodigo(int codigoAuxiliar)
         {
             try
             {
-                var result = await _context.CNT_MAYORES.DefaultIfEmpty().Where(x => x.CODIGO_MAYOR == codigoMayor).FirstOrDefaultAsync();
+                var result = await _context.CNT_AUXILIARES.DefaultIfEmpty().Where(x => x.CODIGO_AUXILIAR == codigoAuxiliar).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -44,13 +44,29 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<ResultDto<CNT_MAYORES>> Add(CNT_MAYORES entity)
+        public async Task<List<CNT_AUXILIARES>> GetByCodigoMayor(int codigoMayor)
         {
-
-            ResultDto<CNT_MAYORES> result = new ResultDto<CNT_MAYORES>(null);
             try
             {
-                await _context.CNT_MAYORES.AddAsync(entity);
+                var result = await _context.CNT_AUXILIARES.DefaultIfEmpty().Where(x => x.CODIGO_MAYOR == codigoMayor).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<ResultDto<CNT_AUXILIARES>> Add(CNT_AUXILIARES entity)
+        {
+
+            ResultDto<CNT_AUXILIARES> result = new ResultDto<CNT_AUXILIARES>(null);
+            try
+            {
+                await _context.CNT_AUXILIARES.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -68,17 +84,16 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-
-        public async Task<ResultDto<CNT_MAYORES>> Update(CNT_MAYORES entity)
+        public async Task<ResultDto<CNT_AUXILIARES>> Update(CNT_AUXILIARES entity)
         {
-            ResultDto<CNT_MAYORES> result = new ResultDto<CNT_MAYORES>(null);
+            ResultDto<CNT_AUXILIARES> result = new ResultDto<CNT_AUXILIARES>(null);
 
             try
             {
-                CNT_MAYORES entityUpdate = await GetByCodigo(entity.CODIGO_MAYOR);
+                CNT_AUXILIARES entityUpdate = await GetByCodigo(entity.CODIGO_AUXILIAR);
                 if (entityUpdate != null)
                 {
-                    _context.CNT_MAYORES.Update(entity);
+                    _context.CNT_AUXILIARES.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -96,14 +111,14 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<string> Delete(int codigoMayor)
+        public async Task<string> Delete(int codigoAuxiliar)
         {
             try
             {
-                CNT_MAYORES entity = await GetByCodigo(codigoMayor);
+                CNT_AUXILIARES entity = await GetByCodigo(codigoAuxiliar);
                 if (entity != null)
                 {
-                    _context.CNT_MAYORES.Remove(entity);
+                    _context.CNT_AUXILIARES.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -113,13 +128,14 @@ namespace Convertidor.Data.Repository.Cnt
                 return ex.Message;
             }
         }
+
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.CNT_MAYORES.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_MAYOR)
+                var last = await _context.CNT_AUXILIARES.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_AUXILIAR)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -127,7 +143,7 @@ namespace Convertidor.Data.Repository.Cnt
                 }
                 else
                 {
-                    result = last.CODIGO_MAYOR + 1;
+                    result = last.CODIGO_AUXILIAR + 1;
                 }
 
                 return (int)result!;
@@ -143,4 +159,6 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
     }
+
+
 }
