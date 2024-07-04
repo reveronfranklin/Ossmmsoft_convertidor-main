@@ -204,6 +204,112 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntAuxiliaresPucResponseDto>> Update(CntAuxiliaresPucUpdateDto dto)
+        {
+            ResultDto<CntAuxiliaresPucResponseDto> result = new ResultDto<CntAuxiliaresPucResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoAuxiliarPuc = await _repository.GetByCodigo(dto.CodigoAuxiliarPuc);
+                if (codigoAuxiliarPuc == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar Puc Invalido";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoAuxiliar <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Auxiliar invalido";
+                    return result;
+                }
+
+                var codigoAuxiliar = await _cntAuxiliaresService.GetByCodigo(dto.CodigoAuxiliar);
+                if (codigoAuxiliar == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Auxiliar invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoPuc <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+                }
+                var codigoPuc = await _pRE_PLAN_UNICO_CUENTASRepository.GetByCodigo(dto.CodigoPuc);
+                if (codigoPuc == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Invalido";
+                    return result;
+
+                }
+
+                if (dto.TipoDocumentoId.Length > 2)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Documento ID Invalido";
+                    return result;
+
+                }
+
+
+                var tipoDocumentoId = await _cntDescriptivaRepository.GetByIdAndTitulo(7, Convert.ToInt32(dto.TipoDocumentoId));
+                if (tipoDocumentoId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Documento ID Invalido";
+                    return result;
+
+                }
+
+
+
+
+
+                codigoAuxiliarPuc.CODIGO_AUXILIAR_PUC = dto.CodigoAuxiliarPuc;
+                codigoAuxiliarPuc.CODIGO_AUXILIAR = dto.CodigoAuxiliar;
+                codigoAuxiliarPuc.CODIGO_PUC = dto.CodigoPuc;
+                codigoAuxiliarPuc.TIPO_DOCUMENTO_ID = dto.TipoDocumentoId;
+
+
+
+
+                codigoAuxiliarPuc.CODIGO_EMPRESA = conectado.Empresa;
+                codigoAuxiliarPuc.USUARIO_UPD = conectado.Usuario;
+                codigoAuxiliarPuc.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoAuxiliarPuc);
+
+                var resultDto = await MapAuxiliaresPuc(codigoAuxiliarPuc);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
 
 
     }

@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_AUXILIARES_PUC> GetByCodigo(int codigoAuxiliarPuc)
+        {
+            try
+            {
+                var result = await _context.CNT_AUXILIARES_PUC.DefaultIfEmpty().Where(x => x.CODIGO_AUXILIAR_PUC == codigoAuxiliarPuc).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CNT_AUXILIARES_PUC>> Add(CNT_AUXILIARES_PUC entity)
         {
 
@@ -52,6 +68,32 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<ResultDto<CNT_AUXILIARES_PUC>> Update(CNT_AUXILIARES_PUC entity)
+        {
+            ResultDto<CNT_AUXILIARES_PUC> result = new ResultDto<CNT_AUXILIARES_PUC>(null);
+
+            try
+            {
+                CNT_AUXILIARES_PUC entityUpdate = await GetByCodigo(entity.CODIGO_AUXILIAR_PUC);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_AUXILIARES_PUC.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try
