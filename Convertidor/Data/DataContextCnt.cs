@@ -26,6 +26,7 @@ namespace Convertidor.Data
         public DbSet<CNT_BALANCES> CNT_BALANCES { get; set; }
         public DbSet<CNT_MAYORES> CNT_MAYORES { get; set; }
         public DbSet<CNT_AUXILIARES> CNT_AUXILIARES { get; set; }
+        public DbSet<CNT_AUXILIARES_PUC> CNT_AUXILIARES_PUC { get; set; }
 
 
 
@@ -192,6 +193,19 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_AUXILIARES");
    });
+
+             modelBuilder
+   .Entity<CNT_AUXILIARES_PUC>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_AUXILIAR_PUC,
+
+       });
+       builder.ToTable("CNT_AUXILIARES_PUC");
+   });
+
+            
         }
 
         
