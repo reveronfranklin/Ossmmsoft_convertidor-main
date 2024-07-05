@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<CNT_PERIODOS> GetByCodigo(int codigoPeriodo);
         Task<ResultDto<CNT_PERIODOS>> Add(CNT_PERIODOS entity);
         Task<ResultDto<CNT_PERIODOS>> Update(CNT_PERIODOS entity);
+        Task<string> Delete(int codigoPeriodo);
         Task<int> GetNextKey();
     }
 }

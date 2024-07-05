@@ -95,6 +95,25 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
         }
+
+        public async Task<string> Delete(int codigoPeriodo)
+        {
+            try
+            {
+                CNT_PERIODOS entity = await GetByCodigo(codigoPeriodo);
+                if (entity != null)
+                {
+                    _context.CNT_PERIODOS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<int> GetNextKey()
         {
             try

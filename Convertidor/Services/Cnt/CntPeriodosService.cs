@@ -521,5 +521,51 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntPeriodosDeleteDto>> Delete(CntPeriodosDeleteDto dto)
+        {
+            ResultDto<CntPeriodosDeleteDto> result = new ResultDto<CntPeriodosDeleteDto>(null);
+            try
+            {
+
+                var codigoPeriodo = await _repository.GetByCodigo(dto.CodigoPeriodo);
+                if (codigoPeriodo == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoPeriodo);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }
