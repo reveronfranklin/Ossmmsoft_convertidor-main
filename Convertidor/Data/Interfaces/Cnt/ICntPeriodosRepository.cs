@@ -5,5 +5,7 @@ namespace Convertidor.Data.Interfaces.Cnt
     public interface ICntPeriodosRepository
     {
         Task<List<CNT_PERIODOS>> GetAll();
+        Task<ResultDto<CNT_PERIODOS>> Add(CNT_PERIODOS entity);
+        Task<int> GetNextKey();
     }
 }
