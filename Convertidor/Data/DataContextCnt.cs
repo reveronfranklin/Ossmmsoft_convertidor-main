@@ -27,6 +27,7 @@ namespace Convertidor.Data
         public DbSet<CNT_MAYORES> CNT_MAYORES { get; set; }
         public DbSet<CNT_AUXILIARES> CNT_AUXILIARES { get; set; }
         public DbSet<CNT_AUXILIARES_PUC> CNT_AUXILIARES_PUC { get; set; }
+        public DbSet<CNT_PERIODOS> CNT_PERIODOS { get; set; }
 
 
 
@@ -204,8 +205,19 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_AUXILIARES_PUC");
    });
+            modelBuilder
+   .Entity<CNT_PERIODOS>(builder =>
+   {
+       builder.HasKey(table => new
+       {
+           table.CODIGO_PERIODO,
 
+       });
+       builder.ToTable("CNT_PERIODOS");
+   });
             
+
+
         }
 
         
