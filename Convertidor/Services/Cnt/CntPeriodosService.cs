@@ -50,7 +50,7 @@ namespace Convertidor.Services.Cnt
             itemResult.FechaPreCierreConcObj = (FechaDto)FechaPreCierreConcObj;
             itemResult.UsuarioCierreConc = dtos.USUARIO_CIERRE_CONC;
             itemResult.FechaCierreConc = dtos.FECHA_CIERRE_CONC;
-            itemResult.FechaCierreConcString = dtos.FECHA_CIERRE_CONC.ToString();
+            itemResult.FechaCierreConcString = dtos.FECHA_CIERRE_CONC.ToString("u");
             FechaDto FechaCierreConcObj = FechaObj.GetFechaDto(dtos.FECHA_CIERRE_CONC);
             itemResult.FechaCierreConcObj = (FechaDto)FechaCierreConcObj;
             itemResult.Extra1 = dtos.EXTRA1;
@@ -315,6 +315,208 @@ namespace Convertidor.Services.Cnt
             }
 
 
+
+            return result;
+        }
+
+        public async Task<ResultDto<CntPeriodosResponseDto>> Update(CntPeriodosUpdateDto dto)
+        {
+            ResultDto<CntPeriodosResponseDto> result = new ResultDto<CntPeriodosResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoPeriodo = await _repository.GetByCodigo(dto.CodigoPeriodo);
+                if (codigoPeriodo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo Invalido";
+                    return result;
+
+                }
+
+
+                if (dto.NombrePeriodo is not null && dto.NombrePeriodo.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nombre Periodo invalido";
+                    return result;
+                }
+
+
+                if (dto.FechaDesde == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Desde invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaHasta == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Hasta Invalido";
+                    return result;
+                }
+
+                if (dto.AnoPeriodo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "año Periodo Invalido";
+                    return result;
+
+                }
+
+                if (dto.NumeroPeriodo <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Periodo Invalido";
+                    return result;
+                }
+
+                if (dto.UsuarioPreCierre <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Usuario PreCierre Invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaPreCierre == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha PreCierre Invalido";
+                    return result;
+
+                }
+
+                if (dto.UsuarioCierre <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Usuario Cierre Invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaCierre == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Cierre Invalido";
+                    return result;
+
+                }
+
+                if (dto.UsuarioPreCierreConc <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Usuario Pre Cierre Conc Invalido";
+                    return result;
+                }
+
+                if (dto.FechaPreCierreConc == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha PreCierreConc Invalido";
+                    return result;
+
+                }
+
+                if (dto.UsuarioCierreConc <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Usuario Cierre Conc Invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaCierreConc == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Cierre Conc Invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoPeriodo.CODIGO_PERIODO = dto.CodigoPeriodo;
+                codigoPeriodo.NOMBRE_PERIODO = dto.NombrePeriodo;
+                codigoPeriodo.FECHA_DESDE = dto.FechaDesde;
+                codigoPeriodo.FECHA_HASTA = dto.FechaHasta;
+                codigoPeriodo.ANO_PERIODO = dto.AnoPeriodo;
+                codigoPeriodo.NUMERO_PERIODO = dto.NumeroPeriodo;
+                codigoPeriodo.USUARIO_PRECIERRE = dto.UsuarioPreCierre;
+                codigoPeriodo.FECHA_PRECIERRE = dto.FechaPreCierre;
+                codigoPeriodo.USUARIO_CIERRE = dto.UsuarioCierre;
+                codigoPeriodo.FECHA_CIERRE = dto.FechaCierre;
+                codigoPeriodo.USUARIO_PRECIERRE_CONC = dto.UsuarioPreCierreConc;
+                codigoPeriodo.FECHA_PRECIERRE_CONC = dto.FechaPreCierreConc;
+                codigoPeriodo.USUARIO_CIERRE_CONC = dto.UsuarioCierreConc;
+                codigoPeriodo.FECHA_CIERRE_CONC = dto.FechaCierreConc;
+                codigoPeriodo.EXTRA1 = dto.Extra1;
+                codigoPeriodo.EXTRA2 = dto.Extra2;
+                codigoPeriodo.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoPeriodo.CODIGO_EMPRESA = conectado.Empresa;
+                codigoPeriodo.USUARIO_UPD = conectado.Usuario;
+                codigoPeriodo.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoPeriodo);
+
+                var resultDto = await MapPeriodos(codigoPeriodo);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
 
             return result;
         }

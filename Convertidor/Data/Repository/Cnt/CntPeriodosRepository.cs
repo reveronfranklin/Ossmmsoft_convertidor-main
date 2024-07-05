@@ -28,7 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-      
+        public async Task<CNT_PERIODOS> GetByCodigo(int codigoPeriodo)
+        {
+            try
+            {
+                var result = await _context.CNT_PERIODOS.DefaultIfEmpty().Where(x => x.CODIGO_PERIODO == codigoPeriodo).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CNT_PERIODOS>> Add(CNT_PERIODOS entity)
         {
 
@@ -53,6 +68,33 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+
+        public async Task<ResultDto<CNT_PERIODOS>> Update(CNT_PERIODOS entity)
+        {
+            ResultDto<CNT_PERIODOS> result = new ResultDto<CNT_PERIODOS>(null);
+
+            try
+            {
+                CNT_PERIODOS entityUpdate = await GetByCodigo(entity.CODIGO_PERIODO);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_PERIODOS.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try
