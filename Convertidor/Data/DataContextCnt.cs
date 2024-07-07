@@ -1,4 +1,5 @@
 ﻿
+using Convertidor.Data.Entities;
 using Convertidor.Data.Entities.Cnt;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,7 @@ namespace Convertidor.Data
         public DbSet<CNT_AUXILIARES_PUC> CNT_AUXILIARES_PUC { get; set; }
         public DbSet<CNT_PERIODOS> CNT_PERIODOS { get; set; }
         public DbSet<CNT_SALDOS> CNT_SALDOS { get; set; }
+        public DbSet<CNT_COMPROBANTES> CNT_COMPROBANTES { get; set; }
 
 
 
@@ -225,6 +227,16 @@ namespace Convertidor.Data
 
       });
       builder.ToTable("CNT_SALDOS");
+  });
+              modelBuilder
+  .Entity<CNT_COMPROBANTES>(builder =>
+  {
+      builder.HasKey(table => new
+      {
+          table.CODIGO_COMPROBANTE,
+
+      });
+      builder.ToTable("CNT_COMPROBANTES");
   });
             
 
