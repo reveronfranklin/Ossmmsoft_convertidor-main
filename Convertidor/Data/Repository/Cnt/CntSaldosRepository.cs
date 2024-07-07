@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_SALDOS> GetByCodigo(int codigoSaldo)
+        {
+            try
+            {
+                var result = await _context.CNT_SALDOS.DefaultIfEmpty().Where(x => x.CODIGO_SALDO == codigoSaldo).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CNT_SALDOS>> Add(CNT_SALDOS entity)
         {
 
@@ -41,6 +57,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_SALDOS>> Update(CNT_SALDOS entity)
+        {
+            ResultDto<CNT_SALDOS> result = new ResultDto<CNT_SALDOS>(null);
+
+            try
+            {
+                CNT_SALDOS entityUpdate = await GetByCodigo(entity.CODIGO_SALDO);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_SALDOS.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)

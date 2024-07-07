@@ -269,5 +269,172 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntSaldosResponseDto>> Update(CntSaldosUpdateDto dto)
+        {
+            ResultDto<CntSaldosResponseDto> result = new ResultDto<CntSaldosResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoSaldo = await _repository.GetByCodigo(dto.CodigoSaldo);
+                if (codigoSaldo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Saldo no Existe";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoPeriodo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo invalido";
+                    return result;
+
+                }
+
+                var codigoPeriodo = await _cntPeriodosService.GetByCodigo(dto.CodigoPeriodo);
+                if (codigoPeriodo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.CodigoMayor <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Mayor invalido";
+                    return result;
+                }
+
+                var codigoMayor = await _cntMayoresService.GetByCodigo(dto.CodigoMayor);
+                if (codigoMayor == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Mayor invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoAuxiliar <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar Invalido";
+                    return result;
+
+                }
+
+                var codigoAuxiliar = await _cntAuxiliaresService.GetByCodigo(dto.CodigoAuxiliar);
+                if (codigoAuxiliar == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar Invalido";
+                    return result;
+                }
+
+                if (dto.Debitos < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Debitos Invalido";
+                    return result;
+
+                }
+
+                if (dto.Creditos < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Creditos Invalido";
+                    return result;
+
+
+                }
+
+                if (dto.Monto <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoSaldo.CODIGO_SALDO = dto.CodigoSaldo;
+                codigoSaldo.CODIGO_PERIODO = dto.CodigoPeriodo;
+                codigoSaldo.CODIGO_MAYOR = dto.CodigoMayor;
+                codigoSaldo.CODIGO_AUXILIAR = dto.CodigoAuxiliar;
+                codigoSaldo.DEBITOS = dto.Debitos;
+                codigoSaldo.CREDITOS = dto.Creditos;
+                codigoSaldo.MONTO = dto.Monto;
+                codigoSaldo.EXTRA1 = dto.Extra1;
+                codigoSaldo.EXTRA2 = dto.Extra2;
+                codigoSaldo.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoSaldo.CODIGO_EMPRESA = conectado.Empresa;
+                codigoSaldo.USUARIO_UPD = conectado.Usuario;
+                codigoSaldo.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoSaldo);
+
+                var resultDto = await MapSaldos(codigoSaldo);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
+
     }
 }
