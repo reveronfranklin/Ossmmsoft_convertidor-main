@@ -567,5 +567,36 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntPeriodosResponseDto>> GetByCodigo(int codigoPeriodo)
+        {
+            ResultDto<CntPeriodosResponseDto> result = new ResultDto<CntPeriodosResponseDto>(null);
+            try
+            {
+
+                var periodo = await _repository.GetByCodigo(codigoPeriodo);
+                if (periodo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo no existe";
+                    return result;
+                }
+
+                var resultDto = await MapPeriodos(periodo);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }
