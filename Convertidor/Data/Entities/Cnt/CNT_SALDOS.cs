@@ -6,8 +6,8 @@
         public int CODIGO_PERIODO { get; set; }
         public int CODIGO_MAYOR { get; set; }
         public int CODIGO_AUXILIAR { get; set; }
-        public int DEBITOS { get; set; }
-        public int CREDITOS { get; set; }
+        public decimal DEBITOS { get; set; }
+        public decimal CREDITOS { get; set; }
         public decimal MONTO { get; set; }
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;

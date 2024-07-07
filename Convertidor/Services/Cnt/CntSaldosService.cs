@@ -435,6 +435,53 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntSaldosDeleteDto>> Delete(CntSaldosDeleteDto dto)
+        {
+            ResultDto<CntSaldosDeleteDto> result = new ResultDto<CntSaldosDeleteDto>(null);
+            try
+            {
+
+                var codigoSaldo = await _repository.GetByCodigo(dto.CodigoSaldo);
+                if (codigoSaldo == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Saldo no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoSaldo);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
 
     }
 }
