@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_DETALLE_COMPROBANTE> GetByCodigo(int codigoDetalleComprobante)
+        {
+            try
+            {
+                var result = await _context.CNT_DETALLE_COMPROBANTE.DefaultIfEmpty().Where(x => x.CODIGO_DETALLE_COMPROBANTE == codigoDetalleComprobante).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<List<CNT_DETALLE_COMPROBANTE>> GetByCodigoComprobante(int codigoComprobante)
         {
             try
@@ -57,6 +73,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_DETALLE_COMPROBANTE>> Update(CNT_DETALLE_COMPROBANTE entity)
+        {
+            ResultDto<CNT_DETALLE_COMPROBANTE> result = new ResultDto<CNT_DETALLE_COMPROBANTE>(null);
+
+            try
+            {
+                CNT_DETALLE_COMPROBANTE entityUpdate = await GetByCodigo(entity.CODIGO_DETALLE_COMPROBANTE);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_DETALLE_COMPROBANTE.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)
