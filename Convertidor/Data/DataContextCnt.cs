@@ -32,6 +32,7 @@ namespace Convertidor.Data
         public DbSet<CNT_SALDOS> CNT_SALDOS { get; set; }
         public DbSet<CNT_COMPROBANTES> CNT_COMPROBANTES { get; set; }
         public DbSet<CNT_DETALLE_COMPROBANTE> CNT_DETALLE_COMPROBANTE { get; set; }
+        public DbSet<CNT_HIST_ANALITICO> CNT_HIST_ANALITICO { get; set; }
 
 
 
@@ -80,23 +81,23 @@ namespace Convertidor.Data
             modelBuilder
      .Entity<CNT_BANCO_ARCHIVO_CONTROL>(builder =>
      {
-          builder.HasKey(table => new
-          {
+         builder.HasKey(table => new
+         {
              table.CODIGO_BANCO_ARCHIVO_CONTROL,
 
-          });
-          builder.ToTable("CNT_BANCO_ARCHIVO_CONTROL");
+         });
+         builder.ToTable("CNT_BANCO_ARCHIVO_CONTROL");
      });
 
             modelBuilder
      .Entity<CNT_DETALLE_EDO_CTA>(builder =>
      {
-          builder.HasKey(table => new
-          {
+         builder.HasKey(table => new
+         {
              table.CODIGO_DETALLE_EDO_CTA,
 
-          });
-          builder.ToTable("CNT_DETALLE_EDO_CTA");
+         });
+         builder.ToTable("CNT_DETALLE_EDO_CTA");
      });
             modelBuilder
      .Entity<CNT_DETALLE_LIBRO>(builder =>
@@ -108,16 +109,16 @@ namespace Convertidor.Data
          });
          builder.ToTable("CNT_DETALLE_LIBRO");
      });
-      modelBuilder
-     .Entity<CNT_ESTADO_CUENTAS>(builder =>
-     {
-         builder.HasKey(table => new
-         {
-             table.CODIGO_ESTADO_CUENTA,
+            modelBuilder
+           .Entity<CNT_ESTADO_CUENTAS>(builder =>
+           {
+               builder.HasKey(table => new
+               {
+                   table.CODIGO_ESTADO_CUENTA,
 
-         });
-         builder.ToTable("CNT_ESTADO_CUENTAS");
-     });
+               });
+               builder.ToTable("CNT_ESTADO_CUENTAS");
+           });
             modelBuilder
    .Entity<CNT_HIST_CONCILIACION>(builder =>
    {
@@ -138,16 +139,16 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_LIBROS");
    });
-                modelBuilder
-    .Entity<CNT_REVERSO_CONCILIACION>(builder =>
-    {
+            modelBuilder
+.Entity<CNT_REVERSO_CONCILIACION>(builder =>
+{
     builder.HasKey(table => new
     {
-      table.CODIGO_HIST_CONCILIACION,
+        table.CODIGO_HIST_CONCILIACION,
 
     });
     builder.ToTable("CNT_REVERSO_CONCILIACION");
-    });
+});
             modelBuilder
    .Entity<CNT_RUBROS>(builder =>
    {
@@ -158,57 +159,57 @@ namespace Convertidor.Data
        });
        builder.ToTable("CNT_RUBROS");
    });
-           modelBuilder
-   .Entity<CNT_TMP_CONCILIACION>(builder =>
-   {
-       builder.HasKey(table => new
-       {
-           table.CODIGO_TMP_CONCILIACION,
+            modelBuilder
+    .Entity<CNT_TMP_CONCILIACION>(builder =>
+    {
+        builder.HasKey(table => new
+        {
+            table.CODIGO_TMP_CONCILIACION,
 
-       });
-       builder.ToTable("CNT_TMP_CONCILIACION");
-   });
-           modelBuilder
-   .Entity<CNT_BALANCES>(builder =>
-   {
-       builder.HasKey(table => new
-       {
-           table.CODIGO_BALANCE,
+        });
+        builder.ToTable("CNT_TMP_CONCILIACION");
+    });
+            modelBuilder
+    .Entity<CNT_BALANCES>(builder =>
+    {
+        builder.HasKey(table => new
+        {
+            table.CODIGO_BALANCE,
 
-       });
-       builder.ToTable("CNT_BALANCES");
-   });
-              modelBuilder
-   .Entity<CNT_MAYORES>(builder =>
-   {
-       builder.HasKey(table => new
-       {
-           table.CODIGO_MAYOR,
+        });
+        builder.ToTable("CNT_BALANCES");
+    });
+            modelBuilder
+ .Entity<CNT_MAYORES>(builder =>
+ {
+     builder.HasKey(table => new
+     {
+         table.CODIGO_MAYOR,
 
-       });
-       builder.ToTable("CNT_MAYORES");
-   });
-              modelBuilder
-   .Entity<CNT_AUXILIARES>(builder =>
-   {
-       builder.HasKey(table => new
-       {
-           table.CODIGO_AUXILIAR,
+     });
+     builder.ToTable("CNT_MAYORES");
+ });
+            modelBuilder
+ .Entity<CNT_AUXILIARES>(builder =>
+ {
+     builder.HasKey(table => new
+     {
+         table.CODIGO_AUXILIAR,
 
-       });
-       builder.ToTable("CNT_AUXILIARES");
-   });
+     });
+     builder.ToTable("CNT_AUXILIARES");
+ });
 
-             modelBuilder
-   .Entity<CNT_AUXILIARES_PUC>(builder =>
-   {
-       builder.HasKey(table => new
-       {
-           table.CODIGO_AUXILIAR_PUC,
+            modelBuilder
+  .Entity<CNT_AUXILIARES_PUC>(builder =>
+  {
+      builder.HasKey(table => new
+      {
+          table.CODIGO_AUXILIAR_PUC,
 
-       });
-       builder.ToTable("CNT_AUXILIARES_PUC");
-   });
+      });
+      builder.ToTable("CNT_AUXILIARES_PUC");
+  });
             modelBuilder
    .Entity<CNT_PERIODOS>(builder =>
    {
@@ -229,16 +230,16 @@ namespace Convertidor.Data
       });
       builder.ToTable("CNT_SALDOS");
   });
-              modelBuilder
-  .Entity<CNT_COMPROBANTES>(builder =>
-  {
-      builder.HasKey(table => new
-      {
-          table.CODIGO_COMPROBANTE,
+            modelBuilder
+.Entity<CNT_COMPROBANTES>(builder =>
+{
+    builder.HasKey(table => new
+    {
+        table.CODIGO_COMPROBANTE,
 
-      });
-      builder.ToTable("CNT_COMPROBANTES");
-  });
+    });
+    builder.ToTable("CNT_COMPROBANTES");
+});
             modelBuilder
   .Entity<CNT_DETALLE_COMPROBANTE>(builder =>
   {
@@ -249,10 +250,20 @@ namespace Convertidor.Data
       });
       builder.ToTable("CNT_DETALLE_COMPROBANTE");
   });
-            
 
+            modelBuilder
+ .Entity<CNT_HIST_ANALITICO>(builder =>
+ {
+     builder.HasKey(table => new
+     {
+         table.CODIGO_HIST_ANALITICO,
+
+     });
+     builder.ToTable("CNT_HIST_ANALITICO");
+
+
+ });
         }
-
         
     }
 
