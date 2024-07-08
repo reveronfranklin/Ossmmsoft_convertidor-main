@@ -72,6 +72,8 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
         }
+        
+    
         public async Task<PRE_RELACION_CARGOS> GetByPresupuestoIcp(int codigoPresupuesto, int codigoIcp)
         {
             try

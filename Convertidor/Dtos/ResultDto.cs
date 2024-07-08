@@ -18,7 +18,10 @@
         public int TotalPage { get; set; }
         
         public int CantidadRegistros { get; set; }
-
+        
+        public decimal Total1 { get; set; }
+        
+        public decimal Total2 { get; set; }
 
     }
 

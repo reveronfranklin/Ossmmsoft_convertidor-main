@@ -12,12 +12,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CntAuxiliaresPucController : ControllerBase
+    public class CntSaldosController : ControllerBase
     {
 
-        private readonly ICntAuxiliaresPucService _service;
+        private readonly ICntSaldosService _service;
 
-        public CntAuxiliaresPucController(ICntAuxiliaresPucService service)
+        public CntSaldosController(ICntSaldosService service)
         {
 
             _service = service;
@@ -35,7 +35,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(CntAuxiliaresPucUpdateDto dto)
+        public async Task<IActionResult> Create(CntSaldosUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -43,18 +43,18 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(CntAuxiliaresPucUpdateDto dto)
+        public async Task<IActionResult> Update(CntSaldosUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
         }
+
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(CntAuxiliaresPucDeleteDto dto)
+        public async Task<IActionResult> Delete(CntSaldosDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
         }
-
     }
 }

@@ -540,5 +540,36 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntAuxiliaresResponseDto>> GetByCodigo(int codigoAuxiliar)
+        {
+            ResultDto<CntAuxiliaresResponseDto> result = new ResultDto<CntAuxiliaresResponseDto>(null);
+            try
+            {
+
+                var auxiliares = await _repository.GetByCodigo(codigoAuxiliar);
+                if (auxiliares == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar no existe";
+                    return result;
+                }
+
+                var resultDto = await MapAuxiliares(auxiliares);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }

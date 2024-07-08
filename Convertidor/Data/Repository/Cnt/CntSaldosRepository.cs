@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Cnt
 {
-    public class CntAuxiliaresPucRepository : ICntAuxiliaresPucRepository
+    public class CntSaldosRepository : ICntSaldosRepository
     {
         private readonly DataContextCnt _context;
 
-        public CntAuxiliaresPucRepository(DataContextCnt context)
+        public CntSaldosRepository(DataContextCnt context)
         {
             _context = context;
         }
 
-        public async Task<List<CNT_AUXILIARES_PUC>> GetAll()
+        public async Task<List<CNT_SALDOS>> GetAll()
         {
             try
             {
-                var result = await _context.CNT_AUXILIARES_PUC.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CNT_SALDOS.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -28,11 +28,11 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_AUXILIARES_PUC> GetByCodigo(int codigoAuxiliarPuc)
+        public async Task<CNT_SALDOS> GetByCodigo(int codigoSaldo)
         {
             try
             {
-                var result = await _context.CNT_AUXILIARES_PUC.DefaultIfEmpty().Where(x => x.CODIGO_AUXILIAR_PUC == codigoAuxiliarPuc).FirstOrDefaultAsync();
+                var result = await _context.CNT_SALDOS.DefaultIfEmpty().Where(x => x.CODIGO_SALDO == codigoSaldo).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -44,13 +44,13 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<ResultDto<CNT_AUXILIARES_PUC>> Add(CNT_AUXILIARES_PUC entity)
+        public async Task<ResultDto<CNT_SALDOS>> Add(CNT_SALDOS entity)
         {
 
-            ResultDto<CNT_AUXILIARES_PUC> result = new ResultDto<CNT_AUXILIARES_PUC>(null);
+            ResultDto<CNT_SALDOS> result = new ResultDto<CNT_SALDOS>(null);
             try
             {
-                await _context.CNT_AUXILIARES_PUC.AddAsync(entity);
+                await _context.CNT_SALDOS.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -68,16 +68,16 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<ResultDto<CNT_AUXILIARES_PUC>> Update(CNT_AUXILIARES_PUC entity)
+        public async Task<ResultDto<CNT_SALDOS>> Update(CNT_SALDOS entity)
         {
-            ResultDto<CNT_AUXILIARES_PUC> result = new ResultDto<CNT_AUXILIARES_PUC>(null);
+            ResultDto<CNT_SALDOS> result = new ResultDto<CNT_SALDOS>(null);
 
             try
             {
-                CNT_AUXILIARES_PUC entityUpdate = await GetByCodigo(entity.CODIGO_AUXILIAR_PUC);
+                CNT_SALDOS entityUpdate = await GetByCodigo(entity.CODIGO_SALDO);
                 if (entityUpdate != null)
                 {
-                    _context.CNT_AUXILIARES_PUC.Update(entity);
+                    _context.CNT_SALDOS.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -95,14 +95,14 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<string> Delete(int codigoAuxiliarPuc)
+        public async Task<string> Delete(int codigoSaldo)
         {
             try
             {
-                CNT_AUXILIARES_PUC entity = await GetByCodigo(codigoAuxiliarPuc);
+                CNT_SALDOS entity = await GetByCodigo(codigoSaldo);
                 if (entity != null)
                 {
-                    _context.CNT_AUXILIARES_PUC.Remove(entity);
+                    _context.CNT_SALDOS.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -112,13 +112,14 @@ namespace Convertidor.Data.Repository.Cnt
                 return ex.Message;
             }
         }
+
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.CNT_AUXILIARES_PUC.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_AUXILIAR_PUC)
+                var last = await _context.CNT_SALDOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_SALDO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -126,7 +127,7 @@ namespace Convertidor.Data.Repository.Cnt
                 }
                 else
                 {
-                    result = last.CODIGO_AUXILIAR_PUC + 1;
+                    result = last.CODIGO_SALDO + 1;
                 }
 
                 return (int)result!;

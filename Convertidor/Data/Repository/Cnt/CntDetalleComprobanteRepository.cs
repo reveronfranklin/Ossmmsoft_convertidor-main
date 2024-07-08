@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Cnt
 {
-    public class CntAuxiliaresPucRepository : ICntAuxiliaresPucRepository
+    public class CntDetalleComprobanteRepository : ICntDetalleComprobanteRepository
     {
         private readonly DataContextCnt _context;
 
-        public CntAuxiliaresPucRepository(DataContextCnt context)
+        public CntDetalleComprobanteRepository(DataContextCnt context)
         {
             _context = context;
         }
 
-        public async Task<List<CNT_AUXILIARES_PUC>> GetAll()
+        public async Task<List<CNT_DETALLE_COMPROBANTE>> GetAll()
         {
             try
             {
-                var result = await _context.CNT_AUXILIARES_PUC.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CNT_DETALLE_COMPROBANTE.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -28,11 +28,11 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_AUXILIARES_PUC> GetByCodigo(int codigoAuxiliarPuc)
+        public async Task<CNT_DETALLE_COMPROBANTE> GetByCodigo(int codigoDetalleComprobante)
         {
             try
             {
-                var result = await _context.CNT_AUXILIARES_PUC.DefaultIfEmpty().Where(x => x.CODIGO_AUXILIAR_PUC == codigoAuxiliarPuc).FirstOrDefaultAsync();
+                var result = await _context.CNT_DETALLE_COMPROBANTE.DefaultIfEmpty().Where(x => x.CODIGO_DETALLE_COMPROBANTE == codigoDetalleComprobante).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -44,13 +44,29 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<ResultDto<CNT_AUXILIARES_PUC>> Add(CNT_AUXILIARES_PUC entity)
+        public async Task<List<CNT_DETALLE_COMPROBANTE>> GetByCodigoComprobante(int codigoComprobante)
         {
-
-            ResultDto<CNT_AUXILIARES_PUC> result = new ResultDto<CNT_AUXILIARES_PUC>(null);
             try
             {
-                await _context.CNT_AUXILIARES_PUC.AddAsync(entity);
+                var result = await _context.CNT_DETALLE_COMPROBANTE.DefaultIfEmpty().Where(x => x.CODIGO_COMPROBANTE == codigoComprobante).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<ResultDto<CNT_DETALLE_COMPROBANTE>> Add(CNT_DETALLE_COMPROBANTE entity)
+        {
+
+            ResultDto<CNT_DETALLE_COMPROBANTE> result = new ResultDto<CNT_DETALLE_COMPROBANTE>(null);
+            try
+            {
+                await _context.CNT_DETALLE_COMPROBANTE.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -68,16 +84,16 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<ResultDto<CNT_AUXILIARES_PUC>> Update(CNT_AUXILIARES_PUC entity)
+        public async Task<ResultDto<CNT_DETALLE_COMPROBANTE>> Update(CNT_DETALLE_COMPROBANTE entity)
         {
-            ResultDto<CNT_AUXILIARES_PUC> result = new ResultDto<CNT_AUXILIARES_PUC>(null);
+            ResultDto<CNT_DETALLE_COMPROBANTE> result = new ResultDto<CNT_DETALLE_COMPROBANTE>(null);
 
             try
             {
-                CNT_AUXILIARES_PUC entityUpdate = await GetByCodigo(entity.CODIGO_AUXILIAR_PUC);
+                CNT_DETALLE_COMPROBANTE entityUpdate = await GetByCodigo(entity.CODIGO_DETALLE_COMPROBANTE);
                 if (entityUpdate != null)
                 {
-                    _context.CNT_AUXILIARES_PUC.Update(entity);
+                    _context.CNT_DETALLE_COMPROBANTE.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -95,14 +111,14 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<string> Delete(int codigoAuxiliarPuc)
+        public async Task<string> Delete(int codigoDetalleComprobante)
         {
             try
             {
-                CNT_AUXILIARES_PUC entity = await GetByCodigo(codigoAuxiliarPuc);
+                CNT_DETALLE_COMPROBANTE entity = await GetByCodigo(codigoDetalleComprobante);
                 if (entity != null)
                 {
-                    _context.CNT_AUXILIARES_PUC.Remove(entity);
+                    _context.CNT_DETALLE_COMPROBANTE.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -112,13 +128,14 @@ namespace Convertidor.Data.Repository.Cnt
                 return ex.Message;
             }
         }
+
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.CNT_AUXILIARES_PUC.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_AUXILIAR_PUC)
+                var last = await _context.CNT_DETALLE_COMPROBANTE.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_DETALLE_COMPROBANTE)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -126,7 +143,7 @@ namespace Convertidor.Data.Repository.Cnt
                 }
                 else
                 {
-                    result = last.CODIGO_AUXILIAR_PUC + 1;
+                    result = last.CODIGO_DETALLE_COMPROBANTE + 1;
                 }
 
                 return (int)result!;

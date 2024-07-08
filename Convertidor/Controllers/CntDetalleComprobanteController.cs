@@ -12,12 +12,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CntAuxiliaresPucController : ControllerBase
+    public class CntDetalleComprobanteController : ControllerBase
     {
 
-        private readonly ICntAuxiliaresPucService _service;
+        private readonly ICntDetalleComprobanteService _service;
 
-        public CntAuxiliaresPucController(ICntAuxiliaresPucService service)
+        public CntDetalleComprobanteController(ICntDetalleComprobanteService service)
         {
 
             _service = service;
@@ -35,7 +35,15 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(CntAuxiliaresPucUpdateDto dto)
+        public async Task<IActionResult> GetAllByCodigoComprobante(FilterDetalleComprobante filter)
+        {
+            var result = await _service.GetAllByCodigoComprobante(filter.CodigoComprobante);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(CntDetalleComprobanteUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -43,18 +51,18 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(CntAuxiliaresPucUpdateDto dto)
+        public async Task<IActionResult> Update(CntDetalleComprobanteUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
         }
+
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(CntAuxiliaresPucDeleteDto dto)
+        public async Task<IActionResult> Delete(CntDetalleComprobanteDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
         }
-
     }
 }

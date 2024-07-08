@@ -9,10 +9,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Settings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Settings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/IRhPersonaService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/IRhPersonaService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_RELACION_CARGOSRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_RELACION_CARGOSRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreSolModificacionRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreSolModificacionRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/FilterByPresupuestoDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/FilterByPresupuestoDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/ResultDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/ResultDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,26 +39,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -195,7 +176,8 @@
       <workItem from="1719005732786" duration="23597000" />
       <workItem from="1719428708703" duration="12828000" />
       <workItem from="1719682443953" duration="803000" />
-      <workItem from="1719877535999" duration="33984000" />
+      <workItem from="1719877535999" duration="34309000" />
+      <workItem from="1720102275788" duration="14098000" />
     </task>
     <servers />
   </component>
@@ -785,13 +767,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs</url>
-          <line>184</line>
+          <line>199</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="6503" />
+              <option value="7143" />
             </startOffsets>
             <endOffsets>
-              <option value="6584" />
+              <option value="7224" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="147" />
@@ -874,32 +856,6 @@
           </properties>
           <option name="timeStamp" value="153" />
         </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreRelacionCargosController.cs</url>
-          <line>41</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreRelacionCargosController.cs" containingFunctionPresentation="Method 'GetAllByPresupuesto'">
-            <startOffsets>
-              <option value="961" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1014" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="164" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreCargosController.cs</url>
-          <line>41</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreCargosController.cs" containingFunctionPresentation="Method 'GetAllByPresupuesto'">
-            <startOffsets>
-              <option value="929" />
-            </startOffsets>
-            <endOffsets>
-              <option value="982" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="166" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmDescriptivasController.cs</url>
           <line>57</line>
@@ -964,6 +920,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="173" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs</url>
+          <line>93</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPresupuesto'">
+            <startOffsets>
+              <option value="3459" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3558" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="179" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs</url>
+          <line>134</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPresupuesto'">
+            <startOffsets>
+              <option value="5171" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5203" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="180" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
