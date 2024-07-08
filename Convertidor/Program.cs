@@ -456,6 +456,7 @@ builder.Services.AddTransient<ICntAuxiliaresPucRepository, CntAuxiliaresPucRepos
 builder.Services.AddTransient<ICntPeriodosRepository, CntPeriodosRepository>();
 builder.Services.AddTransient<ICntSaldosRepository, CntSaldosRepository>();
 builder.Services.AddTransient<ICntComprobantesRepository, CntComprobantesRepository>();
+builder.Services.AddTransient<ICntDetalleComprobanteRepository, CntDetalleComprobanteRepository>();
 
 
 //CNT Services
@@ -479,6 +480,7 @@ builder.Services.AddTransient<ICntAuxiliaresPucService, CntAuxiliaresPucService>
 builder.Services.AddTransient<ICntPeriodosService, CntPeriodosService>();
 builder.Services.AddTransient<ICntSaldosService, CntSaldosService>();
 builder.Services.AddTransient<ICntComprobantesService, CntComprobantesService>();
+builder.Services.AddTransient<ICntDetalleComprobanteService, CntDetalleComprobanteService>();
 
 
 

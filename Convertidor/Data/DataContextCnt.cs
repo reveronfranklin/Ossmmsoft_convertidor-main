@@ -31,6 +31,7 @@ namespace Convertidor.Data
         public DbSet<CNT_PERIODOS> CNT_PERIODOS { get; set; }
         public DbSet<CNT_SALDOS> CNT_SALDOS { get; set; }
         public DbSet<CNT_COMPROBANTES> CNT_COMPROBANTES { get; set; }
+        public DbSet<CNT_DETALLE_COMPROBANTE> CNT_DETALLE_COMPROBANTE { get; set; }
 
 
 
@@ -237,6 +238,16 @@ namespace Convertidor.Data
 
       });
       builder.ToTable("CNT_COMPROBANTES");
+  });
+            modelBuilder
+  .Entity<CNT_DETALLE_COMPROBANTE>(builder =>
+  {
+      builder.HasKey(table => new
+      {
+          table.CODIGO_DETALLE_COMPROBANTE,
+
+      });
+      builder.ToTable("CNT_DETALLE_COMPROBANTE");
   });
             
 
