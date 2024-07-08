@@ -88,11 +88,17 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-
         public async Task<ResultDto<List<PreRelacionCargoGetDto>>> GetAllByPresupuesto(FilterByPresupuestoDto filter)
         {
 
             ResultDto<List<PreRelacionCargoGetDto>> result = new ResultDto<List<PreRelacionCargoGetDto>>(null);
+            
+            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageSize == 0) filter.PageSize = 100;
+            if (filter.PageSize >100) filter.PageSize = 100;
+            var totalRegistros = 0;
+            var totalPage = 0;
+
             try
             {
 
@@ -108,18 +114,35 @@ namespace Convertidor.Services.Presupuesto
                     //if (lastPresupuesto != null) filter.CodigoPresupuesto = lastPresupuesto.CODIGO_PRESUPUESTO;
                 }
 
-                var cargos = await _repository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+                var allCargos = await _repository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+                List<PRE_RELACION_CARGOS> cargos = new List<PRE_RELACION_CARGOS>();
 
-          
-
+                cargos = allCargos;
                 if (filter.CodigoIcp != null && filter.CodigoIcp > 0)
                 {
-                    cargos = cargos.Where(x => x.CODIGO_ICP == filter.CodigoIcp).ToList();
+                    cargos = allCargos.Where(x => x.CODIGO_ICP == filter.CodigoIcp).ToList();
                 }
 
-             
+                result.Total1 = 0;
+                result.Total2 = 0;
+                foreach (var item in cargos)
+                {
+                    result.Total1 = result.Total1 + item.SUELDO * item.CANTIDAD;
+                    
+                }
+                result.Total2 = result.Total1 *12;
                 
+                totalRegistros = cargos.Count();
 
+                totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                
+                cargos = cargos.Skip((filter.PageNumber - 1) * filter.PageSize)
+               .Take(filter.PageSize)
+               .ToList();
+                
+                
+                
+                
                 if (cargos.Count() > 0)
                 {
                     List<PreRelacionCargoGetDto> listDto = new List<PreRelacionCargoGetDto>();
@@ -131,30 +154,22 @@ namespace Convertidor.Services.Presupuesto
                     }
 
                     listDto = listDto.OrderBy(x => x.IcpConcat).ToList();
-                    ExcelMapper mapper = new ExcelMapper();
-
-
-                    var settings = _configuration.GetSection("Settings").Get<Settings>();
-
-
-                    var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
-                    var fileName = $"RelacionCargos {filter.CodigoPresupuesto.ToString()}-{filter.CodigoIcp.ToString()}-{DateTime.Now.ToLongDateString()}.xlsx";
-                    string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-
-
-                    mapper.Save(newFile, listDto, $"RelacionCargos", true);
-                 
-                    result.LinkData = $"/ExcelFiles/{fileName}";
-
-                    result.Data = listDto;
-
+                    result.CantidadRegistros = totalRegistros;
+                    result.TotalPage = totalPage;
+                    result.Page = filter.PageNumber;
                     result.IsValid = true;
                     result.Message = "";
+                    result.Data = listDto;
+                    return result;
+
+              
                 }
                 else
                 {
                     result.Data = null;
                     result.IsValid = true;
+                    result.CantidadRegistros = 0;
+                    result.TotalPage = 0;
                     result.Message = " No existen Datos";
                     result.LinkData = "";
 

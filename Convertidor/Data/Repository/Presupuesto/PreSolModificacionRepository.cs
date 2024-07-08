@@ -46,6 +46,8 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        
+        
         public async Task<List<PRE_SOL_MODIFICACION>> GetByPresupuesto(int codigoPresupuesto)
         {
             try
