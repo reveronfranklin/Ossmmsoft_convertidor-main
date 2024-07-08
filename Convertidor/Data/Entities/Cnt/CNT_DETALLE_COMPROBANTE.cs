@@ -10,7 +10,7 @@
         public string REFERENCIA2 { get; set; } = string.Empty;
         public string REFERENCIA3 { get; set; } = string.Empty;
         public string DESCRIPCION { get; set; } = string.Empty;
-        public int MONTO { get; set; }
+        public decimal MONTO { get; set; }
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;
         public string EXTRA3 { get; set; } = string.Empty;

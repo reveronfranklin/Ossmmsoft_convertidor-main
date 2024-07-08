@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Cnt
 {
-    public class CntDetalleComprobanteResponseDto
+    public class CntDetalleComprobanteUpdateDto
     {
         public int CodigoDetalleComprobante { get; set; }
         public int CodigoComprobante { get; set; }
