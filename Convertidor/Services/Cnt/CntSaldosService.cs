@@ -482,6 +482,35 @@ namespace Convertidor.Services.Cnt
         }
 
 
+        public async Task<ResultDto<CntSaldosResponseDto>> GetByCodigo(int codigoSaldo)
+        {
+            ResultDto<CntSaldosResponseDto> result = new ResultDto<CntSaldosResponseDto>(null);
+            try
+            {
 
+                var saldos = await _repository.GetByCodigo(codigoSaldo);
+                if (saldos == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Saldo no existe";
+                    return result;
+                }
+
+                var resultDto = await MapSaldos(saldos);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
     }
 }

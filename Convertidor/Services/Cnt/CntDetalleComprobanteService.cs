@@ -551,6 +551,37 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntDetalleComprobanteResponseDto>> GetByCodigo(int codigoDetalleComprobante)
+        {
+            ResultDto<CntDetalleComprobanteResponseDto> result = new ResultDto<CntDetalleComprobanteResponseDto>(null);
+            try
+            {
+
+                var Detallecomprobante = await _repository.GetByCodigo(codigoDetalleComprobante);
+                if (Detallecomprobante == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle comprobante no existe";
+                    return result;
+                }
+
+                var resultDto = await MapDetalleComprobante(Detallecomprobante);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
 
     }
 }
