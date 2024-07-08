@@ -33,7 +33,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
-        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllByCodigoComprobante(FilterDetalleComprobante filter)
+        {
+            var result = await _service.GetAllByCodigoComprobante(filter.CodigoComprobante);
+            return Ok(result);
+        }
+
 
     }
 }

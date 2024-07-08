@@ -5,5 +5,6 @@ namespace Convertidor.Data.Interfaces.Cnt
     public interface ICntDetalleComprobanteRepository
     {
         Task<List<CNT_DETALLE_COMPROBANTE>> GetAll();
+        Task<List<CNT_DETALLE_COMPROBANTE>> GetByCodigoComprobante(int codigoComprobante);
     }
 }

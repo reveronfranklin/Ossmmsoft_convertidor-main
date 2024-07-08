@@ -5,5 +5,6 @@ namespace Convertidor.Services.Cnt
     public interface ICntDetalleComprobanteService
     {
         Task<ResultDto<List<CntDetalleComprobanteResponseDto>>> GetAll();
+        Task<ResultDto<List<CntDetalleComprobanteResponseDto>>> GetAllByCodigoComprobante(int codigoComprobante);
     }
 }

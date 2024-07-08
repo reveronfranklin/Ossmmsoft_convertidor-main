@@ -27,5 +27,21 @@ namespace Convertidor.Data.Repository.Cnt
             }
 
         }
+
+        public async Task<List<CNT_DETALLE_COMPROBANTE>> GetByCodigoComprobante(int codigoComprobante)
+        {
+            try
+            {
+                var result = await _context.CNT_DETALLE_COMPROBANTE.DefaultIfEmpty().Where(x => x.CODIGO_COMPROBANTE == codigoComprobante).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
     }
 }

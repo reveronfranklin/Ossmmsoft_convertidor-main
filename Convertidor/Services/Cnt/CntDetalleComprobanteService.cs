@@ -87,5 +87,52 @@ namespace Convertidor.Services.Cnt
             }
 
         }
+
+        public async Task<ResultDto<List<CntDetalleComprobanteResponseDto>>> GetAllByCodigoComprobante(int codigoComprobante)
+        {
+
+            ResultDto<List<CntDetalleComprobanteResponseDto>> result = new ResultDto<List<CntDetalleComprobanteResponseDto>>(null);
+            try
+            {
+
+                var comprobantes = await _repository.GetByCodigoComprobante(codigoComprobante);
+
+
+
+                if (comprobantes.Count() > 0)
+                {
+                    List<CntDetalleComprobanteResponseDto> listDto = new List<CntDetalleComprobanteResponseDto>();
+
+                    foreach (var item in comprobantes)
+                    {
+                        var dto = await MapDetalleComprobante(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = "No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }
