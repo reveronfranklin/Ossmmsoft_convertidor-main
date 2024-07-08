@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<CNT_HIST_ANALITICO> GetByCodigo(int codigoHistAnalitico);
         Task<ResultDto<CNT_HIST_ANALITICO>> Add(CNT_HIST_ANALITICO entity);
         Task<ResultDto<CNT_HIST_ANALITICO>> Update(CNT_HIST_ANALITICO entity);
+        Task<string> Delete(int codigoHistAnalitico);
         Task<int> GetNextKey();
     }
 }
