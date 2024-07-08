@@ -277,5 +277,171 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntComprobantesResponseDto>> Update(CntComprobantesUpdateDto dto)
+        {
+            ResultDto<CntComprobantesResponseDto> result = new ResultDto<CntComprobantesResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoComprobante = await _repository.GetByCodigo(dto.CodigoComprobante);
+                if (codigoComprobante == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Comprobante no Existe";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoPeriodo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo invalido";
+                    return result;
+
+                }
+
+                var codigoPeriodo = await _cntPeriodosService.GetByCodigo(dto.CodigoPeriodo);
+                if (codigoPeriodo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Periodo invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.TipoComprobanteId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Comprobante Id invalido";
+                    return result;
+                }
+
+                var tipoComprobanteId = await _cntDescriptivaRepository.GetByIdAndTitulo(5, dto.TipoComprobanteId);
+                if (tipoComprobanteId == false)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo comprobante Id invalido";
+                    return result;
+
+                }
+
+                if (dto.NumeroComprobante.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Comprobante Invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaComprobante == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Comprobante Invalido";
+                    return result;
+                }
+
+                if (dto.OrigenId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Origen Id Invalido";
+                    return result;
+
+                }
+
+                var origenId = await _cntDescriptivaRepository.GetByIdAndTitulo(1, dto.OrigenId);
+                if (origenId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Origen Id Invalido";
+                    return result;
+
+                }
+
+                if (dto.Observacion.Length > 1000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Onservacion Invalida";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoComprobante.CODIGO_COMPROBANTE = dto.CodigoComprobante;
+                codigoComprobante.CODIGO_PERIODO = dto.CodigoPeriodo;
+                codigoComprobante.TIPO_COMPROBANTE_ID = dto.TipoComprobanteId;
+                codigoComprobante.NUMERO_COMPROBANTE = dto.NumeroComprobante;
+                codigoComprobante.FECHA_COMPROBANTE = dto.FechaComprobante;
+                codigoComprobante.ORIGEN_ID = dto.OrigenId;
+                codigoComprobante.OBSERVACION = dto.Observacion;
+                codigoComprobante.EXTRA1 = dto.Extra1;
+                codigoComprobante.EXTRA2 = dto.Extra2;
+                codigoComprobante.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoComprobante.CODIGO_EMPRESA = conectado.Empresa;
+                codigoComprobante.USUARIO_UPD = conectado.Usuario;
+                codigoComprobante.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoComprobante);
+
+                var resultDto = await MapComprobantes(codigoComprobante);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
+
     }
 }

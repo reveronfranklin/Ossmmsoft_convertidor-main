@@ -33,6 +33,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_COMPROBANTES> GetByCodigo(int codigoComprobante)
+        {
+            try
+            {
+                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty().Where(x => x.CODIGO_COMPROBANTE == codigoComprobante).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<CNT_COMPROBANTES> GetByNumeroComprobante(string numeroComprobante)
         {
             try
@@ -64,6 +80,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_COMPROBANTES>> Update(CNT_COMPROBANTES entity)
+        {
+            ResultDto<CNT_COMPROBANTES> result = new ResultDto<CNT_COMPROBANTES>(null);
+
+            try
+            {
+                CNT_COMPROBANTES entityUpdate = await GetByCodigo(entity.CODIGO_COMPROBANTE);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_COMPROBANTES.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)
