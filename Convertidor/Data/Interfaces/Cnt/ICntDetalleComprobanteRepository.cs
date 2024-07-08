@@ -9,6 +9,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<List<CNT_DETALLE_COMPROBANTE>> GetByCodigoComprobante(int codigoComprobante);
         Task<ResultDto<CNT_DETALLE_COMPROBANTE>> Add(CNT_DETALLE_COMPROBANTE entity);
         Task<ResultDto<CNT_DETALLE_COMPROBANTE>> Update(CNT_DETALLE_COMPROBANTE entity);
+        Task<string> Delete(int codigoDetalleComprobante);
         Task<int> GetNextKey();
     }
 }
