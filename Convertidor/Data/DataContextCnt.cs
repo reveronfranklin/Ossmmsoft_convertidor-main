@@ -5,35 +5,36 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data
 {
-    public class DataContextCnt : DbContext
-    {
-        public DataContextCnt(DbContextOptions<DataContextCnt> options) : base(options)
-        {
+	public class DataContextCnt : DbContext
+	{
+		public DataContextCnt(DbContextOptions<DataContextCnt> options) : base(options)
+		{
 
-        }
+		}
 
-        public DbSet<CNT_DESCRIPTIVAS> CNT_DESCRIPTIVAS { get; set; }
-        public DbSet<CNT_TITULOS> CNT_TITULOS { get; set; }
-        public DbSet<CNT_BANCO_ARCHIVO> CNT_BANCO_ARCHIVO { get; set; }
-        public DbSet<CNT_BANCO_ARCHIVO_CONTROL> CNT_BANCO_ARCHIVO_CONTROL { get; set; }
-        public DbSet<CNT_DETALLE_EDO_CTA> CNT_DETALLE_EDO_CTA { get; set; }
-        public DbSet<CNT_DETALLE_LIBRO> CNT_DETALLE_LIBRO { get; set; }
-        public DbSet<CNT_ESTADO_CUENTAS> CNT_ESTADO_CUENTAS { get; set; }
-        public DbSet<CNT_HIST_CONCILIACION> CNT_HIST_CONCILIACION { get; set; }
-        public DbSet<CNT_LIBROS> CNT_LIBROS { get; set; }
-        public DbSet<CNT_REVERSO_CONCILIACION> CNT_REVERSO_CONCILIACION { get; set; }
-        public DbSet<CNT_RUBROS> CNT_RUBROS { get; set; }
-        public DbSet<CNT_TMP_CONCILIACION> CNT_TMP_CONCILIACION { get; set; }
-        public DbSet<CNT_BALANCES> CNT_BALANCES { get; set; }
-        public DbSet<CNT_MAYORES> CNT_MAYORES { get; set; }
-        public DbSet<CNT_AUXILIARES> CNT_AUXILIARES { get; set; }
-        public DbSet<CNT_AUXILIARES_PUC> CNT_AUXILIARES_PUC { get; set; }
-        public DbSet<CNT_PERIODOS> CNT_PERIODOS { get; set; }
-        public DbSet<CNT_SALDOS> CNT_SALDOS { get; set; }
-        public DbSet<CNT_COMPROBANTES> CNT_COMPROBANTES { get; set; }
-        public DbSet<CNT_DETALLE_COMPROBANTE> CNT_DETALLE_COMPROBANTE { get; set; }
-        public DbSet<CNT_HIST_ANALITICO> CNT_HIST_ANALITICO { get; set; }
-        public DbSet<CNT_TMP_SALDOS> CNT_TMP_SALDOS { get; set; }
+		public DbSet<CNT_DESCRIPTIVAS> CNT_DESCRIPTIVAS { get; set; }
+		public DbSet<CNT_TITULOS> CNT_TITULOS { get; set; }
+		public DbSet<CNT_BANCO_ARCHIVO> CNT_BANCO_ARCHIVO { get; set; }
+		public DbSet<CNT_BANCO_ARCHIVO_CONTROL> CNT_BANCO_ARCHIVO_CONTROL { get; set; }
+		public DbSet<CNT_DETALLE_EDO_CTA> CNT_DETALLE_EDO_CTA { get; set; }
+		public DbSet<CNT_DETALLE_LIBRO> CNT_DETALLE_LIBRO { get; set; }
+		public DbSet<CNT_ESTADO_CUENTAS> CNT_ESTADO_CUENTAS { get; set; }
+		public DbSet<CNT_HIST_CONCILIACION> CNT_HIST_CONCILIACION { get; set; }
+		public DbSet<CNT_LIBROS> CNT_LIBROS { get; set; }
+		public DbSet<CNT_REVERSO_CONCILIACION> CNT_REVERSO_CONCILIACION { get; set; }
+		public DbSet<CNT_RUBROS> CNT_RUBROS { get; set; }
+		public DbSet<CNT_TMP_CONCILIACION> CNT_TMP_CONCILIACION { get; set; }
+		public DbSet<CNT_BALANCES> CNT_BALANCES { get; set; }
+		public DbSet<CNT_MAYORES> CNT_MAYORES { get; set; }
+		public DbSet<CNT_AUXILIARES> CNT_AUXILIARES { get; set; }
+		public DbSet<CNT_AUXILIARES_PUC> CNT_AUXILIARES_PUC { get; set; }
+		public DbSet<CNT_PERIODOS> CNT_PERIODOS { get; set; }
+		public DbSet<CNT_SALDOS> CNT_SALDOS { get; set; }
+		public DbSet<CNT_COMPROBANTES> CNT_COMPROBANTES { get; set; }
+		public DbSet<CNT_DETALLE_COMPROBANTE> CNT_DETALLE_COMPROBANTE { get; set; }
+		public DbSet<CNT_HIST_ANALITICO> CNT_HIST_ANALITICO { get; set; }
+		public DbSet<CNT_TMP_SALDOS> CNT_TMP_SALDOS { get; set; }
+		public DbSet<CNT_TMP_HIST_ANALITICO> CNT_TMP_HIST_ANALITICO { get; set; }
 
 
 
@@ -180,104 +181,115 @@ namespace Convertidor.Data
 		});
 		builder.ToTable("CNT_BALANCES");
 	});
-				modelBuilder
-		.Entity<CNT_MAYORES>(builder =>
-		{
-			builder.HasKey(table => new
-			{
-				table.CODIGO_MAYOR,
-
-			});
-			builder.ToTable("CNT_MAYORES");
-		});
-				modelBuilder
-		.Entity<CNT_AUXILIARES>(builder =>
-		{
-			builder.HasKey(table => new
-			{
-				table.CODIGO_AUXILIAR,
-
-			});
-			builder.ToTable("CNT_AUXILIARES");
-		});
-
-				modelBuilder
-		.Entity<CNT_AUXILIARES_PUC>(builder =>
-		{
-			builder.HasKey(table => new
-			{
-				table.CODIGO_AUXILIAR_PUC,
-
-			});
-			builder.ToTable("CNT_AUXILIARES_PUC");
-		});
-				modelBuilder
-		.Entity<CNT_PERIODOS>(builder =>
-		{
-			builder.HasKey(table => new
-			{
-				table.CODIGO_PERIODO,
-
-			});
-			builder.ToTable("CNT_PERIODOS");
-		});
-				modelBuilder
-		.Entity<CNT_SALDOS>(builder =>
-		{
-			builder.HasKey(table => new
-			{
-				table.CODIGO_SALDO,
-
-			});
-			builder.ToTable("CNT_SALDOS");
-		});
-				modelBuilder
-	.Entity<CNT_COMPROBANTES>(builder =>
+			modelBuilder
+	.Entity<CNT_MAYORES>(builder =>
 	{
 		builder.HasKey(table => new
 		{
-			table.CODIGO_COMPROBANTE,
+			table.CODIGO_MAYOR,
 
 		});
-		builder.ToTable("CNT_COMPROBANTES");
+		builder.ToTable("CNT_MAYORES");
 	});
-				modelBuilder
-		.Entity<CNT_DETALLE_COMPROBANTE>(builder =>
-		{
-			builder.HasKey(table => new
-			{
-				table.CODIGO_DETALLE_COMPROBANTE,
-
-			});
-			builder.ToTable("CNT_DETALLE_COMPROBANTE");
-		});
-
-				modelBuilder
-		.Entity<CNT_HIST_ANALITICO>(builder =>
-		{
-			builder.HasKey(table => new
-			{
-				table.CODIGO_HIST_ANALITICO,
-
-			});
-			builder.ToTable("CNT_HIST_ANALITICO");
-
-
-		});
-				modelBuilder
-	.Entity<CNT_TMP_SALDOS>(builder =>
+			modelBuilder
+	.Entity<CNT_AUXILIARES>(builder =>
 	{
 		builder.HasKey(table => new
 		{
-			table.CODIGO_TMP_SALDO,
+			table.CODIGO_AUXILIAR,
 
 		});
-		builder.ToTable("CNT_TMP_SALDOS");
+		builder.ToTable("CNT_AUXILIARES");
+	});
+
+			modelBuilder
+	.Entity<CNT_AUXILIARES_PUC>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_AUXILIAR_PUC,
+
+		});
+		builder.ToTable("CNT_AUXILIARES_PUC");
+	});
+			modelBuilder
+	.Entity<CNT_PERIODOS>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_PERIODO,
+
+		});
+		builder.ToTable("CNT_PERIODOS");
+	});
+			modelBuilder
+	.Entity<CNT_SALDOS>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_SALDO,
+
+		});
+		builder.ToTable("CNT_SALDOS");
+	});
+			modelBuilder
+.Entity<CNT_COMPROBANTES>(builder =>
+{
+	builder.HasKey(table => new
+	{
+		table.CODIGO_COMPROBANTE,
+
+	});
+	builder.ToTable("CNT_COMPROBANTES");
+});
+			modelBuilder
+	.Entity<CNT_DETALLE_COMPROBANTE>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_DETALLE_COMPROBANTE,
+
+		});
+		builder.ToTable("CNT_DETALLE_COMPROBANTE");
+	});
+
+			modelBuilder
+	.Entity<CNT_HIST_ANALITICO>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_HIST_ANALITICO,
+
+		});
+		builder.ToTable("CNT_HIST_ANALITICO");
+
+
+	});
+			modelBuilder
+.Entity<CNT_TMP_SALDOS>(builder =>
+{
+	builder.HasKey(table => new
+	{
+		table.CODIGO_TMP_SALDO,
+
+	});
+	builder.ToTable("CNT_TMP_SALDOS");
+
+});
+			modelBuilder
+	.Entity<CNT_TMP_HIST_ANALITICO>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_HIST_ANALITICO,
+
+		});
+		builder.ToTable("CNT_TMP_HIST_ANALITICO");
+
 
 	});
 
 		}
 
 	}
-
 }
