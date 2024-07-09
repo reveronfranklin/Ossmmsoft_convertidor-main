@@ -93,6 +93,24 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<string> Delete(int codigoTmpSaldo)
+        {
+            try
+            {
+                CNT_TMP_SALDOS entity = await GetByCodigo(codigoTmpSaldo);
+                if (entity != null)
+                {
+                    _context.CNT_TMP_SALDOS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<int> GetNextKey()
         {
             try
