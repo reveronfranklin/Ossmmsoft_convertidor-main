@@ -35,6 +35,7 @@ namespace Convertidor.Data
 		public DbSet<CNT_HIST_ANALITICO> CNT_HIST_ANALITICO { get; set; }
 		public DbSet<CNT_TMP_SALDOS> CNT_TMP_SALDOS { get; set; }
 		public DbSet<CNT_TMP_HIST_ANALITICO> CNT_TMP_HIST_ANALITICO { get; set; }
+		public DbSet<CNT_TMP_ANALITICO> CNT_TMP_ANALITICO { get; set; }
 
 
 
@@ -288,8 +289,20 @@ namespace Convertidor.Data
 
 
 	});
+			modelBuilder
+	.Entity<CNT_TMP_ANALITICO>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_TMP_ANALITICO,
+
+		});
+		builder.ToTable("CNT_TMP_ANALITICO");
+
+
+
+	});
 
 		}
-
 	}
 }
