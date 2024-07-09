@@ -213,5 +213,124 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<CntTmpHistAnaliticoResponseDto>> Update(CntTmpHistAnaliticoUpdateDto dto)
+        {
+            ResultDto<CntTmpHistAnaliticoResponseDto> result = new ResultDto<CntTmpHistAnaliticoResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoHistAnalitico = await _repository.GetByCodigo(dto.CodigoHistAnalitico);
+                if (codigoHistAnalitico == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Historico Analitico no Existe";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoSaldo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo saldo invalido";
+                    return result;
+
+                }
+
+                var codigoSaldo = await _cntSaldosService.GetByCodigo(dto.CodigoSaldo);
+                if (codigoSaldo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo saldo invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.CodigoDetalleComprobante <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Comprobante invalido";
+                    return result;
+                }
+
+                var codigoDetalleComprobante = await _cntDetalleComprobanteService.GetByCodigo(dto.CodigoDetalleComprobante);
+                if (codigoDetalleComprobante == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Comprobante invalido";
+                    return result;
+
+                }
+
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoHistAnalitico.CODIGO_HIST_ANALITICO = dto.CodigoHistAnalitico;
+                codigoHistAnalitico.CODIGO_SALDO = dto.CodigoSaldo;
+                codigoHistAnalitico.CODIGO_DETALLE_COMPROBANTE = dto.CodigoDetalleComprobante;
+                codigoHistAnalitico.EXTRA1 = dto.Extra1;
+                codigoHistAnalitico.EXTRA2 = dto.Extra2;
+                codigoHistAnalitico.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoHistAnalitico.CODIGO_EMPRESA = conectado.Empresa;
+                codigoHistAnalitico.USUARIO_UPD = conectado.Usuario;
+                codigoHistAnalitico.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoHistAnalitico);
+
+                var resultDto = await MapTmpHistAnalitico(codigoHistAnalitico);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
+
     }
 }

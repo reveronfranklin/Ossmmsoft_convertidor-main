@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_TMP_HIST_ANALITICO> GetByCodigo(int codigoHistAnalitico)
+        {
+            try
+            {
+                var result = await _context.CNT_TMP_HIST_ANALITICO.DefaultIfEmpty().Where(x => x.CODIGO_HIST_ANALITICO == codigoHistAnalitico).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CNT_TMP_HIST_ANALITICO>> Add(CNT_TMP_HIST_ANALITICO entity)
         {
 
@@ -41,6 +57,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<CNT_TMP_HIST_ANALITICO>> Update(CNT_TMP_HIST_ANALITICO entity)
+        {
+            ResultDto<CNT_TMP_HIST_ANALITICO> result = new ResultDto<CNT_TMP_HIST_ANALITICO>(null);
+
+            try
+            {
+                CNT_TMP_HIST_ANALITICO entityUpdate = await GetByCodigo(entity.CODIGO_HIST_ANALITICO);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_TMP_HIST_ANALITICO.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)
