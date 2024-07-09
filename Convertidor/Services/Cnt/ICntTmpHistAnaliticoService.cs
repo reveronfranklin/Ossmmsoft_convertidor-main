@@ -7,5 +7,6 @@ namespace Convertidor.Services.Cnt
         Task<ResultDto<List<CntTmpHistAnaliticoResponseDto>>> GetAll();
         Task<ResultDto<CntTmpHistAnaliticoResponseDto>> Create(CntTmpHistAnaliticoUpdateDto dto);
         Task<ResultDto<CntTmpHistAnaliticoResponseDto>> Update(CntTmpHistAnaliticoUpdateDto dto);
+        Task<ResultDto<CntTmpHistAnaliticoDeleteDto>> Delete(CntTmpHistAnaliticoDeleteDto dto);
     }
 }
