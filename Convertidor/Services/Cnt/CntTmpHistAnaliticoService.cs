@@ -7,10 +7,19 @@ namespace Convertidor.Services.Cnt
     public class CntTmpHistAnaliticoService : ICntTmpHistAnaliticoService
     {
         private readonly ICntTmpHistAnaliticoRepository _repository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICntSaldosService _cntSaldosService;
+        private readonly ICntDetalleComprobanteService _cntDetalleComprobanteService;
 
-        public CntTmpHistAnaliticoService(ICntTmpHistAnaliticoRepository repository)
+        public CntTmpHistAnaliticoService(ICntTmpHistAnaliticoRepository repository,
+                                          ISisUsuarioRepository sisUsuarioRepository,
+                                          ICntSaldosService cntSaldosService,
+                                          ICntDetalleComprobanteService cntDetalleComprobanteService)
         {
             _repository = repository;
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _cntSaldosService = cntSaldosService;
+            _cntDetalleComprobanteService = cntDetalleComprobanteService;
         }
 
         public async Task<CntTmpHistAnaliticoResponseDto> MapTmpHistAnalitico(CNT_TMP_HIST_ANALITICO dtos)
@@ -81,5 +90,128 @@ namespace Convertidor.Services.Cnt
             }
 
         }
+
+        public async Task<ResultDto<CntTmpHistAnaliticoResponseDto>> Create(CntTmpHistAnaliticoUpdateDto dto)
+        {
+            ResultDto<CntTmpHistAnaliticoResponseDto> result = new ResultDto<CntTmpHistAnaliticoResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                if (dto.CodigoSaldo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo saldo invalido";
+                    return result;
+
+                }
+
+                var codigoSaldo = await _cntSaldosService.GetByCodigo(dto.CodigoSaldo);
+                if (codigoSaldo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo saldo invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.CodigoDetalleComprobante <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Comprobante invalido";
+                    return result;
+                }
+
+                var codigoDetalleComprobante = await _cntDetalleComprobanteService.GetByCodigo(dto.CodigoDetalleComprobante);
+                if (codigoDetalleComprobante == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Comprobante invalido";
+                    return result;
+
+                }
+
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+
+                CNT_TMP_HIST_ANALITICO entity = new CNT_TMP_HIST_ANALITICO();
+                entity.CODIGO_HIST_ANALITICO = await _repository.GetNextKey();
+                entity.CODIGO_SALDO = dto.CodigoSaldo;
+                entity.CODIGO_DETALLE_COMPROBANTE = dto.CodigoDetalleComprobante;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapTmpHistAnalitico(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }
