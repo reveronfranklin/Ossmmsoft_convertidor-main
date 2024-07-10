@@ -403,6 +403,53 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<TmpAuxiliaresDeleteDto>> Delete(TmpAuxiliaresDeleteDto dto)
+        {
+            ResultDto<TmpAuxiliaresDeleteDto> result = new ResultDto<TmpAuxiliaresDeleteDto>(null);
+            try
+            {
+
+                var codigoAuxiliar = await _repository.GetByCodigo(dto.CodigoAuxiliar);
+                if (codigoAuxiliar == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoAuxiliar);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
 
     }
 }

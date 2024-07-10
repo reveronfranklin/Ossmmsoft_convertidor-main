@@ -7,5 +7,6 @@ namespace Convertidor.Services.Cnt
         Task<ResultDto<List<TmpAuxiliaresResponseDto>>> GetAll();
         Task<ResultDto<TmpAuxiliaresResponseDto>> Create(TmpAuxiliaresUpdateDto dto);
         Task<ResultDto<TmpAuxiliaresResponseDto>> Update(TmpAuxiliaresUpdateDto dto);
+        Task<ResultDto<TmpAuxiliaresDeleteDto>> Delete(TmpAuxiliaresDeleteDto dto);
     }
 }
