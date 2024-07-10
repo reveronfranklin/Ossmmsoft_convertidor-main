@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<TMP_AUXILIARES> GetByCodigo(int codigoAuxiliar)
+        {
+            try
+            {
+                var result = await _context.TMP_AUXILIARES.DefaultIfEmpty().Where(x => x.CODIGO_AUXILIAR == codigoAuxiliar).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<TMP_AUXILIARES>> Add(TMP_AUXILIARES entity)
         {
 
@@ -41,6 +57,33 @@ namespace Convertidor.Data.Repository.Cnt
                 result.Data = entity;
                 result.IsValid = true;
                 result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
+        public async Task<ResultDto<TMP_AUXILIARES>> Update(TMP_AUXILIARES entity)
+        {
+            ResultDto<TMP_AUXILIARES> result = new ResultDto<TMP_AUXILIARES>(null);
+
+            try
+            {
+                TMP_AUXILIARES entityUpdate = await GetByCodigo(entity.CODIGO_AUXILIAR);
+                if (entityUpdate != null)
+                {
+                    _context.TMP_AUXILIARES.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
                 return result;
             }
             catch (Exception ex)
