@@ -35,6 +35,7 @@ namespace Convertidor.Data
 		public DbSet<CNT_TMP_HIST_ANALITICO> CNT_TMP_HIST_ANALITICO { get; set; }
 		public DbSet<CNT_TMP_ANALITICO> CNT_TMP_ANALITICO { get; set; }
         public DbSet<CNT_RELACION_DOCUMENTOS> CNT_RELACION_DOCUMENTOS { get; set; }
+        public DbSet<TMP_AUXILIARES> TMP_AUXILIARES { get; set; }
 
 
 
@@ -310,6 +311,19 @@ namespace Convertidor.Data
 
 		});
 		builder.ToTable("CNT_RELACION_DOCUMENTOS");
+
+
+
+	});
+			modelBuilder
+	.Entity<TMP_AUXILIARES>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_AUXILIAR,
+
+		});
+		builder.ToTable("TMP_AUXILIARES");
 
 
 
