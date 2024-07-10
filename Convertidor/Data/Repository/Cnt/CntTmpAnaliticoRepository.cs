@@ -95,6 +95,24 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<string> Delete(int codigoTmpAnalitico)
+        {
+            try
+            {
+                CNT_TMP_ANALITICO entity = await GetByCodigo(codigoTmpAnalitico);
+                if (entity != null)
+                {
+                    _context.CNT_TMP_ANALITICO.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<int> GetNextKey()
         {
             try
