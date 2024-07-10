@@ -327,5 +327,52 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
+        public async Task<ResultDto<CntRelacionDocumentosDeleteDto>> Delete(CntRelacionDocumentosDeleteDto dto)
+        {
+            ResultDto<CntRelacionDocumentosDeleteDto> result = new ResultDto<CntRelacionDocumentosDeleteDto>(null);
+            try
+            {
+
+                var codigoRelacionDocumento = await _repository.GetByCodigo(dto.CodigoRelacionDocumento);
+                if (codigoRelacionDocumento == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Relacion Documento no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoRelacionDocumento);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }

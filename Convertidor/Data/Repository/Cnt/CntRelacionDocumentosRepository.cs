@@ -95,7 +95,25 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
 
-        }    
+        }
+
+        public async Task<string> Delete(int codigoRelaciondocumento)
+        {
+            try
+            {
+                CNT_RELACION_DOCUMENTOS entity = await GetByCodigo(codigoRelaciondocumento);
+                if (entity != null)
+                {
+                    _context.CNT_RELACION_DOCUMENTOS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
 
         public async Task<int> GetNextKey()
         {

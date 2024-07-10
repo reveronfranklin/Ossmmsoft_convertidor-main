@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<CNT_RELACION_DOCUMENTOS> GetByCodigo(int codigoRelacionDocumento);
         Task<ResultDto<CNT_RELACION_DOCUMENTOS>> Add(CNT_RELACION_DOCUMENTOS entity);
         Task<ResultDto<CNT_RELACION_DOCUMENTOS>> Update(CNT_RELACION_DOCUMENTOS entity);
+        Task<string> Delete(int codigoRelaciondocumento);
         Task<int> GetNextKey();
     }
 }
