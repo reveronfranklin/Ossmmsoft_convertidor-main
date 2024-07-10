@@ -7,10 +7,16 @@ namespace Convertidor.Services.Cnt
     public class CntRelacionDocumentosService : ICntRelacionDocumentosService
     {
         private readonly ICntRelacionDocumentosRepository _repository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICntDescriptivaRepository _cntDescriptivaRepository;
 
-        public CntRelacionDocumentosService(ICntRelacionDocumentosRepository repository)
+        public CntRelacionDocumentosService(ICntRelacionDocumentosRepository repository,
+                                            ISisUsuarioRepository sisUsuarioRepository,
+                                            ICntDescriptivaRepository cntDescriptivaRepository)
         {
             _repository = repository;
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _cntDescriptivaRepository = cntDescriptivaRepository;
         }
 
         public async Task<CntRelacionDocumentosResponseDto> MapRelacionDocumentos(CNT_RELACION_DOCUMENTOS dtos)
@@ -81,5 +87,129 @@ namespace Convertidor.Services.Cnt
             }
 
         }
+
+        public async Task<ResultDto<CntRelacionDocumentosResponseDto>> Create(CntRelacionDocumentosUpdateDto dto)
+        {
+            ResultDto<CntRelacionDocumentosResponseDto> result = new ResultDto<CntRelacionDocumentosResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                if (dto.TipoDocumentoId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo documento Id invalido";
+                    return result;
+
+                }
+
+                var tipoDocumentoId = await _cntDescriptivaRepository.GetByIdAndTitulo(7, dto.TipoDocumentoId);
+                if (tipoDocumentoId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo documento Id invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.TipoTransaccionId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalida";
+                    return result;
+                }
+
+                var tipoTransaccionId = await _cntDescriptivaRepository.GetByIdAndTitulo(6, dto.TipoTransaccionId);
+                if (tipoTransaccionId == false)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalida";
+                    return result;
+
+                }
+
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+
+                CNT_RELACION_DOCUMENTOS entity = new CNT_RELACION_DOCUMENTOS();
+                entity.CODIGO_RELACION_DOCUMENTO = await _repository.GetNextKey();
+                entity.TIPO_DOCUMENTO_ID = dto.TipoDocumentoId;
+                entity.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapRelacionDocumentos(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        
     }
 }
