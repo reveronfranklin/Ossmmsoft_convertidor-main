@@ -463,6 +463,7 @@ builder.Services.AddTransient<ICntTmpHistAnaliticoRepository, CntTmpHistAnalitic
 builder.Services.AddTransient<ICntTmpAnaliticoRepository, CntTmpAnaliticoRepository>();
 builder.Services.AddTransient<ICntRelacionDocumentosRepository, CntRelacionDocumentosRepository>();
 builder.Services.AddTransient<ITmpAuxiliaresRepository, TmpAuxiliaresRepository>();
+builder.Services.AddTransient<ITmpDetalleComprobanteRepository, TmpDetalleComprobanteRepository>();
 
 
 //CNT Services
@@ -493,6 +494,7 @@ builder.Services.AddTransient<ICntTmpHistAnaliticoService, CntTmpHistAnaliticoSe
 builder.Services.AddTransient<ICntTmpAnaliticoService, CntTmpAnaliticoService>();
 builder.Services.AddTransient<ICntRelacionDocumentosService, CntRelacionDocumentosService>();
 builder.Services.AddTransient<ITmpAuxiliaresService, TmpAuxiliaresService>();
+builder.Services.AddTransient<ITmpDetalleComprobanteService, TmpDetalleComprobanteService>();
 
 
 
