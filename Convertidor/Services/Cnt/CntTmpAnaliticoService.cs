@@ -107,8 +107,8 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                var codigoSaldo = await _cntTmpSaldosService.GetByCodigo(dto.CodigoTmpSaldo);
-                if (codigoSaldo == null)
+                var codigoTmpSaldo = await _cntTmpSaldosService.GetByCodigo(dto.CodigoTmpSaldo);
+                if (codigoTmpSaldo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -212,6 +212,125 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
+
+        public async Task<ResultDto<CntTmpAnaliticoResponseDto>> Update(CntTmpAnaliticoUpdateDto dto)
+        {
+            ResultDto<CntTmpAnaliticoResponseDto> result = new ResultDto<CntTmpAnaliticoResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoTmpAnalitico = await _repository.GetByCodigo(dto.CodigoTmpAnalitico);
+                if (codigoTmpAnalitico == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Tmp Analitico no Existe";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoTmpSaldo <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Tmp saldo invalido";
+                    return result;
+
+                }
+
+                var codigoTmpSaldo = await _cntTmpSaldosService.GetByCodigo(dto.CodigoTmpSaldo);
+                if (codigoTmpSaldo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Tmp saldo invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.CodigoDetalleComprobante <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Comprobante invalido";
+                    return result;
+                }
+
+                var codigoDetalleComprobante = await _cntDetalleComprobanteService.GetByCodigo(dto.CodigoDetalleComprobante);
+                if (codigoDetalleComprobante == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Comprobante invalido";
+                    return result;
+
+                }
+
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoTmpAnalitico.CODIGO_TMP_ANALITICO = dto.CodigoTmpAnalitico;
+                codigoTmpAnalitico.CODIGO_TMP_SALDO = dto.CodigoTmpSaldo;
+                codigoTmpAnalitico.CODIGO_DETALLE_COMPROBANTE = dto.CodigoDetalleComprobante;
+                codigoTmpAnalitico.EXTRA1 = dto.Extra1;
+                codigoTmpAnalitico.EXTRA2 = dto.Extra2;
+                codigoTmpAnalitico.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoTmpAnalitico.CODIGO_EMPRESA = conectado.Empresa;
+                codigoTmpAnalitico.USUARIO_UPD = conectado.Usuario;
+                codigoTmpAnalitico.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoTmpAnalitico);
+
+                var resultDto = await MapTmpAnalitico(codigoTmpAnalitico);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
 
     }
 }
