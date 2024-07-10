@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<TMP_DETALLE_COMPROBANTE> GetByCodigo(int codigoDetalleComprobante);
         Task<ResultDto<TMP_DETALLE_COMPROBANTE>> Add(TMP_DETALLE_COMPROBANTE entity);
         Task<ResultDto<TMP_DETALLE_COMPROBANTE>> Update(TMP_DETALLE_COMPROBANTE entity);
+        Task<string> Delete(int codigoDetalleComprobante);
         Task<int> GetNextKey();
     }
 }

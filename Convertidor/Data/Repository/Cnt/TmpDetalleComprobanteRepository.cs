@@ -67,6 +67,24 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<string> Delete(int codigoDetalleComprobante)
+        {
+            try
+            {
+                TMP_DETALLE_COMPROBANTE entity = await GetByCodigo(codigoDetalleComprobante);
+                if (entity != null)
+                {
+                    _context.TMP_DETALLE_COMPROBANTE.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<ResultDto<TMP_DETALLE_COMPROBANTE>> Update(TMP_DETALLE_COMPROBANTE entity)
         {
             ResultDto<TMP_DETALLE_COMPROBANTE> result = new ResultDto<TMP_DETALLE_COMPROBANTE>(null);
