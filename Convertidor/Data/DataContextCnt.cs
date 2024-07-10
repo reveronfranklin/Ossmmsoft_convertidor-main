@@ -1,11 +1,9 @@
-﻿
-using Convertidor.Data.Entities;
-using Convertidor.Data.Entities.Cnt;
+﻿using Convertidor.Data.Entities.Cnt;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data
 {
-	public class DataContextCnt : DbContext
+    public class DataContextCnt : DbContext
 	{
 		public DataContextCnt(DbContextOptions<DataContextCnt> options) : base(options)
 		{
@@ -36,6 +34,7 @@ namespace Convertidor.Data
 		public DbSet<CNT_TMP_SALDOS> CNT_TMP_SALDOS { get; set; }
 		public DbSet<CNT_TMP_HIST_ANALITICO> CNT_TMP_HIST_ANALITICO { get; set; }
 		public DbSet<CNT_TMP_ANALITICO> CNT_TMP_ANALITICO { get; set; }
+        public DbSet<CNT_RELACION_DOCUMENTOS> CNT_RELACION_DOCUMENTOS { get; set; }
 
 
 
@@ -302,7 +301,19 @@ namespace Convertidor.Data
 
 
 	});
+			modelBuilder
+	.Entity<CNT_RELACION_DOCUMENTOS>(builder =>
+	{
+		builder.HasKey(table => new
+		{
+			table.CODIGO_RELACION_DOCUMENTO,
 
+		});
+		builder.ToTable("CNT_RELACION_DOCUMENTOS");
+
+
+
+	});
 		}
 	}
 }
