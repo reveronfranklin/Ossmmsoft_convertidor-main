@@ -28,6 +28,23 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<CNT_RELACION_DOCUMENTOS> GetByCodigo(int codigoRelacionDocumento)
+        {
+            try
+            {
+                var result = await _context.CNT_RELACION_DOCUMENTOS.DefaultIfEmpty()
+                                           .Where(x => x.CODIGO_RELACION_DOCUMENTO == codigoRelacionDocumento).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CNT_RELACION_DOCUMENTOS>> Add(CNT_RELACION_DOCUMENTOS entity)
         {
 
@@ -51,6 +68,34 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
         }
+
+        public async Task<ResultDto<CNT_RELACION_DOCUMENTOS>> Update(CNT_RELACION_DOCUMENTOS entity)
+        {
+            ResultDto<CNT_RELACION_DOCUMENTOS> result = new ResultDto<CNT_RELACION_DOCUMENTOS>(null);
+
+            try
+            {
+                CNT_RELACION_DOCUMENTOS entityUpdate = await GetByCodigo(entity.CODIGO_RELACION_DOCUMENTO);
+                if (entityUpdate != null)
+                {
+                    _context.CNT_RELACION_DOCUMENTOS.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }    
 
         public async Task<int> GetNextKey()
         {

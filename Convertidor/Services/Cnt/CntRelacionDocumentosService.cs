@@ -210,6 +210,122 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        
+        public async Task<ResultDto<CntRelacionDocumentosResponseDto>> Update(CntRelacionDocumentosUpdateDto dto)
+        {
+            ResultDto<CntRelacionDocumentosResponseDto> result = new ResultDto<CntRelacionDocumentosResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoRelacionDocumento = await _repository.GetByCodigo(dto.CodigoRelacionDocumento);
+                if (codigoRelacionDocumento == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Relacion Documento no Existe";
+                    return result;
+
+                }
+
+
+                if (dto.TipoDocumentoId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo documento Id invalido";
+                    return result;
+
+                }
+
+                var tipoDocumentoId = await _cntDescriptivaRepository.GetByIdAndTitulo(7, dto.TipoDocumentoId);
+                if (tipoDocumentoId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo documento Id invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.TipoTransaccionId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalida";
+                    return result;
+                }
+
+                var tipoTransaccionId = await _cntDescriptivaRepository.GetByIdAndTitulo(6, dto.TipoTransaccionId);
+                if (tipoTransaccionId == false)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Id invalida";
+                    return result;
+
+                }
+
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoRelacionDocumento.CODIGO_RELACION_DOCUMENTO = dto.CodigoRelacionDocumento;
+                codigoRelacionDocumento.TIPO_DOCUMENTO_ID = dto.TipoDocumentoId;
+                codigoRelacionDocumento.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
+                codigoRelacionDocumento.EXTRA1 = dto.Extra1;
+                codigoRelacionDocumento.EXTRA2 = dto.Extra2;
+                codigoRelacionDocumento.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoRelacionDocumento.CODIGO_EMPRESA = conectado.Empresa;
+                codigoRelacionDocumento.USUARIO_UPD = conectado.Usuario;
+                codigoRelacionDocumento.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoRelacionDocumento);
+
+                var resultDto = await MapRelacionDocumentos(codigoRelacionDocumento);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
     }
 }
