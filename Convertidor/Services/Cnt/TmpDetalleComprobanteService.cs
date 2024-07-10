@@ -280,5 +280,183 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+        public async Task<ResultDto<TmpDetalleComprobanteResponseDto>> Update(TmpDetalleComprobanteUpdateDto dto)
+        {
+            ResultDto<TmpDetalleComprobanteResponseDto> result = new ResultDto<TmpDetalleComprobanteResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoDetalleComprobante = await _repository.GetByCodigo(dto.CodigoDetalleComprobante);
+                if (codigoDetalleComprobante == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Comprobante no Existe";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoComprobante <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Comprobrante invalido";
+                    return result;
+
+                }
+
+                var codigoComprobante = await _cntComprobantesService.GetByCodigo(dto.CodigoComprobante);
+                if (codigoComprobante == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Comprobante invalido";
+                    return result;
+
+
+                }
+
+
+                if (dto.CodigoMayor <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Mayor invalido";
+                    return result;
+                }
+
+                var codigoMayor = await _cntMayoresService.GetByCodigo(dto.CodigoMayor);
+                if (codigoMayor == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Mayor invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoAuxiliar <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar Invalido";
+                    return result;
+
+                }
+
+                var codigoAuxiliar = await _cntAuxiliaresService.GetByCodigo(dto.CodigoAuxiliar);
+                if (codigoAuxiliar == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auxiliar Invalido";
+                    return result;
+                }
+
+                if (dto.Referencia1.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Referencia1  Invalida";
+                    return result;
+
+                }
+
+                if (dto.Referencia2.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Referencia2 Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.Descripcion != string.Empty && dto.Descripcion.Length > 200)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+
+                }
+
+                if (dto.Monto <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoDetalleComprobante.CODIGO_DETALLE_COMPROBANTE = dto.CodigoDetalleComprobante;
+                codigoDetalleComprobante.CODIGO_COMPROBANTE = dto.CodigoComprobante;
+                codigoDetalleComprobante.CODIGO_MAYOR = dto.CodigoMayor;
+                codigoDetalleComprobante.CODIGO_AUXILIAR = dto.CodigoAuxiliar;
+                codigoDetalleComprobante.REFERENCIA1 = dto.Referencia1;
+                codigoDetalleComprobante.REFERENCIA2 = dto.Referencia2;
+                codigoDetalleComprobante.REFERENCIA3 = dto.Referencia3;
+                codigoDetalleComprobante.DESCRIPCION = dto.Descripcion;
+                codigoDetalleComprobante.MONTO = dto.Monto;
+                codigoDetalleComprobante.EXTRA1 = dto.Extra1;
+                codigoDetalleComprobante.EXTRA2 = dto.Extra2;
+                codigoDetalleComprobante.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoDetalleComprobante.CODIGO_EMPRESA = conectado.Empresa;
+                codigoDetalleComprobante.USUARIO_UPD = conectado.Usuario;
+                codigoDetalleComprobante.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoDetalleComprobante);
+
+                var resultDto = await MapTmpDetalleComprobante(codigoDetalleComprobante);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
+
     }
 }

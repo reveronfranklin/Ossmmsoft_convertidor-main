@@ -38,6 +38,16 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> Create(TmpDetalleComprobanteUpdateDto dto)
         {
             var result = await _service.Create(dto);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Update(TmpDetalleComprobanteUpdateDto dto)
+        {
+            var result = await _service.Update(dto);
+
             return Ok(result);
         }
     }

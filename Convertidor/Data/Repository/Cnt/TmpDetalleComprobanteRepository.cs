@@ -28,6 +28,21 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
+        public async Task<TMP_DETALLE_COMPROBANTE> GetByCodigo(int codigoDetalleComprobante)
+        {
+            try
+            {
+                var result = await _context.TMP_DETALLE_COMPROBANTE.DefaultIfEmpty().Where(x => x.CODIGO_DETALLE_COMPROBANTE == codigoDetalleComprobante).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<ResultDto<TMP_DETALLE_COMPROBANTE>> Add(TMP_DETALLE_COMPROBANTE entity)
         {
 
@@ -51,6 +66,34 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
         }
+
+        public async Task<ResultDto<TMP_DETALLE_COMPROBANTE>> Update(TMP_DETALLE_COMPROBANTE entity)
+        {
+            ResultDto<TMP_DETALLE_COMPROBANTE> result = new ResultDto<TMP_DETALLE_COMPROBANTE>(null);
+
+            try
+            {
+                TMP_DETALLE_COMPROBANTE entityUpdate = await GetByCodigo(entity.CODIGO_DETALLE_COMPROBANTE);
+                if (entityUpdate != null)
+                {
+                    _context.TMP_DETALLE_COMPROBANTE.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
 
         public async Task<int> GetNextKey()
         {
