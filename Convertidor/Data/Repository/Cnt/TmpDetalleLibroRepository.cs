@@ -98,6 +98,24 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
+        public async Task<string> Delete(int codigoDetalleLibro)
+        {
+            try
+            {
+                TMP_DETALLE_LIBRO entity = await GetByCodigo(codigoDetalleLibro);
+                if (entity != null)
+                {
+                    _context.TMP_DETALLE_LIBRO.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<int> GetNextKey()
         {
             try
