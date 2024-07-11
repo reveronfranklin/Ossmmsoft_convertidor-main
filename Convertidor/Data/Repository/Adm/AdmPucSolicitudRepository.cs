@@ -68,7 +68,12 @@ namespace Convertidor.Data.Repository.Adm
             {
                 var result = await _context.ADM_PUC_SOLICITUD
                     .Where(x=>x.CODIGO_DETALLE_SOLICITUD==codigoDetalleSolicitud)
-                    .DefaultIfEmpty().ToListAsync();
+                    .ToListAsync();
+                if (result == null || result.Count == 0)
+                {
+                    // Manejo cuando no se encuentran datos
+                    result = null;
+                }
                 return result;
             }
             catch (Exception ex) 
