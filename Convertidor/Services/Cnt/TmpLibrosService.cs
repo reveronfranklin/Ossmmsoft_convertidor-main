@@ -201,5 +201,111 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
+
+        public async Task<ResultDto<TmpLibrosResponseDto>> Update(TmpLibrosUpdateDto dto)
+        {
+            ResultDto<TmpLibrosResponseDto> result = new ResultDto<TmpLibrosResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoLibro = await _repository.GetByCodigo(dto.CodigoLibro);
+                if (codigoLibro == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Libro Invalido";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoCuentaBanco <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo cuenta Banco Invalido";
+                    return result;
+                }
+
+
+
+                if (dto.FechaLibro == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "fecha Libro invalido";
+                    return result;
+                }
+
+                if (dto.Status.Length > 1)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status Invalido";
+                    return result;
+                }
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+
+                codigoLibro.CODIGO_LIBRO = dto.CodigoLibro;
+                codigoLibro.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
+                codigoLibro.FECHA_LIBRO = dto.FechaLibro;
+                codigoLibro.STATUS = dto.Status;
+                codigoLibro.EXTRA1 = dto.Extra1;
+                codigoLibro.EXTRA2 = dto.Extra2;
+                codigoLibro.EXTRA3 = dto.Extra3;
+
+
+
+
+                codigoLibro.CODIGO_EMPRESA = conectado.Empresa;
+                codigoLibro.USUARIO_UPD = conectado.Usuario;
+                codigoLibro.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoLibro);
+
+                var resultDto = await MapTmptLibros(codigoLibro);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
+
     }
 }
