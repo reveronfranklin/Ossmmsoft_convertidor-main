@@ -1,11 +1,11 @@
-﻿namespace Convertidor.Data.Entities
+﻿namespace Convertidor.Data.Entities.Cnt
 {
     public class CNT_COMPROBANTES
     {
         public int CODIGO_COMPROBANTE { get; set; }
         public int CODIGO_PERIODO { get; set; }
         public int TIPO_COMPROBANTE_ID { get; set; }
-        public string NUMERO_COMPROBANTE { get; set; }=string.Empty;
+        public string NUMERO_COMPROBANTE { get; set; } = string.Empty;
         public DateTime FECHA_COMPROBANTE { get; set; }
         public int ORIGEN_ID { get; set; }
         public string OBSERVACION { get; set; } = string.Empty;

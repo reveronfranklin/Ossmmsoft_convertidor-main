@@ -1,27 +1,23 @@
-﻿using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Cnt;
+﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Cnt
 {
-    public class CntComprobantesRepository : ICntComprobantesRepository
+    public class CntTmpHistAnaliticoRepository : ICntTmpHistAnaliticoRepository
     {
         private readonly DataContextCnt _context;
-        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public CntComprobantesRepository(DataContextCnt context,
-                                         ISisUsuarioRepository sisUsuarioRepository)
+        public CntTmpHistAnaliticoRepository(DataContextCnt context)
         {
             _context = context;
-            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
-        public async Task<List<CNT_COMPROBANTES>> GetAll()
+        public async Task<List<CNT_TMP_HIST_ANALITICO>> GetAll()
         {
             try
             {
-                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CNT_TMP_HIST_ANALITICO.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -32,11 +28,11 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_COMPROBANTES> GetByCodigo(int codigoComprobante)
+        public async Task<CNT_TMP_HIST_ANALITICO> GetByCodigo(int codigoHistAnalitico)
         {
             try
             {
-                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty().Where(x => x.CODIGO_COMPROBANTE == codigoComprobante).FirstOrDefaultAsync();
+                var result = await _context.CNT_TMP_HIST_ANALITICO.DefaultIfEmpty().Where(x => x.CODIGO_HIST_ANALITICO == codigoHistAnalitico).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -48,31 +44,13 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_COMPROBANTES> GetByNumeroComprobante(string numeroComprobante)
-        {
-            try
-            {
-                var conectado = await _sisUsuarioRepository.GetConectado();
-                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.NUMERO_COMPROBANTE == numeroComprobante)
-                    .FirstOrDefaultAsync();
-
-                return (CNT_COMPROBANTES)result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
-        public async Task<ResultDto<CNT_COMPROBANTES>> Add(CNT_COMPROBANTES entity)
+        public async Task<ResultDto<CNT_TMP_HIST_ANALITICO>> Add(CNT_TMP_HIST_ANALITICO entity)
         {
 
-            ResultDto<CNT_COMPROBANTES> result = new ResultDto<CNT_COMPROBANTES>(null);
+            ResultDto<CNT_TMP_HIST_ANALITICO> result = new ResultDto<CNT_TMP_HIST_ANALITICO>(null);
             try
             {
-                await _context.CNT_COMPROBANTES.AddAsync(entity);
+                await _context.CNT_TMP_HIST_ANALITICO.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -90,16 +68,16 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<ResultDto<CNT_COMPROBANTES>> Update(CNT_COMPROBANTES entity)
+        public async Task<ResultDto<CNT_TMP_HIST_ANALITICO>> Update(CNT_TMP_HIST_ANALITICO entity)
         {
-            ResultDto<CNT_COMPROBANTES> result = new ResultDto<CNT_COMPROBANTES>(null);
+            ResultDto<CNT_TMP_HIST_ANALITICO> result = new ResultDto<CNT_TMP_HIST_ANALITICO>(null);
 
             try
             {
-                CNT_COMPROBANTES entityUpdate = await GetByCodigo(entity.CODIGO_COMPROBANTE);
+                CNT_TMP_HIST_ANALITICO entityUpdate = await GetByCodigo(entity.CODIGO_HIST_ANALITICO);
                 if (entityUpdate != null)
                 {
-                    _context.CNT_COMPROBANTES.Update(entity);
+                    _context.CNT_TMP_HIST_ANALITICO.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -117,14 +95,14 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<string> Delete(int codigoComprobante)
+        public async Task<string> Delete(int codigoHistAnalitico)
         {
             try
             {
-                CNT_COMPROBANTES entity = await GetByCodigo(codigoComprobante);
+                CNT_TMP_HIST_ANALITICO entity = await GetByCodigo(codigoHistAnalitico);
                 if (entity != null)
                 {
-                    _context.CNT_COMPROBANTES.Remove(entity);
+                    _context.CNT_TMP_HIST_ANALITICO.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -140,8 +118,8 @@ namespace Convertidor.Data.Repository.Cnt
             try
             {
                 int result = 0;
-                var last = await _context.CNT_COMPROBANTES.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_COMPROBANTE)
+                var last = await _context.CNT_TMP_HIST_ANALITICO.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_HIST_ANALITICO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -149,7 +127,7 @@ namespace Convertidor.Data.Repository.Cnt
                 }
                 else
                 {
-                    result = last.CODIGO_COMPROBANTE + 1;
+                    result = last.CODIGO_HIST_ANALITICO + 1;
                 }
 
                 return (int)result!;
@@ -164,7 +142,5 @@ namespace Convertidor.Data.Repository.Cnt
 
 
         }
-
-       
     }
 }

@@ -1,57 +1,58 @@
 ﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Dtos.Cnt;
-using Convertidor.Utility;
 
 namespace Convertidor.Services.Cnt
 {
-    public class CntComprobantesService : ICntComprobantesService
+    public class CntTmpSaldosService : ICntTmpSaldosService
     {
-        private readonly ICntComprobantesRepository _repository;
+        private readonly ICntTmpSaldosRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICntMayoresService _cntMayoresService;
+        private readonly ICntAuxiliaresService _cntAuxiliaresService;
         private readonly ICntPeriodosService _cntPeriodosService;
-        private readonly ICntDescriptivaRepository _cntDescriptivaRepository;
 
-        public CntComprobantesService(ICntComprobantesRepository repository,
-                                       ISisUsuarioRepository sisUsuarioRepository,
-                                       ICntPeriodosService cntPeriodosService,
-                                       ICntDescriptivaRepository cntDescriptivaRepository)
+        public CntTmpSaldosService(ICntTmpSaldosRepository repository,
+                                    ISisUsuarioRepository sisUsuarioRepository,
+                                    ICntPeriodosService cntPeriodosService,
+                                    ICntMayoresService cntMayoresService,
+                                    ICntAuxiliaresService cntAuxiliaresService)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _cntMayoresService = cntMayoresService;
+            _cntAuxiliaresService = cntAuxiliaresService;
             _cntPeriodosService = cntPeriodosService;
-            _cntDescriptivaRepository = cntDescriptivaRepository;
         }
 
-        public async Task<CntComprobantesResponseDto> MapComprobantes(CNT_COMPROBANTES dtos)
+        public async Task<CntTmpSaldosResponseDto> MapTmpSaldos(CNT_TMP_SALDOS dtos)
         {
-            CntComprobantesResponseDto itemResult = new CntComprobantesResponseDto();
-            itemResult.CodigoComprobante = dtos.CODIGO_COMPROBANTE;
+            CntTmpSaldosResponseDto itemResult = new CntTmpSaldosResponseDto();
+            itemResult.CodigoTmpSaldo = dtos.CODIGO_TMP_SALDO;
             itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
-            itemResult.TipoComprobanteId = dtos.TIPO_COMPROBANTE_ID;
-            itemResult.NumeroComprobante = dtos.NUMERO_COMPROBANTE;
-            itemResult.FechaComprobante = dtos.FECHA_COMPROBANTE;
-            itemResult.FechaComprobanteString = dtos.FECHA_COMPROBANTE.ToString("u");
-            FechaDto fechaComprobanteObj = FechaObj.GetFechaDto(dtos.FECHA_COMPROBANTE);
-            itemResult.FechaComprobanteObj = (FechaDto)fechaComprobanteObj;
-            itemResult.OrigenId = dtos.ORIGEN_ID;
-            itemResult.Observacion = dtos.OBSERVACION;
+            itemResult.CodigoMayor = dtos.CODIGO_MAYOR;
+            itemResult.CodigoAuxiliar = dtos.CODIGO_AUXILIAR;
+            itemResult.SaldoInicial = dtos.SALDO_INICIAL;
+            itemResult.Debitos = dtos.DEBITOS;
+            itemResult.Creditos = dtos.CREDITOS;
             itemResult.Extra1 = dtos.EXTRA1;
             itemResult.Extra2 = dtos.EXTRA2;
             itemResult.Extra3 = dtos.EXTRA3;
 
+
             return itemResult;
+
         }
 
-        public async Task<List<CntComprobantesResponseDto>> MapListComprobantes(List<CNT_COMPROBANTES> dtos)
+        public async Task<List<CntTmpSaldosResponseDto>> MapListTmpSaldos(List<CNT_TMP_SALDOS> dtos)
         {
-            List<CntComprobantesResponseDto> result = new List<CntComprobantesResponseDto>();
+            List<CntTmpSaldosResponseDto> result = new List<CntTmpSaldosResponseDto>();
 
 
             foreach (var item in dtos)
             {
                 if (item == null) continue;
-                var itemResult = await MapComprobantes(item);
+                var itemResult = await MapTmpSaldos(item);
 
                 result.Add(itemResult);
             }
@@ -59,17 +60,17 @@ namespace Convertidor.Services.Cnt
 
         }
 
-        public async Task<ResultDto<List<CntComprobantesResponseDto>>> GetAll()
+        public async Task<ResultDto<List<CntTmpSaldosResponseDto>>> GetAll()
         {
 
-            ResultDto<List<CntComprobantesResponseDto>> result = new ResultDto<List<CntComprobantesResponseDto>>(null);
+            ResultDto<List<CntTmpSaldosResponseDto>> result = new ResultDto<List<CntTmpSaldosResponseDto>>(null);
             try
             {
-                var comprobantes = await _repository.GetAll();
-                var cant = comprobantes.Count();
-                if (comprobantes != null && comprobantes.Count() > 0)
+                var tmpSaldos = await _repository.GetAll();
+                var cant = tmpSaldos.Count();
+                if (tmpSaldos != null && tmpSaldos.Count() > 0)
                 {
-                    var listDto = await MapListComprobantes(comprobantes);
+                    var listDto = await MapListTmpSaldos(tmpSaldos);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -97,9 +98,9 @@ namespace Convertidor.Services.Cnt
 
         }
 
-        public async Task<ResultDto<CntComprobantesResponseDto>> Create(CntComprobantesUpdateDto dto)
+        public async Task<ResultDto<CntTmpSaldosResponseDto>> Create(CntTmpSaldosUpdateDto dto)
         {
-            ResultDto<CntComprobantesResponseDto> result = new ResultDto<CntComprobantesResponseDto>(null);
+            ResultDto<CntTmpSaldosResponseDto> result = new ResultDto<CntTmpSaldosResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -125,80 +126,72 @@ namespace Convertidor.Services.Cnt
                 }
 
 
-                if (dto.TipoComprobanteId <= 0)
+                if (dto.CodigoMayor <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Comprobante Id invalido";
+                    result.Message = "Codigo Mayor invalido";
                     return result;
                 }
 
-                var tipoComprobanteId = await _cntDescriptivaRepository.GetByIdAndTitulo(5, dto.TipoComprobanteId);
-                if (tipoComprobanteId == false)
+                var codigoMayor = await _cntMayoresService.GetByCodigo(dto.CodigoMayor);
+                if (codigoMayor == null)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo comprobante Id invalido";
-                    return result;
-
-                }
-
-                if (dto.NumeroComprobante.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Comprobante Invalido";
+                    result.Message = "Codigo Mayor invalido";
                     return result;
 
                 }
 
-                var numeroComprobante = await _repository.GetByNumeroComprobante(dto.NumeroComprobante);
-                if (numeroComprobante != null)
+                if (dto.CodigoAuxiliar <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Numero Comprobante Invalido";
-                    return result;
-                }
-
-
-                if (dto.FechaComprobante == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Comprobante Invalido";
-                    return result;
-                }
-
-                if(dto.OrigenId <= 0) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Origen Id Invalido";
+                    result.Message = "Codigo Auxiliar Invalido";
                     return result;
 
                 }
 
-                var origenId = await _cntDescriptivaRepository.GetByIdAndTitulo(1, dto.OrigenId);
-                if(origenId == false) 
+                var codigoAuxiliar = await _cntAuxiliaresService.GetByCodigo(dto.CodigoAuxiliar);
+                if (codigoAuxiliar == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Origen Id Invalido";
+                    result.Message = "Codigo Auxiliar Invalido";
+                    return result;
+                }
+
+                if(dto.SaldoInicial <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Saldo Inicial Invalido";
                     return result;
 
                 }
 
-                if (dto.Observacion.Length > 1000)
+                if (dto.Debitos <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Onservacion Invalida";
+                    result.Message = "Debitos Invalido";
                     return result;
 
                 }
 
+                if (dto.Creditos <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Creditos Invalido";
+                    return result;
+
+
+                }
+
+       
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
@@ -223,18 +216,18 @@ namespace Convertidor.Services.Cnt
                 }
 
 
-                
 
 
 
-                CNT_COMPROBANTES entity = new CNT_COMPROBANTES();
-                entity.CODIGO_COMPROBANTE = await _repository.GetNextKey();
+
+                CNT_TMP_SALDOS entity = new CNT_TMP_SALDOS();
+                entity.CODIGO_TMP_SALDO = await _repository.GetNextKey();
                 entity.CODIGO_PERIODO = dto.CodigoPeriodo;
-                entity.TIPO_COMPROBANTE_ID = dto.TipoComprobanteId;
-                entity.NUMERO_COMPROBANTE = dto.NumeroComprobante; 
-                entity.FECHA_COMPROBANTE = dto.FechaComprobante;
-                entity.ORIGEN_ID = dto.OrigenId;
-                entity.OBSERVACION = dto.Observacion;
+                entity.CODIGO_MAYOR = dto.CodigoMayor;
+                entity.CODIGO_AUXILIAR = dto.CodigoAuxiliar;
+                entity.SALDO_INICIAL = dto.SaldoInicial;
+                entity.DEBITOS = dto.Debitos;
+                entity.CREDITOS = dto.Creditos;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
@@ -247,7 +240,7 @@ namespace Convertidor.Services.Cnt
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapComprobantes(created.Data);
+                    var resultDto = await MapTmpSaldos(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -276,32 +269,23 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntComprobantesResponseDto>> Update(CntComprobantesUpdateDto dto)
+        public async Task<ResultDto<CntTmpSaldosResponseDto>> Update(CntTmpSaldosUpdateDto dto)
         {
-            ResultDto<CntComprobantesResponseDto> result = new ResultDto<CntComprobantesResponseDto>(null);
+            ResultDto<CntTmpSaldosResponseDto> result = new ResultDto<CntTmpSaldosResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoComprobante = await _repository.GetByCodigo(dto.CodigoComprobante);
-                if (codigoComprobante == null)
+                var codigoTmpSaldo = await _repository.GetByCodigo(dto.CodigoTmpSaldo);
+                if (codigoTmpSaldo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Comprobante no Existe";
+                    result.Message = "Codigo Tmp Saldo no Existe";
                     return result;
 
                 }
 
-
-                if (dto.CodigoPeriodo <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Periodo invalido";
-                    return result;
-
-                }
 
                 var codigoPeriodo = await _cntPeriodosService.GetByCodigo(dto.CodigoPeriodo);
                 if (codigoPeriodo == null)
@@ -315,69 +299,71 @@ namespace Convertidor.Services.Cnt
                 }
 
 
-                if (dto.TipoComprobanteId <= 0)
+                if (dto.CodigoMayor <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Comprobante Id invalido";
+                    result.Message = "Codigo Mayor invalido";
                     return result;
                 }
 
-                var tipoComprobanteId = await _cntDescriptivaRepository.GetByIdAndTitulo(5, dto.TipoComprobanteId);
-                if (tipoComprobanteId == false)
+                var codigoMayor = await _cntMayoresService.GetByCodigo(dto.CodigoMayor);
+                if (codigoMayor == null)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo comprobante Id invalido";
-                    return result;
-
-                }
-
-                if (dto.NumeroComprobante.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Comprobante Invalido";
+                    result.Message = "Codigo Mayor invalido";
                     return result;
 
                 }
 
-                if (dto.FechaComprobante == null)
+                if (dto.CodigoAuxiliar <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Fecha Comprobante Invalido";
-                    return result;
-                }
-
-                if (dto.OrigenId <= 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Origen Id Invalido";
+                    result.Message = "Codigo Auxiliar Invalido";
                     return result;
 
                 }
 
-                var origenId = await _cntDescriptivaRepository.GetByIdAndTitulo(1, dto.OrigenId);
-                if (origenId == false)
+                var codigoAuxiliar = await _cntAuxiliaresService.GetByCodigo(dto.CodigoAuxiliar);
+                if (codigoAuxiliar == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Origen Id Invalido";
+                    result.Message = "Codigo Auxiliar Invalido";
+                    return result;
+                }
+
+                if (dto.SaldoInicial <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Saldo Inicial Invalido";
                     return result;
 
                 }
 
-                if (dto.Observacion.Length > 1000)
+                if (dto.Debitos <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Onservacion Invalida";
+                    result.Message = "Debitos Invalido";
                     return result;
 
                 }
+
+                if (dto.Creditos <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Creditos Invalido";
+                    return result;
+
+
+                }
+
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -406,27 +392,27 @@ namespace Convertidor.Services.Cnt
 
 
 
-                codigoComprobante.CODIGO_COMPROBANTE = dto.CodigoComprobante;
-                codigoComprobante.CODIGO_PERIODO = dto.CodigoPeriodo;
-                codigoComprobante.TIPO_COMPROBANTE_ID = dto.TipoComprobanteId;
-                codigoComprobante.NUMERO_COMPROBANTE = dto.NumeroComprobante;
-                codigoComprobante.FECHA_COMPROBANTE = dto.FechaComprobante;
-                codigoComprobante.ORIGEN_ID = dto.OrigenId;
-                codigoComprobante.OBSERVACION = dto.Observacion;
-                codigoComprobante.EXTRA1 = dto.Extra1;
-                codigoComprobante.EXTRA2 = dto.Extra2;
-                codigoComprobante.EXTRA3 = dto.Extra3;
+                codigoTmpSaldo.CODIGO_TMP_SALDO = dto.CodigoTmpSaldo;
+                codigoTmpSaldo.CODIGO_PERIODO = dto.CodigoPeriodo;
+                codigoTmpSaldo.CODIGO_MAYOR = dto.CodigoMayor;
+                codigoTmpSaldo.CODIGO_AUXILIAR = dto.CodigoAuxiliar;
+                codigoTmpSaldo.SALDO_INICIAL = dto.SaldoInicial;
+                codigoTmpSaldo.DEBITOS = dto.Debitos;
+                codigoTmpSaldo.CREDITOS = dto.Creditos;
+                codigoTmpSaldo.EXTRA1 = dto.Extra1;
+                codigoTmpSaldo.EXTRA2 = dto.Extra2;
+                codigoTmpSaldo.EXTRA3 = dto.Extra3;
 
 
 
 
-                codigoComprobante.CODIGO_EMPRESA = conectado.Empresa;
-                codigoComprobante.USUARIO_UPD = conectado.Usuario;
-                codigoComprobante.FECHA_UPD = DateTime.Now;
+                codigoTmpSaldo.CODIGO_EMPRESA = conectado.Empresa;
+                codigoTmpSaldo.USUARIO_UPD = conectado.Usuario;
+                codigoTmpSaldo.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(codigoComprobante);
+                await _repository.Update(codigoTmpSaldo);
 
-                var resultDto = await MapComprobantes(codigoComprobante);
+                var resultDto = await MapTmpSaldos(codigoTmpSaldo);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -440,23 +426,24 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
-        public async Task<ResultDto<CntComprobantesDeleteDto>> Delete(CntComprobantesDeleteDto dto)
+
+        public async Task<ResultDto<CntTmpSaldosDeleteDto>> Delete(CntTmpSaldosDeleteDto dto)
         {
-            ResultDto<CntComprobantesDeleteDto> result = new ResultDto<CntComprobantesDeleteDto>(null);
+            ResultDto<CntTmpSaldosDeleteDto> result = new ResultDto<CntTmpSaldosDeleteDto>(null);
             try
             {
 
-                var codigoComprobantes = await _repository.GetByCodigo(dto.CodigoComprobante);
-                if (codigoComprobantes == null)
+                var codigoTmpSaldo = await _repository.GetByCodigo(dto.CodigoTmpSaldo);
+                if (codigoTmpSaldo == null)
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "Codigo Comprobante no existe";
+                    result.Message = "Codigo Tmp Saldo no existe";
                     return result;
                 }
 
 
-                var deleted = await _repository.Delete(dto.CodigoComprobante);
+                var deleted = await _repository.Delete(dto.CodigoTmpSaldo);
 
                 if (deleted.Length > 0)
                 {
@@ -486,22 +473,22 @@ namespace Convertidor.Services.Cnt
             return result;
         }
 
-        public async Task<ResultDto<CntComprobantesResponseDto>> GetByCodigo(int codigoComprobante)
+        public async Task<ResultDto<CntTmpSaldosResponseDto>> GetByCodigo(int codigoTmpSaldo)
         {
-            ResultDto<CntComprobantesResponseDto> result = new ResultDto<CntComprobantesResponseDto>(null);
+            ResultDto<CntTmpSaldosResponseDto> result = new ResultDto<CntTmpSaldosResponseDto>(null);
             try
             {
 
-                var comprobantes = await _repository.GetByCodigo(codigoComprobante);
-                if (comprobantes == null)
+                var tmpSaldo = await _repository.GetByCodigo(codigoTmpSaldo);
+                if (tmpSaldo == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo comprobante no existe";
+                    result.Message = "Codigo Tmp Saldo no existe";
                     return result;
                 }
 
-                var resultDto = await MapComprobantes(comprobantes);
+                var resultDto = await MapTmpSaldos(tmpSaldo);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -516,7 +503,6 @@ namespace Convertidor.Services.Cnt
 
             return result;
         }
-
 
     }
 }

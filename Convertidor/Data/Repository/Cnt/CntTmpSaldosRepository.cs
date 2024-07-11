@@ -1,27 +1,38 @@
-﻿using Convertidor.Data.Entities.Bm;
-using Convertidor.Data.Entities.Cnt;
+﻿using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Cnt;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Cnt
 {
-    public class CntComprobantesRepository : ICntComprobantesRepository
+    public class CntTmpSaldosRepository : ICntTmpSaldosRepository
     {
         private readonly DataContextCnt _context;
-        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public CntComprobantesRepository(DataContextCnt context,
-                                         ISisUsuarioRepository sisUsuarioRepository)
+        public CntTmpSaldosRepository(DataContextCnt context)
         {
             _context = context;
-            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
-        public async Task<List<CNT_COMPROBANTES>> GetAll()
+        public async Task<List<CNT_TMP_SALDOS>> GetAll()
         {
             try
             {
-                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CNT_TMP_SALDOS.DefaultIfEmpty().ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+        public async Task<CNT_TMP_SALDOS> GetByCodigo(int codigoTmpSaldo)
+        {
+            try
+            {
+                var result = await _context.CNT_TMP_SALDOS.DefaultIfEmpty().Where(x => x.CODIGO_TMP_SALDO == codigoTmpSaldo).FirstOrDefaultAsync();
+
                 return result;
             }
             catch (Exception ex)
@@ -32,47 +43,13 @@ namespace Convertidor.Data.Repository.Cnt
 
         }
 
-        public async Task<CNT_COMPROBANTES> GetByCodigo(int codigoComprobante)
-        {
-            try
-            {
-                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty().Where(x => x.CODIGO_COMPROBANTE == codigoComprobante).FirstOrDefaultAsync();
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
-
-        public async Task<CNT_COMPROBANTES> GetByNumeroComprobante(string numeroComprobante)
-        {
-            try
-            {
-                var conectado = await _sisUsuarioRepository.GetConectado();
-                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.NUMERO_COMPROBANTE == numeroComprobante)
-                    .FirstOrDefaultAsync();
-
-                return (CNT_COMPROBANTES)result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.InnerException.Message;
-                return null;
-            }
-
-        }
-        public async Task<ResultDto<CNT_COMPROBANTES>> Add(CNT_COMPROBANTES entity)
+        public async Task<ResultDto<CNT_TMP_SALDOS>> Add(CNT_TMP_SALDOS entity)
         {
 
-            ResultDto<CNT_COMPROBANTES> result = new ResultDto<CNT_COMPROBANTES>(null);
+            ResultDto<CNT_TMP_SALDOS> result = new ResultDto<CNT_TMP_SALDOS>(null);
             try
             {
-                await _context.CNT_COMPROBANTES.AddAsync(entity);
+                await _context.CNT_TMP_SALDOS.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -89,17 +66,16 @@ namespace Convertidor.Data.Repository.Cnt
                 return result;
             }
         }
-
-        public async Task<ResultDto<CNT_COMPROBANTES>> Update(CNT_COMPROBANTES entity)
+        public async Task<ResultDto<CNT_TMP_SALDOS>> Update(CNT_TMP_SALDOS entity)
         {
-            ResultDto<CNT_COMPROBANTES> result = new ResultDto<CNT_COMPROBANTES>(null);
+            ResultDto<CNT_TMP_SALDOS> result = new ResultDto<CNT_TMP_SALDOS>(null);
 
             try
             {
-                CNT_COMPROBANTES entityUpdate = await GetByCodigo(entity.CODIGO_COMPROBANTE);
+                CNT_TMP_SALDOS entityUpdate = await GetByCodigo(entity.CODIGO_TMP_SALDO);
                 if (entityUpdate != null)
                 {
-                    _context.CNT_COMPROBANTES.Update(entity);
+                    _context.CNT_TMP_SALDOS.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -117,14 +93,14 @@ namespace Convertidor.Data.Repository.Cnt
             }
         }
 
-        public async Task<string> Delete(int codigoComprobante)
+        public async Task<string> Delete(int codigoTmpSaldo)
         {
             try
             {
-                CNT_COMPROBANTES entity = await GetByCodigo(codigoComprobante);
+                CNT_TMP_SALDOS entity = await GetByCodigo(codigoTmpSaldo);
                 if (entity != null)
                 {
-                    _context.CNT_COMPROBANTES.Remove(entity);
+                    _context.CNT_TMP_SALDOS.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -140,8 +116,8 @@ namespace Convertidor.Data.Repository.Cnt
             try
             {
                 int result = 0;
-                var last = await _context.CNT_COMPROBANTES.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_COMPROBANTE)
+                var last = await _context.CNT_TMP_SALDOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_TMP_SALDO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -149,7 +125,7 @@ namespace Convertidor.Data.Repository.Cnt
                 }
                 else
                 {
-                    result = last.CODIGO_COMPROBANTE + 1;
+                    result = last.CODIGO_TMP_SALDO + 1;
                 }
 
                 return (int)result!;
@@ -164,7 +140,5 @@ namespace Convertidor.Data.Repository.Cnt
 
 
         }
-
-       
     }
 }
