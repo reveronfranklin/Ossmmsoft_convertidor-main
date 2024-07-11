@@ -9,7 +9,7 @@
         public string Descripcion { get; set; } = string.Empty;
         public decimal PrecioUnitario { get; set; }
         public int TipoImpuestoId { get; set; }
-        public decimal CodigoProducto { get; set; }
+        public int CodigoProducto { get; set; }
         
     }
 }
