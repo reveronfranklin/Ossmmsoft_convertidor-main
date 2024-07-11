@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Cnt
         Task<TMP_LIBROS> GetByCodigo(int codigoLibro);
         Task<ResultDto<TMP_LIBROS>> Add(TMP_LIBROS entity);
         Task<ResultDto<TMP_LIBROS>> Update(TMP_LIBROS entity);
+        Task<string> Delete(int codigoLibro);
         Task<int> GetNextKey();
     }
 }
