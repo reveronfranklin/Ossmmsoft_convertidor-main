@@ -55,6 +55,45 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<ResultDto<List<AdmPucSolicitudResponseDto>>> GetByDetalleSolicitud(AdmPucSolicitudFilterDto filter)
+        {
+
+            ResultDto<List<AdmPucSolicitudResponseDto>> result = new ResultDto<List<AdmPucSolicitudResponseDto>>(null);
+            try
+            {
+                var pucSolicitud = await _repository.GetByDetalleSolicitud(filter.CodigoDetalleSolicitud);
+                var cant = pucSolicitud.Count();
+                if (pucSolicitud != null && pucSolicitud.Count() > 0)
+                {
+                    var listDto = await MapListPucSolicitudDto(pucSolicitud);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        
         public async Task<ResultDto<List<AdmPucSolicitudResponseDto>>> GetAll()
         {
 
@@ -92,6 +131,7 @@ namespace Convertidor.Services.Adm
             }
 
         }
+       
         public async Task<ResultDto<bool>> PresupuestoExiste(int codigoPresupuesto)
         {
 

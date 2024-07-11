@@ -62,7 +62,23 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+        public async Task<List<ADM_PUC_SOLICITUD>> GetByDetalleSolicitud(int codigoDetalleSolicitud) 
+        {
+            try
+            {
+                var result = await _context.ADM_PUC_SOLICITUD
+                    .Where(x=>x.CODIGO_DETALLE_SOLICITUD==codigoDetalleSolicitud)
+                    .DefaultIfEmpty().ToListAsync();
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
 
+        
         public async Task<ResultDto<ADM_PUC_SOLICITUD>>Add(ADM_PUC_SOLICITUD entity) 
         {
 

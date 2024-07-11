@@ -31,7 +31,17 @@ namespace Convertidor.Controllers
             var result = await _service.GetAll();
             return Ok(result);
         }
-
+        
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByDetalleSolicitud(AdmPucSolicitudFilterDto filter)
+        {
+            var result = await _service.GetByDetalleSolicitud(filter);
+            return Ok(result);
+        }
+        
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Update(AdmPucSolicitudUpdateDto dto)

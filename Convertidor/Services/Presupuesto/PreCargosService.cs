@@ -73,6 +73,57 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<ResultDto<List<PreCargosGetDto>>> GetAllByPresupuestoPaginate(FilterByPresupuestoDto filter)
+        {
+
+            ResultDto<List<PreCargosGetDto>> result = new ResultDto<List<PreCargosGetDto>>(null);
+            try
+            {
+
+                if (filter.PageNumber == 0) filter.PageNumber = 1;
+                if (filter.PageSize == 0) filter.PageSize = 100;
+                if (filter.PageSize >100) filter.PageSize = 100;
+                var cargos = await _repository.GetAllByPresupuesto(filter.CodigoPresupuesto,filter.SearchText);
+                result.CantidadRegistros = cargos.Count;
+                cargos = cargos.Skip((filter.PageNumber - 1) * filter.PageSize)
+                    .Take(filter.PageSize)
+                    .ToList();
+
+                if (cargos.Count() > 0)
+                {
+                    List<PreCargosGetDto> listDto = new List<PreCargosGetDto>();
+
+                    foreach (var item in cargos)
+                    {
+                        var dto = await MapPreCargo(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto.OrderBy(x=>x.DescripcionTipoPersonal).ThenBy(x=>x.DescripcionTipoCargo).ToList();
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
 
         public async Task<ResultDto<List<PreCargosGetDto>>> GetAllByPresupuesto(FilterByPresupuestoDto filter)
