@@ -293,5 +293,171 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+        public async Task<ResultDto<AdmSolCompromisoResponseDto>> Update(AdmSolCompromisoUpdateDto dto)
+        {
+            ResultDto<AdmSolCompromisoResponseDto> result = new ResultDto<AdmSolCompromisoResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoSolCompromiso = await _repository.GetByCodigo(dto.CodigoSolCompromiso);
+                if (codigoSolCompromiso == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitud Compromiso no existe";
+                    return result;
+                }
+
+                var tipoSolCompromisoId = await _admDescriptivaRepository.GetByIdAndTitulo(22, dto.TipoSolCompromisoId);
+                if (tipoSolCompromisoId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo sol compromiso Id no existe";
+                    return result;
+                }
+
+                if (dto.FechaSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Solicitud invalida";
+                    return result;
+                }
+
+                if (dto.CodigoProveedor <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo proveedor invalido";
+                    return result;
+                }
+
+
+                var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
+
+                if (codigoProveedor == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo proveedor invalido";
+                    return result;
+                }
+
+
+                if (dto.Motivo.Length > 2000)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "motivo invalido";
+                    return result;
+                }
+
+                if (dto.Status.Length > 4)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Status invalido";
+                    return result;
+                }
+
+
+                if (dto.CodigoPresupuesto <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto invalido";
+                    return result;
+
+
+                }
+
+                var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+
+                if (codigoPresupuesto == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto invalido";
+                    return result;
+                }
+
+                if (dto.Ano <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Ano Invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+                codigoSolCompromiso.CODIGO_SOL_COMPROMISO = dto.CodigoSolCompromiso;
+                codigoSolCompromiso.TIPO_SOL_COMPROMISO_ID = dto.TipoSolCompromisoId;
+                codigoSolCompromiso.FECHA_SOLICITUD = dto.FechaSolicitud;
+                codigoSolCompromiso.NUMERO_SOLICITUD = dto.NumeroSolicitud;
+                codigoSolCompromiso.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
+                codigoSolCompromiso.CODIGO_PROVEEDOR = dto.CodigoProveedor;
+                codigoSolCompromiso.MOTIVO = dto.Motivo;
+                codigoSolCompromiso.STATUS = dto.Status;
+                codigoSolCompromiso.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                codigoSolCompromiso.ANO = dto.Ano;
+                codigoSolCompromiso.EXTRA1 = dto.Extra1;
+                codigoSolCompromiso.EXTRA2 = dto.Extra2;
+                codigoSolCompromiso.EXTRA3 = dto.Extra3;
+
+                codigoSolCompromiso.CODIGO_EMPRESA = conectado.Empresa;
+                codigoSolCompromiso.USUARIO_UPD = conectado.Usuario;
+                codigoSolCompromiso.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoSolCompromiso);
+
+                var resultDto = await MapSolCompromisoDto(codigoSolCompromiso);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
+
     }
 }
