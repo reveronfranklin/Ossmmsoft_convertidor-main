@@ -375,9 +375,6 @@ namespace Convertidor.Services.Adm
                 }
 
                 var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
-
-             
-                
                 var producto = await _admProductosRepository.GetByCodigo(dto.CodigoProducto);
                 if (producto==null)
                 {

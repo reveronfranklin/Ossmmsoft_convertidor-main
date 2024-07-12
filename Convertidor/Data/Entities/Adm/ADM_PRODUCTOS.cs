@@ -24,4 +24,5 @@ public class ADM_PRODUCTOS
     public string CODIGO_REAL { get; set; }=string.Empty;
     public string CODIGO_PARENT { get; set; }=string.Empty;
     public int TIPO_PRODUCTO_ID { get; set; }
+    public string SEARCH_TEXT { get; set; }=string.Empty;
 }
