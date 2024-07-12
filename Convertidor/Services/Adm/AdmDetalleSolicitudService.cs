@@ -11,11 +11,15 @@ namespace Convertidor.Services.Adm
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
+        private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
+        private readonly IAdmProductosRepository _admProductosRepository;
 
         public AdmDetalleSolicitudService(IAdmDetalleSolicitudRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
-                                     IAdmSolicitudesRepository admSolicitudesRepository
+                                     IAdmSolicitudesRepository admSolicitudesRepository,
+                                     IAdmPucSolicitudRepository admPucSolicitudRepository,
+                                     IAdmProductosRepository admProductosRepository
                                 
                                      )
         {
@@ -23,6 +27,8 @@ namespace Convertidor.Services.Adm
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _admSolicitudesRepository = admSolicitudesRepository;
+            _admPucSolicitudRepository = admPucSolicitudRepository;
+            _admProductosRepository = admProductosRepository;
         }
 
         public async Task<AdmDetalleSolicitudResponseDto> MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
@@ -49,6 +55,8 @@ namespace Convertidor.Services.Adm
             itemResult.PorImpuesto = dtos.POR_IMPUESTO;
             itemResult.MontoImpuesto = dtos.MONTO_IMPUESTO;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            itemResult.Total = dtos.TOTAL;
+            itemResult.TotalMasImpuesto = dtos.TOTAL_MAS_IMPUESTO;
             itemResult.CodigoProducto = dtos.CODIGO_PRODUCTO == null ? 0 : dtos.CODIGO_PRODUCTO ;
             return itemResult;
         }
@@ -221,10 +229,13 @@ namespace Convertidor.Services.Adm
               
                 var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
 
-
-                if (dto.CodigoProducto > 0)
+                var producto = await _admProductosRepository.GetByCodigo(dto.CodigoProducto);
+                if (producto==null)
                 {
-                    //TODO Validar Producto 
+                      result.Data = null;
+                       result.IsValid = false;
+                       result.Message = "TSeleccione un Producto Valido";
+                       return result;
                 }
                 
                 codigoDetallesolicitud.CODIGO_SOLICITUD = dto.CodigoSolicitud;
@@ -241,7 +252,9 @@ namespace Convertidor.Services.Adm
               
                 codigoDetallesolicitud.CODIGO_PRESUPUESTO =(int)solicitud.CODIGO_PRESUPUESTO;
                 codigoDetallesolicitud.CODIGO_PRODUCTO =dto.CodigoProducto;
-
+                codigoDetallesolicitud.TOTAL = codigoDetallesolicitud.PRECIO_UNITARIO * codigoDetallesolicitud.CANTIDAD;
+                codigoDetallesolicitud.TOTAL_MAS_IMPUESTO =
+                    codigoDetallesolicitud.TOTAL + (decimal)codigoDetallesolicitud.MONTO_IMPUESTO;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 codigoDetallesolicitud.CODIGO_EMPRESA = conectado.Empresa;
                 codigoDetallesolicitud.USUARIO_UPD = conectado.Usuario;
@@ -362,12 +375,13 @@ namespace Convertidor.Services.Adm
                 }
 
                 var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
-                
-            
-
-                if (dto.CodigoProducto > 0)
+                var producto = await _admProductosRepository.GetByCodigo(dto.CodigoProducto);
+                if (producto==null)
                 {
-                    //TODO Validar Producto 
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "TSeleccione un Producto Valido";
+                    return result;
                 }
               
 
@@ -389,6 +403,9 @@ namespace Convertidor.Services.Adm
             entity.CODIGO_PRODUCTO = dto.CodigoProducto;
             entity.CODIGO_PRESUPUESTO = (int)solicitud.CODIGO_PRESUPUESTO;
             entity.CODIGO_PRODUCTO = dto.CodigoProducto;
+            entity.TOTAL = entity.PRECIO_UNITARIO * entity.CANTIDAD;
+            entity.TOTAL_MAS_IMPUESTO =
+                entity.TOTAL + (decimal)entity.MONTO_IMPUESTO;
 
             var conectado = await _sisUsuarioRepository.GetConectado();
             entity.CODIGO_EMPRESA = conectado.Empresa;
@@ -442,7 +459,15 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-
+                var pucSolicitud = await _admPucSolicitudRepository.GetByDetalleSolicitud(dto.CodigoDetalleSolicitud);
+                if (pucSolicitud.Count > 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Solicitud Contiene Informacion de PUC";
+                    return result;
+                }
+                
                 var deleted = await _repository.Delete(dto.CodigoDetalleSolicitud);
 
                 if (deleted.Length > 0)

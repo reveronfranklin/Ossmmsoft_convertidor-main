@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Services.Adm
@@ -9,27 +10,58 @@ namespace Convertidor.Services.Adm
         private readonly IAdmPucSolicitudRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IPrePlanUnicoCuentasService _prePlanUnicoCuentasService;
+        private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
+        private readonly IPreDescriptivasService _preDescriptivasService;
 
         public AdmPucSolicitudService(IAdmPucSolicitudRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
-                                     IAdmDescriptivaRepository admDescriptivaRepository)
+                                     IAdmDescriptivaRepository admDescriptivaRepository,
+                                     IPrePlanUnicoCuentasService prePlanUnicoCuentasService,
+                                     IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
+                                     IPreDescriptivasService preDescriptivasService)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
+            _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
+            _preDescriptivasService = preDescriptivasService;
         }
 
         public async Task<AdmPucSolicitudResponseDto> MapPucSolicitudDto(ADM_PUC_SOLICITUD dtos)
         {
+            
+            
             AdmPucSolicitudResponseDto itemResult = new AdmPucSolicitudResponseDto();
             itemResult.CodigoPucSolicitud = dtos.CODIGO_PUC_SOLICITUD;
             itemResult.CodigoDetalleSolicitud = dtos.CODIGO_DETALLE_SOLICITUD;
             itemResult.CodigoSolicitud = dtos.CODIGO_SOLICITUD;
             itemResult.CodigoSaldo = dtos.CODIGO_SALDO;
             itemResult.CodigoIcp = dtos.CODIGO_ICP;
+            itemResult.IcpConcat = "";
+            var icp = await _indiceCategoriaProgramaService.GetByCodigo(dtos.CODIGO_ICP);
+            if (icp != null)
+            {
+                itemResult.IcpConcat = icp.CodigoIcpConcat;
+            }
             itemResult.CodigoPuc = dtos.CODIGO_PUC;
+            itemResult.PucConcat = "";
+            var puc = await _prePlanUnicoCuentasService.GetById(dtos.CODIGO_PUC);
+            if (puc.Data != null)
+            {
+                itemResult.PucConcat = puc.Data.CodigoPucConcat;
+            }
             itemResult.FinanciadoId = dtos.FINANCIADO_ID;
-            itemResult.CodigoFinanciado = dtos.CODIGO_FINANCIADO;
+            itemResult.DescripcionFinanciado = "";
+            var descriptiva = await _preDescriptivasService.GetByCodigo(dtos.FINANCIADO_ID);
+            if (descriptiva.Data != null)
+            {
+                itemResult.DescripcionFinanciado = descriptiva.Data.Descripcion;
+            }
+
+            if (dtos.CODIGO_FINANCIADO == null) dtos.CODIGO_FINANCIADO = 0;
+            itemResult.CodigoFinanciado = (int)dtos.CODIGO_FINANCIADO;
             itemResult.Monto = dtos.MONTO;
             itemResult.MontoComprometido = dtos.MONTO_COMPROMETIDO;
             itemResult.MontoAnulado = dtos.MONTO_ANULADO;
@@ -55,6 +87,45 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<ResultDto<List<AdmPucSolicitudResponseDto>>> GetByDetalleSolicitud(AdmPucSolicitudFilterDto filter)
+        {
+
+            ResultDto<List<AdmPucSolicitudResponseDto>> result = new ResultDto<List<AdmPucSolicitudResponseDto>>(null);
+            try
+            {
+                var pucSolicitud = await _repository.GetByDetalleSolicitud(filter.CodigoDetalleSolicitud);
+                
+                if ( pucSolicitud !=null && pucSolicitud.Count() > 0)
+                {
+                    var listDto = await MapListPucSolicitudDto(pucSolicitud);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        
         public async Task<ResultDto<List<AdmPucSolicitudResponseDto>>> GetAll()
         {
 
@@ -92,6 +163,7 @@ namespace Convertidor.Services.Adm
             }
 
         }
+       
         public async Task<ResultDto<bool>> PresupuestoExiste(int codigoPresupuesto)
         {
 

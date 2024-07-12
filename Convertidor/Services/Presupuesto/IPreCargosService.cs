@@ -11,6 +11,7 @@ namespace Convertidor.Services.Presupuesto
         Task<PreCargosGetDto> MapPreCargo(PRE_CARGOS item);
         Task<ResultDto<PreCargosDeleteDto>> Delete(PreCargosDeleteDto dto);
         Task<ResultDto<List<PreCargosGetDto>>> GetAllByPresupuesto(FilterByPresupuestoDto filter);
-    }
+        Task<ResultDto<List<PreCargosGetDto>>> GetAllByPresupuestoPaginate(FilterByPresupuestoDto filter);
+	}
 }
 

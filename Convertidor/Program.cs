@@ -458,6 +458,14 @@ builder.Services.AddTransient<ICntSaldosRepository, CntSaldosRepository>();
 builder.Services.AddTransient<ICntComprobantesRepository, CntComprobantesRepository>();
 builder.Services.AddTransient<ICntDetalleComprobanteRepository, CntDetalleComprobanteRepository>();
 builder.Services.AddTransient<ICntHistAnaliticoRepository, CntHistAnaliticoRepository>();
+builder.Services.AddTransient<ICntTmpSaldosRepository, CntTmpSaldosRepository>();
+builder.Services.AddTransient<ICntTmpHistAnaliticoRepository, CntTmpHistAnaliticoRepository>();
+builder.Services.AddTransient<ICntTmpAnaliticoRepository, CntTmpAnaliticoRepository>();
+builder.Services.AddTransient<ICntRelacionDocumentosRepository, CntRelacionDocumentosRepository>();
+builder.Services.AddTransient<ITmpAuxiliaresRepository, TmpAuxiliaresRepository>();
+builder.Services.AddTransient<ITmpDetalleComprobanteRepository, TmpDetalleComprobanteRepository>();
+builder.Services.AddTransient<ITmpDetalleLibroRepository, TmpDetalleLibroRepository>();
+builder.Services.AddTransient<ITmpLibrosRepository, TmpLibrosRepository>();
 
 
 //CNT Services
@@ -483,6 +491,14 @@ builder.Services.AddTransient<ICntSaldosService, CntSaldosService>();
 builder.Services.AddTransient<ICntComprobantesService, CntComprobantesService>();
 builder.Services.AddTransient<ICntDetalleComprobanteService, CntDetalleComprobanteService>();
 builder.Services.AddTransient<ICntHistAnaliticoService, CntHistAnaliticoService>();
+builder.Services.AddTransient<ICntTmpSaldosService, CntTmpSaldosService>();
+builder.Services.AddTransient<ICntTmpHistAnaliticoService, CntTmpHistAnaliticoService>();
+builder.Services.AddTransient<ICntTmpAnaliticoService, CntTmpAnaliticoService>();
+builder.Services.AddTransient<ICntRelacionDocumentosService, CntRelacionDocumentosService>();
+builder.Services.AddTransient<ITmpAuxiliaresService, TmpAuxiliaresService>();
+builder.Services.AddTransient<ITmpDetalleComprobanteService, TmpDetalleComprobanteService>();
+builder.Services.AddTransient<ITmpDetalleLibroService, TmpDetalleLibroService>();
+builder.Services.AddTransient<ITmpLibrosService, TmpLibrosService>();
 
 
 

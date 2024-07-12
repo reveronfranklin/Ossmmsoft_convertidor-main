@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.EntitiesDestino;
 using Convertidor.Data.Interfaces;
+using Convertidor.Utility;
 
 namespace Convertidor.Services
 {
@@ -128,8 +129,10 @@ namespace Convertidor.Services
                     var firstCargo = rhHistoricoPersonalCargoes.
                         Where(x => x.DESCRIPCION_CARGO == item.DescripcionCargo).MinBy(x => x.FECHA_NOMINA);
                     var lastCargo = rhHistoricoPersonalCargoes.Where(x => x.DESCRIPCION_CARGO == item.DescripcionCargo).MaxBy(x => x.FECHA_NOMINA);
-                    itemResult.Desde = firstCargo.FECHA_NOMINA.ToShortDateString();
-                    itemResult.Hasta = lastCargo.FECHA_NOMINA.ToShortDateString();
+                    var desdeObj = Fecha.GetFechaDto(firstCargo.FECHA_NOMINA);
+                    itemResult.Desde = $"{desdeObj.Day}/{desdeObj.Month}/{desdeObj.Year}";
+                    var hastaObj=Fecha.GetFechaDto(lastCargo.FECHA_NOMINA);
+                    itemResult.Hasta = $"{hastaObj.Day}/{hastaObj.Month}/{hastaObj.Year}";
                     itemResult.TipoNomina = item.TipoNomina;
                     result.Add(itemResult);
 

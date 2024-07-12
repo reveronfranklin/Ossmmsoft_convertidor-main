@@ -21,6 +21,27 @@ namespace Convertidor.Data.Repository.Adm
             _distributedCache = distributedCache;
         }
       
+        public async Task<string> UpdateSearchText()
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_PRODUCTOS SET ADM.ADM_PRODUCTOS.SEARCH_TEXT = TRIM(CODIGO_PRODUCTO) || CODIGO || '-' || TRIM(CODIGO_PRODUCTO1) || '-' || TRIM(CODIGO_PRODUCTO2) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(DESCRIPCION) WHERE SEARCH_TEXT IS NULL";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+
+        
         public async Task<ADM_PRODUCTOS> GetByCodigo(int codigoProducto)
         {
             try
@@ -102,7 +123,7 @@ namespace Convertidor.Data.Repository.Adm
             if (filter.PageNumber == 0) filter.PageNumber = 1;
             if (filter.PageSize == 0) filter.PageSize = 100;
             if (filter.PageSize >100) filter.PageSize = 100;
-            
+            await UpdateSearchText();
             try
             {
 
@@ -114,13 +135,13 @@ namespace Convertidor.Data.Repository.Adm
                 if (filter.SearchText.Length > 0)
                 {
                     totalRegistros =productos
-                        .Where(x => x.CODIGO_PRODUCTO4!="00" && x.DESCRIPCION.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x => x.CODIGO_PRODUCTO4!="00" && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     
                     pageData = productos
-                        .Where(x => x.CODIGO_PRODUCTO4!="00" && x.DESCRIPCION.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x => x.CODIGO_PRODUCTO4!="00" && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .OrderBy(x => x.DESCRIPCION)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
@@ -149,6 +170,8 @@ namespace Convertidor.Data.Repository.Adm
                     AdmProductosResponse itemData = new AdmProductosResponse();
                     itemData.Codigo = item.CODIGO_PRODUCTO;
                     itemData.Descripcion = item.DESCRIPCION;
+                    itemData.CodigoConcat =
+                        $"{item.CODIGO_PRODUCTO1}-{item.CODIGO_PRODUCTO1}-{item.CODIGO_PRODUCTO2}-{item.CODIGO_PRODUCTO3}-{item.CODIGO_PRODUCTO4}";
                     resultData.Add(itemData);
                 }
                 

@@ -34,6 +34,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllByPresupuestoPaginate(FilterByPresupuestoDto dto)
+        {
+            var result = await _service.GetAllByPresupuestoPaginate(dto);
+            return Ok(result);
+        }
         
         [HttpPost]
         [Route("[action]")]

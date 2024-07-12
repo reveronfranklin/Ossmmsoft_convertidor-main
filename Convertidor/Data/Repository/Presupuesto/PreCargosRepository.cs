@@ -51,38 +51,47 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        public async Task<string> UpdateSearchText(int codigoPresupuesto)
+        {
 
-        public async Task<List<PRE_CARGOS>> GetAllByPresupuesto(int codigoPresupuesto)
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE PRE.PRE_CARGOS SET PRE.PRE_CARGOS.SEARCH_TEXT = CODIGO_CARGO || DENOMINACION || (SELECT DESCRIPCION FROM PRE.PRE_DESCRIPTIVAS    WHERE PRE.PRE_DESCRIPTIVAS.DESCRIPCION_ID  = PRE.PRE_CARGOS.TIPO_PERSONAL_ID) || (SELECT DESCRIPCION FROM PRE.PRE_DESCRIPTIVAS    WHERE PRE.PRE_DESCRIPTIVAS.DESCRIPCION_ID  = PRE.PRE_CARGOS.TIPO_CARGO_ID)   WHERE CODIGO_PRESUPUESTO ={codigoPresupuesto}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        public async Task<List<PRE_CARGOS>> GetAllByPresupuesto(int codigoPresupuesto,string searchText="")
         {
             try
             {
-                
+                await UpdateSearchText(codigoPresupuesto);
                 
                 var listCargos = new List<PRE_CARGOS>();
-
-                var cacheKey = $"listCargosPresupuesto-{codigoPresupuesto}";
-
-                var serializedListNominaPeriodo = string.Empty;
-
-                var redisListNominaPeriodo = await _distributedCache.GetAsync(cacheKey);
-                if (redisListNominaPeriodo != null)
+                if (searchText.Length > 0)
                 {
-                    serializedListNominaPeriodo = System.Text.Encoding.UTF8.GetString(redisListNominaPeriodo);
-                    listCargos = JsonConvert.DeserializeObject<List<PRE_CARGOS>>(serializedListNominaPeriodo);
-                 
+                    listCargos = await _context.PRE_CARGOS
+                         .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(searchText.Trim().ToLower()))
+                        .DefaultIfEmpty().ToListAsync();
                 }
                 else
                 {
                     listCargos = await _context.PRE_CARGOS.Where(x=>x.CODIGO_PRESUPUESTO==codigoPresupuesto).DefaultIfEmpty().ToListAsync();
-                    serializedListNominaPeriodo = JsonConvert.SerializeObject(listCargos);
-                    redisListNominaPeriodo = Encoding.UTF8.GetBytes(serializedListNominaPeriodo);
-
-                    var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(60))
-                        .SetSlidingExpiration(TimeSpan.FromDays(30));
-                    await _distributedCache.SetAsync(cacheKey, redisListNominaPeriodo, options);
 
                 }
+              
+                
+                
+                
                 
                 return listCargos;
             }

@@ -48,6 +48,8 @@ namespace Convertidor.Services.Adm
                         dto.Codigo = item.CODIGO_PRODUCTO;
                         dto.Descripcion = item.DESCRIPCION;
 
+                        dto.CodigoConcat =
+                            $"{item.CODIGO_PRODUCTO1}-{item.CODIGO_PRODUCTO1}-{item.CODIGO_PRODUCTO2}-{item.CODIGO_PRODUCTO3}-{item.CODIGO_PRODUCTO4}";
                         listDto.Add(dto);
                     }
 

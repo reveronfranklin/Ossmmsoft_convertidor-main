@@ -164,7 +164,7 @@ namespace Convertidor.Services.Cnt
                     return result;
                 }
 
-                if(dto.Debitos < 0) 
+                if(dto.Debitos <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -173,7 +173,7 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                if(dto.Creditos < 0) 
+                if(dto.Creditos <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -345,7 +345,7 @@ namespace Convertidor.Services.Cnt
                     return result;
                 }
 
-                if (dto.Debitos < 0)
+                if (dto.Debitos <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -354,7 +354,7 @@ namespace Convertidor.Services.Cnt
 
                 }
 
-                if (dto.Creditos < 0)
+                if (dto.Creditos <= 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
