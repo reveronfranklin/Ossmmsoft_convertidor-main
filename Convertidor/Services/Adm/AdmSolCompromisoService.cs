@@ -458,6 +458,52 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+        public async Task<ResultDto<AdmSolCompromisoDeleteDto>> Delete(AdmSolCompromisoDeleteDto dto)
+        {
+            ResultDto<AdmSolCompromisoDeleteDto> result = new ResultDto<AdmSolCompromisoDeleteDto>(null);
+            try
+            {
+
+                var codigosolCompromiso = await _repository.GetByCodigo(dto.CodigoSolCompromiso);
+                if (codigosolCompromiso == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitud Compromiso no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoSolCompromiso);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
 
     }
 }

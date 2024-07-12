@@ -95,6 +95,24 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
+        public async Task<string> Delete(int codigoSolCompromiso)
+        {
+            try
+            {
+                ADM_SOL_COMPROMISO entity = await GetByCodigo(codigoSolCompromiso);
+                if (entity != null)
+                {
+                    _context.ADM_SOL_COMPROMISO.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<int> GetNextKey()
         {
             try
