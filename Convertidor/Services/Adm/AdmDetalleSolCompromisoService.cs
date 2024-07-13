@@ -524,6 +524,53 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+        public async Task<ResultDto<AdmDetalleSolCompromisoDeleteDto>> Delete(AdmDetalleSolCompromisoDeleteDto dto)
+        {
+            ResultDto<AdmDetalleSolCompromisoDeleteDto> result = new ResultDto<AdmDetalleSolCompromisoDeleteDto>(null);
+            try
+            {
+
+                var codigoDetallesolicitud = await _repository.GetByCodigo(dto.CodigoDetalleSolicitud);
+                if (codigoDetallesolicitud == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Solicitud no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoDetalleSolicitud);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
 
 
     }

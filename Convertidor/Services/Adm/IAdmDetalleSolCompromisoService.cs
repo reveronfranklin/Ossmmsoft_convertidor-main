@@ -7,5 +7,6 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<List<AdmDetalleSolCompromisoResponseDto>>> GetAll();
         Task<ResultDto<AdmDetalleSolCompromisoResponseDto>> Create(AdmDetalleSolCompromisoUpdateDto dto);
         Task<ResultDto<AdmDetalleSolCompromisoResponseDto>> Update(AdmDetalleSolCompromisoUpdateDto dto);
+        Task<ResultDto<AdmDetalleSolCompromisoDeleteDto>> Delete(AdmDetalleSolCompromisoDeleteDto dto);
     }
 }
