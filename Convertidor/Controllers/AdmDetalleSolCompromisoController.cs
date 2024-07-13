@@ -40,6 +40,13 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Update(AdmDetalleSolCompromisoUpdateDto dto)
+        {
+            var result = await _service.Update(dto);
+            return Ok(result);
+        }
 
     }
 }

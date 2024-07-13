@@ -118,10 +118,17 @@ namespace Convertidor.Services.Adm
                     result.Message = "codigo Puc Solicitud no existe";
                     return result;
 
-
                 }
 
-              
+                var codigoPucSolicitud = await _admPucSolicitudService.GetByCodigo(dto.CodigoPucSolicitud);
+                if (codigoPucSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Solicitud Invalido";
+                    return result;
+                }
+
 
                 if (dto.Cantidad <= 0)
                 {
@@ -311,6 +318,212 @@ namespace Convertidor.Services.Adm
 
             return result;
         }
+
+        public async Task<ResultDto<AdmDetalleSolCompromisoResponseDto>> Update(AdmDetalleSolCompromisoUpdateDto dto)
+        {
+            ResultDto<AdmDetalleSolCompromisoResponseDto> result = new ResultDto<AdmDetalleSolCompromisoResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoDetalleSolicitud = await _repository.GetByCodigo(dto.CodigoDetalleSolicitud);
+                if (codigoDetalleSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Detalle Solicitud no existe";
+                    return result;
+                }
+
+                if(dto.CodigoPucSolicitud <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Solicitud Invalido";
+                    return result;
+
+
+                }
+
+                var codigoPucSolicitud = await _admPucSolicitudService.GetByCodigo( dto.CodigoPucSolicitud);
+                if (codigoPucSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc Solicitud Invalido";
+                    return result;
+                }
+
+                if (dto.Cantidad <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "cantidad invalida";
+                    return result;
+                }
+
+                if (dto.UdmId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "UdmId invalida";
+                    return result;
+
+
+                }
+
+                var UdmId = await _admDescriptivaRepository.GetByIdAndTitulo(21, dto.UdmId);
+                if (UdmId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "UdmId invalida";
+                    return result;
+
+                }
+                if (dto.Denominacion.Length > 1000)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Denominacion invalida";
+                    return result;
+                }
+
+
+                if (dto.PrecioUnitario <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Precio Unitario invalido";
+                    return result;
+                }
+
+                if (dto.TipoImpuestoId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "tipo Impuesto Id invalido";
+                    return result;
+
+
+                }
+
+                var tipoImpuestoId = await _admDescriptivaRepository.GetByIdAndTitulo(18, dto.TipoImpuestoId);
+                if (tipoImpuestoId == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "tipo Impuesto Id invalido";
+                    return result;
+                }
+
+                if (dto.PorImpuesto <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Por impuesto invalido";
+                    return result;
+                }
+
+
+                if (dto.CantidadAprobada < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cantidad aprobada invalida";
+                    return result;
+
+
+                }
+
+                if (dto.CantidadAnulada < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cantidad Anulada invalida";
+                    return result;
+
+
+                }
+
+                var codigoPresupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+
+                if (codigoPresupuesto == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto invalido";
+                    return result;
+                }
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+
+
+
+                codigoDetalleSolicitud.CODIGO_DETALLE_SOLICITUD = dto.CodigoDetalleSolicitud;
+                codigoDetalleSolicitud.CODIGO_PUC_SOLICITUD = dto.CodigoPucSolicitud;
+                codigoDetalleSolicitud.CANTIDAD = dto.Cantidad;
+                codigoDetalleSolicitud.UDM_ID = dto.UdmId;
+                codigoDetalleSolicitud.DENOMINACION = dto.Denominacion;
+                codigoDetalleSolicitud.PRECIO_UNITARIO = dto.PrecioUnitario;
+                codigoDetalleSolicitud.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
+                codigoDetalleSolicitud.POR_IMPUESTO = dto.PorImpuesto;
+                codigoDetalleSolicitud.CANTIDAD_APROBADA = dto.CantidadAprobada;
+                codigoDetalleSolicitud.CANTIDAD_ANULADA = dto.CantidadAnulada;
+                codigoDetalleSolicitud.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                codigoDetalleSolicitud.EXTRA1 = dto.Extra1;
+                codigoDetalleSolicitud.EXTRA2 = dto.Extra2;
+                codigoDetalleSolicitud.EXTRA3 = dto.Extra3;
+
+                codigoDetalleSolicitud.CODIGO_EMPRESA = conectado.Empresa;
+                codigoDetalleSolicitud.USUARIO_UPD = conectado.Usuario;
+                codigoDetalleSolicitud.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoDetalleSolicitud);
+
+                var resultDto = await MapDetalleSolCompromisodDto(codigoDetalleSolicitud);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
 
 
     }
