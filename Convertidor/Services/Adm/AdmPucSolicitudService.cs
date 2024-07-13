@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Cnt;
 
 namespace Convertidor.Services.Adm
 {
@@ -560,6 +561,37 @@ namespace Convertidor.Services.Adm
             }
 
 
+
+            return result;
+        }
+
+        public async Task<ResultDto<AdmPucSolicitudResponseDto>> GetByCodigo(int codigoPucSolicitud)
+        {
+            ResultDto<AdmPucSolicitudResponseDto> result = new ResultDto<AdmPucSolicitudResponseDto>(null);
+            try
+            {
+
+                var pucSolicitud = await _repository.GetCodigoPucSolicitud(codigoPucSolicitud);
+                if (pucSolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Puc solicitud no existe";
+                    return result;
+                }
+
+                var resultDto = await MapPucSolicitudDto(pucSolicitud);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
 
             return result;
         }

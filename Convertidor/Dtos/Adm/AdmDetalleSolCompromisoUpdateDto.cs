@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Adm
 {
-    public class AdmDetalleSolCompromisoResponseDto
+    public class AdmDetalleSolCompromisoUpdateDto
     {
         public int CodigoDetalleSolicitud { get; set; }
         public int CodigoPucSolicitud { get; set; }

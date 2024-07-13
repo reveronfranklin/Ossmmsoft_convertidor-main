@@ -7,7 +7,7 @@
         public int CANTIDAD { get; set; }
         public int UDM_ID { get; set; }
         public string DENOMINACION { get; set; }=string.Empty;
-        public int PRECIO_UNITARIO { get; set; }
+        public decimal PRECIO_UNITARIO { get; set; }
         public int TIPO_IMPUESTO_ID { get; set; }
         public int POR_IMPUESTO { get; set; }
         public int CANTIDAD_APROBADA { get; set; }
