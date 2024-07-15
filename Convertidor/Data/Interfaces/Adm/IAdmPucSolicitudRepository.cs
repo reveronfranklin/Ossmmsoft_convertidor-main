@@ -12,5 +12,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> Delete(int codigoPucSolicitud);
         Task<int> GetNextKey();
         Task<bool> ExistePresupuesto(int codigoPresupuesto);
+
+        Task<bool> ExisteByDetalleSolicitud(int codigoDetalleSolicitud);
     }
 }
