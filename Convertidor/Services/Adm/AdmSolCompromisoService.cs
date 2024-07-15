@@ -13,7 +13,6 @@ namespace Convertidor.Services.Adm
     {
         private readonly IAdmSolCompromisoRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-        private readonly IAdmSolicitudesService _admSolicitudesService;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
@@ -21,13 +20,11 @@ namespace Convertidor.Services.Adm
         public AdmSolCompromisoService(IAdmSolCompromisoRepository repository,
                                        IAdmDescriptivaRepository admDescriptivaRepository,
                                        ISisUsuarioRepository sisUsuarioRepository,
-                                       IAdmSolicitudesService admSolicitudesService,
                                        IAdmProveedoresRepository admProveedoresRepository,
                                        IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
-            _admSolicitudesService = admSolicitudesService;
             _admProveedoresRepository = admProveedoresRepository;
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
