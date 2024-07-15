@@ -469,8 +469,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                var pucSolicitud = await _admPucSolicitudRepository.GetByDetalleSolicitud(dto.CodigoDetalleSolicitud);
-                if (pucSolicitud.Count > 0)
+                var pucSolicitud = await _admPucSolicitudRepository.ExisteByDetalleSolicitud(dto.CodigoDetalleSolicitud);
+                if (pucSolicitud ==true)
                 {
                     result.Data = null;
                     result.IsValid = false;

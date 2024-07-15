@@ -9,16 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmDetalleSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesCahRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesCahRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFjpRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFjpRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesSindRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesSindRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesSsoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesSsoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPucSolicitudRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesIncesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesIncesService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +37,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -182,7 +177,7 @@
       <workItem from="1720102275788" duration="42552000" />
       <workItem from="1720621257960" duration="32440000" />
       <workItem from="1720814034005" duration="13799000" />
-      <workItem from="1720967975660" duration="9674000" />
+      <workItem from="1720967975660" duration="13725000" />
     </task>
     <servers />
   </component>
@@ -953,19 +948,6 @@
           <option name="timeStamp" value="194" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs</url>
-          <line>95</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" containingFunctionPresentation="Method 'GetByDetalleSolicitud'">
-            <startOffsets>
-              <option value="4426" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4516" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="195" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs</url>
           <line>68</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" containingFunctionPresentation="Method 'GetByDetalleSolicitud'">
@@ -1198,19 +1180,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="218" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesIncesService.cs</url>
-          <line>61</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesIncesService.cs" containingFunctionPresentation="Method 'GetRetencionesInces'">
-            <startOffsets>
-              <option value="2808" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2832" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="219" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
