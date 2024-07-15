@@ -31,20 +31,13 @@ namespace Convertidor.Data.Repository.Rh
         public async Task Add(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
         {
 
-            var parameters = new OracleParameter[]
-            {
-                    new OracleParameter("procesoId", procesoId),
-                    new OracleParameter("fechaDesde", fechaDesde),
-                    new OracleParameter("fechaHasta", fechaHasta),
-                    new OracleParameter("tipoNomina", tipoNomina)
-
-            };
-
+         
             try
             {
+                var desde =DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", null);
+                var hasta= DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", null);
 
-
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH_P_RETENCION_FAOV({procesoId},{tipoNomina},{fechaDesde},{fechaHasta});\nEND;";
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desde},{hasta});\nEND;";
                 //FormattableString xqueryDiario = $"CALL RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{fechaDesde},{fechaHasta});";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);

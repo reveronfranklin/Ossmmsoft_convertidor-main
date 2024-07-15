@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Convertidor.Data.Repository.Rh
@@ -31,22 +32,18 @@ namespace Convertidor.Data.Repository.Rh
         public async Task Add(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
         {
 
-            var parameters = new OracleParameter[]
-            {
-                    new OracleParameter("procesoId", procesoId),
-                    new OracleParameter("fechaDesde", fechaDesde),
-                    new OracleParameter("fechaHasta", fechaHasta),
-                    new OracleParameter("tipoNomina", tipoNomina)
-
-            };
+            
+         
 
             try
             {
+                string format = "dd/MM/yyyy";
+               var desde =DateTime.ParseExact(fechaDesde, format, CultureInfo.InvariantCulture);
+               var hasta= DateTime.ParseExact(fechaHasta, format, CultureInfo.InvariantCulture);
+            
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH.RH_P_RETENCION_INCES({procesoId},{tipoNomina},{desde},{hasta});\nEND;";
 
-
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH.RH_P_RETENCION_INCES({procesoId},{tipoNomina},{fechaDesde},{fechaHasta});\nEND;";
-
-                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 
                 
 
