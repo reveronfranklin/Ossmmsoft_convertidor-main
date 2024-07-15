@@ -251,7 +251,7 @@ namespace Convertidor.Services.Adm
                 codigoDetallesolicitud.MONTO_IMPUESTO =  ((codigoDetallesolicitud.PRECIO_UNITARIO * codigoDetallesolicitud.CANTIDAD) * codigoDetallesolicitud.POR_IMPUESTO )/100 ;
               
                 codigoDetallesolicitud.CODIGO_PRESUPUESTO =(int)solicitud.CODIGO_PRESUPUESTO;
-                codigoDetallesolicitud.CODIGO_PRODUCTO =dto.CodigoProducto;
+                //codigoDetallesolicitud.CODIGO_PRODUCTO =dto.CodigoProducto;
                 codigoDetallesolicitud.TOTAL = codigoDetallesolicitud.PRECIO_UNITARIO * codigoDetallesolicitud.CANTIDAD;
                 codigoDetallesolicitud.TOTAL_MAS_IMPUESTO =
                     codigoDetallesolicitud.TOTAL + (decimal)codigoDetallesolicitud.MONTO_IMPUESTO;
@@ -327,6 +327,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                var solicitudProducto =
+                    await _repository.GetByCodigoSolicitudProducto(dto.CodigoSolicitud, dto.CodigoProducto);
+                if (solicitudProducto != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Ya existe este producto en la solicitud";
+                    return result;
+                }
+                
                 if (dto.Cantidad <= 0)
                 {
                     result.Data = null;

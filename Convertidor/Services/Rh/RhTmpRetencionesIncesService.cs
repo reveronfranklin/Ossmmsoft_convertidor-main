@@ -1,4 +1,6 @@
-﻿using Convertidor.Services.Sis;
+﻿using System.Globalization;
+using Convertidor.Services.Sis;
+using Convertidor.Utility;
 using Ganss.Excel;
 
 namespace Convertidor.Data.Repository.Rh
@@ -31,7 +33,24 @@ namespace Convertidor.Data.Repository.Rh
                
                 int procesoId = 0;
                 procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
-
+           
+                /*DateTime desdeDate;
+                DateTime hastaDate;
+                string desdeNew = "";
+                string hastaNew = "";
+                if (DateTime.TryParseExact(filter.FechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out desdeDate))
+                {
+                    // Convertir la fecha al formato deseado
+                    desdeNew = desdeDate.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture);
+                   
+                }
+                
+                if (DateTime.TryParseExact(filter.FechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out hastaDate))
+                {
+                    // Convertir la fecha al formato deseado
+                    hastaNew = hastaDate.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture);
+                   
+                }*/
                 await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
                 var retenciones = await _repository.GetByProcesoId(procesoId);
                 if (retenciones.Count > 0)
@@ -42,6 +61,7 @@ namespace Convertidor.Data.Repository.Rh
                     {
                         contador = contador + 1;
                         item.Id = contador;
+                        item.FechaNomina = Fecha.GetFechaString(item.FechaDesde);
                     } 
                     result.Data = listRetenciones.OrderBy(x=>x.FechaNomina).ToList();;
 

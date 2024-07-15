@@ -43,6 +43,23 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+        
+        public async  Task<ADM_DETALLE_SOLICITUD> GetByCodigoSolicitudProducto(int codigoSolicitud,int codigoProducto) 
+        {
+            try
+            {
+                
+             var result = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud && x.CODIGO_PRODUCTO==codigoProducto).FirstOrDefaultAsync();
+             return result;
+
+
+            }
+            catch (Exception ex) 
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
         public List<AdmDetalleSolicitudResponseDto> GetByCodigoSolicitud(int codigoSolicitud) 
         {
             try
