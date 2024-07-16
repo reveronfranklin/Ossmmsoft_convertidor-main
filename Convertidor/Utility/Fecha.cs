@@ -22,7 +22,7 @@ public class Fecha
               
             if (fecha != null)
             {
-                result = $"{fecha:MM/dd/yyyy}";
+                result = $"{fecha:dd/MM/yyyy}";
             }
          
 

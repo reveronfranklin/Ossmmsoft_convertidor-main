@@ -57,7 +57,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetListIcpPucConDisponible(FilterPresupuestoDto filter)
         {
-            var result = await _service. GetListIcpPucConDisponible(filter.CodigoPresupuesto);
+            var result = await _service. GetListIcpPucConDisponible(filter);
             return Ok(result);
         }
         
