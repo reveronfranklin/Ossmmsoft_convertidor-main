@@ -37,16 +37,49 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
-        public async Task<List<ListIcpPucConDisponible>> GetListIcpPucConDisponible(int codigoPresupuesto)
+        public async Task<ResultDto<List<ListIcpPucConDisponible>> > GetListIcpPucConDisponible(FilterPresupuestoDto filter)
         {
-            List<ListIcpPucConDisponible> result = new List<ListIcpPucConDisponible>();
+            
+            ResultDto<List<ListIcpPucConDisponible>> result = new ResultDto<List<ListIcpPucConDisponible>>(null);
 
-            var preVSaldos = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.DISPONIBLE>0).ToListAsync();
+            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageSize == 0) filter.PageSize = 100;
+            if (filter.PageSize >100) filter.PageSize = 100;
+            var totalRegistros = 0;
+            var totalPage = 0;
+            List<PRE_V_SALDOS> preVSaldos;
 
+            if (filter.SearchText.Length > 0)
+            {
+                preVSaldos = await _context.PRE_V_SALDOS.
+                    Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Contains(filter.SearchText) || x.CODIGO_PUC_CONCAT.Contains(filter.SearchText) || x.DESCRIPCION_FINANCIADO.Contains(filter.SearchText) || x.DENOMINACION_ICP.Contains(filter.SearchText) || x.UNIDAD_EJECUTORA.Contains(filter.SearchText) || x.DENOMINACION_PUC.Contains(filter.SearchText)))
+                    .Skip((filter.PageNumber - 1) * filter.PageSize)
+                    .Take(filter.PageSize)
+                    .ToListAsync();
+
+                totalRegistros = _context.PRE_V_SALDOS
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Contains(filter.SearchText) || x.CODIGO_PUC_CONCAT.Contains(filter.SearchText) || x.DESCRIPCION_FINANCIADO.Contains(filter.SearchText) || x.DENOMINACION_ICP.Contains(filter.SearchText) || x.UNIDAD_EJECUTORA.Contains(filter.SearchText) || x.DENOMINACION_PUC.Contains(filter.SearchText)))
+                    .Count();
+
+                totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+            }
+            else
+            {
+                preVSaldos = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0)
+                    .Skip((filter.PageNumber - 1) * filter.PageSize)
+                    .Take(filter.PageSize)
+                    .ToListAsync();
+
+                totalRegistros = _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0).Count();
+
+                totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+            }
+           
+            
             if (preVSaldos.Count > 0)
             {
 
-          
+               
 
                 var resumen = from s in preVSaldos
                     group s by new
@@ -79,8 +112,27 @@ namespace Convertidor.Data.Repository.Presupuesto
                                
 
                     };
-                result = resumen.ToList();
+                
+                result.CantidadRegistros = totalRegistros;
+                result.TotalPage = totalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = resumen.ToList();
+               
+                return result;
 
+            }
+            else
+            {
+                result.CantidadRegistros = 0;
+                result.TotalPage = 0;
+                result.Page = filter.PageNumber;
+                result.IsValid = false;
+                result.Message = "No Datata";
+                result.Data = null;
+               
+                return result;
             }
 
            

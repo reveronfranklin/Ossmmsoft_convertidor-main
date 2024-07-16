@@ -1,15 +1,18 @@
-﻿using NPOI.SS.Formula.Functions;
+﻿using Convertidor.Utility;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
 {
     public class ReporteSolicitudCompromisoDto
     {
-        public EncabezadoReporte Encabezado {  get; set; }
-        public CuerpoReporte Cuerpo { get; set; }
+        public EncabezadoReporteDto Encabezado {  get; set; }
+        public CuerpoReporteDto Cuerpo { get; set; }
     }
 
-    public class EncabezadoReporte 
+    public class EncabezadoReporteDto
     {
+        public int CodigoSolicitud { get; set; }
         public int NumeroSolicitud { get; set; }
         public DateTime FechaSolicitud { get; set; }
         public string FechaSolicitudString { get; set; }
@@ -32,7 +35,7 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public string DireccionProveedor { get { return $"{Vialidad}-{Extra1}-{Vivienda}"; } }
     }
 
-    public class CuerpoReporte
+    public class CuerpoReporteDto
     {
         public decimal Cantidad { get; set; }
         public string DescripcionUdm { get; set; } = string.Empty;
@@ -43,10 +46,12 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public decimal TotalMontoImpuesto { get  { return TotalBolivares * PorImpuesto / 100; } } 
         public string Motivo { get; set; }
         public decimal Total { get { return TotalMontoImpuesto + TotalBolivares ; } }
+        public string TotalEnletras { get { return $"{Total}"; } }
         public decimal PorImpuesto { get; set; }
-        public decimal MontoImpuesto { get; set; }
+        public ConvertirALetras MontoImpuesto { get; set; }
         public  string Status { get; set; }
 
+         
     }
 
 

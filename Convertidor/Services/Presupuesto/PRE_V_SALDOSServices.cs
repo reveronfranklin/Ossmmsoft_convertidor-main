@@ -228,24 +228,13 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
-        public async Task< ResultDto<List<ListIcpPucConDisponible>>> GetListIcpPucConDisponible(int codigoPresupuesto)
+        public async Task<ResultDto<List<ListIcpPucConDisponible>>> GetListIcpPucConDisponible(FilterPresupuestoDto filter)
         {
             ResultDto<List<ListIcpPucConDisponible>> result = new ResultDto<List<ListIcpPucConDisponible>>(null);
 
-            await _repository.RecalcularSaldo(codigoPresupuesto);
-            var listIcpPucConDisponible = await _repository.GetListIcpPucConDisponible(codigoPresupuesto);
-            if (listIcpPucConDisponible.Count > 0)
-            {
-                result.Data = listIcpPucConDisponible;
-                result.IsValid = true;
-                result.Message = "";
-            }
-            else
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = "No existen Datos";
-            }
+            await _repository.RecalcularSaldo(filter.CodigoPresupuesto);
+            result = await _repository.GetListIcpPucConDisponible(filter);
+            
             
             return result;  
         }

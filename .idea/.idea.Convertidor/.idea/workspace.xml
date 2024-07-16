@@ -9,9 +9,17 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPucSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Presupuesto/IPRE_V_SALDOSRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Presupuesto/IPRE_V_SALDOSRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/RH/IRhTmpRetencionesIncesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/RH/IRhTmpRetencionesIncesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/FilterPresupuestoDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/FilterPresupuestoDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/FilterRetencionesDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/FilterRetencionesDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/IPRE_V_SALDOSServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/IPRE_V_SALDOSServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesIncesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesIncesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Utility/Fecha.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Utility/Fecha.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +45,11 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -177,7 +190,8 @@
       <workItem from="1720102275788" duration="42552000" />
       <workItem from="1720621257960" duration="32440000" />
       <workItem from="1720814034005" duration="13799000" />
-      <workItem from="1720967975660" duration="13725000" />
+      <workItem from="1720967975660" duration="18521000" />
+      <workItem from="1721138562381" duration="3781000" />
     </task>
     <servers />
   </component>
@@ -1098,7 +1112,7 @@
               <option value="2341" />
             </startOffsets>
             <endOffsets>
-              <option value="2431" />
+              <option value="2382" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="212" />
@@ -1118,26 +1132,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs</url>
-          <line>45</line>
+          <line>53</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="1496" />
+              <option value="1918" />
             </startOffsets>
             <endOffsets>
-              <option value="1571" />
+              <option value="1993" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="214" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs</url>
-          <line>52</line>
+          <line>60</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="1668" />
+              <option value="2090" />
             </startOffsets>
             <endOffsets>
-              <option value="1690" />
+              <option value="2112" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="215" />
@@ -1157,13 +1171,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs</url>
-          <line>43</line>
+          <line>51</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="1352" />
+              <option value="1767" />
             </startOffsets>
             <endOffsets>
-              <option value="1478" />
+              <option value="1900" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="217" />
@@ -1180,6 +1194,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="218" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs</url>
+          <line>48</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" containingFunctionPresentation="Method 'Add'">
+            <startOffsets>
+              <option value="1632" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1718" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="221" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs</url>
+          <line>51</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'GetListIcpPucConDisponible'">
+            <startOffsets>
+              <option value="1828" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1861" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="222" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

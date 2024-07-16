@@ -51,7 +51,7 @@ namespace Convertidor.Data.Repository.Rh
                     hastaNew = hastaDate.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture);
                    
                 }*/
-                await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                await _repository.Add(procesoId, filter);
                 var retenciones = await _repository.GetByProcesoId(procesoId);
                 if (retenciones.Count > 0)
                 {
