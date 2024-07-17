@@ -10,6 +10,8 @@ public interface IAdmDireccionProveedorRepository
     Task<ResultDto<ADM_DIR_PROVEEDOR>> Update(ADM_DIR_PROVEEDOR entity);
     Task<string> Delete(int id);
     Task<int> GetNextKey();
-    
+    Task<ADM_DIR_PROVEEDOR> GetByProveedorAndPrincipal(int codigoProveedor, int principal);
+
+
 
 }
