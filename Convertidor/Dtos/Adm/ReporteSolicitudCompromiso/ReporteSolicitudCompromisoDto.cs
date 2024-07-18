@@ -13,18 +13,16 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
     public class EncabezadoReporteDto
     {
         public int CodigoSolicitud { get; set; }
-        public int NumeroSolicitud { get; set; }
+        public int? Ano { get; set; }
+        public string NumeroSolicitud { get; set; }
         public DateTime FechaSolicitud { get; set; }
         public string FechaSolicitudString { get; set; }
         public FechaDto FechaSolicitudObj { get; set; }
-        public int CodigoSector { get; set; }
-        public int CodigoPrograma { get; set; }
-        public int CodigoSubPrograma { get; set; }
-        public int CodigoProyecto { get; set; }
-        public int CodigoActividad { get; set; }
         public string Denominacion { get; set; } = string.Empty;
         public string UnidadEjecutora { get; set; }
         public int CodigoSolicitante { get; set; }
+        public int CodigoIcp { get; set; }
+        public int CodigoProveedor { get; set; }
         public string NombreProveedor { get; set; } = string.Empty;
         public string Rif { get; set; } = string.Empty;
         public string Vialidad { get; set; } = string.Empty;
@@ -43,12 +41,12 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public decimal PrecioUnitario { get; set; }
         public decimal TotalBolivares { get { return Cantidad * PrecioUnitario ; }} 
         public  decimal SubTotal { get; set; }
-        public decimal TotalMontoImpuesto { get  { return TotalBolivares * PorImpuesto / 100; } } 
+        public decimal TotalMontoImpuesto { get  { return Math.Round( TotalBolivares * PorImpuesto / 100); } } 
         public string Motivo { get; set; }
         public decimal Total { get { return TotalMontoImpuesto + TotalBolivares ; } }
-        public string TotalEnletras { get { return $"{Total}"; } }
+        public ConvertirALetras TotalEnletras { get; set; }
         public decimal PorImpuesto { get; set; }
-        public ConvertirALetras MontoImpuesto { get; set; }
+        public decimal MontoImpuesto { get; set; }
         public  string Status { get; set; }
 
          
