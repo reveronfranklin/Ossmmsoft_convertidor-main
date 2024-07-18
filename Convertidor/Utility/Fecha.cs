@@ -14,16 +14,16 @@ public class Fecha
         return fechaDesdeObj;
     }
         
-    public static string GetFechaString(DateTime? fecha)
+    public static string GetFechaString(DateTime fecha)
     {
         var result = "";
         try
         {
-              
-            if (fecha != null)
-            {
-                result = $"{fecha:dd/MM/yyyy}";
-            }
+
+            var fechaobj = GetFechaDto(fecha);
+          
+            result = $"{fechaobj.Day}/{fechaobj.Month}/{fechaobj.Year}";
+            
          
 
             return result;

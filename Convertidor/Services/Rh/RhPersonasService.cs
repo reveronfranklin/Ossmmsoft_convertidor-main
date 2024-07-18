@@ -344,8 +344,13 @@ namespace Convertidor.Data.Repository.Rh
                 {
                     itemResult.Sueldo = relacionCargo.SUELDO;
                     itemResult.CodigoCargo = relacionCargo.CODIGO_CARGO;
+                    itemResult.DescripcionCargo = "";
                     var cargo = await _preCargosRepository.GetByCodigo(relacionCargo.CODIGO_CARGO);
-                    itemResult.DescripcionCargo = cargo.DENOMINACION;
+                    if (cargo != null)
+                    {
+                        itemResult.DescripcionCargo = cargo.DENOMINACION;
+                    }
+                    
                     var icp = await _preIndiceCatPrg.GetByCodigo(relacionCargo.CODIGO_ICP);
                     if(icp is not null)
                     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Convertidor.Data.Repository.Rh
@@ -28,17 +29,23 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task Add(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
+        public async Task Add(int procesoId,FilterRetencionesDto filter)
         {
 
            
 
             try
             {
-                var desde =DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", null);
-                var hasta= DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", null);
+                string format = "dd/MM/yyyy";
+                var fechaDesde =
+                    $"{filter.FechaDesdeObj.Day.ToString()}/{filter.FechaDesdeObj.Month.ToString()}/{filter.FechaDesdeObj.Year.ToString()}";
+                var fechaHasta =
+                    $"{filter.FechaHastaObj.Day.ToString()}/{filter.FechaHastaObj.Month.ToString()}/{filter.FechaHastaObj.Year.ToString()}";
+            
+                DateTime desde = DateTime.ParseExact(fechaDesde, format,CultureInfo.InvariantCulture);
+                DateTime hasta= DateTime.ParseExact(fechaHasta, format, CultureInfo.InvariantCulture);
 
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH.RH_P_RETENCION_SSO({procesoId},{tipoNomina},{desde},{hasta});\nEND;";
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH.RH_P_RETENCION_SSO({procesoId},{filter.TipoNomina},{desde},{hasta});\nEND;";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 
