@@ -277,28 +277,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+          
                 if (dto.CodigoPresupuesto < 0)
                 {
 
@@ -319,9 +298,6 @@ namespace Convertidor.Services.Adm
                 codigoPucsolicitud.MONTO = dto.Monto;
                 codigoPucsolicitud.MONTO_COMPROMETIDO = dto.MontoComprometido;
                 codigoPucsolicitud.MONTO_ANULADO = dto.MontoAnulado;
-                codigoPucsolicitud.EXTRA1 = dto.Extra1;
-                codigoPucsolicitud.EXTRA2 = dto.Extra2;
-                codigoPucsolicitud.EXTRA3 = dto.Extra3;
                 codigoPucsolicitud.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -432,28 +408,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+            
                 if (dto.CodigoPresupuesto < 0)
                 {
 
@@ -476,9 +431,7 @@ namespace Convertidor.Services.Adm
             entity.MONTO=dto.Monto;
             entity.MONTO_COMPROMETIDO = dto.MontoComprometido;
             entity.MONTO_ANULADO = dto.MontoAnulado;
-            entity.EXTRA1 = dto.Extra1;
-            entity.EXTRA2 = dto.Extra2;
-            entity.EXTRA3 = dto.Extra3;
+       
             entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
 
 

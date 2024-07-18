@@ -44,7 +44,7 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public decimal TotalMontoImpuesto { get  { return Math.Round( TotalBolivares * PorImpuesto / 100); } } 
         public string Motivo { get; set; }
         public decimal Total { get { return TotalMontoImpuesto + TotalBolivares ; } }
-        public ConvertirALetras TotalEnletras { get; set; }
+        public string TotalEnletras { get; set; }
         public decimal PorImpuesto { get; set; }
         public decimal MontoImpuesto { get; set; }
         public  string Status { get; set; }
