@@ -808,6 +808,45 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<bool> PodemosAnularSolicitudDeModificacion(int codigoSolicitud)
+        {
+            var result = true;
+            var pucModificacion =
+                await _prePucSolicitudModificacionRepository.GetAllByCodigoSolicitud(codigoSolicitud);
+         
+            if (pucModificacion != null && pucModificacion.Count > 0)
+            {
+                foreach (var item in pucModificacion)
+                {
+
+                    if (item.MONTO_MODIFICADO != 0)
+                    {
+                        result = false;
+                        return false;
+                    }
+                    
+                    //Actualizamoos PRE_SALDO
+                    var preSaldo = await _preSaldosRepository.GetByCodigo(item.CODIGO_SALDO);
+                    if (preSaldo != null)
+                    {
+                        if (preSaldo.COMPROMETIDO != 0)
+                        {
+                            return false;
+                        }
+                    }
+                    
+               
+                }
+            }
+            else
+            {
+                result = true;
+               
+            }
+
+            return result;
+        }
+        
         public async Task<ResultDto<PreSolModificacionResponseDto>> Anular(PreSolModificacionDeleteDto dto)
         {
             ResultDto<PreSolModificacionResponseDto> result = new ResultDto<PreSolModificacionResponseDto>(null);
@@ -838,11 +877,23 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "No existe Modificacion Presupuestaria para  ANULAR";
                     return result;
                 }
-                
+
+                var puedeAnular = await PodemosAnularSolicitudDeModificacion(dto.CodigoSolModificacion);
+                if (puedeAnular == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Solicitud no puede ser ANULADA (Tiene un saldo comprometido o Solicitud con Monto Modificado)";
+                    return result;
+                }
+
+
                 //Recorremos la tabla PRE_PUC_MODIFICACION
 
                 var pucModificacion =
                     await _prePucModificacionService.GetAllByCodigoModificacion(modificacion.CodigoModificacion);
+               
+                
                 foreach (var item in pucModificacion.Data)
                 {
                     //Actualizamoos PRE_SALDO

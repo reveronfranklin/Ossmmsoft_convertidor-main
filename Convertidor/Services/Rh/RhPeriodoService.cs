@@ -97,6 +97,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
             RhPeriodosResponseDto itemResult = new RhPeriodosResponseDto();
+          
             itemResult.CodigoPeriodo = dtos.CODIGO_PERIODO;
             itemResult.CodigoTipoNomina = dtos.CODIGO_TIPO_NOMINA;
 
@@ -119,7 +120,7 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.FechaPreCierreObj = null;
             if (dtos.FECHA_PRECIERRE != null)
             {
-                itemResult.FechaPreCierreString =Fecha.GetFechaString(dtos.FECHA_PRECIERRE);
+                itemResult.FechaPreCierreString =Fecha.GetFechaString((DateTime)dtos.FECHA_PRECIERRE);
                 FechaDto fechaPrecierreObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_PRECIERRE);
                 itemResult.FechaPreCierreObj = (FechaDto)fechaPrecierreObj;
             }    
@@ -132,7 +133,7 @@ namespace Convertidor.Data.Repository.Rh
             if (dtos.FECHA_CIERRE!=null)
             {
                 itemResult.FechaCierre = dtos.FECHA_CIERRE;
-                itemResult.FechaCierreString =Fecha.GetFechaString(dtos.FECHA_CIERRE);
+                itemResult.FechaCierreString =Fecha.GetFechaString((DateTime)dtos.FECHA_CIERRE);
                 FechaDto fechaCierreObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_CIERRE);
                 itemResult.FechaCierreObj = (FechaDto)fechaCierreObj;
             }
@@ -145,7 +146,7 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.FechaPrenominaObj = null;
             if (dtos.FECHA_PRENOMINA != null)
             {
-                itemResult.FechaPrenominaString =Fecha.GetFechaString(dtos.FECHA_PRENOMINA);
+                itemResult.FechaPrenominaString =Fecha.GetFechaString((DateTime)dtos.FECHA_PRENOMINA);
                 FechaDto fechaPrenominaObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_PRENOMINA);
                 itemResult.FechaPrenominaObj = (FechaDto)fechaPrenominaObj;
             }

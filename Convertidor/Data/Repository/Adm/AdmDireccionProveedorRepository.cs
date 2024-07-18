@@ -48,9 +48,24 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
+        public async Task<ADM_DIR_PROVEEDOR> GetByProveedorAndPrincipal(int codigoProveedor ,int principal)
+        {
+            try
+            {
+                var result = await _context.ADM_DIR_PROVEEDOR.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_PROVEEDOR == codigoProveedor && e.PRINCIPAL == principal).FirstOrDefaultAsync();
 
-     
-      
+                return (ADM_DIR_PROVEEDOR)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+
 
 
 

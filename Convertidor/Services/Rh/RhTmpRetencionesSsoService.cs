@@ -37,7 +37,7 @@ namespace Convertidor.Data.Repository.Rh
                     int procesoId = 0;
                     procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
 
-                    await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                    await _repository.Add(procesoId, filter);
                     var retenciones = await _repository.GetByProcesoId(procesoId);
                     if (retenciones != null)
                     {
