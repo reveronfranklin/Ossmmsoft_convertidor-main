@@ -198,7 +198,7 @@ namespace Convertidor.Services.Adm
                         };
                     
                     var listDto = linqQuery.ToList();
-
+                    
                     result.Data = listDto;
                     result.IsValid = true;
                     result.Message = solicitudes.Message;

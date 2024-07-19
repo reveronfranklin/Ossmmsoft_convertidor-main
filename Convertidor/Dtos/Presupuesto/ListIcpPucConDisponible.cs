@@ -12,6 +12,7 @@ public class ListIcpPucConDisponible
     public string DenominacionPuc { get; set; }
     
     public int FinanciadoId { get; set; }
+    public int CodigoFinanciado { get; set; }
     public string DenominacionFinanciado { get; set; }
     
     public decimal Disponible { get; set; }
