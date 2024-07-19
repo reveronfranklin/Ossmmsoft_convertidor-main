@@ -92,7 +92,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                         CodigoPucConcat=s.CODIGO_PUC_CONCAT,
                         DenominacionPuc=s.DENOMINACION_PUC,
                         FinanciadoId=s.FINANCIADO_ID,
-                        CodigoFinanciado=s.CODIGO_FINANCIADO,
+                        CodigoFinanciado=s.CODIGO_FINANCIADO.HasValue ? (int)s.CODIGO_FINANCIADO.Value : 0,
                         DenominacionFinanciado=s.DESCRIPCION_FINANCIADO,
                         Disponible=s.DISPONIBLE
                         
@@ -163,6 +163,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                         CodigoPucConcat=s.CODIGO_PUC_CONCAT,
                         DenominacionPuc=s.DENOMINACION_PUC,
                         FinanciadoId=s.FINANCIADO_ID,
+                        CodigoFinanciado=s.CODIGO_FINANCIADO.HasValue ? (int)s.CODIGO_FINANCIADO.Value : 0,
                         DenominacionFinanciado=s.DESCRIPCION_FINANCIADO,
                         Disponible=s.DISPONIBLE
                         
@@ -177,6 +178,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                         CodigoPuc = g.Key.CodigoPuc,
                         DenominacionPuc=g.Key.DenominacionPuc,
                         FinanciadoId = (int)g.Key.FinanciadoId,
+                        CodigoFinanciado =(int) g.Key.CodigoFinanciado,
                         DenominacionFinanciado = g.Key.DenominacionFinanciado,
                         Disponible=(decimal)g.Key.Disponible
                         
