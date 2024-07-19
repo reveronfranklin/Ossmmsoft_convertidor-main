@@ -10,8 +10,7 @@ public interface IAdmComunicacionProveedorRepository
     Task<ResultDto<ADM_COM_PROVEEDOR>> Update(ADM_COM_PROVEEDOR entity);
     Task<string> Delete(int id);
     Task<int> GetNextKey();
-    Task<ADM_COM_PROVEEDOR> GetByProveedorAndPrincipal(int codigoProveedor, int principal);
-
+    Task<ADM_COM_PROVEEDOR> GetBycodigoProveedor(int codigoProveedor);
 
 
 }

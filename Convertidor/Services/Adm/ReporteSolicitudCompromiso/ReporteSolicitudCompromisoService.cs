@@ -2,12 +2,16 @@
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
+using Convertidor.Dtos.Presupuesto;
+using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Utility;
 using iText.Layout.Renderer;
+using QuestPDF.Fluent;
+using System.Collections.Generic;
 
 namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 {
-    public class ReporteSolicitudCompromisoService
+    public class ReporteSolicitudCompromisoService : IReporteSolicitudCompromisoService
     {
         private readonly IAdmSolicitudesService _admSolicitudesService;
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
@@ -18,6 +22,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IAdmComunicacionProveedorRepository _admComProveedorRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IConfiguration _configuration;
 
         public ReporteSolicitudCompromisoService(IAdmSolicitudesService admSolicitudesService,
                                                  IAdmSolicitudesRepository admSolicitudesRepository,
@@ -27,7 +32,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                                  IAdmDireccionProveedorRepository admDirProveedorRepository,
                                                  IAdmComunicacionProveedorRepository admComProveedorRepository,
                                                  IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
-                                                 IAdmDescriptivaRepository admDescriptivaRepository)
+                                                 IAdmDescriptivaRepository admDescriptivaRepository,
+                                                 IConfiguration configuration)
         {
             _admSolicitudesService = admSolicitudesService;
             _admSolicitudesRepository = admSolicitudesRepository;
@@ -38,48 +44,174 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             _admComProveedorRepository = admComProveedorRepository;
             _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _configuration = configuration;
         }
 
-        public async Task<EncabezadoReporteDto> GenerateDataEncabezadoDto(int codigoSolicitud)
+        public async Task<ReporteSolicitudCompromisoDto> GenerateData (AdmSolicitudesFilterDto filter) 
         {
-            EncabezadoReporteDto result = new EncabezadoReporteDto();
-            var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
-            result.CodigoSolicitud = solicitud.CODIGO_SOLICITUD;
-            result.Ano = solicitud.ANO;
-            result.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
-            result.FechaSolicitud = solicitud.FECHA_SOLICITUD;
-            result.FechaSolicitudString = solicitud.FECHA_SOLICITUD.ToString("u");
-            FechaDto FechaSolicitudObj = FechaObj.GetFechaDto(solicitud.FECHA_SOLICITUD);
-            result.FechaSolicitudObj = (FechaDto)FechaSolicitudObj;
-            result.CodigoSolicitante = solicitud.CODIGO_SOLICITANTE;
+          ReporteSolicitudCompromisoDto result = new ReporteSolicitudCompromisoDto();
+          var encabezado = await GenerateDataEncabezadoDto (filter);
+          var cuerpo = await GenerateDataCuerpoDto (filter);
+        
+          result.Encabezado = encabezado;
+          result.Cuerpo = cuerpo;
 
-            var icp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(solicitud.CODIGO_SOLICITANTE);
+          return result;
+        
+        }
 
-            result.CodigoIcp = icp.CODIGO_ICP;
-            result.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
-            result.Denominacion = icp.DENOMINACION;
-            result.CodigoProveedor = solicitud.CODIGO_PROVEEDOR ?? default;
+        public async Task<EncabezadoReporteDto> GenerateDataEncabezadoDto(AdmSolicitudesFilterDto filter)
+        {
+                EncabezadoReporteDto result = new EncabezadoReporteDto();
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
 
-            var Proveedor = await _admProveedoresRepository.GetByCodigo(solicitud.CODIGO_PROVEEDOR ?? default);
-            result.NombreProveedor = Proveedor.NOMBRE_PROVEEDOR;
-            result.Rif = Proveedor.RIF;
+            
+            
+                result.CodigoSolicitud = solicitud.CODIGO_SOLICITUD;
+                result.Ano = (int)solicitud.ANO;
+                result.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
+                result.FechaSolicitud = solicitud.FECHA_SOLICITUD;
+                result.FechaSolicitudString = solicitud.FECHA_SOLICITUD.ToString("u");
+                FechaDto FechaSolicitudObj = FechaObj.GetFechaDto(solicitud.FECHA_SOLICITUD);
+                result.FechaSolicitudObj = (FechaDto)FechaSolicitudObj;
+                result.CodigoSolicitante = solicitud.CODIGO_SOLICITANTE;
 
-            var dirProveedor = await _admDirProveedorRepository.GetByProveedorAndPrincipal(Proveedor.CODIGO_PROVEEDOR, 1);
-            result.Vialidad = dirProveedor.VIALIDAD;
-            result.Vivienda = dirProveedor.VIVIENDA;
+                var icp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(solicitud.CODIGO_SOLICITANTE);
 
-            var comProveedor = await _admComProveedorRepository.GetByProveedorAndPrincipal(Proveedor.CODIGO_PROVEEDOR, 1);
-            result.CodigoArea = comProveedor.CODIGO_AREA;
-            result.LineaComunicacion = comProveedor.LINEA_COMUNICACION;
+                result.CodigoIcp = icp.CODIGO_ICP;
+                result.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
+                result.Denominacion = icp.DENOMINACION;
+                result.CodigoProveedor = (int)solicitud.CODIGO_PROVEEDOR;
 
-            var extra1 = await _admDescriptivaRepository.GetByCodigo(3);
-            result.Extra1 = extra1.EXTRA1;
+                var Proveedor = await _admProveedoresRepository.GetByCodigo((int)solicitud.CODIGO_PROVEEDOR);
+                result.NombreProveedor = Proveedor.NOMBRE_PROVEEDOR;
+                result.Rif = Proveedor.RIF;
+
+                
+           
+                var dirProveedor = await _admDirProveedorRepository.GetByCodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
+                if (dirProveedor.PRINCIPAL == 1)
+                {
+                    result.Vialidad = dirProveedor.VIALIDAD;
+                    result.Vivienda = dirProveedor.VIVIENDA;
+
+                    var comProveedor = await _admComProveedorRepository.GetBycodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
+                    result.CodigoArea = comProveedor.CODIGO_AREA;
+                    result.LineaComunicacion = comProveedor.LINEA_COMUNICACION;
+
+                    var extra1 = await _admDescriptivaRepository.GetByCodigoDescriptiva(dirProveedor.TIPO_VIVIENDA_ID);
+                    result.Extra1 = extra1.EXTRA1;
+                }
 
 
+                return result;
+           
+        }
+
+        public async Task<List<CuerpoReporteDto>> GenerateDataCuerpoDto(AdmSolicitudesFilterDto filter)
+        {
+            try
+            {
+                List<CuerpoReporteDto> result = new List<CuerpoReporteDto>();
+                var solicitudByPresupuesto = await _admSolicitudesService.GetByPresupuesto(filter);
+                var detalle = _admDetalleSolicitudService.GetByCodigoSolicitud(filter.CodigoSolicitud);
+                var detalleDatos = filter.CodigoSolicitud;
+
+
+
+                foreach (var itemSolicitud in solicitudByPresupuesto.Data)
+                {
+                    itemSolicitud.CodigoSolicitud = detalleDatos;
+
+                    foreach (var item in detalle.Data)
+                    {
+                        if (item.CodigoSolicitud == itemSolicitud.CodigoSolicitud)
+                        {
+                            CuerpoReporteDto resultItem = new CuerpoReporteDto();
+                            resultItem.Cantidad = item.Cantidad;
+
+                            var descriptiva = await _admDescriptivaRepository.GetByCodigoDescriptiva(item.UdmId);
+                            resultItem.DescripcionUdmId = descriptiva.DESCRIPCION_ID;
+                            resultItem.DescripcionArticulo = item.Descripcion;
+                            resultItem.PrecioUnitario = item.PrecioUnitario;
+                            var cantidad = item.Cantidad;
+                            var precioUnitario = item.PrecioUnitario;
+                            resultItem.TotalBolivares = (cantidad * precioUnitario);
+                            var subTotalBolivares = detalle.Data.Sum(x => x.PrecioTotal);
+                            resultItem.SubTotal = subTotalBolivares;
+                            resultItem.TotalMontoImpuesto = subTotalBolivares * item.PorImpuesto / 100;
+                            resultItem.Total = resultItem.TotalBolivares + resultItem.TotalMontoImpuesto;
+                            resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
+                            resultItem.Motivo = itemSolicitud.Motivo;
+                            resultItem.TotalEnletras = (item.Total).ToString();
+                            result.Add(resultItem);
+
+                            return result;
+                        }
+
+                        return result;
+                    }
+
+                    return result;
+                }
+
+                return result;
+            }
+            catch (Exception ex) 
+            {
+               var message = ex.Message;
+               return null;
+            }
+
+            
+        }
+        public async Task<string> ReportData(AdmSolicitudesFilterDto filter)
+        {
+           
+
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var result = "No Data";
+            var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
+            var fileName = $"ReporteSolicitudCompromiso-{filter.CodigoSolicitud}.pdf";
+            var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
+
+
+            if (filter == null)
+            {
+                return null;
+            }
+
+
+
+            var reporte = await GenerateData(filter);
+            if (reporte != null)
+            {
+
+
+
+
+                
+
+                if (reporte == null)
+                {
+                    return "No Data";
+                }
+                else
+                {
+
+
+                    filePath = $"{@settings.ExcelFiles}/{fileName}";
+
+
+                    result = fileName;
+                    var document = new ReporteSolicitudCompromisoDocument(reporte, pathLogo);
+                    document.GeneratePdf(filePath);
+                }
+
+                return result;
+            }
 
             return result;
-
-
         }
 
     }

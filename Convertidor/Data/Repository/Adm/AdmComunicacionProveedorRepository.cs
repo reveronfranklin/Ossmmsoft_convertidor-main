@@ -47,17 +47,19 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
-        public async Task<ADM_COM_PROVEEDOR> GetByProveedorAndPrincipal(int codigoProveedor, int principal)
+        public async Task<ADM_COM_PROVEEDOR> GetBycodigoProveedor(int codigoProveedor)
         {
             try
             {
-                var result = await _context.ADM_COM_PROVEEDOR.DefaultIfEmpty().Where(e => e.CODIGO_PROVEEDOR == codigoProveedor && e.PRINCIPAL == principal).FirstOrDefaultAsync();
+                
+                var result = await _context.ADM_COM_PROVEEDOR.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_PROVEEDOR == codigoProveedor).FirstOrDefaultAsync();
 
-                return result;
+                return (ADM_COM_PROVEEDOR)result;
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
+                var res = ex.Message;
                 return null;
             }
 
