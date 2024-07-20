@@ -119,10 +119,14 @@ namespace Convertidor.Services.Presupuesto
                 {
                     List<RhRelacionCargoDto> listDto = new List<RhRelacionCargoDto>();
 
-                        foreach (var item in rhRelacionCargos)
+                    foreach (var item in rhRelacionCargos)
                     {
-                        var dto = await MapRhRelacionCargo(item);
-                        listDto.Add(dto);
+                        if (item != null)
+                        {
+                            var dto = await MapRhRelacionCargo(item);
+                            listDto.Add(dto);
+                        }
+                       
                     }
 
 
@@ -233,6 +237,7 @@ namespace Convertidor.Services.Presupuesto
                             //relacionCargoUpdate.CODIGO_TIPO_NOMINA = dto.TipoNomina;
                             relacionCargoUpdate.FECHA_INI = Convert.ToDateTime(dto.FechaIni, CultureInfo.InvariantCulture);
                             relacionCargoUpdate.FECHA_FIN = Convert.ToDateTime(DateTime.Now.ToString("u"), CultureInfo.InvariantCulture);
+                            relacionCargoUpdate.FECHA_INGRESO = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
                             relacionCargoUpdate.FECHA_UPD = DateTime.Now;
                             await _repository.Update(relacionCargoUpdate);
 
@@ -267,6 +272,7 @@ namespace Convertidor.Services.Presupuesto
                            // relacionCargoUpdate.CODIGO_TIPO_NOMINA = dto.TipoNomina;
                             relacionCargoUpdate.FECHA_INI = Convert.ToDateTime(dto.FechaIni, CultureInfo.InvariantCulture);
                             relacionCargoUpdate.FECHA_FIN = Convert.ToDateTime(DateTime.Now.ToString("u"), CultureInfo.InvariantCulture);
+                            relacionCargoUpdate.FECHA_INGRESO = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
                             relacionCargoUpdate.FECHA_UPD = DateTime.Now;
                             await _repository.Update(relacionCargoUpdate);
                             RhRelacionCargoUpdateDto rhRelacionCargoDto = new RhRelacionCargoUpdateDto();
@@ -322,6 +328,7 @@ namespace Convertidor.Services.Presupuesto
                     rhRelacionCargoDto.CodigoRelacionCargo = 0;
                     rhRelacionCargoDto.TipoNomina = relacionCargoUpdate.CODIGO_TIPO_NOMINA;
                     rhRelacionCargoDto.FechaIni = relacionCargoUpdate.FECHA_INI.Value.ToString("u");
+                    rhRelacionCargoDto.FechaIngreso = relacionCargoUpdate.FECHA_INGRESO.Value.ToString("u");
                     rhRelacionCargoDto.Sueldo = dto.Sueldo;
                     var resultCreated=await Create(rhRelacionCargoDto);
 
@@ -547,6 +554,7 @@ namespace Convertidor.Services.Presupuesto
                 entity.EXTRA3 = "";
                 entity.FECHA_FIN = Convert.ToDateTime(dto.FechaFin, CultureInfo.InvariantCulture);
                 entity.FECHA_INI = Convert.ToDateTime(dto.FechaIni, CultureInfo.InvariantCulture);
+                entity.FECHA_INGRESO = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
                 if (entity.FECHA_INI.Value.Year <= 1900) entity.FECHA_INI = null;
                 if (entity.FECHA_FIN.Value.Year <= 1900) entity.FECHA_FIN = null;
                 entity.FECHA_UPD = DateTime.Now;
@@ -608,16 +616,22 @@ namespace Convertidor.Services.Presupuesto
                 item.FECHA_FIN = DateTime.MinValue;
             }
             dto.FechaFin = (DateTime)item.FECHA_FIN;
-            
+            dto.FechaIngreso = (DateTime)item.FECHA_INGRESO;
             
             
             dto.FechaIniString = FechaObj.GetFechaString(item.FECHA_INI);
             dto.FechaFinString =  FechaObj.GetFechaString( item.FECHA_FIN);
+            dto.FechaIngresoString =  FechaObj.GetFechaString( item.FECHA_INGRESO);
+            
             FechaDto FechaIniObj = FechaObj.GetFechaDto((DateTime)item.FECHA_INI);
+           
             dto.FechaIniObj = (FechaDto)FechaIniObj;
             FechaDto FechaFinObj =  FechaObj.GetFechaDto((DateTime)item.FECHA_FIN);
             dto.FechaFinObj = (FechaDto)FechaFinObj;
 
+            FechaDto FechaIngresoObj =  FechaObj.GetFechaDto((DateTime)item.FECHA_INGRESO);
+            dto.FechaIngresoObj = (FechaDto)FechaIngresoObj;
+            
             var cargo = await _preCargoRepository.GetByCodigo(dto.CodigoCargo);
             if (cargo != null)
             {

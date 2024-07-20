@@ -50,7 +50,11 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public  decimal SubTotal { get; set; }
         public decimal TotalMontoImpuesto { get; set; } 
         public string Motivo { get; set; }
+<<<<<<< HEAD
         public decimal Total { get; set; }
+=======
+        public decimal Total { get { return TotalMontoImpuesto + TotalBolivares ; } }
+>>>>>>> cf28ce8bc82b23e46f3824012e8825381557c9d6
         public string TotalEnletras { get; set; }
         public decimal PorImpuesto { get; set; }
         public decimal MontoImpuesto { get; set; }
