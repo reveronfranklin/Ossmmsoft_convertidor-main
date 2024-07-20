@@ -21,7 +21,6 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public string Denominacion { get; set; } = string.Empty;
         public string UnidadEjecutora { get; set; }
         public int CodigoSolicitante { get; set; }
-        public int CodigoIcp { get; set; }
         public int CodigoProveedor { get; set; }
         public string NombreProveedor { get; set; } = string.Empty;
         public string Rif { get; set; } = string.Empty;
@@ -51,11 +50,7 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public  decimal SubTotal { get; set; }
         public decimal TotalMontoImpuesto { get; set; } 
         public string Motivo { get; set; }
-<<<<<<< HEAD
         public decimal Total { get; set; }
-=======
-        public decimal Total { get { return TotalMontoImpuesto + TotalBolivares ; } }
->>>>>>> 60111996475e4384f21ed8e8d8b50c1f1b6ec5d2
         public string TotalEnletras { get; set; }
         public decimal PorImpuesto { get; set; }
         public decimal MontoImpuesto { get; set; }

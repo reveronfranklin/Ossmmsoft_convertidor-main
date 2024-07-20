@@ -1,5 +1,6 @@
 ﻿using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
 using NPOI.SS.Formula.Functions;
+using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Globalization;
@@ -23,7 +24,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             formato.CurrencyGroupSeparator = ".";
             formato.NumberDecimalSeparator = ",";
             formato.NumberDecimalDigits = 2;
-
+            
+            
             container.Table(table =>
             {
                 table.ColumnsDefinition(columns =>

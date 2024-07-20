@@ -6,6 +6,7 @@ using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Utility;
 using iText.Layout.Renderer;
+using Org.BouncyCastle.Asn1.Cmp;
 using QuestPDF.Fluent;
 using System.Collections.Generic;
 
@@ -21,6 +22,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IAdmDireccionProveedorRepository _admDirProveedorRepository;
         private readonly IAdmComunicacionProveedorRepository _admComProveedorRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
+        private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
+        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IConfiguration _configuration;
 
@@ -32,6 +36,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                                  IAdmDireccionProveedorRepository admDirProveedorRepository,
                                                  IAdmComunicacionProveedorRepository admComProveedorRepository,
                                                  IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
+                                                 IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
+                                                 IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
+                                                 ISisUsuarioRepository sisUsuarioRepository,
                                                  IAdmDescriptivaRepository admDescriptivaRepository,
                                                  IConfiguration configuration)
         {
@@ -43,6 +50,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             _admDirProveedorRepository = admDirProveedorRepository;
             _admComProveedorRepository = admComProveedorRepository;
             _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
+            _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
+            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
+            _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _configuration = configuration;
         }
@@ -62,11 +72,14 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
         public async Task<EncabezadoReporteDto> GenerateDataEncabezadoDto(AdmSolicitudesFilterDto filter)
         {
+         
+            try
+            {
                 EncabezadoReporteDto result = new EncabezadoReporteDto();
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
 
-            
-            
+
+
                 result.CodigoSolicitud = solicitud.CODIGO_SOLICITUD;
                 result.Ano = (int)solicitud.ANO;
                 result.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
@@ -78,17 +91,22 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 var icp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(solicitud.CODIGO_SOLICITANTE);
 
-                result.CodigoIcp = icp.CODIGO_ICP;
+               
                 result.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
-                result.Denominacion = icp.DENOMINACION;
+
+                if (icp.DENOMINACION == "PRESUPUESTO" &&  icp.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto)
+                {
+                    result.Denominacion = icp.DENOMINACION;
+                }
+               
                 result.CodigoProveedor = (int)solicitud.CODIGO_PROVEEDOR;
 
                 var Proveedor = await _admProveedoresRepository.GetByCodigo((int)solicitud.CODIGO_PROVEEDOR);
                 result.NombreProveedor = Proveedor.NOMBRE_PROVEEDOR;
                 result.Rif = Proveedor.RIF;
 
-                
-           
+
+
                 var dirProveedor = await _admDirProveedorRepository.GetByCodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
                 if (dirProveedor.PRINCIPAL == 1)
                 {
@@ -100,11 +118,24 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     result.LineaComunicacion = comProveedor.LINEA_COMUNICACION;
 
                     var extra1 = await _admDescriptivaRepository.GetByCodigoDescriptiva(dirProveedor.TIPO_VIVIENDA_ID);
-                    result.Extra1 = extra1.EXTRA1;
+                    if (extra1 != null)
+                    {
+                        result.Extra1 = extra1.EXTRA1;
+                    }
+                    else 
+                    {
+                        result.Extra1 = "";
+                    }
                 }
 
 
                 return result;
+            }
+            catch (Exception ex) 
+            {
+              var message = ex.Message;
+              return null;
+            }
            
         }
 
