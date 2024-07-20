@@ -37,7 +37,9 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
 
-                var result = await _context.RH_RELACION_CARGOS.Where(x=>x.CODIGO_RELACION_CARGO_PRE== preCodigoRelaciconCargo).DefaultIfEmpty().ToListAsync();
+                var result = await _context.RH_RELACION_CARGOS.Where(x=>x.CODIGO_RELACION_CARGO_PRE== preCodigoRelaciconCargo).ToListAsync();
+              
+             
                 return result;
             }
             catch (Exception ex)

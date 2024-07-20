@@ -140,7 +140,6 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                             var subTotalBolivares = detalle.Data.Sum(x => x.PrecioTotal);
                             resultItem.SubTotal = subTotalBolivares;
                             resultItem.TotalMontoImpuesto = subTotalBolivares * item.PorImpuesto / 100;
-                            resultItem.Total = resultItem.TotalBolivares + resultItem.TotalMontoImpuesto;
                             resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
                             resultItem.Motivo = itemSolicitud.Motivo;
                             resultItem.TotalEnletras = (item.Total).ToString();

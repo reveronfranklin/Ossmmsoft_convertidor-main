@@ -19,6 +19,10 @@
         public FechaDto FechaIniObj { get; set; }
         public FechaDto FechaFinObj { get; set; }
         public int CodigoRelacionCargoPre { get; set; }
+        
+        public DateTime FechaIngreso { get; set; } 
+        public string FechaIngresoString { get; set; } = string.Empty;
+        public FechaDto FechaIngresoObj { get; set; }
         public string searchText { get { return DenominacionCargo + Nombre + Apellido + Cedula; } }
     }
 }

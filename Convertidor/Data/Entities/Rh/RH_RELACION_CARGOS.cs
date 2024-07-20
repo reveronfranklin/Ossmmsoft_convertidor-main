@@ -23,6 +23,7 @@
         public int CODIGO_RELACION_CARGO_PRE { get; set; }
         public DateTime FECHA_INI_VIGENCIA { get; set; }
         public DateTime FECHA_FIN_VIGENCIA { get; set; }
+        public DateTime? FECHA_INGRESO { get; set; }
 
 
     }
