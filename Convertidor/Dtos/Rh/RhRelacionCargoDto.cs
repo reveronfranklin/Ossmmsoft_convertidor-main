@@ -12,17 +12,17 @@
         public string Apellido { get; set; } = string.Empty;
         public int Cedula { get; set; } 
         public decimal Sueldo { get; set; }
-        public DateTime FechaIni { get; set; } 
-        public DateTime FechaFin { get; set; } 
+        public DateTime? FechaIni { get; set; } 
+        public DateTime? FechaFin { get; set; } 
         public string FechaIniString { get; set; } = string.Empty;
         public string FechaFinString { get; set; } = string.Empty;
-        public FechaDto FechaIniObj { get; set; }
-        public FechaDto FechaFinObj { get; set; }
+        public FechaDto? FechaIniObj { get; set; }
+        public FechaDto? FechaFinObj { get; set; }
         public int CodigoRelacionCargoPre { get; set; }
         
-        public DateTime FechaIngreso { get; set; } 
+        public DateTime? FechaIngreso { get; set; } 
         public string FechaIngresoString { get; set; } = string.Empty;
-        public FechaDto FechaIngresoObj { get; set; }
+        public FechaDto? FechaIngresoObj { get; set; }
         public string searchText { get { return DenominacionCargo + Nombre + Apellido + Cedula; } }
     }
 }

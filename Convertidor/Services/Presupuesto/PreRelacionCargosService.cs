@@ -584,8 +584,17 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Relacion Cargo no existe";
                     return result;
                 }
-
-               //TODO VALIDAR CONTRA RH_RELACION_CARGO
+                
+ 
+               var rhRelacionCargoSinRelacionDePersona =
+                   await _rhRelacionCargosService.RhRelacionCargoConRelacionDePersona(dto.CodigoRelacionCargo);
+               if (rhRelacionCargoSinRelacionDePersona == true)
+               {
+                   result.Data = dto;
+                   result.IsValid = false;
+                   result.Message = "Relacion de Cargo ya tiene Personas Asignadas,No puede ser eliminado";
+                   return result;
+               }
 
                 var deleted = await _repository.Delete(dto.CodigoRelacionCargo);
 

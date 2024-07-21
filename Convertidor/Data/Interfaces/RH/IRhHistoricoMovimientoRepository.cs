@@ -8,6 +8,7 @@
         Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetByFechaNomina(DateTime desde, DateTime hasta);
         Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetByFechaNominaPersona(DateTime desde, DateTime hasta, int idPersona);
         Task<RH_V_HISTORICO_MOVIMIENTOS> GetPrimerMovimientoByCodigoPersona(int codigoPersona);
-    }
+        Task<bool> ExisteCodigoRelacionCargo(int rhCodigoRelacionCargo);
+	}
 }
 

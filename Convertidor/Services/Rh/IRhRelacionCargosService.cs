@@ -11,6 +11,8 @@ namespace Convertidor.Services.Rh
         Task<ResultDto<RhRelacionCargoDto>> UpdateField(UpdateFieldDto dto);
         Task<ResultDto<RhRelacionCargoDto>> Create(RhRelacionCargoUpdateDto dto);
         Task<ResultDto<RhRelacionCargoDeleteDto>> Delete(RhRelacionCargoDeleteDto dto);
-    }
+
+        Task<bool> RhRelacionCargoConRelacionDePersona(int codigoPreRelacionCargo);
+	}
 }
 
