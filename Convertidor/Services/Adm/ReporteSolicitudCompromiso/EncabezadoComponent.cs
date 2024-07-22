@@ -48,6 +48,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     columns.ConstantColumn(55);
                     columns.ConstantColumn(35);
 
+                    
                 });
 
             
@@ -65,7 +66,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         
                     }
                     col.Item().Border(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.DireccionProveedor.TrimStart()}{ModelEncabezado.TelefonoProveedor.Trim()}").Style(headerStyle);
-
+                    
                 });
 
                 

@@ -1,5 +1,6 @@
 ﻿using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
+using Microsoft.Data.SqlClient.DataClassification;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -54,10 +55,11 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
         void ComposeHeader(IContainer container)
         {
-
+            
         
             container.PaddingVertical(1).Column(column =>
             {
+                
 
                 
                 
@@ -92,10 +94,10 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(2).Column(async column =>
+            container.PaddingVertical(5).Column(async column =>
             {
 
-
+                column.Spacing(5);
 
                 column.Item().Row(row =>
                 {

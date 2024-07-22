@@ -183,7 +183,6 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 resultItem.DescripcionArticulo = item.Descripcion;
                                 resultItem.PrecioUnitario = item.PrecioUnitario;
                                 resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
-                                resultItem.TotalMontoImpuesto = resultItem.SubTotal * item.PorImpuesto / 100;
                                 resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
                                 resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto;
                                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
