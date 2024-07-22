@@ -29,7 +29,8 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public string Vivienda { get; set; } = string.Empty;
         public string CodigoArea { get; set; } = string.Empty;
         public string LineaComunicacion { get; set; } = string.Empty;
-        public string DireccionProveedor { get { return $"{Vialidad}-{Extra1}-{Vivienda}-{CodigoArea}-{LineaComunicacion}"; } }
+        public string DireccionProveedor { get { return $"{Vialidad}{Extra1}{Vivienda}"; } }
+        public string TelefonoProveedor { get { return $"{CodigoArea}{LineaComunicacion}"; } }
         public int CodigoDetallesolicitud { get; set; }
         public string Motivo { get; set; }
         public string Nota { get; set; }
@@ -43,18 +44,14 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
     public class CuerpoReporteDto
     {
         public decimal Cantidad { get; set; }
-        public int DescripcionUdmId { get; set; } 
+        public string DescripcionUdmId { get; set; } 
         public string DescripcionArticulo { get; set; } = string.Empty;
         public decimal PrecioUnitario { get; set; }
         public decimal TotalBolivares { get; set;} 
         public  decimal SubTotal { get; set; }
         public decimal TotalMontoImpuesto { get; set; } 
         public string Motivo { get; set; }
-<<<<<<< HEAD
         public decimal Total { get; set; }
-=======
-        public decimal Total { get { return TotalMontoImpuesto + TotalBolivares ; } }
->>>>>>> cf28ce8bc82b23e46f3824012e8825381557c9d6
         public string TotalEnletras { get; set; }
         public decimal PorImpuesto { get; set; }
         public decimal MontoImpuesto { get; set; }

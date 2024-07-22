@@ -6,6 +6,7 @@ using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Utility;
 using iText.Layout.Renderer;
+using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Asn1.Cmp;
 using QuestPDF.Fluent;
 using System.Collections.Generic;
@@ -81,6 +82,10 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
 
                 result.CodigoSolicitud = solicitud.CODIGO_SOLICITUD;
+                if(solicitud.ANO == null) 
+                {
+                    solicitud.ANO = solicitud.FECHA_SOLICITUD.Year;
+                }
                 result.Ano = (int)solicitud.ANO;
                 result.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
                 result.FechaSolicitud = solicitud.FECHA_SOLICITUD;
@@ -94,10 +99,16 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                
                 result.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
 
-                if (icp.DENOMINACION == "PRESUPUESTO" &&  icp.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto)
+                var presupuesto = await _pRE_INDICE_CAT_PRGRepository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+
+                foreach (var item in presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DENOMINACION == "SERVICIOS DE PLANIFICACIÓN Y PRESUPUESTO"))
                 {
-                    result.Denominacion = icp.DENOMINACION;
+                    result.Denominacion = item.DENOMINACION;
+                   
+                    presupuesto.Add(item);
+                    return result;
                 }
+               
                
                 result.CodigoProveedor = (int)solicitud.CODIGO_PROVEEDOR;
 
@@ -108,10 +119,16 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
 
                 var dirProveedor = await _admDirProveedorRepository.GetByCodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
+                if (dirProveedor.VIALIDAD == null && dirProveedor.VIVIENDA == null) 
+                {
+                    dirProveedor.VIALIDAD = "No Disponible";
+                    dirProveedor.VIALIDAD = "No Disponible";
+                }
                 if (dirProveedor.PRINCIPAL == 1)
                 {
                     result.Vialidad = dirProveedor.VIALIDAD;
                     result.Vivienda = dirProveedor.VIVIENDA;
+                    
 
                     var comProveedor = await _admComProveedorRepository.GetBycodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
                     result.CodigoArea = comProveedor.CODIGO_AREA;
@@ -122,9 +139,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     {
                         result.Extra1 = extra1.EXTRA1;
                     }
-                    else 
+                    else
                     {
-                        result.Extra1 = "";
+                        result.Extra1 = "No Disponible";
                     }
                 }
 
@@ -144,48 +161,47 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             try
             {
                 List<CuerpoReporteDto> result = new List<CuerpoReporteDto>();
-                var solicitudByPresupuesto = await _admSolicitudesService.GetByPresupuesto(filter);
                 var detalle = _admDetalleSolicitudService.GetByCodigoSolicitud(filter.CodigoSolicitud);
-                var detalleDatos = filter.CodigoSolicitud;
 
 
+                 
 
-                foreach (var itemSolicitud in solicitudByPresupuesto.Data)
-                {
-                    itemSolicitud.CodigoSolicitud = detalleDatos;
 
-                    foreach (var item in detalle.Data)
-                    {
-                        if (item.CodigoSolicitud == itemSolicitud.CodigoSolicitud)
-                        {
-                            CuerpoReporteDto resultItem = new CuerpoReporteDto();
-                            resultItem.Cantidad = item.Cantidad;
+                     if (detalle.Data.Count > 0 )
+                     {
+                         
 
-                            var descriptiva = await _admDescriptivaRepository.GetByCodigoDescriptiva(item.UdmId);
-                            resultItem.DescripcionUdmId = descriptiva.DESCRIPCION_ID;
-                            resultItem.DescripcionArticulo = item.Descripcion;
-                            resultItem.PrecioUnitario = item.PrecioUnitario;
-                            var cantidad = item.Cantidad;
-                            var precioUnitario = item.PrecioUnitario;
-                            resultItem.TotalBolivares = (cantidad * precioUnitario);
-                            var subTotalBolivares = detalle.Data.Sum(x => x.PrecioTotal);
-                            resultItem.SubTotal = subTotalBolivares;
-                            resultItem.TotalMontoImpuesto = subTotalBolivares * item.PorImpuesto / 100;
-                            resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
-                            resultItem.Motivo = itemSolicitud.Motivo;
-                            resultItem.TotalEnletras = (item.Total).ToString();
-                            result.Add(resultItem);
+                            foreach (var item in detalle.Data)
+                            {
 
-                            return result;
-                        }
+                                CuerpoReporteDto resultItem = new CuerpoReporteDto();
 
-                        return result;
-                    }
+                                resultItem.Cantidad = item.Cantidad;
+
+                                var descriptiva = await _admDescriptivaRepository.GetByCodigoDescriptiva(item.UdmId);
+                                resultItem.DescripcionUdmId = descriptiva.DESCRIPCION;
+                                resultItem.DescripcionArticulo = item.Descripcion;
+                                resultItem.PrecioUnitario = item.PrecioUnitario;
+                                resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
+                                resultItem.TotalMontoImpuesto = resultItem.SubTotal * item.PorImpuesto / 100;
+                                resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
+                                resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto;
+                                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
+                                resultItem.Motivo = solicitud.MOTIVO;
+                                resultItem.TotalEnletras = (item.Total).ToString();
+
+
+                                result.Add(resultItem);
+
+                            }
+                          
+                          return result;
+                     }
 
                     return result;
-                }
+                
 
-                return result;
+            
             }
             catch (Exception ex) 
             {

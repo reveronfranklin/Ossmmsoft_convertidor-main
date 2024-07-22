@@ -23,39 +23,68 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
         public void Compose(IDocumentContainer container)
         {
-            container
-                .Page(page =>
-                {
-                    page.Margin(10);
-                    page.Size(PageSizes.A3);
-                    page.Header().Element(ComposeHeader);
-                    page.Content().Element(ComposeContent);
-
-                    page.Footer().AlignCenter().Text(text =>
+            try
+            {
+                container
+                    .Page(page =>
                     {
+                        QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
 
-                        text.CurrentPageNumber();
-                        text.Span(" / ");
-                        text.TotalPages();
+                        page.Margin(10);
+                        page.Size(PageSizes.A3);
+                        page.Header().Element(ComposeHeader);
+                        page.Content().Element(ComposeContent);
+
+
+                        page.Footer().AlignCenter().Text(text =>
+                        {
+
+                            text.CurrentPageNumber();
+                            text.Span(" / ");
+                            text.TotalPages();
+                        });
                     });
-                });
+            }
+            catch (Exception ex) 
+            {
+              var message = ex.Message;   
+            
+            }
         }
 
         void ComposeHeader(IContainer container)
         {
 
-            //var descripcion = "";
-            //var firstResumen = Model.FirstOrDefault();
-
+        
             container.PaddingVertical(1).Column(column =>
             {
 
-                column.Spacing(2);
-                column.Item().PaddingLeft(50).Width(100).AlignLeft().ScaleToFit().Image(_patchLogo);
-                //column.Item().Element(ComposeTableFirma);
-                column.Item().AlignCenter().Text("SOLICITUD COMPROMISO").SemiBold().FontSize(8);
-                //column.Item().PaddingLeft(25).AlignLeft().Text("").ExtraBold().FontSize(8);
+                
+                
+             
+                column.Item().Row(row =>
+                {
+                    var encabezado = new EncabezadoComponent(Model.Encabezado);
+                    row.ConstantItem(200).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(50).AlignLeft().ScaleToFit().Image(_patchLogo);
+                    row.RelativeItem(4).BorderBottom(1).BorderTop(1).AlignCenter().Text("SOLICITUD COMPROMISO").SemiBold().FontSize(14);
+                    
+                    row.RelativeItem().Column(col =>
+                    {
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().Padding(5).Text("N° Solicitud").FontSize(8);
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().Padding(5).Text(encabezado.ModelEncabezado.NumeroSolicitud).FontSize(8);
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().Padding(5).Text("Fecha").FontSize(8);
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().Padding(5).Text(encabezado.ModelEncabezado.FechaSolicitud.ToShortDateString()).FontSize(8);
+                    });
+                
+                    
+                });
 
+
+
+               
+
+             
+                
 
 
             });
@@ -84,10 +113,12 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 
             });
-            //column.Item().Element(ComposeTableRecibo);
-
-
-
+            
         }
+
+
     }
+
+
 }
+
