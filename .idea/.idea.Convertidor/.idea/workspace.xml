@@ -10,11 +10,11 @@
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Rh/RH_RELACION_CARGOS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Rh/RH_RELACION_CARGOS.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhRelacionCargosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhRelacionCargosRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/RH/IRhHistoricoMovimientoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/RH/IRhHistoricoMovimientoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhHistoricoMovimientoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhHistoricoMovimientoRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhRelacionCargoDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhRelacionCargoDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhRelacionCargoUpdateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhRelacionCargoUpdateDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/IRhRelacionCargosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/IRhRelacionCargosService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,6 +41,17 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -207,7 +218,7 @@
       <workItem from="1720621257960" duration="32440000" />
       <workItem from="1720814034005" duration="13799000" />
       <workItem from="1720967975660" duration="18521000" />
-      <workItem from="1721138562381" duration="38597000" />
+      <workItem from="1721138562381" duration="60519000" />
     </task>
     <servers />
   </component>
@@ -797,29 +808,16 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
-          <line>61</line>
+          <line>64</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="3182" />
+              <option value="3459" />
             </startOffsets>
             <endOffsets>
-              <option value="3229" />
+              <option value="3506" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="152" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
-          <line>112</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPreRelacionCargo'">
-            <startOffsets>
-              <option value="4490" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4587" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="153" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmDescriptivasController.cs</url>
@@ -1329,108 +1327,199 @@
           <option name="timeStamp" value="236" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhRelacionCargosController.cs</url>
-          <line>49</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhRelacionCargosController.cs" containingFunctionPresentation="Method 'Update'">
-            <startOffsets>
-              <option value="1247" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1287" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="237" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
-          <line>106</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPreRelacionCargo'">
-            <startOffsets>
-              <option value="4334" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4425" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="238" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
-          <line>57</line>
+          <line>60</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="3043" />
+              <option value="3320" />
             </startOffsets>
             <endOffsets>
-              <option value="3134" />
+              <option value="3411" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="239" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
-          <line>605</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'MapRhRelacionCargo'">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs</url>
+          <line>68</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" containingFunctionPresentation="Method 'GetByCodigo'">
             <startOffsets>
-              <option value="25842" />
+              <option value="3707" />
             </startOffsets>
             <endOffsets>
-              <option value="25895" />
+              <option value="3794" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="242" />
+          <option name="timeStamp" value="247" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhRelacionCargosController.cs</url>
-          <line>41</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhRelacionCargosController.cs" containingFunctionPresentation="Method 'GetAllByRelacionCargo'">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs</url>
+          <line>224</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" containingFunctionPresentation="Method 'GetList'">
             <startOffsets>
-              <option value="964" />
+              <option value="9126" />
             </startOffsets>
             <endOffsets>
-              <option value="1045" />
+              <option value="9225" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="243" />
+          <option name="timeStamp" value="250" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_PRESUPUESTOSRepository.cs</url>
+          <line>31</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_PRESUPUESTOSRepository.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="980" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1016" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="253" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
+          <line>603</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="25249" />
+            </startOffsets>
+            <endOffsets>
+              <option value="25313" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="254" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhRelacionCargosRepository.cs</url>
-          <line>39</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhRelacionCargosRepository.cs" containingFunctionPresentation="Method 'GetAllByPreCodigoRelacionCargos'">
+          <line>87</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhRelacionCargosRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="1193" />
+              <option value="2342" />
             </startOffsets>
             <endOffsets>
-              <option value="1318" />
+              <option value="2401" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="244" />
+          <option name="timeStamp" value="255" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhRelacionCargosRepository.cs</url>
+          <line>104</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhRelacionCargosRepository.cs" containingFunctionPresentation="Method 'Add'">
+            <startOffsets>
+              <option value="2923" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2942" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="256" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
+          <line>167</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPreRelacionCargo'">
+            <startOffsets>
+              <option value="6295" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6392" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="257" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
+          <line>203</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPreRelacionCargo'">
+            <startOffsets>
+              <option value="7412" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7431" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="258" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
+          <line>187</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPreRelacionCargo'">
+            <startOffsets>
+              <option value="6927" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6949" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="259" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
+          <line>172</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPreRelacionCargo'">
+            <startOffsets>
+              <option value="6428" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6461" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="260" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
+          <line>696</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'MapRhRelacionCargo'">
+            <startOffsets>
+              <option value="28955" />
+            </startOffsets>
+            <endOffsets>
+              <option value="28993" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="261" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
+          <line>699</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'MapRhRelacionCargo'">
+            <startOffsets>
+              <option value="29032" />
+            </startOffsets>
+            <endOffsets>
+              <option value="29093" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="262" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs</url>
-          <line>93</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPresupuesto'">
+          <line>578</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="3459" />
+              <option value="21354" />
             </startOffsets>
             <endOffsets>
-              <option value="3558" />
+              <option value="21429" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="245" />
+          <option name="timeStamp" value="263" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs</url>
-          <line>119</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAllByPresupuesto'">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
+          <line>760</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="4613" />
+              <option value="31200" />
             </startOffsets>
             <endOffsets>
-              <option value="4632" />
+              <option value="31345" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="246" />
+          <option name="timeStamp" value="264" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

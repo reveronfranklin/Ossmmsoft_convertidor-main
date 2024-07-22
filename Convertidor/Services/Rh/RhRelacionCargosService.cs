@@ -21,7 +21,9 @@ namespace Convertidor.Services.Presupuesto
         private readonly IRhTipoNominaRepository _rhTipoNominaRepository;
         private readonly IRhConceptosRepository _rhConceptosRepository;
         private readonly IRhMovNominaRepository _rhMovNominaRepository;
- 
+        private readonly IRhHistoricoMovimientoRepository _rhHistoricoMovimientoRepository;
+
+
         private readonly IConfiguration _configuration;
         public RhRelacionCargosService(IRhRelacionCargosRepository repository,
                                         IPRE_RELACION_CARGOSRepository preRelacionCargosRepository,
@@ -34,7 +36,8 @@ namespace Convertidor.Services.Presupuesto
                                         IPRE_RELACION_CARGOSRepository preRelacionCargoRepository,
                                         IRhTipoNominaRepository rhTipoNominaRepository,
                                         IRhConceptosRepository rhConceptosRepository,
-                                        IRhMovNominaRepository rhMovNominaRepository)
+                                        IRhMovNominaRepository rhMovNominaRepository,
+                                        IRhHistoricoMovimientoRepository rhHistoricoMovimientoRepository)
 		{
             _repository = repository;
             _preCargoRepository = preCargoRepository;
@@ -48,7 +51,7 @@ namespace Convertidor.Services.Presupuesto
             _rhTipoNominaRepository = rhTipoNominaRepository;
             _rhConceptosRepository = rhConceptosRepository;
             _rhMovNominaRepository = rhMovNominaRepository;
-
+            _rhHistoricoMovimientoRepository = rhHistoricoMovimientoRepository;
         }
 
 
@@ -99,7 +102,59 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        
+        public async Task<bool> RhRelacionCargoConRelacionDePersona(int codigoPreRelacionCargo)
+        {
 
+            bool result;
+
+            var rhRelacionCargos = await _repository.GetAllByPreCodigoRelacionCargos(codigoPreRelacionCargo);
+            if (rhRelacionCargos.Count == 0)
+            {
+                result = false;
+            }
+            else
+            {
+                var findConPersonas = rhRelacionCargos.Where(x => x.CODIGO_PERSONA > 0).Count();
+                if (findConPersonas > 0)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                    
+                }
+            }
+            
+            
+            return result;
+
+        } 
+        
+        public async Task<bool> PermiteAgregarRelacionCargoPorCantidad(int codigoPreRelacionCargo)
+        {
+
+            bool result;
+
+            var rhRelacionCargos = await _repository.GetAllByPreCodigoRelacionCargos(codigoPreRelacionCargo);
+            var cantidadCargoEnRh = rhRelacionCargos.Count();
+            var preRelacionCargo = await _preRelacionCargoRepository.GetByCodigo(codigoPreRelacionCargo);
+            var nuevaCantidad = cantidadCargoEnRh + 1;
+            if (nuevaCantidad > preRelacionCargo.CANTIDAD)
+            {
+                result = false;
+            }
+            else
+            {
+                result = true;
+            }
+            return result;
+
+        } 
+        
+        
+        
 
         public async Task<ResultDto<List<RhRelacionCargoDto>>> GetAllByPreRelacionCargo(int codigoPreRelacionCargo)
         {
@@ -237,7 +292,6 @@ namespace Convertidor.Services.Presupuesto
                             //relacionCargoUpdate.CODIGO_TIPO_NOMINA = dto.TipoNomina;
                             relacionCargoUpdate.FECHA_INI = Convert.ToDateTime(dto.FechaIni, CultureInfo.InvariantCulture);
                             relacionCargoUpdate.FECHA_FIN = Convert.ToDateTime(DateTime.Now.ToString("u"), CultureInfo.InvariantCulture);
-                            relacionCargoUpdate.FECHA_INGRESO = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
                             relacionCargoUpdate.FECHA_UPD = DateTime.Now;
                             await _repository.Update(relacionCargoUpdate);
 
@@ -272,7 +326,7 @@ namespace Convertidor.Services.Presupuesto
                            // relacionCargoUpdate.CODIGO_TIPO_NOMINA = dto.TipoNomina;
                             relacionCargoUpdate.FECHA_INI = Convert.ToDateTime(dto.FechaIni, CultureInfo.InvariantCulture);
                             relacionCargoUpdate.FECHA_FIN = Convert.ToDateTime(DateTime.Now.ToString("u"), CultureInfo.InvariantCulture);
-                            relacionCargoUpdate.FECHA_INGRESO = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
+                  
                             relacionCargoUpdate.FECHA_UPD = DateTime.Now;
                             await _repository.Update(relacionCargoUpdate);
                             RhRelacionCargoUpdateDto rhRelacionCargoDto = new RhRelacionCargoUpdateDto();
@@ -328,7 +382,7 @@ namespace Convertidor.Services.Presupuesto
                     rhRelacionCargoDto.CodigoRelacionCargo = 0;
                     rhRelacionCargoDto.TipoNomina = relacionCargoUpdate.CODIGO_TIPO_NOMINA;
                     rhRelacionCargoDto.FechaIni = relacionCargoUpdate.FECHA_INI.Value.ToString("u");
-                    rhRelacionCargoDto.FechaIngreso = relacionCargoUpdate.FECHA_INGRESO.Value.ToString("u");
+                  
                     rhRelacionCargoDto.Sueldo = dto.Sueldo;
                     var resultCreated=await Create(rhRelacionCargoDto);
 
@@ -538,6 +592,33 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                var fechaIniIsValid = DateValidate.IsDate(dto.FechaIni);
+                if (fechaIniIsValid == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha de Inicial es Obligatoria";
+                    return result;
+                }
+                
+                var fechaIngresoIsValid = DateValidate.IsDate(dto.FechaIngreso);
+                if (fechaIngresoIsValid == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha de Ingreso es Obligatoria";
+                    return result;
+                }
+
+                var permiteAgregarRelacionCargoPorCantidad =
+                    await PermiteAgregarRelacionCargoPorCantidad(dto.CodigoRelacionCargoPre);
+                if (permiteAgregarRelacionCargoPorCantidad == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Ya existen todos los cargos Planificados en Presupuesto creados en Recursos Humanos";
+                    return result;
+                }
 
                 RH_RELACION_CARGOS entity = new RH_RELACION_CARGOS();
                 entity.CODIGO_RELACION_CARGO = await _repository.GetNextKey();
@@ -557,8 +638,8 @@ namespace Convertidor.Services.Presupuesto
                 entity.FECHA_INGRESO = Convert.ToDateTime(dto.FechaIngreso, CultureInfo.InvariantCulture);
                 if (entity.FECHA_INI.Value.Year <= 1900) entity.FECHA_INI = null;
                 if (entity.FECHA_FIN.Value.Year <= 1900) entity.FECHA_FIN = null;
-                entity.FECHA_UPD = DateTime.Now;
-                entity.FECHA_INS = DateTime.Now;
+                entity.FECHA_UPD = null;
+              
              
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
@@ -610,27 +691,32 @@ namespace Convertidor.Services.Presupuesto
             dto.CodigoCargo = item.CODIGO_CARGO;
             dto.DenominacionCargo = "";
             dto.Sueldo = item.SUELDO;
-            dto.FechaIni = (DateTime)item.FECHA_INI;
-            if (item.FECHA_FIN == null)
-            {
-                item.FECHA_FIN = DateTime.MinValue;
-            }
-            dto.FechaFin = (DateTime)item.FECHA_FIN;
-            dto.FechaIngreso = (DateTime)item.FECHA_INGRESO;
+            dto.FechaIni =item.FECHA_INI;
+         
+            dto.FechaFin = item.FECHA_FIN;
+            dto.FechaIngreso = item.FECHA_INGRESO;
             
             
             dto.FechaIniString = FechaObj.GetFechaString(item.FECHA_INI);
             dto.FechaFinString =  FechaObj.GetFechaString( item.FECHA_FIN);
             dto.FechaIngresoString =  FechaObj.GetFechaString( item.FECHA_INGRESO);
-            
-            FechaDto FechaIniObj = FechaObj.GetFechaDto((DateTime)item.FECHA_INI);
-           
-            dto.FechaIniObj = (FechaDto)FechaIniObj;
-            FechaDto FechaFinObj =  FechaObj.GetFechaDto((DateTime)item.FECHA_FIN);
-            dto.FechaFinObj = (FechaDto)FechaFinObj;
+            if (item.FECHA_INI != null)
+            {
+                FechaDto fechaIniObj = FechaObj.GetFechaDto((DateTime)item.FECHA_INI);
+                dto.FechaIniObj = (FechaDto)fechaIniObj;
+            }
 
-            FechaDto FechaIngresoObj =  FechaObj.GetFechaDto((DateTime)item.FECHA_INGRESO);
-            dto.FechaIngresoObj = (FechaDto)FechaIngresoObj;
+            if (item.FECHA_FIN != null)
+            {
+                FechaDto fechaFinObj =  FechaObj.GetFechaDto((DateTime)item.FECHA_FIN);
+                dto.FechaFinObj = (FechaDto)fechaFinObj;
+            }
+
+            if (item.FECHA_INGRESO != null)
+            {
+                FechaDto fechaIngresoObj =  FechaObj.GetFechaDto((DateTime)item.FECHA_INGRESO);
+                dto.FechaIngresoObj = (FechaDto)fechaIngresoObj;
+            }
             
             var cargo = await _preCargoRepository.GetByCodigo(dto.CodigoCargo);
             if (cargo != null)
@@ -672,6 +758,16 @@ namespace Convertidor.Services.Presupuesto
 
                //TODO VALIDAR CONTRA RH_RELACION_CARGO
 
+               var existeRelacioCargoEnHistorico =
+                   await _rhHistoricoMovimientoRepository.ExisteCodigoRelacionCargo(dto.CodigoRelacionCargo);
+               if (existeRelacioCargoEnHistorico == true)
+               {
+                   result.Data = dto;
+                   result.IsValid = false;
+                   result.Message = "Esta Relacion de  Cargo existe tiene movimiento en historico de Nomina";
+                   return result;
+               }
+               
                 var deleted = await _repository.Delete(dto.CodigoRelacionCargo);
 
                 if (deleted.Length > 0)

@@ -59,7 +59,30 @@ namespace Convertidor.Data.Repository.Rh
             }
         }
 
+        public async Task<bool> ExisteCodigoRelacionCargo(int rhCodigoRelacionCargo)
+        {
+            try
+            {
+                bool result;
+                var historico = await _context.RH_V_HISTORICO_MOVIMIENTOS.DefaultIfEmpty().Where(h => h.CODIGO_RELACION_CARGO == rhCodigoRelacionCargo).FirstOrDefaultAsync();
+                if (historico == null)
+                {
+                    result = false;
+                }
+                else
+                {
+                    result = true;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return false;
+            }
+        }
 
+        
 
         public async Task<List<RH_V_HISTORICO_MOVIMIENTOS>> GetByTipoNominaPeriodo(int tipoNomina,int codigoPeriodo)
         {

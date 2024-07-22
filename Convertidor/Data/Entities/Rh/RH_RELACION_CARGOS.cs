@@ -17,12 +17,12 @@
         public int USUARIO_INS { get; set; }
         public DateTime FECHA_INS { get; set; }
         public int USUARIO_UPD { get; set; }
-        public DateTime FECHA_UPD { get; set; }
+        public DateTime? FECHA_UPD { get; set; }
         public int CODIGO_EMPRESA { get; set; }
         public int CODIGO_PRESUPUESTO { get; set; }
         public int CODIGO_RELACION_CARGO_PRE { get; set; }
-        public DateTime FECHA_INI_VIGENCIA { get; set; }
-        public DateTime FECHA_FIN_VIGENCIA { get; set; }
+        public DateTime? FECHA_INI_VIGENCIA { get; set; }
+        public DateTime? FECHA_FIN_VIGENCIA { get; set; }
         public DateTime? FECHA_INGRESO { get; set; }
 
 
