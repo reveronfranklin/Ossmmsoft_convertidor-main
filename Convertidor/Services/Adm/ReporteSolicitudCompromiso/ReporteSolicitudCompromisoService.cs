@@ -105,8 +105,6 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 {
                     result.Denominacion = item.DENOMINACION;
                    
-                    presupuesto.Add(item);
-                    return result;
                 }
                
                
@@ -162,9 +160,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             {
                 List<CuerpoReporteDto> result = new List<CuerpoReporteDto>();
                 var detalle = _admDetalleSolicitudService.GetByCodigoSolicitud(filter.CodigoSolicitud);
+                //var porImpuesto = await _admDetalleSolicitudService.GetAll();
+                
 
-
-                 
 
 
                      if (detalle.Data.Count > 0 )
@@ -184,7 +182,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 resultItem.PrecioUnitario = item.PrecioUnitario;
                                 resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
                                 resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
-                                resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto;
+                                resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto; 
+                                //resultItem.PorImpuesto = porImpuesto.Data.Max(x => x.PorImpuesto);
                                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
                                 resultItem.Motivo = solicitud.MOTIVO;
                                 resultItem.TotalEnletras = (item.Total).ToString();

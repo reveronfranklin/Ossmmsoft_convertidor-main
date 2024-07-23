@@ -67,15 +67,16 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 column.Item().Row(row =>
                 {
                     var encabezado = new EncabezadoComponent(Model.Encabezado);
-                    row.ConstantItem(200).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(50).AlignLeft().ScaleToFit().Image(_patchLogo);
-                    row.RelativeItem(4).BorderBottom(1).BorderTop(1).AlignCenter().Text("SOLICITUD COMPROMISO").SemiBold().FontSize(14);
+                    row.ConstantItem(210).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(20).AlignLeft().ScaleToFit().Image(_patchLogo);
+                    row.RelativeItem(4).BorderBottom(1).BorderTop(1).AlignCenter().PaddingRight(10).Text("SOLICITUD COMPROMISO").SemiBold().FontSize(14);
                     
                     row.RelativeItem().Column(col =>
                     {
-                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().Padding(5).Text("N° Solicitud").FontSize(8);
-                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().Padding(5).Text(encabezado.ModelEncabezado.NumeroSolicitud).FontSize(8);
-                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().Padding(5).Text("Fecha").FontSize(8);
-                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().Padding(5).Text(encabezado.ModelEncabezado.FechaSolicitud.ToShortDateString()).FontSize(8);
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("N° Solicitud").FontSize(8).SemiBold();
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.NumeroSolicitud).FontSize(8);
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("Fecha").FontSize(8).SemiBold();
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.FechaSolicitud.ToShortDateString()).FontSize(8);
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(6).Text("").FontSize(8).SemiBold();
                     });
                 
                     
@@ -99,7 +100,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 column.Spacing(5);
 
-                column.Item().Row(row =>
+                column.Item().PaddingTop(5).Row(row =>
                 {
                     row.RelativeItem().Component(new EncabezadoComponent(Model.Encabezado));
 
@@ -107,7 +108,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
 
 
-                column.Item().Row(row =>
+                column.Item().PaddingTop(5).Row(row =>
                 {
                     row.RelativeItem().Component(new CuerpoComponent(Model.Cuerpo));
 

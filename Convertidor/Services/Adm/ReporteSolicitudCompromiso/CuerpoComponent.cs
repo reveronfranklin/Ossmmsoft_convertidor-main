@@ -78,11 +78,11 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text(item.Cantidad).FontSize(7);
-                        row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text(item.DescripcionUdmId).FontSize(7);
-                        row.RelativeItem(3).Border(1).AlignCenter().Element(CellStyle).Text(item.DescripcionArticulo).FontSize(7);
-                        row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text(item.PrecioUnitario).FontSize(7);
-                        row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text(item.TotalBolivares).FontSize(7);
+                        row.ConstantItem(50).BorderVertical(1).AlignCenter().Element(CellStyle).Text(item.Cantidad).FontSize(7);
+                        row.ConstantItem(50).BorderVertical(1).AlignCenter().Element(CellStyle).Text(item.DescripcionUdmId).FontSize(7);
+                        row.RelativeItem(3).BorderVertical(1).AlignCenter().Element(CellStyle).Text(item.DescripcionArticulo).FontSize(7);
+                        row.ConstantItem(100).BorderVertical(1).AlignCenter().Element(CellStyle).Text(item.PrecioUnitario).FontSize(7);
+                        row.ConstantItem(100).BorderVertical(1).AlignCenter().Element(CellStyle).Text(item.TotalBolivares).FontSize(7);
 
 
 
@@ -94,10 +94,16 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 table.Footer(footer =>
                 {
 
-                    footer.Cell().ColumnSpan(6).BorderVertical(1).PaddingTop(300);
-                    footer.Cell().ColumnSpan(6).BorderVertical(1).BorderBottom(1).PaddingBottom(300);
+                    footer.Cell().ColumnSpan(6).BorderVertical(1).Row(row =>
+                    {
+                        row.ConstantItem(50).BorderVertical(1).PaddingBottom(600);
+                        row.ConstantItem(50).BorderVertical(1).PaddingBottom(600); ;
+                        row.RelativeItem().BorderVertical(1).PaddingBottom(600); ;
+                        row.ConstantItem(100).BorderVertical(1).PaddingBottom(600); ;
+                        row.ConstantItem(100).BorderVertical(1).PaddingBottom(600); ;
+                    });
+
                     footer.Cell().ColumnSpan(4).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text("MONTO TOTAL EN LETRA").FontSize(8).SemiBold();
-                    
 
                     footer.Cell().Column(col =>
                     {

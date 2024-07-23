@@ -65,7 +65,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         ModelEncabezado.Vivienda ="No Disponible";
                         
                     }
-                    col.Item().Border(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.DireccionProveedor.TrimStart()}{ModelEncabezado.TelefonoProveedor.Trim()}").Style(headerStyle);
+                    col.Item().Border(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.NombreProveedor}    {ModelEncabezado.DireccionProveedor.TrimStart()}     {ModelEncabezado.TelefonoProveedor.Trim()}").Style(headerStyle);
                     
                 });
 

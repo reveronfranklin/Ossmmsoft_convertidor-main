@@ -29,7 +29,7 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public string Vivienda { get; set; } = string.Empty;
         public string CodigoArea { get; set; } = string.Empty;
         public string LineaComunicacion { get; set; } = string.Empty;
-        public string DireccionProveedor { get { return $"{Vialidad}{Extra1}{Vivienda}"; } }
+        public string DireccionProveedor { get { return $"{Vialidad}  {Extra1}  {Vivienda}"; } }
         public string TelefonoProveedor { get { return $"{CodigoArea}{LineaComunicacion}"; } }
         public int CodigoDetallesolicitud { get; set; }
         public string Motivo { get; set; }
