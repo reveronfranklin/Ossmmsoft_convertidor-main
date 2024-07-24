@@ -122,6 +122,10 @@ namespace Convertidor.Data.Repository.Adm
                     itemData.Nota = item.NOTA;
                     itemData.DescripcionStatus = Estatus.GetStatus(item.STATUS);
                     itemData.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+                    if (item.FIRMANTE == null) item.FIRMANTE = "";
+                    itemData.Firmante = item.FIRMANTE;
+                    if (item.MONTO_LETRAS == null) item.MONTO_LETRAS = "";
+                    itemData.MontoLetras = item.MONTO_LETRAS;
                     
                     resultData.Add(itemData);
                 }

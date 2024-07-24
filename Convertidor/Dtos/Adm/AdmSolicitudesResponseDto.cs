@@ -25,7 +25,8 @@
         
         public string SearchText { get { return $"{CodigoSolicitud}-{NumeroSolicitud}-{FechaSolicitudString}-{Motivo}-{Nota}-{DescripcionStatus}-{NombreProveedor}-{DenominacionSolicitante}-{DescripcionTipoSolicitud}"; } }
 
-        
+        public string? MontoLetras { get; set; } = string.Empty;
+        public string? Firmante { get; set; } = string.Empty;
         
     }
 }
