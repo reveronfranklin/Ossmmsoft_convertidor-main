@@ -83,13 +83,6 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 });
 
 
-
-               
-
-             
-                
-
-
             });
         }
 
