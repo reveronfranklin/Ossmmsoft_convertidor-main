@@ -108,9 +108,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     footer.Cell().Column(col =>
                     {
                         
-                        col.Item().BorderTop(1).Width(100).AlignRight().Text("SUBTOTAL").FontSize(8).SemiBold();
-                        col.Item().Width(100).AlignRight().Text("16%    " + "  IVA").FontSize(8).SemiBold();
-                        col.Item().Width(100).AlignRight().Text("TOTAL").FontSize(8).SemiBold();
+                        col.Item().BorderTop(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).SemiBold();
+                        col.Item().Width(100).AlignRight().PaddingRight(3).Text("16%    " + "  IVA").FontSize(8).SemiBold();
+                        col.Item().Width(100).AlignRight().PaddingRight(3).Text("TOTAL").FontSize(8).SemiBold();
                        
 
                     });
@@ -137,7 +137,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     footer.Cell().ColumnSpan(6).Column(col =>
                     {
                         col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("Motivo  :" ).FontSize(8).SemiBold();
-                        col.Item().BorderVertical(1).PaddingLeft(3).Text(motivo).FontSize(7).SemiBold();
+                        col.Item().BorderVertical(1).PaddingLeft(3).Text(motivo).FontSize(7);
                     });
 
                     footer.Cell().ColumnSpan(6).Row(row =>
