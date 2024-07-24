@@ -1,5 +1,6 @@
 ﻿using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
+using Microsoft.Data.SqlClient.DataClassification;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -23,39 +24,70 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
         public void Compose(IDocumentContainer container)
         {
-            container
-                .Page(page =>
-                {
-                    page.Margin(10);
-                    page.Size(PageSizes.A3);
-                    page.Header().Element(ComposeHeader);
-                    page.Content().Element(ComposeContent);
-
-                    page.Footer().AlignCenter().Text(text =>
+            try
+            {
+                container
+                    .Page(page =>
                     {
+                        QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
 
-                        text.CurrentPageNumber();
-                        text.Span(" / ");
-                        text.TotalPages();
+                        page.Margin(10);
+                        page.Size(PageSizes.A3);
+                        page.Header().Element(ComposeHeader);
+                        page.Content().Element(ComposeContent);
+
+
+                        page.Footer().AlignCenter().Text(text =>
+                        {
+
+                            text.CurrentPageNumber();
+                            text.Span(" / ");
+                            text.TotalPages();
+                        });
                     });
-                });
+            }
+            catch (Exception ex) 
+            {
+              var message = ex.Message;   
+            
+            }
         }
 
         void ComposeHeader(IContainer container)
         {
-
-            //var descripcion = "";
-            //var firstResumen = Model.FirstOrDefault();
-
+            
+        
             container.PaddingVertical(1).Column(column =>
             {
+                
 
-                column.Spacing(2);
-                column.Item().PaddingLeft(50).Width(100).AlignLeft().ScaleToFit().Image(_patchLogo);
-                //column.Item().Element(ComposeTableFirma);
-                column.Item().AlignCenter().Text("SOLICITUD COMPROMISO").SemiBold().FontSize(8);
-                //column.Item().PaddingLeft(25).AlignLeft().Text("").ExtraBold().FontSize(8);
+                
+                
+             
+                column.Item().Row(row =>
+                {
+                    var encabezado = new EncabezadoComponent(Model.Encabezado);
+                    row.ConstantItem(210).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(20).AlignLeft().ScaleToFit().Image(_patchLogo);
+                    row.RelativeItem(4).BorderBottom(1).BorderTop(1).AlignCenter().PaddingRight(10).Text("SOLICITUD COMPROMISO").SemiBold().FontSize(14);
+                    
+                    row.RelativeItem().Column(col =>
+                    {
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("N° Solicitud").FontSize(8).SemiBold();
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.NumeroSolicitud).FontSize(8);
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("Fecha").FontSize(8).SemiBold();
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.FechaSolicitud.ToShortDateString()).FontSize(8);
+                            col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(6).Text("").FontSize(8).SemiBold();
+                    });
+                
+                    
+                });
 
+
+
+               
+
+             
+                
 
 
             });
@@ -63,12 +95,12 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(2).Column(async column =>
+            container.PaddingVertical(5).Column(async column =>
             {
 
+                column.Spacing(5);
 
-
-                column.Item().Row(row =>
+                column.Item().PaddingTop(5).Row(row =>
                 {
                     row.RelativeItem().Component(new EncabezadoComponent(Model.Encabezado));
 
@@ -76,7 +108,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
 
 
-                column.Item().Row(row =>
+                column.Item().PaddingTop(5).Row(row =>
                 {
                     row.RelativeItem().Component(new CuerpoComponent(Model.Cuerpo));
 
@@ -84,10 +116,12 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 
             });
-            //column.Item().Element(ComposeTableRecibo);
-
-
-
+            
         }
+
+
     }
+
+
 }
+

@@ -6,6 +6,8 @@ using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Utility;
 using iText.Layout.Renderer;
+using NPOI.SS.Formula.Functions;
+using Org.BouncyCastle.Asn1.Cmp;
 using QuestPDF.Fluent;
 using System.Collections.Generic;
 
@@ -21,6 +23,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IAdmDireccionProveedorRepository _admDirProveedorRepository;
         private readonly IAdmComunicacionProveedorRepository _admComProveedorRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
+        private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
+        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IConfiguration _configuration;
 
@@ -32,6 +37,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                                  IAdmDireccionProveedorRepository admDirProveedorRepository,
                                                  IAdmComunicacionProveedorRepository admComProveedorRepository,
                                                  IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
+                                                 IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
+                                                 IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
+                                                 ISisUsuarioRepository sisUsuarioRepository,
                                                  IAdmDescriptivaRepository admDescriptivaRepository,
                                                  IConfiguration configuration)
         {
@@ -43,6 +51,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             _admDirProveedorRepository = admDirProveedorRepository;
             _admComProveedorRepository = admComProveedorRepository;
             _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
+            _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
+            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
+            _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _configuration = configuration;
         }
@@ -62,12 +73,19 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
         public async Task<EncabezadoReporteDto> GenerateDataEncabezadoDto(AdmSolicitudesFilterDto filter)
         {
+         
+            try
+            {
                 EncabezadoReporteDto result = new EncabezadoReporteDto();
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
 
-            
-            
+
+
                 result.CodigoSolicitud = solicitud.CODIGO_SOLICITUD;
+                if(solicitud.ANO == null) 
+                {
+                    solicitud.ANO = solicitud.FECHA_SOLICITUD.Year;
+                }
                 result.Ano = (int)solicitud.ANO;
                 result.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
                 result.FechaSolicitud = solicitud.FECHA_SOLICITUD;
@@ -78,33 +96,61 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 var icp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(solicitud.CODIGO_SOLICITANTE);
 
-                result.CodigoIcp = icp.CODIGO_ICP;
+               
                 result.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
-                result.Denominacion = icp.DENOMINACION;
+
+                var presupuesto = await _pRE_INDICE_CAT_PRGRepository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+
+                foreach (var item in presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DENOMINACION == "SERVICIOS DE PLANIFICACIÓN Y PRESUPUESTO"))
+                {
+                    result.Denominacion = item.DENOMINACION;
+                   
+                }
+               
+               
                 result.CodigoProveedor = (int)solicitud.CODIGO_PROVEEDOR;
 
                 var Proveedor = await _admProveedoresRepository.GetByCodigo((int)solicitud.CODIGO_PROVEEDOR);
                 result.NombreProveedor = Proveedor.NOMBRE_PROVEEDOR;
                 result.Rif = Proveedor.RIF;
 
-                
-           
+
+
                 var dirProveedor = await _admDirProveedorRepository.GetByCodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
+                if (dirProveedor.VIALIDAD == null && dirProveedor.VIVIENDA == null) 
+                {
+                    dirProveedor.VIALIDAD = "No Disponible";
+                    dirProveedor.VIALIDAD = "No Disponible";
+                }
                 if (dirProveedor.PRINCIPAL == 1)
                 {
                     result.Vialidad = dirProveedor.VIALIDAD;
                     result.Vivienda = dirProveedor.VIVIENDA;
+                    
 
                     var comProveedor = await _admComProveedorRepository.GetBycodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
                     result.CodigoArea = comProveedor.CODIGO_AREA;
                     result.LineaComunicacion = comProveedor.LINEA_COMUNICACION;
 
                     var extra1 = await _admDescriptivaRepository.GetByCodigoDescriptiva(dirProveedor.TIPO_VIVIENDA_ID);
-                    result.Extra1 = extra1.EXTRA1;
+                    if (extra1 != null)
+                    {
+                        result.Extra1 = extra1.EXTRA1;
+                    }
+                    else
+                    {
+                        result.Extra1 = "No Disponible";
+                    }
                 }
 
 
                 return result;
+            }
+            catch (Exception ex) 
+            {
+              var message = ex.Message;
+              return null;
+            }
            
         }
 
@@ -113,48 +159,47 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             try
             {
                 List<CuerpoReporteDto> result = new List<CuerpoReporteDto>();
-                var solicitudByPresupuesto = await _admSolicitudesService.GetByPresupuesto(filter);
                 var detalle = _admDetalleSolicitudService.GetByCodigoSolicitud(filter.CodigoSolicitud);
-                var detalleDatos = filter.CodigoSolicitud;
+                //var porImpuesto = await _admDetalleSolicitudService.GetAll();
+                
 
 
 
-                foreach (var itemSolicitud in solicitudByPresupuesto.Data)
-                {
-                    itemSolicitud.CodigoSolicitud = detalleDatos;
+                     if (detalle.Data.Count > 0 )
+                     {
+                         
 
-                    foreach (var item in detalle.Data)
-                    {
-                        if (item.CodigoSolicitud == itemSolicitud.CodigoSolicitud)
-                        {
-                            CuerpoReporteDto resultItem = new CuerpoReporteDto();
-                            resultItem.Cantidad = item.Cantidad;
+                            foreach (var item in detalle.Data)
+                            {
 
-                            var descriptiva = await _admDescriptivaRepository.GetByCodigoDescriptiva(item.UdmId);
-                            resultItem.DescripcionUdmId = descriptiva.DESCRIPCION_ID;
-                            resultItem.DescripcionArticulo = item.Descripcion;
-                            resultItem.PrecioUnitario = item.PrecioUnitario;
-                            var cantidad = item.Cantidad;
-                            var precioUnitario = item.PrecioUnitario;
-                            resultItem.TotalBolivares = (cantidad * precioUnitario);
-                            var subTotalBolivares = detalle.Data.Sum(x => x.PrecioTotal);
-                            resultItem.SubTotal = subTotalBolivares;
-                            resultItem.TotalMontoImpuesto = subTotalBolivares * item.PorImpuesto / 100;
-                            resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
-                            resultItem.Motivo = itemSolicitud.Motivo;
-                            resultItem.TotalEnletras = (item.Total).ToString();
-                            result.Add(resultItem);
+                                CuerpoReporteDto resultItem = new CuerpoReporteDto();
 
-                            return result;
-                        }
+                                resultItem.Cantidad = item.Cantidad;
 
-                        return result;
-                    }
+                                var descriptiva = await _admDescriptivaRepository.GetByCodigoDescriptiva(item.UdmId);
+                                resultItem.DescripcionUdmId = descriptiva.DESCRIPCION;
+                                resultItem.DescripcionArticulo = item.Descripcion;
+                                resultItem.PrecioUnitario = item.PrecioUnitario;
+                                resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
+                                resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
+                                resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto; 
+                                //resultItem.PorImpuesto = porImpuesto.Data.Max(x => x.PorImpuesto);
+                                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
+                                resultItem.Motivo = solicitud.MOTIVO;
+                                resultItem.TotalEnletras = (item.Total).ToString();
+
+
+                                result.Add(resultItem);
+
+                            }
+                          
+                          return result;
+                     }
 
                     return result;
-                }
+                
 
-                return result;
+            
             }
             catch (Exception ex) 
             {
