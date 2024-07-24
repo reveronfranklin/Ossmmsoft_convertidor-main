@@ -57,7 +57,9 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public decimal MontoImpuesto { get; set; }
         public  string Status { get; set; }
 
-         
+        public string MontoLetras { get; set; } = string.Empty;
+        public string Firmante { get; set; } = string.Empty;
+
     }
 
 
