@@ -45,11 +45,12 @@ namespace Convertidor.Data.Repository.Presupuesto
             if (filter.PageNumber == 0) filter.PageNumber = 1;
             if (filter.PageSize == 0) filter.PageSize = 100;
             if (filter.PageSize >100) filter.PageSize = 100;
+            if (filter.SearchText == null) filter.SearchText = "";
             var totalRegistros = 0;
             var totalPage = 0;
             List<PRE_V_SALDOS> preVSaldos;
 
-            if (filter.SearchText.Length > 0)
+            if ( filter.SearchText.Length > 0)
             {
                 preVSaldos = await _context.PRE_V_SALDOS.
                     Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Contains(filter.SearchText) || x.CODIGO_PUC_CONCAT.Contains(filter.SearchText) || x.DESCRIPCION_FINANCIADO.Contains(filter.SearchText) || x.DENOMINACION_ICP.Contains(filter.SearchText) || x.UNIDAD_EJECUTORA.Contains(filter.SearchText) || x.DENOMINACION_PUC.Contains(filter.SearchText)))
