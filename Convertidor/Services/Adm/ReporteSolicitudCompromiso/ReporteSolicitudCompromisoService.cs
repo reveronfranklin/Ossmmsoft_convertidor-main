@@ -101,12 +101,20 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 var presupuesto = await _pRE_INDICE_CAT_PRGRepository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
 
-                foreach (var item in presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DENOMINACION == "SERVICIOS DE PLANIFICACIÓN Y PRESUPUESTO"))
+                foreach (var item in presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DENOMINACION.Contains( "PRESUPUESTO")))
                 {
                     result.Denominacion = item.DENOMINACION;
                    
                 }
-               
+
+                result.MontoLetras = solicitud.MONTO_LETRAS;
+                
+                if(solicitud.FIRMANTE == null) 
+                {
+                    solicitud.FIRMANTE = "";
+                    result.Firmante = solicitud.FIRMANTE;
+
+                }
                
                 result.CodigoProveedor = (int)solicitud.CODIGO_PROVEEDOR;
 
@@ -141,6 +149,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     {
                         result.Extra1 = " ";
                     }
+
+                    result.Motivo = solicitud.MOTIVO; 
                 }
 
 
@@ -183,15 +193,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
                                 resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
                                 resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto; 
-                                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
-                                resultItem.MontoLetras = solicitud.MONTO_LETRAS;
-                                resultItem.Motivo = solicitud.MOTIVO;
                                 
-                                if(solicitud.FIRMANTE == null) 
-                                {
-                                  solicitud.FIRMANTE = "";
-                                  resultItem.Firmante = solicitud.FIRMANTE;
-                                }
                                 
                                 
                                 result.Add(resultItem);
