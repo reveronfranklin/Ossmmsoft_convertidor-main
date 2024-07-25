@@ -119,8 +119,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 var dirProveedor = await _admDirProveedorRepository.GetByCodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
                 if (dirProveedor.VIALIDAD == null && dirProveedor.VIVIENDA == null) 
                 {
-                    dirProveedor.VIALIDAD = "No Disponible";
-                    dirProveedor.VIALIDAD = "No Disponible";
+                    dirProveedor.VIALIDAD = " ";
+                    dirProveedor.VIALIDAD = " ";
                 }
                 if (dirProveedor.PRINCIPAL == 1)
                 {
@@ -139,7 +139,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     }
                     else
                     {
-                        result.Extra1 = "No Disponible";
+                        result.Extra1 = " ";
                     }
                 }
 
@@ -160,12 +160,12 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             {
                 List<CuerpoReporteDto> result = new List<CuerpoReporteDto>();
                 var detalle = _admDetalleSolicitudService.GetByCodigoSolicitud(filter.CodigoSolicitud);
-                //var porImpuesto = await _admDetalleSolicitudService.GetAll();
                 
 
 
 
-                     if (detalle.Data.Count > 0 )
+
+                if (detalle.Data.Count > 0 )
                      {
                          
 
@@ -183,12 +183,17 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
                                 resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
                                 resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto; 
-                                //resultItem.PorImpuesto = porImpuesto.Data.Max(x => x.PorImpuesto);
                                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
+                                resultItem.MontoLetras = solicitud.MONTO_LETRAS;
                                 resultItem.Motivo = solicitud.MOTIVO;
-                                resultItem.TotalEnletras = (item.Total).ToString();
-
-
+                                
+                                if(solicitud.FIRMANTE == null) 
+                                {
+                                  solicitud.FIRMANTE = "";
+                                  resultItem.Firmante = solicitud.FIRMANTE;
+                                }
+                                
+                                
                                 result.Add(resultItem);
 
                             }

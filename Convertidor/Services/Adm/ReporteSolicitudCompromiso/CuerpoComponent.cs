@@ -9,6 +9,7 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using System.Globalization;
 using System.Linq;
+using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 {
@@ -60,21 +61,26 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                       header.Cell().ColumnSpan(6).Row(row =>
                       {
-                        row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("Cantidad").FontSize(7).SemiBold();
-                        row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("Unidad de Medida").FontSize(7).SemiBold();
-                        row.RelativeItem(3).Border(1).AlignCenter().Element(CellStyle).Text("Descripcion").FontSize(7).SemiBold();
-                        row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("Precio \nUnitario").FontSize(7).SemiBold();
-                        row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("Total \nBolivares").FontSize(7).SemiBold();
+                        row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("CANTIDAD").FontSize(7).Bold();
+                        row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("UNIDAD DE MEDIDA").FontSize(7).Bold();
+                        row.RelativeItem(3).Border(1).AlignCenter().Element(CellStyle).Text("DESCRIPCION").FontSize(7).Bold();
+                        row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("   PRECIO\n"+ "UNITARIO").FontSize(7).Bold();
+                        row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("   TOTAL\n"+"BOLIVARES").FontSize(7).Bold();
+
 
                       });
 
                 });
 
                 var motivo = "";
-
+                var totalEnLetras = "";
+                var firmante = "";
                 foreach (var item in ModelCuerpo)
                 {
                     motivo = item.Motivo;
+                    totalEnLetras = item.MontoLetras;
+                    firmante = item.Firmante;
+
 
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
@@ -83,7 +89,6 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         row.RelativeItem(3).BorderVertical(1).AlignCenter().Element(CellStyle).Text(item.DescripcionArticulo).FontSize(7);
                         row.ConstantItem(100).BorderVertical(1).AlignCenter().Element(CellStyle).Text(item.PrecioUnitario).FontSize(7);
                         row.ConstantItem(100).BorderVertical(1).AlignCenter().Element(CellStyle).Text(item.TotalBolivares).FontSize(7);
-
 
 
                     });
@@ -103,14 +108,15 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         row.ConstantItem(100).BorderVertical(1).PaddingBottom(600); ;
                     });
 
-                    footer.Cell().ColumnSpan(4).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text("MONTO TOTAL EN LETRA").FontSize(8).SemiBold();
+                    footer.Cell().ColumnSpan(3).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text("MONTO TOTAL EN LETRA :").FontSize(8).Bold();
+                    footer.Cell().BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text($"{totalEnLetras}").FontSize(8).Bold();
 
                     footer.Cell().Column(col =>
                     {
                         
-                        col.Item().BorderTop(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).SemiBold();
-                        col.Item().Width(100).AlignRight().PaddingRight(3).Text("16%    " + "  IVA").FontSize(8).SemiBold();
-                        col.Item().Width(100).AlignRight().PaddingRight(3).Text("TOTAL").FontSize(8).SemiBold();
+                        col.Item().BorderTop(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).Bold();
+                        col.Item().Width(100).AlignRight().PaddingRight(3).Text("16%    " + "  IVA").FontSize(8).Bold();
+                        col.Item().Width(100).AlignRight().PaddingRight(3).Text("TOTAL").FontSize(8).Bold();
                        
 
                     });
@@ -136,16 +142,31 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                     footer.Cell().ColumnSpan(6).Column(col =>
                     {
-                        col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("Motivo  :" ).FontSize(8).SemiBold();
+                        col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :" ).FontSize(8).Bold();
                         col.Item().BorderVertical(1).PaddingLeft(3).Text(motivo).FontSize(7);
                     });
 
                     footer.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.RelativeItem().Border(1).AlignTop().Padding(15).PaddingLeft(8).Text($"Elaborado Por :       ").FontSize(8).SemiBold();
-                        row.RelativeItem().Border(1).AlignTop().Padding(15).PaddingLeft(8).Text($"Revisado Por :       ").FontSize(8).SemiBold();
-                        row.RelativeItem().Border(1).AlignTop().Padding(15).PaddingLeft(8).Text($"Confirmado Por :       ").FontSize(8).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).Text($"Elaborado Por :       ").FontSize(8).Bold();
+                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).Text($"Revisado Por :       ").FontSize(8).Bold();
+                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).Text($"Confirmado Por :       ").FontSize(8).Bold();
+
+                        
                     });
+
+                    footer.Cell().ColumnSpan(6).Row(row =>
+                    {
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{firmante}  \n FIRMA: ________________________________________________________________________").FontSize(8).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"         ").FontSize(8).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"DIRECCION DE ADMINISTRACION Y FINANZAS").FontSize(8).Bold();
+                  ;
+  
+
+
+                    });
+
+
                 });
 
              });

@@ -52,7 +52,6 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public decimal TotalMontoImpuesto { get; set; } 
         public string Motivo { get; set; }
         public decimal Total { get; set; }
-        public string TotalEnletras { get; set; }
         public decimal PorImpuesto { get; set; }
         public decimal MontoImpuesto { get; set; }
         public  string Status { get; set; }
