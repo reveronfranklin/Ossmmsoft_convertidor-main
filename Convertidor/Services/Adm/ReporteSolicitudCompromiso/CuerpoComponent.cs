@@ -16,10 +16,12 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
     public class CuerpoComponent : IComponent
     {
         public List<CuerpoReporteDto> ModelCuerpo;
+        public  EncabezadoReporteDto ModelEncabezado;
 
-        public CuerpoComponent(List<CuerpoReporteDto> modelCuerpo)
+        public CuerpoComponent(List<CuerpoReporteDto> modelCuerpo, EncabezadoReporteDto modelEncabezado)
         {
             ModelCuerpo = modelCuerpo;
+            ModelEncabezado = modelEncabezado;
         }
 
         public void Compose(IContainer container)
@@ -72,15 +74,10 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 });
 
-                var motivo = "";
-                var totalEnLetras = "";
-                var firmante = "";
+              
                 foreach (var item in ModelCuerpo)
                 {
-                    motivo = item.Motivo;
-                    totalEnLetras = item.MontoLetras;
-                    firmante = item.Firmante;
-
+                
 
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
@@ -108,15 +105,19 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         row.ConstantItem(100).BorderVertical(1).PaddingBottom(600); ;
                     });
 
-                    footer.Cell().ColumnSpan(3).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text("MONTO TOTAL EN LETRA :").FontSize(8).Bold();
-                    footer.Cell().BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text($"{totalEnLetras}").FontSize(8).Bold();
+                    footer.Cell().ColumnSpan(4).Column(col =>
+                    {
+                       col.Item().BorderLeft(1).BorderTop(1).PaddingLeft(5).PaddingBottom(6).AlignLeft().Text("MONTO TOTAL EN LETRA :").FontSize(8).Bold();
+                       col.Item().BorderLeft(1).PaddingLeft(5).PaddingBottom(6).AlignLeft().Text($"{ModelEncabezado.MontoLetras.ToUpper()}").FontSize(8);
+                    });
+                    
 
                     footer.Cell().Column(col =>
                     {
                         
-                        col.Item().BorderTop(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).Bold();
-                        col.Item().Width(100).AlignRight().PaddingRight(3).Text("16%    " + "  IVA").FontSize(8).Bold();
-                        col.Item().Width(100).AlignRight().PaddingRight(3).Text("TOTAL").FontSize(8).Bold();
+                        col.Item().BorderTop(1).BorderLeft(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).Bold();
+                        col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text("16%    " + "  IVA").FontSize(8).Bold();
+                        col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text("TOTAL").FontSize(8).Bold();
                        
 
                     });
@@ -143,7 +144,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     footer.Cell().ColumnSpan(6).Column(col =>
                     {
                         col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :" ).FontSize(8).Bold();
-                        col.Item().BorderVertical(1).PaddingLeft(3).Text(motivo).FontSize(7);
+                        col.Item().BorderVertical(1).PaddingLeft(3).Text(ModelEncabezado.Motivo).FontSize(7);
                     });
 
                     footer.Cell().ColumnSpan(6).Row(row =>
@@ -157,10 +158,10 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                     footer.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{firmante}  \n FIRMA: ________________________________________________________________________").FontSize(8).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{ModelEncabezado.Firmante}  \n FIRMA: ________________________________________________________________________").FontSize(8).SemiBold();
                         row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"         ").FontSize(8).SemiBold();
                         row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"DIRECCION DE ADMINISTRACION Y FINANZAS").FontSize(8).Bold();
-                  ;
+                     ;
   
 
 

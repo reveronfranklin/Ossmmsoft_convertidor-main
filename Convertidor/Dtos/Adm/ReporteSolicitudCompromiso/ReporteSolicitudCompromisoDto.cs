@@ -38,7 +38,8 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public string DescripcionStatus { get; set; }
         public string DescripcionTipoSolicitud { get; set; }
         public string SearchText { get { return $"{CodigoSolicitud}-{NumeroSolicitud}-{FechaSolicitudString}-{Motivo}-{Nota}-{DescripcionStatus}-{NombreProveedor}-{DenominacionSolicitante}-{DescripcionTipoSolicitud}"; } }
-
+        public string MontoLetras { get; set; } = string.Empty;
+        public string Firmante { get; set; } = string.Empty;
     }
 
     public class CuerpoReporteDto
@@ -56,8 +57,7 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public decimal MontoImpuesto { get; set; }
         public  string Status { get; set; }
 
-        public string MontoLetras { get; set; } = string.Empty;
-        public string Firmante { get; set; } = string.Empty;
+     
 
     }
 

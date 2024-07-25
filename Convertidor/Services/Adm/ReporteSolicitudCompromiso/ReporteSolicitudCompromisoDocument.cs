@@ -103,7 +103,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 column.Item().PaddingTop(5).Row(row =>
                 {
-                    row.RelativeItem().Component(new CuerpoComponent(Model.Cuerpo));
+                    row.RelativeItem().Component(new CuerpoComponent(Model.Cuerpo,Model.Encabezado));
 
                 });
 
