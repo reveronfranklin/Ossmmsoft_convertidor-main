@@ -170,6 +170,7 @@ namespace Convertidor.Data.Repository.Adm
                     AdmProductosResponse itemData = new AdmProductosResponse();
                     itemData.Codigo = item.CODIGO_PRODUCTO;
                     itemData.Descripcion = item.DESCRIPCION;
+                    if (item.DESCRIPCION_REAL == null) item.DESCRIPCION_REAL = "";
                     itemData.DescripcionReal = item.DESCRIPCION_REAL;
                     itemData.CodigoConcat =
                         $"{item.CODIGO_PRODUCTO1}-{item.CODIGO_PRODUCTO1}-{item.CODIGO_PRODUCTO2}-{item.CODIGO_PRODUCTO3}-{item.CODIGO_PRODUCTO4}";
