@@ -21,6 +21,8 @@ namespace Convertidor.Data.Repository.Adm
         {
             try
             {
+                await UpdateMontoEnLetras(codigoSolicitud);
+                
                 var result = await _context.ADM_SOLICITUDES.DefaultIfEmpty()
                     .Where(e => e.CODIGO_SOLICITUD == codigoSolicitud).FirstOrDefaultAsync();
 
@@ -34,7 +36,27 @@ namespace Convertidor.Data.Repository.Adm
 
         }
       
+       
+        public async Task<string> UpdateMontoEnLetras(int codigoSolicitud)
+        {
 
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM_SOLICITUDES  SET MONTO_LETRAS= UPPER(SIS.SIS_MONTOESCRITO((SELECT sum(CANTIDAD*PRECIO_UNITARIO) FROM adm.ADM_DETALLE_SOLICITUD WHERE ADM_DETALLE_SOLICITUD.CODIGO_SOLICITUD =ADM_SOLICITUDES.CODIGO_SOLICITUD),2)) WHERE ADM_SOLICITUDES.CODIGO_SOLICITUD ={codigoSolicitud}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<string> UpdateSearchText(int codigoPresupuesto)
         {
 
