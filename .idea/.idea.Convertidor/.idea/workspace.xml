@@ -7,10 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmProductosResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmProductosResponse.cs" afterDir="false" />
-    </list>
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,6 +32,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -187,7 +186,7 @@
       <workItem from="1721138562381" duration="61120000" />
       <workItem from="1721752036424" duration="1761000" />
       <workItem from="1721825587632" duration="5079000" />
-      <workItem from="1721843838977" duration="15283000" />
+      <workItem from="1721843838977" duration="16168000" />
     </task>
     <servers />
   </component>
@@ -962,10 +961,10 @@
           <line>125</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetAllPaginate'">
             <startOffsets>
-              <option value="4275" />
+              <option value="4309" />
             </startOffsets>
             <endOffsets>
-              <option value="4300" />
+              <option value="4334" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="205" />
@@ -975,10 +974,10 @@
           <line>78</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetProductosCache'">
             <startOffsets>
-              <option value="2593" />
+              <option value="2627" />
             </startOffsets>
             <endOffsets>
-              <option value="2624" />
+              <option value="2658" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="206" />
@@ -988,10 +987,10 @@
           <line>112</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="3748" />
+              <option value="3782" />
             </startOffsets>
             <endOffsets>
-              <option value="3784" />
+              <option value="3818" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="207" />
@@ -1001,10 +1000,10 @@
           <line>103</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="3466" />
+              <option value="3500" />
             </startOffsets>
             <endOffsets>
-              <option value="3638" />
+              <option value="3672" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="208" />
@@ -1521,10 +1520,10 @@
           <line>48</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetByCodigo'">
             <startOffsets>
-              <option value="1511" />
+              <option value="1545" />
             </startOffsets>
             <endOffsets>
-              <option value="1640" />
+              <option value="1674" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="268" />

@@ -169,6 +169,10 @@ namespace Convertidor.Data.Repository.Adm
                 {
                     AdmProductosResponse itemData = new AdmProductosResponse();
                     itemData.Codigo = item.CODIGO_PRODUCTO;
+                    itemData.CodigoProducto1 = item.CODIGO_PRODUCTO1;
+                    itemData.CodigoProducto2 = item.CODIGO_PRODUCTO2;
+                    itemData.CodigoProducto3 = item.CODIGO_PRODUCTO3;
+                    itemData.CodigoProducto4 = item.CODIGO_PRODUCTO4;
                     itemData.Descripcion = item.DESCRIPCION;
                     if (item.DESCRIPCION_REAL == null) item.DESCRIPCION_REAL = "";
                     itemData.DescripcionReal = item.DESCRIPCION_REAL;
