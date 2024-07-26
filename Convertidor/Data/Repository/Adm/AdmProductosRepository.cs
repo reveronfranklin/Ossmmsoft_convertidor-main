@@ -26,7 +26,7 @@ namespace Convertidor.Data.Repository.Adm
 
             try
             {
-                FormattableString xqueryDiario = $"UPDATE ADM.ADM_PRODUCTOS SET ADM.ADM_PRODUCTOS.SEARCH_TEXT = TRIM(CODIGO_PRODUCTO) || CODIGO || '-' || TRIM(CODIGO_PRODUCTO1) || '-' || TRIM(CODIGO_PRODUCTO2) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(DESCRIPCION) WHERE SEARCH_TEXT IS NULL";
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_PRODUCTOS SET ADM.ADM_PRODUCTOS.SEARCH_TEXT = TRIM(CODIGO_PRODUCTO) || CODIGO || '-' || TRIM(CODIGO_PRODUCTO1) || '-' || TRIM(CODIGO_PRODUCTO2) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(DESCRIPCION)  || '-' || TRIM(DESCRIPCION_REAL) WHERE SEARCH_TEXT IS NULL";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 return "";
@@ -170,6 +170,7 @@ namespace Convertidor.Data.Repository.Adm
                     AdmProductosResponse itemData = new AdmProductosResponse();
                     itemData.Codigo = item.CODIGO_PRODUCTO;
                     itemData.Descripcion = item.DESCRIPCION;
+                    itemData.DescripcionReal = item.DESCRIPCION_REAL;
                     itemData.CodigoConcat =
                         $"{item.CODIGO_PRODUCTO1}-{item.CODIGO_PRODUCTO1}-{item.CODIGO_PRODUCTO2}-{item.CODIGO_PRODUCTO3}-{item.CODIGO_PRODUCTO4}";
                     resultData.Add(itemData);

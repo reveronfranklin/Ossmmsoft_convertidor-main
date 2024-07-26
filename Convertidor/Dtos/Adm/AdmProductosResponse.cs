@@ -6,4 +6,5 @@ public class AdmProductosResponse
     
     public string Descripcion { get; set; }=string.Empty;
     public string CodigoConcat { get; set; }=string.Empty;
+    public string DescripcionReal { get; set; }=string.Empty;
 }
