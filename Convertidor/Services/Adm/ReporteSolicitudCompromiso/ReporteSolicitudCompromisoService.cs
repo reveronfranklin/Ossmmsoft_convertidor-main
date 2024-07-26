@@ -6,6 +6,7 @@ using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Utility;
 using iText.Layout.Renderer;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Asn1.Cmp;
 using QuestPDF.Fluent;
@@ -27,6 +28,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IAdmDescriptivasService _admDescriptivasService;
         private readonly IConfiguration _configuration;
 
         public ReporteSolicitudCompromisoService(IAdmSolicitudesService admSolicitudesService,
@@ -41,6 +43,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                                  IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                                  ISisUsuarioRepository sisUsuarioRepository,
                                                  IAdmDescriptivaRepository admDescriptivaRepository,
+                                                 IAdmDescriptivasService admDescriptivasService,
                                                  IConfiguration configuration)
         {
             _admSolicitudesService = admSolicitudesService;
@@ -55,6 +58,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _admDescriptivasService = admDescriptivasService;
             _configuration = configuration;
         }
 
@@ -108,7 +112,12 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 }
 
                 result.MontoLetras = solicitud.MONTO_LETRAS;
+                if(solicitud.MONTO_LETRAS == null) 
+                {
+                    solicitud.MONTO_LETRAS = "";
+                    result.MontoLetras = solicitud.MONTO_LETRAS;
                 
+                }
                 if(solicitud.FIRMANTE == null) 
                 {
                     solicitud.FIRMANTE = "";
@@ -177,8 +186,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 if (detalle.Data.Count > 0 )
                      {
-                         
-
+                  
                             foreach (var item in detalle.Data)
                             {
 
@@ -186,14 +194,14 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                                 resultItem.Cantidad = item.Cantidad;
 
-                                var descriptiva = await _admDescriptivaRepository.GetByCodigoDescriptiva(item.UdmId);
+                                var descriptiva = await _admDescriptivaRepository.GetByCodigo(item.UdmId);
+
                                 resultItem.DescripcionUdmId = descriptiva.DESCRIPCION;
                                 resultItem.DescripcionArticulo = item.Descripcion;
                                 resultItem.PrecioUnitario = item.PrecioUnitario;
                                 resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
                                 resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
                                 resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto; 
-                                
                                 
                                 
                                 result.Add(resultItem);

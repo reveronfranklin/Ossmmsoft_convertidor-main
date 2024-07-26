@@ -61,8 +61,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     col.Item().Border(1).AlignLeft().PaddingLeft(4).Text("PROVEEDOR: ").Style(headerStyle);
                     if(ModelEncabezado.Vialidad == string.Empty && ModelEncabezado.Vivienda == string.Empty) 
                     {
-                        ModelEncabezado.Vialidad ="No Disponible";
-                        ModelEncabezado.Vivienda ="No Disponible";
+                        ModelEncabezado.Vialidad =" ";
+                        ModelEncabezado.Vivienda =" ";
                         
                     }
                     col.Item().Border(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.NombreProveedor}    {ModelEncabezado.DireccionProveedor.TrimStart()}     {ModelEncabezado.TelefonoProveedor.Trim()}").Style(headerStyle);
