@@ -9,7 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmSolicitudesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmSolicitudesRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -186,7 +185,7 @@
       <workItem from="1721138562381" duration="61120000" />
       <workItem from="1721752036424" duration="1761000" />
       <workItem from="1721825587632" duration="5079000" />
-      <workItem from="1721843838977" duration="8324000" />
+      <workItem from="1721843838977" duration="11956000" />
     </task>
     <servers />
   </component>
@@ -437,10 +436,10 @@
           <line>71</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'UpdateSearchText'">
             <startOffsets>
-              <option value="2687" />
+              <option value="2694" />
             </startOffsets>
             <endOffsets>
-              <option value="2705" />
+              <option value="2712" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="95" />
