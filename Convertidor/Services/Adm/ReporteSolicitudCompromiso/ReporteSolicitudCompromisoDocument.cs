@@ -68,7 +68,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 {
                     var encabezado = new EncabezadoComponent(Model.Encabezado);
                     row.ConstantItem(210).BorderLeft(1).BorderBottom(1).BorderTop(1).PaddingLeft(20).AlignLeft().ScaleToFit().Image(_patchLogo);
-                    row.RelativeItem(4).BorderBottom(1).BorderTop(1).AlignCenter().PaddingRight(10).Text("SOLICITUD COMPROMISO").SemiBold().FontSize(14);
+                    row.RelativeItem(4).BorderBottom(1).BorderTop(1).AlignCenter().PaddingRight(10).Text("SOLICITUD DE COMPROMISO").SemiBold().FontSize(14);
                     
                     row.RelativeItem().Column(col =>
                     {

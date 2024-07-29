@@ -61,11 +61,13 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 {
                     table.ExtendLastCellsToTableBottom();
 
-                      header.Cell().ColumnSpan(6).Row(row =>
+                    header.Cell().ColumnSpan(6).Background(Colors.Grey.Lighten2).Border(1).AlignCenter().Text("DETALLES DE SOLICITUD").FontSize(12).Bold();
+                    header.Cell().ColumnSpan(6).Row(row =>
                       {
+
                         row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("CANTIDAD").FontSize(7).Bold();
-                        row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("UNIDAD\n" +   "DE MEDIDA").FontSize(7).Bold();
-                        row.RelativeItem(3).Border(1).AlignCenter().Element(CellStyle).Text("DESCRIPCION").FontSize(7).Bold();
+                        row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("   UNIDAD\n"+ "DE MEDIDA").FontSize(7).Bold();
+                        row.RelativeItem(3).Border(1).AlignCenter().Element(CellStyle).PaddingLeft(50).Text("DESCRIPCION").FontSize(7).Bold();
                         row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("   PRECIO\n"+ "UNITARIO").FontSize(7).Bold();
                           row.ConstantItem(100).Column(col =>
                           {
@@ -82,15 +84,17 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
               
                 foreach (var item in ModelCuerpo)
                 {
-                
 
+                    
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingTop(5).Element(CellStyle).Text(item.Cantidad).FontSize(7);
-                        row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingTop(5).Element(CellStyle).Text(item.DescripcionUdmId).FontSize(7);
-                        row.RelativeItem(3).BorderVertical(1).AlignCenter().PaddingTop(5).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(7);
-                        row.ConstantItem(100).BorderVertical(1).AlignCenter().PaddingTop(5).Element(CellStyle).Text(item.PrecioUnitario).FontSize(7);
-                        row.ConstantItem(100).BorderVertical(1).AlignCenter().PaddingTop(5).Element(CellStyle).Text(item.TotalBolivares).FontSize(7);
+                        row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(item.Cantidad).FontSize(7);
+                        row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(item.DescripcionUdmId).FontSize(7);
+                        row.RelativeItem(3).BorderVertical(1).AlignLeft().PaddingLeft(10).PaddingTop(5).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(7);
+                        var precio = item.PrecioUnitario.ToString("N", formato);
+                        row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(precio).FontSize(7);
+                        var totalBolivares = item.TotalBolivares.ToString("N", formato);
+                        row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(totalBolivares).FontSize(7);
 
 
                     });
@@ -103,11 +107,17 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                     footer.Cell().ColumnSpan(6).BorderVertical(1).Row(row =>
                     {
-                        row.ConstantItem(50).BorderVertical(1).PaddingBottom(600);
-                        row.ConstantItem(50).BorderVertical(1).PaddingBottom(600); ;
-                        row.RelativeItem().BorderVertical(1).PaddingBottom(600); ;
-                        row.ConstantItem(100).BorderVertical(1).PaddingBottom(600); ;
-                        row.ConstantItem(100).BorderVertical(1).PaddingBottom(600); ;
+                        //row.ConstantItem(50).BorderVertical(1).PaddingBottom(600);
+                        //row.ConstantItem(50).BorderVertical(1).PaddingBottom(600); 
+                        //row.RelativeItem().BorderVertical(1).PaddingBottom(600); 
+                        //row.ConstantItem(100).BorderVertical(1).PaddingBottom(600); 
+                        //row.ConstantItem(100).BorderVertical(1).PaddingBottom(600);
+
+                        row.ConstantItem(50).BorderVertical(1);
+                        row.ConstantItem(50).BorderVertical(1);
+                        row.RelativeItem().BorderVertical(1);
+                        row.ConstantItem(100).BorderVertical(1);
+                        row.ConstantItem(100).BorderVertical(1);
                     });
 
                     footer.Cell().ColumnSpan(4).Column(col =>
@@ -127,10 +137,11 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                     });
 
-                    
+
+                     
                      var bolivares = ModelCuerpo.Sum(x => x.TotalBolivares);
-                     var montoImpuesto = bolivares * Convert.ToDecimal(0.16);
-                     var total = bolivares + montoImpuesto;
+                     var montoImpuesto = bolivares * (decimal)0.16;
+                     var total =  bolivares + montoImpuesto;
 
                     var totalBolivares = bolivares.ToString("N",formato);
                     var totalImpuesto =  montoImpuesto.ToString("N", formato);
@@ -139,9 +150,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     footer.Cell().Column(col =>
                     {
                         
-                        col.Item().Width(100).Border(1).AlignCenter().Element(CellStyle).Padding(1).Text(bolivares).FontSize(7);
-                        col.Item().Width(100).Border(1).AlignCenter().Element(CellStyle).Padding(1).Text(montoImpuesto).FontSize(7);
-                        col.Item().Width(100).Border(1).AlignCenter().Element(CellStyle).BorderBottom(1).Padding(1).Text(totales).FontSize(7);
+                        col.Item().Width(100).Border(1).AlignRight().Element(CellStyle).Padding(1).PaddingRight(3).Text(totalBolivares).FontSize(7);
+                        col.Item().Width(100).Border(1).AlignRight().Element(CellStyle).Padding(1).PaddingRight(3).Text(totalImpuesto).FontSize(7);
+                        col.Item().Width(100).Border(1).AlignRight().Element(CellStyle).BorderBottom(1).Padding(1).PaddingRight(3).Text(totales).FontSize(7);
 
 
                     });
