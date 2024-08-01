@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.Bm;
+﻿using System.Net;
+using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
 using ImageMagick;
@@ -255,6 +256,10 @@ namespace Convertidor.Services.Bm
         public async Task<ResultDto<BmBienesFotoDeleteDto>> Delete(BmBienesFotoDeleteDto dto)
         {
 
+            
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.BmFiles;
+            
             ResultDto<BmBienesFotoDeleteDto> result = new ResultDto<BmBienesFotoDeleteDto>(null);
             try
             {
@@ -268,7 +273,10 @@ namespace Convertidor.Services.Bm
                     return result;
                 }
 
-
+                if (File.Exists($"{destino}{codigoBien.NUMERO_PLACA}/{codigoBien.FOTO}"))
+                {
+                    File.Delete($"{destino}{codigoBien.NUMERO_PLACA}/{codigoBien.FOTO}");
+                }
                 var deleted = await _repository.Delete(dto.CodigoBienFoto);
 
                 if (deleted.Length > 0)

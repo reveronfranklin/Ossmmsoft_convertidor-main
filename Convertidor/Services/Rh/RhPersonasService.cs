@@ -831,9 +831,12 @@ namespace Convertidor.Data.Repository.Rh
                 persona.IDENTIFICACION_ID = dto.IdentificacionId;
                 persona.NUMERO_IDENTIFICACION = dto.NumeroIdentificacion;
            
-                
-                var fechaNacimiento = Convert.ToDateTime(dto.FechaNacimiento, CultureInfo.InvariantCulture);
-                persona.FECHA_NACIMIENTO = fechaNacimiento;
+              
+                string formato = "dd/MM/yyyy"; // Ajusta este formato a tus necesidades
+             
+             
+                DateTime fechaConvertida = DateTime.ParseExact( dto.FechaNacimiento, formato, CultureInfo.InvariantCulture);
+                persona.FECHA_NACIMIENTO = fechaConvertida;
                 persona.FECHA_UPD = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 persona.CODIGO_EMPRESA = conectado.Empresa;

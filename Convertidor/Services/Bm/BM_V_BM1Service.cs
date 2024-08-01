@@ -98,7 +98,9 @@ namespace Convertidor.Services.Bm
 
                             };
 
-                if (lista != null && lista.Count() > 0)
+
+                listaResult = lista.ToList();
+                /*if (lista != null && lista.Count() > 0)
                 {
                     foreach (var item in lista)
                     {
@@ -115,7 +117,7 @@ namespace Convertidor.Services.Bm
                 listaResult = listaResult.Where(x => x.FechaMovimientoFiltro>=desde && x.FechaMovimientoFiltro <= hasta).OrderBy(x => x.CodigoGrupo)
                     .ThenBy(x => x.CodigoNivel1)
                     .ThenBy(x => x.CodigoNivel2)
-                    .ThenBy(x => x.ConsecutivoPlaca).ToList();
+                    .ThenBy(x => x.ConsecutivoPlaca).ToList();*/
                 
                 var listaExcel = from s in listaResult
                                  group s by new
