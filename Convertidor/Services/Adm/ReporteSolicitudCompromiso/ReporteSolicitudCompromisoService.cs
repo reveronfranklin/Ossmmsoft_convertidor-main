@@ -19,46 +19,31 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IAdmSolicitudesService _admSolicitudesService;
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
         private readonly IAdmDetalleSolicitudService _admDetalleSolicitudService;
-        private readonly IPreCompromisosService _preCompromisosService;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly IAdmDireccionProveedorRepository _admDirProveedorRepository;
         private readonly IAdmComunicacionProveedorRepository _admComProveedorRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
-        private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
-        private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
-        private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
-        private readonly IAdmDescriptivasService _admDescriptivasService;
         private readonly IConfiguration _configuration;
 
         public ReporteSolicitudCompromisoService(IAdmSolicitudesService admSolicitudesService,
                                                  IAdmSolicitudesRepository admSolicitudesRepository,
                                                  IAdmDetalleSolicitudService admDetalleSolicitudService,
-                                                 IPreCompromisosService preCompromisosService,
                                                  IAdmProveedoresRepository admProveedoresRepository,
                                                  IAdmDireccionProveedorRepository admDirProveedorRepository,
                                                  IAdmComunicacionProveedorRepository admComProveedorRepository,
                                                  IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
-                                                 IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
-                                                 IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
-                                                 ISisUsuarioRepository sisUsuarioRepository,
                                                  IAdmDescriptivaRepository admDescriptivaRepository,
-                                                 IAdmDescriptivasService admDescriptivasService,
                                                  IConfiguration configuration)
         {
             _admSolicitudesService = admSolicitudesService;
             _admSolicitudesRepository = admSolicitudesRepository;
             _admDetalleSolicitudService = admDetalleSolicitudService;
-            _preCompromisosService = preCompromisosService;
             _admProveedoresRepository = admProveedoresRepository;
             _admDirProveedorRepository = admDirProveedorRepository;
             _admComProveedorRepository = admComProveedorRepository;
             _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
-            _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
-            _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
-            _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
-            _admDescriptivasService = admDescriptivasService;
             _configuration = configuration;
         }
 
@@ -200,8 +185,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 resultItem.DescripcionArticulo = item.Descripcion;
                                 resultItem.PrecioUnitario = item.PrecioUnitario;
                                 resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
-                                resultItem.MontoImpuesto = (decimal)item.MontoImpuesto;
-                                resultItem.Total = resultItem.TotalBolivares * resultItem.TotalMontoImpuesto; 
+                 
                                 
                                 
                                 result.Add(resultItem);
