@@ -32,6 +32,7 @@ using Convertidor.Services.Rh.Report.Example;
 using Convertidor.Services.Rh.Report.HistoricoNomina;
 using Microsoft.Extensions.DependencyInjection;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
+using Convertidor.Services.Adm.ReporteSolicitudCompromiso;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -180,7 +181,7 @@ builder.Services.AddTransient<ISisDetSourceRepository,SisDetSourceRepository>();
 builder.Services.AddTransient<ISisSourceRepository,SisSourceRepository>();
 builder.Services.AddTransient<ISisSerieDocumentosRepository,SisSerieDocumentosRepository>();
 builder.Services.AddTransient<ISisDescriptivaRepository,SisDescriptivaRepository>();
-
+builder.Services.AddTransient<IOssUsuarioRolRepository,OssUsuarioRolRepository>();
 
 
 
@@ -429,6 +430,7 @@ builder.Services.AddTransient<IAdmChequesService, AdmChequesService>();
 builder.Services.AddTransient<IAdmProductosService, AdmProductosService>();
 builder.Services.AddTransient<IAdmSolCompromisoService, AdmSolCompromisoService>();
 builder.Services.AddTransient<IAdmDetalleSolCompromisoService, AdmDetalleSolCompromisoService>();
+builder.Services.AddTransient<IReporteSolicitudCompromisoService, ReporteSolicitudCompromisoService>();
 
 
 

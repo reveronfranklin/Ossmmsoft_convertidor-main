@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Convertidor.Data.Entities.Sis;
 using Convertidor.Dtos.Sis;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Sis
 {
@@ -8,6 +9,7 @@ namespace Convertidor.Services.Sis
     {
 		
         private readonly ISisUsuarioRepository _repository;
+        private readonly IOssUsuarioRolRepository _ossUsuarioRolRepository;
         private readonly IConfiguration _configuration;
 
 
@@ -15,10 +17,12 @@ namespace Convertidor.Services.Sis
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public SisUsuarioServices(ISisUsuarioRepository repository,
+                                    IOssUsuarioRolRepository ossUsuarioRolRepository,
                                     IHttpContextAccessor httpContextAccessor,
                                     IConfiguration configuration)
         {
             _repository = repository;
+            _ossUsuarioRolRepository = ossUsuarioRolRepository;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
         }
@@ -68,7 +72,47 @@ namespace Convertidor.Services.Sis
             return jwt;
         }
 
+        
+        
         public async  Task<List<RoleMenuDto>> GetMenu(string usuario)
+        {
+
+            List<RoleMenuDto> result = new List<RoleMenuDto> ();
+
+
+            var roles = await _ossUsuarioRolRepository.GetByUsuario(usuario);
+            
+      
+
+            if (roles!=null)
+            {
+                foreach (var item in roles)
+                {
+                    RoleMenuDto resultItem = new RoleMenuDto();
+                    resultItem.Role = item.DESCRIPCION;
+
+                    var jsonValid = JsonValidator.IsValidJson(item.JSON_MENU);
+                    if (jsonValid)
+                    {
+                        resultItem.Menu = item.JSON_MENU;
+                    }
+                    else
+                    {
+                        resultItem.Menu = "[{ \"title\": \"Nomina\",\n    \"icon\": \"mdi:file-document-outline\",}]";
+                    }
+                   
+                    result.Add(resultItem);
+
+                }
+                
+            }
+
+            return result;
+
+        }
+
+        
+        public async  Task<List<RoleMenuDto>> GetMenuOld(string usuario)
         {
 
             List<RoleMenuDto> result = new List<RoleMenuDto> ();

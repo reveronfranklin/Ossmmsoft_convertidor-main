@@ -14,6 +14,8 @@ namespace Convertidor.Data
 
         }
         public DbSet<SIS_USUARIOS> SIS_USUARIOS { get; set; }
+        public DbSet<OSS_USUARIO_ROL> OSS_USUARIO_ROL { get; set; }
+        
         public DbSet<SIS_V_SISTEMA_USUARIO_PROGRAMA> SIS_V_SISTEMA_USUARIO_PROGRAMA { get; set; }
     
         public DbSet<SIS_UBICACION_NACIONAL> SIS_UBICACION_NACIONAL { get; set; }
@@ -54,6 +56,16 @@ namespace Convertidor.Data
 
                     });
                     builder.ToTable("SIS_USUARIOS");
+                })
+                .Entity<OSS_USUARIO_ROL>(builder =>
+                {
+                    //builder.HasNoKey();
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_USUARIO_ROL,
+
+                    });
+                    builder.ToTable("OSS_USUARIO_ROL");
                 })
                 .Entity<OSS_CONFIG>(builder =>
                 {

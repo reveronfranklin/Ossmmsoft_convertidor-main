@@ -12,6 +12,7 @@
         public decimal Sueldo { get; set; }
         public string FechaIni { get; set; }
         public string FechaFin { get; set; }
+        public string FechaIngreso { get; set; }
         public int CodigoRelacionCargoPre { get; set; }
     }
 }

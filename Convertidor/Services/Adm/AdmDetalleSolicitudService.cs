@@ -390,7 +390,7 @@ namespace Convertidor.Services.Adm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "TSeleccione un Producto Valido";
+                    result.Message = "Seleccione un Producto Valido";
                     return result;
                 }
               
