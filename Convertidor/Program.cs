@@ -181,7 +181,7 @@ builder.Services.AddTransient<ISisDetSourceRepository,SisDetSourceRepository>();
 builder.Services.AddTransient<ISisSourceRepository,SisSourceRepository>();
 builder.Services.AddTransient<ISisSerieDocumentosRepository,SisSerieDocumentosRepository>();
 builder.Services.AddTransient<ISisDescriptivaRepository,SisDescriptivaRepository>();
-
+builder.Services.AddTransient<IOssUsuarioRolRepository,OssUsuarioRolRepository>();
 
 
 

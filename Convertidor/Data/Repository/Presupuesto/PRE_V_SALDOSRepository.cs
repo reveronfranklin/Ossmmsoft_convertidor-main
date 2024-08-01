@@ -53,13 +53,13 @@ namespace Convertidor.Data.Repository.Presupuesto
             if ( filter.SearchText.Length > 0)
             {
                 preVSaldos = await _context.PRE_V_SALDOS.
-                    Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Contains(filter.SearchText) || x.CODIGO_PUC_CONCAT.Contains(filter.SearchText) || x.DESCRIPCION_FINANCIADO.Contains(filter.SearchText) || x.DENOMINACION_ICP.Contains(filter.SearchText) || x.UNIDAD_EJECUTORA.Contains(filter.SearchText) || x.DENOMINACION_PUC.Contains(filter.SearchText)))
+                    Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.CODIGO_PUC_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DESCRIPCION_FINANCIADO.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_ICP.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.UNIDAD_EJECUTORA.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_PUC.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())))
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize)
                     .ToListAsync();
 
                 totalRegistros = _context.PRE_V_SALDOS
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Contains(filter.SearchText) || x.CODIGO_PUC_CONCAT.Contains(filter.SearchText) || x.DESCRIPCION_FINANCIADO.Contains(filter.SearchText) || x.DENOMINACION_ICP.Contains(filter.SearchText) || x.UNIDAD_EJECUTORA.Contains(filter.SearchText) || x.DENOMINACION_PUC.Contains(filter.SearchText)))
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.CODIGO_PUC_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DESCRIPCION_FINANCIADO.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_ICP.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.UNIDAD_EJECUTORA.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_PUC.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())))
                     .Count();
 
                 totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;

@@ -45,6 +45,12 @@ namespace Convertidor.Data.Repository.Adm
                 FormattableString xqueryDiario = $"UPDATE ADM_SOLICITUDES  SET MONTO_LETRAS= UPPER(SIS.SIS_MONTOESCRITO((SELECT sum(CANTIDAD*PRECIO_UNITARIO) FROM adm.ADM_DETALLE_SOLICITUD WHERE ADM_DETALLE_SOLICITUD.CODIGO_SOLICITUD =ADM_SOLICITUDES.CODIGO_SOLICITUD),2)) WHERE ADM_SOLICITUDES.CODIGO_SOLICITUD ={codigoSolicitud}";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+
+                xqueryDiario=
+                    $"UPDATE ADM_DETALLE_SOLICITUD SET DESCRIPCION = REPLACE(DESCRIPCION , CHR(10), '')   WHERE ADM_DETALLE_SOLICITUD.CODIGO_SOLICITUD ={codigoSolicitud}";
+                resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
                 return "";
             }
             catch (Exception ex)
