@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Dtos.Adm;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Adm
@@ -109,7 +110,30 @@ namespace Convertidor.Data.Repository.Adm
                 return true;
             }
         }
-        
+        public async Task<ResultDto<ADM_PUC_SOLICITUD>>GetByIcpPucFInanciado(AdmPucSolicitudUpdateDto dto) 
+        {
+
+            ResultDto<ADM_PUC_SOLICITUD> result = new ResultDto<ADM_PUC_SOLICITUD>(null);
+            try 
+            {
+                var admPucSolicitud = await _context.ADM_PUC_SOLICITUD
+                    .Where(x=>x.CODIGO_DETALLE_SOLICITUD==dto.CodigoDetalleSolicitud && x.CODIGO_PUC==dto.CodigoPuc && x.CODIGO_ICP==dto.CodigoIcp && x.FINANCIADO_ID==dto.FinanciadoId)
+                    .FirstOrDefaultAsync();
+
+                result.Data = admPucSolicitud;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
         
         public async Task<ResultDto<ADM_PUC_SOLICITUD>>Add(ADM_PUC_SOLICITUD entity) 
         {

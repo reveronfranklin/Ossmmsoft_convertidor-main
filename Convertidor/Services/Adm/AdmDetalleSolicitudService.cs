@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -114,18 +115,20 @@ namespace Convertidor.Services.Adm
 
         }
 
-        public ResultDto<List<AdmDetalleSolicitudResponseDto>> GetByCodigoSolicitud(int codigoSolicitud)
+        public async  Task<ResultDto<List<AdmDetalleSolicitudResponseDto>>> GetByCodigoSolicitud(int codigoSolicitud)
         {
 
             ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
             try
             {
-                var detalleSolicitud = _repository.GetByCodigoSolicitud(codigoSolicitud);
+                var detalleSolicitud = await  _repository.GetByCodigoSolicitud(codigoSolicitud);
           
                 if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
                 {
-                   
 
+                    var total = await GetTotalMonto(detalleSolicitud);
+                    result.Total1 = total;
+                    result.Total2 = total;
                     result.Data = detalleSolicitud;
                     result.IsValid = true;
                     result.Message = "";
@@ -151,6 +154,41 @@ namespace Convertidor.Services.Adm
             }
 
         }
+       
+        public async Task<decimal> GetTotalMonto(List<AdmDetalleSolicitudResponseDto> detalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+             
+                if (detalleSolicitud != null && detalleSolicitud.Count > 0)
+                {
+                  
+                    foreach (var item in detalleSolicitud)
+                    {
+                        result = result + (decimal)item.TotalMasImpuesto;
+                    }
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+        
         public async Task<ResultDto<AdmDetalleSolicitudResponseDto>> Update(AdmDetalleSolicitudUpdateDto dto)
         {
             ResultDto<AdmDetalleSolicitudResponseDto> result = new ResultDto<AdmDetalleSolicitudResponseDto>(null);
@@ -164,6 +202,8 @@ namespace Convertidor.Services.Adm
                     result.Message = TraduccionErrores.AdmDetalleSolicitudNoexiste; 
                     return result;
                 }
+               
+              
                 if (dto.CodigoSolicitud<0)
                 {
                     result.Data = null;
@@ -177,6 +217,14 @@ namespace Convertidor.Services.Adm
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo solicitud invalido";
+                    return result;
+                }
+                var status = Estatus.GetStatusObj(solicitud.STATUS);
+                if (status.Modificable == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
                     return result;
                 }
 
@@ -326,6 +374,15 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo solicitud invalido";
                     return result;
                 }
+                var status = Estatus.GetStatusObj(solicitud.STATUS);
+                if (status.Modificable == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
+                    return result;
+                }
+
 
                 var solicitudProducto =
                     await _repository.GetByCodigoSolicitudProducto(dto.CodigoSolicitud, dto.CodigoProducto);

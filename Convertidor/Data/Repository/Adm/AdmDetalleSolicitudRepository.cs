@@ -60,7 +60,52 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
-        public List<AdmDetalleSolicitudResponseDto> GetByCodigoSolicitud(int codigoSolicitud) 
+        public async Task<List<AdmDetalleSolicitudResponseDto>> GetByCodigoSolicitud(int codigoSolicitud) 
+        {
+            try
+            {
+
+
+                List<AdmDetalleSolicitudResponseDto> result = new List<AdmDetalleSolicitudResponseDto>();
+
+                var detalle = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud).ToListAsync();
+                foreach (var item in detalle)
+                {
+                    AdmDetalleSolicitudResponseDto resultItem = new AdmDetalleSolicitudResponseDto();
+                    resultItem.CodigoDetalleSolicitud = item.CODIGO_DETALLE_SOLICITUD;
+                    resultItem.CodigoSolicitud = item.CODIGO_SOLICITUD;
+                    resultItem.Cantidad = item.CANTIDAD;
+                    resultItem.CantidadComprada = item.CANTIDAD_COMPRADA;
+                    resultItem.CantidadAnulada = item.CANTIDAD_ANULADA;
+                    resultItem.UdmId = item.UDM_ID;
+                    var descriptivaUnidad = await _context.ADM_DESCRIPTIVAS.DefaultIfEmpty()
+                        .Where(x => x.DESCRIPCION_ID == item.UDM_ID).FirstOrDefaultAsync();
+                    resultItem.DescripcionUnidad = descriptivaUnidad.DESCRIPCION;
+                    resultItem.Descripcion = item.DESCRIPCION;
+                    resultItem.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+                    resultItem.PrecioUnitario = item.PRECIO_UNITARIO;
+                    resultItem.PorDescuento = item.POR_DESCUENTO;
+                    resultItem.MontoDescuento = item.MONTO_DESCUENTO == null ? 0 : item.MONTO_DESCUENTO;
+                    resultItem.TipoImpuestoId = item.TIPO_IMPUESTO_ID;
+                    resultItem.PorImpuesto = item.POR_IMPUESTO;
+                    resultItem.MontoImpuesto = item.MONTO_IMPUESTO == null ? 0 : item.MONTO_IMPUESTO;
+                    resultItem.Total = item.TOTAL == null ? 0 : item.TOTAL;
+                    resultItem.TotalMasImpuesto = item.TOTAL_MAS_IMPUESTO == null ? 0 : item.TOTAL_MAS_IMPUESTO;
+                    resultItem.CodigoProducto = item.CODIGO_PRODUCTO == null ? 0 : item.CODIGO_PRODUCTO;
+                    result.Add(resultItem);
+                }
+                
+                return result;
+
+
+            }
+            catch (Exception ex) 
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+   public List<AdmDetalleSolicitudResponseDto> GetByCodigoSolicitudBk(int codigoSolicitud) 
         {
             try
             {
@@ -80,10 +125,12 @@ namespace Convertidor.Data.Repository.Adm
                         CodigoPresupuesto=sol.CODIGO_PRESUPUESTO,
                         PrecioUnitario=sol.PRECIO_UNITARIO,
                         PorDescuento=sol.POR_DESCUENTO,
-                        MontoDescuento=sol.MONTO_DESCUENTO ==null ? 0: sol.MONTO_DESCUENTO,
+                        MontoDescuento=sol.MONTO_DESCUENTO == null ? 0: sol.MONTO_DESCUENTO,
                         TipoImpuestoId=sol.TIPO_IMPUESTO_ID,
                         PorImpuesto=sol.POR_IMPUESTO,
-                        MontoImpuesto=sol.MONTO_IMPUESTO ==null? 0 : sol.MONTO_IMPUESTO  ,
+                        MontoImpuesto=sol.MONTO_IMPUESTO == null? 0 : sol.MONTO_IMPUESTO  ,
+                        Total= sol.TOTAL == null? 0 : sol.TOTAL  ,
+                        TotalMasImpuesto= sol.TOTAL_MAS_IMPUESTO ==null ? 0 : sol.TOTAL_MAS_IMPUESTO  ,
                         CodigoProducto = sol.CODIGO_PRODUCTO ==null ? 0 : sol.CODIGO_PRODUCTO
                    
                         
@@ -100,7 +147,6 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
-
         public async Task<ResultDto<ADM_DETALLE_SOLICITUD>>Add(ADM_DETALLE_SOLICITUD entity) 
         {
 
