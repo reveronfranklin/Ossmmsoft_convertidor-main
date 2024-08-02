@@ -121,12 +121,12 @@ namespace Convertidor.Services.Adm
             ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
             try
             {
-                var detalleSolicitud =  _repository.GetByCodigoSolicitud(codigoSolicitud);
+                var detalleSolicitud = await  _repository.GetByCodigoSolicitud(codigoSolicitud);
           
                 if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
                 {
 
-                    var total = await GetTotalMonto(codigoSolicitud);
+                    var total = await GetTotalMonto(detalleSolicitud);
                     result.Total1 = total;
                     result.Total2 = total;
                     result.Data = detalleSolicitud;
@@ -155,20 +155,19 @@ namespace Convertidor.Services.Adm
 
         }
        
-        public async Task<decimal> GetTotalMonto(int codigoSolicitud)
+        public async Task<decimal> GetTotalMonto(List<AdmDetalleSolicitudResponseDto> detalleSolicitud)
         {
 
             decimal result = 0;
             try
             {
-                var detalleSolicitud = _repository.GetByCodigoSolicitud(codigoSolicitud);
-
+             
                 if (detalleSolicitud != null && detalleSolicitud.Count > 0)
                 {
                   
                     foreach (var item in detalleSolicitud)
                     {
-                        result = result + item.TotalMasImpuesto;
+                        result = result + (decimal)item.TotalMasImpuesto;
                     }
                    
                     

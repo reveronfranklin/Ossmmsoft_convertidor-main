@@ -26,8 +26,8 @@
         public int CODIGO_PRESUPUESTO { get; set; }
         public decimal? CODIGO_PRODUCTO { get; set; }
         
-        public decimal TOTAL { get; set; }
-        public decimal TOTAL_MAS_IMPUESTO { get; set; }
+        public decimal? TOTAL { get; set; }
+        public decimal? TOTAL_MAS_IMPUESTO { get; set; }
     }
 }
 
