@@ -84,6 +84,8 @@ namespace Convertidor.Data.Repository.Adm
                         TipoImpuestoId=sol.TIPO_IMPUESTO_ID,
                         PorImpuesto=sol.POR_IMPUESTO,
                         MontoImpuesto=sol.MONTO_IMPUESTO ==null? 0 : sol.MONTO_IMPUESTO  ,
+                        Total= sol.TOTAL ==null? 0 : sol.TOTAL  ,
+                        TotalMasImpuesto= sol.TOTAL_MAS_IMPUESTO ==null? 0 : sol.TOTAL_MAS_IMPUESTO  ,
                         CodigoProducto = sol.CODIGO_PRODUCTO ==null ? 0 : sol.CODIGO_PRODUCTO
                    
                         

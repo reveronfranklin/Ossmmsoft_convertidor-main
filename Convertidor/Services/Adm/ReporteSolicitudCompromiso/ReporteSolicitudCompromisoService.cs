@@ -163,7 +163,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             try
             {
                 List<CuerpoReporteDto> result = new List<CuerpoReporteDto>();
-                var detalle = _admDetalleSolicitudService.GetByCodigoSolicitud(filter.CodigoSolicitud);
+                var detalle =await   _admDetalleSolicitudService.GetByCodigoSolicitud(filter.CodigoSolicitud);
                 
 
 

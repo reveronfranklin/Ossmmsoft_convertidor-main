@@ -3,6 +3,7 @@ using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Cnt;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -14,13 +15,17 @@ namespace Convertidor.Services.Adm
         private readonly IPrePlanUnicoCuentasService _prePlanUnicoCuentasService;
         private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
         private readonly IPreDescriptivasService _preDescriptivasService;
+        private readonly IAdmDetalleSolicitudRepository _admDetalleSolicitudRepository;
+        private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
 
         public AdmPucSolicitudService(IAdmPucSolicitudRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IPrePlanUnicoCuentasService prePlanUnicoCuentasService,
                                      IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
-                                     IPreDescriptivasService preDescriptivasService)
+                                     IPreDescriptivasService preDescriptivasService,
+                                     IAdmDetalleSolicitudRepository admDetalleSolicitudRepository,
+                                     IAdmSolicitudesRepository admSolicitudesRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -28,6 +33,8 @@ namespace Convertidor.Services.Adm
             _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
             _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
             _preDescriptivasService = preDescriptivasService;
+            _admDetalleSolicitudRepository = admDetalleSolicitudRepository;
+            _admSolicitudesRepository = admSolicitudesRepository;
         }
 
         public async Task<AdmPucSolicitudResponseDto> MapPucSolicitudDto(ADM_PUC_SOLICITUD dtos)
@@ -99,7 +106,9 @@ namespace Convertidor.Services.Adm
                 if ( pucSolicitud !=null && pucSolicitud.Count() > 0)
                 {
                     var listDto = await MapListPucSolicitudDto(pucSolicitud);
-
+                    var total = await GetTotalMonto(filter.CodigoDetalleSolicitud);
+                    result.Total1 = total;
+                    result.Total2 = total;
                     result.Data = listDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -191,6 +200,81 @@ namespace Convertidor.Services.Adm
 
         }
 
+        public async Task<bool> SuperaElMontoDetalle(int codigoDetalleSolicitud,decimal nuevoMonto)
+        {
+
+            bool result = false;
+            try
+            {
+                var codigoDetallesolicitud = await _admDetalleSolicitudRepository.GetCodigoDetalleSolicitud(codigoDetalleSolicitud);
+                var pucSolicitud = await _repository.GetByDetalleSolicitud(codigoDetalleSolicitud);
+                if (pucSolicitud != null && pucSolicitud.Count > 0)
+                {
+                    var total = nuevoMonto;
+                    foreach (var item in pucSolicitud)
+                    {
+                        total = total + item.MONTO;
+                    }
+
+                    if (total > codigoDetallesolicitud.TOTAL_MAS_IMPUESTO)
+                    {
+                        result = true;
+                    }
+                   
+                    
+                }
+                else
+                {
+                    result = false;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+        
+        public async Task<decimal> GetTotalMonto(int codigoDetalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+                var codigoDetallesolicitud = await _admDetalleSolicitudRepository.GetCodigoDetalleSolicitud(codigoDetalleSolicitud);
+                var pucSolicitud = await _repository.GetByDetalleSolicitud(codigoDetalleSolicitud);
+                if (pucSolicitud != null && pucSolicitud.Count > 0)
+                {
+                  
+                    foreach (var item in pucSolicitud)
+                    {
+                        result = result + item.MONTO;
+                    }
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+        
         public async Task<ResultDto<AdmPucSolicitudResponseDto>> Update(AdmPucSolicitudUpdateDto dto)
         {
             ResultDto<AdmPucSolicitudResponseDto> result = new ResultDto<AdmPucSolicitudResponseDto>(null);
@@ -204,6 +288,24 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Puc Solicitud no existe";
                     return result;
                 }
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
+                if (solicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existe Esta Solicitud";
+                    return result;
+                }
+
+                var status = Estatus.GetStatusObj(solicitud.STATUS);
+                if (status.Modificable == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
+                    return result;
+                }
+                
                 if (dto.CodigoDetalleSolicitud<0)
                 {
                     result.Data = null;
@@ -286,6 +388,14 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
+                if (dto.Monto <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto no puede ser cero ni negativo";
+                    return result;
+                }
 
                 codigoPucsolicitud.CODIGO_PUC_SOLICITUD = dto.CodigoPucSolicitud;
                 codigoPucsolicitud.CODIGO_DETALLE_SOLICITUD = dto.CodigoDetalleSolicitud;
@@ -327,6 +437,24 @@ namespace Convertidor.Services.Adm
             ResultDto<AdmPucSolicitudResponseDto> result = new ResultDto<AdmPucSolicitudResponseDto>(null);
             try
             {
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
+                if (solicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existe Esta Solicitud";
+                    return result;
+                }
+
+                var status = Estatus.GetStatusObj(solicitud.STATUS);
+                if (status.Modificable == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
+                    return result;
+                }
+                
                 var codigoPucsolicitud = await _repository.GetCodigoPucSolicitud(dto.CodigoPucSolicitud);
                 if (codigoPucsolicitud != null)
                 {
@@ -335,6 +463,37 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Puc Solicitud ya existe";
                     return result;
                 }
+                
+                var codigoDetallesolicitud = await _admDetalleSolicitudRepository.GetCodigoDetalleSolicitud(dto.CodigoDetalleSolicitud);
+                if (codigoDetallesolicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = TraduccionErrores.AdmDetalleSolicitudNoexiste; 
+                    return result;
+                }
+                
+                
+
+                var superaMontoDetalle = await SuperaElMontoDetalle(dto.CodigoDetalleSolicitud, dto.Monto);
+                if(superaMontoDetalle==true)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Supera el monto del detalle de la solicitud"; 
+                    return result;
+                }
+
+                var pucByIcpPuFinanciado = await _repository.GetByIcpPucFInanciado(dto);
+                if (pucByIcpPuFinanciado != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Ya existe Registro para Este Icp,Puc,Financiado"; 
+                    return result;
+                }
+
+                
                 if (dto.CodigoDetalleSolicitud < 0)
                 {
                     result.Data = null;
@@ -417,6 +576,15 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
+                
+                if (dto.Monto <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto no puede ser cero ni negativo";
+                    return result;
+                }
 
 
             ADM_PUC_SOLICITUD entity = new ADM_PUC_SOLICITUD();
@@ -486,7 +654,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Puc Solicitud no existe";
                     return result;
                 }
-
+              
 
                 var deleted = await _repository.Delete(dto.CodigoPucSolicitud);
 
