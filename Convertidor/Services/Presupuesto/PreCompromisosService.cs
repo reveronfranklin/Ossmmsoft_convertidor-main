@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Utility;
 
@@ -589,7 +590,37 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
+        public async Task<ResultDto<PreCompromisosResponseDto>> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso)
+        {
+            ResultDto<PreCompromisosResponseDto> result = new ResultDto<PreCompromisosResponseDto>(null);
+            try
+            {
 
+                var compromisos = await _repository.GetByNumeroYFecha(numeroCompromiso,fechaCompromiso);
+                if (compromisos == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero compromiso y Fecha Compromiso incorrectos";
+                    return result;
+                }
+
+
+                var resultDto = await MapPreCompromisos(compromisos);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
 
     }
 }

@@ -16,7 +16,12 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public string FechaCompromisoString { get; set; }
         public FechaDto FechaCompromisoObj { get; set; }
         public string NumeroSolicitud { get; set; } = string.Empty;
+        public int CodigoSolicitud { get; set; }
+        public string UnidadEjecutora { get; set; } = string.Empty;
         public string NombreProveedor { get; set; } = string.Empty;
+        public string Rif { get; set; }
+        public string CodigoArea { get; set; } = string.Empty;
+        public string LineaComunicacion { get; set; } = string.Empty;
         public string IcpConcat { get; set; } = string.Empty;
         public string Denominacion { get; set; } = string.Empty;
         public string MontoEnLetras { get; set; } = string.Empty;
