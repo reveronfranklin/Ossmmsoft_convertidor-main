@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
+using System.Text;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Adm;
 using Convertidor.Utility;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Convertidor.Services.Presupuesto
 {
@@ -24,6 +26,7 @@ namespace Convertidor.Services.Presupuesto
         private readonly IAdmPucSolicitudService _admPucSolicitudService;
         private readonly IPrePucSolicitudModificacionService _prePucSolicitudModificacionService;
         private readonly IPRE_SALDOSRepository _preSaldosRepository;
+        private readonly IDistributedCache _distributedCache;
 
 
         public PRE_PRESUPUESTOSService(IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
@@ -39,7 +42,8 @@ namespace Convertidor.Services.Presupuesto
                                         IMapper mapper,
                                         IAdmPucSolicitudService admPucSolicitudService,
                                         IPrePucSolicitudModificacionService prePucSolicitudModificacionService,
-                                        IPRE_SALDOSRepository preSaldosRepository
+                                        IPRE_SALDOSRepository preSaldosRepository,
+                                        IDistributedCache distributedCache
                                         )
         {
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
@@ -56,6 +60,7 @@ namespace Convertidor.Services.Presupuesto
             _admPucSolicitudService = admPucSolicitudService;
             _prePucSolicitudModificacionService = prePucSolicitudModificacionService;
             _preSaldosRepository = preSaldosRepository;
+            _distributedCache = distributedCache;
         }
 
 
@@ -104,45 +109,62 @@ namespace Convertidor.Services.Presupuesto
             ResultDto<List<ListPresupuestoDto>> result = new ResultDto<List<ListPresupuestoDto>>(null);
             try
             {
-                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
-                if (presupuesto.Count() > 0)
-                 {
-                    List<ListPresupuestoDto> listDto = new List<ListPresupuestoDto>();
-
-                    foreach (var item in presupuesto.OrderByDescending(x => x.FECHA_HASTA).ToList())
-                    {
-                        ListPresupuestoDto dto = new ListPresupuestoDto();
-                        dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
-                        dto.Descripcion = item.DENOMINACION;
-                        dto.Ano = item.ANO;
-                       var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
-                        if (preListFinanciado.Count > 0) {
-
-                            dto.PreFinanciadoDto = preListFinanciado;
-                        }
-
-                        dto.presupuestoEnEjecucion = false;
-                        var presupuestoExiste = await _pre_V_SALDOSRepository.PresupuestoExiste(item.CODIGO_PRESUPUESTO);
-                        if (presupuestoExiste)
-                        {
-                            dto.presupuestoEnEjecucion = presupuestoExiste;
-                        }
-                        listDto.Add(dto);
-                    }
-
-
-                    result.Data = listDto;
-
-                    result.IsValid = true;
-                    result.Message = "";
+                
+                
+                var cacheKey = $"ListPresupuesto";
+                var listPresupuesto= await _distributedCache.GetAsync(cacheKey);
+                if (listPresupuesto != null)
+                {
+                    result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<ListPresupuestoDto>> > (listPresupuesto);
                 }
                 else
                 {
-                    result.Data = null;
-                    result.IsValid = true;
-                    result.Message = " No existen Datos";
+                    var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
+                    if (presupuesto.Count() > 0)
+                    {
+                        List<ListPresupuestoDto> listDto = new List<ListPresupuestoDto>();
 
+                        foreach (var item in presupuesto.OrderByDescending(x => x.FECHA_HASTA).ToList())
+                        {
+                            ListPresupuestoDto dto = new ListPresupuestoDto();
+                            dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+                            dto.Descripcion = item.DENOMINACION;
+                            dto.Ano = item.ANO;
+                            var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
+                            if (preListFinanciado.Count > 0) {
+
+                                dto.PreFinanciadoDto = preListFinanciado;
+                            }
+
+                            dto.presupuestoEnEjecucion = false;
+                            var presupuestoExiste = await _pre_V_SALDOSRepository.PresupuestoExiste(item.CODIGO_PRESUPUESTO);
+                            if (presupuestoExiste)
+                            {
+                                dto.presupuestoEnEjecucion = presupuestoExiste;
+                            }
+                            listDto.Add(dto);
+                        }
+
+
+                        result.Data = listDto;
+
+                        result.IsValid = true;
+                        result.Message = "";
+                    }
+                    if (result.Data.Count > 0)
+                    {
+                        var options = new DistributedCacheEntryOptions()
+                            .SetAbsoluteExpiration(DateTime.Now.AddDays(15))
+                            .SetSlidingExpiration(TimeSpan.FromDays(1));
+                        var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                        var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                        await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                    }
+               
                 }
+                
+                
+           
             }
             catch (Exception ex)
             {

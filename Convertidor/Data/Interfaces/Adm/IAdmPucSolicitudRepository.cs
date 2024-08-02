@@ -1,4 +1,5 @@
 ﻿using Convertidor.Data.Entities.ADM;
+using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Data.Interfaces.Adm
 {
@@ -14,5 +15,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<bool> ExistePresupuesto(int codigoPresupuesto);
 
         Task<bool> ExisteByDetalleSolicitud(int codigoDetalleSolicitud);
+        Task<ResultDto<ADM_PUC_SOLICITUD>> GetByIcpPucFInanciado(AdmPucSolicitudUpdateDto dto);
     }
 }

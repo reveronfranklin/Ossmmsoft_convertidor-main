@@ -8,20 +8,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/OSS_USUARIO_ROL.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssUsuarioRolRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssUsuarioRolRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Utility/JsonValidator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextSis.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextSis.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPucSolicitudRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BmBienesFotoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmBienesFotoService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmDetalleSolicitudService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +44,14 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -193,7 +198,9 @@
       <workItem from="1721752036424" duration="1761000" />
       <workItem from="1721825587632" duration="5079000" />
       <workItem from="1721843838977" duration="22080000" />
-      <workItem from="1722371014357" duration="23360000" />
+      <workItem from="1722371014357" duration="26753000" />
+      <workItem from="1722547828569" duration="2938000" />
+      <workItem from="1722556329361" duration="6255000" />
     </task>
     <servers />
   </component>
@@ -272,26 +279,26 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>436</line>
+          <line>437</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="17992" />
+              <option value="18009" />
             </startOffsets>
             <endOffsets>
-              <option value="18051" />
+              <option value="18068" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>600</line>
+          <line>601</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="24381" />
+              <option value="24398" />
             </startOffsets>
             <endOffsets>
-              <option value="24463" />
+              <option value="24480" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="21" />
@@ -444,10 +451,10 @@
           <line>77</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'UpdateSearchText'">
             <startOffsets>
-              <option value="3002" />
+              <option value="3003" />
             </startOffsets>
             <endOffsets>
-              <option value="3020" />
+              <option value="3021" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="95" />
@@ -523,13 +530,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>551</line>
+          <line>552</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="22545" />
+              <option value="22562" />
             </startOffsets>
             <endOffsets>
-              <option value="22683" />
+              <option value="22700" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="123" />
@@ -562,13 +569,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>483</line>
+          <line>484</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="19725" />
+              <option value="19742" />
             </startOffsets>
             <endOffsets>
-              <option value="19799" />
+              <option value="19816" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="127" />
@@ -601,13 +608,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>550</line>
+          <line>551</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="22423" />
+              <option value="22440" />
             </startOffsets>
             <endOffsets>
-              <option value="22528" />
+              <option value="22545" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="130" />
@@ -692,26 +699,26 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
-          <line>249</line>
+          <line>298</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="10124" />
+              <option value="11586" />
             </startOffsets>
             <endOffsets>
-              <option value="10213" />
+              <option value="11675" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="143" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
-          <line>410</line>
+          <line>468</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="16542" />
+              <option value="18399" />
             </startOffsets>
             <endOffsets>
-              <option value="16615" />
+              <option value="18472" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="144" />
@@ -913,26 +920,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs</url>
-          <line>68</line>
+          <line>69</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" containingFunctionPresentation="Method 'GetByDetalleSolicitud'">
             <startOffsets>
-              <option value="2091" />
+              <option value="2119" />
             </startOffsets>
             <endOffsets>
-              <option value="2254" />
+              <option value="2282" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="197" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs</url>
-          <line>80</line>
+          <line>81</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" containingFunctionPresentation="Method 'GetByDetalleSolicitud'">
             <startOffsets>
-              <option value="2552" />
+              <option value="2580" />
             </startOffsets>
             <endOffsets>
-              <option value="2588" />
+              <option value="2616" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="198" />
@@ -1017,13 +1024,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
-          <line>329</line>
+          <line>387</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="13436" />
+              <option value="15293" />
             </startOffsets>
             <endOffsets>
-              <option value="13568" />
+              <option value="15425" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="209" />
@@ -1303,26 +1310,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs</url>
-          <line>68</line>
+          <line>73</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" containingFunctionPresentation="Method 'GetByCodigo'">
             <startOffsets>
-              <option value="3707" />
+              <option value="3962" />
             </startOffsets>
             <endOffsets>
-              <option value="3794" />
+              <option value="4049" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="247" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs</url>
-          <line>224</line>
+          <line>246</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" containingFunctionPresentation="Method 'GetList'">
             <startOffsets>
-              <option value="9126" />
+              <option value="10367" />
             </startOffsets>
             <endOffsets>
-              <option value="9225" />
+              <option value="10466" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="250" />
@@ -1511,13 +1518,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
-          <line>387</line>
+          <line>445</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="15558" />
+              <option value="17415" />
             </startOffsets>
             <endOffsets>
-              <option value="15635" />
+              <option value="17492" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="267" />
@@ -1566,10 +1573,10 @@
           <line>57</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'UpdateMontoEnLetras'">
             <startOffsets>
-              <option value="2012" />
+              <option value="2013" />
             </startOffsets>
             <endOffsets>
-              <option value="2030" />
+              <option value="2031" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="271" />
@@ -1579,10 +1586,10 @@
           <line>51</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'UpdateMontoEnLetras'">
             <startOffsets>
-              <option value="1820" />
+              <option value="1821" />
             </startOffsets>
             <endOffsets>
-              <option value="1890" />
+              <option value="1891" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="272" />
@@ -1755,6 +1762,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="292" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs</url>
+          <line>205</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" containingFunctionPresentation="Method 'SuperaElMontoDetalle'">
+            <startOffsets>
+              <option value="8069" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8089" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="293" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs</url>
+          <line>108</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" containingFunctionPresentation="Method 'GetListPresupuesto'">
+            <startOffsets>
+              <option value="5144" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5235" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="295" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

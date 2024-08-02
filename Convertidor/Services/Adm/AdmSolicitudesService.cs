@@ -241,6 +241,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Solicitud no existe";
                     return result;
                 }
+                
                 var status = Estatus.GetStatusObj(solicitud.STATUS);
                 if (status.Modificable == false)
                 {
