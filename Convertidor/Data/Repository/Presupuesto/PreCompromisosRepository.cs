@@ -33,7 +33,23 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
 
-    
+        public async Task<PRE_COMPROMISOS> GetByNumeroYFecha(string numeroCompromiso,DateTime fechaCompromiso)
+        {
+            try
+            {
+                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.NUMERO_COMPROMISO == numeroCompromiso && e.FECHA_COMPROMISO == fechaCompromiso).FirstOrDefaultAsync();
+
+                return (PRE_COMPROMISOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+
         public async Task<List<PRE_COMPROMISOS>> GetAll()
         {
             try
