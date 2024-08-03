@@ -17,6 +17,9 @@ namespace Convertidor.Services.Presupuesto
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly ISisSerieDocumentosRepository _serieDocumentosRepository;
+        private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
         private readonly IConfiguration _configuration;
         public PreCompromisosService(IPreCompromisosRepository repository,
                                       IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
@@ -24,7 +27,10 @@ namespace Convertidor.Services.Presupuesto
                                       IAdmProveedoresRepository admProveedoresRepository,
                                       IAdmSolicitudesRepository admSolicitudesRepository,
                                       IConfiguration configuration,
-                                      ISisUsuarioRepository sisUsuarioRepository
+                                      ISisUsuarioRepository sisUsuarioRepository,
+                                      IAdmDescriptivaRepository admDescriptivaRepository,
+                                      ISisSerieDocumentosRepository serieDocumentosRepository,
+                                      ISisDescriptivaRepository sisDescriptivaRepository
         )
 		{
             _repository = repository;
@@ -34,6 +40,9 @@ namespace Convertidor.Services.Presupuesto
             _admProveedoresRepository = admProveedoresRepository;
             _admSolicitudesRepository = admSolicitudesRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _admDescriptivaRepository = admDescriptivaRepository;
+            _serieDocumentosRepository = serieDocumentosRepository;
+            _sisDescriptivaRepository = sisDescriptivaRepository;
         }
 
 
@@ -102,16 +111,16 @@ namespace Convertidor.Services.Presupuesto
             itemResult.FechaCompromisoObj = (FechaDto)fechaCompromisoObj;
             itemResult.CodigoProveedor = dto.CODIGO_PROVEEDOR;
             itemResult.FechaEntrega = dto.FECHA_ENTREGA;
-            itemResult.FechaEntregaString = Fecha.GetFechaString( dto.FECHA_ENTREGA);
-            FechaDto fechaEntregaObj = Fecha.GetFechaDto(dto.FECHA_ENTREGA);
+            itemResult.FechaEntregaString = Fecha.GetFechaString( (DateTime)dto.FECHA_ENTREGA);
+            FechaDto fechaEntregaObj = Fecha.GetFechaDto((DateTime)dto.FECHA_ENTREGA);
             itemResult.FechaEntregaObj = (FechaDto) fechaEntregaObj;
             itemResult.CodigoDirEntrega = dto.CODIGO_DIR_ENTREGA;
-            itemResult.TipoPagoId = dto.TIPO_PAGO_ID;
+            itemResult.TipoPagoId = (int)dto.TIPO_PAGO_ID;
             itemResult.Extra1 = dto.EXTRA1;
             itemResult.Extra2 = dto.EXTRA2;
             itemResult.Extra3 = dto.EXTRA3;
             itemResult.CodigoPresupuesto = dto.CODIGO_PRESUPUESTO;
-            itemResult.TipoRenglonId = dto.TIPO_RENGLON_ID;
+            itemResult.TipoRenglonId = (int)dto.TIPO_RENGLON_ID;
             itemResult.NumeroOrden = dto.NUMERO_ORDEN;
 
             return itemResult;
@@ -119,6 +128,80 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
+        public async Task<ResultDto<bool>> CrearCompromisoDesdeSolicitud(int codigoSolicitud)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            try
+            {
+
+                var admSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+                if (admSolicitud == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo de Solicitud no existe";
+                    return result;
+                }
+                PRE_COMPROMISOS entity = new PRE_COMPROMISOS();
+                entity.CODIGO_COMPROMISO = await _repository.GetNextKey();
+                entity.ANO = (int)admSolicitud.ANO;
+                entity.CODIGO_SOLICITUD = admSolicitud.CODIGO_SOLICITUD;
+                
+                var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
+                var descriptivaSolicitud =
+                    tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == admSolicitud.TIPO_SOLICITUD_ID).FirstOrDefault();
+                //SE GENERA EL PROXIMO NUMERO DE COMPROMISO
+                var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
+                var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie(sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+                entity.NUMERO_COMPROMISO = numeroCompromiso;
+                entity.FECHA_COMPROMISO = DateTime.Now;
+                entity.CODIGO_PROVEEDOR = (int)admSolicitud.CODIGO_PROVEEDOR;
+                entity.FECHA_ENTREGA = null;
+                //TODO
+                //entity.CODIGO_DIR_ENTREGA = admSolicitud.co;
+                entity.TIPO_PAGO_ID = null;
+                entity.MOTIVO = admSolicitud.MOTIVO;
+                entity.STATUS = "PE";
+                entity.EXTRA1 = "";
+                entity.EXTRA2 = "";
+                entity.EXTRA3 = "";
+                entity.CODIGO_PRESUPUESTO = (int)admSolicitud.CODIGO_PRESUPUESTO;
+                entity.TIPO_RENGLON_ID = null;
+                entity.NUMERO_ORDEN =null;
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                   
+                    
+
+
+                }
+                
+                
+                //TODO ACTUALIZAR PRE_V_SALDO
+                
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+                
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+    
+            return result;
+        }
+        
         public async Task<List<PreCompromisosResponseDto>> MapListPreCompromisosDto(List<PRE_COMPROMISOS> dtos)
         {
             List<PreCompromisosResponseDto> result = new List<PreCompromisosResponseDto>();
@@ -139,6 +222,7 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
+        
         public async Task<ResultDto<PreCompromisosResponseDto>> Update(PreCompromisosUpdateDto dto)
         {
 
@@ -486,6 +570,7 @@ namespace Convertidor.Services.Presupuesto
                 entity.CODIGO_COMPROMISO = await _repository.GetNextKey();
                 entity.ANO = dto.Ano;
                 entity.CODIGO_SOLICITUD = dto.CodigoSolicitud;
+                
                 entity.NUMERO_COMPROMISO = dto.NumeroCompromiso;
                 entity.FECHA_COMPROMISO = dto.FechaCompromiso;
                 entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
@@ -539,8 +624,7 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
-  
-
+        
 
         public async Task<ResultDto<PreCompromisosDeleteDto>> Delete(PreCompromisosDeleteDto dto)
         {

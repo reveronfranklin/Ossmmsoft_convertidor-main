@@ -22,10 +22,10 @@ namespace Convertidor.Services.Adm
 
         public AdmSolicitudesService(IAdmSolicitudesRepository repository,
             ISisUsuarioRepository sisUsuarioRepository,
-            IAdmDescriptivaRepository admDescriptivaRepository,
             IPRE_PRESUPUESTOSRepository presupuestosRepository,
             IPRE_INDICE_CAT_PRGRepository preIndiceCatPrgRepository,
             IAdmProveedoresRepository admProveedoresRepository,
+            IAdmDescriptivaRepository admDescriptivaRepository,
             ISisSerieDocumentosRepository serieDocumentosRepository,
             ISisDescriptivaRepository sisDescriptivaRepository)
         {
