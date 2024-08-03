@@ -10,7 +10,7 @@
         public string FechaCompromisoString { get; set; }
         public FechaDto FechaCompromisoObj { get; set; }
         public int CodigoProveedor { get; set; }
-        public DateTime FechaEntrega { get; set; }
+        public DateTime? FechaEntrega { get; set; }
         public string FechaEntregaString { get; set; }
         public FechaDto FechaEntregaObj { get; set; }
         public int CodigoDirEntrega { get; set; }

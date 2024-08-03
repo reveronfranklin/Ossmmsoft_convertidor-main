@@ -26,7 +26,8 @@ namespace Convertidor.Data.Repository.Adm
 
             try
             {
-                FormattableString xqueryDiario = $"UPDATE ADM.ADM_PRODUCTOS SET ADM.ADM_PRODUCTOS.SEARCH_TEXT = TRIM(CODIGO_PRODUCTO) || CODIGO || '-' || TRIM(CODIGO_PRODUCTO1) || '-' || TRIM(CODIGO_PRODUCTO2) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(DESCRIPCION)  || '-' || TRIM(DESCRIPCION_REAL) WHERE SEARCH_TEXT IS NULL";
+                //FormattableString xqueryDiario = $"UPDATE ADM.ADM_PRODUCTOS SET ADM.ADM_PRODUCTOS.SEARCH_TEXT = TRIM(CODIGO_PRODUCTO) || CODIGO || '-' || TRIM(CODIGO_PRODUCTO1) || '-' || TRIM(CODIGO_PRODUCTO2) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(DESCRIPCION)  || '-' || TRIM(DESCRIPCION_REAL)  || '-' || TRIM(CODIGO_REAL)";
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_PRODUCTOS SET ADM.ADM_PRODUCTOS.SEARCH_TEXT = TRIM(CODIGO_PRODUCTO) || CODIGO || '-' || TRIM(CODIGO_PRODUCTO1) || '-' || TRIM(CODIGO_PRODUCTO2) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(CODIGO_PRODUCTO3) || '-' || TRIM(DESCRIPCION)  || '-' || TRIM(DESCRIPCION_REAL)  || '-' || TRIM(CODIGO_REAL) WHERE SEARCH_TEXT IS NULL";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 return "";
@@ -47,6 +48,22 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
                 var result = await _context.ADM_PRODUCTOS.DefaultIfEmpty().Where(e => e.CODIGO_PRODUCTO == codigoProducto).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+        
+        public async Task<ADM_PRODUCTOS> GetByCodigoReal(string codigoReal)
+        {
+            try
+            {
+                var result = await _context.ADM_PRODUCTOS.DefaultIfEmpty().Where(e => e.CODIGO_REAL == codigoReal).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -96,7 +113,38 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+        public async Task<List<ADM_PRODUCTOS>> UpdateProductosCache()
+        {
+            try
+            {
+                var listHistorico = new List<ADM_PRODUCTOS>();
 
+                var cacheKey = "listProductos";
+
+                var serializedListNominaPeriodo = string.Empty;
+
+                var redisListNominaPeriodo = await _distributedCache.GetAsync(cacheKey);
+             
+                    listHistorico = await GetAll();
+                    serializedListNominaPeriodo = JsonConvert.SerializeObject(listHistorico);
+                    redisListNominaPeriodo = Encoding.UTF8.GetBytes(serializedListNominaPeriodo);
+
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(60))
+                        .SetSlidingExpiration(TimeSpan.FromDays(30));
+                    await _distributedCache.SetAsync(cacheKey, redisListNominaPeriodo, options);
+
+                
+
+                return listHistorico;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<List<ADM_PRODUCTOS>> GetAll()
         {
             try
@@ -169,11 +217,14 @@ namespace Convertidor.Data.Repository.Adm
                 {
                     AdmProductosResponse itemData = new AdmProductosResponse();
                     itemData.Codigo = item.CODIGO_PRODUCTO;
+                    itemData.CodigoReal = item.CODIGO_REAL;
                     itemData.CodigoProducto1 = item.CODIGO_PRODUCTO1;
                     itemData.CodigoProducto2 = item.CODIGO_PRODUCTO2;
                     itemData.CodigoProducto3 = item.CODIGO_PRODUCTO3;
                     itemData.CodigoProducto4 = item.CODIGO_PRODUCTO4;
                     itemData.Descripcion = item.DESCRIPCION;
+                    if (item.CODIGO_REAL == null) item.CODIGO_REAL = "";
+                    itemData.CodigoReal=  item.CODIGO_REAL;
                     if (item.DESCRIPCION_REAL == null) item.DESCRIPCION_REAL = "";
                     itemData.DescripcionReal = item.DESCRIPCION_REAL;
                     itemData.CodigoConcat =

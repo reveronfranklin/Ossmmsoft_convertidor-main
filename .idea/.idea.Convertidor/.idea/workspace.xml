@@ -8,12 +8,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmProductosUpdateDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_DETALLE_SOLICITUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_DETALLE_SOLICITUD.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmDetalleSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmDetalleSolicitudResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmDetalleSolicitudResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmProductosController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmProductosController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Presupuesto/PRE_COMPROMISOS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Presupuesto/PRE_COMPROMISOS.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmProductosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmProductosRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmProductosResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmProductosResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/PreCompromisosResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/PreCompromisosResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmProductosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmProductosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +45,37 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -206,7 +243,7 @@
       <workItem from="1721843838977" duration="22080000" />
       <workItem from="1722371014357" duration="26753000" />
       <workItem from="1722547828569" duration="2938000" />
-      <workItem from="1722556329361" duration="11699000" />
+      <workItem from="1722556329361" duration="33474000" />
     </task>
     <servers />
   </component>
@@ -627,26 +664,26 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs</url>
-          <line>36</line>
+          <line>38</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="1096" />
+              <option value="1305" />
             </startOffsets>
             <endOffsets>
-              <option value="1139" />
+              <option value="1348" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="131" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs</url>
-          <line>44</line>
+          <line>46</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="1331" />
+              <option value="1540" />
             </startOffsets>
             <endOffsets>
-              <option value="1362" />
+              <option value="1571" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="132" />
@@ -744,26 +781,26 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs</url>
-          <line>71</line>
+          <line>73</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="2267" />
+              <option value="2476" />
             </startOffsets>
             <endOffsets>
-              <option value="2286" />
+              <option value="2495" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="148" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs</url>
-          <line>26</line>
+          <line>28</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs" containingFunctionPresentation="Method 'GetAllPaginate'">
             <startOffsets>
-              <option value="764" />
+              <option value="973" />
             </startOffsets>
             <endOffsets>
-              <option value="818" />
+              <option value="1027" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="149" />
@@ -978,55 +1015,42 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs</url>
-          <line>125</line>
+          <line>173</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetAllPaginate'">
             <startOffsets>
-              <option value="4309" />
+              <option value="6326" />
             </startOffsets>
             <endOffsets>
-              <option value="4334" />
+              <option value="6351" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="205" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs</url>
-          <line>78</line>
+          <line>95</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetProductosCache'">
             <startOffsets>
-              <option value="2627" />
+              <option value="3475" />
             </startOffsets>
             <endOffsets>
-              <option value="2658" />
+              <option value="3506" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="206" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs</url>
-          <line>112</line>
+          <line>160</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="3782" />
+              <option value="5799" />
             </startOffsets>
             <endOffsets>
-              <option value="3818" />
+              <option value="5835" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="207" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs</url>
-          <line>103</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetAll'">
-            <startOffsets>
-              <option value="3500" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3672" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="208" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
@@ -1261,19 +1285,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="233" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
-          <line>342</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" containingFunctionPresentation="Method 'MapObjPersonasDto'">
-            <startOffsets>
-              <option value="14911" />
-            </startOffsets>
-            <endOffsets>
-              <option value="14940" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="234" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/HistoricoMovimientoController.cs</url>
@@ -1536,19 +1547,6 @@
           <option name="timeStamp" value="267" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs</url>
-          <line>48</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetByCodigo'">
-            <startOffsets>
-              <option value="1545" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1674" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="268" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/ReporteSolicitudCompromisoController.cs</url>
           <line>37</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/ReporteSolicitudCompromisoController.cs" containingFunctionPresentation="Method 'ReportData'">
@@ -1768,6 +1766,45 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="300" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
+          <line>128</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'GetByCodigoSolicitud'">
+            <startOffsets>
+              <option value="5583" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5633" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="301" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs</url>
+          <line>107</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmProductosService.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="3567" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3632" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="302" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs</url>
+          <line>214</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProductosRepository.cs" containingFunctionPresentation="Method 'GetAllPaginate'">
+            <startOffsets>
+              <option value="8023" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8096" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="303" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
