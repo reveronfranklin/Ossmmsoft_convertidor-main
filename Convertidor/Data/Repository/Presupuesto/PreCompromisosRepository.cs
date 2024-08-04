@@ -32,6 +32,21 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
 
         }
+        public async Task<PRE_COMPROMISOS> GetByCodigoSolicitud(int codigoSolicitud)
+        {
+            try
+            {
+                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_SOLICITUD == codigoSolicitud).FirstOrDefaultAsync();
+
+                return (PRE_COMPROMISOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
 
         public async Task<PRE_COMPROMISOS> GetByNumeroYFecha(string numeroCompromiso,DateTime fechaCompromiso)
         {
