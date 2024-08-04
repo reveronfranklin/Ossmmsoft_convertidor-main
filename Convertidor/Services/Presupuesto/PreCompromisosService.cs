@@ -1,8 +1,10 @@
-﻿using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.ADM;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Services.Adm;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
@@ -16,21 +18,34 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPreDescriptivaRepository _repositoryPreDescriptiva;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
+        private readonly IAdmDetalleSolicitudRepository _admDetalleSolicitudRepository;
+        private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly ISisSerieDocumentosRepository _serieDocumentosRepository;
         private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
+        private readonly IAdmSolicitudesService _admSolicitudesService;
+        private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
+        private readonly IPrePucCompromisosRepository _prePucCompromisosRepository;
+
         private readonly IConfiguration _configuration;
         public PreCompromisosService(IPreCompromisosRepository repository,
                                       IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                       IPreDescriptivaRepository repositoryPreDescriptiva,
                                       IAdmProveedoresRepository admProveedoresRepository,
                                       IAdmSolicitudesRepository admSolicitudesRepository,
+                                      IAdmDetalleSolicitudRepository admDetalleSolicitudRepository,
+                                      IAdmPucSolicitudRepository admPucSolicitudRepository,
                                       IConfiguration configuration,
                                       ISisUsuarioRepository sisUsuarioRepository,
                                       IAdmDescriptivaRepository admDescriptivaRepository,
                                       ISisSerieDocumentosRepository serieDocumentosRepository,
-                                      ISisDescriptivaRepository sisDescriptivaRepository
+                                      ISisDescriptivaRepository sisDescriptivaRepository,
+                                      IPRE_V_SALDOSRepository preVSaldosRepository,
+                                      IAdmSolicitudesService admSolicitudesService,
+                                      IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
+                                      IPrePucCompromisosRepository prePucCompromisosRepository
         )
 		{
             _repository = repository;
@@ -39,10 +54,16 @@ namespace Convertidor.Services.Presupuesto
             _repositoryPreDescriptiva = repositoryPreDescriptiva;
             _admProveedoresRepository = admProveedoresRepository;
             _admSolicitudesRepository = admSolicitudesRepository;
+            _admDetalleSolicitudRepository = admDetalleSolicitudRepository;
+            _admPucSolicitudRepository = admPucSolicitudRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _serieDocumentosRepository = serieDocumentosRepository;
             _sisDescriptivaRepository = sisDescriptivaRepository;
+            _preVSaldosRepository = preVSaldosRepository;
+            _admSolicitudesService = admSolicitudesService;
+            _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
+            _prePucCompromisosRepository = prePucCompromisosRepository;
         }
 
 
@@ -143,6 +164,26 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo de Solicitud no existe";
                     return result;
                 }
+                var preCompromisoPorSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+                if (preCompromisoPorSolicitud != null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Codigo de Solicitud ya tiene el compromiso: {preCompromisoPorSolicitud.NUMERO_SOLICITUD}";
+                    return result;
+                }
+
+                var solicitudPuedeSerAprobada = await _admSolicitudesService.SolicitudPuedeSerAprobada(codigoSolicitud);
+                if (solicitudPuedeSerAprobada.IsValid==false)
+                {
+                    result.Data = solicitudPuedeSerAprobada.Data;
+                    result.IsValid = solicitudPuedeSerAprobada.IsValid;
+                    result.Message = solicitudPuedeSerAprobada.Message;
+                    return result;
+                }
+                
+                
+                
                 PRE_COMPROMISOS entity = new PRE_COMPROMISOS();
                 entity.CODIGO_COMPROMISO = await _repository.GetNextKey();
                 entity.ANO = (int)admSolicitud.ANO;
@@ -177,15 +218,84 @@ namespace Convertidor.Services.Presupuesto
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                   
-                    
+                    var admDetalleSolicitud =
+                        await _admDetalleSolicitudRepository.GetByCodigoSolicitud(codigoSolicitud);
 
+                    if (admDetalleSolicitud != null && admDetalleSolicitud.Count > 0)
+                    {
+                        foreach (var item in admDetalleSolicitud)
+                        {
+                            PRE_DETALLE_COMPROMISOS detailEntity = new PRE_DETALLE_COMPROMISOS();
+                            detailEntity.CODIGO_COMPROMISO = created.Data.CODIGO_COMPROMISO;
+                            detailEntity.CODIGO_DETALLE_COMPROMISO = await _preDetalleCompromisosRepository.GetNextKey();
+                            detailEntity.CODIGO_DETALLE_SOLICITUD = item.CodigoDetalleSolicitud;
+                            
+                            detailEntity.CANTIDAD = item.Cantidad;
+                            detailEntity.CANTIDAD_ANULADA = 0;
+                            detailEntity.UDM_ID = item.UdmId;
+                            detailEntity.DESCRIPCION = item.Descripcion;
+                            detailEntity.PRECIO_UNITARIO = item.PrecioUnitario;
+                            detailEntity.POR_DESCUENTO=(decimal)item.PorDescuento;
+                            detailEntity.MONTO_DESCUENTO = (decimal)item.MontoDescuento;
+                            detailEntity.TIPO_IMPUESTO_ID = item.TipoImpuestoId;
+                            detailEntity.POR_IMPUESTO = item.PorImpuesto;
+                            detailEntity.MONTO_IMPUESTO = (decimal)item.MontoImpuesto ;
+                            //TODO VERIFICAR SI SE AGREGA CODIGO PRODUCTO
+                            //detailEntity.CODIGO_PRODUCTO = item.CodigoProducto;
+                            detailEntity.CODIGO_PRESUPUESTO = (int)item.CodigoPresupuesto;
+                            detailEntity.CODIGO_EMPRESA = conectado.Empresa;
+                            detailEntity.USUARIO_INS = conectado.Usuario;
+                            detailEntity.FECHA_INS = DateTime.Now;
+
+                            var createdDetail = await _preDetalleCompromisosRepository.Add(detailEntity);
+                            if (createdDetail.IsValid && createdDetail.Data != null)
+                            {
+                                var admPucSolicitud = await _admPucSolicitudRepository.GetByDetalleSolicitud(
+                                    item.CodigoDetalleSolicitud);
+                                if (admPucSolicitud != null && admPucSolicitud.Count > 0)
+                                {
+                                    foreach (var itemPuc in admPucSolicitud)
+                                    {
+                                        
+                                        PRE_PUC_COMPROMISOS entityPuc = new PRE_PUC_COMPROMISOS();
+                                        entityPuc.CODIGO_PUC_COMPROMISO = await _prePucCompromisosRepository.GetNextKey();
+                                        entityPuc.CODIGO_DETALLE_COMPROMISO = createdDetail.Data.CODIGO_DETALLE_COMPROMISO;
+                                        entityPuc.CODIGO_PUC_SOLICITUD = itemPuc.CODIGO_PUC_SOLICITUD;
+                                        entityPuc.CODIGO_SALDO = itemPuc.CODIGO_SALDO;
+                                        entityPuc.CODIGO_ICP = itemPuc.CODIGO_ICP;
+                                        entityPuc.CODIGO_PUC = itemPuc.CODIGO_PUC;
+                                        entityPuc.FINANCIADO_ID = itemPuc.FINANCIADO_ID;
+                                        entityPuc.CODIGO_FINANCIADO = (int)itemPuc.CODIGO_FINANCIADO;
+                                        entityPuc.MONTO = itemPuc.MONTO;
+                                        entityPuc.MONTO_CAUSADO = itemPuc.MONTO;
+                                        entityPuc.MONTO_ANULADO = itemPuc.MONTO_ANULADO;
+                                        entityPuc.EXTRA1 = "";
+                                        entityPuc.EXTRA2 = "";
+                                        entityPuc.EXTRA3 = "";
+                                        entityPuc.CODIGO_PRESUPUESTO = itemPuc.CODIGO_PRESUPUESTO;
+
+                                        entityPuc.CODIGO_EMPRESA = conectado.Empresa;
+                                        entityPuc.USUARIO_INS = conectado.Usuario;
+                                        entityPuc.FECHA_INS = DateTime.Now;
+
+                                        var createdPuc = await _prePucCompromisosRepository.Add(entityPuc);
+                                        
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                 }
+
+                admSolicitud.STATUS = "AP";
+                admSolicitud.USUARIO_UPD = conectado.Usuario;
+                admSolicitud.FECHA_UPD=DateTime.Now;
+                await _admSolicitudesRepository.Update(admSolicitud);
                 
-                
-                //TODO ACTUALIZAR PRE_V_SALDO
-                
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)admSolicitud.CODIGO_PRESUPUESTO);
                 
                 result.Data = true;
                 result.IsValid = true;

@@ -52,6 +52,17 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> CrearCompromisoDesdeSolicitud(FilterCrearCompromisoDesdeSolictud filter)
+        {
+            var result = await _service.CrearCompromisoDesdeSolicitud(filter.CodigoSolicitud);
+            return Ok(result);
+        }
+        
+        
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Delete(PreCompromisosDeleteDto dto)

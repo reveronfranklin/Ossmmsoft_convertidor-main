@@ -165,10 +165,9 @@ namespace Convertidor.Services.Adm
                 if (detalleSolicitud != null && detalleSolicitud.Count > 0)
                 {
                   
-                    foreach (var item in detalleSolicitud)
-                    {
-                        result = result + (decimal)item.TotalMasImpuesto;
-                    }
+                    
+                    var total  = detalleSolicitud.Sum(p => p.TotalMasImpuesto);
+                    result = (decimal)total; 
                    
                     
                 }

@@ -148,6 +148,7 @@ namespace Convertidor.Data.Repository.Adm
                     itemData.NombreProveedor = "";
                     itemData.Motivo = item.MOTIVO.Trim();
                     itemData.Nota = item.NOTA;
+                    itemData.Status = item.STATUS;
                     itemData.DescripcionStatus = Estatus.GetStatus(item.STATUS);
                     itemData.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
                     if (item.FIRMANTE == null) item.FIRMANTE = "";
@@ -177,6 +178,102 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
+          public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuestoPendientes(AdmSolicitudesFilterDto filter) 
+        {
+            ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
+
+            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageSize == 0) filter.PageSize = 100;
+            if (filter.PageSize >100) filter.PageSize = 100;
+            
+            try
+            {
+
+                var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
+                var totalRegistros = 0;
+                var totalPage = 0;
+              
+                List<ADM_SOLICITUDES> pageData;
+                if (filter.SearchText.Length > 0)
+                {
+                    totalRegistros = _context.ADM_SOLICITUDES
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS=="PE" && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = await _context.ADM_SOLICITUDES.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS=="PE" && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .OrderByDescending(x => x.FECHA_SOLICITUD)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                else
+                {
+                    totalRegistros = _context.ADM_SOLICITUDES.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS=="PE").Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    pageData = await _context.ADM_SOLICITUDES.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS=="PE")
+                        .OrderByDescending(x => x.FECHA_SOLICITUD)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+             
+                
+                
+                
+                List<AdmSolicitudesResponseDto> resultData = new List<AdmSolicitudesResponseDto>();
+                foreach (var item in pageData)
+                {
+                    AdmSolicitudesResponseDto itemData = new AdmSolicitudesResponseDto();
+                    itemData.CodigoSolicitud = item.CODIGO_SOLICITUD;
+                    itemData.Ano = 0;
+                    itemData.NumeroSolicitud = item.NUMERO_SOLICITUD;
+                    itemData.FechaSolicitud = item.FECHA_SOLICITUD;
+                    itemData.FechaSolicitudString = Fecha.GetFechaString(item.FECHA_SOLICITUD);
+                    itemData.FechaSolicitudObj = Fecha.GetFechaDto(item.FECHA_SOLICITUD);
+                    itemData.CodigoSolicitante = item.CODIGO_SOLICITANTE;
+                    itemData.DenominacionSolicitante = "";
+                    itemData.TipoSolicitudId = item.TIPO_SOLICITUD_ID;
+                    itemData.DescripcionTipoSolicitud = "";
+                    itemData.CodigoProveedor = item.CODIGO_PROVEEDOR;
+                    itemData.NombreProveedor = "";
+                    itemData.Motivo = item.MOTIVO.Trim();
+                    itemData.Nota = item.NOTA;
+                    itemData.Status = item.STATUS;
+                    itemData.DescripcionStatus = Estatus.GetStatus(item.STATUS);
+                    itemData.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+                    if (item.FIRMANTE == null) item.FIRMANTE = "";
+                    itemData.Firmante = item.FIRMANTE;
+                    if (item.MONTO_LETRAS == null) item.MONTO_LETRAS = "";
+                    itemData.MontoLetras = item.MONTO_LETRAS;
+                    
+                    resultData.Add(itemData);
+                }
+                
+                result.CantidadRegistros = totalRegistros;
+                result.TotalPage = totalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = resultData;
+                return result;
+                
+            }
+            catch (Exception ex) 
+            {
+                result.CantidadRegistros = 0;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                result.Data = null;
+                return result;
+            }
+        }
+
+        
         public async Task<ResultDto<ADM_SOLICITUDES>>Add(ADM_SOLICITUDES entity) 
         {
 
