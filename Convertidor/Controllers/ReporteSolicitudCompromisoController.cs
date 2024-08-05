@@ -34,8 +34,11 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> ReportData(AdmSolicitudesFilterDto filter)
         {
           
-           var result =await  _service.ReportData(filter);
-
+           var fileName =await  _service.ReportData(filter);
+           ResultDto<string> result = new ResultDto<string>("");
+           result.Data = fileName;
+           result.IsValid = true;
+           result.Message = "";
            return Ok(result);
         }
        
