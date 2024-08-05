@@ -45,8 +45,10 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public decimal TotalBolivares { get; set; }
         public string CodigoPucConcat { get; set; } = string.Empty;
         public string DescripcionFinanciado { get; set; } = string.Empty;
+        public int FinanciadoId { get; set; }
         public decimal MontoImpuesto { get; set; }
-        public decimal Monto { get; set; } 
+        public decimal Monto { get; set; }
+        public List<PrePucCompromisosResponseDto> PucCompromisos { get; set; }
 
     }
 }

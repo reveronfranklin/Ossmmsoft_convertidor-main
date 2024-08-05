@@ -158,21 +158,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                         resultItem.DescripcionArticulo = item.Descripcion;
                         resultItem.PrecioUnitario = item.PrecioUnitario;
                         resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
-                        var pucCompromisos = await _prePucCompromisosRepository.GetByCodigoDetalleCompromiso(item.CodigoDetalleCompromiso);
-                        var saldos = await _preV_SALDOSRepository.GetByCodigo(pucCompromisos.CODIGO_SALDO);
-                        if (saldos.DESCRIPCION_FINANCIADO.Contains("ORDINARIO") && saldos.CODIGO_PUC_CONCAT == saldos.CODIGO_PUC_CONCAT)
-                        {
-                            
-                            resultItem.MontoImpuesto = pucCompromisos.MONTO;
-                            resultItem.CodigoPucConcat = saldos.CODIGO_PUC_CONCAT;
-                        }
-                        else if (saldos.DESCRIPCION_FINANCIADO.Contains("TRASPASO PRESUPUESTARIO") && saldos.CODIGO_PUC_CONCAT == saldos.CODIGO_PUC_CONCAT)
-                        {
-                            
-                            resultItem.CodigoPucConcat = saldos.CODIGO_PUC_CONCAT;
-                            resultItem.DescripcionFinanciado = saldos.DESCRIPCION_FINANCIADO;
-                            resultItem.Monto = pucCompromisos.MONTO;
-                        }
+                        
 
                         result.Add(resultItem);
 

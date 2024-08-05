@@ -1,7 +1,4 @@
 ﻿using Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario;
-using Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario;
-using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
-using Microsoft.Data.SqlClient.DataClassification;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -36,7 +33,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                         page.Size(PageSizes.A3);
                         page.Header().Element(ComposeHeader);
                         page.Content().Element(ComposeContent);
-                        page.Header().Element(ComposeHeader);
+                        //page.Header().Element(ComposeHeader);
 
                         page.Footer().AlignCenter().Text(text =>
                         {
@@ -64,7 +61,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
             {
                 
                 
-             
+
                 column.Item().Row(row =>
                 {
                     var encabezado = new EncabezadoComponent(Model.Encabezado);
@@ -85,7 +82,8 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     
                 });
 
-
+                column.Spacing(10);
+                column.Item().Component(new EncabezadoComponent(Model.Encabezado));
             });
         }
 
@@ -96,27 +94,16 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 
                 column.Spacing(5);
 
+               
                 column.Item().PaddingTop(5).Row(row =>
                 {
-                    row.RelativeItem().Component(new EncabezadoComponent(Model.Encabezado));
 
-                });
-
-
-
-                column.Item().PaddingTop(5).Row(row =>
-                {
                     row.RelativeItem().Component(new CuerpoComponent(Model.Cuerpo,Model.Encabezado));
-
+                    
                 });
 
                 column.Item().PageBreak();
-
-                column.Item().Row(row =>
-                {
-                    row.RelativeItem().Component(new EncabezadoComponent(Model.Encabezado));
-
-                });
+                
 
             });
             
