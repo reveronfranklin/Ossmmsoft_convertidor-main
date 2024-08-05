@@ -148,15 +148,14 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                 {
 
 
-                    footer.Cell().ColumnSpan(6).ExtendHorizontal().BorderVertical(1).BorderBottom(1).BorderTop(1).PaddingRight(5).Row(row =>
+                    footer.Cell().ColumnSpan(6).ExtendHorizontal().BorderVertical(1).BorderBottom(1).BorderTop(1).PaddingVertical(2).Row(row =>
                     {
-                        row.RelativeItem().PaddingLeft(10).PaddingRight(5).AlignLeft().Text($"MONTO TOTAL EN LETRA :\n{ModelEncabezado.MontoEnLetras.ToUpper()}").FontSize(8).Bold();
+                        row.RelativeItem(5).PaddingLeft(10).PaddingRight(5).AlignLeft().Text($"MONTO TOTAL EN LETRA :\n{ModelEncabezado.MontoEnLetras.ToUpper()}").FontSize(8).Bold();
                         
-                        row.RelativeItem().PaddingBottom(4);
-                        row.RelativeItem().PaddingBottom(4); 
-                        row.RelativeItem().PaddingBottom(4); 
-                        row.RelativeItem().PaddingBottom(4); 
-                        row.RelativeItem().Width(70).AlignRight().PaddingRight(5).PaddingTop(3).Text("TOTAL").FontSize(8).Bold();
+                       
+                        
+                        row.ConstantItem(70).AlignRight().AlignBottom().PaddingRight(2).Text("TOTAL").FontSize(8).Bold();
+
                         var bolivares = ModelCuerpo.Sum(x => x.TotalBolivares);
                         var montoImpuesto = bolivares * (decimal)0.16;
                         var total = bolivares + montoImpuesto;
@@ -164,7 +163,12 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                         var totalBolivares = bolivares.ToString("N", formato);
                         var totalImpuesto = montoImpuesto.ToString("N", formato);
                         var totales = total.ToString("N", formato);
-                        row.RelativeItem().Width(70).BorderVertical(1).AlignRight().Element(CellStyle).BorderBottom(1).Padding(1).PaddingRight(3).Text(totalBolivares).FontSize(7);
+                        row.ConstantItem(70).BorderLeft(1).AlignRight().Column(col =>
+                        {
+                           
+                           col.Item().BorderBottom(1).ExtendHorizontal().PaddingVertical(20);
+                           col.Item().ExtendHorizontal().AlignRight().AlignBottom().Element(CellStyle).PaddingBottom(-1).PaddingRight(3).Text(totalBolivares).FontSize(7);
+                        });
                      
                     });
 
@@ -175,16 +179,16 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     footer.Cell().ColumnSpan(6).Column(col =>
                     {
                         col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :" ).FontSize(8).Bold();
-                        col.Item().BorderVertical(1).PaddingLeft(3).Text(ModelEncabezado.Motivo).FontSize(7);
+                        col.Item().BorderVertical(1).PaddingVertical(20).PaddingLeft(3).Text(ModelEncabezado.Motivo).FontSize(7);
                     });
 
                     footer.Cell().Row(row =>
                     {
                         row.RelativeItem().Column(col =>
                         {
-                            col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).PaddingBottom(5).Text($"ANALISTA").FontSize(8).Bold();
+                            col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).PaddingVertical(5).Text($"ANALISTA").FontSize(8).Bold();
                             col.Item().BorderVertical(1).Text($"{ModelEncabezado.Firmante}").FontSize(7);
-                            col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).PaddingBottom(4).Text($"FIRMA : ________________________________________     ").FontSize(8).Bold();
+                            col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).PaddingVertical(4).Text($"FIRMA : ________________________________________     ").FontSize(8).Bold();
                         });
                        
                         
