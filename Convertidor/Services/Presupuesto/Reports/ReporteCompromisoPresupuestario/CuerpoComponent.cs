@@ -123,10 +123,11 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                 {
                     var financiado = ModelCuerpo.ElementAt(0);
                     col.Item().Text("Financiado Por").FontSize(7).Bold().Underline();
-                    if(financiado.DescripcionFinanciado.Contains("TRASPASO PRESUPUESTARIO")) 
-                    {
-                        col.Item().Text(financiado.DescripcionFinanciado= "TRASPASO\nPRESUPUESTARIO").FontSize(7);
-                    }
+                    col.Item().AlignCenter().Text(financiado.DescripcionFinanciado).FontSize(7);
+                    //if(financiado.DescripcionFinanciado.Contains("TRASPASO PRESUPUESTARIO")) 
+                    //{
+                    //    col.Item().Text(financiado.DescripcionFinanciado= "TRASPASO\nPRESUPUESTARIO").FontSize(7);
+                    //}
                     
 
                 });
@@ -200,13 +201,12 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     col.Item().PageBreak();
                 });
 
-                table.Header(header =>
-                {
+               
                     table.ExtendLastCellsToTableBottom();
 
-                    header.Cell().ColumnSpan(6).Border(1).Text("");
+                    table.Cell().ColumnSpan(6).Border(1).Text("");
                     
-                    header.Cell().ColumnSpan(6).Row(row =>
+                    table.Cell().ColumnSpan(6).Row(row =>
                     {
 
                         row.ConstantItem(40).Border(1).AlignCenter().PaddingVertical(20).Element(CellStyle).Text("").FontSize(7).Bold();
@@ -223,8 +223,8 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 
                     });
 
-                });
             });
+            
 
    
 
