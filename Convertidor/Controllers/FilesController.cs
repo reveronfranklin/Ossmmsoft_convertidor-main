@@ -67,7 +67,8 @@ namespace Convertidor.Controllers
                 contenttype = "application/pdf";
             }
             var bytes =await System.IO.File.ReadAllBytesAsync(filePatch);
-            return File(bytes, contenttype, Path.GetFileName(filePatch));
+            var result = File(bytes, contenttype, Path.GetFileName(filePatch));
+            return result;
 
 
         }
