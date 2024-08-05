@@ -1,4 +1,4 @@
-﻿using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
+﻿using Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario;
 using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -7,7 +7,7 @@ using System.Drawing.Text;
 using System.Globalization;
 
 
-namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
+namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 {
     public class EncabezadoComponent : IComponent
     {
@@ -54,18 +54,13 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             
                 table.Cell().ColumnSpan(6).Column(col =>
                 {
-                    col.Item().BorderTop(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text("PARA: ").Style(headerStyle);
-                    col.Item().BorderBottom(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text(ModelEncabezado.Denominacion).Style(headerStyle);
-                    col.Item().BorderTop(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text("SOLICITANTE: ").Style(headerStyle);
-                    col.Item().BorderBottom(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text(ModelEncabezado.UnidadEjecutora).Style(headerStyle);
-                    col.Item().BorderTop(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text("PROVEEDOR: ").Style(headerStyle);
-                    if(ModelEncabezado.Vialidad == string.Empty && ModelEncabezado.Vivienda == string.Empty) 
-                    {
-                        ModelEncabezado.Vialidad =" ";
-                        ModelEncabezado.Vivienda =" ";
-                        
-                    }
-                    col.Item().BorderBottom(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.NombreProveedor}    {ModelEncabezado.DireccionProveedor.TrimStart()}     {ModelEncabezado.TelefonoProveedor.Trim()}").Style(headerStyle);
+                    col.Item().BorderVertical(1).BorderTop(1).AlignLeft().PaddingLeft(4).Text("SEÑORES: ").Style(headerStyle);
+                    col.Item().BorderVertical(1).BorderBottom(1).AlignLeft().PaddingLeft(4).Text(ModelEncabezado.NombreProveedor).Style(headerStyle).FontSize(8);
+                    col.Item().BorderVertical(1).AlignLeft().PaddingLeft(4).Text("SOLICITANTE: ").Style(headerStyle);
+                    col.Item().BorderVertical(1).BorderBottom(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.IcpConcat}  {ModelEncabezado.Denominacion}").Style(headerStyle).FontSize(8);
+                   
+                 
+                   
                     
                 });
 

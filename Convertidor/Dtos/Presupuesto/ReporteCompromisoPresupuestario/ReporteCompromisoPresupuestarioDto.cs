@@ -5,13 +5,13 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
     public class ReporteCompromisoPresupuestarioDto
     {
         public EncabezadoReporteDto Encabezado;
-        public CuerpoReporteDto CuerpoReporte;
+        public List<CuerpoReporteDto> Cuerpo;
     }
 
 
-    public class EncabezadoReporteDto 
+    public class EncabezadoReporteDto
     {
-        public string NumeroCompromiso { get; set; }= string.Empty;
+        public string NumeroCompromiso { get; set; } = string.Empty;
         public DateTime FechaCompromiso { get; set; }
         public string FechaCompromisoString { get; set; }
         public FechaDto FechaCompromisoObj { get; set; }
@@ -23,10 +23,17 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public string CodigoArea { get; set; } = string.Empty;
         public string LineaComunicacion { get; set; } = string.Empty;
         public string IcpConcat { get; set; } = string.Empty;
+        public string codigoSector { get; set; }
+        public string codigoPrograma { get; set; }
+        public string codigoSubPrograma { get; set; }
+        public string codigoProyecto { get; set; }
+        public string codigoActividad { get; set; }
+        public string CodigoIcpConcat { get { return $"{codigoSector}-{codigoPrograma}-{codigoSubPrograma}-{codigoProyecto}-{codigoActividad}"; } } 
         public string Denominacion { get; set; } = string.Empty;
         public string MontoEnLetras { get; set; } = string.Empty;
         public string Motivo { get; set; } = string.Empty;
         public string Firmante { get; set; } = string.Empty;
+        public string TelefonoProveedor { get { return $"{CodigoArea}{LineaComunicacion}"; } }
     }
 
     public class CuerpoReporteDto 
@@ -38,7 +45,8 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public decimal TotalBolivares { get; set; }
         public string CodigoPucConcat { get; set; } = string.Empty;
         public string DescripcionFinanciado { get; set; } = string.Empty;
-        public decimal Monto { get; set; }
+        public decimal MontoImpuesto { get; set; }
+        public decimal Monto { get; set; } 
 
     }
 }

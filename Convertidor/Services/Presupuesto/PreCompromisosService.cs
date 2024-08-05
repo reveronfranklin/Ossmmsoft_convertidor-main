@@ -784,33 +784,27 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-        public async Task<ResultDto<PreCompromisosResponseDto>> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso)
+        public async Task<PreCompromisosResponseDto> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso)
         {
-            ResultDto<PreCompromisosResponseDto> result = new ResultDto<PreCompromisosResponseDto>(null);
+            PreCompromisosResponseDto result = new PreCompromisosResponseDto();
             try
             {
 
                 var compromisos = await _repository.GetByNumeroYFecha(numeroCompromiso,fechaCompromiso);
                 if (compromisos == null)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero compromiso y Fecha Compromiso incorrectos";
-                    return result;
+                    return null;
                 }
 
 
-                var resultDto = await MapPreCompromisos(compromisos);
-                result.Data = resultDto;
-                result.IsValid = true;
-                result.Message = "";
+               result = await MapPreCompromisos(compromisos);
+                
 
             }
             catch (Exception ex)
             {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
+             
+               var message = ex.Message;
             }
 
             return result;
