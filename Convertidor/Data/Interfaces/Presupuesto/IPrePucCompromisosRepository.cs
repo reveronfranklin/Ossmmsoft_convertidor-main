@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
 
         Task<PRE_PUC_COMPROMISOS> GetByCodigo(int codigoPucCompromiso);
         Task<PRE_PUC_COMPROMISOS> GetByCodigoDetalleCompromiso(int codigoDetalleCompromiso);
+        Task<List<PRE_PUC_COMPROMISOS>> GetListByCodigoDetalleCompromiso(int codigoDetalleCompromiso);
         Task<List<PRE_PUC_COMPROMISOS>> GetAll();
         Task<ResultDto<PRE_PUC_COMPROMISOS>> Add(PRE_PUC_COMPROMISOS entity);
         Task<ResultDto<PRE_PUC_COMPROMISOS>> Update(PRE_PUC_COMPROMISOS entity);
