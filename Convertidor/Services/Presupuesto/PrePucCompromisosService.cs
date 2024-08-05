@@ -13,33 +13,38 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
         private readonly IPRE_SALDOSRepository _pRE_SALDOSRepository;
         private readonly IPrePlanUnicoCuentasService _prePlanUnicoCuentasService;
+        private readonly IIndiceCategoriaProgramaService _indiceCategoriaProgramaService;
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
         private readonly IPreDescriptivaRepository _repositoryPreDescriptiva;
         private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IPreDescriptivasService _preDescriptivasService;
 
         public PrePucCompromisosService(IPrePucCompromisosRepository repository,
                                       IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
                                       IPRE_SALDOSRepository pRE_SALDOSRepository,
                                       IPrePlanUnicoCuentasService prePlanUnicoCuentasService,
+                                      IIndiceCategoriaProgramaService indiceCategoriaProgramaService,
                                       IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                       IPreDescriptivaRepository repositoryPreDescriptiva,
                                       IAdmPucSolicitudRepository admPucSolicitudRepository,
                                       IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
-                              
-                                      ISisUsuarioRepository sisUsuarioRepository
+                                      ISisUsuarioRepository sisUsuarioRepository,
+                                      IPreDescriptivasService preDescriptivasService
         )
 		{
             _repository = repository;
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
             _pRE_SALDOSRepository = pRE_SALDOSRepository;
             _prePlanUnicoCuentasService = prePlanUnicoCuentasService;
+            _indiceCategoriaProgramaService = indiceCategoriaProgramaService;
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
             _repositoryPreDescriptiva = repositoryPreDescriptiva;
             _admPucSolicitudRepository = admPucSolicitudRepository;
            _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _preDescriptivasService = preDescriptivasService;
         }
 
 
@@ -91,6 +96,52 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
+        public async Task<ResultDto<List<PrePucCompromisosResponseDto>>> GetByDetalleCompromido(int codigoDetalleCompromiso)
+        {
+
+            ResultDto<List<PrePucCompromisosResponseDto>> result = new ResultDto<List<PrePucCompromisosResponseDto>>(null);
+            try
+            {
+
+                var pucCompromisos = await _repository.GetListByCodigoDetalleCompromiso(codigoDetalleCompromiso);
+
+               
+
+                if (pucCompromisos.Count() > 0)
+                {
+                    List<PrePucCompromisosResponseDto> listDto = new List<PrePucCompromisosResponseDto>();
+
+                    foreach (var item in pucCompromisos)
+                    {
+                        var dto = await MapPrePucCompromisos(item);
+                        listDto.Add(dto);
+                    }
+
+
+                    result.Data = listDto;
+
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = true;
+                    result.Message = " No existen Datos";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
        
 
@@ -101,8 +152,32 @@ namespace Convertidor.Services.Presupuesto
             itemResult.CodigoDetalleCompromiso = dto.CODIGO_DETALLE_COMPROMISO;
             itemResult.CodigoPucSolicitud = dto.CODIGO_PUC_SOLICITUD;
             itemResult.CodigoSaldo = dto.CODIGO_SALDO;
+            
             itemResult.CodigoIcp = dto.CODIGO_ICP;
+            itemResult.DenominacionIcp = "";
+            itemResult.CodigoIcpConcat = "";
+            var icp = await _indiceCategoriaProgramaService.GetByCodigo(dto.CODIGO_ICP);
+            if (icp != null)
+            {
+                itemResult.DenominacionIcp = icp.Denominacion;
+                itemResult.CodigoIcpConcat = icp.CodigoIcpConcat;
+            }
+            itemResult.CodigoPuc = dto.CODIGO_PUC;
+            itemResult.DenominacionPuc = "";
+            itemResult.CodigoPucConcat = "";
+            var puc = await _prePlanUnicoCuentasService.GetById(dto.CODIGO_PUC);
+            if (puc.Data != null)
+            {
+                itemResult.DenominacionPuc = puc.Data.Denominacion;
+                itemResult.CodigoPucConcat = puc.Data.CodigoPucConcat;
+            }
             itemResult.FinanciadoId = dto.FINANCIADO_ID;
+            itemResult.DescripcionFinanciado = "";
+            var descriptiva = await _preDescriptivasService.GetByCodigo(dto.FINANCIADO_ID);
+            if (descriptiva.Data != null)
+            {
+                itemResult.DescripcionFinanciado = descriptiva.Data.Descripcion;
+            }
             itemResult.CodigoFinanciado = dto.CODIGO_FINANCIADO;
             itemResult.Monto = dto.MONTO;
             itemResult.MontoCausado = dto.MONTO_CAUSADO;
@@ -116,8 +191,10 @@ namespace Convertidor.Services.Presupuesto
             return itemResult;
 
         }
+        
 
-
+        
+        
         public async Task<List<PrePucCompromisosResponseDto>> MapListPrePucCompromisosDto(List<PRE_PUC_COMPROMISOS> dtos)
         {
             List<PrePucCompromisosResponseDto> result = new List<PrePucCompromisosResponseDto>();
