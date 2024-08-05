@@ -485,7 +485,7 @@ namespace Convertidor.Services.Adm
                 }
 
                 var pucByIcpPuFinanciado = await _repository.GetByIcpPucFInanciado(dto);
-                if (pucByIcpPuFinanciado != null)
+                if (pucByIcpPuFinanciado.Data != null)
                 {
                     result.Data = null;
                     result.IsValid = false;

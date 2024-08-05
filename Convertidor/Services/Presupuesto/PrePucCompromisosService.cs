@@ -96,7 +96,7 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-        public async Task<ResultDto<List<PrePucCompromisosResponseDto>>> GetByDetalleCompromido(int codigoDetalleCompromiso)
+        public async Task<ResultDto<List<PrePucCompromisosResponseDto>>> GetByDetalleCompromiso(int codigoDetalleCompromiso)
         {
 
             ResultDto<List<PrePucCompromisosResponseDto>> result = new ResultDto<List<PrePucCompromisosResponseDto>>(null);
