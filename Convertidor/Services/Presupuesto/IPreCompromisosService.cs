@@ -10,7 +10,8 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<PreCompromisosDeleteDto>> Delete(PreCompromisosDeleteDto dto);
         Task<PreCompromisosResponseDto> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso);
 
-
+        Task<ResultDto<bool>> CrearCompromisoDesdeSolicitud(int codigoSolicitud);
+        
     }
 }
 

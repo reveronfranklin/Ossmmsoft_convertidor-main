@@ -12,6 +12,8 @@ namespace Convertidor.Services.Adm
     public class AdmSolicitudesService : IAdmSolicitudesService
     {
         private readonly IAdmSolicitudesRepository _repository;
+        private readonly IAdmDetalleSolicitudRepository _admDetalleSolicitudRepository;
+        private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IPRE_PRESUPUESTOSRepository _presupuestosRepository;
@@ -21,15 +23,19 @@ namespace Convertidor.Services.Adm
         private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
 
         public AdmSolicitudesService(IAdmSolicitudesRepository repository,
+            IAdmDetalleSolicitudRepository admDetalleSolicitudRepository,
+            IAdmPucSolicitudRepository admPucSolicitudRepository,
             ISisUsuarioRepository sisUsuarioRepository,
-            IAdmDescriptivaRepository admDescriptivaRepository,
             IPRE_PRESUPUESTOSRepository presupuestosRepository,
             IPRE_INDICE_CAT_PRGRepository preIndiceCatPrgRepository,
             IAdmProveedoresRepository admProveedoresRepository,
+            IAdmDescriptivaRepository admDescriptivaRepository,
             ISisSerieDocumentosRepository serieDocumentosRepository,
             ISisDescriptivaRepository sisDescriptivaRepository)
         {
             _repository = repository;
+            _admDetalleSolicitudRepository = admDetalleSolicitudRepository;
+            _admPucSolicitudRepository = admPucSolicitudRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _presupuestosRepository = presupuestosRepository;
@@ -192,6 +198,94 @@ namespace Convertidor.Services.Adm
                             NombreProveedor = proveedor(proveedores,(int)sol.CodigoProveedor),
                             Motivo=sol.Motivo,
                             Nota = sol.Nota,
+                            Status = sol.Status,
+                            DescripcionStatus=sol.DescripcionStatus,
+                            CodigoPresupuesto=sol.CodigoPresupuesto
+                        
+                        };
+                    
+                    var listDto = linqQuery.ToList();
+                    
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = solicitudes.Message;
+                    result.Page = solicitudes.Page;
+                    result.TotalPage = solicitudes.TotalPage;
+                    result.CantidadRegistros = solicitudes.CantidadRegistros;
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+            }
+
+        public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuestoPendiente(AdmSolicitudesFilterDto filter)
+        {
+            
+            
+            ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var codigoPresupuesto = await _presupuestosRepository.GetByCodigo(conectado.Empresa, filter.CodigoPresupuesto);
+
+                if (codigoPresupuesto == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
+                //var updateSearchText = await _repository.UpdateSearchText(filter.CodigoPresupuesto);
+                
+                //generamos las listas pra pasar a las busquedas
+                var icps = await _preIndiceCatPrgRepository.GetAll();
+                var listIcp = icps.ToList();
+                var listTipoSolicitud = await _admDescriptivaRepository.GetByTitulo(35);
+                var proveedores = await _admProveedoresRepository.GetByAll();
+                
+                var solicitudes = await  _repository.GetByPresupuestoPendientes(filter);
+               
+                if (solicitudes.Data.Count > 0)
+                {
+                    
+                    
+                    var linqQuery = from sol in solicitudes.Data
+                   
+                       
+                 
+                        select new AdmSolicitudesResponseDto() {
+                            CodigoSolicitud = sol.CodigoSolicitud,
+                            Ano = codigoPresupuesto.ANO ,
+                            NumeroSolicitud=sol.NumeroSolicitud,
+                            FechaSolicitud=sol.FechaSolicitud,
+                            FechaSolicitudString= sol.FechaSolicitudString,
+                            FechaSolicitudObj = sol.FechaSolicitudObj,
+                            CodigoSolicitante=sol.CodigoSolicitante,
+                            DenominacionSolicitante=GetDenominacionIcp(listIcp,sol.CodigoSolicitante),
+                            TipoSolicitudId=sol.TipoSolicitudId,
+                            DescripcionTipoSolicitud=GetDenominacionDescriptiva(listTipoSolicitud,(int)sol.TipoSolicitudId),
+                            CodigoProveedor=sol.CodigoProveedor,
+                            NombreProveedor = proveedor(proveedores,(int)sol.CodigoProveedor),
+                            Motivo=sol.Motivo,
+                            Nota = sol.Nota,
+                            Status = sol.Status,
                             DescripcionStatus=sol.DescripcionStatus,
                             CodigoPresupuesto=sol.CodigoPresupuesto
                         
@@ -649,5 +743,76 @@ namespace Convertidor.Services.Adm
 
             return result;
         }
+        
+        public async Task<ResultDto<bool>> SolicitudPuedeSerAprobada(int codigoSolicitud)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+
+                var solicitud = await _repository.GetByCodigoSolicitud(codigoSolicitud);
+                if (solicitud == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitud no existe";
+                    return result;
+                }
+                
+                if (solicitud != null && solicitud.STATUS!="PE")
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud debe estar en estatus {Estatus.GetStatus("PE")}";
+                    return result;
+                }
+                
+                var admDetalleSolicitud =
+                    await _admDetalleSolicitudRepository.GetByCodigoSolicitud(codigoSolicitud);
+
+                if (admDetalleSolicitud == null || admDetalleSolicitud.Count == 0)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Solicitud No tiene Dettalle";
+                    return result;
+                }
+                var pucSolicitud =await _admPucSolicitudRepository.GetByDetalleSolicitud(codigoSolicitud);
+                if (pucSolicitud == null || pucSolicitud.Count == 0)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Solicitud No tiene PUC";
+                    return result;
+                }
+                
+                var totalDetalle = admDetalleSolicitud.Sum(p => p.TotalMasImpuesto);
+                var totalPuc = pucSolicitud.Sum(p => p.MONTO);
+                if (totalDetalle != totalPuc)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Total Detalle({totalDetalle}) no cuadra con Total PUC({totalPuc})";
+                    return result;
+                }
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }

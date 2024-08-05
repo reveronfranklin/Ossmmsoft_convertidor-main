@@ -83,7 +83,28 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+        public async Task<List<ADM_PUC_SOLICITUD>> GetBySolicitud(int codigoSolicitud) 
+        {
+            try
+            {
+                var result = await _context.ADM_PUC_SOLICITUD
+                    .Where(x=>x.CODIGO_SOLICITUD==codigoSolicitud)
+                    .ToListAsync();
+                if (result == null || result.Count == 0)
+                {
+                    // Manejo cuando no se encuentran datos
+                    result = null;
+                }
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
 
+        
         public async Task<bool> ExisteByDetalleSolicitud(int codigoDetalleSolicitud)
         {
             bool result = false;

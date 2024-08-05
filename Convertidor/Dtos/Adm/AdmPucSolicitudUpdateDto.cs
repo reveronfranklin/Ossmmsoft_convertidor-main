@@ -10,9 +10,9 @@
         public int CodigoPuc { get; set; }
         public int FinanciadoId { get; set; }
         public int CodigoFinanciado { get; set; }
-        public int Monto { get; set; }
-        public int MontoComprometido { get; set; }
-        public int MontoAnulado { get; set; }
+        public decimal Monto { get; set; }
+        public decimal MontoComprometido { get; set; }
+        public decimal MontoAnulado { get; set; }
       
         public int CodigoPresupuesto { get; set; }
     }

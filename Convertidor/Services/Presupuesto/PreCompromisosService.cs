@@ -1,8 +1,10 @@
-﻿using Convertidor.Data.Entities.Presupuesto;
+﻿using Convertidor.Data.Entities.ADM;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Services.Adm;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
@@ -16,15 +18,34 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPreDescriptivaRepository _repositoryPreDescriptiva;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
+        private readonly IAdmDetalleSolicitudRepository _admDetalleSolicitudRepository;
+        private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly ISisSerieDocumentosRepository _serieDocumentosRepository;
+        private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
+        private readonly IAdmSolicitudesService _admSolicitudesService;
+        private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
+        private readonly IPrePucCompromisosRepository _prePucCompromisosRepository;
+
         private readonly IConfiguration _configuration;
         public PreCompromisosService(IPreCompromisosRepository repository,
                                       IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                       IPreDescriptivaRepository repositoryPreDescriptiva,
                                       IAdmProveedoresRepository admProveedoresRepository,
                                       IAdmSolicitudesRepository admSolicitudesRepository,
+                                      IAdmDetalleSolicitudRepository admDetalleSolicitudRepository,
+                                      IAdmPucSolicitudRepository admPucSolicitudRepository,
                                       IConfiguration configuration,
-                                      ISisUsuarioRepository sisUsuarioRepository
+                                      ISisUsuarioRepository sisUsuarioRepository,
+                                      IAdmDescriptivaRepository admDescriptivaRepository,
+                                      ISisSerieDocumentosRepository serieDocumentosRepository,
+                                      ISisDescriptivaRepository sisDescriptivaRepository,
+                                      IPRE_V_SALDOSRepository preVSaldosRepository,
+                                      IAdmSolicitudesService admSolicitudesService,
+                                      IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
+                                      IPrePucCompromisosRepository prePucCompromisosRepository
         )
 		{
             _repository = repository;
@@ -33,7 +54,16 @@ namespace Convertidor.Services.Presupuesto
             _repositoryPreDescriptiva = repositoryPreDescriptiva;
             _admProveedoresRepository = admProveedoresRepository;
             _admSolicitudesRepository = admSolicitudesRepository;
+            _admDetalleSolicitudRepository = admDetalleSolicitudRepository;
+            _admPucSolicitudRepository = admPucSolicitudRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _admDescriptivaRepository = admDescriptivaRepository;
+            _serieDocumentosRepository = serieDocumentosRepository;
+            _sisDescriptivaRepository = sisDescriptivaRepository;
+            _preVSaldosRepository = preVSaldosRepository;
+            _admSolicitudesService = admSolicitudesService;
+            _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
+            _prePucCompromisosRepository = prePucCompromisosRepository;
         }
 
 
@@ -102,16 +132,16 @@ namespace Convertidor.Services.Presupuesto
             itemResult.FechaCompromisoObj = (FechaDto)fechaCompromisoObj;
             itemResult.CodigoProveedor = dto.CODIGO_PROVEEDOR;
             itemResult.FechaEntrega = dto.FECHA_ENTREGA;
-            itemResult.FechaEntregaString = Fecha.GetFechaString( dto.FECHA_ENTREGA);
-            FechaDto fechaEntregaObj = Fecha.GetFechaDto(dto.FECHA_ENTREGA);
+            itemResult.FechaEntregaString = Fecha.GetFechaString( (DateTime)dto.FECHA_ENTREGA);
+            FechaDto fechaEntregaObj = Fecha.GetFechaDto((DateTime)dto.FECHA_ENTREGA);
             itemResult.FechaEntregaObj = (FechaDto) fechaEntregaObj;
             itemResult.CodigoDirEntrega = dto.CODIGO_DIR_ENTREGA;
-            itemResult.TipoPagoId = dto.TIPO_PAGO_ID;
+            itemResult.TipoPagoId = (int)dto.TIPO_PAGO_ID;
             itemResult.Extra1 = dto.EXTRA1;
             itemResult.Extra2 = dto.EXTRA2;
             itemResult.Extra3 = dto.EXTRA3;
             itemResult.CodigoPresupuesto = dto.CODIGO_PRESUPUESTO;
-            itemResult.TipoRenglonId = dto.TIPO_RENGLON_ID;
+            itemResult.TipoRenglonId = (int)dto.TIPO_RENGLON_ID;
             itemResult.NumeroOrden = dto.NUMERO_ORDEN;
 
             return itemResult;
@@ -119,6 +149,169 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
+        public async Task<ResultDto<bool>> CrearCompromisoDesdeSolicitud(int codigoSolicitud)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            try
+            {
+
+                var admSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+                if (admSolicitud == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo de Solicitud no existe";
+                    return result;
+                }
+                var preCompromisoPorSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+                if (preCompromisoPorSolicitud != null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Codigo de Solicitud ya tiene el compromiso: {preCompromisoPorSolicitud.NUMERO_SOLICITUD}";
+                    return result;
+                }
+
+                var solicitudPuedeSerAprobada = await _admSolicitudesService.SolicitudPuedeSerAprobada(codigoSolicitud);
+                if (solicitudPuedeSerAprobada.IsValid==false)
+                {
+                    result.Data = solicitudPuedeSerAprobada.Data;
+                    result.IsValid = solicitudPuedeSerAprobada.IsValid;
+                    result.Message = solicitudPuedeSerAprobada.Message;
+                    return result;
+                }
+                
+                
+                
+                PRE_COMPROMISOS entity = new PRE_COMPROMISOS();
+                entity.CODIGO_COMPROMISO = await _repository.GetNextKey();
+                entity.ANO = (int)admSolicitud.ANO;
+                entity.CODIGO_SOLICITUD = admSolicitud.CODIGO_SOLICITUD;
+                
+                var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
+                var descriptivaSolicitud =
+                    tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == admSolicitud.TIPO_SOLICITUD_ID).FirstOrDefault();
+                //SE GENERA EL PROXIMO NUMERO DE COMPROMISO
+                var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
+                var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie(sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+                entity.NUMERO_COMPROMISO = numeroCompromiso;
+                entity.FECHA_COMPROMISO = DateTime.Now;
+                entity.CODIGO_PROVEEDOR = (int)admSolicitud.CODIGO_PROVEEDOR;
+                entity.FECHA_ENTREGA = null;
+                //TODO
+                //entity.CODIGO_DIR_ENTREGA = admSolicitud.co;
+                entity.TIPO_PAGO_ID = null;
+                entity.MOTIVO = admSolicitud.MOTIVO;
+                entity.STATUS = "PE";
+                entity.EXTRA1 = "";
+                entity.EXTRA2 = "";
+                entity.EXTRA3 = "";
+                entity.CODIGO_PRESUPUESTO = (int)admSolicitud.CODIGO_PRESUPUESTO;
+                entity.TIPO_RENGLON_ID = null;
+                entity.NUMERO_ORDEN =null;
+
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var admDetalleSolicitud =
+                        await _admDetalleSolicitudRepository.GetByCodigoSolicitud(codigoSolicitud);
+
+                    if (admDetalleSolicitud != null && admDetalleSolicitud.Count > 0)
+                    {
+                        foreach (var item in admDetalleSolicitud)
+                        {
+                            PRE_DETALLE_COMPROMISOS detailEntity = new PRE_DETALLE_COMPROMISOS();
+                            detailEntity.CODIGO_COMPROMISO = created.Data.CODIGO_COMPROMISO;
+                            detailEntity.CODIGO_DETALLE_COMPROMISO = await _preDetalleCompromisosRepository.GetNextKey();
+                            detailEntity.CODIGO_DETALLE_SOLICITUD = item.CodigoDetalleSolicitud;
+                            
+                            detailEntity.CANTIDAD = item.Cantidad;
+                            detailEntity.CANTIDAD_ANULADA = 0;
+                            detailEntity.UDM_ID = item.UdmId;
+                            detailEntity.DESCRIPCION = item.Descripcion;
+                            detailEntity.PRECIO_UNITARIO = item.PrecioUnitario;
+                            detailEntity.POR_DESCUENTO=(decimal)item.PorDescuento;
+                            detailEntity.MONTO_DESCUENTO = (decimal)item.MontoDescuento;
+                            detailEntity.TIPO_IMPUESTO_ID = item.TipoImpuestoId;
+                            detailEntity.POR_IMPUESTO = item.PorImpuesto;
+                            detailEntity.MONTO_IMPUESTO = (decimal)item.MontoImpuesto ;
+                            //TODO VERIFICAR SI SE AGREGA CODIGO PRODUCTO
+                            //detailEntity.CODIGO_PRODUCTO = item.CodigoProducto;
+                            detailEntity.CODIGO_PRESUPUESTO = (int)item.CodigoPresupuesto;
+                            detailEntity.CODIGO_EMPRESA = conectado.Empresa;
+                            detailEntity.USUARIO_INS = conectado.Usuario;
+                            detailEntity.FECHA_INS = DateTime.Now;
+
+                            var createdDetail = await _preDetalleCompromisosRepository.Add(detailEntity);
+                            if (createdDetail.IsValid && createdDetail.Data != null)
+                            {
+                                var admPucSolicitud = await _admPucSolicitudRepository.GetByDetalleSolicitud(
+                                    item.CodigoDetalleSolicitud);
+                                if (admPucSolicitud != null && admPucSolicitud.Count > 0)
+                                {
+                                    foreach (var itemPuc in admPucSolicitud)
+                                    {
+                                        
+                                        PRE_PUC_COMPROMISOS entityPuc = new PRE_PUC_COMPROMISOS();
+                                        entityPuc.CODIGO_PUC_COMPROMISO = await _prePucCompromisosRepository.GetNextKey();
+                                        entityPuc.CODIGO_DETALLE_COMPROMISO = createdDetail.Data.CODIGO_DETALLE_COMPROMISO;
+                                        entityPuc.CODIGO_PUC_SOLICITUD = itemPuc.CODIGO_PUC_SOLICITUD;
+                                        entityPuc.CODIGO_SALDO = itemPuc.CODIGO_SALDO;
+                                        entityPuc.CODIGO_ICP = itemPuc.CODIGO_ICP;
+                                        entityPuc.CODIGO_PUC = itemPuc.CODIGO_PUC;
+                                        entityPuc.FINANCIADO_ID = itemPuc.FINANCIADO_ID;
+                                        entityPuc.CODIGO_FINANCIADO = (int)itemPuc.CODIGO_FINANCIADO;
+                                        entityPuc.MONTO = itemPuc.MONTO;
+                                        entityPuc.MONTO_CAUSADO = itemPuc.MONTO;
+                                        entityPuc.MONTO_ANULADO = itemPuc.MONTO_ANULADO;
+                                        entityPuc.EXTRA1 = "";
+                                        entityPuc.EXTRA2 = "";
+                                        entityPuc.EXTRA3 = "";
+                                        entityPuc.CODIGO_PRESUPUESTO = itemPuc.CODIGO_PRESUPUESTO;
+
+                                        entityPuc.CODIGO_EMPRESA = conectado.Empresa;
+                                        entityPuc.USUARIO_INS = conectado.Usuario;
+                                        entityPuc.FECHA_INS = DateTime.Now;
+
+                                        var createdPuc = await _prePucCompromisosRepository.Add(entityPuc);
+                                        
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                admSolicitud.STATUS = "AP";
+                admSolicitud.USUARIO_UPD = conectado.Usuario;
+                admSolicitud.FECHA_UPD=DateTime.Now;
+                await _admSolicitudesRepository.Update(admSolicitud);
+                
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)admSolicitud.CODIGO_PRESUPUESTO);
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+                
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+    
+            return result;
+        }
+        
         public async Task<List<PreCompromisosResponseDto>> MapListPreCompromisosDto(List<PRE_COMPROMISOS> dtos)
         {
             List<PreCompromisosResponseDto> result = new List<PreCompromisosResponseDto>();
@@ -139,6 +332,7 @@ namespace Convertidor.Services.Presupuesto
 
         }
 
+        
         public async Task<ResultDto<PreCompromisosResponseDto>> Update(PreCompromisosUpdateDto dto)
         {
 
@@ -486,6 +680,7 @@ namespace Convertidor.Services.Presupuesto
                 entity.CODIGO_COMPROMISO = await _repository.GetNextKey();
                 entity.ANO = dto.Ano;
                 entity.CODIGO_SOLICITUD = dto.CodigoSolicitud;
+                
                 entity.NUMERO_COMPROMISO = dto.NumeroCompromiso;
                 entity.FECHA_COMPROMISO = dto.FechaCompromiso;
                 entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
@@ -539,8 +734,7 @@ namespace Convertidor.Services.Presupuesto
 
             return result;
         }
-  
-
+        
 
         public async Task<ResultDto<PreCompromisosDeleteDto>> Delete(PreCompromisosDeleteDto dto)
         {

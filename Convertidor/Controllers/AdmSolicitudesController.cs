@@ -32,6 +32,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByPresupuestoPendiente(AdmSolicitudesFilterDto filter)
+        {
+            var result = await _service.GetByPresupuestoPendiente(filter);
+            return Ok(result);
+        }
 
 
         [HttpPost]

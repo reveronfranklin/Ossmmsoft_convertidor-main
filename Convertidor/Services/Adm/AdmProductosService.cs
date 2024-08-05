@@ -13,13 +13,15 @@ namespace Convertidor.Services.Adm
         private readonly IAdmProductosRepository _repository;
 
         private readonly IConfiguration _configuration;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+
         public AdmProductosService(IAdmProductosRepository repository,
-                                      IConfiguration configuration)
+                                      IConfiguration configuration,
+                                      ISisUsuarioRepository sisUsuarioRepository)
 		{
             _repository = repository;
             _configuration = configuration;
-
-
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
         public async Task<ResultDto<List<AdmProductosResponse>>> GetAllPaginate(AdmProductosFilterDto filter)
@@ -80,7 +82,73 @@ namespace Convertidor.Services.Adm
         }
 
 
-   
+       public async Task<ResultDto<bool>> Update(AdmProductosUpdateDto dto)
+        {
+
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+
+                if (!string.IsNullOrEmpty(dto.CodigoReal) && dto.CodigoReal.Length > 15)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "La longitud maxima del Codigo real es de 15 caracteres";
+                    return result;
+                }
+                
+                if (!string.IsNullOrEmpty(dto.DescripcionReal) && dto.DescripcionReal.Length > 500)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "La longitud maxima del Descripcion real es de 500 caracteres";
+                    return result;
+                }
+                
+                var producto = await _repository.GetByCodigo(dto.CodigoProducto);
+                if (producto == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Producto no existe";
+                    return result;
+                }
+
+                var productoReal = await _repository.GetByCodigoReal(dto.CodigoReal);
+                if (productoReal != null && productoReal.CODIGO_PRODUCTO!= producto.CODIGO_PRODUCTO)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Codigo Real {dto.CodigoReal} ya existe en el codigo {productoReal.CODIGO}-{productoReal.DESCRIPCION}";
+                    return result;
+                }
+                
+                
+                
+                producto.CODIGO_REAL = dto.CodigoReal;
+                producto.DESCRIPCION_REAL = dto.DescripcionReal;
+                producto.FECHA_UPD = DateTime.Now;
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                producto.CODIGO_EMPRESA = conectado.Empresa;
+                producto.USUARIO_INS = conectado.Usuario;
+                await _repository.Update(producto);
+                await _repository.UpdateProductosCache();
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            
+            return result;
+        }
+
 
 
 

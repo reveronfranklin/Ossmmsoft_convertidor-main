@@ -12,5 +12,6 @@ public interface IAdmProductosRepository
     Task<string> Delete(int codigoProducto);
     Task<int> GetNextKey();
     Task<ResultDto<List<AdmProductosResponse>>> GetAllPaginate(AdmProductosFilterDto filter);
-
+    Task<ADM_PRODUCTOS> GetByCodigoReal(string codigoReal);
+    Task<List<ADM_PRODUCTOS>> UpdateProductosCache();
 }
