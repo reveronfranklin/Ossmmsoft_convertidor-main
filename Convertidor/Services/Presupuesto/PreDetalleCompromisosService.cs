@@ -614,7 +614,32 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<List<PreDetalleCompromisosResponseDto>> GetByCodigoCompromiso(int codigoCompromiso)
+        {
+            List<PreDetalleCompromisosResponseDto> result = new List<PreDetalleCompromisosResponseDto>();
+            try
+            {
 
+                var compromisos = await _repository.GetByCodigoCompromiso(codigoCompromiso);
+                if (compromisos == null)
+                {
+                  result = null;
+                  return result;
+                }
+
+
+                result = await MapListPreCompromisosDto(compromisos);
+                
+
+            }
+            catch (Exception ex)
+            {
+                result = null;
+                var message = ex.Message;
+            }
+
+            return result;
+        }
 
 
     }

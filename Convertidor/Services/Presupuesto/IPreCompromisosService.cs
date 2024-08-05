@@ -8,7 +8,7 @@ namespace Convertidor.Services.Presupuesto
         Task<ResultDto<PreCompromisosResponseDto>> Update(PreCompromisosUpdateDto dto);
         Task<ResultDto<PreCompromisosResponseDto>> Create(PreCompromisosUpdateDto dto); 
         Task<ResultDto<PreCompromisosDeleteDto>> Delete(PreCompromisosDeleteDto dto);
-        Task<ResultDto<PreCompromisosResponseDto>> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso);
+        Task<PreCompromisosResponseDto> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso);
 
 
     }
