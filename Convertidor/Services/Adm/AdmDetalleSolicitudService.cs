@@ -59,6 +59,13 @@ namespace Convertidor.Services.Adm
             itemResult.Total = dtos.TOTAL;
             itemResult.TotalMasImpuesto = dtos.TOTAL_MAS_IMPUESTO;
             itemResult.CodigoProducto = dtos.CODIGO_PRODUCTO == null ? 0 : dtos.CODIGO_PRODUCTO ;
+
+            itemResult.DescripcionProducto = "";
+            var producto = await _admProductosRepository.GetByCodigo((int)dtos.CODIGO_PRODUCTO);
+            if (producto != null)
+            {
+                itemResult.DescripcionProducto =producto.DESCRIPCION;
+            }
             return itemResult;
         }
 
