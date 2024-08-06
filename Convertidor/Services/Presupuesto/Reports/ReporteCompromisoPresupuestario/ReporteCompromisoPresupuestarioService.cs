@@ -164,7 +164,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                         resultItem.PrecioUnitario = item.PrecioUnitario;
                         resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
 
-                        var pucCompromisos = await _prePucCompromisosService.GetByDetalleCompromido(item.CodigoDetalleCompromiso);
+                        var pucCompromisos = await _prePucCompromisosService.GetByDetalleCompromiso(item.CodigoDetalleCompromiso);
                         if(pucCompromisos.Data.Count > 0) 
                         {
                           resultItem.PucCompromisos = pucCompromisos.Data;
