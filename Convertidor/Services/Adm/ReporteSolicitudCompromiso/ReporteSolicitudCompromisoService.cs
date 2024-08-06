@@ -219,18 +219,10 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             var result = "No Data";
             var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
             var fileName = $"ReporteSolicitudCompromiso-{filter.CodigoSolicitud}.pdf";
+            var separatorPatch = @settings.SeparatorPatch;
             var filePath = "";
-            if (_env.IsDevelopment())
-            {
-                filePath =$"{@settings.ExcelFiles}/{fileName}";
-            }
-            else if (_env.IsProduction())
-            {
-                filePath =$"{@settings.ExcelFiles}\\{fileName}";
-            }
-                
-           
-
+            filePath =$"{@settings.ExcelFiles}{separatorPatch}{fileName}";
+            
 
             if (filter == null)
             {
