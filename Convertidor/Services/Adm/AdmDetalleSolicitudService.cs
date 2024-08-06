@@ -155,6 +155,46 @@ namespace Convertidor.Services.Adm
 
         }
        
+        
+        
+        public async Task<decimal> TotalPuc(int codigoDetalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+              
+                var pucSolicitud = await _admPucSolicitudRepository.GetByDetalleSolicitud(codigoDetalleSolicitud);
+                if (pucSolicitud != null && pucSolicitud.Count > 0)
+                {
+                    decimal total = 0;
+                    foreach (var item in pucSolicitud)
+                    {
+                        total = total + item.MONTO;
+                    }
+
+                    result = total;
+
+
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+
+        
         public async Task<decimal> GetTotalMonto(List<AdmDetalleSolicitudResponseDto> detalleSolicitud)
         {
 
@@ -281,7 +321,7 @@ namespace Convertidor.Services.Adm
                 {
                       result.Data = null;
                        result.IsValid = false;
-                       result.Message = "TSeleccione un Producto Valido";
+                       result.Message = "Seleccione un Producto Valido";
                        return result;
                 }
                 
@@ -302,6 +342,15 @@ namespace Convertidor.Services.Adm
                 codigoDetallesolicitud.TOTAL = codigoDetallesolicitud.PRECIO_UNITARIO * codigoDetallesolicitud.CANTIDAD;
                 codigoDetallesolicitud.TOTAL_MAS_IMPUESTO =
                     codigoDetallesolicitud.TOTAL + (decimal)codigoDetallesolicitud.MONTO_IMPUESTO;
+
+                var totalPuc = await TotalPuc(dto.CodigoDetalleSolicitud);
+                if (codigoDetallesolicitud.TOTAL_MAS_IMPUESTO < totalPuc)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Esta intentando Modificar Precio o Cantidad y supera lo cargado en PUC";
+                    return result;
+                }
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 codigoDetallesolicitud.CODIGO_EMPRESA = conectado.Empresa;
                 codigoDetallesolicitud.USUARIO_UPD = conectado.Usuario;
