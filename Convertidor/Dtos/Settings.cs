@@ -14,6 +14,9 @@
         public string PaisConfig { get; set; }
         public string EmpresaConfig { get; set; }
         public string UrlReport { get; set; }
+
+
+        public string  SeparatorPatch { get; set; }
         
         
     }

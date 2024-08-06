@@ -23,6 +23,8 @@
         public int CodigoPresupuesto { get; set; }
         
         public decimal? CodigoProducto { get; set; }
+        
+        public string  DescripcionProducto  { get; set; }
         public decimal? Total { get; set; }
         public decimal? TotalMasImpuesto { get; set; }
 
