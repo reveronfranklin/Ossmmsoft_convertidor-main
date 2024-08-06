@@ -25,6 +25,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
         public ReporteSolicitudCompromisoService(IAdmSolicitudesService admSolicitudesService,
                                                  IAdmSolicitudesRepository admSolicitudesRepository,
@@ -34,7 +35,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                                  IAdmComunicacionProveedorRepository admComProveedorRepository,
                                                  IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
                                                  IAdmDescriptivaRepository admDescriptivaRepository,
-                                                 IConfiguration configuration)
+                                                 IConfiguration configuration,
+                                                 IWebHostEnvironment env)
         {
             _admSolicitudesService = admSolicitudesService;
             _admSolicitudesRepository = admSolicitudesRepository;
@@ -45,6 +47,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _configuration = configuration;
+            _env = env;
         }
 
         public async Task<ReporteSolicitudCompromisoDto> GenerateData (AdmSolicitudesFilterDto filter) 
@@ -216,7 +219,17 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             var result = "No Data";
             var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
             var fileName = $"ReporteSolicitudCompromiso-{filter.CodigoSolicitud}.pdf";
-            var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
+            var filePath = "";
+            if (_env.IsDevelopment())
+            {
+                filePath =$"{@settings.ExcelFiles}/{fileName}";
+            }
+            else if (_env.IsProduction())
+            {
+                filePath =$"{@settings.ExcelFiles}\\{fileName}";
+            }
+                
+           
 
 
             if (filter == null)
@@ -229,23 +242,13 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             var reporte = await GenerateData(filter);
             if (reporte != null)
             {
-
-
-
-
                 
-
                 if (reporte == null)
                 {
                     return "No Data";
                 }
                 else
                 {
-
-
-                    filePath = $"{@settings.ExcelFiles}/{fileName}";
-
-
                     result = fileName;
                     var document = new ReporteSolicitudCompromisoDocument(reporte, pathLogo);
                     document.GeneratePdf(filePath);
