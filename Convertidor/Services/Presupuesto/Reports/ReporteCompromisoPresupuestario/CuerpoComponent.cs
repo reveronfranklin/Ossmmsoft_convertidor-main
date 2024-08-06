@@ -108,7 +108,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     foreach (var itemPuc in pucCompromisos.OrderByDescending(x => x.CodigoDetalleCompromiso))
                     {
                         
-                        table.Cell().ColumnSpan(3).Row(row =>
+                        table.Cell().ColumnSpan(6).Row(row =>
                         {
 
                         row.ConstantItem(40).BorderVertical(1).Text("");
@@ -123,7 +123,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 
                         });
 
-                        row.RelativeItem().ShowOnce().Column(async col =>
+                        row.RelativeItem().ShowOnce().Column(col =>
                         {
                                 
                                 var ivaPucConcat = itemPuc.CodigoPucConcat;
