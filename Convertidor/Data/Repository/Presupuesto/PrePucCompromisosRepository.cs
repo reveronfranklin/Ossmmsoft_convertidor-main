@@ -30,7 +30,39 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-    
+        public async Task<PRE_PUC_COMPROMISOS> GetByCodigoDetalleCompromiso(int codigoDetalleCompromiso)
+        {
+            try
+            {
+                var result = await _context.PRE_PUC_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_DETALLE_COMPROMISO == codigoDetalleCompromiso).FirstOrDefaultAsync();
+
+                return (PRE_PUC_COMPROMISOS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+        
+        public async Task<List<PRE_PUC_COMPROMISOS>> GetListByCodigoDetalleCompromiso(int codigoDetalleCompromiso)
+        {
+            try
+            {
+                var result = await _context.PRE_PUC_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_DETALLE_COMPROMISO == codigoDetalleCompromiso).ToListAsync();
+
+                return (List<PRE_PUC_COMPROMISOS>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+
         public async Task<List<PRE_PUC_COMPROMISOS>> GetAll()
         {
             try

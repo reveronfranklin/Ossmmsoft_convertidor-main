@@ -24,7 +24,7 @@
         public DateTime FECHA_UPD { get; set; }
         public int CODIGO_EMPRESA { get; set; }
         public int CODIGO_PRESUPUESTO { get; set; }
-        public decimal? CODIGO_PRODUCTO { get; set; }
+        public int? CODIGO_PRODUCTO { get; set; }
         
         public decimal? TOTAL { get; set; }
         public decimal? TOTAL_MAS_IMPUESTO { get; set; }

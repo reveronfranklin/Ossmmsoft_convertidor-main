@@ -1129,15 +1129,12 @@ namespace Convertidor.Data.Repository.Rh
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
                 var destino = @settings.Images;
                 var origen = @settings.RhFilesProceso;
+                var separadorPatch = @settings.SeparatorPatch;
 
                 var ficheros = GetFicheros(origen);
                 foreach (string file in ficheros)
                 {
-                    var srcFileArr = file.Split("/");
-                    if (_env == "producction")
-                    {
-                        srcFileArr = file.Split("\\");
-                    }
+                    var srcFileArr = file.Split(separadorPatch);
                     var fileName = srcFileArr[srcFileArr.Length - 1];
                     var controlArray = fileName.Split("_");
                     var controlFinalArray = controlArray[controlArray.Length - 1].Split(".");
@@ -1149,23 +1146,23 @@ namespace Convertidor.Data.Repository.Rh
                     if (persona != null)
                     {
                      
-                        File.Delete($"{destino}/{fileName}");
+                        File.Delete($"{destino}{separadorPatch}{fileName}");
                        
-                        if (!File.Exists($"{destino}/{fileName}"))
+                        if (!File.Exists($"{destino}{separadorPatch}{fileName}"))
                         {
 
-                            File.Copy(file, $"{destino}/{fileName}");
-                            if (File.Exists($"{destino}/{fileName}"))
+                            File.Copy(file, $"{destino}{separadorPatch}{fileName}");
+                            if (File.Exists($"{destino}{separadorPatch}{fileName}"))
                             {
                                 persona.FILE_NAME = fileName;
 
                                 await _repository.Update(persona);
-                                File.Delete($"{origen}/{fileName}");
+                                File.Delete($"{origen}{separadorPatch}{fileName}");
                             }
                         }
 
                     }else{
-                        File.Delete($"{origen}/{fileName}");
+                        File.Delete($"{origen}{separadorPatch}{fileName}");
                     }
 
 

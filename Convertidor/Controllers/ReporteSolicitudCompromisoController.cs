@@ -1,11 +1,8 @@
-﻿using Convertidor.Data.Entities.Presupuesto;
+﻿
 using Convertidor.Dtos.Adm;
-using Convertidor.Dtos.Presupuesto;
-using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
 using Convertidor.Services.Adm.ReporteSolicitudCompromiso;
-using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
-using Convertidor.Services.Rh.Report.Example;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 
 // HTML to PDF
 
@@ -20,12 +17,14 @@ namespace Convertidor.Controllers
     {
        
         private readonly IReporteSolicitudCompromisoService _service;
+        private readonly IConfiguration _configuration;
 
-        public ReporteSolicitudCompromisoController(IReporteSolicitudCompromisoService service)
+        public ReporteSolicitudCompromisoController(
+            IReporteSolicitudCompromisoService service,
+            IConfiguration configuration)
         {
-
             _service = service;
-           
+            _configuration = configuration;
         }
 
        
@@ -35,7 +34,11 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> ReportData(AdmSolicitudesFilterDto filter)
         {
           
-           var result =await  _service.ReportData(filter);
+           var fileName =await  _service.ReportData(filter);
+           ResultDto<string> result = new ResultDto<string>("");
+           result.Data = fileName;
+           result.IsValid = true;
+           result.Message = "";
            return Ok(result);
         }
        

@@ -169,6 +169,22 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async Task<List<PRE_DETALLE_COMPROMISOS>> GetByCodigoCompromiso(int codigoCompromiso)
+        {
+            try
+            {
+                var result = await _context.PRE_DETALLE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_COMPROMISO == codigoCompromiso).ToListAsync();
+
+                return (List<PRE_DETALLE_COMPROMISOS>)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
 
     }
 }
