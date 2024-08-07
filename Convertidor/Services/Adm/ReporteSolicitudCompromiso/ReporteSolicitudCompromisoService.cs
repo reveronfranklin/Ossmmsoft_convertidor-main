@@ -72,13 +72,13 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
 
 
-
+                
                 result.CodigoSolicitud = solicitud.CODIGO_SOLICITUD;
-                if(solicitud.ANO == null) 
+                if(solicitud.ANO != null) 
                 {
-                    solicitud.ANO = solicitud.FECHA_SOLICITUD.Year;
+                    result.Ano = (int)solicitud.ANO;
                 }
-                result.Ano = (int)solicitud.ANO;
+
                 result.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
                 result.FechaSolicitud = solicitud.FECHA_SOLICITUD;
                 result.FechaSolicitudString = solicitud.FECHA_SOLICITUD.ToString("u");
@@ -87,18 +87,20 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 result.CodigoSolicitante = solicitud.CODIGO_SOLICITANTE;
 
                 var icp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(solicitud.CODIGO_SOLICITANTE);
-
-               
-                result.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
-
-                var presupuesto = await _pRE_INDICE_CAT_PRGRepository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
-
-                foreach (var item in presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DENOMINACION.Contains( "PRESUPUESTO")))
+                if (icp != null)
                 {
-                    result.Denominacion = item.DENOMINACION;
-                   
-                }
 
+
+                    result.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
+
+                    var presupuesto = await _pRE_INDICE_CAT_PRGRepository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
+
+                    foreach (var item in presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DENOMINACION.Contains("PRESUPUESTO")))
+                    {
+                        result.Denominacion = item.DENOMINACION;
+
+                    }
+                }
                 result.MontoLetras = solicitud.MONTO_LETRAS;
                 if(solicitud.MONTO_LETRAS == null) 
                 {
@@ -115,40 +117,62 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                
                 result.CodigoProveedor = (int)solicitud.CODIGO_PROVEEDOR;
 
-                var Proveedor = await _admProveedoresRepository.GetByCodigo((int)solicitud.CODIGO_PROVEEDOR);
-                result.NombreProveedor = Proveedor.NOMBRE_PROVEEDOR;
-                result.Rif = Proveedor.RIF;
+                result.NombreProveedor = "";
+                result.Rif = "";
 
-
-
-                var dirProveedor = await _admDirProveedorRepository.GetByCodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
-                if (dirProveedor.VIALIDAD == null && dirProveedor.VIVIENDA == null) 
+                var proveedor = await _admProveedoresRepository.GetByCodigo((int)solicitud.CODIGO_PROVEEDOR);
+                if(proveedor != null)
                 {
-                    dirProveedor.VIALIDAD = " ";
-                    dirProveedor.VIALIDAD = " ";
+                    result.NombreProveedor = proveedor.NOMBRE_PROVEEDOR;
+                    result.Rif = proveedor.RIF;
                 }
-                if (dirProveedor.PRINCIPAL == 1)
+
+
+                result.Vialidad = "";
+                result.Vivienda = "";
+
+                var dirProveedor = await _admDirProveedorRepository.GetByCodigoProveedor(proveedor.CODIGO_PROVEEDOR);
+                if(dirProveedor != null) 
                 {
-                    result.Vialidad = dirProveedor.VIALIDAD;
-                    result.Vivienda = dirProveedor.VIVIENDA;
-                    
-
-                    var comProveedor = await _admComProveedorRepository.GetBycodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
-                    result.CodigoArea = comProveedor.CODIGO_AREA;
-                    result.LineaComunicacion = comProveedor.LINEA_COMUNICACION;
-
-                    var extra1 = await _admDescriptivaRepository.GetByCodigoDescriptiva(dirProveedor.TIPO_VIVIENDA_ID);
-                    if (extra1 != null)
+                    if (dirProveedor.VIALIDAD == null && dirProveedor.VIVIENDA == null)
                     {
-                        result.Extra1 = extra1.EXTRA1;
+                        dirProveedor.VIALIDAD = " ";
+                        dirProveedor.VIVIENDA = " ";
                     }
-                    else
+                    if (dirProveedor.PRINCIPAL == 1)
                     {
-                        result.Extra1 = " ";
+                        result.Vialidad = dirProveedor.VIALIDAD;
+                        result.Vivienda = dirProveedor.VIVIENDA;
+
+
+                        
+
+                        var extra1 = await _admDescriptivaRepository.GetByCodigoDescriptiva(dirProveedor.TIPO_VIVIENDA_ID);
+                        if (extra1 != null)
+                        {
+                            result.Extra1 = extra1.EXTRA1;
+                        }
+                        else
+                        {
+                            result.Extra1 = " ";
+                        }
+
+                        
                     }
 
-                    result.Motivo = solicitud.MOTIVO; 
+                    result.CodigoArea = "";
+                    result.LineaComunicacion = "";
+
+                    var comProveedor = await _admComProveedorRepository.GetBycodigoProveedor(proveedor.CODIGO_PROVEEDOR);
+                    if (comProveedor != null)
+                    {
+                        result.CodigoArea = comProveedor.CODIGO_AREA;
+                        result.LineaComunicacion = comProveedor.LINEA_COMUNICACION;
+                    }
+
+                    result.Motivo = solicitud.MOTIVO;
                 }
+                
 
 
                 return result;

@@ -139,8 +139,13 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
             try
             {
                 List<CuerpoReporteDto> result = new List<CuerpoReporteDto>();
-                var compromiso = await _preCompromisosRepository.GetByNumeroYFecha(filter.NumeroCompromiso, filter.fechaCompromiso);
-                var detalle = await _preDetalleCompromisosService.GetByCodigoCompromiso(compromiso.CODIGO_COMPROMISO);
+             
+                var detalle = await _preDetalleCompromisosService.GetByCodigoCompromiso(filter.CodigoCompromiso);
+
+                if(detalle == null) 
+                {
+                    return null;
+                }
 
                 if (detalle.Count > 0)
                 {
@@ -158,8 +163,13 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                         resultItem.DescripcionArticulo = item.Descripcion;
                         resultItem.PrecioUnitario = item.PrecioUnitario;
                         resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
-                        
 
+                        var pucCompromisos = await _prePucCompromisosService.GetByDetalleCompromiso(item.CodigoDetalleCompromiso);
+                        if(pucCompromisos.Data.Count > 0) 
+                        {
+                          resultItem.PucCompromisos = pucCompromisos.Data;
+                          
+                        }
                         result.Add(resultItem);
 
                     }
