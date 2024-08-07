@@ -1,5 +1,6 @@
 ﻿using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario;
+using NPOI.SS.Formula.Functions;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -34,8 +35,10 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
             container.Table(table =>
             {
 
-
-
+                var icpConcat = "";
+                var PucConcat = "";
+                var monto = (decimal)0.00;
+                var descripcionFinanciado = "";
                 table.ExtendLastCellsToTableBottom();
 
                 table.ColumnsDefinition(columns =>
@@ -97,74 +100,153 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 
                 }
 
-          
+                table.Cell().ColumnSpan(6).BorderLeft(1).Row(row =>
+                {
+                    row.ConstantItem(40).BorderVertical(1).Text("");
+                    row.ConstantItem(50).BorderVertical(1).Text("");
+                    row.ConstantItem(100).Text("");
+                    row.ConstantItem(100).PaddingLeft(5).Text("SE-PR-SP-PY-AC").FontSize(7).Bold().Underline();
+                    row.ConstantItem(100).Text("GR-PA-GE-ES-SE-EX").FontSize(7).Bold().Underline();
+                    row.ConstantItem(100).AlignCenter().Text("Financiado Por").FontSize(7).Bold().Underline();
+                    row.ConstantItem(100).PaddingLeft(10).Text("Monto").FontSize(7).Bold().Underline();
+                    row.ConstantItem(102).Text("");
+                    row.ConstantItem(60).BorderVertical(1).Text("");
+                    row.ConstantItem(70).BorderVertical(1).Text("");
+                });
 
+                table.Cell().ColumnSpan(6).BorderLeft(1).Column(col =>
+                {
+                    col.Item().Row(row =>
+                    {
+                        row.RelativeItem().BorderVertical(1).Text("");
+                        row.ConstantItem(50).BorderVertical(1).Text("");
+                        row.ConstantItem(100).Text("");
+                        row.ConstantItem(100).Column(col =>
+                        {
+                            col.Item().PaddingLeft(5).Text(icpConcat).FontSize(7).Bold().Underline();
+                            col.Item().PaddingLeft(5).Text(icpConcat).FontSize(7).Bold().Underline();
+                        });
+
+                        row.ConstantItem(100).Column(col =>
+                        {
+                            col.Item().PaddingLeft(5).Text(PucConcat).FontSize(7).Bold().Underline();
+                            col.Item().PaddingLeft(5).Text(PucConcat).FontSize(7).Bold().Underline();
+                        });
+                
+                        row.ConstantItem(100).Column(col =>
+                        {
+                            col.Item().PaddingLeft(5).Text(icpConcat).FontSize(7).Bold().Underline();
+                            col.Item().PaddingLeft(5).Text(icpConcat).FontSize(7).Bold().Underline();
+                        });
+
+                        row.ConstantItem(100).Column(col =>
+                        {
+                            col.Item().PaddingLeft(5).Text(monto).FontSize(7).Bold().Underline();
+                            col.Item().PaddingLeft(5).Text(monto).FontSize(7).Bold().Underline();
+                        });
+                        row.ConstantItem(102).Text("");
+                        row.ConstantItem(60).BorderVertical(1).Text("");
+                        row.ConstantItem(70).BorderVertical(1).Text("");
+                    });
+                   
+                });
 
                 foreach (var item in ModelCuerpo)
                 {
                     
                     var pucCompromisos = item.PucCompromisos;
-
-                    foreach (var itemPuc in pucCompromisos.OrderByDescending(x => x.CodigoDetalleCompromiso))
+                    
+                    
+                    foreach (var itemPuc in pucCompromisos.OrderBy(x => x.FinanciadoId))
                     {
-                        
-                        table.Cell().ColumnSpan(6).Row(row =>
+                        monto = pucCompromisos.Sum(x => x.Monto);
+
+                        icpConcat = itemPuc.CodigoIcpConcat;
+
+                        if (pucCompromisos.IndexOf(itemPuc) == 7) 
                         {
+                            PucConcat = itemPuc.CodigoPucConcat;
+                            itemPuc.DescripcionFinanciado = "";
+                            monto = itemPuc.Monto;
+                        }
 
-                        row.ConstantItem(40).BorderVertical(1).Text("");
-                        row.ConstantItem(50).BorderVertical(1).Text("");
-
-                        row.RelativeItem().PaddingLeft(5).ShowOnce().Column(col =>
+                        else 
                         {
+                            PucConcat = itemPuc.CodigoPucConcat;
+                            descripcionFinanciado = itemPuc.DescripcionFinanciado;
+                        }
+                        //table.Cell().ColumnSpan(6).Row(row =>
+                        //{
+                          
+                        //  row.ConstantItem(40).BorderVertical(1).Text("");
+                        //  row.ConstantItem(50).BorderVertical(1).Text("");
+                        //  row.ConstantItem(102).Text("");
 
-                            col.Item().Text("SE-PR-SP-PY-AC").FontSize(7).Bold().Underline();
-                            col.Item().Text(itemPuc.CodigoIcpConcat).FontSize(7);
-                            col.Item().Text(itemPuc.CodigoIcpConcat).FontSize(7);
+                          
+                        //row.ConstantItem(100).PaddingLeft(5).ShowOnce().Column(col =>
+                        //{
 
-                        });
+                           
+                        //    col.Item().Text(itemPuc.CodigoIcpConcat).FontSize(7);
+                        //    col.Item().Text(itemPuc.CodigoIcpConcat).FontSize(7);
 
-                        row.RelativeItem().ShowOnce().Column(col =>
-                        {
+                        //});
+
+                        //row.ConstantItem(100).ShowOnce().Column(col =>
+                        //{
                                 
-                                var ivaPucConcat = itemPuc.CodigoPucConcat;
-                                var montoIva = itemPuc.Monto;
+                        //        var ivaPucConcat = itemPuc.CodigoPucConcat;
+                        //        var montoIva = itemPuc.Monto;
 
-                                col.Item().Text("GR-PA-GE-ES-SE-EX").FontSize(7).Bold().Underline();
-                                col.Item().Text(itemPuc.CodigoPucConcat).FontSize(7);
-                                col.Item().Text(ivaPucConcat).FontSize(7);
+                                
+                        //        col.Item().Text(itemPuc.CodigoPucConcat).FontSize(7);
+                        //        col.Item().Text(ivaPucConcat).FontSize(7);
                             
-                        });
+                        //});
 
-                        row.RelativeItem().ShowOnce().Column(col =>
-                        {
-
-                            col.Item().Text("Financiado Por").FontSize(7).Bold().Underline();
-                            col.Item().AlignCenter().Text(itemPuc.DescripcionFinanciado).FontSize(7);
-
-                        });
-
-
-                        row.RelativeItem().ShowOnce().Column(col =>
-                        {
-                            col.Item().Text("Monto").FontSize(7).Bold().Underline();
+                        //row.ConstantItem(100).ShowOnce().Column(col =>
+                        //{
                             
-                                var montoTraspaso = pucCompromisos.Sum(x => x.Monto);
-                                var montoPresupuestario = montoTraspaso.ToString("N", formato);
-                                col.Item().Text(montoPresupuestario).FontSize(7);
                             
-                                var montoIva = pucCompromisos.Sum(x => x.Monto);
-                                var monto = montoIva.ToString("N", formato);
-                                col.Item().Text(monto).FontSize(7);
+                        //    col.Item().AlignCenter().Text(itemPuc.DescripcionFinanciado).FontSize(7);
+
+                        //});
+
+
+                        //row.ConstantItem(100).PaddingLeft(10).ShowOnce().Column(col =>
+                        //{
+                          
+                            
+                        //        var montoTraspaso = pucCompromisos.Sum(x => x.Monto);
+                        //        var montoPresupuestario = montoTraspaso.ToString("N", formato);
+                        //        col.Item().Text(montoPresupuestario).FontSize(7);
+                            
+                        //        var montoIva = pucCompromisos.Sum(x => x.Monto);
+                        //        var monto = montoIva.ToString("N", formato);
+                        //        col.Item().Text(monto).FontSize(7);
 
                             
-                        });
+                        //});
 
-                            row.ConstantItem(60).BorderVertical(1).Text("");
-                            row.ConstantItem(70).BorderVertical(1).Text("");
+                        //row.ConstantItem(100).ShowOnce().Column(col =>
+                        //{
 
-                        });
+                        // });
+                        //row.ConstantItem(60).BorderVertical(1).ShowOnce().Column(col =>
+                        //{
+
+                        //});
+                        //row.ConstantItem(70).BorderVertical(1).ShowOnce().Column(col =>
+                        //{
+
+                        //});
+
+                        //});
                     }
                 }
+
+
+
                 table.Footer(footer =>
                 {
 
