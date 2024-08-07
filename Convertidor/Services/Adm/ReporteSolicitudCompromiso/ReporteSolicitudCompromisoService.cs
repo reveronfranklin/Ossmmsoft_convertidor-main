@@ -229,6 +229,10 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 return null;
             }
 
+            if (!File.Exists(pathLogo))
+            {
+                return $"No existe {pathLogo}";
+            }
 
 
             var reporte = await GenerateData(filter);
