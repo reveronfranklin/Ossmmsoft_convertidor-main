@@ -51,7 +51,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     
                 });
 
-            
+
                 table.Cell().ColumnSpan(6).Column(col =>
                 {
                     col.Item().BorderTop(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text("PARA: ").Style(headerStyle);

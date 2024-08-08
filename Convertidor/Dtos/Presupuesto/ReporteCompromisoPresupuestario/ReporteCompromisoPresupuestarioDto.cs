@@ -38,6 +38,7 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
 
     public class CuerpoReporteDto 
     {
+        public int CodigoDetalleCompromiso { get; set; }
         public decimal Cantidad { get; set; }
         public string DescripcionUdm { get; set; } = string.Empty;
         public string DescripcionArticulo { get; set; } = string.Empty;
