@@ -13,6 +13,15 @@ namespace Convertidor.Data
         {
 
         }
+        
+        public DbSet<AUTH_CONTENT_TYPE> AUTH_CONTENT_TYPE { get; set; }
+        public DbSet<AUTH_GROUP> AUTH_GROUP { get; set; }
+        public DbSet<AUTH_GROUP_PERMISSIONS> AUTH_GROUP_PERMISSIONS { get; set; }
+        public DbSet<AUTH_PERMISSION> AUTH_PERMISSION { get; set; }
+        public DbSet<AUTH_USER> AUTH_USER { get; set; }
+        public DbSet<AUTH_USER_GROUPS> AUTH_USER_GROUPS { get; set; }
+        public DbSet<AUTH_USER_USER_PERMISSIONS> AUTH_USER_USER_PERMISSIONS { get; set; }
+        
         public DbSet<SIS_USUARIOS> SIS_USUARIOS { get; set; }
         public DbSet<OSS_USUARIO_ROL> OSS_USUARIO_ROL { get; set; }
         
@@ -33,15 +42,75 @@ namespace Convertidor.Data
         public virtual DbSet<SIS_SERIE_DOCUMENTOS> SIS_SERIE_DOCUMENTOS { get; set; } = null!;
         public virtual DbSet<SIS_DESCRIPTIVAS> SIS_DESCRIPTIVAS { get; set; } = null!;
         
-        
-        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
             base.OnModelCreating(modelBuilder);
-
-
             modelBuilder
+                    
+                .Entity<AUTH_CONTENT_TYPE>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.ID,
+
+                    });
+                    builder.ToTable("AUTH_CONTENT_TYPE");
+                })
+                .Entity<AUTH_GROUP>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.ID,
+
+                    });
+                    builder.ToTable("AUTH_GROUP");
+                })
+                .Entity<AUTH_GROUP_PERMISSIONS>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.ID,
+
+                    });
+                    builder.ToTable("AUTH_GROUP_PERMISSIONS");
+                })
+                .Entity<AUTH_PERMISSION>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.ID,
+
+                    });
+                    builder.ToTable("AUTH_PERMISSION");
+                })
+                .Entity<AUTH_USER>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.ID,
+
+                    });
+                    builder.ToTable("AUTH_USER");
+                })
+                .Entity<AUTH_USER_GROUPS>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.ID,
+
+                    });
+                    builder.ToTable("AUTH_USER_GROUPS");
+                })
+                .Entity<AUTH_USER_USER_PERMISSIONS>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.ID,
+
+                    });
+                    builder.ToTable("AUTH_USER_USER_PERMISSIONS");
+                })
                 .Entity<SIS_V_SISTEMA_USUARIO_PROGRAMA>(builder =>
                 {
                     builder.HasNoKey();
