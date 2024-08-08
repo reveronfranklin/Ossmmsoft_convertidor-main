@@ -2,6 +2,7 @@
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Adm;
@@ -115,10 +116,6 @@ namespace Convertidor.Services.Presupuesto
         }
 
 
-
-        
-      
-
         public async Task<PreCompromisosResponseDto> MapPreCompromisos(PRE_COMPROMISOS dto)
         {
             PreCompromisosResponseDto itemResult = new PreCompromisosResponseDto();
@@ -131,19 +128,14 @@ namespace Convertidor.Services.Presupuesto
             FechaDto fechaCompromisoObj = Fecha.GetFechaDto(dto.FECHA_COMPROMISO);
             itemResult.FechaCompromisoObj = (FechaDto)fechaCompromisoObj;
             itemResult.CodigoProveedor = dto.CODIGO_PROVEEDOR;
-            itemResult.FechaEntrega = dto.FECHA_ENTREGA;
-            itemResult.FechaEntregaString = Fecha.GetFechaString( (DateTime)dto.FECHA_ENTREGA);
-            FechaDto fechaEntregaObj = Fecha.GetFechaDto((DateTime)dto.FECHA_ENTREGA);
-            itemResult.FechaEntregaObj = (FechaDto) fechaEntregaObj;
+            var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CODIGO_PROVEEDOR);
+            if (proveedor != null)
+            {
+                itemResult.NombreProveedor = proveedor.NOMBRE_PROVEEDOR;
+            }
+        
             itemResult.CodigoDirEntrega = dto.CODIGO_DIR_ENTREGA;
-            itemResult.TipoPagoId = (int)dto.TIPO_PAGO_ID;
-            itemResult.Extra1 = dto.EXTRA1;
-            itemResult.Extra2 = dto.EXTRA2;
-            itemResult.Extra3 = dto.EXTRA3;
             itemResult.CodigoPresupuesto = dto.CODIGO_PRESUPUESTO;
-            itemResult.TipoRenglonId = (int)dto.TIPO_RENGLON_ID;
-            itemResult.NumeroOrden = dto.NUMERO_ORDEN;
-
             return itemResult;
 
         }
@@ -311,7 +303,12 @@ namespace Convertidor.Services.Presupuesto
     
             return result;
         }
-        
+
+        public async Task<ResultDto<List<PreCompromisosResponseDto>>> GetByPresupuesto(PreCompromisosFilterDto filter)
+        {
+            return await _repository.GetByPresupuesto(filter);
+        }
+
         public async Task<List<PreCompromisosResponseDto>> MapListPreCompromisosDto(List<PRE_COMPROMISOS> dtos)
         {
             List<PreCompromisosResponseDto> result = new List<PreCompromisosResponseDto>();

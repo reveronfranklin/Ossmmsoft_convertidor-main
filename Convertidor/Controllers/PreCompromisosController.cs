@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Convertidor.Dtos.Adm;
+using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
 using Convertidor.Dtos.Presupuesto;
@@ -34,6 +35,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByPresupuesto(PreCompromisosFilterDto filter)
+        {
+            var result = await _service.GetByPresupuesto(filter);
+            return Ok(result);
+        }
+        
        
 
         [HttpPost]

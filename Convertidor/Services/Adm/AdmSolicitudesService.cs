@@ -455,7 +455,6 @@ namespace Convertidor.Services.Adm
                 solicitud.NUMERO_SOLICITUD = dto.NumeroSolicitud;
                 solicitud.FECHA_SOLICITUD = dto.FechaSolicitud;
                 solicitud.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
-                solicitud.TIPO_SOLICITUD_ID = dto.TipoSolicitudId;
                 solicitud.CODIGO_PROVEEDOR = dto.CodigoProveedor;
                 solicitud.MOTIVO = dto.Motivo;
                 solicitud.NOTA = dto.Nota;
