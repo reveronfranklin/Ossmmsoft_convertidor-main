@@ -1,24 +1,25 @@
 ﻿using Convertidor.Data.Entities.Sis;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Data.Repository.Sis
 {
-	public class OssConfigRepository: Interfaces.Sis.IOssConfigRepository
+	public class SisAuthPermissionRepository: Interfaces.Sis.ISisAuthPermissionRepository
     {
 		
 
         private readonly DataContextSis _context;
-        public OssConfigRepository(DataContextSis context)
+        public SisAuthPermissionRepository(DataContextSis context)
         {
             _context = context;
       
         }
 
-        public async Task<List<OSS_CONFIG>> GetALL()
+        public async Task<List<AUTH_PERMISSION>> GetALL()
         {
             try
             {
-                var result = await _context.OSS_CONFIG.DefaultIfEmpty().ToListAsync();
+                var result = await _context.AUTH_PERMISSION.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -30,11 +31,13 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-        public async Task<List<OSS_CONFIG>> GetListByClave(string clave)
+     
+
+        public async Task<AUTH_PERMISSION> GetByID(int id)
         {
             try
             {
-                var result = await _context.OSS_CONFIG.DefaultIfEmpty().Where(x=>x.CLAVE==clave).ToListAsync();
+                var result = await _context.AUTH_PERMISSION.DefaultIfEmpty().Where(x => x.ID == id).FirstOrDefaultAsync();
                 return result;
             }
             catch (Exception ex)
@@ -46,31 +49,15 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-        public async Task<OSS_CONFIG> GetByClave(string clave)
+        public async Task<ResultDto<AUTH_PERMISSION>> Add(AUTH_PERMISSION entity)
         {
-            try
-            {
-                var result = await _context.OSS_CONFIG.DefaultIfEmpty().Where(x => x.CLAVE == clave).FirstOrDefaultAsync();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.InnerException.Message;
-                return null;
-            }
-
-
-        }
-
-        public async Task<ResultDto<OSS_CONFIG>> Add(OSS_CONFIG entity)
-        {
-            ResultDto<OSS_CONFIG> result = new ResultDto<OSS_CONFIG>(null);
+            ResultDto<AUTH_PERMISSION> result = new ResultDto<AUTH_PERMISSION>(null);
             try
             {
 
                 entity.ID = await GetNextKey();
 
-                await _context.OSS_CONFIG.AddAsync(entity);
+                await _context.AUTH_PERMISSION.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -93,18 +80,18 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-        public async Task<ResultDto<OSS_CONFIG>> Update(OSS_CONFIG entity)
+        public async Task<ResultDto<AUTH_PERMISSION>> Update(AUTH_PERMISSION entity)
         {
-            ResultDto<OSS_CONFIG> result = new ResultDto<OSS_CONFIG>(null);
+            ResultDto<AUTH_PERMISSION> result = new ResultDto<AUTH_PERMISSION>(null);
 
             try
             {
-                OSS_CONFIG entityUpdate = await GetByClave(entity.CLAVE);
+                AUTH_PERMISSION entityUpdate = await GetByID(entity.ID);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.OSS_CONFIG.Update(entity);
+                    _context.AUTH_PERMISSION.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -128,7 +115,7 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                 int result = 0;
-                var last = await _context.OSS_CONFIG.DefaultIfEmpty()
+                var last = await _context.AUTH_PERMISSION.DefaultIfEmpty()
                     .OrderByDescending(x => x.ID)
                     .FirstOrDefaultAsync();
                 if (last == null)

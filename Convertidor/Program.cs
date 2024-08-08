@@ -184,6 +184,13 @@ builder.Services.AddTransient<ISisSourceRepository,SisSourceRepository>();
 builder.Services.AddTransient<ISisSerieDocumentosRepository,SisSerieDocumentosRepository>();
 builder.Services.AddTransient<ISisDescriptivaRepository,SisDescriptivaRepository>();
 builder.Services.AddTransient<IOssUsuarioRolRepository,OssUsuarioRolRepository>();
+builder.Services.AddTransient<ISisAuthContentTypeRepository,SisAuthContentTypeRepository>();
+builder.Services.AddTransient<ISisAuthGroupRepository,SisAuthGroupRepository>();
+builder.Services.AddTransient<ISisAuthGroupPermissionsRepository,SisAuthGroupPermissionsRepository>();
+builder.Services.AddTransient<ISisAuthPermissionRepository,SisAuthPermissionRepository>();
+builder.Services.AddTransient<ISisAuthUserRepository,SisAuthUserRepository>();
+builder.Services.AddTransient<ISisAuthUserGroupRepository,SisAuthUserGroupRepository>();
+builder.Services.AddTransient<ISisAuthuserPermissionsRepository,SisAuthUserPermissionsRepository>();
 
 
 
