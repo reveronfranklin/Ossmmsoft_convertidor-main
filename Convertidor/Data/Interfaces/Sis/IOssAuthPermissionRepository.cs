@@ -8,5 +8,6 @@ public interface IOssAuthPermissionRepository
     Task<AUTH_PERMISSION> GetByID(int id);
     Task<ResultDto<AUTH_PERMISSION>> Add(AUTH_PERMISSION entity);
     Task<ResultDto<AUTH_PERMISSION>> Update(AUTH_PERMISSION entity);
-    
+    Task<string> Delete(int id);
+
 } 

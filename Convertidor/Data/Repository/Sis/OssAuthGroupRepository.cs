@@ -110,6 +110,27 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+        public async Task<string> Delete(int id)
+        {
+
+            try
+            {
+                var entity = await GetByID(id);
+                if (entity != null)
+                {
+                    _context.AUTH_GROUP.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
         public async Task<int> GetNextKey()
         {
             try

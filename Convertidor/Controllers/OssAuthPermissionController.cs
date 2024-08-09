@@ -8,12 +8,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class OssAuthContentTypeController : ControllerBase
+    public class OssAuthPermissionController : ControllerBase
     {
-        private readonly IOssAuthContentTypeService _service;
+        private readonly IOssAuthPermissionsService _service;
 
 
-        public OssAuthContentTypeController(IOssAuthContentTypeService service)
+        public OssAuthPermissionController(IOssAuthPermissionsService service)
         {
             _service = service;
         }
@@ -25,25 +25,32 @@ namespace Convertidor.Controllers
                 var result = await _service.GetAll();
             return Ok(result);
         }
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetListCodeName()
+        {
+            var result = _service.GetListCodeName();
+            return Ok(result);
+        }
         
         
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetById(AuthContentTypeFilterDto filter)
+        public async Task<IActionResult> GetById(AuthPermissionFilterDto filter)
         {
             var result = await _service.GetById(filter);
             return Ok(result);
         }
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(AuthContentTypeUpdateDto filter)
+        public async Task<IActionResult> Update(AuthPermissionUpdateDto filter)
         {
             var result = await _service.Update(filter);
             return Ok(result);
         }
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(AuthContentTypeUpdateDto filter)
+        public async Task<IActionResult> Create(AuthPermissionUpdateDto filter)
         {
             var result = await _service.Create(filter);
             return Ok(result);
@@ -51,7 +58,7 @@ namespace Convertidor.Controllers
         
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(AuthContentTypeDeleteDto filter)
+        public async Task<IActionResult> Delete(AuthPermissionDeleteDto filter)
         {
             var result = await _service.Delete(filter);
             return Ok(result);
