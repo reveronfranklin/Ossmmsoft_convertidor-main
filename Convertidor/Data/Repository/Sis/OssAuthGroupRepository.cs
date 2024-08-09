@@ -4,12 +4,12 @@ using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Data.Repository.Sis
 {
-	public class SisAuthGroupRepository: Interfaces.Sis.ISisAuthGroupRepository
+	public class OssAuthGroupRepository: Interfaces.Sis.IOssAuthGroupRepository
     {
 		
 
         private readonly DataContextSis _context;
-        public SisAuthGroupRepository(DataContextSis context)
+        public OssAuthGroupRepository(DataContextSis context)
         {
             _context = context;
       

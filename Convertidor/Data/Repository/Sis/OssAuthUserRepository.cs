@@ -4,22 +4,22 @@ using NPOI.SS.Formula.Functions;
 
 namespace Convertidor.Data.Repository.Sis
 {
-	public class SisAuthContentTypeRepository: Interfaces.Sis.ISisAuthContentTypeRepository
+	public class OssAuthUserRepository: Interfaces.Sis.IOssAuthUserRepository
     {
 		
 
         private readonly DataContextSis _context;
-        public SisAuthContentTypeRepository(DataContextSis context)
+        public OssAuthUserRepository(DataContextSis context)
         {
             _context = context;
       
         }
 
-        public async Task<List<AUTH_CONTENT_TYPE>> GetALL()
+        public async Task<List<AUTH_USER>> GetALL()
         {
             try
             {
-                var result = await _context.AUTH_CONTENT_TYPE.DefaultIfEmpty().ToListAsync();
+                var result = await _context.AUTH_USER.DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -33,11 +33,11 @@ namespace Convertidor.Data.Repository.Sis
 
      
 
-        public async Task<AUTH_CONTENT_TYPE> GetByID(int id)
+        public async Task<AUTH_USER> GetByID(int id)
         {
             try
             {
-                var result = await _context.AUTH_CONTENT_TYPE.DefaultIfEmpty().Where(x => x.ID == id).FirstOrDefaultAsync();
+                var result = await _context.AUTH_USER.DefaultIfEmpty().Where(x => x.ID == id).FirstOrDefaultAsync();
                 return result;
             }
             catch (Exception ex)
@@ -49,15 +49,15 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-        public async Task<ResultDto<AUTH_CONTENT_TYPE>> Add(AUTH_CONTENT_TYPE entity)
+        public async Task<ResultDto<AUTH_USER>> Add(AUTH_USER entity)
         {
-            ResultDto<AUTH_CONTENT_TYPE> result = new ResultDto<AUTH_CONTENT_TYPE>(null);
+            ResultDto<AUTH_USER> result = new ResultDto<AUTH_USER>(null);
             try
             {
 
                 entity.ID = await GetNextKey();
 
-                await _context.AUTH_CONTENT_TYPE.AddAsync(entity);
+                await _context.AUTH_USER.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -80,18 +80,18 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-        public async Task<ResultDto<AUTH_CONTENT_TYPE>> Update(AUTH_CONTENT_TYPE entity)
+        public async Task<ResultDto<AUTH_USER>> Update(AUTH_USER entity)
         {
-            ResultDto<AUTH_CONTENT_TYPE> result = new ResultDto<AUTH_CONTENT_TYPE>(null);
+            ResultDto<AUTH_USER> result = new ResultDto<AUTH_USER>(null);
 
             try
             {
-                AUTH_CONTENT_TYPE entityUpdate = await GetByID(entity.ID);
+                AUTH_USER entityUpdate = await GetByID(entity.ID);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.AUTH_CONTENT_TYPE.Update(entity);
+                    _context.AUTH_USER.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -115,7 +115,7 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                 int result = 0;
-                var last = await _context.AUTH_CONTENT_TYPE.DefaultIfEmpty()
+                var last = await _context.AUTH_USER.DefaultIfEmpty()
                     .OrderByDescending(x => x.ID)
                     .FirstOrDefaultAsync();
                 if (last == null)

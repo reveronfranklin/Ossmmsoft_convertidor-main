@@ -184,13 +184,13 @@ builder.Services.AddTransient<ISisSourceRepository,SisSourceRepository>();
 builder.Services.AddTransient<ISisSerieDocumentosRepository,SisSerieDocumentosRepository>();
 builder.Services.AddTransient<ISisDescriptivaRepository,SisDescriptivaRepository>();
 builder.Services.AddTransient<IOssUsuarioRolRepository,OssUsuarioRolRepository>();
-builder.Services.AddTransient<ISisAuthContentTypeRepository,SisAuthContentTypeRepository>();
-builder.Services.AddTransient<ISisAuthGroupRepository,SisAuthGroupRepository>();
-builder.Services.AddTransient<ISisAuthGroupPermissionsRepository,SisAuthGroupPermissionsRepository>();
-builder.Services.AddTransient<ISisAuthPermissionRepository,SisAuthPermissionRepository>();
-builder.Services.AddTransient<ISisAuthUserRepository,SisAuthUserRepository>();
-builder.Services.AddTransient<ISisAuthUserGroupRepository,SisAuthUserGroupRepository>();
-builder.Services.AddTransient<ISisAuthuserPermissionsRepository,SisAuthUserPermissionsRepository>();
+builder.Services.AddTransient<IOssAuthContentTypeRepository,OssAuthContentTypeRepository>();
+builder.Services.AddTransient<IOssAuthGroupRepository,OssAuthGroupRepository>();
+builder.Services.AddTransient<IOssAuthGroupPermissionsRepository,OssAuthGroupPermissionsRepository>();
+builder.Services.AddTransient<IOssAuthPermissionRepository,OssAuthPermissionRepository>();
+builder.Services.AddTransient<IOssAuthUserRepository,OssAuthUserRepository>();
+builder.Services.AddTransient<IOssAuthUserGroupRepository,OssAuthUserGroupRepository>();
+builder.Services.AddTransient<IOssAuthUserPermissionsRepository,OssAuthUserPermissionsRepository>();
 
 
 
@@ -204,7 +204,7 @@ builder.Services.AddTransient<IOssFuncionService, OssFuncionService>();
 builder.Services.AddTransient<IOssFormulaService, OssFormulaService>();
 builder.Services.AddTransient<IOssCalculoService, OssCalculoService>();
 builder.Services.AddTransient<IOssModeloCalculoService, OssModeloCalculoService>();
-
+builder.Services.AddTransient<IOssAuthContentTypeService, OssAuthContentTypeService>();
 
 
 

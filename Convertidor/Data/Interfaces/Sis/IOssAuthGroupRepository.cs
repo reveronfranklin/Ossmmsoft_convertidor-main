@@ -2,7 +2,7 @@ using Convertidor.Data.Entities.Sis;
 
 namespace Convertidor.Data.Interfaces.Sis;
 
-public interface ISisAuthGroupRepository
+public interface IOssAuthGroupRepository
 {
     Task<List<AUTH_GROUP>> GetALL();
     Task<AUTH_GROUP> GetByID(int id);
