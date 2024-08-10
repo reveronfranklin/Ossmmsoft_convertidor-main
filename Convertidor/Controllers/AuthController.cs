@@ -19,17 +19,17 @@ namespace Convertidor.Controllers
         private readonly ISisUsuarioServices _service;
 
         private IHttpContextAccessor _httpContextAccessor;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        
-      
 
-        public SisUsuariosController(ISisUsuarioServices service, IHttpContextAccessor httpContextAccessor)
+        public SisUsuariosController(ISisUsuarioServices service,
+                                    IHttpContextAccessor httpContextAccessor,
+                                    ISisUsuarioRepository sisUsuarioRepository)
         {
 
             _service = service;
             _httpContextAccessor = httpContextAccessor;
-
-           
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
 
@@ -53,6 +53,36 @@ namespace Convertidor.Controllers
             return Ok(menu);
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult> GetAll()
+        {
+      
+            var menu = await _service.GetAll();
+
+
+            return Ok(menu);
+        }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> Update(SisUsuariosUpdateDto dto)
+        {
+      
+            var result = await _service.Update(dto);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> Create(SisUsuariosUpdateDto dto)
+        {
+      
+            var result = await _service.Create(dto);
+
+
+            return Ok(result);
+        }
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult>  Login(LoginDto dto)
@@ -260,7 +290,7 @@ namespace Convertidor.Controllers
             sisUsuario.REFRESHTOKEN = newRefreshToken.Refresh_Token;
             sisUsuario.TOKENCREATED = newRefreshToken.Created;
             sisUsuario.TOKENEXPIRES = newRefreshToken.Expires;
-            await _service.Update(sisUsuario);
+            await _sisUsuarioRepository.Update(sisUsuario);
         }
 
 

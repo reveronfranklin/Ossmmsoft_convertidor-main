@@ -185,6 +185,14 @@ builder.Services.AddTransient<ISisSerieDocumentosRepository,SisSerieDocumentosRe
 builder.Services.AddTransient<ISisDescriptivaRepository,SisDescriptivaRepository>();
 builder.Services.AddTransient<IOssUsuarioRolRepository,OssUsuarioRolRepository>();
 
+builder.Services.AddTransient<IOssAuthContentTypeRepository,OssAuthContentTypeRepository>();
+builder.Services.AddTransient<IOssAuthGroupRepository,OssAuthGroupRepository>();
+builder.Services.AddTransient<IOssAuthGroupPermissionsRepository,OssAuthGroupPermissionsRepository>();
+builder.Services.AddTransient<IOssAuthPermissionRepository,OssAuthPermissionRepository>();
+builder.Services.AddTransient<IOssAuthUserRepository,OssAuthUserRepository>();
+builder.Services.AddTransient<IOssAuthUserGroupRepository,OssAuthUserGroupRepository>();
+builder.Services.AddTransient<IOssAuthUserPermissionsRepository,OssAuthUserPermissionsRepository>();
+
 
 
 //Services Sis
@@ -197,10 +205,11 @@ builder.Services.AddTransient<IOssFuncionService, OssFuncionService>();
 builder.Services.AddTransient<IOssFormulaService, OssFormulaService>();
 builder.Services.AddTransient<IOssCalculoService, OssCalculoService>();
 builder.Services.AddTransient<IOssModeloCalculoService, OssModeloCalculoService>();
-
-
-
-
+builder.Services.AddTransient<IOssAuthContentTypeService, OssAuthContentTypeService>();
+builder.Services.AddTransient<IOssAuthPermissionsService, OssAuthPermissionsService>();
+builder.Services.AddTransient<IOssAuthGroupService, OssAuthGroupService>();
+builder.Services.AddTransient<IOssAuthGroupPermissionService, OssAuthGroupPermissionService>();
+builder.Services.AddTransient<IOssAuthUserPermissionService, OssAuthUserPermissionService>();
 
 
 

@@ -159,11 +159,12 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
 
                         var descriptiva = await _admDescriptivaRepository.GetByCodigo(item.UdmId);
 
+                        resultItem.CodigoDetalleCompromiso = item.CodigoDetalleCompromiso;
                         resultItem.DescripcionUdm = descriptiva.DESCRIPCION;
                         resultItem.DescripcionArticulo = item.Descripcion;
                         resultItem.PrecioUnitario = item.PrecioUnitario;
                         resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
-
+                        
                         var pucCompromisos = await _prePucCompromisosService.GetByDetalleCompromiso(item.CodigoDetalleCompromiso);
                         if(pucCompromisos.Data.Count > 0) 
                         {

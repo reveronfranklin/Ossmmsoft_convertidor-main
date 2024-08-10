@@ -140,18 +140,72 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+        public async Task Execute(string codigo)
+        {
+            try
+            {
+                //FormattableString xqueryDiario =  $"DECLARE VALOR VARCHAR2(20); \nBEGIN\n VALOR:= SIS.SIS_F_SERIE_DOCUMENTOS('SERIE_COMPUESTA_ACTUAL','{codigo}',13, -1);\nEND;";
+                FormattableString xqueryDiario =  $"CALL SIS.SIS_P_SERIE_DOCUMENTOS('SERIE_COMPUESTA_ACTUAL','{codigo}',13, -1,?);";
 
+                var a = $"CALL SIS.SIS_P_SERIE_DOCUMENTOS";
+                var resultDiario = await _context.Database.ExecuteSqlInterpolatedAsync(xqueryDiario);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
+        }
+        
         public async Task<string> GenerateNextSerie(int tipoDocumentoId,string codigo)
         {
 
             string result = "";
             try
             {
-                
-                FormattableString xqueryDiario = $"DECLARE VALOR VARCHAR2(20); \nBEGIN\n VALOR:= SIS.SIS_F_SERIE_DOCUMENTOS('SERIE_COMPUESTA_ACTUAL','{codigo}',13, -1);\nEND;";
 
-                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.DefaultIfEmpty().Where(x => x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN ==null).FirstOrDefaultAsync();
+           
+                
+                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.DefaultIfEmpty().Where(x => x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN == null).FirstOrDefaultAsync();
+                if (serieDocumentos != null)
+                {
+                    var serieCompuesta = "";
+                    serieDocumentos.NUMERO_SERIE_ACTUAL =serieDocumentos.NUMERO_SERIE_ACTUAL+ 1;
+                    int number =  serieDocumentos.NUMERO_SERIE_ACTUAL;;
+                    string paddedNumber = number.ToString().PadLeft(serieDocumentos.MAX_DIGITOS, '0');
+                    serieCompuesta = $"{serieDocumentos.SERIE_LETRAS}{paddedNumber}";
+                    result = serieCompuesta;
+                    serieDocumentos.SERIE_COMPUESTA_ACTUAL = serieCompuesta;
+                    _context.SIS_SERIE_DOCUMENTOS.Update(serieDocumentos);
+                    await _context.SaveChangesAsync();
+                    
+
+                }
+                else
+                {
+                    result = "";
+                }
+                return result;
+                
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+        
+        
+        public async Task<string> GenerateNextSerieOracle(int tipoDocumentoId,string codigo)
+        {
+
+            string result = "";
+            try
+            {
+
+                await Execute(codigo);
+                
+                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.DefaultIfEmpty().Where(x => x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN == null).FirstOrDefaultAsync();
                 if (serieDocumentos != null)
                 {
                     result = serieDocumentos.SERIE_COMPUESTA_ACTUAL;

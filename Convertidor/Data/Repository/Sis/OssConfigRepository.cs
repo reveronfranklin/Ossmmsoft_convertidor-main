@@ -8,11 +8,10 @@ namespace Convertidor.Data.Repository.Sis
 		
 
         private readonly DataContextSis _context;
-        private readonly IConfiguration _configuration;
-        public OssConfigRepository(DataContextSis context, IConfiguration configuration)
+        public OssConfigRepository(DataContextSis context)
         {
             _context = context;
-            _configuration = configuration;
+      
         }
 
         public async Task<List<OSS_CONFIG>> GetALL()

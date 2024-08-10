@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Utility;
 using NPOI.OpenXmlFormats.Vml.Office;
@@ -22,6 +23,7 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPreModificacionService _preModificacionService;
         private readonly IPrePucModificacionService _prePucModificacionService;
         private readonly IPrePucModificacionRepository _prePucModificacionRepository;
+        private readonly IPRE_INDICE_CAT_PRGRepository _preIndiceCatPrgRepository;
         private readonly IPrePucSolicitudModificacionRepository _prePucSolicitudModificacionRepository;
 
         public PreSolModificacionService(IPreSolModificacionRepository repository,
@@ -35,7 +37,8 @@ namespace Convertidor.Services.Presupuesto
                                       IPRE_SALDOSRepository preSaldosRepository,
                                       IPreModificacionService preModificacionService,
                                       IPrePucModificacionService prePucModificacionService,
-                                      IPrePucModificacionRepository prePucModificacionRepository
+                                      IPrePucModificacionRepository prePucModificacionRepository,
+                                      IPRE_INDICE_CAT_PRGRepository preIndiceCatPrgRepository
                                       
         )
 		{
@@ -51,6 +54,7 @@ namespace Convertidor.Services.Presupuesto
             _preModificacionService = preModificacionService;
             _prePucModificacionService = prePucModificacionService;
             _prePucModificacionRepository = prePucModificacionRepository;
+            _preIndiceCatPrgRepository = preIndiceCatPrgRepository;
         }
 
 
@@ -456,10 +460,17 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
                 
-              
 
+                if (dto.CodigoSolicitante <=0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitante Invalido";
+                    return result;
+                }
 
-                if (dto.CodigoSolicitante < 0)
+                var solicitante = await _preIndiceCatPrgRepository.GetByCodigo(dto.CodigoSolicitante);
+                if (solicitante == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -572,7 +583,7 @@ namespace Convertidor.Services.Presupuesto
               
 
 
-                if (dto.CodigoSolicitante < 0)
+                if (dto.CodigoSolicitante <=0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -580,6 +591,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                var solicitante = await _preIndiceCatPrgRepository.GetByCodigo(dto.CodigoSolicitante);
+                if (solicitante == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Solicitante Invalido";
+                    return result;
+                }
+                
+                
                 if (dto.Motivo.Length > 1000)
                 {
                     result.Data = null;
