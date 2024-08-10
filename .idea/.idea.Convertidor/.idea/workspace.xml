@@ -8,29 +8,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/OssGroupPermissionController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupPermisionResponseDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupPermissionDeleteDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupPermissionFilterDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupPermissionUpdateDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisEstatus.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisPrioridad.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisUsuariosResponseDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisUsuariosUpdateDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/IOssAuthGroupPermissionService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthUserPermisionDeleteDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthUserPermisionFilterDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthUserPermisionResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthUserPermisionUpdateDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/IOssAuthUserPermissionService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthUserPermissionService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/SIS_USUARIOS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/SIS_USUARIOS.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthGroupPermissionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthGroupPermissionsRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisUsuarioRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthGroupPermissionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthGroupPermissionsRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthGroupRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthGroupRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthUserPermissionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthUserPermissionsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthUserPermissionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthUserPermissionsRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/ISisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/ISisUsuarioServices.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +44,16 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -254,7 +252,7 @@
       <workItem from="1722547828569" duration="2938000" />
       <workItem from="1722556329361" duration="69229000" />
       <workItem from="1722979877253" duration="10353000" />
-      <workItem from="1723059935503" duration="57718000" />
+      <workItem from="1723059935503" duration="65264000" />
     </task>
     <servers />
   </component>
@@ -1900,10 +1898,10 @@
           <line>221</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'GenerateNextSerie'">
             <startOffsets>
-              <option value="6796" />
+              <option value="6772" />
             </startOffsets>
             <endOffsets>
-              <option value="6806" />
+              <option value="6782" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="328" />
@@ -1913,10 +1911,10 @@
           <line>207</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'GenerateNextSerie'">
             <startOffsets>
-              <option value="6250" />
+              <option value="6226" />
             </startOffsets>
             <endOffsets>
-              <option value="6430" />
+              <option value="6406" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="329" />
@@ -1939,10 +1937,10 @@
           <line>205</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'GenerateNextSerie'">
             <startOffsets>
-              <option value="6194" />
+              <option value="6170" />
             </startOffsets>
             <endOffsets>
-              <option value="6216" />
+              <option value="6192" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="331" />
@@ -1959,6 +1957,71 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="332" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs</url>
+          <line>24</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="600" />
+            </startOffsets>
+            <endOffsets>
+              <option value="637" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="333" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs</url>
+          <line>34</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs" containingFunctionPresentation="Method 'GetById'">
+            <startOffsets>
+              <option value="859" />
+            </startOffsets>
+            <endOffsets>
+              <option value="903" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="334" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs</url>
+          <line>41</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs" containingFunctionPresentation="Method 'GetByUser'">
+            <startOffsets>
+              <option value="1100" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1146" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="335" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs</url>
+          <line>48</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="1340" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1383" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="336" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs</url>
+          <line>56</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/OssUserPermissionController.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="1586" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1629" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="337" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

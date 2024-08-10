@@ -209,7 +209,7 @@ builder.Services.AddTransient<IOssAuthContentTypeService, OssAuthContentTypeServ
 builder.Services.AddTransient<IOssAuthPermissionsService, OssAuthPermissionsService>();
 builder.Services.AddTransient<IOssAuthGroupService, OssAuthGroupService>();
 builder.Services.AddTransient<IOssAuthGroupPermissionService, OssAuthGroupPermissionService>();
-
+builder.Services.AddTransient<IOssAuthUserPermissionService, OssAuthUserPermissionService>();
 
 
 

@@ -30,8 +30,37 @@ namespace Convertidor.Data.Repository.Sis
 
 
         }
+        public async Task<List<AUTH_USER_USER_PERMISSIONS>> GetByUser(int userId)
+        {
+            try
+            {
+                var result = await _context.AUTH_USER_USER_PERMISSIONS.DefaultIfEmpty().Where(x=>x.USER_ID==userId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
 
-     
+
+        }
+
+        public async Task<AUTH_USER_USER_PERMISSIONS> GetByUserPermision(int userId,int permissionId)
+        {
+            try
+            {
+                var result = await _context.AUTH_USER_USER_PERMISSIONS.DefaultIfEmpty().Where(x => x.USER_ID == userId && x.PERMISSION_ID==permissionId).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
 
         public async Task<AUTH_USER_USER_PERMISSIONS> GetByID(int id)
         {
@@ -140,7 +169,27 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+        public async Task<string> Delete(int id)
+        {
 
+            try
+            {
+                var entity = await GetByID(id);
+                if (entity != null)
+                {
+                    _context.AUTH_USER_USER_PERMISSIONS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
 
     }
 
