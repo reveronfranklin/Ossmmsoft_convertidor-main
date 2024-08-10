@@ -87,7 +87,55 @@ namespace Convertidor.Data.Repository.Sis
 
 
         }
+        public async Task<SIS_USUARIOS> GetByCodigo(int codigousuario)
+        {
+        
+            try
+            {
+                var result = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x=>x.CODIGO_USUARIO== codigousuario).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
 
+
+        }
+        public async Task<ResultDto<SIS_USUARIOS>> Create(SIS_USUARIOS entity)
+        {
+            ResultDto<SIS_USUARIOS> result = new ResultDto<SIS_USUARIOS>(null);
+
+            try
+            {
+                SIS_USUARIOS entityUpdate = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x => x.CODIGO_USUARIO == entity.CODIGO_USUARIO).FirstOrDefaultAsync();
+                if (entityUpdate != null)
+                {
+                    entity.CODIGO_USUARIO = await GetNextKey();
+                    _context.SIS_USUARIOS.Add(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.InnerException.Message;
+                return result;
+            }
+
+
+
+
+
+
+        }
         public async Task<ResultDto<SIS_USUARIOS>> Update(SIS_USUARIOS entity)
         {
             ResultDto<SIS_USUARIOS> result = new ResultDto<SIS_USUARIOS>(null);
@@ -308,6 +356,36 @@ namespace Convertidor.Data.Repository.Sis
 
 
          
+
+
+        }
+        
+        public async Task<int> GetNextKey()
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.SIS_USUARIOS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_USUARIO)
+                    .FirstOrDefaultAsync();
+                if (last == null)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = last.CODIGO_USUARIO + 1;
+                }
+
+                return (int)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return 0;
+            }
+
 
 
         }

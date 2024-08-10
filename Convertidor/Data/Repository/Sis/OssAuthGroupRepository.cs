@@ -128,8 +128,6 @@ namespace Convertidor.Data.Repository.Sis
                 return ex.Message;
             }
 
-
-
         }
         public async Task<int> GetNextKey()
         {

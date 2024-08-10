@@ -42,6 +42,7 @@ namespace Convertidor.Data.Entities.Sis
         public string? REFRESHTOKEN { get; set; } = string.Empty;
         public DateTime? TOKENCREATED { get; set; }
         public DateTime? TOKENEXPIRES { get; set; }
+        public int IS_SUPERUSER { get; set; }
         
 
     }

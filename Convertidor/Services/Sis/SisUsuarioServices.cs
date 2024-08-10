@@ -11,7 +11,7 @@ namespace Convertidor.Services.Sis
         private readonly ISisUsuarioRepository _repository;
         private readonly IOssUsuarioRolRepository _ossUsuarioRolRepository;
         private readonly IConfiguration _configuration;
-
+        private readonly IRhDescriptivasService _rhDescriptivasService;
 
 
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -19,12 +19,14 @@ namespace Convertidor.Services.Sis
         public SisUsuarioServices(ISisUsuarioRepository repository,
                                     IOssUsuarioRolRepository ossUsuarioRolRepository,
                                     IHttpContextAccessor httpContextAccessor,
-                                    IConfiguration configuration)
+                                    IConfiguration configuration,
+                                    IRhDescriptivasService rhDescriptivasService)
         {
             _repository = repository;
             _ossUsuarioRolRepository = ossUsuarioRolRepository;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+            _rhDescriptivasService = rhDescriptivasService;
         }
 
         public async Task<ResultLoginDto> Login(LoginDto dto)
@@ -53,14 +55,404 @@ namespace Convertidor.Services.Sis
 
         }
 
-        public async Task<ResultDto<SIS_USUARIOS>> Update(SIS_USUARIOS entity)
-        {
+       
 
-           var result = await _repository.Update(entity);
+        public List<SisEstatus> GetListEstatus()
+        {
+            List<SisEstatus> result = new List<SisEstatus>();
+
+            // Agregar objetos a la lista
+            result.Add(new SisEstatus { Id = "0", Descripcion = "Activo" });
+            result.Add(new SisEstatus { Id = "1", Descripcion = "Inactivo" });
+            result.Add(new SisEstatus { Id = "2", Descripcion = "Suspendido" });
 
             return result;
 
+        }
+        
+        public List<SisPrioridad> GetListPrioridad()
+        {
+            List<SisPrioridad> result = new List<SisPrioridad>();
 
+            // Agregar objetos a la lista
+            result.Add(new SisPrioridad { Id = 0, Descripcion = "No Auditor" });
+            result.Add(new SisPrioridad { Id = 1, Descripcion = "Auditor" });
+
+            return result;
+
+        }
+
+        public  async Task<SisUsuariosResponseDto> MapDto(SIS_USUARIOS entity)
+        {
+            SisUsuariosResponseDto itemResult = new SisUsuariosResponseDto();
+            
+            try
+            {
+                if (entity == null)
+                {
+                    return itemResult;
+                }
+                itemResult.CodigoUsuario = entity.CODIGO_USUARIO;
+                itemResult.Usuario = entity.USUARIO;
+                itemResult.Login = entity.LOGIN;
+                itemResult.Cedula = entity.CEDULA;
+                itemResult.DepartamentoId = entity.DEPARTAMENTO_ID;
+                itemResult.DescripcionDepartamento = "";
+                var departamento = await _rhDescriptivasService.GetByCodigoDescriptiva((int)itemResult.DepartamentoId);
+                if (departamento != null)
+                {
+                    itemResult.DescripcionDepartamento = departamento.DESCRIPCION;
+                }
+                itemResult.CargoId = entity.CARGO_ID;
+                itemResult.DescripcionCargo = "";
+                var cargo = await _rhDescriptivasService.GetByCodigoDescriptiva((int)itemResult.CargoId);
+                if (cargo != null)
+                {
+                    itemResult.DescripcionCargo = cargo.DESCRIPCION;
+                }
+                itemResult.DescripcionSistema = "";
+                itemResult.SistemaId = entity.SISTEMA_ID;
+                var sistema = await _rhDescriptivasService.GetByCodigoDescriptiva((int)itemResult.SistemaId);
+                if (sistema != null)
+                {
+                    itemResult.DescripcionSistema = sistema.DESCRIPCION;
+                }
+                itemResult.FechaIngreso = entity.FECHA_INGRESO;
+                itemResult.FechaIngresoString = Fecha.GetFechaString((DateTime)entity.FECHA_INGRESO);
+                itemResult.FechaIngresoObj = Fecha.GetFechaDto((DateTime)entity.FECHA_INGRESO);
+                itemResult.FechaEgreso = entity.FECHA_EGRESO;
+                itemResult.FechaEgresoString = Fecha.GetFechaString((DateTime)entity.FECHA_INGRESO);
+                itemResult.FechaEgresoObj = Fecha.GetFechaDto((DateTime)entity.FECHA_INGRESO);
+                itemResult.Prioridad = entity.PRIORIDAD;
+                var listPrioridad = GetListPrioridad();
+                var prioridad = listPrioridad.Where(x=> x.Id==itemResult.Prioridad).FirstOrDefault();
+                itemResult.DescripcionPrioridad = prioridad.Descripcion;
+                itemResult.Status = entity.STATUS;
+                itemResult.DescripcionStatus = "";
+                var listEstatus = GetListEstatus();
+                var estatus = listEstatus.Where(x=> x.Id==itemResult.Status).FirstOrDefault();
+                if (estatus != null)
+                {
+                    itemResult.DescripcionStatus = estatus.Descripcion;
+                }
+
+                if (entity.IS_SUPERUSER == 0)
+                {
+                    itemResult.IsSuperUser = false;
+                }
+                else
+                {
+                    itemResult.IsSuperUser = true;
+                }
+         
+                return itemResult;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(entity);
+                Console.WriteLine(e);
+                return itemResult;
+            }
+          
+        }
+
+        public async Task< List<SisUsuariosResponseDto>> MapList(List<SIS_USUARIOS> dtos)
+        {
+            List<SisUsuariosResponseDto> result = new List<SisUsuariosResponseDto>();
+            if (dtos.Count > 0)
+            {
+                foreach (var item in dtos)
+                {
+                    if (item == null)
+                    {
+                        var detener = "";
+                    }
+                    else
+                    {
+                        var itemResult =  await MapDto(item);
+               
+                        result.Add(itemResult);
+                    }
+
+                   
+                }
+            }
+            
+          
+            return result;
+
+
+
+        }
+        
+        
+        
+        public async Task<ResultDto<List<SisUsuariosResponseDto>>> GetAll()
+        {
+            ResultDto<List<SisUsuariosResponseDto>> result = new ResultDto<List<SisUsuariosResponseDto>>(null);
+            try
+            {
+
+                var usuarios = await _repository.GetALL();
+                if (usuarios == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No Data";
+                    return result;
+                }
+                 
+                var resultDto = await  MapList(usuarios);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+           
+        }
+
+        
+        
+     
+        public async Task<ResultDto<SisUsuariosResponseDto>> Update(SisUsuariosUpdateDto dto)
+        {
+
+            ResultDto<SisUsuariosResponseDto> result = new ResultDto<SisUsuariosResponseDto>(null);
+            try
+            {
+                var usuario = await _repository.GetByCodigo(dto.CodigoUsuario);
+                if (usuario == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Usuario no existe";
+                    return result;
+                }
+              
+                
+                if (String.IsNullOrEmpty(dto.Login) )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Login Invalido";
+                    return result;
+                }
+                if (String.IsNullOrEmpty(dto.Usuario) )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nombre Usuario Invalido";
+                    return result;
+                }
+                if (dto.Cedula<=0 )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cedula Invalido";
+                    return result;
+                }
+
+                
+                
+                var departamento = await _rhDescriptivasService.GetByCodigoDescriptiva((int)dto.DepartamentoId);
+                if (departamento == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Departamento Invalido";
+                    return result;
+                }
+               
+                var cargo = await _rhDescriptivasService.GetByCodigoDescriptiva((int)dto.CargoId);
+                if (cargo != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cargo Invalido";
+                    return result;
+                }
+              
+                var sistema = await _rhDescriptivasService.GetByCodigoDescriptiva((int)dto.SistemaId);
+                if (sistema == null)
+                { result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Sistema Invalido";
+                    return result;
+                  
+                }
+                
+                usuario.USUARIO = dto.Usuario;
+                usuario.LOGIN = dto.Login;
+                usuario.CEDULA = dto.Cedula;
+                usuario.DEPARTAMENTO_ID = dto.DepartamentoId;
+                usuario.CARGO_ID = dto.CargoId;
+                usuario.SISTEMA_ID = dto.SistemaId;
+                string dateString = Fecha.GetFechaString((DateTime)dto.FechaEgreso);
+                DateTime dateValue;
+                bool isValidDate = DateTime.TryParse(dateString, out dateValue);
+                if (isValidDate)
+                {
+                    usuario.FECHA_EGRESO = dto.FechaEgreso;
+                }
+            
+                usuario.FECHA_UPD = DateTime.Now;
+                var conectado = await _repository.GetConectado();
+                usuario.CODIGO_EMPRESA = conectado.Empresa;
+                usuario.USUARIO_UPD = conectado.Usuario;
+                await _repository.Update(usuario);
+                var resultDto = await  MapDto(usuario);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            
+            return result;
+        }
+        
+        
+        public async Task<ResultDto<SisUsuariosResponseDto>> Create(SisUsuariosUpdateDto dto)
+        {
+
+            ResultDto<SisUsuariosResponseDto> result = new ResultDto<SisUsuariosResponseDto>(null);
+            try
+            {
+
+                var usuario = await _repository.GetByLogin(dto.Login);
+                if (usuario != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Ya existe este usuario:{dto.Usuario}";
+                    return result;
+                }
+                
+                if (String.IsNullOrEmpty(dto.Login) )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Login Invalido";
+                    return result;
+                }
+                if (String.IsNullOrEmpty(dto.Usuario) )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nombre Usuario Invalido";
+                    return result;
+                }
+                if (dto.Cedula<=0 )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cedula Invalido";
+                    return result;
+                }
+
+                
+                
+                var departamento = await _rhDescriptivasService.GetByCodigoDescriptiva((int)dto.DepartamentoId);
+                if (departamento == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Departamento Invalido";
+                    return result;
+                }
+               
+                var cargo = await _rhDescriptivasService.GetByCodigoDescriptiva((int)dto.CargoId);
+                if (cargo != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Cargo Invalido";
+                    return result;
+                }
+              
+                var sistema = await _rhDescriptivasService.GetByCodigoDescriptiva((int)dto.SistemaId);
+                if (sistema == null)
+                { result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Sistema Invalido";
+                    return result;
+                  
+                }
+               
+                
+                SIS_USUARIOS entity = new SIS_USUARIOS();
+            
+                entity.USUARIO = dto.Usuario;
+                entity.LOGIN = dto.Login;
+                entity.CEDULA = dto.Cedula;
+                entity.DEPARTAMENTO_ID = dto.DepartamentoId;
+                entity.CARGO_ID = dto.CargoId;
+                entity.SISTEMA_ID = dto.SistemaId;
+                entity.FECHA_INGRESO = dto.FechaIngreso;
+                entity.STATUS = dto.Status;
+                entity.PRIORIDAD = dto.Prioridad;
+                if (dto.IsSuperUser)
+                {
+                    entity.IS_SUPERUSER =1 ;
+                }
+                else
+                {
+                    entity.IS_SUPERUSER =0 ;
+                }
+
+                var conectado = await _repository.GetConectado();
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.FECHA_INS = DateTime.Now;
+                entity.USUARIO_INS = conectado.Usuario;
+                var created=await _repository.Create(entity);
+                
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapDto(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;  
+
+              
+
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
         }
         public string GetToken(SIS_USUARIOS usuario)
         {

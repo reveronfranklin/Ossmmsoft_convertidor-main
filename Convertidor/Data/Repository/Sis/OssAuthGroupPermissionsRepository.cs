@@ -48,6 +48,36 @@ namespace Convertidor.Data.Repository.Sis
 
 
         }
+        public async Task<List<AUTH_GROUP_PERMISSIONS>> GetByGroup(int groupId)
+        {
+            try
+            {
+                var result = await _context.AUTH_GROUP_PERMISSIONS.DefaultIfEmpty().Where(x => x.GROUP_ID == groupId).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        public async Task<AUTH_GROUP_PERMISSIONS> GetByGroupPermission(int groupId , int permissionId)
+        {
+            try
+            {
+                var result = await _context.AUTH_GROUP_PERMISSIONS.DefaultIfEmpty().Where(x => x.GROUP_ID == groupId && x.PERMISSION_ID==permissionId).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
 
         public async Task<ResultDto<AUTH_GROUP_PERMISSIONS>> Add(AUTH_GROUP_PERMISSIONS entity)
         {
@@ -110,6 +140,25 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+        public async Task<string> Delete(int id)
+        {
+
+            try
+            {
+                var entity = await GetByID(id);
+                if (entity != null)
+                {
+                    _context.AUTH_GROUP_PERMISSIONS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
         public async Task<int> GetNextKey()
         {
             try

@@ -8,27 +8,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/OssAuthPermissionController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/OssGroupController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupDeleteDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupFilterDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupResponseDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupUpdateDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthPermissionDeleteDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthPermissionFilterDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthPermissionResponseDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthPermissionUpdateDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/IOssAuthGroupService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/IOssAuthPermissionsService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthPermissionService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/OssGroupPermissionController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupPermisionResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupPermissionDeleteDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupPermissionFilterDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/AuthGroupPermissionUpdateDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisEstatus.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisPrioridad.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisUsuariosResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisUsuariosUpdateDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/IOssAuthGroupPermissionService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/OssAuthContentTypeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/OssAuthContentTypeController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthGroupRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthGroupRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthPermissionRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthPermissionRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/SIS_USUARIOS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/SIS_USUARIOS.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthGroupPermissionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/IOssAuthGroupPermissionsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisUsuarioRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthGroupPermissionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthGroupPermissionsRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthGroupRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthGroupRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthPermissionRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/OssAuthPermissionRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/ISisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/ISisUsuarioServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +56,41 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -217,7 +254,7 @@
       <workItem from="1722547828569" duration="2938000" />
       <workItem from="1722556329361" duration="69229000" />
       <workItem from="1722979877253" duration="10353000" />
-      <workItem from="1723059935503" duration="34197000" />
+      <workItem from="1723059935503" duration="57718000" />
     </task>
     <servers />
   </component>
@@ -257,13 +294,13 @@
       <breakpoints>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>78</line>
+          <line>108</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
             <startOffsets>
-              <option value="2301" />
+              <option value="3199" />
             </startOffsets>
             <endOffsets>
-              <option value="2331" />
+              <option value="3229" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="3" />
@@ -374,13 +411,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
-          <line>292</line>
+          <line>340</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'Login'">
             <startOffsets>
-              <option value="9732" />
+              <option value="11225" />
             </startOffsets>
             <endOffsets>
-              <option value="9753" />
+              <option value="11246" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
@@ -572,19 +609,6 @@
           <option name="timeStamp" value="125" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs</url>
-          <line>56</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" containingFunctionPresentation="Method 'Create'">
-            <startOffsets>
-              <option value="1506" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1546" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="126" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
           <line>577</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
@@ -596,32 +620,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="127" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs</url>
-          <line>152</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'GenerateNextSerie'">
-            <startOffsets>
-              <option value="4215" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4289" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="128" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs</url>
-          <line>167</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'GenerateNextSerie'">
-            <startOffsets>
-              <option value="4851" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4861" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="129" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
@@ -1248,19 +1246,6 @@
           <option name="timeStamp" value="235" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs</url>
-          <line>30</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" containingFunctionPresentation="Method 'GetByPresupuesto'">
-            <startOffsets>
-              <option value="752" />
-            </startOffsets>
-            <endOffsets>
-              <option value="805" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="236" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs</url>
           <line>60</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhRelacionCargosService.cs" containingFunctionPresentation="Method 'GetAll'">
@@ -1522,13 +1507,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs</url>
-          <line>117</line>
+          <line>509</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" containingFunctionPresentation="Method 'GetMenu'">
             <startOffsets>
-              <option value="3305" />
+              <option value="17579" />
             </startOffsets>
             <endOffsets>
-              <option value="3357" />
+              <option value="17631" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="276" />
@@ -1701,19 +1686,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="303" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs</url>
-          <line>39</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" containingFunctionPresentation="Method 'GetByPresupuestoPendiente'">
-            <startOffsets>
-              <option value="1025" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1087" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="304" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs</url>
@@ -1909,6 +1881,84 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="324" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs</url>
+          <line>56</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="1506" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1546" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="327" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs</url>
+          <line>221</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'GenerateNextSerie'">
+            <startOffsets>
+              <option value="6796" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6806" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="328" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs</url>
+          <line>207</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'GenerateNextSerie'">
+            <startOffsets>
+              <option value="6250" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6430" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="329" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs</url>
+          <line>154</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'Execute'">
+            <startOffsets>
+              <option value="4484" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4505" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="330" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs</url>
+          <line>205</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'GenerateNextSerie'">
+            <startOffsets>
+              <option value="6194" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6216" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="331" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs</url>
+          <line>149</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisSerieDomumentosRepository.cs" containingFunctionPresentation="Method 'Execute'">
+            <startOffsets>
+              <option value="4262" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4305" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="332" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
