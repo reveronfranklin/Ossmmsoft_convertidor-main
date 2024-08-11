@@ -92,6 +92,12 @@ namespace Convertidor.Data.Repository.Adm
                     resultItem.Total = item.TOTAL == null ? 0 : item.TOTAL;
                     resultItem.TotalMasImpuesto = item.TOTAL_MAS_IMPUESTO == null ? 0 : item.TOTAL_MAS_IMPUESTO;
                     resultItem.CodigoProducto = item.CODIGO_PRODUCTO == null ? 0 : item.CODIGO_PRODUCTO;
+                    resultItem.DescripcionProducto = "";
+                    var producto = await _context.ADM_PRODUCTOS.DefaultIfEmpty().Where(x=>x.CODIGO_PRODUCTO== resultItem.CodigoProducto).FirstOrDefaultAsync();
+                    if (producto != null)
+                    {
+                        resultItem.DescripcionProducto =producto.DESCRIPCION;
+                    }
                     result.Add(resultItem);
                 }
                 
