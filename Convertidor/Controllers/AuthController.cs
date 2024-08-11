@@ -85,6 +85,17 @@ namespace Convertidor.Controllers
         
         [HttpPost]
         [Route("[action]")]
+        public async Task<ActionResult> GetUserPermissions(SisUsuariosFilterDto filter)
+        {
+      
+            var result = await _service.GetUserPermissions(filter.Login);
+
+
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult>  Login(LoginDto dto)
         {
 

@@ -10,6 +10,7 @@ namespace Convertidor.Services.Sis
         Task<ResultLoginDto> Login(LoginDto dto);
         string GetMyName();
         Task<SIS_USUARIOS> GetByLogin(string login);
+        Task<ResultDto<UserPermissionDto>> GetUserPermissions(string login);
         string GetToken(SIS_USUARIOS usuario);
         string GetMenuPre();
         string GetMenuDeveloper();

@@ -12,6 +12,12 @@ namespace Convertidor.Services.Sis
         private readonly IOssUsuarioRolRepository _ossUsuarioRolRepository;
         private readonly IConfiguration _configuration;
         private readonly IRhDescriptivasService _rhDescriptivasService;
+        private readonly IOssAuthGroupService _ossAuthGroupService;
+        private readonly IOssAuthUserGroupService _ossAuthUserGroupService;
+        private readonly IOssAuthGroupPermissionService _ossAuthGroupPermissionService;
+        private readonly IOssAuthUserPermissionService _ossAuthUserPermissionService;
+        private readonly IOssAuthPermissionsService _ossAuthPermissionsService;
+        private readonly IOssAuthContentTypeService _ossAuthContentTypeService;
 
 
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -20,13 +26,26 @@ namespace Convertidor.Services.Sis
                                     IOssUsuarioRolRepository ossUsuarioRolRepository,
                                     IHttpContextAccessor httpContextAccessor,
                                     IConfiguration configuration,
-                                    IRhDescriptivasService rhDescriptivasService)
+                                    IRhDescriptivasService rhDescriptivasService,
+                                    IOssAuthGroupService ossAuthGroupService,
+                                    IOssAuthUserGroupService ossAuthUserGroupService,
+                                    IOssAuthGroupPermissionService ossAuthGroupPermissionService,
+                                    IOssAuthUserPermissionService ossAuthUserPermissionService,
+                                    IOssAuthPermissionsService ossAuthPermissionsService,
+                                    IOssAuthContentTypeService ossAuthContentTypeService
+                                    )
         {
             _repository = repository;
             _ossUsuarioRolRepository = ossUsuarioRolRepository;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
             _rhDescriptivasService = rhDescriptivasService;
+            _ossAuthGroupService = ossAuthGroupService;
+            _ossAuthUserGroupService = ossAuthUserGroupService;
+            _ossAuthGroupPermissionService = ossAuthGroupPermissionService;
+            _ossAuthUserPermissionService = ossAuthUserPermissionService;
+            _ossAuthPermissionsService = ossAuthPermissionsService;
+            _ossAuthContentTypeService = ossAuthContentTypeService;
         }
 
         public async Task<ResultLoginDto> Login(LoginDto dto)
@@ -35,6 +54,103 @@ namespace Convertidor.Services.Sis
             return result;
         }
 
+        public async Task<List<Permission>> GetPermissionsByUserId(int userId)
+        {
+            List<Permission> result = new List<Permission>();
+            List<AuthPermissionResponseDto> allPermissions = new  List<AuthPermissionResponseDto>(); 
+            AuthUserGroupFilterDto  userGroupFilter = new AuthUserGroupFilterDto();
+            userGroupFilter.UserId = userId;
+            var groupsByUser = await _ossAuthUserGroupService.GetByUser(userGroupFilter);
+            if (groupsByUser.Data != null && groupsByUser.Data.Count > 0)
+            {
+                foreach (var itemGroupByUser in groupsByUser.Data)
+                {
+                    AuthGroupPermissionFilterDto filter = new AuthGroupPermissionFilterDto();
+                    filter.GroupId = itemGroupByUser.GroupId;
+                    var permissionByGroup = await _ossAuthGroupPermissionService.GetByGroup(filter);
+                    if (permissionByGroup.Data != null && permissionByGroup.Data.Count > 0)
+                    {
+                        foreach (var itemPermissionByGroup in permissionByGroup.Data)
+                        {
+                            AuthPermissionResponseDto allPermissionsItem = new  AuthPermissionResponseDto();
+                            AuthPermissionFilterDto permissionFilter = new AuthPermissionFilterDto();
+                            permissionFilter.Id = itemPermissionByGroup.PermisionId;
+                            var permission = await _ossAuthPermissionsService.GetById(permissionFilter);
+                            if (permission.Data != null)
+                            {
+                                allPermissions.Add(permission.Data);
+                            }
+                        }
+                    }
+                }
+                
+                
+             
+            }
+            
+            var groupedByModel = allPermissions.GroupBy(p => p.Model);
+            foreach (var group in groupedByModel)
+            {
+                Permission newPermisionByModel = new Permission();
+                newPermisionByModel.Model = group.Key;
+                Console.WriteLine($"Age Group: {group.Key}");
+                List<string> actions = new List<string>();
+                foreach (var itemGroup in group)
+                {
+                    Console.WriteLine($"  Name: {itemGroup.Codename}");
+                    actions.Add(itemGroup.Codename);
+                }
+
+                newPermisionByModel.Actions = actions;
+                result.Add(newPermisionByModel);
+            }
+            
+            return result;
+
+        }
+        public async Task<ResultDto<UserPermissionDto>> GetUserPermissions(string login)
+        {
+
+            ResultDto<UserPermissionDto> result = new ResultDto<UserPermissionDto>(null);
+            UserPermissionDto userPermissionDto = new UserPermissionDto();
+            var user = await _repository.GetByLogin(login);
+            if (user != null)
+            {
+                userPermissionDto.Login = login;
+                userPermissionDto.UserId = user.CODIGO_USUARIO;
+                userPermissionDto.Name = user.USUARIO;
+                userPermissionDto.IsActive = false;
+                if (user.STATUS == "1")
+                {
+                    userPermissionDto.IsActive = true;
+                }
+              
+                userPermissionDto.IsSuperUser = false;
+                if (user.IS_SUPERUSER == 1)
+                {
+                    userPermissionDto.IsSuperUser = true;
+                }
+
+                var permission = await GetPermissionsByUserId(userPermissionDto.UserId);
+                userPermissionDto.Permissions = permission;
+                result.Data = userPermissionDto;
+                result.Message = "";
+                result.IsValid = true;
+            }
+            else
+            {
+                result.Data = null;
+                result.Message = "No Data";
+                result.IsValid = false;
+
+            }
+          
+           
+            
+            return result;
+        }
+        
+        
         public string GetMyName()
         {
             var login = string.Empty;
