@@ -10,6 +10,9 @@ using QuestPDF.Infrastructure;
 using System.Globalization;
 using System.Linq;
 using Convertidor.Dtos.Adm;
+using System.Security.Principal;
+using Convertidor.Utility;
+using MathNet.Numerics;
 
 namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 {
@@ -39,12 +42,12 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
             container.Table(table =>
             {
-                
-                
+                table.ExtendLastCellsToTableBottom();
+
 
                 table.ColumnsDefinition(columns =>
                 {
-
+                    
                     columns.ConstantColumn(320);
                     columns.RelativeColumn();
                     columns.RelativeColumn();
@@ -53,7 +56,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     columns.RelativeColumn();
                 });
 
-                table.ExtendLastCellsToTableBottom();
+                
 
                 table.Header(header =>
                 {
@@ -71,46 +74,58 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                               col.Item().Border(1).AlignCenter().Element(CellStyle).Text("BOLIVARES").FontSize(7).Bold();
                           });
 
-
-
                       });
 
                 });
 
+                int contador = 0;
+
+
 
                 foreach (var item in ModelCuerpo)
                 {
-                    table.ExtendLastCellsToTableBottom();
+                    contador++;
 
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(item.Cantidad).FontSize(7);
-                        row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(item.DescripcionUdmId).FontSize(7);
-                        row.RelativeItem(3).BorderVertical(1).AlignLeft().PaddingLeft(10).PaddingTop(5).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(7);
-                        var precio = item.PrecioUnitario.ToString("N", formato);
-                        row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(precio).FontSize(7);
-                        var totalBolivares = item.TotalBolivares.ToString("N", formato);
-                        row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(totalBolivares).FontSize(7);
 
+                    row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.Cantidad).FontSize(7);
+                    row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.DescripcionUdmId).FontSize(7);
+                    row.RelativeItem(3).BorderVertical(1).AlignLeft().PaddingLeft(10).PaddingTop(3).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(7);
+                    var precio = item.PrecioUnitario.ToString("N", formato);
+                    row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(precio).FontSize(7);
+                    var totalBolivares = item.TotalBolivares.ToString("N", formato);
+                    row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(totalBolivares).FontSize(7);
 
-                    });
+                     if (contador == ModelCuerpo.LongCount() / 2)
+                     {
 
-                    table.Cell().ColumnSpan(6).Column(col =>
-                    {
-                        col.Item().Row(row =>
+                        table.Cell().ColumnSpan(6).ExtendVertical().Column(col =>
                         {
-                            row.ConstantItem(50).BorderVertical(1).AlignCenter();
-                            row.ConstantItem(50).BorderVertical(1).AlignCenter();
-                            row.RelativeItem(3).BorderVertical(1).AlignCenter();
-                            row.ConstantItem(100).BorderVertical(1).AlignCenter();
-                            row.ConstantItem(100).BorderVertical(1).AlignCenter();
 
+                            col.Item().ExtendVertical().Row(row =>
+                            {
+                                row.ConstantItem(50).ExtendVertical().BorderVertical(1);
+                                row.ConstantItem(50).ExtendVertical().BorderVertical(1);
+                                row.RelativeItem(3).ExtendVertical().BorderVertical(1);
+                                row.ConstantItem(100).ExtendVertical().BorderVertical(1);
+                                row.ConstantItem(100).ExtendVertical().BorderVertical(1);
+                            });
 
                         });
 
+                    }
+                     
                     });
 
+                   
+
+                   
                 }
+
+
+
+
 
 
             });
