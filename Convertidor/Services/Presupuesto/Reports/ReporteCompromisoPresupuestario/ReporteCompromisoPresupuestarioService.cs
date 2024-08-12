@@ -200,7 +200,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var result = "No Data";
             var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
-            var fileName = $"ReporteCompromisoPresupuestario-{filter.NumeroCompromiso}.pdf";
+            var fileName = $"ReporteCompromisoPresupuestario-{filter.CodigoCompromiso}.pdf";
             var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
 
 

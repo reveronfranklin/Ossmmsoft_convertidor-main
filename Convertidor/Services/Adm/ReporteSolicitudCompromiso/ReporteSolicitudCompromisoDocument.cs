@@ -1,4 +1,5 @@
 ﻿using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
+using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Data.SqlClient.DataClassification;
@@ -38,21 +39,23 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     .Page(page =>
                     {
                         QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
-                        
+
                         page.Margin(10);
                         page.Size(PageSizes.A3);
                         page.Header().Element(ComposeHeader);
-                        page.Content().Element(ComposeContent);
-                        page.Footer().Element(ComposeFooter);
+                        page.Content().ExtendVertical().Element(ComposeContent);
+                        //page.Footer().Element(ComposeFooter);
 
                         page.Footer().AlignCenter().Text(text =>
                         {
+
                             page.Footer().Element(ComposeFooter);
                             text.CurrentPageNumber();
                             text.Span(" / ");
                             text.TotalPages();
                         });
 
+                    
 
                     });
                 
@@ -71,7 +74,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             container.Column(column =>
             {
                 
-                column.Spacing(5);
+                
+                column.Spacing(10);
                 column.Item().Row(row =>
                 {
                     var encabezado = new EncabezadoComponent(Model.Encabezado);
@@ -92,17 +96,18 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 {
                     col.Item().Component(new EncabezadoComponent(Model.Encabezado));
                     
+                    
                 });
 
-
-
+                
             });
         }
 
         void ComposeContent(IContainer container)
         {
-            container.Table(async table =>
+            container.PaddingTop(3).Table(table =>
             {
+                table.ExtendLastCellsToTableBottom();
                 table.ColumnsDefinition(columns => 
                 {
                     columns.ConstantColumn(320);
@@ -114,13 +119,19 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 });
 
-                table.ExtendLastCellsToTableBottom();
+                
 
-               table.Cell().ColumnSpan(6).ExtendVertical().PaddingTop(5).BorderVertical(1).Column(col =>
+               table.Cell().ColumnSpan(6).ExtendVertical().PaddingTop(10).BorderVertical(1).Column(col =>
                {
-                   
                    col.Item().Component(new CuerpoComponent(Model.Cuerpo, Model.Encabezado));
-                   
+                   col.Item().ExtendVertical().Row(row =>
+                   {
+                      row.ConstantItem(50).ExtendVertical().BorderVertical(1);
+                      row.ConstantItem(50).ExtendVertical().BorderVertical(1);
+                      row.RelativeItem(3).ExtendVertical().BorderVertical(1);
+                      row.ConstantItem(100).ExtendVertical().BorderVertical(1);
+                      row.ConstantItem(100).ExtendVertical().BorderVertical(1);
+                   });
 
                });
 
@@ -154,27 +165,25 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 table.Footer(footer =>
                 {
 
-
-                    footer.Cell().ColumnSpan(4).Column(col =>
-                    {
-                        col.Item().BorderLeft(1).BorderTop(1).PaddingLeft(5).PaddingBottom(6).AlignLeft().Text("MONTO TOTAL EN LETRA :").FontSize(8).Bold();
-                        col.Item().BorderLeft(1).PaddingLeft(5).PaddingBottom(6).AlignLeft().Text($"{Model.Encabezado.MontoLetras.ToUpper()}").FontSize(8);
-                    });
-
-
-                    footer.Cell().Column(col =>
-                    {
-
-                        col.Item().BorderTop(1).BorderLeft(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).Bold();
-                        col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text("16%    " + "  IVA").FontSize(8).Bold();
-                        col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text("TOTAL").FontSize(8).Bold();
+                footer.Cell().ColumnSpan(4).BorderLeft(1).Column(col =>
+                {
+                    col.Item().BorderLeft(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text("MONTO TOTAL EN LETRA :").FontSize(8).Bold();
+                    col.Item().BorderLeft(1).PaddingLeft(5).AlignLeft().PaddingBottom(10).Text($"{Model.Encabezado.MontoLetras.ToUpper()}").FontSize(8);
+                });
 
 
-                    });
+                footer.Cell().Column(col =>
+                {
 
+                    col.Item().BorderTop(1).BorderLeft(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).Bold();
+                    col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text("16%    " + "  IVA").FontSize(8).Bold();
+                    col.Item().Width(100).BorderLeft(1).AlignRight().AlignMiddle().PaddingRight(3).PaddingBottom(10).Text("TOTAL").FontSize(8).Bold();
 
+                });
 
+                    
                     var bolivares = Model.Cuerpo.Sum(x => x.TotalBolivares);
+                   
                     var montoImpuesto = bolivares * (decimal)0.16;
                     var total = bolivares + montoImpuesto;
 
@@ -187,7 +196,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                         col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalBolivares).FontSize(7);
                         col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalImpuesto).FontSize(7);
-                        col.Item().Width(100).Border(1).AlignRight().BorderBottom(1).Padding(1).PaddingRight(3).Text(totales).FontSize(7);
+                        col.Item().Width(100).Border(1).AlignRight().AlignMiddle().BorderBottom(1).Padding(1).PaddingBottom(10).PaddingRight(3).Text(totales).FontSize(7);
 
 
                     });
@@ -195,7 +204,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     footer.Cell().ColumnSpan(6).Column(col =>
                     {
                         col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :").FontSize(8).Bold();
-                        col.Item().BorderVertical(1).PaddingLeft(3).Text(Model.Encabezado.Motivo).FontSize(7);
+                        col.Item().BorderVertical(1).PaddingLeft(3).PaddingBottom(3).Text(Model.Encabezado.Motivo).FontSize(7);
                     });
 
                     footer.Cell().ColumnSpan(6).Row(row =>
@@ -212,9 +221,6 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.Firmante}  \n FIRMA: ________________________________________________________________________").FontSize(8).SemiBold();
                         row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"         ").FontSize(8).SemiBold();
                         row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"DIRECCION DE ADMINISTRACION Y FINANZAS").FontSize(8).Bold();
-
-
-
 
                     });
 
