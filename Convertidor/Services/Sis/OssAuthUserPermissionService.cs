@@ -10,15 +10,21 @@ namespace Convertidor.Services.Sis
         private readonly IOssAuthUserPermissionsRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IOssAuthPermissionsService _ossAuthPermissionsService;
+        private readonly IOssAuthUserGroupService _ossAuthUserGroupService;
+        private readonly IOssAuthGroupPermissionService _ossAuthGroupPermissionService;
 
 
         public OssAuthUserPermissionService(IOssAuthUserPermissionsRepository repository,
                                       ISisUsuarioRepository sisUsuarioRepository,
-                                      IOssAuthPermissionsService ossAuthPermissionsService)
+                                      IOssAuthPermissionsService ossAuthPermissionsService,
+                                      IOssAuthUserGroupService ossAuthUserGroupService,
+                                      IOssAuthGroupPermissionService ossAuthGroupPermissionService)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _ossAuthPermissionsService = ossAuthPermissionsService;
+            _ossAuthUserGroupService = ossAuthUserGroupService;
+            _ossAuthGroupPermissionService = ossAuthGroupPermissionService;
         }
         
        
@@ -131,7 +137,15 @@ namespace Convertidor.Services.Sis
                     result.Message = "Permiso  no existe";
                     return result;
                 }
-               
+
+                var existePermiso = await ExistedPermissionInGroup(dto.UserId, dto.PermissionId);
+                if (existePermiso)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Usuario ya tiene este permiso por grupo";
+                    return result;
+                }
                 
                 AUTH_USER_USER_PERMISSIONS entity = new AUTH_USER_USER_PERMISSIONS();
             
@@ -319,6 +333,43 @@ namespace Convertidor.Services.Sis
            
         }
 
+        
+            public async Task<bool> ExistedPermissionInGroup(int userId,int permissionId)
+            {
+                bool result = false;
+            List<AuthPermissionResponseDto> allPermissions = new  List<AuthPermissionResponseDto>(); 
+            AuthUserGroupFilterDto  userGroupFilter = new AuthUserGroupFilterDto();
+            userGroupFilter.UserId = userId;
+            var groupsByUser = await _ossAuthUserGroupService.GetByUser(userGroupFilter);
+            if (groupsByUser.Data != null && groupsByUser.Data.Count > 0)
+            {
+                foreach (var itemGroupByUser in groupsByUser.Data)
+                {
+                    AuthGroupPermissionFilterDto filter = new AuthGroupPermissionFilterDto();
+                    filter.GroupId = itemGroupByUser.GroupId;
+                    var permissionByGroup = await _ossAuthGroupPermissionService.GetByGroup(filter);
+                    if (permissionByGroup.Data != null && permissionByGroup.Data.Count > 0)
+                    {
+                        foreach (var itemPermissionByGroup in permissionByGroup.Data)
+                        {
+                            if (itemPermissionByGroup.PermisionId == permissionId)
+                            {
+                                result = true;
+                                return result;
+                            }
+                        }
+                    }
+                }
+                
+                
+             
+            }
+            
+          
+            
+            return result;
+
+        }
         
     }
 }
