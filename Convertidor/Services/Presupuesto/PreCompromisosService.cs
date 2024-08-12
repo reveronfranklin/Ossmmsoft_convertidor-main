@@ -186,7 +186,7 @@ namespace Convertidor.Services.Presupuesto
                     tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == admSolicitud.TIPO_SOLICITUD_ID).FirstOrDefault();
                 //SE GENERA EL PROXIMO NUMERO DE COMPROMISO
                 var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
-                var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie(sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+                var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie((int)admSolicitud.CODIGO_PRESUPUESTO,sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
                 entity.NUMERO_COMPROMISO = numeroCompromiso;
                 entity.FECHA_COMPROMISO = DateTime.Now;
                 entity.CODIGO_PROVEEDOR = (int)admSolicitud.CODIGO_PROVEEDOR;

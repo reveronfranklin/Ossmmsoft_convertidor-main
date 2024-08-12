@@ -37,7 +37,7 @@ public class SIS_SERIE_DOCUMENTOS
     public int CODIGO_EMPRESA { get; set; }
     public int NUMERO_SERIE_FINAL { get; set; }
     public string SERIE_COMPUESTA_FINAL { get; set; } = string.Empty;
-        
+    public int CODIGO_PRESUPUESTO { get; set; }    
     
     
   
