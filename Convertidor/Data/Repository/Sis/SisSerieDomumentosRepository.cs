@@ -158,7 +158,7 @@ namespace Convertidor.Data.Repository.Sis
            
         }
         
-        public async Task<string> GenerateNextSerie(int tipoDocumentoId,string codigo)
+        public async Task<string> GenerateNextSerie(int codigoPresupuesto,int tipoDocumentoId,string codigo)
         {
 
             string result = "";
@@ -167,7 +167,7 @@ namespace Convertidor.Data.Repository.Sis
 
            
                 
-                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.DefaultIfEmpty().Where(x => x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN == null).FirstOrDefaultAsync();
+                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.DefaultIfEmpty().Where(x => x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN == null).FirstOrDefaultAsync();
                 if (serieDocumentos != null)
                 {
                     var serieCompuesta = "";

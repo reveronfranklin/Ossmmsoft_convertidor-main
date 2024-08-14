@@ -8,7 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthUserPermissionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthUserPermissionService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,7 +262,7 @@
       <workItem from="1722547828569" duration="2938000" />
       <workItem from="1722556329361" duration="69229000" />
       <workItem from="1722979877253" duration="10353000" />
-      <workItem from="1723059935503" duration="84389000" />
+      <workItem from="1723059935503" duration="88206000" />
     </task>
     <servers />
   </component>
@@ -406,10 +409,10 @@
           <line>340</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'Login'">
             <startOffsets>
-              <option value="11225" />
+              <option value="11245" />
             </startOffsets>
             <endOffsets>
-              <option value="11246" />
+              <option value="11266" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
@@ -1499,13 +1502,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs</url>
-          <line>625</line>
+          <line>626</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" containingFunctionPresentation="Method 'GetMenu'">
             <startOffsets>
-              <option value="23126" />
+              <option value="23139" />
             </startOffsets>
             <endOffsets>
-              <option value="23178" />
+              <option value="23191" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="276" />
@@ -2071,13 +2074,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs</url>
-          <line>149</line>
+          <line>150</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" containingFunctionPresentation="Method 'GetUserPermissions'">
             <startOffsets>
-              <option value="6890" />
+              <option value="6903" />
             </startOffsets>
             <endOffsets>
-              <option value="6904" />
+              <option value="6917" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="342" />
@@ -2133,6 +2136,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="346" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs</url>
+          <line>116</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" containingFunctionPresentation="Method 'GetUserPermissions'">
+            <startOffsets>
+              <option value="5749" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5796" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="347" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -643,7 +643,7 @@ namespace Convertidor.Services.Adm
                 entity.ANO = codigoPresupuesto.ANO;
                 //SE GENERA EL PROXIMO NUMERO DE SOLICITUD
                 var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
-                var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+                var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie((int)entity.CODIGO_PRESUPUESTO , sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
 
                 entity.NUMERO_SOLICITUD = numeroSolicitud;
                 entity.FECHA_SOLICITUD = dto.FechaSolicitud;

@@ -1,18 +1,8 @@
 ﻿using Convertidor.Dtos.Adm.ReporteSolicitudCompromiso;
-using Convertidor.Dtos.Presupuesto;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using NPOI.HSSF.Record;
-using NPOI.SS.Formula.Functions;
-using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using System.Globalization;
-using System.Linq;
-using Convertidor.Dtos.Adm;
-using System.Security.Principal;
-using Convertidor.Utility;
-using MathNet.Numerics;
 
 namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 {
@@ -97,7 +87,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     var totalBolivares = item.TotalBolivares.ToString("N", formato);
                     row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(totalBolivares).FontSize(7);
 
-                     if (contador == ModelCuerpo.LongCount() / 2)
+                     if (contador == ModelCuerpo.LongCount())
                      {
 
                         table.Cell().ColumnSpan(6).ExtendVertical().Column(col =>

@@ -113,6 +113,7 @@ namespace Convertidor.Services.Sis
 
             ResultDto<UserPermissionDto> result = new ResultDto<UserPermissionDto>(null);
             UserPermissionDto userPermissionDto = new UserPermissionDto();
+            
             var user = await _repository.GetByLogin(login);
             if (user != null)
             {
