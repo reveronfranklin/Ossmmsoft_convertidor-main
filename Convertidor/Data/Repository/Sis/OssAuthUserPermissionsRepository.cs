@@ -1,4 +1,5 @@
 ﻿using Convertidor.Data.Entities.Sis;
+using Convertidor.Dtos.Sis;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
 
@@ -46,6 +47,110 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+        public  async Task<AuthUserPermisionResponseDto> MapDto(AUTH_USER_USER_PERMISSIONS entity)
+        {
+            AuthUserPermisionResponseDto itemResult = new AuthUserPermisionResponseDto();
+            
+            try
+            {
+                if (entity == null)
+                {
+                    return itemResult;
+                }
+                itemResult.Id = entity.ID;
+             
+                itemResult.UserId = entity.USER_ID;
+                itemResult.UserName = "";
+                var user = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x=> x.CODIGO_USUARIO== entity.USER_ID).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    itemResult.UserName = user.USUARIO;
+                    itemResult.Login = user.LOGIN;
+                }
+                itemResult.PermisionId = entity.PERMISSION_ID;
+                itemResult.DescriptionPermision = "";
+                var permission = await  _context.AUTH_PERMISSION.Where(x=>x.ID==itemResult.PermisionId).FirstOrDefaultAsync();
+                if (permission != null)
+                {
+                    var contentType = await _context.AUTH_CONTENT_TYPE.Where(x => x.ID == permission.CONTENT_TYPE_ID)
+                        .FirstOrDefaultAsync();
+                    itemResult.DescriptionPermision = $"{contentType.APP_LABEL}-{contentType.MODEL}-{permission.NAME}";
+                }
+            
+                
+                return itemResult;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(entity);
+                Console.WriteLine(e);
+                return itemResult;
+            }
+          
+        }
+
+        public async Task< List<AuthUserPermisionResponseDto>> MapList(List<AUTH_USER_USER_PERMISSIONS> dtos)
+        {
+            List<AuthUserPermisionResponseDto> result = new List<AuthUserPermisionResponseDto>();
+            if (dtos.Count > 0)
+            {
+                foreach (var item in dtos)
+                {
+                    if (item == null)
+                    {
+                        var detener = "";
+                    }
+                    else
+                    {
+                        var itemResult =  await MapDto(item);
+               
+                        result.Add(itemResult);
+                    }
+
+                   
+                }
+            }
+            
+          
+            return result;
+
+
+
+        }
+      
+        public async Task<ResultDto<List<AuthUserPermisionResponseDto>>> GetByUser(AuthUserPermisionFilterDto dto)
+        { 
+            ResultDto<List<AuthUserPermisionResponseDto>> result = new ResultDto<List<AuthUserPermisionResponseDto>>(null);
+            try
+            {
+
+                var userPermission = await GetByUser(dto.UserId);
+                if (userPermission == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existen Permisos para este Usuario";
+                    return result;
+                }
+                
+                var resultDto =  await MapList(userPermission);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
+        
         public async Task<AUTH_USER_USER_PERMISSIONS> GetByUserPermision(int userId,int permissionId)
         {
             try

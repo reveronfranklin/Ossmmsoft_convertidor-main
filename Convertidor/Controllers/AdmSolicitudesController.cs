@@ -2,7 +2,9 @@
 
 // HTML to PDF
 using Convertidor.Dtos.Adm;
+using Convertidor.Enum;
 using Convertidor.Services.Adm;
+using Convertidor.Services.Sis;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,20 +17,36 @@ namespace Convertidor.Controllers
     {
        
         private readonly IAdmSolicitudesService _service;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ISisUsuarioServices _sisUsuarioServices;
+        private readonly IAuthModelUserServices _authModelUserServices;
 
-        public AdmSolicitudesController(IAdmSolicitudesService service)
+        public AdmSolicitudesController(IAdmSolicitudesService service,
+                                        ISisUsuarioRepository sisUsuarioRepository,
+                                        ISisUsuarioServices sisUsuarioServices,
+                                        IAuthModelUserServices authModelUserServices)
         {
-
             _service = service;
-
-
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _sisUsuarioServices = sisUsuarioServices;
+            _authModelUserServices = authModelUserServices;
         }
 
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
-            var result = await _service.GetByPresupuesto(filter);
+            ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.View);
+            if (userValid.IsValid == false)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }
+            result = await _service.GetByPresupuesto(filter);
             return Ok(result);
         }
 
@@ -37,7 +55,17 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetByPresupuestoPendiente(AdmSolicitudesFilterDto filter)
         {
-            var result = await _service.GetByPresupuestoPendiente(filter);
+            ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.View);
+            if (userValid.IsValid == false)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }
+            result = await _service.GetByPresupuestoPendiente(filter);
             return Ok(result);
         }
 
@@ -46,7 +74,17 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Update(AdmSolicitudesUpdateDto dto)
         {
-            var result = await _service.Update(dto);
+            ResultDto<AdmSolicitudesResponseDto> result = new ResultDto<AdmSolicitudesResponseDto>(null);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.Change);
+            if (userValid.IsValid == false)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }
+            result = await _service.Update(dto);
             return Ok(result);
         }
 
@@ -54,7 +92,18 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Create(AdmSolicitudesUpdateDto dto)
         {
-            var result = await _service.Create(dto);
+
+            ResultDto<AdmSolicitudesResponseDto> result = new ResultDto<AdmSolicitudesResponseDto>(null);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.Add);
+            if (userValid.IsValid == false)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }
+            result = await _service.Create(dto);
             return Ok(result);
         }
 
@@ -62,7 +111,17 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Delete(AdmSolicitudesDeleteDto dto)
         {
-            var result = await _service.Delete(dto);
+            ResultDto<AdmSolicitudesDeleteDto> result = new ResultDto<AdmSolicitudesDeleteDto>(null);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.Delete);
+            if (userValid.IsValid == false)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }
+            result = await _service.Delete(dto);
             return Ok(result);
 
         }

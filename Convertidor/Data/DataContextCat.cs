@@ -1,4 +1,5 @@
 ﻿using Convertidor.Data.Entities.Catastro;
+using Convertidor.Data.Entities.Cnt;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data
@@ -45,11 +46,15 @@ namespace Convertidor.Data
                      });
 
             modelBuilder
-                  .Entity<CAT_TITULOS>(builder =>
-                  {
-                      builder.HasNoKey();
-                      builder.ToTable("CAT_TITULOS");
-                  });
+          .Entity<CAT_TITULOS>(builder =>
+          {
+              builder.HasKey(table => new
+              {
+                  table.TITULO_ID,
+
+              });
+              builder.ToTable("CAT_TITULOS");
+          });
 
             modelBuilder
                  .Entity<CAT_UBICACION_NAC>(builder =>

@@ -211,13 +211,24 @@ builder.Services.AddTransient<IOssAuthGroupService, OssAuthGroupService>();
 builder.Services.AddTransient<IOssAuthGroupPermissionService, OssAuthGroupPermissionService>();
 builder.Services.AddTransient<IOssAuthUserPermissionService, OssAuthUserPermissionService>();
 builder.Services.AddTransient<IOssAuthUserGroupService, OssAuthUserGroupService>();
+builder.Services.AddTransient<IAuthModelUserServices, AuthModelUserServices>();
 
 
 
-//CATASTRO
+
+
+
+//CATASTRO Repository
 builder.Services.AddTransient<ICAT_FICHARepository, CAT_FICHARepository>();
 
+
 builder.Services.AddTransient<ICAT_FICHAService, CAT_FICHAService>();
+builder.Services.AddTransient<ICatTitulosRepository, CatTitulosRepository>();
+builder.Services.AddTransient<ICatDescriptivasRepository, CatDescriptivasRepository>();
+
+//CATASTRO Services
+builder.Services.AddTransient<ICatTitulosService, CatTitulosService>();
+builder.Services.AddTransient<ICatDescriptivasService, CatDescriptivasService>();
 
 
 //RH

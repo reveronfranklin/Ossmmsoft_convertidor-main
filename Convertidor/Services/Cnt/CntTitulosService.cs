@@ -15,19 +15,19 @@ namespace Convertidor.Services.Cnt
 
       //
         private readonly ICntTitulosRepository _repository;
-        private readonly ICntDescriptivaRepository _repositoryPreDescriptiva;
+        private readonly ICntDescriptivaRepository _repositoryCntDescriptiva;
         private readonly IConfiguration _configuration;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
         public CntTituloService(ICntTitulosRepository repository,
                                       IConfiguration configuration,
                                       ISisUsuarioRepository sisUsuarioRepository,
-                                      ICntDescriptivaRepository repositoryPreDescriptiva)
+                                      ICntDescriptivaRepository repositoryCntDescriptiva)
 		{
             _repository = repository;
             _configuration = configuration;
             _sisUsuarioRepository = sisUsuarioRepository;
-            _repositoryPreDescriptiva = repositoryPreDescriptiva;
+            _repositoryCntDescriptiva = repositoryCntDescriptiva;
 
 
         }
@@ -296,7 +296,7 @@ namespace Convertidor.Services.Cnt
                     return result;
                 }
 
-                var descriptiva = await  _repositoryPreDescriptiva.GetByTitulo(dto.TituloId);
+                var descriptiva = await _repositoryCntDescriptiva.GetByTitulo(dto.TituloId);
                 if (descriptiva != null && descriptiva.Count>0)
                 {
                     result.Data = dto;

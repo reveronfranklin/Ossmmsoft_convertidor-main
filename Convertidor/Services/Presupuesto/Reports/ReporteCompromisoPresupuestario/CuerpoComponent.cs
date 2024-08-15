@@ -82,13 +82,13 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.ConstantItem(40).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(item.Cantidad).FontSize(7);
-                        row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(item.DescripcionUdm).FontSize(8);
-                        row.RelativeItem(3).BorderVertical(1).AlignLeft().PaddingLeft(10).PaddingTop(5).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(8);
+                        row.ConstantItem(40).BorderVertical(1).AlignCenter().PaddingRight(3).Element(CellStyle).Text(item.Cantidad).FontSize(7);
+                        row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).Element(CellStyle).Text(item.DescripcionUdm).FontSize(8);
+                        row.RelativeItem(3).BorderVertical(1).AlignLeft().PaddingLeft(10).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(8);
                         var precio = item.PrecioUnitario.ToString("N", formato);
-                        row.ConstantItem(60).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(precio).FontSize(7);
+                        row.ConstantItem(60).BorderVertical(1).AlignRight().PaddingRight(3).Element(CellStyle).Text(precio).FontSize(7);
                         var totalBolivares = item.TotalBolivares.ToString("N", formato);
-                        row.ConstantItem(70).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(5).Element(CellStyle).Text(totalBolivares).FontSize(7);
+                        row.ConstantItem(70).BorderVertical(1).AlignRight().PaddingRight(3).Element(CellStyle).Text(totalBolivares).FontSize(7);
 
 
                     });
@@ -103,6 +103,8 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                 string descripcionFinanciado1 = "";
                 string descripcionFinanciado2 = "";
 
+             
+                
                 int contador = 0;
                 foreach (var item in ModelCuerpo.OrderBy(x => x.CodigoDetalleCompromiso).ToList())
                 {
@@ -122,83 +124,150 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                             itemPuc.DescripcionFinanciado = "";
                             descripcionFinanciado2 = itemPuc.DescripcionFinanciado;
                             montoIva = itemPuc.Monto;
-                              
+                            
                         }
 
-                        else if(itemPuc.FinanciadoId != 92)
+                        else if(itemPuc.CodigoDetalleCompromiso == item.CodigoDetalleCompromiso && itemPuc.FinanciadoId != 92)
                         {
                             PucConcat = itemPuc.CodigoPucConcat;
                             descripcionFinanciado1 = itemPuc.DescripcionFinanciado;
                             monto = ModelCuerpo.Sum(x => x.TotalBolivares);
+                            
                         }
 
+                        if(contador == ModelCuerpo.LongCount()) 
+                        {
+                            table.Cell().ColumnSpan(6).BorderLeft(1).Row(row =>
+                            {
+                                row.ConstantItem(40).BorderVertical(1).Text("");
+                                row.ConstantItem(50).BorderVertical(1).Text("");
+                                row.ConstantItem(100).Text("");
+                                row.ConstantItem(100).PaddingLeft(5).Text("SE-PR-SP-PY-AC").FontSize(8).Bold().Underline();
+                                row.ConstantItem(100).Text("GR-PA-GE-ES-SE-EX").FontSize(8).Bold().Underline();
+                                row.ConstantItem(100).AlignCenter().PaddingRight(10).Text("Financiado Por").FontSize(7).Bold().Underline();
+                                row.ConstantItem(100).PaddingLeft(10).Text("Monto").FontSize(8).Bold().Underline();
+                                row.ConstantItem(102).Text("");
+                                row.ConstantItem(60).BorderVertical(1).Text("");
+                                row.ConstantItem(70).BorderVertical(1).Text("");
+                            });
+
+                            table.Cell().ColumnSpan(6).BorderLeft(1).Column(col =>
+                            {
+                                col.Item().Row(row =>
+                                {
+                                    row.RelativeItem().BorderVertical(1).Text("");
+                                    row.ConstantItem(50).BorderVertical(1).Text("");
+                                    row.ConstantItem(100).Text("");
+                                    row.ConstantItem(100).Column(col =>
+                                    {
+                                        col.Item().PaddingLeft(5).PaddingBottom(2).Text(icpConcat).FontSize(9);
+                                        col.Item().PaddingLeft(5).PaddingBottom(2).Text(icpConcat).FontSize(9);
+                                    });
+
+                                    row.ConstantItem(100).Column(col =>
+                                    {
+                                        col.Item().PaddingLeft(5).PaddingBottom(2).Text(PucConcat).FontSize(9);
+                                        col.Item().ShowIf(PucConcatIva != PucConcat).PaddingLeft(5).PaddingBottom(9).Text(PucConcatIva).FontSize(9);
+                                    });
+
+                                    row.ConstantItem(100).Column(col =>
+                                    {
+                                        col.Item().Width(70).AlignCenter().PaddingLeft(15).PaddingBottom(2).Text(descripcionFinanciado1).FontSize(5);
+                                        col.Item().AlignLeft().PaddingLeft(15).PaddingBottom(2).Text(descripcionFinanciado2).FontSize(5);
+                                    });
+
+                                    row.ConstantItem(100).Column(col =>
+                                    {
+                                        var montos = monto - montoIva;
+                                        col.Item().PaddingLeft(10).PaddingBottom(2).Text(montos.ToString("N", formato)).FontSize(8);
+                                        col.Item().PaddingLeft(10).PaddingBottom(2).Text(montoIva.ToString("N", formato)).FontSize(8);
+                                    });
+                                    row.ConstantItem(102).Text("");
+                                    row.ConstantItem(60).BorderVertical(1).Text("");
+                                    row.ConstantItem(70).BorderVertical(1).Text("");
+
+                                    col.Item().ExtendVertical().Row(row =>
+                                    {
+                                        row.ConstantItem(40).ExtendVertical().BorderVertical(1);
+                                        row.ConstantItem(50).ExtendVertical().BorderVertical(1);
+                                        row.RelativeItem(3).ExtendVertical().BorderVertical(1);
+                                        row.ConstantItem(60).ExtendVertical().BorderVertical(1);
+                                        row.ConstantItem(70).ExtendVertical().BorderVertical(1);
+                                    });
+                                });
+
+                            });
+
+
+
+                        }
+                       
 
                     }
 
-                    
                 }
 
-               
 
-                table.Cell().ColumnSpan(6).BorderLeft(1).Row(row =>
-                {
-                    row.ConstantItem(40).BorderVertical(1).Text("");
-                    row.ConstantItem(50).BorderVertical(1).Text("");
-                    row.ConstantItem(100).Text("");
-                    row.ConstantItem(100).PaddingLeft(5).PaddingBottom(2).Text("SE-PR-SP-PY-AC").FontSize(8).Bold().Underline();
-                    row.ConstantItem(100).PaddingBottom(2).Text("GR-PA-GE-ES-SE-EX").FontSize(8).Bold().Underline();
-                    row.ConstantItem(100).PaddingBottom(2).AlignCenter().PaddingRight(10).Text("Financiado Por").FontSize(7).Bold().Underline();
-                    row.ConstantItem(100).PaddingBottom(2).PaddingLeft(10).Text("Monto").FontSize(8).Bold().Underline();
-                    row.ConstantItem(102).Text("");
-                    row.ConstantItem(60).BorderVertical(1).Text("");
-                    row.ConstantItem(70).BorderVertical(1).Text("");
-                });
+                //table.Cell().ColumnSpan(6).BorderLeft(1).Row(row =>
+                //{
+                //    row.ConstantItem(40).BorderVertical(1).Text("");
+                //    row.ConstantItem(50).BorderVertical(1).Text("");
+                //    row.ConstantItem(100).Text("");
+                //    row.ConstantItem(100).PaddingLeft(5).Text("SE-PR-SP-PY-AC").FontSize(8).Bold().Underline();
+                //    row.ConstantItem(100).Text("GR-PA-GE-ES-SE-EX").FontSize(8).Bold().Underline();
+                //    row.ConstantItem(100).AlignCenter().PaddingRight(10).Text("Financiado Por").FontSize(7).Bold().Underline();
+                //    row.ConstantItem(100).PaddingLeft(10).Text("Monto").FontSize(8).Bold().Underline();
+                //    row.ConstantItem(102).Text("");
+                //    row.ConstantItem(60).BorderVertical(1).Text("");
+                //    row.ConstantItem(70).BorderVertical(1).Text("");
+                //});
 
-                table.Cell().ColumnSpan(6).BorderLeft(1).Column(col =>
-                {
-                    col.Item().Row(row =>
-                    {
-                        row.RelativeItem().BorderVertical(1).Text("");
-                        row.ConstantItem(50).BorderVertical(1).Text("");
-                        row.ConstantItem(100).Text("");
-                        row.ConstantItem(100).Column(col =>
-                        {
-                            col.Item().PaddingLeft(5).PaddingBottom(2).Text(icpConcat).FontSize(9);
-                            col.Item().PaddingLeft(5).PaddingBottom(2).Text(icpConcat).FontSize(9);
-                        });
+                //table.Cell().ColumnSpan(6).BorderLeft(1).Column(col =>
+                //{
+                //    col.Item().Row(row =>
+                //    {
+                //        row.RelativeItem().BorderVertical(1).Text("");
+                //        row.ConstantItem(50).BorderVertical(1).Text("");
+                //        row.ConstantItem(100).Text("");
+                //        row.ConstantItem(100).Column(col =>
+                //        {
+                //            col.Item().PaddingLeft(5).PaddingBottom(2).Text(icpConcat).FontSize(9);
+                //            col.Item().PaddingLeft(5).PaddingBottom(2).Text(icpConcat).FontSize(9);
+                //        });
 
-                        row.ConstantItem(100).Column(col =>
-                        {
-                            col.Item().PaddingLeft(5).PaddingBottom(2).Text(PucConcat).FontSize(9);
-                            col.Item().ShowIf(PucConcatIva != PucConcat).PaddingLeft(5).PaddingBottom(9).Text(PucConcatIva).FontSize(9);
-                        });
+                //        row.ConstantItem(100).Column(col =>
+                //        {
+                //            col.Item().PaddingLeft(5).PaddingBottom(2).Text(PucConcat).FontSize(9);
+                //            col.Item().ShowIf(PucConcatIva != PucConcat).PaddingLeft(5).PaddingBottom(9).Text(PucConcatIva).FontSize(9);
+                //        });
 
-                        row.ConstantItem(100).Column(col =>
-                        {
-                            col.Item().Width(70).AlignCenter().PaddingLeft(15).PaddingBottom(2).Text(descripcionFinanciado1).FontSize(5);
-                            col.Item().AlignLeft().PaddingLeft(15).PaddingBottom(2).Text(descripcionFinanciado2).FontSize(5);
-                        });
+                //        row.ConstantItem(100).Column(col =>
+                //        {
+                //            col.Item().Width(70).AlignCenter().PaddingLeft(15).PaddingBottom(2).Text(descripcionFinanciado1).FontSize(5);
+                //            col.Item().AlignLeft().PaddingLeft(15).PaddingBottom(2).Text(descripcionFinanciado2).FontSize(5);
+                //        });
 
-                        row.ConstantItem(100).Column(col =>
-                        {
-                            col.Item().PaddingLeft(10).PaddingBottom(2).Text(monto-montoIva).FontSize(8);
-                            col.Item().PaddingLeft(10).PaddingBottom(2).Text(montoIva).FontSize(8);
-                        });
-                        row.ConstantItem(102).Text("");
-                        row.ConstantItem(60).BorderVertical(1).Text("");
-                        row.ConstantItem(70).BorderVertical(1).Text("");
+                //        row.ConstantItem(100).Column(col =>
+                //        {
+                //            var montos = monto - montoIva;
+                //            col.Item().PaddingLeft(10).PaddingBottom(2).Text(montos.ToString("N",formato)).FontSize(8);
+                //            col.Item().PaddingLeft(10).PaddingBottom(2).Text(montoIva.ToString("N",formato)).FontSize(8);
+                //        });
+                //        row.ConstantItem(102).Text("");
+                //        row.ConstantItem(60).BorderVertical(1).Text("");
+                //        row.ConstantItem(70).BorderVertical(1).Text("");
 
-                        col.Item().ExtendVertical().Row(row =>
-                        {
-                            row.ConstantItem(40).ExtendVertical().BorderVertical(1);
-                            row.ConstantItem(50).ExtendVertical().BorderVertical(1);
-                            row.RelativeItem(3).ExtendVertical().BorderVertical(1);
-                            row.ConstantItem(60).ExtendVertical().BorderVertical(1);
-                            row.ConstantItem(70).ExtendVertical().BorderVertical(1);
-                        });
-                    });
+                //        col.Item().ExtendVertical().Row(row =>
+                //        {
+                //            row.ConstantItem(40).ExtendVertical().BorderVertical(1);
+                //            row.ConstantItem(50).ExtendVertical().BorderVertical(1);
+                //            row.RelativeItem(3).ExtendVertical().BorderVertical(1);
+                //            row.ConstantItem(60).ExtendVertical().BorderVertical(1);
+                //            row.ConstantItem(70).ExtendVertical().BorderVertical(1);
+                //        });
+                //    });
 
-                });
+                //});
 
 
 
