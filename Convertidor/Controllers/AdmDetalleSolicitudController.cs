@@ -54,7 +54,7 @@ namespace Convertidor.Controllers
         public async  Task<IActionResult> GetByCodigoSolicitud(AdmDetalleSolicitudFilterDto filter)
         {
             ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
-            /*var conectado = await _sisUsuarioRepository.GetConectado();
+            var conectado = await _sisUsuarioRepository.GetConectado();
             var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmDetalleSolicitudes, ActionType.View);
             if (userValid.IsValid == false)
             {
@@ -62,7 +62,7 @@ namespace Convertidor.Controllers
                 result.IsValid = false;
                 result.Message = userValid.Message;
                 return Ok(result);
-            }*/
+            }
             result =await  _service.GetByCodigoSolicitud(filter.CodigoSolicitud);
             return Ok(result);
         }
