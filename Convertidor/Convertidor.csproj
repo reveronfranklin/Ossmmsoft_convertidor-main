@@ -68,12 +68,9 @@
     <Folder Include="Data\Entities\RentasMunicipales\" />
     <Folder Include="Data\Repository\RentasMunicipales\" />
     <Folder Include="Data\Interfaces\RentasMunicipales\" />
-<<<<<<< HEAD
     <Folder Include="Services\Catastro\" />
     <Folder Include="Dtos\Catastro\" />
-=======
     <Folder Include="Enum\" />
->>>>>>> fcc012e2d1a2b8b3ca6661fec45d4bde96d90dad
     <Folder Include="Services\Shared\" />
   </ItemGroup>
   <ItemGroup>
