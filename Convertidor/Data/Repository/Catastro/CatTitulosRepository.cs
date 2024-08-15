@@ -93,6 +93,41 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<ResultDto<CAT_TITULOS>> Update(CAT_TITULOS entity)
+        {
+            ResultDto<CAT_TITULOS> result = new ResultDto<CAT_TITULOS>(null);
+
+            try
+            {
+                CAT_TITULOS entityUpdate = await GetByCodigo(entity.TITULO_ID);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_TITULOS.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+
+
+
+
+
+        }
+
         public async Task<int> GetNextKey()
         {
             try
