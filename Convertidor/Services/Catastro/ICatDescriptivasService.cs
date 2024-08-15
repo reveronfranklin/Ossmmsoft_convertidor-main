@@ -1,0 +1,9 @@
+﻿using Convertidor.Dtos.Catastro;
+
+namespace Convertidor.Services.Catastro
+{
+    public interface ICatDescriptivasService
+    {
+        Task<ResultDto<List<CatDescriptivasResponseDto>>> GetAll();
+    }
+}

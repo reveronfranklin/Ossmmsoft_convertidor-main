@@ -228,6 +228,7 @@ builder.Services.AddTransient<ICatDescriptivasRepository, CatDescriptivasReposit
 
 //CATASTRO Services
 builder.Services.AddTransient<ICatTitulosService, CatTitulosService>();
+builder.Services.AddTransient<ICatDescriptivasService, CatDescriptivasService>();
 
 
 //RH
