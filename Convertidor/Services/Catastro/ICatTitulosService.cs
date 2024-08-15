@@ -5,5 +5,6 @@ namespace Convertidor.Services.Catastro
     public interface ICatTitulosService
     {
         Task<ResultDto<List<CatTitulosResponseDto>>> GetAll();
+        Task<ResultDto<CatTitulosResponseDto>> Create(CatTitulosUpdateDto dto);
     }
 }
