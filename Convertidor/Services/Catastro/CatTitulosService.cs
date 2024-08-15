@@ -11,12 +11,15 @@ namespace Convertidor.Services.Catastro
     {
         private readonly ICatTitulosRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICatDescriptivasRepository _catDescriptivasRepository;
 
         public CatTitulosService(ICatTitulosRepository repository,
-                                 ISisUsuarioRepository sisUsuarioRepository)
+                                 ISisUsuarioRepository sisUsuarioRepository,
+                                 ICatDescriptivasRepository catDescriptivasRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _catDescriptivasRepository = catDescriptivasRepository;
         }
 
         public CatTitulosResponseDto MapCatTitulo(CAT_TITULOS entity)
@@ -166,7 +169,7 @@ namespace Convertidor.Services.Catastro
 
                 if (dto.TituloFkID > 0)
                 {
-                    var padre = await _repository.GetByCodigo(dto.TituloFkID);
+                    var padre = await _repository.GetByTitulo(dto.TituloFkID);
                     if (padre == null)
                     {
                         result.Data = null;
@@ -254,7 +257,7 @@ namespace Convertidor.Services.Catastro
             try
             {
 
-                var tituloUpdate = await _repository.GetByCodigo(dto.TituloId);
+                var tituloUpdate = await _repository.GetByTitulo(dto.TituloId);
                 if (tituloUpdate == null)
                 {
                     result.Data = null;
@@ -274,7 +277,7 @@ namespace Convertidor.Services.Catastro
 
                 if (dto.TituloFkID > 0)
                 {
-                    var padre = await _repository.GetByCodigo(dto.TituloFkID);
+                    var padre = await _repository.GetByTitulo(dto.TituloFkID);
                     if (padre == null)
                     {
                         result.Data = null;
@@ -334,5 +337,60 @@ namespace Convertidor.Services.Catastro
 
             return result;
         }
+
+        public async Task<ResultDto<CatTitulosDeleteDto>> Delete(CatTitulosDeleteDto dto)
+        {
+
+            ResultDto<CatTitulosDeleteDto> result = new ResultDto<CatTitulosDeleteDto>(null);
+            try
+            {
+
+                var titulo = await _repository.GetByTitulo(dto.TituloId);
+                if (titulo == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Titulo no existe";
+                    return result;
+                }
+
+                var descriptiva = await _catDescriptivasRepository.GetByTitulo(dto.TituloId);
+                if (descriptiva != null && descriptiva.Count > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = $"Titulo esta asociado a una  descriptiva";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.TituloId);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }

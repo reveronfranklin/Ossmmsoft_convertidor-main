@@ -217,8 +217,10 @@ builder.Services.AddTransient<IOssAuthUserGroupService, OssAuthUserGroupService>
 //CATASTRO Repository
 builder.Services.AddTransient<ICAT_FICHARepository, CAT_FICHARepository>();
 
+
 builder.Services.AddTransient<ICAT_FICHAService, CAT_FICHAService>();
 builder.Services.AddTransient<ICatTitulosRepository, CatTitulosRepository>();
+builder.Services.AddTransient<ICatDescriptivasRepository, CatDescriptivasRepository>();
 
 //CATASTRO Services
 builder.Services.AddTransient<ICatTitulosService, CatTitulosService>();
