@@ -4,6 +4,7 @@ using Convertidor.Data.Interfaces.Catastro;
 using Convertidor.Dtos.Catastro;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Catastro
 {
@@ -103,7 +104,7 @@ namespace Convertidor.Services.Catastro
                         if (item.EXTRA13 == null) item.EXTRA13 = "";
                         if (item.EXTRA14 == null) item.EXTRA14 = "";
                         if (item.EXTRA15 == null) item.EXTRA15 = "";
-                        
+
                         dto.Extra1 = item.EXTRA1;
                         dto.Extra2 = item.EXTRA2;
                         dto.Extra3 = item.EXTRA3;
@@ -119,7 +120,7 @@ namespace Convertidor.Services.Catastro
                         dto.Extra13 = item.EXTRA13;
                         dto.Extra14 = item.EXTRA14;
                         dto.Extra15 = item.EXTRA15;
-                    
+
                         listDto.Add(dto);
                     }
 
@@ -311,7 +312,7 @@ namespace Convertidor.Services.Catastro
             try
             {
 
-                
+
                 if (dto.Titulo.Trim().Length <= 0)
                 {
                     result.Data = null;
@@ -373,7 +374,7 @@ namespace Convertidor.Services.Catastro
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = MapCatTitulo (created.Data);
+                    var resultDto = MapCatTitulo(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -547,5 +548,149 @@ namespace Convertidor.Services.Catastro
             return result;
         }
 
+
+        public async Task<ResultDto<List<TreePUC>>> GetTreeTitulos()
+        {
+
+            ResultDto<List<TreePUC>> result = new ResultDto<List<TreePUC>>(null);
+
+
+            try
+            {
+
+
+                List<TreePUC> listTreePUC2 = new List<TreePUC>();
+                var titulosArbol = await BuscarArbol();
+
+                foreach (var item in titulosArbol)
+                {
+                    var patch = getPatch(item);
+
+
+                    TreePUC treePUC = new TreePUC();
+                    treePUC.Path = patch;
+                    treePUC.Id = item.Id;
+                    treePUC.Denominacion = item.Text;
+                    treePUC.Descripcion = item.Text;
+                    var search = listTreePUC2.Where(x => x.Id == treePUC.Id).FirstOrDefault();
+                    if (search == null)
+                    {
+                        listTreePUC2.Add(treePUC);
+                    }
+
+                    Console.WriteLine(patch);
+                }
+                result.Data = listTreePUC2.OrderBy(x => x.Id).ToList();
+                result.IsValid = true;
+                result.Message = $"";
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+
+            }
+
+        }
+
+        private async Task<List<Comment>> BuscarArbol()
+        {
+            List<Comment> categories = new List<Comment>();
+            var descriptivas = await _repository.GetAll();
+            foreach (var item in descriptivas)
+            {
+                Comment itenNew = new Comment();
+                itenNew.Id = item.TITULO_ID;
+                itenNew.ParentId = (int)item.TITULO_FK_ID;
+                if (item.TITULO == null) item.TITULO = "";
+                itenNew.Text = item.TITULO;
+                categories.Add(itenNew);
+
+            }
+
+            List<Comment> hierarchy = new List<Comment>();
+            hierarchy = categories
+                            //.Where(c => c.ParentId != 0)
+                            .Select(c => new Comment()
+                            {
+                                Id = c.Id,
+                                Text = c.Text,
+                                ParentId = c.ParentId,
+                                //hierarchy = "0000" + c.Id,
+                                hierarchy = c.Text,
+                                Children = GetParent(categories, c)
+                            })
+                            .ToList();
+
+
+            return hierarchy.OrderBy(x => x.Id).ToList();
+
+
+        }
+
+        public List<string> getPatch(Comment item)
+        {
+            List<string> result = new List<string>();
+            if (item.Children.Count == 0)
+            {
+                result.Add(item.Text);
+                return result;
+            }
+            else
+            {
+
+                foreach (var itemChield in item.Children)
+                {
+                    result.Add(itemChield.Text);
+
+                }
+                return result;
+            }
+
+
+        }
+
+        public List<Comment> GetParent(List<Comment> comments, Comment comment)
+        {
+            if (comment.Id == 15)
+            {
+                var detener = 1;
+            }
+
+            List<Comment> result = new List<Comment>();
+
+            if (comment.ParentId == 0)
+            {
+                result.Add(comment);
+                return result;
+            }
+            var padre = comments.Where(c => c.Id == comment.ParentId).FirstOrDefault();
+            if (padre != null)
+            {
+                if (padre.ParentId == 0)
+                {
+                    result.Add(padre);
+                    result.Add(comment);
+                    return result;
+
+                }
+                else
+                {
+                    result.AddRange(GetParent(comments, padre));
+                    result.Add(comment);
+                    return result;
+                }
+            }
+            else
+            {
+                result.Add(comment);
+                return result;
+            }
+        }
     }
 }
