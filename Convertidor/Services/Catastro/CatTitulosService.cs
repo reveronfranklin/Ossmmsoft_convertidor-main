@@ -246,5 +246,93 @@ namespace Convertidor.Services.Catastro
 
             return result;
         }
+
+        public async Task<ResultDto<CatTitulosResponseDto>> Update(CatTitulosUpdateDto dto)
+        {
+
+            ResultDto<CatTitulosResponseDto> result = new ResultDto<CatTitulosResponseDto>(null);
+            try
+            {
+
+                var tituloUpdate = await _repository.GetByCodigo(dto.TituloId);
+                if (tituloUpdate == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo no existe";
+                    return result;
+                }
+                if (dto.Titulo.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalido";
+                    return result;
+                }
+
+
+
+                if (dto.TituloFkID > 0)
+                {
+                    var padre = await _repository.GetByCodigo(dto.TituloFkID);
+                    if (padre == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Padre Invalido";
+                        return result;
+                    }
+
+                }
+                if (dto.CodigoTitulo.Length > 0)
+                {
+                    var tituloCodigo = await _repository.GetByCodigoString(dto.CodigoTitulo);
+                    if (tituloCodigo != null && tituloCodigo.TITULO_ID != dto.TituloId)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = $"Ya existe titulo con ese codigo: {dto.CodigoTitulo}";
+                        return result;
+                    }
+
+                }
+                //No se permite modificar ni Extra1 ni Codigo
+                //descriptiva.EXTRA1 = dto.Extra1;
+                //descriptiva.CODIGO = dto.Codigo;
+
+                tituloUpdate.TITULO = dto.Titulo;
+                tituloUpdate.TITULO_FK_ID = dto.TituloFkID;
+
+
+                tituloUpdate.EXTRA2 = dto.Extra2;
+                tituloUpdate.EXTRA3 = dto.Extra3;
+                tituloUpdate.FECHA_UPD = DateTime.Now;
+
+
+
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                tituloUpdate.CODIGO_EMPRESA = conectado.Empresa;
+                tituloUpdate.USUARIO_UPD = conectado.Usuario;
+
+                await _repository.Update(tituloUpdate);
+
+                var resultDto = MapCatTitulo(tituloUpdate);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }
