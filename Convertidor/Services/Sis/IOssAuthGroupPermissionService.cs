@@ -11,4 +11,5 @@ public interface IOssAuthGroupPermissionService
     Task<ResultDto<List<AuthGroupPermisionResponseDto>>> GetAll();
     Task<ResultDto<List<AuthGroupPermisionResponseDto>>> GetByGroup(AuthGroupPermissionFilterDto dto);
 
+
 }

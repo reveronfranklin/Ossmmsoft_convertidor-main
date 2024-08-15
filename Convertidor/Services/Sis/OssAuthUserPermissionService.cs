@@ -12,19 +12,23 @@ namespace Convertidor.Services.Sis
         private readonly IOssAuthPermissionsService _ossAuthPermissionsService;
         private readonly IOssAuthUserGroupService _ossAuthUserGroupService;
         private readonly IOssAuthGroupPermissionService _ossAuthGroupPermissionService;
+        private readonly IAuthModelUserServices _authModelUserServices;
 
 
         public OssAuthUserPermissionService(IOssAuthUserPermissionsRepository repository,
                                       ISisUsuarioRepository sisUsuarioRepository,
                                       IOssAuthPermissionsService ossAuthPermissionsService,
                                       IOssAuthUserGroupService ossAuthUserGroupService,
-                                      IOssAuthGroupPermissionService ossAuthGroupPermissionService)
+                                      IOssAuthGroupPermissionService ossAuthGroupPermissionService,
+                                      IAuthModelUserServices authModelUserServices
+                                   )
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _ossAuthPermissionsService = ossAuthPermissionsService;
             _ossAuthUserGroupService = ossAuthUserGroupService;
             _ossAuthGroupPermissionService = ossAuthGroupPermissionService;
+            _authModelUserServices = authModelUserServices;
         }
         
        
@@ -100,7 +104,37 @@ namespace Convertidor.Services.Sis
 
         }
       
-      
+        public async Task<ResultDto<List<AuthUserPermisionResponseDto>>> GetByUser(AuthUserPermisionFilterDto dto)
+        { 
+            ResultDto<List<AuthUserPermisionResponseDto>> result = new ResultDto<List<AuthUserPermisionResponseDto>>(null);
+            try
+            {
+
+                var userPermission = await _repository.GetByUser(dto.UserId);
+                if (userPermission == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existen Permisos para este Usuario";
+                    return result;
+                }
+                
+                var resultDto =  await MapList(userPermission);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
      
         public async Task<ResultDto<AuthUserPermisionResponseDto>> Create(AuthUserPermisionUpdateDto dto)
         {
@@ -138,7 +172,7 @@ namespace Convertidor.Services.Sis
                     return result;
                 }
 
-                var existePermiso = await ExistedPermissionInGroup(dto.UserId, dto.PermissionId);
+                var existePermiso = await _authModelUserServices.ExistedPermissionInGroup(dto.UserId, dto.PermissionId);
                 if (existePermiso)
                 {
                     result.Data = null;
@@ -157,6 +191,13 @@ namespace Convertidor.Services.Sis
                 entity.FECHA_INS = DateTime.Now;
                 entity.USUARIO_INS = conectado.Usuario;
                 var created=await _repository.Add(entity);
+                
+                
+            
+                await _authModelUserServices.UpdateCachetModelUserAction(entity.USER_ID);
+                
+             
+                return result;  
                 
                 if (created.IsValid && created.Data != null)
                 {
@@ -212,6 +253,8 @@ namespace Convertidor.Services.Sis
 
                 var deleted = await _repository.Delete(dto.Id);
 
+                await _authModelUserServices.UpdateCachetModelUserAction(userPermissions.USER_ID);
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;
@@ -271,37 +314,7 @@ namespace Convertidor.Services.Sis
             return result;
         }
         
-        public async Task<ResultDto<List<AuthUserPermisionResponseDto>>> GetByUser(AuthUserPermisionFilterDto dto)
-        { 
-            ResultDto<List<AuthUserPermisionResponseDto>> result = new ResultDto<List<AuthUserPermisionResponseDto>>(null);
-            try
-            {
-
-                var userPermission = await _repository.GetByUser(dto.UserId);
-                if (userPermission == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "No existen Permisos para este Usuario";
-                    return result;
-                }
-                
-                var resultDto =  await MapList(userPermission);
-                result.Data = resultDto;
-                result.IsValid = true;
-                result.Message = "";
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-            }
-
-            return result;
-        }
-
+       
         public async Task<ResultDto<List<AuthUserPermisionResponseDto>>> GetAll()
         {
             ResultDto<List<AuthUserPermisionResponseDto>> result = new ResultDto<List<AuthUserPermisionResponseDto>>(null);
@@ -334,43 +347,7 @@ namespace Convertidor.Services.Sis
         }
 
         
-            public async Task<bool> ExistedPermissionInGroup(int userId,int permissionId)
-            {
-                bool result = false;
-            List<AuthPermissionResponseDto> allPermissions = new  List<AuthPermissionResponseDto>(); 
-            AuthUserGroupFilterDto  userGroupFilter = new AuthUserGroupFilterDto();
-            userGroupFilter.UserId = userId;
-            var groupsByUser = await _ossAuthUserGroupService.GetByUser(userGroupFilter);
-            if (groupsByUser.Data != null && groupsByUser.Data.Count > 0)
-            {
-                foreach (var itemGroupByUser in groupsByUser.Data)
-                {
-                    AuthGroupPermissionFilterDto filter = new AuthGroupPermissionFilterDto();
-                    filter.GroupId = itemGroupByUser.GroupId;
-                    var permissionByGroup = await _ossAuthGroupPermissionService.GetByGroup(filter);
-                    if (permissionByGroup.Data != null && permissionByGroup.Data.Count > 0)
-                    {
-                        foreach (var itemPermissionByGroup in permissionByGroup.Data)
-                        {
-                            if (itemPermissionByGroup.PermisionId == permissionId)
-                            {
-                                result = true;
-                                return result;
-                            }
-                        }
-                    }
-                }
-                
-                
-             
-            }
-            
-          
-            
-            return result;
-
-        }
-        
+    
     }
 }
 

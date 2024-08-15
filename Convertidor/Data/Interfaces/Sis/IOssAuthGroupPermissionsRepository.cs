@@ -1,4 +1,5 @@
 using Convertidor.Data.Entities.Sis;
+using Convertidor.Dtos.Sis;
 
 namespace Convertidor.Data.Interfaces.Sis;
 
@@ -11,5 +12,6 @@ public interface IOssAuthGroupPermissionsRepository
     Task<ResultDto<AUTH_GROUP_PERMISSIONS>> Add(AUTH_GROUP_PERMISSIONS entity);
     Task<ResultDto<AUTH_GROUP_PERMISSIONS>> Update(AUTH_GROUP_PERMISSIONS entity);
     Task<string> Delete(int id);
+    Task<ResultDto<List<AuthGroupPermisionResponseDto>>> GetByGroup(AuthGroupPermissionFilterDto dto);
 
 } 
