@@ -72,7 +72,6 @@
     <Folder Include="Data\Interfaces\RentasMunicipales\" />
     <Folder Include="Services\Catastro\" />
     <Folder Include="Dtos\Catastro\" />
-    <Folder Include="Enum\" />
     <Folder Include="Services\Shared\" />
   </ItemGroup>
   <ItemGroup>

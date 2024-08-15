@@ -211,6 +211,10 @@ builder.Services.AddTransient<IOssAuthGroupService, OssAuthGroupService>();
 builder.Services.AddTransient<IOssAuthGroupPermissionService, OssAuthGroupPermissionService>();
 builder.Services.AddTransient<IOssAuthUserPermissionService, OssAuthUserPermissionService>();
 builder.Services.AddTransient<IOssAuthUserGroupService, OssAuthUserGroupService>();
+builder.Services.AddTransient<IAuthModelUserServices, AuthModelUserServices>();
+
+
+
 
 
 

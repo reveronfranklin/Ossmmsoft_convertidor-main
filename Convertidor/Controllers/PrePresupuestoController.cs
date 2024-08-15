@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Distributed;
 namespace Convertidor.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] 
     //[Authorize]
     public class PrePresupuestoController : ControllerBase
     {
@@ -28,6 +28,7 @@ namespace Convertidor.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        
         public async Task<IActionResult> GetAll()
         {
             FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();

@@ -11,17 +11,23 @@ namespace Convertidor.Services.Sis
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IOssAuthGroupService _ossAuthGroupService;
         private readonly IOssAuthPermissionsService _ossAuthPermissionsService;
+        private readonly IAuthModelUserServices _authModelUserServices;
+        private readonly IOssAuthUserGroupService _ossAuthUserGroupService;
 
 
         public OssAuthGroupPermissionService(IOssAuthGroupPermissionsRepository repository,
                                       ISisUsuarioRepository sisUsuarioRepository,
                                       IOssAuthGroupService  ossAuthGroupService,
-                                      IOssAuthPermissionsService ossAuthPermissionsService)
+                                      IOssAuthPermissionsService ossAuthPermissionsService,
+                                      IAuthModelUserServices authModelUserServices,
+                                      IOssAuthUserGroupService ossAuthUserGroupService)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _ossAuthGroupService = ossAuthGroupService;
             _ossAuthPermissionsService = ossAuthPermissionsService;
+            _authModelUserServices = authModelUserServices;
+            _ossAuthUserGroupService = ossAuthUserGroupService;
         }
         
        
@@ -97,8 +103,11 @@ namespace Convertidor.Services.Sis
 
 
         }
-      
-      
+
+        public async Task<ResultDto<List<AuthGroupPermisionResponseDto>>> GetByGroup(AuthGroupPermissionFilterDto dto)
+        {
+            return await  _repository.GetByGroup(dto);
+        }
      
         public async Task<ResultDto<AuthGroupPermisionResponseDto>> Create(AuthGroupPermissionUpdateDto dto)
         {
@@ -166,6 +175,12 @@ namespace Convertidor.Services.Sis
                     result.Message = created.Message;
                 }
 
+                var userGroup = await _ossAuthUserGroupService.GetAll();
+                foreach (var item in userGroup.Data)
+                {
+                    await _authModelUserServices.UpdateCachetModelUserAction(item.UserId);
+                }
+             
                 return result;  
 
               
@@ -204,6 +219,13 @@ namespace Convertidor.Services.Sis
 
                 var deleted = await _repository.Delete(dto.Id);
 
+                var userGroup = await _ossAuthUserGroupService.GetAll();
+                foreach (var item in userGroup.Data)
+                {
+                    await _authModelUserServices.UpdateCachetModelUserAction(item.UserId);
+                }
+
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;
@@ -263,37 +285,7 @@ namespace Convertidor.Services.Sis
             return result;
         }
         
-        public async Task<ResultDto<List<AuthGroupPermisionResponseDto>>> GetByGroup(AuthGroupPermissionFilterDto dto)
-        { 
-            ResultDto<List<AuthGroupPermisionResponseDto>> result = new ResultDto<List<AuthGroupPermisionResponseDto>>(null);
-            try
-            {
-
-                var groupPermission = await _repository.GetByGroup(dto.GroupId);
-                if (groupPermission == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "No existen Permisos para este Grupo";
-                    return result;
-                }
-                
-                var resultDto =  await MapList(groupPermission);
-                result.Data = resultDto;
-                result.IsValid = true;
-                result.Message = "";
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-            }
-
-            return result;
-        }
-
+      
         public async Task<ResultDto<List<AuthGroupPermisionResponseDto>>> GetAll()
         {
             ResultDto<List<AuthGroupPermisionResponseDto>> result = new ResultDto<List<AuthGroupPermisionResponseDto>>(null);
