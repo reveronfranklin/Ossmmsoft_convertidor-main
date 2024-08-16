@@ -120,6 +120,8 @@ namespace Convertidor.Services.Sis
               return result;
           }
      
+        
+        //Busca los Permisos por usuario
         public async Task<List<Permission>> GetPermissionsByUserId(int userId)
                 {
                     List<Permission> result = new List<Permission>();
