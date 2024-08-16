@@ -12,7 +12,6 @@ namespace Convertidor.Services.Sis
         private readonly IConfiguration _configuration;
         private readonly IOssAuthUserGroupService _ossAuthUserGroupService;
         private readonly IOssAuthGroupPermissionsRepository _ossAuthGroupPermissionsRepository;
-        private readonly IOssAuthGroupPermissionService _ossAuthGroupPermissionService;
         private readonly IOssAuthPermissionsService _ossAuthPermissionsService;
         private readonly IOssAuthUserPermissionsRepository _ossAuthUserPermissionServiceRepository;
         private readonly IOssAuthUserPermissionService _ossAuthUserPermissionService;
@@ -191,7 +190,7 @@ namespace Convertidor.Services.Sis
                 {
                     AuthGroupPermissionFilterDto filter = new AuthGroupPermissionFilterDto();
                     filter.GroupId = itemGroupByUser.GroupId;
-                    var permissionByGroup = await _ossAuthGroupPermissionService.GetByGroup(filter);
+                    var permissionByGroup = await _ossAuthGroupPermissionsRepository.GetByGroup(filter);
                     if (permissionByGroup.Data != null && permissionByGroup.Data.Count > 0)
                     {
                         foreach (var itemPermissionByGroup in permissionByGroup.Data)
@@ -283,7 +282,7 @@ namespace Convertidor.Services.Sis
                       {
                           AuthGroupPermissionFilterDto filter = new AuthGroupPermissionFilterDto();
                           filter.GroupId = itemGroupByUser.GroupId;
-                          var permissionByGroup = await _ossAuthGroupPermissionService.GetByGroup(filter);
+                          var permissionByGroup = await _ossAuthGroupPermissionsRepository.GetByGroup(filter);
                           if (permissionByGroup.Data != null && permissionByGroup.Data.Count > 0)
                           {
                               foreach (var itemPermissionByGroup in permissionByGroup.Data)
