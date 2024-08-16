@@ -276,6 +276,53 @@ namespace Convertidor.Services.Catastro
 
             return result;
         }
+
+        public async Task<ResultDto<CatDescriptivasDeleteDto>> Delete(CatDescriptivasDeleteDto dto)
+        {
+
+            ResultDto<CatDescriptivasDeleteDto> result = new ResultDto<CatDescriptivasDeleteDto>(null);
+            try
+            {
+
+                var catDescriptiva= await _repository.GetByCodigo(dto.DescripcionId);
+                if (catDescriptiva == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Descriptiva no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.DescripcionId);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
         public CatDescriptivasResponseDto GetDefaultDecriptiva()
         {
             CatDescriptivasResponseDto itemDefault = new CatDescriptivasResponseDto();

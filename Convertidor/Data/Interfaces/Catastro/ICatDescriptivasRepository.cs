@@ -11,6 +11,7 @@ namespace Convertidor.Data.Interfaces.Catastro
         Task<CAT_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo);
         Task<ResultDto<CAT_DESCRIPTIVAS>> Add(CAT_DESCRIPTIVAS entity);
         Task<ResultDto<CAT_DESCRIPTIVAS>> Update(CAT_DESCRIPTIVAS entity);
+        Task<string> Delete(int descripcionId);
         Task<int> GetNextKey();
     }
 }
