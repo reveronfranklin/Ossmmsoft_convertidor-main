@@ -1,7 +1,10 @@
 ﻿using Convertidor.Data.Entities.Catastro;
 using Convertidor.Data.Entities.Cnt;
 using Convertidor.Data.Interfaces.Catastro;
+using Convertidor.Dtos.Catastro;
+using Convertidor.Dtos.Cnt;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 
 namespace Convertidor.Data.Repository.Catastro
 {
@@ -30,7 +33,7 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<CAT_TITULOS> GetByCodigo(int tituloId)
+        public async Task<CAT_TITULOS> GetByTitulo(int tituloId)
         {
             try
             {
@@ -99,7 +102,7 @@ namespace Convertidor.Data.Repository.Catastro
 
             try
             {
-                CAT_TITULOS entityUpdate = await GetByCodigo(entity.TITULO_ID);
+                CAT_TITULOS entityUpdate = await GetByTitulo(entity.TITULO_ID);
                 if (entityUpdate != null)
                 {
 
@@ -121,8 +124,25 @@ namespace Convertidor.Data.Repository.Catastro
                 return result;
             }
 
+        }
 
+        public async Task<string> Delete(int tituloId)
+        {
 
+            try
+            {
+                CAT_TITULOS entity = await GetByTitulo(tituloId);
+                if (entity != null)
+                {
+                    _context.CAT_TITULOS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
 
 
 
@@ -158,6 +178,10 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-
     }
+
+
+
 }
+    
+

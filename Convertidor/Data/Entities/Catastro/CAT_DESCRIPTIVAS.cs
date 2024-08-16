@@ -44,9 +44,9 @@
             public string EXTRA10 { get; set; } = string.Empty;
 
             public string EXTRA11 { get; set; } = string.Empty;
+            public string EXTRA12 { get; set; } = string.Empty;
 
-
-            public string EXTRA13 { get; set; } = string.Empty;
+           public string EXTRA13 { get; set; } = string.Empty;
 
             public string EXTRA14 { get; set; } = string.Empty;
 
