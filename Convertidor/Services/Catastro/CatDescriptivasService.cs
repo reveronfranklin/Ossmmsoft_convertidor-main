@@ -178,6 +178,104 @@ namespace Convertidor.Services.Catastro
             return result;
         }
 
+        public async Task<ResultDto<CatDescriptivasResponseDto>> Update(CatDescriptivasUpdateDto dto)
+        {
+
+            ResultDto<CatDescriptivasResponseDto> result = new ResultDto<CatDescriptivasResponseDto>(null);
+            try
+            {
+
+                var descriptiva = await _repository.GetByCodigo(dto.DescripcionId);
+                if (descriptiva == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Decriptiva existe";
+                    return result;
+                }
+                if (dto.Descripcion.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+                }
+
+                var titulo = await _catTitulosRepository.GetByTitulo(dto.TituloId);
+                if (titulo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalido";
+                    return result;
+                }
+
+                if (dto.DescripcionFkId > 0)
+                {
+                    var padre = await _repository.GetByCodigo(dto.DescripcionFkId);
+                    if (padre == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Padre Invalido";
+                        return result;
+                    }
+
+                }
+                var descriptivaCodigo = await _repository.GetByCodigoDescriptivaTexto(dto.Codigo);
+                if (descriptivaCodigo != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Ya existe Descriptiva con ese codigo: {dto.Codigo}";
+                    return result;
+                }
+                //No se permite modificar ni Extra1 ni Codigo
+                //descriptiva.EXTRA1 = dto.Extra1;
+                //descriptiva.CODIGO = dto.Codigo;
+
+                descriptiva.DESCRIPCION = dto.Descripcion;
+                descriptiva.DESCRIPCION_FK_ID = dto.DescripcionFkId;
+                descriptiva.TITULO_ID = dto.TituloId;
+
+                descriptiva.EXTRA2 = dto.Extra2;
+                descriptiva.EXTRA3 = dto.Extra3;
+                descriptiva.EXTRA4 = dto.Extra4;
+                descriptiva.EXTRA5 = dto.Extra5;
+                descriptiva.EXTRA6 = dto.Extra6;
+                descriptiva.EXTRA7 = dto.Extra7;
+                descriptiva.EXTRA8 = dto.Extra8;
+                descriptiva.EXTRA9 = dto.Extra9;
+                descriptiva.EXTRA10 = dto.Extra10;
+                descriptiva.EXTRA11 = dto.Extra11;
+                descriptiva.EXTRA12 = dto.Extra12;
+                descriptiva.EXTRA13 = dto.Extra13;
+                descriptiva.EXTRA14 = dto.Extra14;
+                descriptiva.EXTRA15 = dto.Extra15;
+                descriptiva.FECHA_UPD = DateTime.Now;
+
+
+
+
+                await _repository.Update(descriptiva);
+
+                var resultDto = await MapCatDescriptiva(descriptiva);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
         public CatDescriptivasResponseDto GetDefaultDecriptiva()
         {
             CatDescriptivasResponseDto itemDefault = new CatDescriptivasResponseDto();
