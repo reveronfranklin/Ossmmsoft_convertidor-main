@@ -66,5 +66,103 @@ namespace Convertidor.Data.Repository.Catastro
 
 
         }
+
+        public async Task<CAT_DESCRIPTIVAS> GetByCodigo(int descripcionId)
+        {
+            try
+            {
+
+                var result = await _context.CAT_DESCRIPTIVAS.DefaultIfEmpty()
+                    .Where(x => x.DESCRIPCION_ID == descripcionId)
+                    .FirstOrDefaultAsync();
+                return (CAT_DESCRIPTIVAS)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<CAT_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo)
+        {
+            try
+            {
+                var result = await _context.CAT_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.CODIGO == codigo).FirstOrDefaultAsync();
+
+                return (CAT_DESCRIPTIVAS)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+
+
+        public async Task<ResultDto<CAT_DESCRIPTIVAS>> Add(CAT_DESCRIPTIVAS entity)
+        {
+            ResultDto<CAT_DESCRIPTIVAS> result = new ResultDto<CAT_DESCRIPTIVAS>(null);
+            try
+            {
+
+
+
+                await _context.CAT_DESCRIPTIVAS.AddAsync(entity);
+                await _context.SaveChangesAsync();
+
+
+                result.Data = entity;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+
+
+        }
+
+        public async Task<int> GetNextKey()
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.CAT_DESCRIPTIVAS.DefaultIfEmpty()
+                    .OrderByDescending(x => x.DESCRIPCION_ID)
+                    .FirstOrDefaultAsync();
+                if (last == null)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = last.DESCRIPCION_ID + 1;
+                }
+
+                return (int)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return 0;
+            }
+
+
+
+        }
     }
 }

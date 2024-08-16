@@ -1,6 +1,8 @@
 ﻿using Convertidor.Data.Entities.Catastro;
+using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Catastro;
 using Convertidor.Dtos.Catastro;
+using Convertidor.Dtos.Presupuesto;
 
 namespace Convertidor.Services.Catastro
 {
@@ -52,6 +54,117 @@ namespace Convertidor.Services.Catastro
                     result.Message = " No existen Datos";
 
                 }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        public async Task<ResultDto<CatDescriptivasResponseDto>> Create(CatDescriptivasUpdateDto dto)
+        {
+
+            ResultDto<CatDescriptivasResponseDto> result = new ResultDto<CatDescriptivasResponseDto>(null);
+            try
+            {
+
+                var descriptiva = await _repository.GetByCodigo(dto.DescripcionId);
+                if (descriptiva != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Decriptiva existe";
+                    return result;
+                }
+                if (dto.Descripcion.Trim().Length <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Descripcion Invalida";
+                    return result;
+                }
+
+                var titulo = await _catTitulosRepository.GetByTitulo(dto.TituloId);
+                if (titulo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalido";
+                    return result;
+                }
+
+                if (dto.DescripcionFkId > 0)
+                {
+                    var padre = await _repository.GetByCodigo(dto.DescripcionFkId);
+                    if (padre == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Padre Invalido";
+                        return result;
+                    }
+
+                }
+                var descriptivaCodigo = await _repository.GetByCodigoDescriptivaTexto(dto.Codigo);
+                if (descriptivaCodigo != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Ya existe Descriptiva con ese codigo: {dto.Codigo}";
+                    return result;
+                }
+
+                CAT_DESCRIPTIVAS entity = new CAT_DESCRIPTIVAS();
+                entity.DESCRIPCION_ID = await _repository.GetNextKey();
+                entity.DESCRIPCION_FK_ID = dto.DescripcionFkId;
+                entity.TITULO_ID = dto.TituloId;
+                entity.CODIGO = dto.Codigo;
+                entity.DESCRIPCION = dto.Descripcion;
+                entity.EXTRA1 = dto.Extra1;
+                entity.EXTRA2 = dto.Extra2;
+                entity.EXTRA3 = dto.Extra3;
+                entity.EXTRA4 = dto.Extra4;
+                entity.EXTRA4 = dto.Extra4;
+                entity.EXTRA5 = dto.Extra5;
+                entity.EXTRA6 = dto.Extra6;
+                entity.EXTRA7 = dto.Extra7;
+                entity.EXTRA8 = dto.Extra8;
+                entity.EXTRA9 = dto.Extra9;
+                entity.EXTRA10 = dto.Extra10;
+                entity.EXTRA11 = dto.Extra11;
+                entity.EXTRA12 = dto.Extra12;
+                entity.EXTRA13 = dto.Extra13;
+                entity.EXTRA14 = dto.Extra14;
+                entity.EXTRA15 = dto.Extra15;
+
+                var created = await _repository.Add(entity);
+                if (created.IsValid && created.Data != null)
+                {
+                    var resultDto = await MapCatDescriptiva(created.Data);
+                    result.Data = resultDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                }
+                else
+                {
+
+                    result.Data = null;
+                    result.IsValid = created.IsValid;
+                    result.Message = created.Message;
+                }
+
+                return result;
+
+
+
             }
             catch (Exception ex)
             {
