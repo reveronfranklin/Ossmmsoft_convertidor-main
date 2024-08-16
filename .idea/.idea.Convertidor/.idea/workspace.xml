@@ -8,7 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,6 +197,7 @@
       <workItem from="1723735629592" duration="186000" />
       <workItem from="1723735928607" duration="522000" />
       <workItem from="1723738977967" duration="1683000" />
+      <workItem from="1723826243185" duration="1414000" />
     </task>
     <servers />
   </component>

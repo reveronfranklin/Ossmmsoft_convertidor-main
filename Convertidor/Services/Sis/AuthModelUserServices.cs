@@ -13,8 +13,7 @@ namespace Convertidor.Services.Sis
         private readonly IOssAuthUserGroupService _ossAuthUserGroupService;
         private readonly IOssAuthGroupPermissionsRepository _ossAuthGroupPermissionsRepository;
         private readonly IOssAuthPermissionsService _ossAuthPermissionsService;
-        private readonly IOssAuthUserPermissionsRepository _ossAuthUserPermissionServiceRepository;
-        private readonly IOssAuthUserPermissionService _ossAuthUserPermissionService;
+        private readonly IOssAuthUserPermissionsRepository _ossAuthUserPermissionRepository;
         private readonly IDistributedCache _distributedCache;
 
 
@@ -28,7 +27,7 @@ namespace Convertidor.Services.Sis
                                      IOssAuthUserGroupService ossAuthUserGroupService,
                                      IOssAuthGroupPermissionsRepository ossAuthGroupPermissionsRepository,
                                      IOssAuthPermissionsService ossAuthPermissionsService,
-                                     IOssAuthUserPermissionsRepository ossAuthUserPermissionServiceRepository,
+                                     IOssAuthUserPermissionsRepository ossAuthUserPermissionRepository,
                                     IDistributedCache distributedCache)
         {
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -37,7 +36,8 @@ namespace Convertidor.Services.Sis
             _ossAuthUserGroupService = ossAuthUserGroupService;
             _ossAuthGroupPermissionsRepository = ossAuthGroupPermissionsRepository;
             _ossAuthPermissionsService = ossAuthPermissionsService;
-            _ossAuthUserPermissionServiceRepository = ossAuthUserPermissionServiceRepository;
+            _ossAuthUserPermissionRepository = ossAuthUserPermissionRepository;
+
             _distributedCache = distributedCache;
         }
 
@@ -81,7 +81,7 @@ namespace Convertidor.Services.Sis
 
                   AuthUserPermisionFilterDto filterUserPermission = new AuthUserPermisionFilterDto();
                   filterUserPermission.UserId = userId;
-                  var permissionByUser = await _ossAuthUserPermissionServiceRepository.GetByUser(filterUserPermission);
+                  var permissionByUser = await _ossAuthUserPermissionRepository.GetByUser(filterUserPermission);
                   if (permissionByUser.Data != null && permissionByUser.Data.Count > 0)
                   {
                       foreach (var itempermissionByUser in permissionByUser.Data)
@@ -305,7 +305,7 @@ namespace Convertidor.Services.Sis
 
                   AuthUserPermisionFilterDto filterUserPermission = new AuthUserPermisionFilterDto();
                   filterUserPermission.UserId = userId;
-                  var permissionByUser = await _ossAuthUserPermissionService.GetByUser(filterUserPermission);
+                  var permissionByUser = await _ossAuthUserPermissionRepository.GetByUser(filterUserPermission);
                   if (permissionByUser.Data != null && permissionByUser.Data.Count > 0)
                   {
                       foreach (var itempermissionByUser in permissionByUser.Data)
