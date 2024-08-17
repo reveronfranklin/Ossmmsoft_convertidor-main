@@ -7,7 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -199,7 +202,7 @@
       <workItem from="1723735928607" duration="522000" />
       <workItem from="1723738977967" duration="1683000" />
       <workItem from="1723826243185" duration="2576000" />
-      <workItem from="1723844293307" duration="8996000" />
+      <workItem from="1723844293307" duration="10312000" />
     </task>
     <servers />
   </component>
@@ -291,13 +294,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>694</line>
+          <line>695</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="28748" />
+              <option value="28815" />
             </startOffsets>
             <endOffsets>
-              <option value="28830" />
+              <option value="28897" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="21" />
@@ -516,13 +519,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>645</line>
+          <line>646</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="26879" />
+              <option value="26946" />
             </startOffsets>
             <endOffsets>
-              <option value="27050" />
+              <option value="27117" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="123" />
@@ -555,13 +558,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>644</line>
+          <line>645</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="26757" />
+              <option value="26824" />
             </startOffsets>
             <endOffsets>
-              <option value="26862" />
+              <option value="26929" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="130" />
@@ -2089,13 +2092,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
-          <line>768</line>
+          <line>769</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'SolicitudPuedeSerAprobada'">
             <startOffsets>
-              <option value="31215" />
+              <option value="31282" />
             </startOffsets>
             <endOffsets>
-              <option value="31336" />
+              <option value="31403" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="364" />
