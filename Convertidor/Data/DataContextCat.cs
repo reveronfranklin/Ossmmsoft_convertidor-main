@@ -39,11 +39,15 @@ namespace Convertidor.Data
 
 
             modelBuilder
-                     .Entity<CAT_DESCRIPTIVAS>(builder =>
-                     {
-                         builder.HasNoKey();
-                         builder.ToTable("CAT_DESCRIPTIVAS");
-                     });
+                      .Entity<CAT_DESCRIPTIVAS>(builder =>
+                      {
+                          builder.HasKey(table => new
+                          {
+                              table.DESCRIPCION_ID,
+
+                          });
+                          builder.ToTable("CAT_DESCRIPTIVAS");
+                      });
 
             modelBuilder
           .Entity<CAT_TITULOS>(builder =>
