@@ -776,7 +776,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Solicitud No tiene Dettalle";
                     return result;
                 }
-                var pucSolicitud =await _admPucSolicitudRepository.GetByDetalleSolicitud(codigoSolicitud);
+                var pucSolicitud =await _admPucSolicitudRepository.GetBySolicitud(codigoSolicitud);
                 if (pucSolicitud == null || pucSolicitud.Count == 0)
                 {
                     result.Data = false;

@@ -14,14 +14,49 @@ namespace Convertidor.Data.Repository.Presupuesto
 		
         private readonly DataContextPre _context;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
 
-        public PreCompromisosRepository(DataContextPre context,IAdmProveedoresRepository admProveedoresRepository )
+        public PreCompromisosRepository(
+                                        DataContextPre context,
+                                        IAdmProveedoresRepository admProveedoresRepository,
+                                        ISisUsuarioRepository sisUsuarioRepository )
         {
             _context = context;
             _admProveedoresRepository = admProveedoresRepository;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
       
+        
+        
+        public async Task<string> AnularDesdeSolicitud(int codigoSolicitud)
+        {
+
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                FormattableString xqueryAnulaSolicitud = $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.STATUS='AN',USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE   WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+                var resultXqueryAnulaSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryAnulaSolicitud);
+                
+                FormattableString xqueryAdmPucSolicitud = $"UPDATE ADM.ADM_PUC_SOLICITUD SET MONTO_ANULADO = MONTO,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+                var resultAdmPucSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryAdmPucSolicitud);
+                
+                FormattableString xqueryPreCompromiso = $"UPDATE PRE.PRE_COMPROMISO SET PRE.PRE_COMPROMISOS.STATUS = 'AN',USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+                var resultPreCompromiso = _context.Database.ExecuteSqlInterpolated(xqueryAdmPucSolicitud);
+
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso)
         {
             try
