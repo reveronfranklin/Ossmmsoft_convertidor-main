@@ -70,6 +70,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
         
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AnularDesdeSolicitud(FilterAnularCompromisoDesdeSolictud filter)
+        {
+            var result = await _service.AnularDesdeSolicitud(filter.CodigoSolicitud);
+            return Ok(result);
+        }
+        
         
         
         [HttpPost]

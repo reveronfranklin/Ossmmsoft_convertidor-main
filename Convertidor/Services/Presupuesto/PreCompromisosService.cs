@@ -156,12 +156,12 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo de Solicitud no existe";
                     return result;
                 }
-                var preCompromisoPorSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+                var preCompromisoPorSolicitud = await _repository.GetByCodigoSolicitud(codigoSolicitud);
                 if (preCompromisoPorSolicitud != null)
                 {
                     result.Data = false;
                     result.IsValid = false;
-                    result.Message = $"Codigo de Solicitud ya tiene el compromiso: {preCompromisoPorSolicitud.NUMERO_SOLICITUD}";
+                    result.Message = $"Codigo de Solicitud ya tiene el compromiso: {admSolicitud.NUMERO_SOLICITUD}";
                     return result;
                 }
 
@@ -304,6 +304,51 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+         public async Task<ResultDto<bool>> AnularDesdeSolicitud(int codigoSolicitud)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            try
+            {
+
+                var admSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+                if (admSolicitud == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo de Solicitud no existe";
+                    return result;
+                }
+              ;
+                if (admSolicitud.STATUS != "AP")
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"La solicitud {admSolicitud.NUMERO_SOLICITUD} no esta Aprobada";
+                    return result;
+                }
+
+                var aprobar = await _repository.AnularDesdeSolicitud(codigoSolicitud);
+                
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)admSolicitud.CODIGO_PRESUPUESTO);
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+                
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+    
+            return result;
+        }
+
+        
         public async Task<ResultDto<List<PreCompromisosResponseDto>>> GetByPresupuesto(PreCompromisosFilterDto filter)
         {
             return await _repository.GetByPresupuesto(filter);
