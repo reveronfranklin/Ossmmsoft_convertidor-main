@@ -9,9 +9,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/PreCompromisosController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/PreCompromisosController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Enum/Action.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Enum/Action.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthPermissionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthPermissionService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthUserGroupService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthUserGroupService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +36,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -208,7 +208,7 @@
       <workItem from="1723735928607" duration="522000" />
       <workItem from="1723738977967" duration="1683000" />
       <workItem from="1723826243185" duration="2576000" />
-      <workItem from="1723844293307" duration="14958000" />
+      <workItem from="1723844293307" duration="17088000" />
     </task>
     <servers />
   </component>
@@ -1965,6 +1965,45 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="366" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreCompromisosController.cs</url>
+          <line>73</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreCompromisosController.cs" containingFunctionPresentation="Method 'CrearCompromisoDesdeSolicitud'">
+            <startOffsets>
+              <option value="2215" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2267" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="367" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs</url>
+          <line>114</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="4260" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4361" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="368" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs</url>
+          <line>177</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="6820" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6876" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="369" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

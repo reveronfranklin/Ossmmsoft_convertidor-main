@@ -116,6 +116,8 @@ namespace Convertidor.Services.Sis
                   var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
                   var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
                   await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                  
+               
               return result;
           }
      
