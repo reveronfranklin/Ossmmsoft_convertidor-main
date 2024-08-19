@@ -8,9 +8,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/CatAforosInmueblesController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Catastro/CAT_AFOROS_INMUEBLES.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Catastro/ICatAforosInmueblesRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Catastro/CatAforosInmueblesRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Catastro/CatAforosInmueblesDeleteDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Catastro/CatAforosInmueblesResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Catastro/CatAforosInmueblesUpdateDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Catastro/CatAforosInmueblesService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Catastro/ICatAforosInmueblesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Convertidor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Convertidor.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextCat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextCat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +92,7 @@
     &quot;Publish to folder.Publish Convertidor to folder.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging develop&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -205,7 +214,7 @@
       <workItem from="1723826243185" duration="2576000" />
       <workItem from="1723844293307" duration="17970000" />
       <workItem from="1724000942690" duration="2463000" />
-      <workItem from="1724107034524" duration="3511000" />
+      <workItem from="1724107034524" duration="3629000" />
     </task>
     <servers />
   </component>

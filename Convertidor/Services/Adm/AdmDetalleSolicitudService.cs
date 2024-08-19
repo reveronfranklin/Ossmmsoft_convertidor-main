@@ -14,13 +14,15 @@ namespace Convertidor.Services.Adm
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
         private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly IAdmProductosRepository _admProductosRepository;
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
 
         public AdmDetalleSolicitudService(IAdmDetalleSolicitudRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IAdmSolicitudesRepository admSolicitudesRepository,
                                      IAdmPucSolicitudRepository admPucSolicitudRepository,
-                                     IAdmProductosRepository admProductosRepository
+                                     IAdmProductosRepository admProductosRepository,
+                                     IPRE_V_SALDOSRepository preVSaldosRepository
                                 
                                      )
         {
@@ -30,6 +32,7 @@ namespace Convertidor.Services.Adm
             _admSolicitudesRepository = admSolicitudesRepository;
             _admPucSolicitudRepository = admPucSolicitudRepository;
             _admProductosRepository = admProductosRepository;
+            _preVSaldosRepository = preVSaldosRepository;
         }
 
         public async Task<AdmDetalleSolicitudResponseDto> MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
@@ -400,7 +403,8 @@ namespace Convertidor.Services.Adm
                 codigoDetallesolicitud.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoDetallesolicitud);
-
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)solicitud.CODIGO_PRESUPUESTO);
                 var resultDto =  await MapDetalleSolicitudDto(codigoDetallesolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -573,6 +577,9 @@ namespace Convertidor.Services.Adm
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
+                
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)solicitud.CODIGO_PRESUPUESTO);
                 var resultDto = await MapDetalleSolicitudDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -627,7 +634,8 @@ namespace Convertidor.Services.Adm
                 }
                 
                 var deleted = await _repository.Delete(dto.CodigoDetalleSolicitud);
-
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)codigoDetalleSolicitud.CODIGO_PRESUPUESTO);
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;
