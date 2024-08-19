@@ -7,5 +7,6 @@ public static class ActionType
     public const string View = "view";
     public const string Delete = "delete";
     public const string Aprobar = "aprobar";
+    public const string Anular = "anular";
 }
 

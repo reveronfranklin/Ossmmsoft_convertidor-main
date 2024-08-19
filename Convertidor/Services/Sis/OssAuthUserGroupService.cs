@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.Sis;
 using Convertidor.Dtos.Sis;
+using Microsoft.Extensions.Caching.Distributed;
 
 
 namespace Convertidor.Services.Sis
@@ -10,15 +11,21 @@ namespace Convertidor.Services.Sis
         private readonly IOssAuthUserGroupRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IOssAuthGroupRepository _ossAuthGroupRepository;
+ 
+        private readonly IDistributedCache _distributedCache;
 
 
         public OssAuthUserGroupService(IOssAuthUserGroupRepository repository,
                                       ISisUsuarioRepository sisUsuarioRepository,
-                                      IOssAuthGroupRepository ossAuthGroupRepository)
+                                      IOssAuthGroupRepository ossAuthGroupRepository,
+                                    
+                                      IDistributedCache distributedCache)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _ossAuthGroupRepository = ossAuthGroupRepository;
+        
+            _distributedCache = distributedCache;
         }
         
        
@@ -153,6 +160,10 @@ namespace Convertidor.Services.Sis
                     result.IsValid = created.IsValid;
                     result.Message = created.Message;
                 }
+                var cacheKey = $"List<AuthModelUserAction>-{dto.UserId}";
+                _distributedCache.Remove(cacheKey);
+
+              
 
                 return result;  
 
@@ -188,7 +199,8 @@ namespace Convertidor.Services.Sis
                     result.Message = "Usuario/Permiso No existe";
                     return result;
                 }
-
+                var cacheKey = $"List<AuthModelUserAction>-{userGroup.USER_ID}";
+                _distributedCache.Remove(cacheKey);
 
                 var deleted = await _repository.Delete(dto.Id);
 
@@ -205,6 +217,8 @@ namespace Convertidor.Services.Sis
                     result.Message = deleted;
 
                 }
+         
+          
 
 
             }

@@ -17,7 +17,8 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<PRE_COMPROMISOS>> Update(PRE_COMPROMISOS entity);
         Task<string> Delete(int codigoCompromiso);
         Task<int> GetNextKey();
-       
+        Task<string> AnularDesdeSolicitud(int codigoSolicitud);
+
     }
 }
 

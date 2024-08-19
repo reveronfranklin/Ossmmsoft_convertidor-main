@@ -13,7 +13,9 @@ namespace Convertidor.Services.Presupuesto
         Task<PreCompromisosResponseDto> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso);
 
         Task<ResultDto<bool>> CrearCompromisoDesdeSolicitud(int codigoSolicitud);
-        
+
+        Task<ResultDto<bool>> AnularDesdeSolicitud(int codigoSolicitud);
+
     }
 }
 

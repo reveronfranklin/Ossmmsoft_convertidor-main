@@ -62,7 +62,7 @@ namespace Convertidor.Services.Sis
 
         public List<string> GetListCodeName()
         {
-            List<string> result = new List<string> { "add", "change", "view","delete" };
+            List<string> result = new List<string> { "add", "change", "view","delete","aprobar","anular" };
 
             return result;
 
