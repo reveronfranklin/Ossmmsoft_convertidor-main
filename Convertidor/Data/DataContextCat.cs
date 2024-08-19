@@ -20,8 +20,8 @@ namespace Convertidor.Data
         public DbSet<CAT_TITULOS> CAT_TITULOS { get; set; }
 
         public DbSet<CAT_UBICACION_NAC> CAT_UBICACION_NAC { get; set; }
-     
-        
+
+        public DbSet<CAT_AFOROS_INMUEBLES> CAT_AFOROS_INMUEBLES { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,7 +74,16 @@ namespace Convertidor.Data
                     builder.ToTable("CAT_ROLES");
                 });
 
+            modelBuilder
+                      .Entity<CAT_AFOROS_INMUEBLES>(builder =>
+                      {
+                          builder.HasKey(table => new
+                          {
+                              table.CODIGO_AFORO_INMUEBLE,
 
+                          });
+                          builder.ToTable("CAT_AFOROS_INMUEBLES");
+                      });
 
         }
 

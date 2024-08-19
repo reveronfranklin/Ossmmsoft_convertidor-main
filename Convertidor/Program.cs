@@ -225,10 +225,12 @@ builder.Services.AddTransient<ICAT_FICHARepository, CAT_FICHARepository>();
 builder.Services.AddTransient<ICAT_FICHAService, CAT_FICHAService>();
 builder.Services.AddTransient<ICatTitulosRepository, CatTitulosRepository>();
 builder.Services.AddTransient<ICatDescriptivasRepository, CatDescriptivasRepository>();
+builder.Services.AddTransient<ICatAforosInmueblesRepository, CatAforosInmueblesRepository>();
 
 //CATASTRO Services
 builder.Services.AddTransient<ICatTitulosService, CatTitulosService>();
 builder.Services.AddTransient<ICatDescriptivasService, CatDescriptivasService>();
+builder.Services.AddTransient<ICatAforosInmueblesService, CatAforosInmueblesService>();
 
 
 //RH
