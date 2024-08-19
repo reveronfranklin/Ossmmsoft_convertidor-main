@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Catastro
         Task<CAT_AFOROS_INMUEBLES> GetByCodigo(int codigoAforoInmueble);
         Task<ResultDto<CAT_AFOROS_INMUEBLES>> Add(CAT_AFOROS_INMUEBLES entity);
         Task<ResultDto<CAT_AFOROS_INMUEBLES>> Update(CAT_AFOROS_INMUEBLES entity);
+        Task<string> Delete(int codigoAforoInmueble);
         Task<int> GetNextKey();
     }
 }

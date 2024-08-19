@@ -113,6 +113,28 @@ namespace Convertidor.Data.Repository.Catastro
 
 
         }
+
+        public async Task<string> Delete(int codigoAforoInmueble)
+        {
+
+            try
+            {
+                CAT_AFOROS_INMUEBLES entity = await GetByCodigo(codigoAforoInmueble);
+                if (entity != null)
+                {
+                    _context.CAT_AFOROS_INMUEBLES.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
         public async Task<int> GetNextKey()
         {
             try
