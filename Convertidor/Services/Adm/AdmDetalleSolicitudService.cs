@@ -134,8 +134,9 @@ namespace Convertidor.Services.Adm
                 {
 
                     var total = await GetTotalMonto(detalleSolicitud);
+                    var totalPuc = await GetTotalMontoPuc(codigoSolicitud);
                     result.Total1 = total;
-                    result.Total2 = total;
+                    result.Total2 = totalPuc;
                     result.Data = detalleSolicitud;
                     result.IsValid = true;
                     result.Message = "";
@@ -235,6 +236,41 @@ namespace Convertidor.Services.Adm
 
         }
         
+        public async Task<decimal> GetTotalMontoPuc(int codigoSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+
+                var puc = await _admPucSolicitudRepository.GetBySolicitud(codigoSolicitud);
+             
+                if (puc != null && puc.Count > 0)
+                {
+                  
+                    
+                    var total  = puc.Sum(p => p.MONTO);
+                    result = (decimal)total; 
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+
         public async Task<ResultDto<AdmDetalleSolicitudResponseDto>> Update(AdmDetalleSolicitudUpdateDto dto)
         {
             ResultDto<AdmDetalleSolicitudResponseDto> result = new ResultDto<AdmDetalleSolicitudResponseDto>(null);
