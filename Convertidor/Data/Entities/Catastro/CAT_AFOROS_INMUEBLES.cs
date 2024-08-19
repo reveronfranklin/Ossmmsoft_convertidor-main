@@ -5,8 +5,8 @@
         public int CODIGO_AFORO_INMUEBLE { get; set; }
         public int TRIBUTO { get; set; }
         public int CODIGO_INMUEBLE { get; set; }
-        public int MONTO { get; set; }
-        public int MONTO_MINIMO { get; set; }
+        public decimal MONTO { get; set; }
+        public decimal MONTO_MINIMO { get; set; }
         public int CODIGO_FORMA_LIQUIDACION { get; set; }
         public int CODIGO_FORMA_LIQ_MINIMO { get; set; }
         public DateTime FECHA_LIQUIDACION { get; set; }
