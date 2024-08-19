@@ -15,14 +15,13 @@ namespace Convertidor.Services.Adm
         private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly IAdmProductosRepository _admProductosRepository;
         private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
-
         public AdmDetalleSolicitudService(IAdmDetalleSolicitudRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IAdmSolicitudesRepository admSolicitudesRepository,
                                      IAdmPucSolicitudRepository admPucSolicitudRepository,
-                                     IAdmProductosRepository admProductosRepository,
-                                     IPRE_V_SALDOSRepository preVSaldosRepository
+                                     IAdmProductosRepository admProductosRepository
+                                    
                                 
                                      )
         {
@@ -32,7 +31,7 @@ namespace Convertidor.Services.Adm
             _admSolicitudesRepository = admSolicitudesRepository;
             _admPucSolicitudRepository = admPucSolicitudRepository;
             _admProductosRepository = admProductosRepository;
-            _preVSaldosRepository = preVSaldosRepository;
+        
         }
 
         public async Task<AdmDetalleSolicitudResponseDto> MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
