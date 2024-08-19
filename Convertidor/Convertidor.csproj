@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Data\Entities\Catastro\" />
     <Folder Include="Data\Entities\RentasMunicipales\" />
     <Folder Include="Data\Repository\RentasMunicipales\" />
     <Folder Include="Data\Interfaces\RentasMunicipales\" />
