@@ -29,6 +29,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<CAT_AFOROS_INMUEBLES> GetByCodigo(int codigoAforoInmueble)
+        {
+            try
+            {
+
+                var result = await _context.CAT_AFOROS_INMUEBLES.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_AFORO_INMUEBLE == codigoAforoInmueble)
+                    .FirstOrDefaultAsync();
+                return (CAT_AFOROS_INMUEBLES)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CAT_AFOROS_INMUEBLES>> Add(CAT_AFOROS_INMUEBLES entity)
         {
             ResultDto<CAT_AFOROS_INMUEBLES> result = new ResultDto<CAT_AFOROS_INMUEBLES>(null);
@@ -60,6 +79,40 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<ResultDto<CAT_AFOROS_INMUEBLES>> Update(CAT_AFOROS_INMUEBLES entity)
+        {
+            ResultDto<CAT_AFOROS_INMUEBLES> result = new ResultDto<CAT_AFOROS_INMUEBLES>(null);
+
+            try
+            {
+                CAT_AFOROS_INMUEBLES entityUpdate = await GetByCodigo(entity.CODIGO_AFORO_INMUEBLE);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_AFOROS_INMUEBLES.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+
+
+
+
+
+        }
         public async Task<int> GetNextKey()
         {
             try
