@@ -1,5 +1,4 @@
 ﻿using Convertidor.Data.Entities.Catastro;
-using Convertidor.Data.Entities.Cnt;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data
@@ -22,6 +21,7 @@ namespace Convertidor.Data
         public DbSet<CAT_UBICACION_NAC> CAT_UBICACION_NAC { get; set; }
 
         public DbSet<CAT_AFOROS_INMUEBLES> CAT_AFOROS_INMUEBLES { get; set; }
+        public DbSet<CAT_ARRENDAMIENTOS_INMUEBLES> CAT_ARRENDAMIENTOS_INMUEBLES { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -84,6 +84,17 @@ namespace Convertidor.Data
                           });
                           builder.ToTable("CAT_AFOROS_INMUEBLES");
                       });
+
+            modelBuilder
+                     .Entity<CAT_ARRENDAMIENTOS_INMUEBLES>(builder =>
+                     {
+                         builder.HasKey(table => new
+                         {
+                             table.CODIGO_ARRENDAMIENTO_INMUEBLE,
+
+                         });
+                         builder.ToTable("CAT_ARRENDAMIENTOS_INMUEBLES");
+                     });
 
         }
 
