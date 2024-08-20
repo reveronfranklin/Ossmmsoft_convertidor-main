@@ -8,9 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPucSolicitudRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +36,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
@@ -208,6 +207,7 @@
       <workItem from="1724107034524" duration="3629000" />
       <workItem from="1724111146290" duration="8957000" />
       <workItem from="1724166622893" duration="3420000" />
+      <workItem from="1724194210488" duration="730000" />
     </task>
     <servers />
   </component>
@@ -1876,13 +1876,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs</url>
-          <line>338</line>
+          <line>340</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'AnularDesdeSolicitud'">
             <startOffsets>
-              <option value="17039" />
+              <option value="17145" />
             </startOffsets>
             <endOffsets>
-              <option value="17109" />
+              <option value="17215" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="361" />

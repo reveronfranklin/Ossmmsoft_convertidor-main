@@ -293,6 +293,8 @@ namespace Convertidor.Services.Presupuesto
                 admSolicitud.USUARIO_UPD = conectado.Usuario;
                 admSolicitud.FECHA_UPD=DateTime.Now;
                 await _admSolicitudesRepository.Update(admSolicitud);
+
+                await _admPucSolicitudRepository.UpdateMontoComprometido(admSolicitud.CODIGO_SOLICITUD);
                 
                 //ACTUALIZAR PRE_V_SALDO
                 await _preVSaldosRepository.RecalcularSaldo((int)admSolicitud.CODIGO_PRESUPUESTO);
@@ -327,7 +329,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo de Solicitud no existe";
                     return result;
                 }
-              ;
+              
                 if (admSolicitud.STATUS != "AP")
                 {
                     result.Data = false;
@@ -336,6 +338,16 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+             
+                //SI EXISTE UN COMPROMISO DE ESTA SOLICITUD Y ESTA ANULADO: PERNITO ANULAR
+                var compromiso = await _repository.GetByCodigoSolicitud(codigoSolicitud);
+                if (compromiso!=null && compromiso.STATUS!="AN")
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"La solicitud {admSolicitud.NUMERO_SOLICITUD} tiene un compromiso pendiente,debe anular el compromiso {compromiso.NUMERO_COMPROMISO}";
+                    return result;
+                }
                 var aprobar = await _repository.AnularDesdeSolicitud(codigoSolicitud);
                 
                 //ACTUALIZAR PRE_V_SALDO

@@ -17,5 +17,6 @@ namespace Convertidor.Data.Interfaces.Adm
 
         Task<bool> ExisteByDetalleSolicitud(int codigoDetalleSolicitud);
         Task<ResultDto<ADM_PUC_SOLICITUD>> GetByIcpPucFInanciado(AdmPucSolicitudUpdateDto dto);
+        Task<string> UpdateMontoComprometido(int codigoSolicitud);
     }
 }
