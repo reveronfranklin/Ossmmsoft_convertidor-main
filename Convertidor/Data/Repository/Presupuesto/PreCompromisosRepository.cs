@@ -38,11 +38,11 @@ namespace Convertidor.Data.Repository.Presupuesto
                 FormattableString xqueryAnulaSolicitud = $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.STATUS='AN',USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE   WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
                 var resultXqueryAnulaSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryAnulaSolicitud);
                 
-                FormattableString xqueryAdmPucSolicitud = $"UPDATE ADM.ADM_PUC_SOLICITUD SET MONTO_ANULADO = MONTO,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+                FormattableString xqueryAdmPucSolicitud = $"UPDATE ADM.ADM_PUC_SOLICITUD SET MONTO_ANULADO = MONTO,MONTO_COMPROMETIDO = 0,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
                 var resultAdmPucSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryAdmPucSolicitud);
                 
-                FormattableString xqueryPreCompromiso = $"UPDATE PRE.PRE_COMPROMISO SET PRE.PRE_COMPROMISOS.STATUS = 'AN',USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
-                var resultPreCompromiso = _context.Database.ExecuteSqlInterpolated(xqueryAdmPucSolicitud);
+                //FormattableString xqueryPreCompromiso = $"UPDATE PRE.PRE_COMPROMISO SET PRE.PRE_COMPROMISOS.STATUS = 'AN',USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+                //var resultPreCompromiso = _context.Database.ExecuteSqlInterpolated(xqueryAdmPucSolicitud);
 
                 
                 return "";
@@ -76,7 +76,7 @@ namespace Convertidor.Data.Repository.Presupuesto
         {
             try
             {
-                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_SOLICITUD == codigoSolicitud).FirstOrDefaultAsync();
+                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_SOLICITUD == codigoSolicitud).OrderByDescending(x=>x.CODIGO_COMPROMISO).FirstOrDefaultAsync();
 
                 return (PRE_COMPROMISOS)result;
             }
