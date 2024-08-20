@@ -4,7 +4,7 @@
     {
         public int CODIGO_ARRENDAMIENTO_INMUEBLE { get; set; }
         public int CODIGO_INMUEBLE { get; set; }
-        public int NUMERO_DE_EXPEDIENTE { get; set; }
+        public string NUMERO_DE_EXPEDIENTE { get; set; } = string.Empty;
         public DateTime FECHA_DONACION { get; set; }
         public string NUMERO_CONSECION_DE_USO { get; set; } = string.Empty;
         public string NUMERO_RESOLUCION_X_RESICION { get; set; } = string.Empty;
@@ -15,7 +15,7 @@
         public string NUMERO_RESOLUCION { get; set; } = string.Empty;
         public DateTime FECHA_RESOLUCION { get; set; }
         public string NUMERO_NOTIFICACION { get; set; } = string.Empty;
-        public string CANON { get; set; } = string.Empty;
+        public decimal CANON { get; set; } 
         public string TOMO { get; set; } = string.Empty;
         public string FOLIO { get; set; } = string.Empty;
         public string REGISTRO { get; set; } = string.Empty;
@@ -24,7 +24,7 @@
         public string OBSERVACIONES { get; set; } = string.Empty;
         public string NUMERO_ARRENDAMIENTO { get; set; } = string.Empty;
         public string TIPO_TRANSACCION { get; set; } = string.Empty;
-        public int TRIBUTO { get; set; }
+        public decimal TRIBUTO { get; set; }
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;
         public string EXTRA3 { get; set; } = string.Empty;
