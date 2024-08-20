@@ -6,6 +6,7 @@ using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Adm;
+using Convertidor.Services.Sis;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
@@ -29,6 +30,8 @@ namespace Convertidor.Services.Presupuesto
         private readonly IAdmSolicitudesService _admSolicitudesService;
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
         private readonly IPrePucCompromisosRepository _prePucCompromisosRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
+
 
         private readonly IConfiguration _configuration;
         public PreCompromisosService(IPreCompromisosRepository repository,
@@ -46,7 +49,8 @@ namespace Convertidor.Services.Presupuesto
                                       IPRE_V_SALDOSRepository preVSaldosRepository,
                                       IAdmSolicitudesService admSolicitudesService,
                                       IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
-                                      IPrePucCompromisosRepository prePucCompromisosRepository
+                                      IPrePucCompromisosRepository prePucCompromisosRepository,
+                                      IOssConfigRepository ossConfigRepository 
         )
 		{
             _repository = repository;
@@ -65,6 +69,8 @@ namespace Convertidor.Services.Presupuesto
             _admSolicitudesService = admSolicitudesService;
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
             _prePucCompromisosRepository = prePucCompromisosRepository;
+            _ossConfigRepository = ossConfigRepository;
+         
         }
 
 
@@ -181,11 +187,13 @@ namespace Convertidor.Services.Presupuesto
                 entity.ANO = (int)admSolicitud.ANO;
                 entity.CODIGO_SOLICITUD = admSolicitud.CODIGO_SOLICITUD;
                 
-                var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
-                var descriptivaSolicitud =
-                    tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == admSolicitud.TIPO_SOLICITUD_ID).FirstOrDefault();
+                //var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
+                //var descriptivaSolicitud =tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == admSolicitud.TIPO_SOLICITUD_ID).FirstOrDefault();
                 //SE GENERA EL PROXIMO NUMERO DE COMPROMISO
-                var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
+        
+                var literalCompromiso="CLAVE_CONSECUTIVO_COMPROMISO";
+                var ossConfig = await _ossConfigRepository.GetByClave(literalCompromiso);
+                var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(ossConfig.VALOR);
                 var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie((int)admSolicitud.CODIGO_PRESUPUESTO,sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
                 entity.NUMERO_COMPROMISO = numeroCompromiso;
                 entity.FECHA_COMPROMISO = DateTime.Now;
