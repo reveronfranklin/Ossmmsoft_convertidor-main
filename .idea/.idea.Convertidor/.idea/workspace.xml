@@ -8,9 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthUserGroupService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthUserGroupService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,11 +35,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -79,34 +73,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.Convertidor.executor&quot;: &quot;Debug&quot;,
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Publish to folder.PublicacionLinux.executor&quot;: &quot;Run&quot;,
-    &quot;Publish to folder.PublicacionLinuxDev(1).executor&quot;: &quot;Run&quot;,
-    &quot;Publish to folder.Publish Convertidor to folder.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.Convertidor.executor": "Debug",
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Publish to folder.PublicacionLinux.executor": "Run",
+    "Publish to folder.PublicacionLinuxDev(1).executor": "Run",
+    "Publish to folder.Publish Convertidor to folder.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "develop",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;oracle&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "oracle"
     ],
-    &quot;rider.external.source.directories&quot;: [
-      &quot;/Users/freveron/Library/Application Support/JetBrains/Rider2024.1/resharper-host/DecompilerCache&quot;,
-      &quot;/Users/freveron/Library/Application Support/JetBrains/Rider2024.1/resharper-host/SourcesCache&quot;,
-      &quot;/Users/freveron/Library/Application Support/Symbols/src&quot;
+    "rider.external.source.directories": [
+      "/Users/freveron/Library/Application Support/JetBrains/Rider2024.1/resharper-host/DecompilerCache",
+      "/Users/freveron/Library/Application Support/JetBrains/Rider2024.1/resharper-host/SourcesCache",
+      "/Users/freveron/Library/Application Support/Symbols/src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.Convertidor">
     <configuration name="PublicacionLinux" type="DotNetFolderPublish" factoryName="Publish to folder">
       <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" runtime="linux-x64" target_folder="$PROJECT_DIR$/../PublicacionLinux" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733" />
@@ -208,7 +202,10 @@
       <workItem from="1723735928607" duration="522000" />
       <workItem from="1723738977967" duration="1683000" />
       <workItem from="1723826243185" duration="2576000" />
-      <workItem from="1723844293307" duration="17088000" />
+      <workItem from="1723844293307" duration="17970000" />
+      <workItem from="1724000942690" duration="2463000" />
+      <workItem from="1724107034524" duration="3629000" />
+      <workItem from="1724111146290" duration="667000" />
     </task>
     <servers />
   </component>
@@ -313,26 +310,26 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs</url>
-          <line>85</line>
+          <line>86</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="3701" />
+              <option value="3739" />
             </startOffsets>
             <endOffsets>
-              <option value="3737" />
+              <option value="3775" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs</url>
-          <line>121</line>
+          <line>122</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="5316" />
+              <option value="5354" />
             </startOffsets>
             <endOffsets>
-              <option value="5352" />
+              <option value="5390" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="29" />
@@ -642,26 +639,26 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
-          <line>343</line>
+          <line>381</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="12712" />
+              <option value="13700" />
             </startOffsets>
             <endOffsets>
-              <option value="12801" />
+              <option value="13789" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="143" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
-          <line>522</line>
+          <line>561</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="19941" />
+              <option value="21065" />
             </startOffsets>
             <endOffsets>
-              <option value="20014" />
+              <option value="21138" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="144" />
@@ -1292,13 +1289,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs</url>
-          <line>103</line>
+          <line>104</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="4509" />
+              <option value="4547" />
             </startOffsets>
             <endOffsets>
-              <option value="4545" />
+              <option value="4583" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="266" />
@@ -1487,13 +1484,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs</url>
-          <line>205</line>
+          <line>208</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" containingFunctionPresentation="Method 'SuperaElMontoDetalle'">
             <startOffsets>
-              <option value="8069" />
+              <option value="8282" />
             </startOffsets>
             <endOffsets>
-              <option value="8089" />
+              <option value="8302" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="293" />
@@ -1539,26 +1536,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs</url>
-          <line>486</line>
+          <line>490</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="18492" />
+              <option value="18829" />
             </startOffsets>
             <endOffsets>
-              <option value="18564" />
+              <option value="18901" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="310" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
-          <line>352</line>
+          <line>390</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="13465" />
+              <option value="14453" />
             </startOffsets>
             <endOffsets>
-              <option value="13523" />
+              <option value="14511" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="311" />

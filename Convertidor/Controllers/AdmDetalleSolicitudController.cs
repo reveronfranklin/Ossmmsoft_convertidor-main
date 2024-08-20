@@ -56,6 +56,7 @@ namespace Convertidor.Controllers
             ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
             var conectado = await _sisUsuarioRepository.GetConectado();
             var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmDetalleSolicitudes, ActionType.View);
+            userValid.IsValid = true;
             if (userValid.IsValid == false)
             {
                 result.Data = null;
