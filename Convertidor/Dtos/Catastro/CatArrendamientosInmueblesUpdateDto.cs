@@ -1,31 +1,21 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatArrendamientosInmueblesResponseDto
+    public class CatArrendamientosInmueblesUpdateDto
     {
         public int CodigoArrendamientoInmueble { get; set; }
         public int CodigoInmueble { get; set; }
         public string NumeroDeExpediente { get; set; } = string.Empty;
         public DateTime FechaDonacion { get; set; }
-        public string FechaDonacionString { get; set; }
-        public FechaDto FechaDonacionObj { get; set; }
         public string NumeroConsecionDeUso { get; set; } = string.Empty;
         public string NumeroResolucionXResicion { get; set; } = string.Empty;
         public DateTime FechaResolucionXResicion { get; set; }
-        public string FechaResolucionXResicionString { get; set; }
-        public FechaDto FechaResolucionXResicionObj { get; set; }
         public string NumeroDeInforme { get; set; }
         public DateTime FechaInicioContrato { get; set; }
-        public string FechaInicioContratoString { get; set; }
-        public FechaDto FechaInicioContratoObj { get; set; }
         public DateTime FechaFinContrato { get; set; }
-        public string FechaFinContratoString { get; set; }
-        public FechaDto FechaFinContratoObj { get; set; }
         public string NumeroResolucion { get; set; } = string.Empty;
         public DateTime FechaResolucion { get; set; }
-        public string FechaResolucionString { get; set; }
-        public FechaDto FechaResolucionObj { get; set; }
         public string NumeroNotificacion { get; set; } = string.Empty;
-        public decimal Canon { get; set; }
+        public decimal Canon { get; set; } 
         public string Tomo { get; set; } = string.Empty;
         public string Folio { get; set; } = string.Empty;
         public string Registro { get; set; } = string.Empty;
@@ -54,11 +44,7 @@
         public decimal ValorTerreno { get; set; }
         public string NumeroAcuerdo { get; set; } = string.Empty;
         public DateTime FechaAcuerdo { get; set; }
-        public string FechaAcuerdoString { get; set; }
-        public FechaDto FechaAcuerdoObj { get; set; }
         public string CodigoCatastro { get; set; }
         public DateTime FechaNotificacion { get; set; }
-        public string FechaNotificacionString { get; set; }
-        public FechaDto FechaNotificacionObj { get; set; }
     }
 }
