@@ -244,14 +244,14 @@ namespace Convertidor.Data.Repository.Presupuesto
         public async Task RecalcularSaldo(int codigo_presupuesto)
         {
 
-            var presupuestoActual = await _context.PRE_V_SALDOS.DefaultIfEmpty().OrderByDescending(x => x.CODIGO_PRESUPUESTO).FirstOrDefaultAsync();
+            /*var presupuestoActual = await _context.PRE_V_SALDOS.DefaultIfEmpty().OrderByDescending(x => x.CODIGO_PRESUPUESTO).FirstOrDefaultAsync();
             if (presupuestoActual!=null)
             {
                 if (codigo_presupuesto != (int)presupuestoActual.CODIGO_PRESUPUESTO)
                 {
                     return;
                 }
-            }
+            }*/
            
 
 

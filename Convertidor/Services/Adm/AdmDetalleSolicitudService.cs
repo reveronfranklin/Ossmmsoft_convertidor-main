@@ -574,11 +574,12 @@ namespace Convertidor.Services.Adm
             entity.FECHA_INS = DateTime.Now;
 
             var created = await _repository.Add(entity);
+           
+            
             if (created.IsValid && created.Data != null)
             {
                 
-                //ACTUALIZAR PRE_V_SALDO
-                await _preVSaldosRepository.RecalcularSaldo((int)solicitud.CODIGO_PRESUPUESTO);
+            
                 var resultDto = await MapDetalleSolicitudDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -633,8 +634,7 @@ namespace Convertidor.Services.Adm
                 }
                 
                 var deleted = await _repository.Delete(dto.CodigoDetalleSolicitud);
-                //ACTUALIZAR PRE_V_SALDO
-                await _preVSaldosRepository.RecalcularSaldo((int)codigoDetalleSolicitud.CODIGO_PRESUPUESTO);
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;
