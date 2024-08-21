@@ -630,6 +630,493 @@ namespace Convertidor.Services.Catastro
             return result;
         }
 
+        public async Task<ResultDto<CatArrendamientosInmueblesResponseDto>> Update(CatArrendamientosInmueblesUpdateDto dto)
+        {
+
+            ResultDto<CatArrendamientosInmueblesResponseDto> result = new ResultDto<CatArrendamientosInmueblesResponseDto>(null);
+            try
+            {
+               
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoArrendamientoInmueble = await _repository.GetByCodigo(dto.CodigoArrendamientoInmueble);
+                if(codigoArrendamientoInmueble == null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Arrendamiento inmueble Invalido";
+                    return result;
+
+                }
+
+
+                if (dto.CodigoInmueble < 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo inmueble Invalido";
+                    return result;
+
+                }
+
+                if (dto.NumeroDeExpediente.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero de expediente Invalido ";
+                    return result;
+                }
+
+                if (dto.FechaDonacion == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Donacion Invalida";
+                    return result;
+
+                }
+
+                if (dto.NumeroConsecionDeUso.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero consecion de uso Invalido";
+                    return result;
+
+                }
+
+                if (dto.NumeroResolucionXResicion.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Resolucion por Resicion Invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaResolucionXResicion == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Resolucion por Resicion Invalida";
+                    return result;
+
+                }
+
+                if (dto.NumeroDeInforme.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Periodo Final Invalida";
+                    return result;
+
+                }
+
+                if (dto.FechaInicioContrato == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha inicio contrato Invalida";
+                    return result;
+
+                }
+
+                if (dto.FechaFinContrato == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha fin contrato Invalida";
+                    return result;
+
+                }
+
+                if (dto.NumeroResolucion.Length > 50)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Resolucion Invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaResolucion == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Resolucion Invalida";
+                    return result;
+
+                }
+
+                if (dto.NumeroNotificacion.Length > 30)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero notificacion Invalido";
+                    return result;
+
+                }
+
+                if (dto.Canon <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Canon Invalido";
+                    return result;
+
+                }
+
+                if (dto.Tomo.Length > 10)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tomo Invalido";
+                    return result;
+
+                }
+
+                if (dto.Folio.Length > 10)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Folio Invalido";
+                    return result;
+
+                }
+
+                if (dto.Registro.Length > 10)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Registro Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoContribuyente < 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo contribuyente Invalido";
+                    return result;
+
+                }
+
+                if (dto.NumeroContrato.Length > 15)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Contrato Invalido";
+                    return result;
+
+                }
+
+                if (dto.Observaciones.Length > 500)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Observaciones Invalidas";
+                    return result;
+
+                }
+
+                if (dto.NumeroArrendamiento.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Arrendamiento Invalido";
+                    return result;
+
+                }
+
+                if (dto.TipoTransaccion.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Invalida";
+                    return result;
+
+                }
+
+                if (dto.Tributo <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tributo Invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra4 is not null && dto.Extra4.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra4 Invalido";
+                    return result;
+                }
+                if (dto.Extra5 is not null && dto.Extra5.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra5 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra6 is not null && dto.Extra6.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra6 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra7 is not null && dto.Extra7.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra7 Invalido";
+                    return result;
+                }
+                if (dto.Extra8 is not null && dto.Extra8.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra8 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra9 is not null && dto.Extra9.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra9 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra10 is not null && dto.Extra10.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra10 Invalido";
+                    return result;
+                }
+                if (dto.Extra11 is not null && dto.Extra11.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra11 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra12 is not null && dto.Extra12.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra12 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra13 is not null && dto.Extra13.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra13 Invalido";
+                    return result;
+                }
+                if (dto.Extra14 is not null && dto.Extra14.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra14 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra15 is not null && dto.Extra15.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra15 Invalido";
+                    return result;
+                }
+
+                if (dto.PrecioUnitario <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Precio Unitario Invalido";
+                    return result;
+
+                }
+
+                if (dto.ValorTerreno <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Valor Terreno Invalido";
+                    return result;
+
+                }
+
+                if (dto.NumeroAcuerdo.Length > 15)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Acuerdo Invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaAcuerdo == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Acuerdo Invalida";
+                    return result;
+
+                }
+
+                if (dto.CodigoCatastro.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Catastro Invalido";
+                    return result;
+
+                }
+
+                if (dto.FechaNotificacion == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Notificacion Invalida";
+                    return result;
+
+                }
+
+
+                codigoArrendamientoInmueble.CODIGO_ARRENDAMIENTO_INMUEBLE = dto.CodigoArrendamientoInmueble;
+                codigoArrendamientoInmueble.CODIGO_INMUEBLE = dto.CodigoInmueble;
+                codigoArrendamientoInmueble.NUMERO_DE_EXPEDIENTE = dto.NumeroDeExpediente;
+                codigoArrendamientoInmueble.FECHA_DONACION = dto.FechaDonacion;
+                codigoArrendamientoInmueble.NUMERO_CONSECION_DE_USO = dto.NumeroConsecionDeUso;
+                codigoArrendamientoInmueble.NUMERO_RESOLUCION_X_RESICION = dto.NumeroResolucionXResicion;
+                codigoArrendamientoInmueble.FECHA_RESOLUCION_X_RESICION = dto.FechaResolucionXResicion;
+                codigoArrendamientoInmueble.NUMERO_DE_INFORME = dto.NumeroDeInforme;
+                codigoArrendamientoInmueble.FECHA_INICIO_CONTRATO = dto.FechaInicioContrato;
+                codigoArrendamientoInmueble.FECHA_FIN_CONTRATO = dto.FechaFinContrato;
+                codigoArrendamientoInmueble.NUMERO_RESOLUCION = dto.NumeroResolucion;
+                codigoArrendamientoInmueble.FECHA_RESOLUCION = dto.FechaResolucion;
+                codigoArrendamientoInmueble.NUMERO_NOTIFICACION = dto.NumeroNotificacion;
+                codigoArrendamientoInmueble.CANON = dto.Canon;
+                codigoArrendamientoInmueble.TOMO = dto.Tomo;
+                codigoArrendamientoInmueble.FOLIO = dto.Folio;
+                codigoArrendamientoInmueble.REGISTRO = dto.Registro;
+                codigoArrendamientoInmueble.CODIGO_CONTRIBUYENTE = dto.CodigoContribuyente;
+                codigoArrendamientoInmueble.NUMERO_CONTRATO = dto.NumeroContrato;
+                codigoArrendamientoInmueble.OBSERVACIONES = dto.Observaciones;
+                codigoArrendamientoInmueble.NUMERO_ARRENDAMIENTO = dto.NumeroArrendamiento;
+                codigoArrendamientoInmueble.TIPO_TRANSACCION = dto.TipoTransaccion;
+                codigoArrendamientoInmueble.TRIBUTO = dto.Tributo;
+                codigoArrendamientoInmueble.EXTRA1 = dto.Extra1;
+                codigoArrendamientoInmueble.EXTRA2 = dto.Extra2;
+                codigoArrendamientoInmueble.EXTRA3 = dto.Extra3;
+                codigoArrendamientoInmueble.EXTRA4 = dto.Extra4;
+                codigoArrendamientoInmueble.EXTRA5 = dto.Extra5;
+                codigoArrendamientoInmueble.EXTRA6 = dto.Extra6;
+                codigoArrendamientoInmueble.EXTRA7 = dto.Extra7;
+                codigoArrendamientoInmueble.EXTRA8 = dto.Extra8;
+                codigoArrendamientoInmueble.EXTRA9 = dto.Extra9;
+                codigoArrendamientoInmueble.EXTRA10 = dto.Extra10;
+                codigoArrendamientoInmueble.EXTRA11 = dto.Extra11;
+                codigoArrendamientoInmueble.EXTRA12 = dto.Extra12;
+                codigoArrendamientoInmueble.EXTRA13 = dto.Extra13;
+                codigoArrendamientoInmueble.EXTRA14 = dto.Extra14;
+                codigoArrendamientoInmueble.EXTRA15 = dto.Extra15;
+                codigoArrendamientoInmueble.PRECIO_UNITARIO = dto.PrecioUnitario;
+                codigoArrendamientoInmueble.VALOR_TERRENO = dto.ValorTerreno;
+                codigoArrendamientoInmueble.NUMERO_ACUERDO = dto.NumeroAcuerdo;
+                codigoArrendamientoInmueble.FECHA_ACUERDO = dto.FechaAcuerdo;
+                codigoArrendamientoInmueble.CODIGO_CATASTRO = dto.CodigoCatastro;
+                codigoArrendamientoInmueble.FECHA_NOTIFICACION = dto.FechaNotificacion;
+
+                codigoArrendamientoInmueble.CODIGO_EMPRESA = conectado.Empresa;
+                codigoArrendamientoInmueble.USUARIO_UPD = conectado.Usuario;
+                codigoArrendamientoInmueble.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoArrendamientoInmueble);
+                var resultDto = await MapCatArrendamientosInmuebles(codigoArrendamientoInmueble);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+            return result;
+
+
+
+
+        }
+
+
 
     }
 
