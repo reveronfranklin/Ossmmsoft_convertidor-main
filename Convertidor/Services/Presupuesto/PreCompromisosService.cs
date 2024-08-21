@@ -279,8 +279,8 @@ namespace Convertidor.Services.Presupuesto
                                         entityPuc.FECHA_INS = DateTime.Now;
 
                                         var createdPuc = await _prePucCompromisosRepository.Add(entityPuc);
-                                        
-                                        
+                                        //ACTUALIZAR PRE_V_SALDO
+                                        _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(entityPuc.CODIGO_PRESUPUESTO,entityPuc.CODIGO_ICP,entityPuc.CODIGO_PUC,(int)entityPuc.CODIGO_FINANCIADO);
                                     }
                                 }
                             }
@@ -295,9 +295,7 @@ namespace Convertidor.Services.Presupuesto
                 await _admSolicitudesRepository.Update(admSolicitud);
 
                 await _admPucSolicitudRepository.UpdateMontoComprometido(admSolicitud.CODIGO_SOLICITUD);
-                
-                //ACTUALIZAR PRE_V_SALDO
-                await _preVSaldosRepository.RecalcularSaldo((int)admSolicitud.CODIGO_PRESUPUESTO);
+      
                 
                 result.Data = true;
                 result.IsValid = true;

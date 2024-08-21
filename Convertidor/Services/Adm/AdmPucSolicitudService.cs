@@ -420,7 +420,7 @@ namespace Convertidor.Services.Adm
 
                 await _repository.Update(codigoPucsolicitud);
                 //ACTUALIZAR PRE_V_SALDO
-                await _preVSaldosRepository.RecalcularSaldo(dto.CodigoPresupuesto);
+                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.CodigoFinanciado);
                 var resultDto = await MapPucSolicitudDto(codigoPucsolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -617,7 +617,7 @@ namespace Convertidor.Services.Adm
             {
                 
                 //ACTUALIZAR PRE_V_SALDO
-                await _preVSaldosRepository.RecalcularSaldo(dto.CodigoPresupuesto);
+                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.CodigoFinanciado);
                 var resultDto = await MapPucSolicitudDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -665,7 +665,7 @@ namespace Convertidor.Services.Adm
 
                 var deleted = await _repository.Delete(dto.CodigoPucSolicitud);
                 //ACTUALIZAR PRE_V_SALDO
-                await _preVSaldosRepository.RecalcularSaldo(codigoPucSolicitud.CODIGO_PRESUPUESTO);
+                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(codigoPucSolicitud.CODIGO_PRESUPUESTO,codigoPucSolicitud.CODIGO_ICP,codigoPucSolicitud.CODIGO_PUC,(int)codigoPucSolicitud.CODIGO_FINANCIADO);
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;

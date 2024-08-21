@@ -16,7 +16,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<List<ListIcpPucConDisponible>>> GetListIcpPucConDisponible(FilterPresupuestoDto filter);
         Task<ListIcpPucConDisponible> GetListIcpPucConDisponibleCodigoSaldo(int codigoSaldo);
         Task<PRE_V_SALDOS> GetByCodigo(int codigo);
-
-    }
+        void RecalculaSaldosPreIcpPucFi(int codigo_presupuesto, int codigoIcp, int codigoPuc, int codigoFinanciado);
+	}
 }
 

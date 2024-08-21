@@ -345,10 +345,51 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
 
                 }
+                
+                var pucSolModificacionCombinacion = await _repository.GetAllByIcpPucFinanciadoSolicitud(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.FinanciadoId.ToString(),dto.CodigoSolModificacion);
+                if (pucSolModificacionCombinacion != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Ya existe registro para: {codigoIcp.DESCRIPCION} {codigoPuc.Data.Denominacion} {financiado.Data.Descripcion}";
+                    return result;
+                }
+                
+                
 
-            
+                if (dto.DePara == "P" && dto.CodigoSaldo <= 0)
+                {
+                    
+                    PRE_SALDOS entitySaldo = new PRE_SALDOS();
+                    entitySaldo.CODIGO_SALDO = await _preSaldosRepository.GetNextKey();
+                    entitySaldo.ANO = presupuesto.ANO;
+                    entitySaldo.CODIGO_ICP = dto.CodigoIcp;
+                    entitySaldo.CODIGO_PUC = dto.CodigoPuc;
+                    entitySaldo.FINANCIADO_ID =dto.FinanciadoId;
+                    entitySaldo.CODIGO_FINANCIADO = dto.CodigoSolModificacion;
+                    entitySaldo.CODIGO_PRESUPUESTO =dto.CodigoPresupuesto;
+                    entitySaldo.ASIGNACION = 0;
+                    entitySaldo.BLOQUEADO = dto.Monto;
+                    entitySaldo.MODIFICADO =  dto.Monto;
+                    entitySaldo.COMPROMETIDO = 0;
+                    entitySaldo.CAUSADO = 0;
+                    entitySaldo.PAGADO = 0;
+                    entitySaldo.AJUSTADO = 0;
+                    entitySaldo.PRESUPUESTADO =0;
+                    entitySaldo.USUARIO_INS = conectado.Usuario;
+                    entitySaldo.FECHA_INS = DateTime.Now;
+                    entitySaldo.CODIGO_EMPRESA = conectado.Empresa;
+                    var preSaldoCreated = await _preSaldosRepository.Add(entitySaldo);
+                    if (preSaldoCreated.IsValid == true)
+                    {
+                        dto.CodigoSaldo = preSaldoCreated.Data.CODIGO_SALDO;
+                        dto.CodigoFinanciado = dto.CodigoSolModificacion;
+                    }
+                    
+                }
+                
 
-                var presaldo = await _preSaldosRepository
+                /*var presaldo = await _preSaldosRepository
                     .GetAllByIcpPucFinanciado(dto.CodigoPresupuesto, dto.CodigoIcp, dto.CodigoPuc, dto.FinanciadoId);
                 if (presaldo == null)
                 {
@@ -382,7 +423,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                 {
                     dto.CodigoSaldo = presaldo.CODIGO_SALDO;
                     dto.CodigoFinanciado = presaldo.CODIGO_FINANCIADO;
-                }
+                }*/
 
                 if (dto.CodigoFinanciado == 0)
                 {
@@ -397,6 +438,8 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     result.Message = $"Ya existe registro para: {codigoIcp.DESCRIPCION} {codigoPuc.Data.Denominacion} {financiado.Data.Descripcion}";
                     return result;
                 }
+              
+                
                 
                 PRE_PUC_SOL_MODIFICACION entity = new PRE_PUC_SOL_MODIFICACION();
                 entity.CODIGO_PUC_SOL_MODIFICACION = await _repository.GetNextKey();
