@@ -402,8 +402,7 @@ namespace Convertidor.Services.Adm
                 codigoDetallesolicitud.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoDetallesolicitud);
-                //ACTUALIZAR PRE_V_SALDO
-                await _preVSaldosRepository.RecalcularSaldo((int)solicitud.CODIGO_PRESUPUESTO);
+
                 var resultDto =  await MapDetalleSolicitudDto(codigoDetallesolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
