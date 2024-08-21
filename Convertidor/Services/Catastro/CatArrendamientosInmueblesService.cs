@@ -1116,6 +1116,53 @@ namespace Convertidor.Services.Catastro
 
         }
 
+        public async Task<ResultDto<CatArrendamientosInmueblesDeleteDto>> Delete(CatArrendamientosInmueblesDeleteDto dto)
+        {
+
+            ResultDto<CatArrendamientosInmueblesDeleteDto> result = new ResultDto<CatArrendamientosInmueblesDeleteDto>(null);
+            try
+            {
+
+                var catArrendamientosInmuebles = await _repository.GetByCodigo(dto.CodigoArrendamientoInmueble);
+                if (catArrendamientosInmuebles == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Arrendamiento Inmueble no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoArrendamientoInmueble);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
 
 
     }

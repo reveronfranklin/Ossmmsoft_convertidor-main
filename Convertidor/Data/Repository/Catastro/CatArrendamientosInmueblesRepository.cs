@@ -108,8 +108,25 @@ namespace Convertidor.Data.Repository.Catastro
                 return result;
             }
 
+        }
 
+        public async Task<string> Delete(int codigoArrendamientoInmueble)
+        {
 
+            try
+            {
+                CAT_ARRENDAMIENTOS_INMUEBLES entity = await GetByCodigo(codigoArrendamientoInmueble);
+                if (entity != null)
+                {
+                    _context.CAT_ARRENDAMIENTOS_INMUEBLES.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
 
 
 
