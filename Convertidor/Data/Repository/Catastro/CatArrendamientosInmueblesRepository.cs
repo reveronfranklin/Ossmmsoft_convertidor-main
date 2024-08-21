@@ -29,6 +29,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<CAT_ARRENDAMIENTOS_INMUEBLES> GetByCodigo(int codigoArrendamientoInmueble)
+        {
+            try
+            {
+
+                var result = await _context.CAT_ARRENDAMIENTOS_INMUEBLES.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_ARRENDAMIENTO_INMUEBLE == codigoArrendamientoInmueble)
+                    .FirstOrDefaultAsync();
+                return (CAT_ARRENDAMIENTOS_INMUEBLES)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CAT_ARRENDAMIENTOS_INMUEBLES>> Add(CAT_ARRENDAMIENTOS_INMUEBLES entity)
         {
             ResultDto<CAT_ARRENDAMIENTOS_INMUEBLES> result = new ResultDto<CAT_ARRENDAMIENTOS_INMUEBLES>(null);
@@ -60,6 +79,58 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+
+        public async Task<ResultDto<CAT_ARRENDAMIENTOS_INMUEBLES>> Update(CAT_ARRENDAMIENTOS_INMUEBLES entity)
+        {
+            ResultDto<CAT_ARRENDAMIENTOS_INMUEBLES> result = new ResultDto<CAT_ARRENDAMIENTOS_INMUEBLES>(null);
+
+            try
+            {
+                CAT_ARRENDAMIENTOS_INMUEBLES entityUpdate = await GetByCodigo(entity.CODIGO_ARRENDAMIENTO_INMUEBLE);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_ARRENDAMIENTOS_INMUEBLES.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        public async Task<string> Delete(int codigoArrendamientoInmueble)
+        {
+
+            try
+            {
+                CAT_ARRENDAMIENTOS_INMUEBLES entity = await GetByCodigo(codigoArrendamientoInmueble);
+                if (entity != null)
+                {
+                    _context.CAT_ARRENDAMIENTOS_INMUEBLES.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
         public async Task<int> GetNextKey()
         {
             try
