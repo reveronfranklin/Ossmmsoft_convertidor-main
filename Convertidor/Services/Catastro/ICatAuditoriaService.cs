@@ -5,5 +5,6 @@ namespace Convertidor.Services.Catastro
     public interface ICatAuditoriaService
     {
         Task<ResultDto<List<CatAuditoriaResponseDto>>> GetAll();
+        Task<ResultDto<CatAuditoriaResponseDto>> Create(CatAuditoriaUpdateDto dto);
     }
 }

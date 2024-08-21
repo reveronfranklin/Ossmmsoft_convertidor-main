@@ -1,14 +1,12 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatAuditoriaResponseDto
+    public class CatAuditoriaUpdateDto
     {
         public int CodigoAuditoria { get; set; }
         public int TablaId { get; set; }
         public int SectorId { get; set; }
         public int UsuarioIns { get; set; }
         public DateTime FechaIns { get; set; }
-        public string FechaInsString { get; set; }
-        public FechaDto FechaInsObj { get; set; }
         public int CodigoEmpresa { get; set; }
         public string Extra1 { get; set; } = string.Empty;
         public string Extra2 { get; set; } = string.Empty;
