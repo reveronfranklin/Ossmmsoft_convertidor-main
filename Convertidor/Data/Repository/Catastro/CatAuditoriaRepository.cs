@@ -111,6 +111,28 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<string> Delete(int codigoAuditoria)
+        {
+
+            try
+            {
+                CAT_AUDITORIA entity = await GetByCodigo(codigoAuditoria);
+                if (entity != null)
+                {
+                    _context.CAT_AUDITORIA.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
+
         public async Task<int> GetNextKey()
         {
             try

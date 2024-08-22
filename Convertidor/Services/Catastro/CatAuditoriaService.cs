@@ -572,6 +572,53 @@ namespace Convertidor.Services.Catastro
 
         }
 
+        public async Task<ResultDto<CatAuditoriaDeleteDto>> Delete(CatAuditoriaDeleteDto dto)
+        {
+
+            ResultDto<CatAuditoriaDeleteDto> result = new ResultDto<CatAuditoriaDeleteDto>(null);
+            try
+            {
+
+                var catAuditoria = await _repository.GetByCodigo(dto.CodigoAuditoria);
+                if (catAuditoria == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Auditoria no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoAuditoria);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
 
     }
 }
