@@ -795,7 +795,7 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        private async Task<bool> RollbackSolicitudModificacion(int codigoSolicitudModificacion)
+        private async Task<bool> RollbackSolicitudModificacion(int codigoSolicitudModificacion,int codigoPresupuesto)
         {
             var result = false;
             var prePucSolicitud =
@@ -825,6 +825,9 @@ namespace Convertidor.Services.Presupuesto
             {
                 result = true;
             }
+            
+            //RECALCULAMOS PRE_SALDO
+            await _preVSaldosRepository.RecalcularSaldo(codigoPresupuesto);
 
             return result;
         }
@@ -978,19 +981,23 @@ namespace Convertidor.Services.Presupuesto
         public async Task<ResultDto<PreSolModificacionResponseDto>> Aprobar(PreSolModificacionDeleteDto dto)
         {
 
+           
+            
             ResultDto<PreSolModificacionResponseDto> result = new ResultDto<PreSolModificacionResponseDto>(null);
+            
+            var solModificacion = await _repository.GetByCodigo(dto.CodigoSolModificacion);
+            if (solModificacion == null)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "Codigo Sol ModificaCion no existe";
+                return result;
+            }
             try
             {
                 
 
-                var solModificacion = await _repository.GetByCodigo(dto.CodigoSolModificacion);
-                if (solModificacion == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Sol ModificaCion no existe";
-                    return result;
-                }
+               
 
                 var preModificacion = await _preModificacionRepository.GetByCodigoSolicitud(dto.CodigoSolModificacion);
                 if (preModificacion != null)
@@ -1071,7 +1078,7 @@ namespace Convertidor.Services.Presupuesto
                        item.MONTO);
                    if (montoModificado.IsValid == false)
                    {
-                       await RollbackSolicitudModificacion(dto.CodigoSolModificacion);
+                       await RollbackSolicitudModificacion(dto.CodigoSolModificacion,solModificacion.CODIGO_PRESUPUESTO);
                        result.Data = null;
                        result.IsValid = false;
                        result.Message = $"{montoModificado.Message} ";
@@ -1101,7 +1108,7 @@ namespace Convertidor.Services.Presupuesto
                    var prePucModificacionCreated= await _prePucModificacionService.Create(prePucModificacionUpdateDto);
                    if (prePucModificacionCreated.IsValid == false)
                    {
-                       await RollbackSolicitudModificacion(dto.CodigoSolModificacion);
+                       await RollbackSolicitudModificacion(dto.CodigoSolModificacion,solModificacion.CODIGO_PRESUPUESTO);
                        result.Data = null;
                        result.IsValid = false;
                        result.Message = $"{prePucModificacionCreated.Message} ";
@@ -1145,7 +1152,7 @@ namespace Convertidor.Services.Presupuesto
             }
             catch (Exception ex)
             {
-                await RollbackSolicitudModificacion(dto.CodigoSolModificacion);
+                await RollbackSolicitudModificacion(dto.CodigoSolModificacion,solModificacion.CODIGO_PRESUPUESTO);
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = ex.Message;

@@ -57,6 +57,38 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
         
+        public async Task<string> AnularCompromiso(int codigoCompromiso,int codigoSolicitud)
+        {
+
+            try
+            {
+                
+           
+                
+                
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                FormattableString xqueryAnulaSolicitud =  $"UPDATE ADM.ADM_PUC_SOLICITUD SET MONTO_COMPROMETIDO = MONTO,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE WHERE CODIGO_SOLICITUD = {codigoSolicitud}";
+                var resultXqueryAnulaSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryAnulaSolicitud);
+                
+                FormattableString xqueryPrePucCompromiso = $"UPDATE PRE.PRE_PUC_COMPROMISOS SET MONTO_ANULADO = MONTO,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE WHERE CODIGO_COMPROMISO = {codigoCompromiso}";
+                var resultAdmPucSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryPrePucCompromiso);
+                
+                FormattableString xqueryPreDetalleCompromiso = $"UPDATE PRE.PRE_DETALLE_COMPROMISOS SET CANTIDAD_ANULADA =  CANTIDAD,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATEWHERE CODIGO_COMPROMISO = {codigoCompromiso}";
+                var resultPreDetalleCompromiso = _context.Database.ExecuteSqlInterpolated(xqueryPreDetalleCompromiso);
+
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso)
         {
             try
@@ -141,6 +173,29 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
         
+        
+        
+        public async Task<string> AprobarCompromiso(int codigoCompromiso)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE PRE.PRE_COMPROMISOS SET PRE.PRE_COMPROMISOS.STATUS = 'AP' WHERE CODIGO_COMPROMISO ={codigoCompromiso}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
+        
         public async Task<ResultDto<List<PreCompromisosResponseDto>>> GetByPresupuesto(PreCompromisosFilterDto filter) 
         {
             ResultDto<List<PreCompromisosResponseDto>> result = new ResultDto<List<PreCompromisosResponseDto>>(null);
@@ -148,11 +203,12 @@ namespace Convertidor.Data.Repository.Presupuesto
             if (filter.PageNumber == 0) filter.PageNumber = 1;
             if (filter.PageSize == 0) filter.PageSize = 100;
             if (filter.PageSize >100) filter.PageSize = 100;
-            
+            if (filter.SearchText == null) filter.SearchText = "";
+            if (filter.Status == null) filter.Status = "PE";
             try
             {
                 var presupuesto = await _context.PRE_PRESUPUESTOS
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto).FirstOrDefaultAsync();
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto ).FirstOrDefaultAsync();
                 var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
                 var totalRegistros = 0;
                 var totalPage = 0;
@@ -161,13 +217,13 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (filter.SearchText.Length > 0)
                 {
                     totalRegistros = _context.PRE_COMPROMISOS
-                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     
                     pageData = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
-                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .OrderByDescending(x => x.FECHA_COMPROMISO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
@@ -175,11 +231,11 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
                 else
                 {
-                    totalRegistros = _context.PRE_COMPROMISOS.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto).Count();
+                    totalRegistros = _context.PRE_COMPROMISOS.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.STATUS==filter.Status).Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     pageData = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
-                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto)
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.STATUS==filter.Status)
                         .OrderByDescending(x => x.FECHA_COMPROMISO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)

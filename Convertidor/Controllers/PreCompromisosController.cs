@@ -48,6 +48,33 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
         
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByCompromiso(PreCompromisoFilterDto dto)
+        {
+            var result = await _service.GetByCompromiso(dto.CodigoCompromiso);
+            return Ok(result);
+
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AprobarCompromiso(PreCompromisoFilterDto dto)
+        {
+            var result = await _service.AprobarCompromiso(dto.CodigoCompromiso);
+            return Ok(result);
+
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AnularCompromiso(PreCompromisoFilterDto dto)
+        {
+            var result = await _service.AnularCompromiso(dto.CodigoCompromiso);
+            return Ok(result);
+
+        }
+        
        
 
         [HttpPost]
@@ -55,6 +82,14 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> Update(PreCompromisosUpdateDto dto)
         {
             var result = await _service.Update(dto);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> UpdateFechaMotivo(PreCompromisosUpdateFechaMotivoDto dto)
+        {
+            var result = await _service.UpdateFechaMotivo(dto);
             return Ok(result);
         }
 
