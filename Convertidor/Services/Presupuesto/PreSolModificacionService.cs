@@ -839,22 +839,23 @@ namespace Convertidor.Services.Presupuesto
             {
                 foreach (var item in pucModificacion)
                 {
-
-                    if (item.MONTO_MODIFICADO != 0)
-                    {
-                        result = false;
-                        return false;
-                    }
                     
-                    //Actualizamoos PRE_SALDO
+                    /*
+                     * AND a.MONTO_ANULADO = 0
+                       and a.MONTO_MODIFICADO <> 0
+                       AND b.COMPROMETIDO <> 0
+                     */
+                    
+                    
                     var preSaldo = await _preSaldosRepository.GetByCodigo(item.CODIGO_SALDO);
                     if (preSaldo != null)
                     {
-                        if (preSaldo.COMPROMETIDO != 0)
+                        if (preSaldo.COMPROMETIDO != 0 && item.MONTO_MODIFICADO != 0 && item.MONTO_ANULADO==0)
                         {
                             return false;
                         }
                     }
+                 
                     
                
                 }
@@ -1061,7 +1062,7 @@ namespace Convertidor.Services.Presupuesto
                    return result;
                }
                
-               foreach (var item in prePucSolicitud)
+               foreach (var item in prePucSolicitud.Where(x=>x.MONTO_ANULADO==0).ToList())
                {
 
                    //ACTUALIZAMOS EL MONTO MODIFICADO EN PRE PUC SOLICITUD MODIFICACION(PRE_PUC_SOL_MODIFICACION)
