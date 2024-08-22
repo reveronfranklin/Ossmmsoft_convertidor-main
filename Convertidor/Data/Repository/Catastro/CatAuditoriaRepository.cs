@@ -29,7 +29,26 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-       
+        public async Task<CAT_AUDITORIA> GetByCodigo(int codigoArrendamientoInmueble)
+        {
+            try
+            {
+
+                var result = await _context.CAT_AUDITORIA.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_AUDITORIA == codigoArrendamientoInmueble)
+                    .FirstOrDefaultAsync();
+                return (CAT_AUDITORIA)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
+
 
         public async Task<ResultDto<CAT_AUDITORIA>> Add(CAT_AUDITORIA entity)
         {
@@ -62,7 +81,35 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-   
+        public async Task<ResultDto<CAT_AUDITORIA>> Update(CAT_AUDITORIA entity)
+        {
+            ResultDto<CAT_AUDITORIA> result = new ResultDto<CAT_AUDITORIA>(null);
+
+            try
+            {
+                CAT_AUDITORIA entityUpdate = await GetByCodigo(entity.CODIGO_AUDITORIA);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_AUDITORIA.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
 
         public async Task<int> GetNextKey()
         {

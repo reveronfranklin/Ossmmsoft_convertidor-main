@@ -339,5 +339,239 @@ namespace Convertidor.Services.Catastro
             return result;
         }
 
+        public async Task<ResultDto<CatAuditoriaResponseDto>> Update(CatAuditoriaUpdateDto dto)
+        {
+
+            ResultDto<CatAuditoriaResponseDto> result = new ResultDto<CatAuditoriaResponseDto>(null);
+            try
+            {
+
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoAuditoria = await _repository.GetByCodigo(dto.CodigoAuditoria);
+                if (codigoAuditoria == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Auditoria Invalido";
+                    return result;
+
+                }
+
+
+                if (dto.TablaId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tabla Id Invalido ";
+                    return result;
+                }
+
+                if (dto.SectorId < 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Sector Id Invalida";
+                    return result;
+
+                }
+
+                if (dto.UsuarioIns < 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Usuario Ins Invalida";
+                    return result;
+
+                }
+
+                if (dto.FechaIns == null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Ins Invalida";
+                    return result;
+
+                }
+
+                if (dto.CodigoEmpresa < 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Empresa Invalido";
+                    return result;
+
+                }
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra4 is not null && dto.Extra4.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra4 Invalido";
+                    return result;
+                }
+                if (dto.Extra5 is not null && dto.Extra5.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra5 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra6 is not null && dto.Extra6.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra6 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra7 is not null && dto.Extra7.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra7 Invalido";
+                    return result;
+                }
+                if (dto.Extra8 is not null && dto.Extra8.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra8 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra9 is not null && dto.Extra9.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra9 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra10 is not null && dto.Extra10.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra10 Invalido";
+                    return result;
+                }
+                if (dto.Extra11 is not null && dto.Extra11.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra11 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra12 is not null && dto.Extra12.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra12 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra13 is not null && dto.Extra13.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra13 Invalido";
+                    return result;
+                }
+                if (dto.Extra14 is not null && dto.Extra14.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra14 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra15 is not null && dto.Extra15.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra15 Invalido";
+                    return result;
+                }
+
+
+                codigoAuditoria.CODIGO_AUDITORIA = dto.CodigoAuditoria;
+                codigoAuditoria.TABLA_ID = dto.TablaId;
+                codigoAuditoria.SECTOR_ID = dto.SectorId;
+                codigoAuditoria.USUARIO_INS = dto.UsuarioIns;
+                codigoAuditoria.FECHA_INS = dto.FechaIns;
+                codigoAuditoria.CODIGO_EMPRESA = dto.CodigoEmpresa;
+                codigoAuditoria.EXTRA1 = dto.Extra1;
+                codigoAuditoria.EXTRA2 = dto.Extra2;
+                codigoAuditoria.EXTRA3 = dto.Extra3;
+                codigoAuditoria.EXTRA4 = dto.Extra4;
+                codigoAuditoria.EXTRA5 = dto.Extra5;
+                codigoAuditoria.EXTRA6 = dto.Extra6;
+                codigoAuditoria.EXTRA7 = dto.Extra7;
+                codigoAuditoria.EXTRA8 = dto.Extra8;
+                codigoAuditoria.EXTRA9 = dto.Extra9;
+                codigoAuditoria.EXTRA11 = dto.Extra11;
+                codigoAuditoria.EXTRA12 = dto.Extra12;
+                codigoAuditoria.EXTRA13 = dto.Extra13;
+                codigoAuditoria.EXTRA14 = dto.Extra14;
+                codigoAuditoria.EXTRA15 = dto.Extra15;
+
+
+                codigoAuditoria.CODIGO_EMPRESA = conectado.Empresa;
+                codigoAuditoria.USUARIO_INS = conectado.Usuario;
+                codigoAuditoria.FECHA_INS = DateTime.Now;
+
+                await _repository.Update(codigoAuditoria);
+                var resultDto = await MapCatAuditoria(codigoAuditoria);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+            return result;
+
+
+
+
+        }
+
+
     }
 }
