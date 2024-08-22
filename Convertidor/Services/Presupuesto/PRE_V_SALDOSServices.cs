@@ -51,7 +51,7 @@ namespace Convertidor.Services.Presupuesto
             var presupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
           
             if (filter.CodigoPresupuesto == 0) filter.CodigoPresupuesto = presupuesto.CODIGO_PRESUPUESTO;
-            await _repository.RecalcularSaldo(filter.CodigoPresupuesto);
+            //await _repository.RecalcularSaldo(filter.CodigoPresupuesto);
 
             ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
             try
@@ -106,7 +106,7 @@ namespace Convertidor.Services.Presupuesto
         public async Task<ResultDto<List<PreVSaldosGetDto>>> GetAll(FilterPRE_V_SALDOSDto filter)
         {
             var presupuesto = await _pRE_PRESUPUESTOSRepository.GetLast();
-            await _repository.RecalcularSaldo(presupuesto.CODIGO_PRESUPUESTO);
+            //await _repository.RecalcularSaldo(presupuesto.CODIGO_PRESUPUESTO);
 
             ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
             try
@@ -232,7 +232,7 @@ namespace Convertidor.Services.Presupuesto
         {
             ResultDto<List<ListIcpPucConDisponible>> result = new ResultDto<List<ListIcpPucConDisponible>>(null);
 
-            await _repository.RecalcularSaldo(filter.CodigoPresupuesto);
+            //await _repository.RecalcularSaldo(filter.CodigoPresupuesto);
             result = await _repository.GetListIcpPucConDisponible(filter);
             
             
@@ -242,7 +242,7 @@ namespace Convertidor.Services.Presupuesto
         {
             ResultDto<ListIcpPucConDisponible> result = new ResultDto<ListIcpPucConDisponible>(null);
 
-            await _repository.RecalcularSaldo(codigoPresupuesto);
+           // await _repository.RecalcularSaldo(codigoPresupuesto);
             var listIcpPucConDisponible = await _repository.GetListIcpPucConDisponibleCodigoSaldo(codigoSaldo);
             if (listIcpPucConDisponible !=null)
             {
