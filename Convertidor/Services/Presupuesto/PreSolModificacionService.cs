@@ -126,7 +126,7 @@ namespace Convertidor.Services.Presupuesto
                     }
 
 
-                    result.Data = listDto.OrderByDescending(x=>x.FechaSolicitud).ToList();
+                    result.Data = listDto.OrderByDescending(x=>x.CodigoSolModificacion).ToList();
 
                     result.IsValid = true;
                     result.Message = "";
@@ -314,20 +314,14 @@ namespace Convertidor.Services.Presupuesto
             itemResult.TotalAportar = 0;
             var pucSolModificacion =
                 await _prePucSolicitudModificacionRepository.GetAllByCodigoSolicitud(itemResult.CodigoSolModificacion);
-
+            decimal totalDescontar = 0;
+            decimal totalAportar = 0;
             if (pucSolModificacion != null && pucSolModificacion.Count > 0)
             {
-                foreach (var itemSol in pucSolModificacion)
-                {
-                    if (itemSol.DE_PARA == "D")
-                    {
-                        itemResult.TotalDescontar = itemResult.TotalDescontar + itemSol.MONTO;
-                    }
-                    if (itemSol.DE_PARA == "P")
-                    {
-                        itemResult.TotalAportar = itemResult.TotalAportar + itemSol.MONTO;
-                    }
-                }
+                totalDescontar = pucSolModificacion.Where(x => x.DE_PARA == "D").Sum(x => x.MONTO);
+                totalAportar = pucSolModificacion.Where(x => x.DE_PARA == "P").Sum(x => x.MONTO);
+                itemResult.TotalDescontar = totalDescontar;
+                itemResult.TotalAportar = totalAportar;
             }
             
             itemResult.FechaSolicitud = dto.FECHA_SOLICITUD;
