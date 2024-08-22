@@ -134,6 +134,8 @@ namespace Convertidor.Services.Presupuesto
             FechaDto fechaCompromisoObj = Fecha.GetFechaDto(dto.FECHA_COMPROMISO);
             itemResult.FechaCompromisoObj = (FechaDto)fechaCompromisoObj;
             itemResult.CodigoProveedor = dto.CODIGO_PROVEEDOR;
+            itemResult.Status = dto.STATUS;
+            itemResult.Motivo = dto.MOTIVO;
             var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CODIGO_PROVEEDOR);
             if (proveedor != null)
             {
@@ -592,6 +594,78 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+          public async Task<ResultDto<PreCompromisosResponseDto>> UpdateFechaMotivo(PreCompromisosUpdateFechaMotivoDto dto)
+        {
+
+            ResultDto<PreCompromisosResponseDto> result = new ResultDto<PreCompromisosResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                if(dto.CodigoCompromiso <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Compromiso no existe";
+                    return result;
+
+                }
+                var codigoCompromiso = await _repository.GetByCodigo(dto.CodigoCompromiso);
+                if (codigoCompromiso == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Compromiso no existe";
+                    return result;
+                }
+
+
+                if (dto.FechaCompromiso == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha compromiso Invalida";
+                    return result;
+                }
+
+                if (dto.Motivo.Length > 1150)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Motivo Invalido";
+                    return result;
+                }
+
+
+               
+
+            
+                codigoCompromiso.FECHA_COMPROMISO = dto.FechaCompromiso;
+                codigoCompromiso.MOTIVO = dto.Motivo;
+                codigoCompromiso.CODIGO_EMPRESA = conectado.Empresa;
+                codigoCompromiso.USUARIO_UPD = conectado.Usuario;
+                codigoCompromiso.FECHA_UPD = DateTime.Now;
+                await _repository.Update(codigoCompromiso);
+
+                var resultDto =await  MapPreCompromisos(codigoCompromiso);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        
         public async Task<ResultDto<PreCompromisosResponseDto>> Create(PreCompromisosUpdateDto dto)
         {
 
@@ -843,6 +917,31 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<PreCompromisosResponseDto> GetByCompromiso(int codigoCompromiso)
+        {
+            PreCompromisosResponseDto result = new PreCompromisosResponseDto();
+            try
+            {
+
+                var compromisos = await _repository.GetByCodigo(codigoCompromiso);
+                if (compromisos == null)
+                {
+                    return null;
+                }
+
+
+                result = await MapPreCompromisos(compromisos);
+                
+
+            }
+            catch (Exception ex)
+            {
+             
+                var message = ex.Message;
+            }
+
+            return result;
+        }
 
         public async Task<PreCompromisosResponseDto> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso)
         {

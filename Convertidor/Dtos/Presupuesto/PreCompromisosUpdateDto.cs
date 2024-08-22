@@ -20,4 +20,12 @@
         public int TipoRenglonId { get; set; }
         public string NumeroOrden { get; set; } = string.Empty;
     }
+    
+    public class PreCompromisosUpdateFechaMotivoDto
+    {
+        public int CodigoCompromiso { get; set; }
+        public string Motivo { get; set; } = string.Empty;
+        public DateTime FechaCompromiso { get; set; }
+      
+    }
 }
