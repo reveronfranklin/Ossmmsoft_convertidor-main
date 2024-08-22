@@ -1,7 +1,10 @@
-﻿using System.Security.Claims;
+﻿using System.Runtime.Intrinsics.X86;
+using System.Security.Claims;
+using System.Text;
 using Convertidor.Data.Entities.Sis;
 using Convertidor.Dtos.Sis;
 using Convertidor.Utility;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Convertidor.Services.Sis
 {
@@ -14,19 +17,24 @@ namespace Convertidor.Services.Sis
         private readonly IRhDescriptivasService _rhDescriptivasService;
 
 
+
         private readonly IHttpContextAccessor _httpContextAccessor;
+
 
         public SisUsuarioServices(ISisUsuarioRepository repository,
                                     IOssUsuarioRolRepository ossUsuarioRolRepository,
                                     IHttpContextAccessor httpContextAccessor,
                                     IConfiguration configuration,
-                                    IRhDescriptivasService rhDescriptivasService)
+                                    IRhDescriptivasService rhDescriptivasService
+              
+                                    )
         {
             _repository = repository;
             _ossUsuarioRolRepository = ossUsuarioRolRepository;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
             _rhDescriptivasService = rhDescriptivasService;
+
         }
 
         public async Task<ResultLoginDto> Login(LoginDto dto)
@@ -35,6 +43,13 @@ namespace Convertidor.Services.Sis
             return result;
         }
 
+
+      
+      
+     
+        
+     
+     
         public string GetMyName()
         {
             var login = string.Empty;

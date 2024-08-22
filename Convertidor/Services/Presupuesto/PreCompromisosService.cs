@@ -6,6 +6,7 @@ using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Cnt;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Adm;
+using Convertidor.Services.Sis;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Presupuesto
@@ -29,6 +30,8 @@ namespace Convertidor.Services.Presupuesto
         private readonly IAdmSolicitudesService _admSolicitudesService;
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
         private readonly IPrePucCompromisosRepository _prePucCompromisosRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
+
 
         private readonly IConfiguration _configuration;
         public PreCompromisosService(IPreCompromisosRepository repository,
@@ -46,7 +49,8 @@ namespace Convertidor.Services.Presupuesto
                                       IPRE_V_SALDOSRepository preVSaldosRepository,
                                       IAdmSolicitudesService admSolicitudesService,
                                       IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
-                                      IPrePucCompromisosRepository prePucCompromisosRepository
+                                      IPrePucCompromisosRepository prePucCompromisosRepository,
+                                      IOssConfigRepository ossConfigRepository 
         )
 		{
             _repository = repository;
@@ -65,6 +69,8 @@ namespace Convertidor.Services.Presupuesto
             _admSolicitudesService = admSolicitudesService;
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
             _prePucCompromisosRepository = prePucCompromisosRepository;
+            _ossConfigRepository = ossConfigRepository;
+         
         }
 
 
@@ -128,6 +134,8 @@ namespace Convertidor.Services.Presupuesto
             FechaDto fechaCompromisoObj = Fecha.GetFechaDto(dto.FECHA_COMPROMISO);
             itemResult.FechaCompromisoObj = (FechaDto)fechaCompromisoObj;
             itemResult.CodigoProveedor = dto.CODIGO_PROVEEDOR;
+            itemResult.Status = dto.STATUS;
+            itemResult.Motivo = dto.MOTIVO;
             var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CODIGO_PROVEEDOR);
             if (proveedor != null)
             {
@@ -156,12 +164,12 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Codigo de Solicitud no existe";
                     return result;
                 }
-                var preCompromisoPorSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+                var preCompromisoPorSolicitud = await _repository.GetByCodigoSolicitud(codigoSolicitud);
                 if (preCompromisoPorSolicitud != null)
                 {
                     result.Data = false;
                     result.IsValid = false;
-                    result.Message = $"Codigo de Solicitud ya tiene el compromiso: {preCompromisoPorSolicitud.NUMERO_SOLICITUD}";
+                    result.Message = $"Codigo de Solicitud ya tiene el compromiso: {admSolicitud.NUMERO_SOLICITUD}";
                     return result;
                 }
 
@@ -181,12 +189,14 @@ namespace Convertidor.Services.Presupuesto
                 entity.ANO = (int)admSolicitud.ANO;
                 entity.CODIGO_SOLICITUD = admSolicitud.CODIGO_SOLICITUD;
                 
-                var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
-                var descriptivaSolicitud =
-                    tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == admSolicitud.TIPO_SOLICITUD_ID).FirstOrDefault();
+                //var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
+                //var descriptivaSolicitud =tipoSolicitudTitulo.Where(x => x.DESCRIPCION_ID == admSolicitud.TIPO_SOLICITUD_ID).FirstOrDefault();
                 //SE GENERA EL PROXIMO NUMERO DE COMPROMISO
-                var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
-                var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie(sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+        
+                var literalCompromiso="CLAVE_CONSECUTIVO_COMPROMISO";
+                var ossConfig = await _ossConfigRepository.GetByClave(literalCompromiso);
+                var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(ossConfig.VALOR);
+                var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie((int)admSolicitud.CODIGO_PRESUPUESTO,sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
                 entity.NUMERO_COMPROMISO = numeroCompromiso;
                 entity.FECHA_COMPROMISO = DateTime.Now;
                 entity.CODIGO_PROVEEDOR = (int)admSolicitud.CODIGO_PROVEEDOR;
@@ -271,8 +281,8 @@ namespace Convertidor.Services.Presupuesto
                                         entityPuc.FECHA_INS = DateTime.Now;
 
                                         var createdPuc = await _prePucCompromisosRepository.Add(entityPuc);
-                                        
-                                        
+                                        //ACTUALIZAR PRE_V_SALDO
+                                        _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(entityPuc.CODIGO_PRESUPUESTO,entityPuc.CODIGO_ICP,entityPuc.CODIGO_PUC,(int)entityPuc.CODIGO_FINANCIADO);
                                     }
                                 }
                             }
@@ -285,6 +295,60 @@ namespace Convertidor.Services.Presupuesto
                 admSolicitud.USUARIO_UPD = conectado.Usuario;
                 admSolicitud.FECHA_UPD=DateTime.Now;
                 await _admSolicitudesRepository.Update(admSolicitud);
+
+                await _admPucSolicitudRepository.UpdateMontoComprometido(admSolicitud.CODIGO_SOLICITUD);
+      
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+                
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+    
+            return result;
+        }
+
+         public async Task<ResultDto<bool>> AnularDesdeSolicitud(int codigoSolicitud)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            try
+            {
+
+                var admSolicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+                if (admSolicitud == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo de Solicitud no existe";
+                    return result;
+                }
+              
+                if (admSolicitud.STATUS != "AP")
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"La solicitud {admSolicitud.NUMERO_SOLICITUD} no esta Aprobada";
+                    return result;
+                }
+
+             
+                //SI EXISTE UN COMPROMISO DE ESTA SOLICITUD Y ESTA ANULADO: PERNITO ANULAR
+                var compromiso = await _repository.GetByCodigoSolicitud(codigoSolicitud);
+                if (compromiso!=null && compromiso.STATUS!="AN")
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"La solicitud {admSolicitud.NUMERO_SOLICITUD} tiene un compromiso pendiente,debe anular el compromiso {compromiso.NUMERO_COMPROMISO}";
+                    return result;
+                }
+                var aprobar = await _repository.AnularDesdeSolicitud(codigoSolicitud);
                 
                 //ACTUALIZAR PRE_V_SALDO
                 await _preVSaldosRepository.RecalcularSaldo((int)admSolicitud.CODIGO_PRESUPUESTO);
@@ -304,6 +368,7 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        
         public async Task<ResultDto<List<PreCompromisosResponseDto>>> GetByPresupuesto(PreCompromisosFilterDto filter)
         {
             return await _repository.GetByPresupuesto(filter);
@@ -529,6 +594,78 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+          public async Task<ResultDto<PreCompromisosResponseDto>> UpdateFechaMotivo(PreCompromisosUpdateFechaMotivoDto dto)
+        {
+
+            ResultDto<PreCompromisosResponseDto> result = new ResultDto<PreCompromisosResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                if(dto.CodigoCompromiso <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Compromiso no existe";
+                    return result;
+
+                }
+                var codigoCompromiso = await _repository.GetByCodigo(dto.CodigoCompromiso);
+                if (codigoCompromiso == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Compromiso no existe";
+                    return result;
+                }
+
+
+                if (dto.FechaCompromiso == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha compromiso Invalida";
+                    return result;
+                }
+
+                if (dto.Motivo.Length > 1150)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Motivo Invalido";
+                    return result;
+                }
+
+
+               
+
+            
+                codigoCompromiso.FECHA_COMPROMISO = dto.FechaCompromiso;
+                codigoCompromiso.MOTIVO = dto.Motivo;
+                codigoCompromiso.CODIGO_EMPRESA = conectado.Empresa;
+                codigoCompromiso.USUARIO_UPD = conectado.Usuario;
+                codigoCompromiso.FECHA_UPD = DateTime.Now;
+                await _repository.Update(codigoCompromiso);
+
+                var resultDto =await  MapPreCompromisos(codigoCompromiso);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        
         public async Task<ResultDto<PreCompromisosResponseDto>> Create(PreCompromisosUpdateDto dto)
         {
 
@@ -780,6 +917,31 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+        public async Task<PreCompromisosResponseDto> GetByCompromiso(int codigoCompromiso)
+        {
+            PreCompromisosResponseDto result = new PreCompromisosResponseDto();
+            try
+            {
+
+                var compromisos = await _repository.GetByCodigo(codigoCompromiso);
+                if (compromisos == null)
+                {
+                    return null;
+                }
+
+
+                result = await MapPreCompromisos(compromisos);
+                
+
+            }
+            catch (Exception ex)
+            {
+             
+                var message = ex.Message;
+            }
+
+            return result;
+        }
 
         public async Task<PreCompromisosResponseDto> GetByNumeroYFecha(string numeroCompromiso, DateTime fechaCompromiso)
         {

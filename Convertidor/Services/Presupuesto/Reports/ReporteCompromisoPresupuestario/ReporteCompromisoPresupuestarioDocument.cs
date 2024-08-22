@@ -1,7 +1,10 @@
 ﻿using Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario;
+using NPOI.SS.Formula.Functions;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using Spire.Xls;
+using System.Globalization;
 
 namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 {
@@ -37,7 +40,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 
                         page.Footer().AlignCenter().Text(text =>
                         {
-
+                            page.Footer().Element(ComposeFooter);
                             text.CurrentPageNumber();
                             text.Span(" / ");
                             text.TotalPages();
@@ -57,7 +60,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
         {
             
         
-            container.PaddingVertical(1).Column(column =>
+            container.Column(column =>
             {
                 
                 
@@ -89,29 +92,90 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(5).Column(async column =>
+            container.PaddingTop(5).Column(async column =>
             {
 
-                column.Spacing(5);
-
-               
-                column.Item().PaddingTop(5).Row(row =>
+                column.Item().Row(row =>
                 {
 
                     row.RelativeItem().Component(new CuerpoComponent(Model.Cuerpo,Model.Encabezado));
                     
                 });
 
-                column.Item().PageBreak();
                 
-
             });
             
             
         }
 
+        void ComposeFooter(IContainer container)
+        {
 
-        
+            NumberFormatInfo formato = new CultureInfo("es-AR").NumberFormat;
+
+            formato.CurrencyGroupSeparator = ".";
+            formato.NumberDecimalSeparator = ",";
+            formato.NumberDecimalDigits = 2;
+
+            container.Table(async table =>
+            {
+                table.ColumnsDefinition(colums =>
+                {
+                    colums.ConstantColumn(320);
+                    colums.RelativeColumn();
+                    colums.RelativeColumn();
+                    colums.RelativeColumn();
+                    colums.RelativeColumn();
+                    colums.RelativeColumn();
+
+                });
+
+
+                var bolivares = Model.Cuerpo.Sum(x => x.TotalBolivares);
+
+                var montoImpuesto = bolivares * (decimal)0.16;
+                var total = bolivares + montoImpuesto;
+
+                var totalBolivares = bolivares.ToString("N", formato);
+                var totalImpuesto = montoImpuesto.ToString("N", formato);
+                var totales = total.ToString("N", formato);
+                table.Footer(footer =>
+                {
+                    
+                    footer.Cell().ColumnSpan(6).BorderVertical(1).BorderTop(1).Row(row =>
+                    {
+                        row.RelativeItem(5).PaddingLeft(10).PaddingRight(5).AlignLeft().Text($"MONTO TOTAL EN LETRA :\n{Model.Encabezado.MontoEnLetras.ToUpper()}").FontSize(8).Bold();
+                        row.ConstantItem(70).AlignRight().AlignBottom().PaddingRight(2).Text("TOTAL").FontSize(8).Bold();
+
+                        
+                        row.ConstantItem(70).BorderLeft(1).AlignRight().Column(col =>
+                        {
+                            col.Item().BorderBottom(1).ExtendHorizontal().PaddingVertical(20);
+                            col.Item().ExtendHorizontal().AlignRight().PaddingBottom(-1).PaddingRight(3).Text(totalBolivares).FontSize(7);
+                        });
+
+                    });
+
+                    footer.Cell().ColumnSpan(6).Column(col =>
+                    {
+                        col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :").FontSize(8).Bold();
+                        col.Item().BorderVertical(1).PaddingLeft(3).PaddingBottom(3).Text(Model.Encabezado.Motivo).FontSize(7);
+                    });
+
+                    footer.Cell().ColumnSpan(2).Column(col =>
+                    {
+                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).PaddingVertical(3).Text($"ANALISTA").FontSize(8).Bold();
+                        col.Item().BorderVertical(1).Text($"{Model.Encabezado.Firmante}").FontSize(7);
+                        col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).PaddingVertical(4).Text($"FIRMA : ________________________________________     ").FontSize(8).Bold();
+
+                    });
+
+                    footer.Cell().ColumnSpan(4).BorderVertical(1).BorderBottom(1).BorderTop(1).AlignBottom().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(5).Text($"DIRECCION DE PLANIFICACION Y PRESUPUESTO").FontSize(8).Bold();
+
+                });
+            });
+        }
+
     }
 
 

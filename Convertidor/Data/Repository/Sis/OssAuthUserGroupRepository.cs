@@ -31,7 +31,37 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-     
+        
+        public async Task<AUTH_USER_GROUPS> GetByUserGroup(int userId,int groupId)
+        {
+            try
+            {
+                var result = await _context.AUTH_USER_GROUPS.DefaultIfEmpty().Where(x => x.USER_ID == userId && x.GROUP_ID==groupId).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        public async Task<List<AUTH_USER_GROUPS>> GetByUser(int userId)
+        {
+            try
+            {
+                var result = await _context.AUTH_USER_GROUPS.DefaultIfEmpty().Where(x => x.USER_ID == userId ).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
 
         public async Task<AUTH_USER_GROUPS> GetByID(int id)
         {
@@ -134,6 +164,28 @@ namespace Convertidor.Data.Repository.Sis
             {
                 var msg = ex.Message;
                 return 0;
+            }
+
+
+
+        }
+        
+        public async Task<string> Delete(int id)
+        {
+
+            try
+            {
+                var entity = await GetByID(id);
+                if (entity != null)
+                {
+                    _context.AUTH_USER_GROUPS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
 
 

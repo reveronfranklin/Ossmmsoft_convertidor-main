@@ -14,13 +14,14 @@ namespace Convertidor.Services.Adm
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
         private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly IAdmProductosRepository _admProductosRepository;
-
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
         public AdmDetalleSolicitudService(IAdmDetalleSolicitudRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IAdmSolicitudesRepository admSolicitudesRepository,
                                      IAdmPucSolicitudRepository admPucSolicitudRepository,
                                      IAdmProductosRepository admProductosRepository
+                                    
                                 
                                      )
         {
@@ -30,6 +31,7 @@ namespace Convertidor.Services.Adm
             _admSolicitudesRepository = admSolicitudesRepository;
             _admPucSolicitudRepository = admPucSolicitudRepository;
             _admProductosRepository = admProductosRepository;
+        
         }
 
         public async Task<AdmDetalleSolicitudResponseDto> MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
@@ -134,8 +136,9 @@ namespace Convertidor.Services.Adm
                 {
 
                     var total = await GetTotalMonto(detalleSolicitud);
+                    var totalPuc = await GetTotalMontoPuc(codigoSolicitud);
                     result.Total1 = total;
-                    result.Total2 = total;
+                    result.Total2 = totalPuc;
                     result.Data = detalleSolicitud;
                     result.IsValid = true;
                     result.Message = "";
@@ -235,6 +238,41 @@ namespace Convertidor.Services.Adm
 
         }
         
+        public async Task<decimal> GetTotalMontoPuc(int codigoSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+
+                var puc = await _admPucSolicitudRepository.GetBySolicitud(codigoSolicitud);
+             
+                if (puc != null && puc.Count > 0)
+                {
+                  
+                    
+                    var total  = puc.Sum(p => p.MONTO);
+                    result = (decimal)total; 
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+
         public async Task<ResultDto<AdmDetalleSolicitudResponseDto>> Update(AdmDetalleSolicitudUpdateDto dto)
         {
             ResultDto<AdmDetalleSolicitudResponseDto> result = new ResultDto<AdmDetalleSolicitudResponseDto>(null);
@@ -535,8 +573,12 @@ namespace Convertidor.Services.Adm
             entity.FECHA_INS = DateTime.Now;
 
             var created = await _repository.Add(entity);
+           
+            
             if (created.IsValid && created.Data != null)
             {
+                
+            
                 var resultDto = await MapDetalleSolicitudDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -591,7 +633,7 @@ namespace Convertidor.Services.Adm
                 }
                 
                 var deleted = await _repository.Delete(dto.CodigoDetalleSolicitud);
-
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;

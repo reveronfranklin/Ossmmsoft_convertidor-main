@@ -19,16 +19,20 @@ namespace Convertidor.Controllers
         private readonly ISisUsuarioServices _service;
 
         private IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthModelUserServices _authModelUserServices;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
 
         public SisUsuariosController(ISisUsuarioServices service,
                                     IHttpContextAccessor httpContextAccessor,
-                                    ISisUsuarioRepository sisUsuarioRepository)
+                                    IAuthModelUserServices authModelUserServices,
+                                    ISisUsuarioRepository sisUsuarioRepository
+                                    )
         {
 
             _service = service;
             _httpContextAccessor = httpContextAccessor;
+            _authModelUserServices = authModelUserServices;
             _sisUsuarioRepository = sisUsuarioRepository;
         }
 
@@ -78,6 +82,27 @@ namespace Convertidor.Controllers
         {
       
             var result = await _service.Create(dto);
+
+
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> GetUserPermissions(SisUsuariosFilterDto filter)
+        {
+      
+            var result = await _authModelUserServices.GetUserPermissions(filter.Login);
+
+
+            return Ok(result);
+        }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> GetModelUserAction(SisUsuariosFilterDto filter)
+        {
+            var user = await _service.GetByLogin(filter.Login);
+            var result = await _authModelUserServices.GetModelUserAction(user.CODIGO_USUARIO);
 
 
             return Ok(result);

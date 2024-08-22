@@ -240,18 +240,50 @@ namespace Convertidor.Data.Repository.Presupuesto
         }
 
 
+        public void RecalculaSaldosPreIcpPucFi(int codigo_presupuesto,int codigoIcp,int codigoPuc,int codigoFinanciado)
+        {
+            
+
+            
+            try
+            {
+
+                
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE_P_CREATE_SALDOS_DIARIOS({codigo_presupuesto},{codigoIcp},{codigoPuc},{codigoFinanciado});\nEND;";
+
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+
+                FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_P_ACTUALIZAR_SALDOS({codigo_presupuesto},{codigoIcp},{codigoPuc},{codigoFinanciado});\nEND;";
+                var result = _context.Database.ExecuteSqlInterpolated(xquery);
+
+            
+
+                var aprobacion = result; 
+
+            }
+            catch (Exception ex)
+            {
+                var mess = ex.InnerException.Message;
+
+                throw;
+            }
+
+            
+        }
+        
 
         public async Task RecalcularSaldo(int codigo_presupuesto)
         {
 
-            var presupuestoActual = await _context.PRE_V_SALDOS.DefaultIfEmpty().OrderByDescending(x => x.CODIGO_PRESUPUESTO).FirstOrDefaultAsync();
+            /*var presupuestoActual = await _context.PRE_V_SALDOS.DefaultIfEmpty().OrderByDescending(x => x.CODIGO_PRESUPUESTO).FirstOrDefaultAsync();
             if (presupuestoActual!=null)
             {
                 if (codigo_presupuesto != (int)presupuestoActual.CODIGO_PRESUPUESTO)
                 {
                     return;
                 }
-            }
+            }*/
            
 
 
@@ -263,13 +295,16 @@ namespace Convertidor.Data.Repository.Presupuesto
             try
             {
 
-
-                FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
-                        var result = _context.Database.ExecuteSqlInterpolated(xquery);
-
+                
                 FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_CREATE_SALDOS_DIARIOS({DateTime.Now},{codigo_presupuesto});\nEND;";
 
                 var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+
+                 FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
+                        var result = _context.Database.ExecuteSqlInterpolated(xquery);
+
+            
 
                 var aprobacion = result; 
 

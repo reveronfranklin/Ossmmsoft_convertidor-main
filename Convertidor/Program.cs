@@ -210,13 +210,34 @@ builder.Services.AddTransient<IOssAuthPermissionsService, OssAuthPermissionsServ
 builder.Services.AddTransient<IOssAuthGroupService, OssAuthGroupService>();
 builder.Services.AddTransient<IOssAuthGroupPermissionService, OssAuthGroupPermissionService>();
 builder.Services.AddTransient<IOssAuthUserPermissionService, OssAuthUserPermissionService>();
+builder.Services.AddTransient<IOssAuthUserGroupService, OssAuthUserGroupService>();
+builder.Services.AddTransient<IAuthModelUserServices, AuthModelUserServices>();
 
 
 
-//CATASTRO
+
+
+
+//CATASTRO Repository
 builder.Services.AddTransient<ICAT_FICHARepository, CAT_FICHARepository>();
 
+
 builder.Services.AddTransient<ICAT_FICHAService, CAT_FICHAService>();
+builder.Services.AddTransient<ICatTitulosRepository, CatTitulosRepository>();
+builder.Services.AddTransient<ICatDescriptivasRepository, CatDescriptivasRepository>();
+builder.Services.AddTransient<ICatAforosInmueblesRepository, CatAforosInmueblesRepository>();
+builder.Services.AddTransient<ICatArrendamientosInmueblesRepository, CatArrendamientosInmueblesRepository>();
+builder.Services.AddTransient<ICatAuditoriaRepository, CatAuditoriaRepository>();
+builder.Services.AddTransient<ICatAvaluoConstruccionRepository, CatAvaluoConstruccionRepository>();
+
+
+//CATASTRO Services
+builder.Services.AddTransient<ICatTitulosService, CatTitulosService>();
+builder.Services.AddTransient<ICatDescriptivasService, CatDescriptivasService>();
+builder.Services.AddTransient<ICatAforosInmueblesService, CatAforosInmueblesService>();
+builder.Services.AddTransient<ICatArrendamientosInmueblesService, CatArrendamientosInmueblesService>();
+builder.Services.AddTransient<ICatAuditoriaService, CatAuditoriaService>();
+builder.Services.AddTransient<ICatAvaluoConstruccionService, CatAvaluoConstruccionService>();
 
 
 //RH

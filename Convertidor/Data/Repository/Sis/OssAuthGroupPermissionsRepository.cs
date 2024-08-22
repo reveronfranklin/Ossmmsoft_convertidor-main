@@ -1,4 +1,5 @@
 ﻿using Convertidor.Data.Entities.Sis;
+using Convertidor.Dtos.Sis;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
 
@@ -31,7 +32,108 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
-     
+           public  async Task<AuthGroupPermisionResponseDto> MapDto(AUTH_GROUP_PERMISSIONS entity)
+        {
+            AuthGroupPermisionResponseDto itemResult = new AuthGroupPermisionResponseDto();
+            
+            try
+            {
+                if (entity == null)
+                {
+                    return itemResult;
+                }
+                itemResult.Id = entity.ID;
+             
+                itemResult.GroupId = entity.GROUP_ID;
+                itemResult.GroupName = "";
+                var group = await _context.AUTH_GROUP.Where(x=>x.ID== itemResult.GroupId).FirstOrDefaultAsync();
+                if (group != null)
+                {
+                    itemResult.GroupName = group.NAME;
+                }
+                itemResult.PermisionId = entity.PERMISSION_ID;
+                itemResult.DescriptionPermision = "";
+                var permission = await  _context.AUTH_PERMISSION.Where(x=>x.ID==itemResult.PermisionId).FirstOrDefaultAsync();
+                if (permission != null)
+                {
+                    var contentType = await _context.AUTH_CONTENT_TYPE.Where(x => x.ID == permission.CONTENT_TYPE_ID)
+                        .FirstOrDefaultAsync();
+                    itemResult.DescriptionPermision = $"{contentType.APP_LABEL}-{contentType.MODEL}-{permission.NAME}";
+                }
+            
+                
+                return itemResult;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(entity);
+                Console.WriteLine(e);
+                return itemResult;
+            }
+          
+        }
+
+        public async Task< List<AuthGroupPermisionResponseDto>> MapList(List<AUTH_GROUP_PERMISSIONS> dtos)
+        {
+            List<AuthGroupPermisionResponseDto> result = new List<AuthGroupPermisionResponseDto>();
+            if (dtos.Count > 0)
+            {
+                foreach (var item in dtos)
+                {
+                    if (item == null)
+                    {
+                        var detener = "";
+                    }
+                    else
+                    {
+                        var itemResult =  await MapDto(item);
+               
+                        result.Add(itemResult);
+                    }
+
+                   
+                }
+            }
+            
+          
+            return result;
+
+
+
+        }
+      
+        public async Task<ResultDto<List<AuthGroupPermisionResponseDto>>> GetByGroup(AuthGroupPermissionFilterDto dto)
+        { 
+            ResultDto<List<AuthGroupPermisionResponseDto>> result = new ResultDto<List<AuthGroupPermisionResponseDto>>(null);
+            try
+            {
+
+                var groupPermission = await GetByGroup(dto.GroupId);
+                if (groupPermission == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existen Permisos para este Grupo";
+                    return result;
+                }
+                
+                var resultDto =  await MapList(groupPermission);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
 
         public async Task<AUTH_GROUP_PERMISSIONS> GetByID(int id)
         {

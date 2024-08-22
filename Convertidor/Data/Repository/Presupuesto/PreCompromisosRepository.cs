@@ -14,14 +14,49 @@ namespace Convertidor.Data.Repository.Presupuesto
 		
         private readonly DataContextPre _context;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
 
-        public PreCompromisosRepository(DataContextPre context,IAdmProveedoresRepository admProveedoresRepository )
+        public PreCompromisosRepository(
+                                        DataContextPre context,
+                                        IAdmProveedoresRepository admProveedoresRepository,
+                                        ISisUsuarioRepository sisUsuarioRepository )
         {
             _context = context;
             _admProveedoresRepository = admProveedoresRepository;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
       
+        
+        
+        public async Task<string> AnularDesdeSolicitud(int codigoSolicitud)
+        {
+
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                FormattableString xqueryAnulaSolicitud = $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.STATUS='AN',USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE   WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+                var resultXqueryAnulaSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryAnulaSolicitud);
+                
+                FormattableString xqueryAdmPucSolicitud = $"UPDATE ADM.ADM_PUC_SOLICITUD SET MONTO_ANULADO = MONTO,MONTO_COMPROMETIDO = 0,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+                var resultAdmPucSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryAdmPucSolicitud);
+                
+                //FormattableString xqueryPreCompromiso = $"UPDATE PRE.PRE_COMPROMISO SET PRE.PRE_COMPROMISOS.STATUS = 'AN',USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+                //var resultPreCompromiso = _context.Database.ExecuteSqlInterpolated(xqueryAdmPucSolicitud);
+
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso)
         {
             try
@@ -41,7 +76,7 @@ namespace Convertidor.Data.Repository.Presupuesto
         {
             try
             {
-                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_SOLICITUD == codigoSolicitud).FirstOrDefaultAsync();
+                var result = await _context.PRE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_SOLICITUD == codigoSolicitud).OrderByDescending(x=>x.CODIGO_COMPROMISO).FirstOrDefaultAsync();
 
                 return (PRE_COMPROMISOS)result;
             }
@@ -113,11 +148,12 @@ namespace Convertidor.Data.Repository.Presupuesto
             if (filter.PageNumber == 0) filter.PageNumber = 1;
             if (filter.PageSize == 0) filter.PageSize = 100;
             if (filter.PageSize >100) filter.PageSize = 100;
-            
+            if (filter.SearchText == null) filter.SearchText = "";
+            if (filter.Status == null) filter.Status = "PE";
             try
             {
                 var presupuesto = await _context.PRE_PRESUPUESTOS
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto).FirstOrDefaultAsync();
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto ).FirstOrDefaultAsync();
                 var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
                 var totalRegistros = 0;
                 var totalPage = 0;
@@ -126,13 +162,13 @@ namespace Convertidor.Data.Repository.Presupuesto
                 if (filter.SearchText.Length > 0)
                 {
                     totalRegistros = _context.PRE_COMPROMISOS
-                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     
                     pageData = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
-                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .OrderByDescending(x => x.FECHA_COMPROMISO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
@@ -140,11 +176,11 @@ namespace Convertidor.Data.Repository.Presupuesto
                 }
                 else
                 {
-                    totalRegistros = _context.PRE_COMPROMISOS.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto).Count();
+                    totalRegistros = _context.PRE_COMPROMISOS.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.STATUS==filter.Status).Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     pageData = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
-                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto)
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.STATUS==filter.Status)
                         .OrderByDescending(x => x.FECHA_COMPROMISO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)

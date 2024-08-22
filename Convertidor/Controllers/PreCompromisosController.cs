@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 // HTML to PDF
 using Convertidor.Dtos.Presupuesto;
+using Convertidor.Enum;
+using Convertidor.Services.Sis;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,13 +17,16 @@ namespace Convertidor.Controllers
     {
        
         private readonly IPreCompromisosService _service;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IAuthModelUserServices _authModelUserServices;
 
-        public PreCompromisosController(IPreCompromisosService service)
+        public PreCompromisosController(IPreCompromisosService service,
+                                        ISisUsuarioRepository sisUsuarioRepository,
+                                        IAuthModelUserServices authModelUserServices)
         {
-
             _service = service;
-
-
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _authModelUserServices = authModelUserServices;
         }
 
        
@@ -43,6 +48,15 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
         
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByCompromiso(PreCompromisoFilterDto dto)
+        {
+            var result = await _service.GetByCompromiso(dto.CodigoCompromiso);
+            return Ok(result);
+
+        }
+        
        
 
         [HttpPost]
@@ -50,6 +64,14 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> Update(PreCompromisosUpdateDto dto)
         {
             var result = await _service.Update(dto);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> UpdateFechaMotivo(PreCompromisosUpdateFechaMotivoDto dto)
+        {
+            var result = await _service.UpdateFechaMotivo(dto);
             return Ok(result);
         }
 
@@ -66,7 +88,37 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> CrearCompromisoDesdeSolicitud(FilterCrearCompromisoDesdeSolictud filter)
         {
-            var result = await _service.CrearCompromisoDesdeSolicitud(filter.CodigoSolicitud);
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.Aprobar);
+            if (userValid.IsValid == false)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }
+            
+            result = await _service.CrearCompromisoDesdeSolicitud(filter.CodigoSolicitud);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AnularDesdeSolicitud(FilterAnularCompromisoDesdeSolictud filter)
+        {
+            
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.Anular);
+            if (userValid.IsValid == false)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }
+            result = await _service.AnularDesdeSolicitud(filter.CodigoSolicitud);
             return Ok(result);
         }
         

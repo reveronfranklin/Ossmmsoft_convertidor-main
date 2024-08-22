@@ -63,6 +63,28 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+        public async Task<string> UpdateMontoComprometido(int codigoSolicitud)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_PUC_SOLICITUD  SET MONTO_COMPROMETIDO= MONTO  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<List<ADM_PUC_SOLICITUD>> GetByDetalleSolicitud(int codigoDetalleSolicitud) 
         {
             try
@@ -180,6 +202,23 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
+
+        public void UpdateMpntoComprometido(int codigoPucSolicitud)
+        {
+           
+                
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE  ADM.ADM_PUC_SOLICITUD SET MONTO_COMPROMETIDO= MONTO  WHERE CODIGO_PUC_SOLICITUD= {codigoPucSolicitud}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+            
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         public async Task<ResultDto<ADM_PUC_SOLICITUD>>Update(ADM_PUC_SOLICITUD entity) 
         {
             ResultDto<ADM_PUC_SOLICITUD> result = new ResultDto<ADM_PUC_SOLICITUD>(null);

@@ -55,7 +55,7 @@ namespace Convertidor.Data.Repository.Adm
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                    return ex.Message;
             }
 
 
@@ -90,7 +90,15 @@ namespace Convertidor.Data.Repository.Adm
             if (filter.PageNumber == 0) filter.PageNumber = 1;
             if (filter.PageSize == 0) filter.PageSize = 100;
             if (filter.PageSize >100) filter.PageSize = 100;
-            
+
+            if (string.IsNullOrEmpty(filter.SearchText))
+            {
+                filter.SearchText = "";
+            }
+            if (string.IsNullOrEmpty(filter.Status))
+            {
+                filter.Status = "";
+            }
             try
             {
 
@@ -98,8 +106,39 @@ namespace Convertidor.Data.Repository.Adm
                 var totalRegistros = 0;
                 var totalPage = 0;
               
-                List<ADM_SOLICITUDES> pageData;
-                if (filter.SearchText.Length > 0)
+                List<ADM_SOLICITUDES> pageData = new List<ADM_SOLICITUDES>();
+                
+                if (filter.Status.Length > 0 && filter.SearchText.Length==0)
+                {
+                    totalRegistros = _context.ADM_SOLICITUDES
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS==filter.Status )
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = await _context.ADM_SOLICITUDES.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&   x.STATUS==filter.Status )
+                        .OrderByDescending(x => x.FECHA_SOLICITUD)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                if (filter.Status.Length >  0 && filter.SearchText.Length>0)
+                {
+                    totalRegistros = _context.ADM_SOLICITUDES
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = await _context.ADM_SOLICITUDES.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&   x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .OrderByDescending(x => x.FECHA_SOLICITUD)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                if (filter.SearchText.Length > 0 && filter.Status.Length==0)
                 {
                     totalRegistros = _context.ADM_SOLICITUDES
                         .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
@@ -114,7 +153,7 @@ namespace Convertidor.Data.Repository.Adm
                         .Take(filter.PageSize)
                         .ToListAsync();
                 }
-                else
+                if (filter.SearchText.Length == 0 && filter.Status.Length==0)
                 {
                     totalRegistros = _context.ADM_SOLICITUDES.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto).Count();
 

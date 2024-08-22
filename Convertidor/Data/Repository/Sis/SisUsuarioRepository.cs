@@ -76,7 +76,7 @@ namespace Convertidor.Data.Repository.Sis
             }
             try
             {
-                var result = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x=>x.LOGIN== newlogin).FirstOrDefaultAsync();
+                var result = await _context.SIS_USUARIOS.DefaultIfEmpty().Where(x=>x.LOGIN.ToUpper()== newlogin.ToUpper()).FirstOrDefaultAsync();
                 return result;
             }
             catch (Exception ex)

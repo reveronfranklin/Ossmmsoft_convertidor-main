@@ -641,9 +641,10 @@ namespace Convertidor.Services.Adm
                 ADM_SOLICITUDES entity = new ADM_SOLICITUDES();
                 entity.CODIGO_SOLICITUD = await _repository.GetNextKey();
                 entity.ANO = codigoPresupuesto.ANO;
+                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 //SE GENERA EL PROXIMO NUMERO DE SOLICITUD
                 var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
-                var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+                var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie((int)entity.CODIGO_PRESUPUESTO , sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
 
                 entity.NUMERO_SOLICITUD = numeroSolicitud;
                 entity.FECHA_SOLICITUD = dto.FechaSolicitud;
@@ -776,7 +777,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Solicitud No tiene Dettalle";
                     return result;
                 }
-                var pucSolicitud =await _admPucSolicitudRepository.GetByDetalleSolicitud(codigoSolicitud);
+                var pucSolicitud =await _admPucSolicitudRepository.GetBySolicitud(codigoSolicitud);
                 if (pucSolicitud == null || pucSolicitud.Count == 0)
                 {
                     result.Data = false;
