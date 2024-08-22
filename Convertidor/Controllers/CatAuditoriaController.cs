@@ -40,5 +40,20 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Update(CatAuditoriaUpdateDto dto)
+        {
+            var result = await _service.Update(dto);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete(CatAuditoriaDeleteDto dto)
+        {
+            var result = await _service.Delete(dto);
+            return Ok(result);
+        }
     }
 }
