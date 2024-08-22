@@ -369,6 +369,93 @@ namespace Convertidor.Services.Presupuesto
         }
 
         
+         public async Task<ResultDto<bool>> AprobarCompromiso(int codigoCompromiso)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            try
+            {
+
+                var compromiso = await _repository.GetByCodigo(codigoCompromiso);
+                if (compromiso == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Compromiso no existe";
+                    return result;
+                }
+              
+                if (compromiso.STATUS != "PE")
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"El Compromiso: {compromiso.NUMERO_COMPROMISO} no esta PENDIENTE";
+                    return result;
+                }
+
+                compromiso.STATUS = "AP";
+                compromiso.CODIGO_EMPRESA = conectado.Empresa;
+                compromiso.USUARIO_UPD = conectado.Usuario;
+                compromiso.FECHA_UPD = DateTime.Now;
+                await _repository.Update(compromiso);
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+                
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+    
+            return result;
+        }
+        public async Task<ResultDto<bool>> AnularCompromiso(int codigoCompromiso)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            try
+            {
+
+                var compromiso = await _repository.GetByCodigo(codigoCompromiso);
+                if (compromiso == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Compromiso no existe";
+                    return result;
+                }
+              
+                if (compromiso.STATUS != "AP")
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"El Compromiso: {compromiso.NUMERO_COMPROMISO} no esta APROBADO";
+                    return result;
+                }
+
+              
+                await _repository.AnularCompromiso(compromiso.CODIGO_COMPROMISO,compromiso.CODIGO_SOLICITUD);
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+                
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+    
+            return result;
+        }
+        
+         
         public async Task<ResultDto<List<PreCompromisosResponseDto>>> GetByPresupuesto(PreCompromisosFilterDto filter)
         {
             return await _repository.GetByPresupuesto(filter);
