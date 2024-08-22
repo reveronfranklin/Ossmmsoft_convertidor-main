@@ -23,6 +23,7 @@ namespace Convertidor.Data
         public DbSet<CAT_AFOROS_INMUEBLES> CAT_AFOROS_INMUEBLES { get; set; }
         public DbSet<CAT_ARRENDAMIENTOS_INMUEBLES> CAT_ARRENDAMIENTOS_INMUEBLES { get; set; }
         public DbSet<CAT_AUDITORIA> CAT_AUDITORIA { get; set; }
+        public DbSet<CAT_AVALUO_CONSTRUCCION> CAT_AVALUO_CONSTRUCCION { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -108,6 +109,17 @@ namespace Convertidor.Data
                          builder.ToTable("CAT_AUDITORIA");
                      });
 
+            modelBuilder
+                     .Entity<CAT_AVALUO_CONSTRUCCION>(builder =>
+                     {
+                         builder.HasKey(table => new
+                         {
+                             table.CODIGO_AVALUO_CONSTRUCCION,
+
+                         });
+                         builder.ToTable("CAT_AVALUO_CONSTRUCCION");
+                     });
+            
         }
 
 
