@@ -114,17 +114,6 @@ namespace Convertidor.Services.Catastro
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-
-                if (dto.CodigoAuditoria < 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "codigo Auditoria Invalido";
-                    return result;
-
-                }
-
                 if (dto.TablaId < 0)
                 {
                     result.Data = null;
@@ -294,8 +283,6 @@ namespace Convertidor.Services.Catastro
                 entity.CODIGO_AUDITORIA = await _repository.GetNextKey();
                 entity.TABLA_ID = dto.TablaId;
                 entity.SECTOR_ID = dto.SectorId;
-                entity.USUARIO_INS = dto.UsuarioIns;
-                entity.FECHA_INS = dto.FechaIns;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
@@ -351,8 +338,6 @@ namespace Convertidor.Services.Catastro
 
             return result;
         }
-
-
 
     }
 }
