@@ -29,6 +29,8 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+       
+
         public async Task<ResultDto<CAT_AUDITORIA>> Add(CAT_AUDITORIA entity)
         {
             ResultDto<CAT_AUDITORIA> result = new ResultDto<CAT_AUDITORIA>(null);
@@ -59,6 +61,8 @@ namespace Convertidor.Data.Repository.Catastro
 
 
         }
+
+   
 
         public async Task<int> GetNextKey()
         {
