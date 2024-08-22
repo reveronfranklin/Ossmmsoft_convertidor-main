@@ -11,9 +11,9 @@
         public int FACTOR_DEPRECIACION { get; set; }
         public int VALOR_MODIFICADO { get; set; }
         public int AREA_TOTAL { get; set; }
-        public int MONTO_AVALUO { get; set; }
+        public decimal MONTO_AVALUO { get; set; }
         public string OBSERVACIONES { get; set; } = string.Empty;
-        public int VALOR_REPOSICION { get; set; }
+        public decimal VALOR_REPOSICION { get; set; }
         public int AREA_CONSTRUCCION { get; set; }
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;
@@ -38,8 +38,8 @@
         public string EXTRA15 { get; set; } = string.Empty;
         public string TIPOLOGIA { get; set; } = string.Empty;
         public int FRENTE_PARCELA { get; set; }
-        public int MONTO_COMPLEMENTO { get; set; }
-        public int MONTO_COMPLEMENTO_USUARIO { get; set; }
-        public int MONTO_TOTAL_AVALUO { get; set; }
+        public decimal MONTO_COMPLEMENTO { get; set; }
+        public decimal MONTO_COMPLEMENTO_USUARIO { get; set; }
+        public decimal MONTO_TOTAL_AVALUO { get; set; }
     }
 }
