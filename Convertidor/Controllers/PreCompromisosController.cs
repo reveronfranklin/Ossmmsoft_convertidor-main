@@ -57,6 +57,24 @@ namespace Convertidor.Controllers
 
         }
         
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AprobarCompromiso(PreCompromisoFilterDto dto)
+        {
+            var result = await _service.AprobarCompromiso(dto.CodigoCompromiso);
+            return Ok(result);
+
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AnularCompromiso(PreCompromisoFilterDto dto)
+        {
+            var result = await _service.AnularCompromiso(dto.CodigoCompromiso);
+            return Ok(result);
+
+        }
+        
        
 
         [HttpPost]

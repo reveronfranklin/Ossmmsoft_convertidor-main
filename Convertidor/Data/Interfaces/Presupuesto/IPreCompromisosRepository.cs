@@ -18,6 +18,8 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<string> Delete(int codigoCompromiso);
         Task<int> GetNextKey();
         Task<string> AnularDesdeSolicitud(int codigoSolicitud);
+        Task<string> AprobarCompromiso(int codigoCompromiso);
+        Task<string> AnularCompromiso(int codigoCompromiso, int codigoSolicitud);
 
     }
 }
