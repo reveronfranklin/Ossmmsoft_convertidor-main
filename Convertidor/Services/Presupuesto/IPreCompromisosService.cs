@@ -18,6 +18,10 @@ namespace Convertidor.Services.Presupuesto
         Task<PreCompromisosResponseDto> GetByCompromiso(int codigoCompromiso);
         Task<ResultDto<PreCompromisosResponseDto>> UpdateFechaMotivo(PreCompromisosUpdateFechaMotivoDto dto);
 
+        Task<ResultDto<bool>> AprobarCompromiso(int codigoCompromiso);
+        Task<ResultDto<bool>> AnularCompromiso(int codigoCompromiso);
+
+
     }
 }
 
