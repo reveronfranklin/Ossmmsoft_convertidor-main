@@ -8,8 +8,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/ValidateUserDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -213,7 +211,7 @@
       <workItem from="1724341935441" duration="3585000" />
       <workItem from="1724351374957" duration="15424000" />
       <workItem from="1724427123592" duration="634000" />
-      <workItem from="1724445466142" duration="1722000" />
+      <workItem from="1724445466142" duration="2546000" />
     </task>
     <servers />
   </component>
@@ -546,10 +544,10 @@
           <line>112</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="4522" />
+              <option value="4525" />
             </startOffsets>
             <endOffsets>
-              <option value="4558" />
+              <option value="4561" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="125" />
@@ -2223,10 +2221,10 @@
           <line>60</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" containingFunctionPresentation="Method 'ValidateUser'">
             <startOffsets>
-              <option value="2337" />
+              <option value="2340" />
             </startOffsets>
             <endOffsets>
-              <option value="2389" />
+              <option value="2392" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="395" />
