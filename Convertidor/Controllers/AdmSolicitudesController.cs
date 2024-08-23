@@ -38,7 +38,7 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
             ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
-           /* var conectado = await _sisUsuarioRepository.GetConectado();
+           var conectado = await _sisUsuarioRepository.GetConectado();
 
             Console.WriteLine(conectado);
             var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.View);
@@ -48,7 +48,7 @@ namespace Convertidor.Controllers
                 result.IsValid = false;
                 result.Message = $"{userValid.Message} Usuario:{conectado.Usuario} {conectado.Empresa}";
                 return Ok(result);
-            }*/
+            }
             
             result = await _service.GetByPresupuesto(filter);
             return Ok(result);
