@@ -29,6 +29,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<CAT_AVALUO_CONSTRUCCION> GetByCodigo(int codigoAvaluoConstruccion)
+        {
+            try
+            {
+
+                var result = await _context.CAT_AVALUO_CONSTRUCCION.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_AVALUO_CONSTRUCCION == codigoAvaluoConstruccion)
+                    .FirstOrDefaultAsync();
+                return (CAT_AVALUO_CONSTRUCCION)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CAT_AVALUO_CONSTRUCCION>> Add(CAT_AVALUO_CONSTRUCCION entity)
         {
             ResultDto<CAT_AVALUO_CONSTRUCCION> result = new ResultDto<CAT_AVALUO_CONSTRUCCION>(null);
@@ -60,6 +79,57 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<ResultDto<CAT_AVALUO_CONSTRUCCION>> Update(CAT_AVALUO_CONSTRUCCION entity)
+        {
+            ResultDto<CAT_AVALUO_CONSTRUCCION> result = new ResultDto<CAT_AVALUO_CONSTRUCCION>(null);
+
+            try
+            {
+                CAT_AVALUO_CONSTRUCCION entityUpdate = await GetByCodigo(entity.CODIGO_AVALUO_CONSTRUCCION);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_AVALUO_CONSTRUCCION.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        public async Task<string> Delete(int codigoAvaluoConstruccion)
+        {
+
+            try
+            {
+                CAT_AVALUO_CONSTRUCCION entity = await GetByCodigo(codigoAvaluoConstruccion);
+                if (entity != null)
+                {
+                    _context.CAT_AVALUO_CONSTRUCCION.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
         public async Task<int> GetNextKey()
         {
             try
