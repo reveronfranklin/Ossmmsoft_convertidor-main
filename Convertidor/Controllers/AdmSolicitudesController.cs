@@ -40,13 +40,13 @@ namespace Convertidor.Controllers
             ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
             var conectado = await _sisUsuarioRepository.GetConectado();
 
-            //conectado.Usuario = 530;
+            Console.WriteLine(conectado);
             var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.View);
             if (userValid.IsValid == false)
             {
                 result.Data = null;
                 result.IsValid = false;
-                result.Message = userValid.Message;
+                result.Message = $"{userValid.Message} Usuario:{conectado.Usuario} {conectado.Empresa}";
                 return Ok(result);
             }
             
