@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" afterDir="false" />
-    </list>
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,8 +32,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -49,6 +45,7 @@
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/IOssAuthGroupPermissionService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e48b45e431e847a3a9baedf2f6e3277db57e00/7c/8ec2be90/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fa3d0ae320444f1ca3cfc7bae1c2d9ec209800/02/1e054e21/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6518e12429e640b855e84dbcb556279a6dcdecc0f25132fcbc5510f956f771e7/CallSiteFactory.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d1f68ef86315497c7b39ddb155d5cf3ace964abca69857f9943cd58479799/ServiceProvider.cs" root0="SKIP_HIGHLIGHTING" />
@@ -211,7 +208,7 @@
       <workItem from="1724341935441" duration="3585000" />
       <workItem from="1724351374957" duration="15424000" />
       <workItem from="1724427123592" duration="634000" />
-      <workItem from="1724445466142" duration="2546000" />
+      <workItem from="1724445466142" duration="3827000" />
     </task>
     <servers />
   </component>
@@ -544,10 +541,10 @@
           <line>112</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="4525" />
+              <option value="4578" />
             </startOffsets>
             <endOffsets>
-              <option value="4561" />
+              <option value="4614" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="125" />
@@ -2221,10 +2218,10 @@
           <line>60</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" containingFunctionPresentation="Method 'ValidateUser'">
             <startOffsets>
-              <option value="2340" />
+              <option value="2393" />
             </startOffsets>
             <endOffsets>
-              <option value="2392" />
+              <option value="2445" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="395" />
