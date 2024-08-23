@@ -69,8 +69,11 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             try
             {
                 EncabezadoReporteDto result = new EncabezadoReporteDto();
+                
+                await _admSolicitudesRepository.UpdateMontoEnLetras(filter.CodigoSolicitud);
+                
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
-
+    
 
                 
                 result.CodigoSolicitud = solicitud.CODIGO_SOLICITUD;
