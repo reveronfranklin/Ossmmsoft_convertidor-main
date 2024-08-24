@@ -1,12 +1,10 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatAvaluoTerrenoResponseDto
+    public class CatAvaluoTerrenoUpdateDto
     {
         public int CodigoAvaluoTerreno { get; set; }
         public int CodigoFicha { get; set; }
         public DateTime AnoAvaluo { get; set; }
-        public string AnoAvaluoString { get; set; }
-        public FechaDto AnoAvaluoObj { get; set; }
         public int UnidadMedidaId { get; set; }
         public int AreaM2 { get; set; }
         public decimal ValorUnitario { get; set; }

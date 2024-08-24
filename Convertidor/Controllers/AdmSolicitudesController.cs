@@ -2,6 +2,7 @@
 
 // HTML to PDF
 using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Sis;
 using Convertidor.Enum;
 using Convertidor.Services.Adm;
 using Convertidor.Services.Sis;
@@ -37,19 +38,44 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
             ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
-            var conectado = await _sisUsuarioRepository.GetConectado();
+           var conectado = await _sisUsuarioRepository.GetConectado();
+
+            Console.WriteLine(conectado);
             var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.View);
             if (userValid.IsValid == false)
             {
                 result.Data = null;
                 result.IsValid = false;
-                result.Message = userValid.Message;
+                result.Message = $"{userValid.Message} Usuario:{conectado.Usuario} {conectado.Empresa}";
                 return Ok(result);
             }
+            
             result = await _service.GetByPresupuesto(filter);
             return Ok(result);
         }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> ValidateUser(ValidateUserDto filter)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
 
+            //conectado.Usuario = 530;
+            var userValid = await _authModelUserServices.ValidUserModel(filter.Usuario, filter.Model,filter.Action);
+            if (userValid.IsValid == false)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }
+            
+            result = userValid;
+            return Ok(result);
+        }
+        
+        
         
         [HttpPost]
         [Route("[action]")]
