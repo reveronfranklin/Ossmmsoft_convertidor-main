@@ -76,6 +76,28 @@ namespace Convertidor.Data.Repository.Catastro
             }
 
         }
+
+        public async Task<string> Delete(int codigoAvaluoTerreno)
+        {
+
+            try
+            {
+                CAT_AVALUO_TERRENO entity = await GetByCodigo(codigoAvaluoTerreno);
+                if (entity != null)
+                {
+                    _context.CAT_AVALUO_TERRENO.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
         public async Task<ResultDto<CAT_AVALUO_TERRENO>> Add(CAT_AVALUO_TERRENO entity)
         {
             ResultDto<CAT_AVALUO_TERRENO> result = new ResultDto<CAT_AVALUO_TERRENO>(null);

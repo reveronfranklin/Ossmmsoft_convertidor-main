@@ -7,5 +7,6 @@ namespace Convertidor.Services.Catastro
         Task<ResultDto<List<CatAvaluoTerrenoResponseDto>>> GetAll();
         Task<ResultDto<CatAvaluoTerrenoResponseDto>> Create(CatAvaluoTerrenoUpdateDto dto);
         Task<ResultDto<CatAvaluoTerrenoResponseDto>> Update(CatAvaluoTerrenoUpdateDto dto);
+        Task<ResultDto<CatAvaluoTerrenoDeleteDto>> Delete(CatAvaluoTerrenoDeleteDto dto);
     }
 }
