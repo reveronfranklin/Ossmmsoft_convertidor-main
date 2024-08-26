@@ -230,6 +230,7 @@ builder.Services.AddTransient<ICatArrendamientosInmueblesRepository, CatArrendam
 builder.Services.AddTransient<ICatAuditoriaRepository, CatAuditoriaRepository>();
 builder.Services.AddTransient<ICatAvaluoConstruccionRepository, CatAvaluoConstruccionRepository>();
 builder.Services.AddTransient<ICatAvaluoTerrenoRepository, CatAvaluoTerrenoRepository>();
+builder.Services.AddTransient<ICatCalcXTriangulacionRepository, CatCalcXTriangulacionRepository>();
 
 
 //CATASTRO Services
@@ -240,6 +241,7 @@ builder.Services.AddTransient<ICatArrendamientosInmueblesService, CatArrendamien
 builder.Services.AddTransient<ICatAuditoriaService, CatAuditoriaService>();
 builder.Services.AddTransient<ICatAvaluoConstruccionService, CatAvaluoConstruccionService>();
 builder.Services.AddTransient<ICatAvaluoTerrenoService, CatAvaluoTerrenoService>();
+builder.Services.AddTransient<ICatCalcXTriangulacionService, CatCalcXTriangulacionService>();
 
 
 //RH
