@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Catastro
         Task<CAT_CALC_X_TRIANGULACION> GetByCodigo(int codigoTriangulacion);
         Task<ResultDto<CAT_CALC_X_TRIANGULACION>> Add(CAT_CALC_X_TRIANGULACION entity);
         Task<ResultDto<CAT_CALC_X_TRIANGULACION>> Update(CAT_CALC_X_TRIANGULACION entity);
+        Task<string> Delete(int codigoTriangulacion);
         Task<int> GetNextKey();
     }
 }

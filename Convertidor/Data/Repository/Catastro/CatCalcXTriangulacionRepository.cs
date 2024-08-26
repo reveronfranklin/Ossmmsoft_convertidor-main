@@ -108,6 +108,29 @@ namespace Convertidor.Data.Repository.Catastro
             }
 
         }
+
+
+        public async Task<string> Delete(int codigoTriangulacion)
+        {
+
+            try
+            {
+                CAT_CALC_X_TRIANGULACION entity = await GetByCodigo(codigoTriangulacion);
+                if (entity != null)
+                {
+                    _context.CAT_CALC_X_TRIANGULACION.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
         public async Task<int> GetNextKey()
         {
             try

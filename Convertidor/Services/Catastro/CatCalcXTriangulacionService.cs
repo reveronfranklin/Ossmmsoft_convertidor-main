@@ -643,5 +643,52 @@ namespace Convertidor.Services.Catastro
 
         }
 
+        public async Task<ResultDto<CatCalcXTriangulacionDeleteDto>> Delete(CatCalcXTriangulacionDeleteDto dto)
+        {
+
+            ResultDto<CatCalcXTriangulacionDeleteDto> result = new ResultDto<CatCalcXTriangulacionDeleteDto>(null);
+            try
+            {
+
+                var catCalcXTriangulacion = await _repository.GetByCodigo(dto.CodigoTriangulacion);
+                if (catCalcXTriangulacion == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Calc X Triangulacion no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoTriangulacion);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }
