@@ -5,11 +5,11 @@
         public int CODIGO_TRIANGULACION { get; set; }
         public int CODIGO_FICHA { get; set; }
         public int CODIGO_AVALUO_CONSTRUCCION { get; set; }
-        public int CATETO_A { get; set; }
-        public int CATETO_B { get; set; }
-        public int CATETO_C { get; set; }
-        public int AREA_PARCIAL { get; set; }
-        public int AREA_COMPLEMENTARIA { get; set; }
+        public decimal CATETO_A { get; set; }
+        public decimal CATETO_B { get; set; }
+        public decimal CATETO_C { get; set; }
+        public decimal AREA_PARCIAL { get; set; }
+        public decimal AREA_COMPLEMENTARIA { get; set; }
         public string OBSERVACIONES { get; set; } = string.Empty;
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;

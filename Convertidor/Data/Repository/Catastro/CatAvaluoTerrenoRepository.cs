@@ -47,6 +47,36 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<ResultDto<CAT_AVALUO_TERRENO>> Add(CAT_AVALUO_TERRENO entity)
+        {
+            ResultDto<CAT_AVALUO_TERRENO> result = new ResultDto<CAT_AVALUO_TERRENO>(null);
+            try
+            {
+
+
+
+                await _context.CAT_AVALUO_TERRENO.AddAsync(entity);
+                await _context.SaveChangesAsync();
+
+
+                result.Data = entity;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+
+
+        }
         public async Task<ResultDto<CAT_AVALUO_TERRENO>> Update(CAT_AVALUO_TERRENO entity)
         {
             ResultDto<CAT_AVALUO_TERRENO> result = new ResultDto<CAT_AVALUO_TERRENO>(null);
@@ -98,36 +128,7 @@ namespace Convertidor.Data.Repository.Catastro
 
 
         }
-        public async Task<ResultDto<CAT_AVALUO_TERRENO>> Add(CAT_AVALUO_TERRENO entity)
-        {
-            ResultDto<CAT_AVALUO_TERRENO> result = new ResultDto<CAT_AVALUO_TERRENO>(null);
-            try
-            {
-
-
-
-                await _context.CAT_AVALUO_TERRENO.AddAsync(entity);
-                await _context.SaveChangesAsync();
-
-
-                result.Data = entity;
-                result.IsValid = true;
-                result.Message = "";
-                return result;
-
-
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-                return result;
-            }
-
-
-
-        }
+        
 
         public async Task<int> GetNextKey()
         {

@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatCalcXTriangulacionResponseDto
+    public class CatCalcXTriangulacionUpdateDto
     {
         public int CodigoTriangulacion { get; set; }
         public int CodigoFicha { get; set; }
