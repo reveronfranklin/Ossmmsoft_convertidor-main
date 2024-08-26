@@ -25,6 +25,8 @@ namespace Convertidor.Data
         public DbSet<CAT_AUDITORIA> CAT_AUDITORIA { get; set; }
         public DbSet<CAT_AVALUO_CONSTRUCCION> CAT_AVALUO_CONSTRUCCION { get; set; }
         public DbSet<CAT_AVALUO_TERRENO> CAT_AVALUO_TERRENO { get; set; }
+        public DbSet<CAT_CALC_X_TRIANGULACION> CAT_CALC_X_TRIANGULACION { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -131,10 +133,21 @@ namespace Convertidor.Data
                      builder.ToTable("CAT_AVALUO_TERRENO");
                  });
 
+            modelBuilder
+                .Entity<CAT_CALC_X_TRIANGULACION>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_TRIANGULACION,
+
+                    });
+                    builder.ToTable("CAT_CALC_X_TRIANGULACION");
+                });
+
             
         }
 
-
+        
 
     }
 }

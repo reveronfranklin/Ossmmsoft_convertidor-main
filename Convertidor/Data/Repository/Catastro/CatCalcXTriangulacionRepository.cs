@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Catastro
 {
-    public class CatAvaluoTerrenoRepository : ICatAvaluoTerrenoRepository
+    public class CatCalcXTriangulacionRepository : ICatCalcXTriangulacionRepository
     {
         private readonly DataContextCat _context;
 
-        public CatAvaluoTerrenoRepository(DataContextCat context)
+        public CatCalcXTriangulacionRepository(DataContextCat context)
         {
             _context = context;
         }
 
-        public async Task<List<CAT_AVALUO_TERRENO>> GetAll()
+        public async Task<List<CAT_CALC_X_TRIANGULACION>> GetAll()
         {
             try
             {
-                var result = await _context.CAT_AVALUO_TERRENO.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CAT_CALC_X_TRIANGULACION.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -28,15 +28,16 @@ namespace Convertidor.Data.Repository.Catastro
             }
 
         }
-        public async Task<CAT_AVALUO_TERRENO> GetByCodigo(int codigoAvaluoTerreno)
+
+        public async Task<CAT_CALC_X_TRIANGULACION> GetByCodigo(int codigoTriangulacion)
         {
             try
             {
 
-                var result = await _context.CAT_AVALUO_TERRENO.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_AVALUO_TERRENO == codigoAvaluoTerreno)
+                var result = await _context.CAT_CALC_X_TRIANGULACION.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_TRIANGULACION == codigoTriangulacion)
                     .FirstOrDefaultAsync();
-                return (CAT_AVALUO_TERRENO)result!;
+                return (CAT_CALC_X_TRIANGULACION)result!;
 
             }
             catch (Exception ex)
@@ -47,15 +48,15 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<ResultDto<CAT_AVALUO_TERRENO>> Add(CAT_AVALUO_TERRENO entity)
+        public async Task<ResultDto<CAT_CALC_X_TRIANGULACION>> Add(CAT_CALC_X_TRIANGULACION entity)
         {
-            ResultDto<CAT_AVALUO_TERRENO> result = new ResultDto<CAT_AVALUO_TERRENO>(null);
+            ResultDto<CAT_CALC_X_TRIANGULACION> result = new ResultDto<CAT_CALC_X_TRIANGULACION>(null);
             try
             {
 
 
 
-                await _context.CAT_AVALUO_TERRENO.AddAsync(entity);
+                await _context.CAT_CALC_X_TRIANGULACION.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -77,18 +78,19 @@ namespace Convertidor.Data.Repository.Catastro
 
 
         }
-        public async Task<ResultDto<CAT_AVALUO_TERRENO>> Update(CAT_AVALUO_TERRENO entity)
+
+        public async Task<ResultDto<CAT_CALC_X_TRIANGULACION>> Update(CAT_CALC_X_TRIANGULACION entity)
         {
-            ResultDto<CAT_AVALUO_TERRENO> result = new ResultDto<CAT_AVALUO_TERRENO>(null);
+            ResultDto<CAT_CALC_X_TRIANGULACION> result = new ResultDto<CAT_CALC_X_TRIANGULACION>(null);
 
             try
             {
-                CAT_AVALUO_TERRENO entityUpdate = await GetByCodigo(entity.CODIGO_AVALUO_TERRENO);
+                CAT_CALC_X_TRIANGULACION entityUpdate = await GetByCodigo(entity.CODIGO_TRIANGULACION);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.CAT_AVALUO_TERRENO.Update(entity);
+                    _context.CAT_CALC_X_TRIANGULACION.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -107,15 +109,16 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<string> Delete(int codigoAvaluoTerreno)
+
+        public async Task<string> Delete(int codigoTriangulacion)
         {
 
             try
             {
-                CAT_AVALUO_TERRENO entity = await GetByCodigo(codigoAvaluoTerreno);
+                CAT_CALC_X_TRIANGULACION entity = await GetByCodigo(codigoTriangulacion);
                 if (entity != null)
                 {
-                    _context.CAT_AVALUO_TERRENO.Remove(entity);
+                    _context.CAT_CALC_X_TRIANGULACION.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -128,15 +131,13 @@ namespace Convertidor.Data.Repository.Catastro
 
 
         }
-        
-
         public async Task<int> GetNextKey()
         {
             try
             {
                 int result = 0;
-                var last = await _context.CAT_AVALUO_TERRENO.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_AVALUO_TERRENO)
+                var last = await _context.CAT_CALC_X_TRIANGULACION.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_TRIANGULACION)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -144,7 +145,7 @@ namespace Convertidor.Data.Repository.Catastro
                 }
                 else
                 {
-                    result = last.CODIGO_AVALUO_TERRENO + 1;
+                    result = last.CODIGO_TRIANGULACION + 1;
                 }
 
                 return (int)result!;
