@@ -10,12 +10,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CatAvaluoTerrenoController : ControllerBase
+    public class CatCalcXTriangulacionController : ControllerBase
     {
        
-        private readonly ICatAvaluoTerrenoService _service;
+        private readonly ICatCalcXTriangulacionService _service;
 
-        public CatAvaluoTerrenoController(ICatAvaluoTerrenoService service)
+        public CatCalcXTriangulacionController(ICatCalcXTriangulacionService service)
         {
 
             _service = service;
@@ -34,7 +34,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(CatAvaluoTerrenoUpdateDto dto)
+        public async Task<IActionResult> Create(CatCalcXTriangulacionUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -42,7 +42,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(CatAvaluoTerrenoUpdateDto dto)
+        public async Task<IActionResult> Update(CatCalcXTriangulacionUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -50,7 +50,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(CatAvaluoTerrenoDeleteDto dto)
+        public async Task<IActionResult> Delete(CatCalcXTriangulacionDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
