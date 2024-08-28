@@ -9,8 +9,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmOrdenPagoResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmOrdenPagoResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +38,12 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -212,7 +220,12 @@
       <workItem from="1724341935441" duration="3585000" />
       <workItem from="1724351374957" duration="15424000" />
       <workItem from="1724427123592" duration="634000" />
-      <workItem from="1724445466142" duration="6738000" />
+      <workItem from="1724445466142" duration="16117000" />
+      <workItem from="1724706726231" duration="2198000" />
+      <workItem from="1724717747870" duration="1155000" />
+      <workItem from="1724724077451" duration="937000" />
+      <workItem from="1724780825800" duration="1053000" />
+      <workItem from="1724798844093" duration="2715000" />
     </task>
     <servers />
   </component>
@@ -1361,19 +1374,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
-          <line>43</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'GetListICP'">
-            <startOffsets>
-              <option value="980" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1017" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="281" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
           <line>51</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'GetByListIcp'">
             <startOffsets>
@@ -1410,19 +1410,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="287" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>436</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GetByListIcp'">
-            <startOffsets>
-              <option value="19643" />
-            </startOffsets>
-            <endOffsets>
-              <option value="19684" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="288" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
@@ -1582,13 +1569,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs</url>
-          <line>287</line>
+          <line>299</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" containingFunctionPresentation="Method 'GetByPresupuesto'">
             <startOffsets>
-              <option value="11970" />
+              <option value="12809" />
             </startOffsets>
             <endOffsets>
-              <option value="11999" />
+              <option value="12838" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="315" />
@@ -2268,6 +2255,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="398" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/ReporteCompromisoPresupuestarioController.cs</url>
+          <line>38</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/ReporteCompromisoPresupuestarioController.cs" containingFunctionPresentation="Method 'ReportData'">
+            <startOffsets>
+              <option value="1233" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1280" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="402" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

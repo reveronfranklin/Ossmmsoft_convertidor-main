@@ -27,9 +27,27 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
-      
+
+        public string GetDenominacionDescriptiva(List<ADM_DESCRIPTIVAS> descriptivas , int id)
+        {
+            string result = "";
+            
+            var descriptivaTipoOrdenPago =
+                descriptivas.Where(x => x.DESCRIPCION_ID == id).FirstOrDefault();
+            if (descriptivaTipoOrdenPago != null)
+            {
+                result = descriptivaTipoOrdenPago.DESCRIPCION;
+            }
+
+            return result;
+        }
+        
         public async Task<AdmOrdenPagoResponseDto> MapOrdenPagoDto(ADM_ORDEN_PAGO dtos)
         {
+
+            var descriptivas = await _admDescriptivaRepository.GetAll();
+            
+            
             AdmOrdenPagoResponseDto itemResult = new AdmOrdenPagoResponseDto();
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.ANO = dtos.ANO;
@@ -43,7 +61,7 @@ namespace Convertidor.Services.Adm
             itemResult.FechaOrdenPagoString =Fecha.GetFechaString(dtos.FECHA_ORDEN_PAGO);
             FechaDto fechaOrdenPagoObj = Fecha.GetFechaDto(dtos.FECHA_ORDEN_PAGO);
             itemResult.FechaOrdenPagoObj = (FechaDto)fechaOrdenPagoObj;
-            itemResult.TipoOrdenPagoId = dtos.TIPO_ORDEN_PAGO_ID;
+         
             itemResult.FechaPlazoDesde = dtos.FECHA_PLAZO_DESDE;
             itemResult.FechaPlazoDesdeString = Fecha.GetFechaString(dtos.FECHA_PLAZO_DESDE);
             FechaDto fechaPlazoDesdeObj = Fecha.GetFechaDto(dtos.FECHA_PLAZO_DESDE);
@@ -54,26 +72,16 @@ namespace Convertidor.Services.Adm
             itemResult.FechaPlazoHastaObj = (FechaDto)fechaPlazoHastaObj;
             itemResult.CantidadPago = dtos.CANTIDAD_PAGO;
             itemResult.NumeroPago = dtos.NUMERO_PAGO;
+            itemResult.TipoOrdenPagoId = dtos.TIPO_ORDEN_PAGO_ID;
+            itemResult.DescripcionTipoOrdenPago = GetDenominacionDescriptiva(descriptivas , dtos.TIPO_ORDEN_PAGO_ID);
             itemResult.FrecuenciaPagoId = dtos.FRECUENCIA_PAGO_ID;
+            itemResult.DescripcionFrecuencia = GetDenominacionDescriptiva(descriptivas ,(int)dtos.FRECUENCIA_PAGO_ID);
             itemResult.TipoPagoId = dtos.TIPO_PAGO_ID;
+            itemResult.DescripcionTipoPago = GetDenominacionDescriptiva(descriptivas ,(int)dtos.TIPO_PAGO_ID);
             itemResult.NumeroValuacion = dtos.NUMERO_VALUACION;
             itemResult.Status = dtos.STATUS;
             itemResult.Motivo = dtos.MOTIVO;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
-            itemResult.Extra4 = dtos.EXTRA4;
-            itemResult.Extra5 = dtos.EXTRA5;
-            itemResult.Extra6 = dtos.EXTRA6;
-            itemResult.Extra1 = dtos.EXTRA7;
-            itemResult.Extra2 = dtos.EXTRA8;
-            itemResult.Extra3 = dtos.EXTRA10;
-            itemResult.Extra1 = dtos.EXTRA11;
-            itemResult.Extra2 = dtos.EXTRA12;
-            itemResult.Extra3 = dtos.EXTRA13;
-            itemResult.Extra2 = dtos.EXTRA14;
-            itemResult.Extra3 = dtos.EXTRA15;
             itemResult.NumeroComprobante = dtos.NUMERO_COMPROBANTE;
             itemResult.FechaComprobante = dtos.FECHA_COMPROBANTE;
             itemResult.FechaComprobanteString = Fecha.GetFechaString(dtos.FECHA_COMPROBANTE);

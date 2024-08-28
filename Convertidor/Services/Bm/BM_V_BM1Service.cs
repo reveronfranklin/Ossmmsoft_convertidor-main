@@ -425,12 +425,12 @@ namespace Convertidor.Services.Bm
 
                 } 
                 var fileName = $"";
-                var _env = "development";
+               // var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
                 var destino = @settings.ExcelFiles;
-              
-                destino = $"{destino}/placas.pdf";
+                var separatorPatchSeparatorPatch = @settings.SeparatorPatch;
+                destino = $"{destino}{separatorPatchSeparatorPatch}placas.pdf";
                 File.Delete(destino);
                 if (listIcpSeleccionado.Count > 0)
                 {
@@ -599,7 +599,7 @@ namespace Convertidor.Services.Bm
 
                 Table _table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
                 
-                var _env = "development";
+               // var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
                 var pathLogo = @settings.BmFiles;
@@ -714,7 +714,7 @@ namespace Convertidor.Services.Bm
             {
 
                 Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
-                var _env = "development";
+               // var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
                 var pathLogo = @settings.BmFiles;
@@ -821,7 +821,7 @@ namespace Convertidor.Services.Bm
 
                                         );
 
-            var _env = "development";
+            //var _env = "development";
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             
             var pathFont = $"{settings.BmFiles + ("arial.ttf")}";
@@ -996,13 +996,13 @@ namespace Convertidor.Services.Bm
 
             try
             {
-                var _env = "development";
+               // var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
 
                 var destino = @settings.ExcelFiles;
                 FileInfo file = new FileInfo(destino);
                 file.Directory.Create();
-                destino = $"{destino}/placas.pdf";
+                destino = $"{destino}{settings.SeparatorPatch}placas.pdf";
 
                 //var bienes = await _bM_V_BM1Service.GetAll();
                 
