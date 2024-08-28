@@ -4,7 +4,6 @@
     {
 
         public int CodigoOrdenPago { get; set; }
-        #nullable enable
         public int? ANO { get; set; }
         public int? CodigoCompromiso { get; set; }
         public int? CodigoOrdenCompra { get; set; }
@@ -16,6 +15,7 @@
         public string? FechaOrdenPagoString { get; set; }= string.Empty;
         public FechaDto? FechaOrdenPagoObj { get; set; }
         public int TipoOrdenPagoId { get; set; }
+        public string DescripcionTipoOrdenPago { get; set; }= string.Empty;
         public DateTime FechaPlazoDesde { get; set; }
         public string? FechaPlazoDesdeString { get; set; }
         public FechaDto? FechaPlazoDesdeObj { get; set; }
@@ -25,27 +25,15 @@
         public int? CantidadPago { get; set; }
         public int? NumeroPago { get; set; }
         public int? FrecuenciaPagoId { get; set; }
+        
+        public string DescripcionFrecuencia { get; set; }= string.Empty;
         public int? TipoPagoId { get; set; }
+        public string DescripcionTipoPago { get; set; }= string.Empty;
         public int? NumeroValuacion { get; set; }
         public string? Status { get; set; } = string.Empty;
         public string Motivo { get; set; } = string.Empty;
-     
-        public string? Extra1 { get; set; } = string.Empty;
-        public string? Extra2 { get; set; } = string.Empty;
-        public string? Extra3 { get; set; } = string.Empty;
+        
         public int CodigoPresupuesto { get; set; }
-        public string? Extra4 { get; set; } = string.Empty;
-        public string? Extra5 { get; set; } = string.Empty;
-        public string? Extra6 { get; set; } = string.Empty;
-        public string? Extra7 { get; set; } = string.Empty;
-        public string Extra8 { get; set; } = string.Empty;
-        public string? Extra9 { get; set; } = string.Empty;
-        public string Extra10 { get; set; } = string.Empty;
-        public string? Extra11 { get; set; } = string.Empty;
-        public string? Extra12 { get; set; } = string.Empty;
-        public string? Extra13 { get; set; } = string.Empty;
-        public string? Extra14 { get; set; } = string.Empty;
-        public string? Extra15 { get; set; } = string.Empty;
         public decimal? NumeroComprobante { get; set; }
         public DateTime FechaComprobante { get; set; }
         public string FechaComprobanteString { get; set; }

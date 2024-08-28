@@ -232,6 +232,7 @@ builder.Services.AddTransient<ICatAvaluoConstruccionRepository, CatAvaluoConstru
 builder.Services.AddTransient<ICatAvaluoTerrenoRepository, CatAvaluoTerrenoRepository>();
 builder.Services.AddTransient<ICatCalcXTriangulacionRepository, CatCalcXTriangulacionRepository>();
 builder.Services.AddTransient<ICatControlParcelasRepository, CatControlParcelasRepository>();
+builder.Services.AddTransient<ICAT_UBICACION_NACRepository, CAT_UBICACION_NACRepository>();
 
 
 //CATASTRO Services
@@ -244,6 +245,7 @@ builder.Services.AddTransient<ICatAvaluoConstruccionService, CatAvaluoConstrucci
 builder.Services.AddTransient<ICatAvaluoTerrenoService, CatAvaluoTerrenoService>();
 builder.Services.AddTransient<ICatCalcXTriangulacionService, CatCalcXTriangulacionService>();
 builder.Services.AddTransient<ICatControlParcelasService, CatControlParcelasService>();
+builder.Services.AddTransient<ICAT_UBICACION_NACService, CAT_UBICACION_NACService>();
 
 
 //RH

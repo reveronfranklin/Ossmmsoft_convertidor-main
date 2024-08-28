@@ -213,8 +213,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var totalRegistros = 0;
                 var totalPage = 0;
               
-                List<PRE_COMPROMISOS> pageData;
-                if (filter.SearchText.Length > 0)
+                List<PRE_COMPROMISOS> pageData = new List<PRE_COMPROMISOS>();
+                if (filter.SearchText.Length > 0 && filter.Status.Length>0)
                 {
                     totalRegistros = _context.PRE_COMPROMISOS
                         .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
@@ -229,13 +229,25 @@ namespace Convertidor.Data.Repository.Presupuesto
                         .Take(filter.PageSize)
                         .ToListAsync();
                 }
-                else
+                if (filter.SearchText.Length == 0 && filter.Status.Length>0)
                 {
                     totalRegistros = _context.PRE_COMPROMISOS.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.STATUS==filter.Status).Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     pageData = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
                         .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.STATUS==filter.Status)
+                        .OrderByDescending(x => x.FECHA_COMPROMISO)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                if (filter.SearchText.Length == 0 && filter.Status.Length==0)
+                {
+                    totalRegistros = _context.PRE_COMPROMISOS.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto ).Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    pageData = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  )
                         .OrderByDescending(x => x.FECHA_COMPROMISO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
