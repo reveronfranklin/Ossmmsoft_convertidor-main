@@ -70,11 +70,16 @@ namespace Convertidor.Data.Repository.Presupuesto
                 FormattableString xqueryAnulaSolicitud =  $"UPDATE ADM.ADM_PUC_SOLICITUD SET MONTO_COMPROMETIDO = MONTO,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE WHERE CODIGO_SOLICITUD = {codigoSolicitud}";
                 var resultXqueryAnulaSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryAnulaSolicitud);
                 
-                FormattableString xqueryPrePucCompromiso = $"UPDATE PRE.PRE_PUC_COMPROMISOS SET MONTO_ANULADO = MONTO,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE WHERE CODIGO_COMPROMISO = {codigoCompromiso}";
-                var resultAdmPucSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryPrePucCompromiso);
-                
-                FormattableString xqueryPreDetalleCompromiso = $"UPDATE PRE.PRE_DETALLE_COMPROMISOS SET CANTIDAD_ANULADA =  CANTIDAD,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATEWHERE CODIGO_COMPROMISO = {codigoCompromiso}";
+             
+                FormattableString xqueryPreDetalleCompromiso = $"UPDATE PRE.PRE_DETALLE_COMPROMISOS SET CANTIDAD_ANULADA =  CANTIDAD,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE WHERE CODIGO_COMPROMISO = {codigoCompromiso}";
                 var resultPreDetalleCompromiso = _context.Database.ExecuteSqlInterpolated(xqueryPreDetalleCompromiso);
+
+                
+                FormattableString xqueryPrePucCompromiso = $"UPDATE PRE.PRE_PUC_COMPROMISOS SET MONTO_ANULADO = MONTO,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE WHERE EXISTS (SELECT * FROM PRE.PRE_DETALLE_COMPROMISOS WHERE CODIGO_COMPROMISO= {codigoCompromiso} AND  PRE.PRE_DETALLE_COMPROMISOS.CODIGO_DETALLE_COMPROMISO = PRE.PRE_PUC_COMPROMISOS.CODIGO_DETALLE_COMPROMISO)";
+                var resultAdmPucSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryPrePucCompromiso);
+
+                FormattableString xqueryAnulaCompromiso =  $"UPDATE PRE.PRE_COMPROMISOS SET STATUS='AN' ,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_COMPROMISO = {codigoCompromiso}";
+                var resultXqueryAnulaCompromiso = _context.Database.ExecuteSqlInterpolated(xqueryAnulaCompromiso);
 
                 
                 return "";
@@ -258,7 +263,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 foreach (var item in pageData)
                 {
                     PreCompromisosResponseDto itemData = new PreCompromisosResponseDto();
-                    itemData.CodigoCompromiso = item.CODIGO_SOLICITUD;
+                    itemData.CodigoCompromiso = item.CODIGO_COMPROMISO;
                     itemData.Ano = presupuesto.ANO;
                     itemData.CodigoSolicitud = item.CODIGO_SOLICITUD;
                     itemData.NumeroCompromiso = item.NUMERO_COMPROMISO;

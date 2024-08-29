@@ -3,8 +3,8 @@
     public class CAT_CONTROL_PARCELAS
     {
         public int CODIGO_CONTROL_PARCELA { get; set; }
-        public int CODIGO_CATASTRO { get; set; }
-        public int CODIGO_VIEJO_CAT { get; set; }
+        public string CODIGO_CATASTRO { get; set; } = string.Empty;
+        public string CODIGO_VIEJO_CAT { get; set; } = string.Empty;
         public int CODIGO_CONTRIBUYENTE { get; set; }
         public int CODIGO_UBICACION_NAC { get; set; }
         public int CODIGO_EMPRESA { get; set; }

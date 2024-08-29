@@ -128,7 +128,7 @@ namespace Convertidor.Services.Catastro
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                if (dto.CodigoCatastro <= 0)
+                if (dto.CodigoCatastro.Length > 30)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -136,7 +136,7 @@ namespace Convertidor.Services.Catastro
                     return result;
                 }
 
-                if (dto.CodigoViejoCat <= 0)
+                if (dto.CodigoViejoCat.Length > 20)
                 {
 
                     result.Data = null;
@@ -489,6 +489,441 @@ namespace Convertidor.Services.Catastro
             return result;
         }
 
+        public async Task<ResultDto<CatControlParcelasResponseDto>> Update(CatControlParcelasUpdateDto dto)
+        {
+
+            ResultDto<CatControlParcelasResponseDto> result = new ResultDto<CatControlParcelasResponseDto>(null);
+            try
+            {
+
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoControlParcela = await _repository.GetByCodigo(dto.CodigoControlParcela);
+
+             
+
+                if (codigoControlParcela == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo control Parcela Invalido";
+                    return result;
+
+                }
+
+                var codigoCatastro = Convert.ToInt32(dto.CodigoCatastro);
+                if(codigoCatastro <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo catastro Invalido ";
+                    return result;
+
+                }
+
+                if (dto.CodigoCatastro.Length > 30)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo catastro Invalido ";
+                    return result;
+                }
+
+                var codigoViejoCatastro = Convert.ToInt32(dto.CodigoViejoCat);
+                if (codigoViejoCatastro <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo viejo catastro Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoViejoCat.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo viejo catastro Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoContribuyente <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo contribuyente Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoUbicacionNac <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Ubicacion Nacional Invalido";
+                    return result;
+
+                }
+
+                var pais = await _cAT_UBICACION_NACService.GetPais(dto.PaisId);
+
+                if (pais is null)
+                {
+                    pais.Id = dto.PaisId;
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Pais  Invalido";
+                    return result;
+                }
+
+                var estado = await _cAT_UBICACION_NACService.GetEstado(dto.PaisId, dto.EntidadId);
+                if (estado is null)
+                {
+                    estado.Id = dto.EntidadId;
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estado Invalido";
+                    return result;
+                }
+
+                var municipio = await _cAT_UBICACION_NACService.GetMunicipio(dto.PaisId, dto.EntidadId, dto.MunicipioId);
+                if (municipio is null)
+                {
+                    municipio.Id = dto.MunicipioId;
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Municipio Invalido";
+                    return result;
+                }
+
+                var ciudad = await _cAT_UBICACION_NACService.GetCiudad(dto.PaisId, dto.EntidadId, dto.MunicipioId, dto.AmbitoId);
+                if (ciudad is null)
+                {
+                    ciudad.Id = dto.AmbitoId;
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Ciudad Invalida";
+                    return result;
+                }
+
+                var parroquia = await _cAT_UBICACION_NACService.GetParroquia(dto.PaisId, dto.EntidadId, dto.MunicipioId,
+                    dto.AmbitoId, dto.ParroquiaId);
+                if (parroquia is null)
+                {
+                    parroquia.Id = dto.ParroquiaId;
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Parroquia Invalida";
+                    return result;
+                }
+
+                var sector = await _cAT_UBICACION_NACService.GetSector(dto.PaisId, dto.EntidadId, dto.MunicipioId,
+                    dto.AmbitoId, dto.ParroquiaId, dto.SectorId);
+                if (sector is null)
+                {
+                    sector.Id = dto.SectorId;
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Sector Invalido";
+                    return result;
+                }
+
+                if (dto.Observacion.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Observacion Invalida";
+                    return result;
+
+                }
+
+                if (dto.NumeroControl.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Numero Control Invalido";
+                    return result;
+
+                }
+
+                if (dto.AreaParcela < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Parcela Invalida";
+                    return result;
+
+                }
+
+                if (dto.FrenteParcela < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Frente Parcela Invalida";
+                    return result;
+
+                }
+
+                if (dto.FrenteTipo < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Frente Tipo Invalida";
+                    return result;
+
+                }
+
+                if (dto.AreaTipo < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Tipo Invalida";
+                    return result;
+
+                }
+
+                if (dto.TipoTransaccion.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Invalida";
+                    return result;
+
+                }
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra4 is not null && dto.Extra4.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra4 Invalido";
+                    return result;
+                }
+                if (dto.Extra5 is not null && dto.Extra5.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra5 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra6 is not null && dto.Extra6.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra6 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra7 is not null && dto.Extra7.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra7 Invalido";
+                    return result;
+                }
+                if (dto.Extra8 is not null && dto.Extra8.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra8 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra9 is not null && dto.Extra9.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra9 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra10 is not null && dto.Extra10.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra10 Invalido";
+                    return result;
+                }
+                if (dto.Extra11 is not null && dto.Extra11.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra11 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra12 is not null && dto.Extra12.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra12 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra13 is not null && dto.Extra13.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra13 Invalido";
+                    return result;
+                }
+                if (dto.Extra14 is not null && dto.Extra14.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra14 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra15 is not null && dto.Extra15.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra15 Invalido";
+                    return result;
+                }
+
+
+                codigoControlParcela.CODIGO_CONTROL_PARCELA = dto.CodigoControlParcela;
+                codigoControlParcela.CODIGO_CATASTRO = dto.CodigoCatastro;
+                codigoControlParcela.CODIGO_VIEJO_CAT = dto.CodigoViejoCat;
+                codigoControlParcela.CODIGO_CONTRIBUYENTE = dto.CodigoContribuyente;
+                codigoControlParcela.CODIGO_UBICACION_NAC = dto.CodigoUbicacionNac;
+                codigoControlParcela.PAIS_ID = dto.PaisId;
+                codigoControlParcela.ENTIDAD_ID = dto.EntidadId;
+                codigoControlParcela.MUNICIPIO_ID = dto.MunicipioId;
+                codigoControlParcela.PARROQUIA_ID = dto.ParroquiaId;
+                codigoControlParcela.AMBITO_ID = dto.AmbitoId;
+                codigoControlParcela.SECTOR_ID = dto.SectorId;
+                codigoControlParcela.SUB_SECTOR_ID = dto.SubsectorId;
+                codigoControlParcela.MANZANA_ID = dto.ManzanaId;
+                codigoControlParcela.PARCELA_ID = dto.ParcelaId;
+                codigoControlParcela.SUB_PARCELA_ID = dto.SubParcelaId;
+                codigoControlParcela.OBSERVACION = dto.Observacion;
+                codigoControlParcela.NUMERO_CONTROL = dto.NumeroControl;
+                codigoControlParcela.AREA_PARCELA = dto.AreaParcela;
+                codigoControlParcela.FRENTE_PARCELA = dto.FrenteParcela;
+                codigoControlParcela.FRENTE_TIPO = dto.FrenteTipo;
+                codigoControlParcela.AREA_TIPO = dto.AreaTipo;
+                codigoControlParcela.TIPO_TRANSACCION = dto.TipoTransaccion;
+                codigoControlParcela.EXTRA1 = dto.Extra1;
+                codigoControlParcela.EXTRA2 = dto.Extra2;
+                codigoControlParcela.EXTRA3 = dto.Extra3;
+                codigoControlParcela.EXTRA4 = dto.Extra4;
+                codigoControlParcela.EXTRA5 = dto.Extra5;
+                codigoControlParcela.EXTRA6 = dto.Extra6;
+                codigoControlParcela.EXTRA7 = dto.Extra7;
+                codigoControlParcela.EXTRA8 = dto.Extra8;
+                codigoControlParcela.EXTRA9 = dto.Extra9;
+                codigoControlParcela.EXTRA10 = dto.Extra10;
+                codigoControlParcela.EXTRA11 = dto.Extra11;
+                codigoControlParcela.EXTRA12 = dto.Extra12;
+                codigoControlParcela.EXTRA13 = dto.Extra13;
+                codigoControlParcela.EXTRA14 = dto.Extra14;
+                codigoControlParcela.EXTRA15 = dto.Extra15;
+
+
+                codigoControlParcela.CODIGO_EMPRESA = conectado.Empresa;
+                codigoControlParcela.USUARIO_INS = conectado.Usuario;
+                codigoControlParcela.FECHA_INS = DateTime.Now;
+
+                await _repository.Update(codigoControlParcela);
+                var resultDto = await MapControlParcelas(codigoControlParcela);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+            return result;
+
+
+
+
+        }
+
+        public async Task<ResultDto<CatControlParcelasDeleteDto>> Delete(CatControlParcelasDeleteDto dto)
+        {
+
+            ResultDto<CatControlParcelasDeleteDto> result = new ResultDto<CatControlParcelasDeleteDto>(null);
+            try
+            {
+
+                var codigoControlParcela = await _repository.GetByCodigo(dto.CodigoControlParcela);
+                if (codigoControlParcela == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Control Parcela no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoControlParcela);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
 
     }
 }
