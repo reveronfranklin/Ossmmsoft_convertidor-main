@@ -47,5 +47,7 @@
         public decimal? NUMERO_COMPROBANTE2 { get; set; }
         public decimal? NUMERO_COMPROBANTE3 { get; set; }
         public decimal? NUMERO_COMPROBANTE4 { get; set; }
+        public string? SEARCH_TEXT { get; set; } = string.Empty;
+        
     }
 }

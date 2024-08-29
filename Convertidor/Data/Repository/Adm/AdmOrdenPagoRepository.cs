@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Dtos.Adm;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Adm
@@ -29,19 +30,129 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
-        public async Task<List<ADM_ORDEN_PAGO>> GetAll() 
+         public async Task<string> UpdateSearchText(int codigoPresupuesto)
         {
+
             try
             {
-                var result = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty().ToListAsync();
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_ORDEN_PAGO SET ADM.ADM_ORDEN_PAGO.SEARCH_TEXT =  STATUS || TRIM(MOTIVO) || (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  = ADM.ADM_ORDEN_PAGO.TIPO_ORDEN_PAGO_ID) || (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  = ADM.ADM_ORDEN_PAGO.FRECUENCIA_PAGO_ID) || (SELECT NOMBRE_PROVEEDOR FROM ADM.ADM_PROVEEDORES   WHERE  ADM.ADM_PROVEEDORES.CODIGO_PROVEEDOR  =ADM.ADM_ORDEN_PAGO.CODIGO_PROVEEDOR) || (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  = ADM.ADM_ORDEN_PAGO.TIPO_PAGO_ID) WHERE CODIGO_PRESUPUESTO ={codigoPresupuesto}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
+        public async Task<ResultDto<List<ADM_ORDEN_PAGO>>> GetByPresupuesto(AdmOrdenPagoFilterDto filter) 
+        {
+            ResultDto<List<ADM_ORDEN_PAGO>> result = new ResultDto<List<ADM_ORDEN_PAGO>>(null);
+
+            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageSize == 0) filter.PageSize = 100;
+            if (filter.PageSize >100) filter.PageSize = 100;
+
+            if (string.IsNullOrEmpty(filter.SearchText))
+            {
+                filter.SearchText = "";
+            }
+            if (string.IsNullOrEmpty(filter.Status))
+            {
+                filter.Status = "";
+            }
+            try
+            {
+
+                var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
+                var totalRegistros = 0;
+                var totalPage = 0;
+              
+                List<ADM_ORDEN_PAGO> pageData = new List<ADM_ORDEN_PAGO>();
+                
+                if (filter.Status.Length > 0 && filter.SearchText.Length==0)
+                {
+                    totalRegistros = _context.ADM_ORDEN_PAGO
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS==filter.Status )
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&   x.STATUS==filter.Status )
+                        .OrderByDescending(x => x.NUMERO_ORDEN_PAGO)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                if (filter.Status.Length >  0 && filter.SearchText.Length>0)
+                {
+                    totalRegistros = _context.ADM_ORDEN_PAGO
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&   x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .OrderByDescending(x => x.NUMERO_ORDEN_PAGO)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                if (filter.SearchText.Length > 0 && filter.Status.Length==0)
+                {
+                    totalRegistros = _context.ADM_ORDEN_PAGO
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .OrderByDescending(x => x.NUMERO_ORDEN_PAGO)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                if (filter.SearchText.Length == 0 && filter.Status.Length==0)
+                {
+                    totalRegistros = _context.ADM_ORDEN_PAGO.Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto).Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    pageData = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto)
+                        .OrderByDescending(x => x.NUMERO_ORDEN_PAGO)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+             
+                
+                result.CantidadRegistros = totalRegistros;
+                result.TotalPage = totalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = pageData;
                 return result;
+                
             }
             catch (Exception ex) 
             {
-                var res = ex.InnerException.Message;
-                return null;
+                result.CantidadRegistros = 0;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                result.Data = null;
+                return result;
             }
         }
+
 
         public async Task<ResultDto<ADM_ORDEN_PAGO>>Add(ADM_ORDEN_PAGO entity) 
         {

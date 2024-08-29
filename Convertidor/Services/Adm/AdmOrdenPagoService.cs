@@ -1,4 +1,5 @@
 ﻿using Convertidor.Data.Entities.Adm;
+using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
@@ -13,18 +14,21 @@ namespace Convertidor.Services.Adm
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly IPRE_PRESUPUESTOSRepository _prePresupuestosRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IAdmCompromisoOpService _admCompromisoOpService;
 
         public AdmOrdenPagoService(IAdmOrdenPagoRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmProveedoresRepository admProveedoresRepository,
                                      IPRE_PRESUPUESTOSRepository prePresupuestosRepository,
-                                     IAdmDescriptivaRepository admDescriptivaRepository)
+                                     IAdmDescriptivaRepository admDescriptivaRepository,
+                                     IAdmCompromisoOpService admCompromisoOpService)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admProveedoresRepository = admProveedoresRepository;
             _prePresupuestosRepository = prePresupuestosRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _admCompromisoOpService = admCompromisoOpService;
         }
 
 
@@ -42,24 +46,30 @@ namespace Convertidor.Services.Adm
             return result;
         }
         
-        public async Task<AdmOrdenPagoResponseDto> MapOrdenPagoDto(ADM_ORDEN_PAGO dtos)
+        public async Task<AdmOrdenPagoResponseDto> MapOrdenPagoDto(ADM_ORDEN_PAGO dtos,List<ADM_DESCRIPTIVAS> descriptivas,List<ADM_PROVEEDORES> proveedores)
         {
 
-            var descriptivas = await _admDescriptivaRepository.GetAll();
+       
             
             
             AdmOrdenPagoResponseDto itemResult = new AdmOrdenPagoResponseDto();
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.ANO = dtos.ANO;
-            itemResult.CodigoCompromiso = dtos.CODIGO_COMPROMISO;
+            itemResult.CodigoCompromiso = await _admCompromisoOpService.GetCompromisosByOrdenPago(dtos.CODIGO_ORDEN_PAGO);
             itemResult.CodigoOrdenCompra = dtos.CODIGO_ORDEN_COMPRA;
             itemResult.CodigoContrato = dtos.CODIGO_CONTRATO;
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
+            itemResult.NombreProveedor = "";
+            var proveedor = proveedores.Where(x=>x.CODIGO_PROVEEDOR==itemResult.CodigoProveedor).FirstOrDefault();
+            if (proveedor != null)
+            {
+                itemResult.NombreProveedor = proveedor.NOMBRE_PROVEEDOR;
+            }
             itemResult.NumeroOrdenPago = dtos.NUMERO_ORDEN_PAGO;
             itemResult.ReferenciaOrdenPago = dtos.REFERENCIA_ORDEN_PAGO;
             itemResult.FechaOrdenPago = dtos.FECHA_ORDEN_PAGO;
             itemResult.FechaOrdenPagoString =Fecha.GetFechaString(dtos.FECHA_ORDEN_PAGO);
-            FechaDto fechaOrdenPagoObj = Fecha.GetFechaDto(dtos.FECHA_ORDEN_PAGO);
+            ;            FechaDto fechaOrdenPagoObj = Fecha.GetFechaDto(dtos.FECHA_ORDEN_PAGO);
             itemResult.FechaOrdenPagoObj = (FechaDto)fechaOrdenPagoObj;
          
             itemResult.FechaPlazoDesde = dtos.FECHA_PLAZO_DESDE;
@@ -80,6 +90,7 @@ namespace Convertidor.Services.Adm
             itemResult.DescripcionTipoPago = GetDenominacionDescriptiva(descriptivas ,(int)dtos.TIPO_PAGO_ID);
             itemResult.NumeroValuacion = dtos.NUMERO_VALUACION;
             itemResult.Status = dtos.STATUS;
+            itemResult.DescripcionStatus= Estatus.GetStatus( itemResult.Status );
             itemResult.Motivo = dtos.MOTIVO;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             itemResult.NumeroComprobante = dtos.NUMERO_COMPROBANTE;
@@ -94,21 +105,24 @@ namespace Convertidor.Services.Adm
             return itemResult;
         }
 
-        public async Task<ResultDto<List<AdmOrdenPagoResponseDto>>> GetAll()
+        public async Task<ResultDto<List<AdmOrdenPagoResponseDto>>> GetByPresupuesto(AdmOrdenPagoFilterDto filter)
         {
 
             ResultDto<List<AdmOrdenPagoResponseDto>> result = new ResultDto<List<AdmOrdenPagoResponseDto>>(null);
             try
             {
-                var ordenPago = await _repository.GetAll();
-                var cant = ordenPago.Count();
-                if (ordenPago != null && ordenPago.Count() > 0)
+                var ordenPago = await _repository.GetByPresupuesto(filter);
+             
+                if (ordenPago.Data != null )
                 {
-                    var listDto = await MapListOrdenPagoDto(ordenPago);
+                    var listDto = await MapListOrdenPagoDto(ordenPago.Data);
 
                     result.Data = listDto;
                     result.IsValid = true;
                     result.Message = "";
+                    result.CantidadRegistros = ordenPago.CantidadRegistros;
+                    result.TotalPage = ordenPago.TotalPage;
+                    result.Page = ordenPago.Page;
 
 
                     return result;
@@ -134,12 +148,15 @@ namespace Convertidor.Services.Adm
 
         public async Task<List<AdmOrdenPagoResponseDto>> MapListOrdenPagoDto(List<ADM_ORDEN_PAGO> dtos)
         {
+            
+            var descriptivas = await _admDescriptivaRepository.GetAll();
+            var proveedores = await _admProveedoresRepository.GetByAll();
             List<AdmOrdenPagoResponseDto> result = new List<AdmOrdenPagoResponseDto>();
             {
                 foreach (var item in dtos)
                 {
 
-                    var itemResult = await MapOrdenPagoDto(item);
+                    var itemResult = await MapOrdenPagoDto(item,descriptivas,proveedores);
 
                     result.Add(itemResult);
                 }
@@ -419,8 +436,9 @@ namespace Convertidor.Services.Adm
                 codigoOrdenPago.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoOrdenPago);
-
-                var resultDto = await MapOrdenPagoDto(codigoOrdenPago);
+                var descriptivas = await _admDescriptivaRepository.GetAll();
+                var proveedores = await _admProveedoresRepository.GetByAll();
+                var resultDto = await MapOrdenPagoDto(codigoOrdenPago,descriptivas,proveedores);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -458,7 +476,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                //TODO VALIDAR CON REPOSITORIO PROVEEDORES
+                
 
                 var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
                 if (dto.CodigoProveedor < 0)
@@ -713,7 +731,9 @@ namespace Convertidor.Services.Adm
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
-                var resultDto = await MapOrdenPagoDto(created.Data);
+                var descriptivas = await _admDescriptivaRepository.GetAll();
+                var proveedores = await _admProveedoresRepository.GetByAll();
+                var resultDto = await MapOrdenPagoDto(created.Data,descriptivas,proveedores);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";

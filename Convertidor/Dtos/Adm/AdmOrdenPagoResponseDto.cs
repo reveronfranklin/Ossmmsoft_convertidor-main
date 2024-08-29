@@ -5,10 +5,11 @@
 
         public int CodigoOrdenPago { get; set; }
         public int? ANO { get; set; }
-        public int? CodigoCompromiso { get; set; }
+        public string CodigoCompromiso { get; set; }
         public int? CodigoOrdenCompra { get; set; }
         public int? CodigoContrato { get; set; }
         public int CodigoProveedor { get; set; }
+        public string NombreProveedor { get; set; } = string.Empty;
         public string NumeroOrdenPago { get; set; } = string.Empty;
         public string ReferenciaOrdenPago { get; set; } = string.Empty;
         public DateTime FechaOrdenPago { get; set; }
@@ -31,6 +32,7 @@
         public string DescripcionTipoPago { get; set; }= string.Empty;
         public int? NumeroValuacion { get; set; }
         public string? Status { get; set; } = string.Empty;
+        public string DescripcionStatus { get; set; } = string.Empty;
         public string Motivo { get; set; } = string.Empty;
         
         public int CodigoPresupuesto { get; set; }

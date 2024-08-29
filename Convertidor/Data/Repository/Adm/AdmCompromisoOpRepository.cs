@@ -12,6 +12,23 @@ namespace Convertidor.Data.Repository.Adm
             _context = context;
         }
 
+        public async Task<List<ADM_COMPROMISO_OP>> GetCodigoOrdenPago(int codigoOrdenPago)
+        {
+            try
+            {
+                var result = await _context.ADM_COMPROMISO_OP
+                    .Where(e => e.CODIGO_ORDEN_PAGO == codigoOrdenPago).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+        
         public async Task<ADM_COMPROMISO_OP> GetCodigoCompromisoOp(int codigoCompromisoOp)
         {
             try
