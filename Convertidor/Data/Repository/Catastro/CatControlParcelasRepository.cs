@@ -1,6 +1,9 @@
 ﻿using Convertidor.Data.Entities.Catastro;
 using Convertidor.Data.Interfaces.Catastro;
 using Microsoft.EntityFrameworkCore;
+using NPOI.Util;
+using Org.BouncyCastle.Math;
+using System.Numerics;
 
 namespace Convertidor.Data.Repository.Catastro
 {
@@ -25,6 +28,55 @@ namespace Convertidor.Data.Repository.Catastro
             {
                 var res = ex.InnerException.Message;
                 return null;
+            }
+
+        }
+
+        public async Task<CAT_CONTROL_PARCELAS> GetByCodigo(int codigoControlParcela)
+        {
+            try
+            {
+
+                var result = await _context.CAT_CONTROL_PARCELAS.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_CONTROL_PARCELA == codigoControlParcela)
+                    .FirstOrDefaultAsync();
+                return (CAT_CONTROL_PARCELAS)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
+        public async Task<ResultDto<CAT_CONTROL_PARCELAS>> Update(CAT_CONTROL_PARCELAS entity)
+        {
+            ResultDto<CAT_CONTROL_PARCELAS> result = new ResultDto<CAT_CONTROL_PARCELAS>(null);
+
+            try
+            {
+                CAT_CONTROL_PARCELAS entityUpdate = await GetByCodigo(entity.CODIGO_CONTROL_PARCELA);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_CONTROL_PARCELAS.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
             }
 
         }
