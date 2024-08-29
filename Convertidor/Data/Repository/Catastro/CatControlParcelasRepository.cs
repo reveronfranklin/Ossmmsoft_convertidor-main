@@ -112,6 +112,28 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<string> Delete(int codigoControlParcela)
+        {
+
+            try
+            {
+                CAT_CONTROL_PARCELAS entity = await GetByCodigo(codigoControlParcela);
+                if (entity != null)
+                {
+                    _context.CAT_CONTROL_PARCELAS.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
+
         public async Task<int> GetNextKey()
         {
             try

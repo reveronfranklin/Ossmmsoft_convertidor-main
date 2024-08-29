@@ -878,5 +878,52 @@ namespace Convertidor.Services.Catastro
 
         }
 
+        public async Task<ResultDto<CatControlParcelasDeleteDto>> Delete(CatControlParcelasDeleteDto dto)
+        {
+
+            ResultDto<CatControlParcelasDeleteDto> result = new ResultDto<CatControlParcelasDeleteDto>(null);
+            try
+            {
+
+                var codigoControlParcela = await _repository.GetByCodigo(dto.CodigoControlParcela);
+                if (codigoControlParcela == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Control Parcela no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoControlParcela);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }
