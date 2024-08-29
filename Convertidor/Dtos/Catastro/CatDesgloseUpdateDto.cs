@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatDesgloseResponseDto
+    public class CatDesgloseUpdateDto
     {
         public int CodigoDesglose { get; set; }
         public int CodigoDesgloseFk { get; set; }
@@ -29,8 +29,6 @@
         public int TipoOperacionId { get; set; }
         public string TipoTransaccion { get; set; } = string.Empty;
         public DateTime Extra1 { get; set; }
-        public string Extra1String { get; set; } = string.Empty;
-        public FechaDto Extra1Obj { get; set; }
         public string Extra2 { get; set; } = string.Empty;
         public string Extra3 { get; set; } = string.Empty;
         public string Extra4 { get; set; } = string.Empty;
