@@ -263,7 +263,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 foreach (var item in pageData)
                 {
                     PreCompromisosResponseDto itemData = new PreCompromisosResponseDto();
-                    itemData.CodigoCompromiso = item.CODIGO_SOLICITUD;
+                    itemData.CodigoCompromiso = item.CODIGO_COMPROMISO;
                     itemData.Ano = presupuesto.ANO;
                     itemData.CodigoSolicitud = item.CODIGO_SOLICITUD;
                     itemData.NumeroCompromiso = item.NUMERO_COMPROMISO;
