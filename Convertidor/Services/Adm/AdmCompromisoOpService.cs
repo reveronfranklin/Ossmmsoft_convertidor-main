@@ -29,7 +29,62 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
+
+        public async Task<string> GetCompromisosByOrdenPago(int codigoOrdenPago)
+        {
+            string result = "";
+            var compromisoOp = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
+            if (compromisoOp != null && compromisoOp.Count > 0)
+            {
+
+                foreach (var item in compromisoOp)
+                {
+                    result = result + "-" + item.CODIGO_IDENTIFICADOR;
+                }
+                
+            }
+            
+            return result;
+
+        }
         
+        public async Task<ResultDto<List<AdmCompromisoOpResponseDto>>> GetByOrdenPago(int codigoOrdenPago)
+        {
+
+            ResultDto<List<AdmCompromisoOpResponseDto>> result = new ResultDto<List<AdmCompromisoOpResponseDto>>(null);
+            try
+            {
+                var compromisoOp = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
+                var cant = compromisoOp.Count();
+                if (compromisoOp != null && compromisoOp.Count() > 0)
+                {
+                    var listDto = await MapListCompromisoOpDto(compromisoOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
         public async Task<AdmCompromisoOpResponseDto> MapCompromisoOpDto(ADM_COMPROMISO_OP dtos)
         {
             AdmCompromisoOpResponseDto itemResult = new AdmCompromisoOpResponseDto();
