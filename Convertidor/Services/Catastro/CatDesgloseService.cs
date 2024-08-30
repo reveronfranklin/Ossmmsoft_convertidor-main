@@ -469,5 +469,402 @@ namespace Convertidor.Services.Catastro
 
             return result;
         }
+
+        public async Task<ResultDto<CatDesgloseResponseDto>> Update(CatDesgloseUpdateDto dto)
+        {
+
+            ResultDto<CatDesgloseResponseDto> result = new ResultDto<CatDesgloseResponseDto>(null);
+            try
+            {
+
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoDesglose = await _repository.GetByCodigo(dto.CodigoDesglose);
+
+                if (codigoDesglose == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Desglose Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoDesgloseFk <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Desglose Fk Invalido ";
+                    return result;
+                }
+
+                if (dto.CodigoDesglosePk <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Desglose Pk Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoParcela <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "codigo Parcela Invalido";
+                    return result;
+
+                }
+
+
+
+                if (dto.CodigoCatastro.Length > 30)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Catastro Invalido";
+                    return result;
+
+                }
+
+                if (dto.Titulo.Length > 500)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Titulo Invalido";
+                    return result;
+
+                }
+
+                if (dto.AreaTerrenoTotal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Terreno Total Invalida";
+                    return result;
+
+                }
+
+                if (dto.AreaConTrucTotal <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Contruccion total Invalida";
+                    return result;
+
+                }
+
+                if (dto.AreaTrrTotalVendi <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Terreno Total vendido Invalida";
+                    return result;
+
+                }
+
+                if (dto.AreaTerrComun <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Terreno Comun Invalida";
+                    return result;
+
+                }
+
+                if (dto.AreaContrucComun <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Construccion Comun Invalida";
+                    return result;
+
+                }
+
+                if (dto.AreaTerrSinCond <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Terreno Sin Condicion Invalida";
+                    return result;
+
+                }
+
+                if (dto.AreaContrucSinCond <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area Construccion Sin Condicion Invalida";
+                    return result;
+
+                }
+
+
+                if (dto.Area <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Area  Invalida";
+                    return result;
+
+                }
+
+                if (dto.EstacionaTerr <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estaciona Terreno Invalida";
+                    return result;
+
+                }
+
+                if (dto.EstacionaContruc <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estaciona Construccion Invalida";
+                    return result;
+
+                }
+
+                if (dto.PorcentajCondominio <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Porcentaje Condominio Invalido";
+                    return result;
+
+                }
+
+                if (dto.ManualTerreno <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Manual Terreno Invalido";
+                    return result;
+
+                }
+
+                if (dto.ManualConstruccion <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Manual Construccion Invalida";
+                    return result;
+
+                }
+
+                if (dto.MaleteroTerreno <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Maletero Terreno Invalido";
+                    return result;
+
+                }
+
+                if (dto.MaleteroConstruccion <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Maletero Construccion Invalido";
+                    return result;
+
+                }
+
+                if (dto.Observacion.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Observacion Invalida";
+                    return result;
+
+                }
+
+                if (dto.NivelId.Length > 3)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nivel Id Invalido";
+                    return result;
+
+                }
+
+                if (dto.UnidadId.Length > 3)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Nivel Id Invalido";
+                    return result;
+
+                }
+
+                if (dto.TipoOperacionId <= 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Operacion Id Invalido";
+                    return result;
+
+                }
+
+                if (dto.TipoTransaccion.Length > 20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Transaccion Invalida";
+                    return result;
+
+                }
+
+
+                if (dto.Extra1 == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra4 is not null && dto.Extra4.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra4 Invalido";
+                    return result;
+                }
+                if (dto.Extra5 is not null && dto.Extra5.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra5 Invalido";
+                    return result;
+                }
+
+
+                codigoDesglose.CODIGO_DESGLOSE = dto.CodigoDesglose;
+                codigoDesglose.CODIGO_DESGLOSE_FK = dto.CodigoDesgloseFk;
+                codigoDesglose.CODIGO_DESGLOSE_PK = dto.CodigoDesglosePk;
+                codigoDesglose.CODIGO_PARCELA = dto.CodigoParcela;
+                codigoDesglose.CODIGO_CATASTRO = dto.CodigoCatastro;
+                codigoDesglose.TITULO = dto.Titulo;
+                codigoDesglose.AREA_TERRENO_TOTAL = dto.AreaTerrenoTotal;
+                codigoDesglose.AREA_CONTRUC_TOTAL = dto.AreaConTrucTotal;
+                codigoDesglose.AREA_TRR_TOTAL_VENDI = dto.AreaTrrTotalVendi;
+                codigoDesglose.AREA_TERR_COMUN = dto.AreaTerrComun;
+                codigoDesglose.AREA_CONTRUC_COMUN = dto.AreaContrucComun;
+                codigoDesglose.AREA_TERR_SIN_COND = dto.AreaTerrSinCond;
+                codigoDesglose.AREA_CONTRUC_SIN_COND = dto.AreaContrucSinCond;
+                codigoDesglose.AREA = dto.Area;
+                codigoDesglose.ESTACIONA_TERR = dto.EstacionaTerr;
+                codigoDesglose.ESTACIONA_CONTRUC = dto.EstacionaContruc;
+                codigoDesglose.PORCENTAJ_CONDOMINIO = dto.PorcentajCondominio;
+                codigoDesglose.MANUAL_TERRENO = dto.ManualTerreno;
+                codigoDesglose.MANUAL_CONSTRUCCION = dto.ManualConstruccion;
+                codigoDesglose.MALETERO_TERRENO = dto.MaleteroTerreno;
+                codigoDesglose.MALETERO_CONSTRUCCION = dto.MaleteroConstruccion;
+                codigoDesglose.OBSERVACION = dto.Observacion;
+                codigoDesglose.NIVEL_ID = dto.NivelId;
+                codigoDesglose.UNIDAD_ID = dto.UnidadId;
+                codigoDesglose.TIPO_OPERACION_ID = dto.TipoOperacionId;
+                codigoDesglose.TIPO_TRANSACCION = dto.TipoTransaccion;
+                codigoDesglose.EXTRA1 = dto.Extra1;
+                codigoDesglose.EXTRA2 = dto.Extra2;
+                codigoDesglose.EXTRA3 = dto.Extra3;
+                codigoDesglose.EXTRA4 = dto.Extra4;
+                codigoDesglose.EXTRA5 = dto.Extra5;
+
+
+                codigoDesglose.CODIGO_EMPRESA = conectado.Empresa;
+                codigoDesglose.USUARIO_INS = conectado.Usuario;
+                codigoDesglose.FECHA_INS = DateTime.Now;
+
+                await _repository.Update(codigoDesglose);
+                var resultDto = await MapCatDesglose(codigoDesglose);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+            return result;
+
+
+
+
+        }
+
+        public async Task<ResultDto<CatDesgloseDeleteDto>> Delete(CatDesgloseDeleteDto dto)
+        {
+
+            ResultDto<CatDesgloseDeleteDto> result = new ResultDto<CatDesgloseDeleteDto>(null);
+            try
+            {
+
+                var codigoDesglose = await _repository.GetByCodigo(dto.CodigoDesglose);
+                if (codigoDesglose == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Desglose no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoDesglose);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
     }
 }
