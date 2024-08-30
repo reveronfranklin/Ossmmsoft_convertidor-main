@@ -482,13 +482,11 @@ namespace Convertidor.Services.Catastro
 
                 var codigoDesglose = await _repository.GetByCodigo(dto.CodigoDesglose);
 
-
-
                 if (codigoDesglose == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Desglose Invalido";
+                    result.Message = "Codigo Desglose Invalido";
                     return result;
 
                 }
@@ -497,7 +495,7 @@ namespace Convertidor.Services.Catastro
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "codigo Desglose Fk Invalido ";
+                    result.Message = "Codigo Desglose Fk Invalido ";
                     return result;
                 }
 
@@ -820,6 +818,53 @@ namespace Convertidor.Services.Catastro
 
 
 
+        }
+
+        public async Task<ResultDto<CatDesgloseDeleteDto>> Delete(CatDesgloseDeleteDto dto)
+        {
+
+            ResultDto<CatDesgloseDeleteDto> result = new ResultDto<CatDesgloseDeleteDto>(null);
+            try
+            {
+
+                var codigoDesglose = await _repository.GetByCodigo(dto.CodigoDesglose);
+                if (codigoDesglose == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Desglose no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoDesglose);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
         }
     }
 }
