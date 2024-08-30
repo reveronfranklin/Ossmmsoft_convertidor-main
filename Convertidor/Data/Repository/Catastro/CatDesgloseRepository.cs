@@ -29,6 +29,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<CAT_DESGLOSE> GetByCodigo(int codigoDesglose)
+        {
+            try
+            {
+
+                var result = await _context.CAT_DESGLOSE.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_DESGLOSE == codigoDesglose)
+                    .FirstOrDefaultAsync();
+                return (CAT_DESGLOSE)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CAT_DESGLOSE>> Add(CAT_DESGLOSE entity)
         {
             ResultDto<CAT_DESGLOSE> result = new ResultDto<CAT_DESGLOSE>(null);
@@ -57,6 +76,36 @@ namespace Convertidor.Data.Repository.Catastro
             }
 
 
+
+        }
+
+        public async Task<ResultDto<CAT_DESGLOSE>> Update(CAT_DESGLOSE entity)
+        {
+            ResultDto<CAT_DESGLOSE> result = new ResultDto<CAT_DESGLOSE>(null);
+
+            try
+            {
+                CAT_DESGLOSE entityUpdate = await GetByCodigo(entity.CODIGO_DESGLOSE);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_DESGLOSE.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
 
         }
 
