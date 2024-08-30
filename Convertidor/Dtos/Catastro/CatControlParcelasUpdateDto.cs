@@ -3,8 +3,8 @@
     public class CatControlParcelasUpdateDto
     {
         public int CodigoControlParcela { get; set; }
-        public int CodigoCatastro { get; set; }
-        public int CodigoViejoCat { get; set; }
+        public string CodigoCatastro { get; set; } = string.Empty;
+        public string CodigoViejoCat { get; set; } = string.Empty;
         public int CodigoContribuyente { get; set; }
         public int CodigoUbicacionNac { get; set; }
         public int PaisId { get; set; }

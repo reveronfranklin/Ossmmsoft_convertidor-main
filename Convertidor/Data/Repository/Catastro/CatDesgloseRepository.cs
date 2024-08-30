@@ -1,26 +1,23 @@
 ﻿using Convertidor.Data.Entities.Catastro;
 using Convertidor.Data.Interfaces.Catastro;
 using Microsoft.EntityFrameworkCore;
-using NPOI.Util;
-using Org.BouncyCastle.Math;
-using System.Numerics;
 
 namespace Convertidor.Data.Repository.Catastro
 {
-    public class CatControlParcelasRepository : ICatControlParcelasRepository
+    public class CatDesgloseRepository : ICatDesgloseRepository
     {
         private readonly DataContextCat _context;
 
-        public CatControlParcelasRepository(DataContextCat context)
+        public CatDesgloseRepository(DataContextCat context)
         {
             _context = context;
         }
 
-        public async Task<List<CAT_CONTROL_PARCELAS>> GetAll()
+        public async Task<List<CAT_DESGLOSE>> GetAll()
         {
             try
             {
-                var result = await _context.CAT_CONTROL_PARCELAS.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CAT_DESGLOSE.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -32,15 +29,15 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<CAT_CONTROL_PARCELAS> GetByCodigo(int codigoControlParcela)
+        public async Task<CAT_DESGLOSE> GetByCodigo(int codigoDesglose)
         {
             try
             {
 
-                var result = await _context.CAT_CONTROL_PARCELAS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_CONTROL_PARCELA == codigoControlParcela)
+                var result = await _context.CAT_DESGLOSE.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_DESGLOSE == codigoDesglose)
                     .FirstOrDefaultAsync();
-                return (CAT_CONTROL_PARCELAS)result!;
+                return (CAT_DESGLOSE)result!;
 
             }
             catch (Exception ex)
@@ -51,45 +48,15 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<ResultDto<CAT_CONTROL_PARCELAS>> Update(CAT_CONTROL_PARCELAS entity)
+        public async Task<ResultDto<CAT_DESGLOSE>> Add(CAT_DESGLOSE entity)
         {
-            ResultDto<CAT_CONTROL_PARCELAS> result = new ResultDto<CAT_CONTROL_PARCELAS>(null);
-
-            try
-            {
-                CAT_CONTROL_PARCELAS entityUpdate = await GetByCodigo(entity.CODIGO_CONTROL_PARCELA);
-                if (entityUpdate != null)
-                {
-
-
-                    _context.CAT_CONTROL_PARCELAS.Update(entity);
-                    await _context.SaveChangesAsync();
-                    result.Data = entity;
-                    result.IsValid = true;
-                    result.Message = "";
-
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
-                return result;
-            }
-
-        }
-
-        public async Task<ResultDto<CAT_CONTROL_PARCELAS>> Add(CAT_CONTROL_PARCELAS entity)
-        {
-            ResultDto<CAT_CONTROL_PARCELAS> result = new ResultDto<CAT_CONTROL_PARCELAS>(null);
+            ResultDto<CAT_DESGLOSE> result = new ResultDto<CAT_DESGLOSE>(null);
             try
             {
 
 
 
-                await _context.CAT_CONTROL_PARCELAS.AddAsync(entity);
+                await _context.CAT_DESGLOSE.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -112,15 +79,45 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<string> Delete(int codigoControlParcela)
+        public async Task<ResultDto<CAT_DESGLOSE>> Update(CAT_DESGLOSE entity)
+        {
+            ResultDto<CAT_DESGLOSE> result = new ResultDto<CAT_DESGLOSE>(null);
+
+            try
+            {
+                CAT_DESGLOSE entityUpdate = await GetByCodigo(entity.CODIGO_DESGLOSE);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_DESGLOSE.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        public async Task<string> Delete(int codigoDesglose)
         {
 
             try
             {
-                CAT_CONTROL_PARCELAS entity = await GetByCodigo(codigoControlParcela);
+                CAT_DESGLOSE entity = await GetByCodigo(codigoDesglose);
                 if (entity != null)
                 {
-                    _context.CAT_CONTROL_PARCELAS.Remove(entity);
+                    _context.CAT_DESGLOSE.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -139,8 +136,8 @@ namespace Convertidor.Data.Repository.Catastro
             try
             {
                 int result = 0;
-                var last = await _context.CAT_CONTROL_PARCELAS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_CONTROL_PARCELA)
+                var last = await _context.CAT_DESGLOSE.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_DESGLOSE)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -148,7 +145,7 @@ namespace Convertidor.Data.Repository.Catastro
                 }
                 else
                 {
-                    result = last.CODIGO_CONTROL_PARCELA + 1;
+                    result = last.CODIGO_DESGLOSE + 1;
                 }
 
                 return (int)result!;

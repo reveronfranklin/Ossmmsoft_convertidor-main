@@ -10,12 +10,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class CatControlParcelasController : ControllerBase
+    public class CatDesgloseController : ControllerBase
     {
        
-        private readonly ICatControlParcelasService _service;
+        private readonly ICatDesgloseService _service;
 
-        public CatControlParcelasController(ICatControlParcelasService service)
+        public CatDesgloseController(ICatDesgloseService service)
         {
 
             _service = service;
@@ -34,7 +34,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(CatControlParcelasUpdateDto dto)
+        public async Task<IActionResult> Create(CatDesgloseUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -42,7 +42,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Update(CatControlParcelasUpdateDto dto)
+        public async Task<IActionResult> Update(CatDesgloseUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -50,7 +50,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(CatControlParcelasDeleteDto dto)
+        public async Task<IActionResult> Delete(CatDesgloseDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);
