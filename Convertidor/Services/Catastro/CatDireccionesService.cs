@@ -801,5 +801,52 @@ namespace Convertidor.Services.Catastro
 
         }
 
+        public async Task<ResultDto<CatDireccionesDeleteDto>> Delete(CatDireccionesDeleteDto dto)
+        {
+
+            ResultDto<CatDireccionesDeleteDto> result = new ResultDto<CatDireccionesDeleteDto>(null);
+            try
+            {
+
+                var codigoDireccion = await _repository.GetByCodigo(dto.CodigoDireccion);
+                if (codigoDireccion == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Direccion no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoDireccion);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
     }
 }

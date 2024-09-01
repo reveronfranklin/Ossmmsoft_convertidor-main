@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Catastro
         Task<CAT_DIRECCIONES> GetByCodigo(int codigoDireccion);
         Task<ResultDto<CAT_DIRECCIONES>> Add(CAT_DIRECCIONES entity);
         Task<ResultDto<CAT_DIRECCIONES>> Update(CAT_DIRECCIONES entity);
+        Task<string> Delete(int codigoDireccion);
         Task<int> GetNextKey();
     }
 }

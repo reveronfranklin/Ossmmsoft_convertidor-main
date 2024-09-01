@@ -109,6 +109,28 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<string> Delete(int codigoDireccion)
+        {
+
+            try
+            {
+                CAT_DIRECCIONES entity = await GetByCodigo(codigoDireccion);
+                if (entity != null)
+                {
+                    _context.CAT_DIRECCIONES.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
+
         public async Task<int> GetNextKey()
         {
             try
