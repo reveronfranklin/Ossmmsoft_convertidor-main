@@ -201,7 +201,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
             var result = "No Data";
             var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
             var fileName = $"ReporteCompromisoPresupuestario-{filter.CodigoCompromiso}.pdf";
-            var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
+            var separatorPatch = @settings.SeparatorPatch;
+            var filePath = $"{@settings.ExcelFiles}{separatorPatch}{fileName}.pdf";
 
 
             if (filter == null)
@@ -228,7 +229,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 {
 
 
-                    filePath = $"{@settings.ExcelFiles}/{fileName}";
+                    filePath = $"{@settings.ExcelFiles}{separatorPatch}{fileName}";
 
 
                     result = fileName;

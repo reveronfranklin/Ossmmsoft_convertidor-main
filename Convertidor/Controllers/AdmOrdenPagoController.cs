@@ -29,7 +29,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetByPresupuesto(AdmOrdenPagoFilterDto filter)
         {
-            var result = await _service.GetByPresupuesto(filter);
+                var result = await _service.GetByPresupuesto(filter);
             return Ok(result);
         }
 
