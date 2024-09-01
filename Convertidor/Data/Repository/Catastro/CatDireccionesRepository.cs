@@ -29,6 +29,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<CAT_DIRECCIONES> GetByCodigo(int codigoDireccion)
+        {
+            try
+            {
+
+                var result = await _context.CAT_DIRECCIONES.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_DIRECCION == codigoDireccion)
+                    .FirstOrDefaultAsync();
+                return (CAT_DIRECCIONES)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CAT_DIRECCIONES>> Add(CAT_DIRECCIONES entity)
         {
             ResultDto<CAT_DIRECCIONES> result = new ResultDto<CAT_DIRECCIONES>(null);
@@ -57,6 +76,36 @@ namespace Convertidor.Data.Repository.Catastro
             }
 
 
+
+        }
+
+        public async Task<ResultDto<CAT_DIRECCIONES>> Update(CAT_DIRECCIONES entity)
+        {
+            ResultDto<CAT_DIRECCIONES> result = new ResultDto<CAT_DIRECCIONES>(null);
+
+            try
+            {
+                CAT_DIRECCIONES entityUpdate = await GetByCodigo(entity.CODIGO_DIRECCION);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_DIRECCIONES.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
 
         }
 

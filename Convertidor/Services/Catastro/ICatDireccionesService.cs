@@ -6,5 +6,6 @@ namespace Convertidor.Services.Catastro
     {
         Task<ResultDto<List<CatDireccionesResponseDto>>> GetAll();
         Task<ResultDto<CatDireccionesResponseDto>> Create(CatDireccionesUpdateDto dto);
+        Task<ResultDto<CatDireccionesResponseDto>> Update(CatDireccionesUpdateDto dto);
     }
 }
