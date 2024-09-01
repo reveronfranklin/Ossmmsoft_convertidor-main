@@ -28,6 +28,7 @@ namespace Convertidor.Data
         public DbSet<CAT_CALC_X_TRIANGULACION> CAT_CALC_X_TRIANGULACION { get; set; }
         public DbSet<CAT_CONTROL_PARCELAS> CAT_CONTROL_PARCELAS { get; set; }
         public DbSet<CAT_DESGLOSE> CAT_DESGLOSE { get; set; }
+        public DbSet<CAT_DIRECCIONES> CAT_DIRECCIONES { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -167,9 +168,18 @@ namespace Convertidor.Data
                   });
                   builder.ToTable("CAT_DESGLOSE");
               });
+                        modelBuilder
+              .Entity<CAT_DIRECCIONES>(builder =>
+              {
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_DIRECCION,
+
+                  });
+                  builder.ToTable("CAT_DIRECCIONES");
+              });
+
             
-
-
         }
 
         
