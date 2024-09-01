@@ -29,6 +29,7 @@ namespace Convertidor.Data
         public DbSet<CAT_CONTROL_PARCELAS> CAT_CONTROL_PARCELAS { get; set; }
         public DbSet<CAT_DESGLOSE> CAT_DESGLOSE { get; set; }
         public DbSet<CAT_DIRECCIONES> CAT_DIRECCIONES { get; set; }
+        public DbSet<CAT_DOCUMENTOS_LEGALES> CAT_DOCUMENTOS_LEGALES { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -179,7 +180,19 @@ namespace Convertidor.Data
                   builder.ToTable("CAT_DIRECCIONES");
               });
 
+            modelBuilder
+              .Entity<CAT_DOCUMENTOS_LEGALES>(builder =>
+              {
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_DOCUMENTOS_LEGALES,
+
+                  });
+                  builder.ToTable("CAT_DOCUMENTOS_LEGALES");
+              });
             
+
+
         }
 
         
