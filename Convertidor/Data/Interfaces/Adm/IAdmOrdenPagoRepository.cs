@@ -11,5 +11,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> Delete(int codigoOrdenPago);
         Task<int> GetNextKey();
         Task<ResultDto<List<ADM_ORDEN_PAGO>>> GetByPresupuesto(AdmOrdenPagoFilterDto filter);
+        Task<string> GetNextOrdenPago(int codigoPresupuesto);
     }
 }

@@ -32,6 +32,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByOrdenPago(AdmPucOrdenPagoFilterDto dto)
+        {
+            var result = await _service.GetByOrdenPago(dto.CodigoOrdenPago);
+            return Ok(result);
+        }
+        
 
         [HttpPost]
         [Route("[action]")]
