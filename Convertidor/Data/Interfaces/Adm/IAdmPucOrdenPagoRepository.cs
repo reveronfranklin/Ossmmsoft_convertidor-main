@@ -10,5 +10,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_PUC_ORDEN_PAGO>> Update(ADM_PUC_ORDEN_PAGO entity);
         Task<string> Delete(int CodigoPucOrdenPago);
         Task<int> GetNextKey();
+        Task<List<ADM_PUC_ORDEN_PAGO>> GetByOrdenPago(int codigoOrdenPago);
     }
 }

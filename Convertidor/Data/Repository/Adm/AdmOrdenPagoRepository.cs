@@ -85,7 +85,7 @@ namespace Convertidor.Data.Repository.Adm
                     
                     pageData = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
                         .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&   x.STATUS==filter.Status )
-                        .OrderByDescending(x => x.NUMERO_ORDEN_PAGO)
+                        .OrderByDescending(x => x.CODIGO_ORDEN_PAGO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
@@ -100,7 +100,7 @@ namespace Convertidor.Data.Repository.Adm
                     
                     pageData = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
                         .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&   x.STATUS==filter.Status && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
-                        .OrderByDescending(x => x.NUMERO_ORDEN_PAGO)
+                        .OrderByDescending(x => x.CODIGO_ORDEN_PAGO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
@@ -115,7 +115,7 @@ namespace Convertidor.Data.Repository.Adm
                     
                     pageData = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
                         .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
-                        .OrderByDescending(x => x.NUMERO_ORDEN_PAGO)
+                        .OrderByDescending(x => x.CODIGO_ORDEN_PAGO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
@@ -127,7 +127,7 @@ namespace Convertidor.Data.Repository.Adm
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     pageData = await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
                         .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto)
-                        .OrderByDescending(x => x.NUMERO_ORDEN_PAGO)
+                        .OrderByDescending(x => x.CODIGO_ORDEN_PAGO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
@@ -173,7 +173,15 @@ namespace Convertidor.Data.Repository.Adm
             {
                 result.Data = null;
                 result.IsValid = false;
-                result.Message = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    result.Message = ex.InnerException.Message;
+                }
+                else
+                {
+                    result.Message = ex.Message;
+                }
+                
                 return result;
             }
         }
@@ -245,6 +253,40 @@ namespace Convertidor.Data.Repository.Adm
             {
                 var msg = ex.Message;
                 return 0;
+            }
+
+
+
+        }
+        
+        public async Task<string> GetNextOrdenPago(int codigoPresupuesto)
+        {
+            try
+            {
+                string result = "";
+                var ordenesPago =  await _context.ADM_ORDEN_PAGO.DefaultIfEmpty()
+                    .Where(x=>x.CODIGO_PRESUPUESTO==codigoPresupuesto)
+                    .ToListAsync();
+                var last = ordenesPago
+                    .OrderByDescending(x => int.Parse(x.NUMERO_ORDEN_PAGO))
+                    .FirstOrDefault();
+                if (last == null)
+                {
+                    result = "1";
+                }
+                else
+                {
+                    var ultimo=Convert.ToInt32(last.NUMERO_ORDEN_PAGO) + 1;
+                    result =ultimo.ToString();
+                }
+
+                return result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return "";
             }
 
 

@@ -10,5 +10,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_H_ORDEN_PAGO>> Update(ADM_H_ORDEN_PAGO entity);
         Task<string> Delete(int codigoHOrdenPago);
         Task<int> GetNextKey();
+      
     }
 }
