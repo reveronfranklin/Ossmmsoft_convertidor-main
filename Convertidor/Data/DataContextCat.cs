@@ -30,6 +30,7 @@ namespace Convertidor.Data
         public DbSet<CAT_DESGLOSE> CAT_DESGLOSE { get; set; }
         public DbSet<CAT_DIRECCIONES> CAT_DIRECCIONES { get; set; }
         public DbSet<CAT_DOCUMENTOS_LEGALES> CAT_DOCUMENTOS_LEGALES { get; set; }
+        public DbSet<CAT_DOCUMENTOS_RAMO> CAT_DOCUMENTOS_RAMO { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -190,7 +191,17 @@ namespace Convertidor.Data
                   });
                   builder.ToTable("CAT_DOCUMENTOS_LEGALES");
               });
-            
+
+            modelBuilder
+             .Entity<CAT_DOCUMENTOS_RAMO>(builder =>
+             {
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_DOCU_RAMO,
+
+                 });
+                 builder.ToTable("CAT_DOCUMENTOS_RAMO");
+             });
 
 
         }
