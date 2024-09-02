@@ -7,5 +7,6 @@ namespace Convertidor.Services.Catastro
         Task<ResultDto<List<CatDocumentosLegalesResponseDto>>> GetAll();
         Task<ResultDto<CatDocumentosLegalesResponseDto>> Create(CatDocumentosLegalesUpdateDto dto);
         Task<ResultDto<CatDocumentosLegalesResponseDto>> Update(CatDocumentosLegalesUpdateDto dto);
+        Task<ResultDto<CatDocumentosLegalesDeleteDto>> Delete(CatDocumentosLegalesDeleteDto dto);
     }
 }

@@ -8,6 +8,7 @@ namespace Convertidor.Data.Interfaces.Catastro
         Task<CAT_DOCUMENTOS_LEGALES> GetByCodigo(int codigoDocumentosLegales);
         Task<ResultDto<CAT_DOCUMENTOS_LEGALES>> Add(CAT_DOCUMENTOS_LEGALES entity);
         Task<ResultDto<CAT_DOCUMENTOS_LEGALES>> Update(CAT_DOCUMENTOS_LEGALES entity);
+        Task<string> Delete(int codigoDocumentosLegales);
         Task<int> GetNextKey();
 
     }
