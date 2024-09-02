@@ -645,8 +645,14 @@ namespace Convertidor.Services.Adm
                 //SE GENERA EL PROXIMO NUMERO DE SOLICITUD
                 var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
                 var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie((int)entity.CODIGO_PRESUPUESTO , sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
-
-                entity.NUMERO_SOLICITUD = numeroSolicitud;
+                if (!numeroSolicitud.IsValid)
+                {
+                    result.Data = null;
+                    result.IsValid = numeroSolicitud.IsValid;
+                    result.Message = numeroSolicitud.Message;
+                    return result;
+                }
+                entity.NUMERO_SOLICITUD = numeroSolicitud.Data;
                 entity.FECHA_SOLICITUD = dto.FechaSolicitud;
                 entity.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
                 entity.TIPO_SOLICITUD_ID = dto.TipoSolicitudId;
