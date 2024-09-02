@@ -42,6 +42,21 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+        
+        public async Task<List<ADM_PUC_ORDEN_PAGO>> GetByOrdenPago(int codigoOrdenPago) 
+        {
+            try
+            {
+                var result = await _context.ADM_PUC_ORDEN_PAGO.DefaultIfEmpty().Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).ToListAsync();
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+
 
         public async Task<ResultDto<ADM_PUC_ORDEN_PAGO>>Add(ADM_PUC_ORDEN_PAGO entity) 
         {

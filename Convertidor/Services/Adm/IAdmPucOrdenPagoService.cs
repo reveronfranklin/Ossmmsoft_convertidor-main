@@ -8,5 +8,7 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmPucOrdenPagoResponseDto>> Update(AdmPucOrdenPagoUpdateDto dto);
         Task<ResultDto<AdmPucOrdenPagoResponseDto>> Create(AdmPucOrdenPagoUpdateDto dto);
         Task<ResultDto<AdmPucOrdenPagoDeleteDto>> Delete(AdmPucOrdenPagoDeleteDto dto);
+        Task<ResultDto<List<AdmPucOrdenPagoResponseDto>>> GetByOrdenPago(int codigoOrdenPago);
+        
     }
 }
