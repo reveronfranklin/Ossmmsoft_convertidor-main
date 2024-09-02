@@ -158,10 +158,11 @@ namespace Convertidor.Data.Repository.Sis
            
         }
         
-        public async Task<string> GenerateNextSerie(int codigoPresupuesto,int tipoDocumentoId,string codigo)
+        public async Task<ResultDto<string>> GenerateNextSerie(int codigoPresupuesto,int tipoDocumentoId,string codigo)
         {
 
-            string result = "";
+            
+            ResultDto<string> result = new ResultDto<string>(null);
             try
             {
 
@@ -175,24 +176,33 @@ namespace Convertidor.Data.Repository.Sis
                     int number =  serieDocumentos.NUMERO_SERIE_ACTUAL;;
                     string paddedNumber = number.ToString().PadLeft(serieDocumentos.MAX_DIGITOS, '0');
                     serieCompuesta = $"{serieDocumentos.SERIE_LETRAS}{paddedNumber}";
-                    result = serieCompuesta;
+                  
                     serieDocumentos.SERIE_COMPUESTA_ACTUAL = serieCompuesta;
                     _context.SIS_SERIE_DOCUMENTOS.Update(serieDocumentos);
                     await _context.SaveChangesAsync();
+                    result.Data = serieCompuesta;
+                    result.IsValid = true;
+                    result.Message = "";
                     
 
                 }
                 else
                 {
-                    result = "";
+                    result.Data = "";
+                    result.IsValid = false;
+                    result.Message = "No existe serie de documentos para este Presupuesto";
                 }
                 return result;
                 
             }
             catch (Exception ex)
             {
-                return "";
+                result.Data = "";
+                result.IsValid = false;
+                result.Message = ex.Message;
             }
+
+            return result;
         }
         
         
