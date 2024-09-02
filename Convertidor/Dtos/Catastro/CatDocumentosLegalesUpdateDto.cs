@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatDocumentosLegalesResponseDto
+    public class CatDocumentosLegalesUpdateDto
     {
         public int CodigoDocumentosLegales { get; set; }
         public int CodigoFicha { get; set; }
@@ -9,8 +9,6 @@
         public string TomoNumero { get; set; } = string.Empty;
         public string ProfNumero { get; set; } = string.Empty;
         public DateTime FechaRegistro { get; set; }
-        public string FechaRegistroString { get; set; }
-        public FechaDto FechaRegistroObj { get; set; }
         public decimal AreaTerreno { get; set; }
         public decimal AreaConstruccion { get; set; }
         public string Protocolo { get; set; } = string.Empty;
@@ -19,11 +17,7 @@
         public decimal PrecioTerreno { get; set; }
         public int NumeroCivico { get; set; }
         public DateTime FechaPrimeraVisita { get; set; }
-        public string FechaPrimeraVisitaString { get; set; }
-        public FechaDto FechaPrimeraVisitaObj { get; set; }
         public DateTime FechaLevantamiento { get; set; }
-        public string FechaLevantamientoString { get; set; }
-        public FechaDto FechaLevantamientoObj { get; set; }
         public int ControlArchivo { get; set; }
         public string Extra1 { get; set; } = string.Empty;
         public string Extra2 { get; set; } = string.Empty;

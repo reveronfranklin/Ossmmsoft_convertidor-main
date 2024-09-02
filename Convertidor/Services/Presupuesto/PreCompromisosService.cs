@@ -197,7 +197,16 @@ namespace Convertidor.Services.Presupuesto
                 var ossConfig = await _ossConfigRepository.GetByClave(literalCompromiso);
                 var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(ossConfig.VALOR);
                 var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie((int)admSolicitud.CODIGO_PRESUPUESTO,sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
-                entity.NUMERO_COMPROMISO = numeroCompromiso;
+                if (!numeroCompromiso.IsValid)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = numeroCompromiso.Message;
+                    return result;
+                    
+                }
+                
+                entity.NUMERO_COMPROMISO = numeroCompromiso.Data;
                 entity.FECHA_COMPROMISO = DateTime.Now;
                 entity.CODIGO_PROVEEDOR = (int)admSolicitud.CODIGO_PROVEEDOR;
                 entity.FECHA_ENTREGA = null;

@@ -9,10 +9,10 @@
         public string TOMO_NUMERO { get; set; } = string.Empty;
         public string PROF_NUMERO { get; set; } = string.Empty;
         public DateTime FECHA_REGISTRO { get; set; }
-        public int AREA_TERRENO { get; set; }
-        public int AREA_CONSTRUCCION { get; set; }
+        public decimal AREA_TERRENO { get; set; }
+        public decimal AREA_CONSTRUCCION { get; set; }
         public string PROTOCOLO { get; set; } = string.Empty;
-        public int MONTO_REGISTRO { get; set; }
+        public decimal MONTO_REGISTRO { get; set; }
         public int SERV_TERRENO { get; set; }
         public decimal PRECIO_TERRENO { get; set; }
         public int NUMERO_CIVICO { get; set; }
