@@ -29,6 +29,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<CAT_DOCUMENTOS_LEGALES> GetByCodigo(int codigoDocumentosLegales)
+        {
+            try
+            {
+
+                var result = await _context.CAT_DOCUMENTOS_LEGALES.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_DOCUMENTOS_LEGALES == codigoDocumentosLegales)
+                    .FirstOrDefaultAsync();
+                return (CAT_DOCUMENTOS_LEGALES)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CAT_DOCUMENTOS_LEGALES>> Add(CAT_DOCUMENTOS_LEGALES entity)
         {
             ResultDto<CAT_DOCUMENTOS_LEGALES> result = new ResultDto<CAT_DOCUMENTOS_LEGALES>(null);
@@ -60,6 +79,35 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<ResultDto<CAT_DOCUMENTOS_LEGALES>> Update(CAT_DOCUMENTOS_LEGALES entity)
+        {
+            ResultDto<CAT_DOCUMENTOS_LEGALES> result = new ResultDto<CAT_DOCUMENTOS_LEGALES>(null);
+
+            try
+            {
+                CAT_DOCUMENTOS_LEGALES entityUpdate = await GetByCodigo(entity.CODIGO_DOCUMENTOS_LEGALES);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_DOCUMENTOS_LEGALES.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
         public async Task<int> GetNextKey()
         {
             try
