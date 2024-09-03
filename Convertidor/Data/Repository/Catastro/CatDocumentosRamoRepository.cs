@@ -29,6 +29,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<CAT_DOCUMENTOS_RAMO> GetByCodigo(int codigoDocuRamo)
+        {
+            try
+            {
+
+                var result = await _context.CAT_DOCUMENTOS_RAMO.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_DOCU_RAMO == codigoDocuRamo)
+                    .FirstOrDefaultAsync();
+                return (CAT_DOCUMENTOS_RAMO)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CAT_DOCUMENTOS_RAMO>> Add(CAT_DOCUMENTOS_RAMO entity)
         {
             ResultDto<CAT_DOCUMENTOS_RAMO> result = new ResultDto<CAT_DOCUMENTOS_RAMO>(null);
@@ -57,6 +76,36 @@ namespace Convertidor.Data.Repository.Catastro
             }
 
 
+
+        }
+
+        public async Task<ResultDto<CAT_DOCUMENTOS_RAMO>> Update(CAT_DOCUMENTOS_RAMO entity)
+        {
+            ResultDto<CAT_DOCUMENTOS_RAMO> result = new ResultDto<CAT_DOCUMENTOS_RAMO>(null);
+
+            try
+            {
+                CAT_DOCUMENTOS_RAMO entityUpdate = await GetByCodigo(entity.CODIGO_DOCU_RAMO);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_DOCUMENTOS_RAMO.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
 
         }
 
