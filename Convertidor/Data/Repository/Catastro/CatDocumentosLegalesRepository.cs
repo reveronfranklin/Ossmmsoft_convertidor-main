@@ -108,6 +108,29 @@ namespace Convertidor.Data.Repository.Catastro
             }
 
         }
+
+        public async Task<string> Delete(int codigoDocumentosLegales)
+        {
+
+            try
+            {
+                CAT_DOCUMENTOS_LEGALES entity = await GetByCodigo(codigoDocumentosLegales);
+                if (entity != null)
+                {
+                    _context.CAT_DOCUMENTOS_LEGALES.Remove(entity);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+        }
+
         public async Task<int> GetNextKey()
         {
             try

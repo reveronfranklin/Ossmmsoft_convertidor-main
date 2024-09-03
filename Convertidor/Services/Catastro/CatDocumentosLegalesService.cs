@@ -839,6 +839,54 @@ namespace Convertidor.Services.Catastro
         }
 
 
+        public async Task<ResultDto<CatDocumentosLegalesDeleteDto>> Delete(CatDocumentosLegalesDeleteDto dto)
+        {
+
+            ResultDto<CatDocumentosLegalesDeleteDto> result = new ResultDto<CatDocumentosLegalesDeleteDto>(null);
+            try
+            {
+
+                var codigoDocumentosLegales = await _repository.GetByCodigo(dto.CodigoDocumentosLegales);
+                if (codigoDocumentosLegales == null)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Documentos Legales no existe";
+                    return result;
+                }
+
+
+                var deleted = await _repository.Delete(dto.CodigoDocumentosLegales);
+
+                if (deleted.Length > 0)
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = deleted;
+                }
+                else
+                {
+                    result.Data = dto;
+                    result.IsValid = true;
+                    result.Message = deleted;
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = dto;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+
 
     }
 }
