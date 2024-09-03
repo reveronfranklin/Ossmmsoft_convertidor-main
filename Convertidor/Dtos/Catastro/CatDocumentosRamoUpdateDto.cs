@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatDocumentosRamoResponseDto
+    public class CatDocumentosRamoUpdateDto
     {
         public int CodigoDocuRamo { get; set; }
         public int CodigoContribuyente { get; set; }
@@ -12,8 +12,6 @@
         public int TipoDocumentoId { get; set; }
         public string NumeroDocumento { get; set; }
         public DateTime FechaDocumento { get; set; }
-        public string FechaDocumentoString { get; set; }
-        public FechaDto FechaDocumentoObj { get; set; }
         public string Observacion { get; set; }
         public string Descripcion { get; set; }
         public string Extra1 { get; set; } = string.Empty;

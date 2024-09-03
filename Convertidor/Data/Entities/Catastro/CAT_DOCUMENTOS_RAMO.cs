@@ -10,7 +10,7 @@
         public int CODIGO_ESTADO { get; set; }
         public int CODIGO_MUNICIPIO { get; set; }
         public int TIPO_DOCUMENTO_ID { get; set; }
-        public int NUMERO_DOCUMENTO { get; set; }
+        public string NUMERO_DOCUMENTO { get; set; }
         public DateTime FECHA_DOCUMENTO { get; set; }
         public string OBSERVACION { get; set; }
         public string DESCRIPCION { get; set; }
