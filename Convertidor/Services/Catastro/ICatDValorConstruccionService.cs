@@ -4,6 +4,7 @@ namespace Convertidor.Services.Catastro
 {
     public interface ICatDValorConstruccionService
     {
-        Task<ResultDto<List<CatDValorContruccionResponseDto>>> GetAll();
+        Task<ResultDto<List<CatDValorConstruccionResponseDto>>> GetAll();
+        Task<ResultDto<CatDValorConstruccionResponseDto>> Create(CatDValorConstruccionUpdateDto dto);
     }
 }

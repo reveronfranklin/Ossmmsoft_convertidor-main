@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatDValorConstruccionResponseDto
+    public class CatDValorConstruccionUpdateDto
     {
         public int CodigoParcela { get; set; }
         public int CodigoDValorConstruccion { get; set; }
