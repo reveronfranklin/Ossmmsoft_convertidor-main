@@ -460,6 +460,354 @@ namespace Convertidor.Services.Catastro
             return result;
         }
 
+        public async Task<ResultDto<CatDValorConstruccionResponseDto>> Update(CatDValorConstruccionUpdateDto dto)
+        {
+
+            ResultDto<CatDValorConstruccionResponseDto> result = new ResultDto<CatDValorConstruccionResponseDto>(null);
+            try
+            {
+
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoParcela = await _repository.GetByCodigo(dto.CodigoParcela);
+
+
+
+                if (codigoParcela == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Parcela Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoDValorConstruccion <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo D Valor Construccion Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoValorConstruccion < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Valor Construccion Invalido ";
+                    return result;
+                }
+
+                if (dto.CodigoInmueble <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Inmueble Invalido";
+                    return result;
+
+                }
+
+                if (dto.CodigoCatastro.Length > 20)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Catastro Invalido";
+                    return result;
+
+                }
+
+                if (dto.EstructuraNivel1Id <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 1 Id Invalido";
+                    return result;
+
+                }
+
+                var estructuraNivelID1 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel1Id);
+                if (estructuraNivelID1 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 1 Id Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.EstructuraNivel2Id <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 2 Id Invalido";
+                    return result;
+
+                }
+
+                var estructuraNivelID2 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel2Id);
+                if (estructuraNivelID2 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 2 Id Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.EstructuraNivel3Id <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 3 Id Invalido";
+                    return result;
+                }
+
+                var estructuraNivelID3 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel3Id);
+                if (estructuraNivelID3 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 3 Id Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.EstructuraNivel4Id <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 4 Id Invalida";
+                    return result;
+                }
+
+                var estructuraNivelID4 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel4Id);
+                if (estructuraNivelID4 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 4 Id Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.EstructuraDescriptiva.Length > 10)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Descriptiva Invalida";
+                    return result;
+
+                }
+
+                var estructuraDescriptiva = await _catDescriptivasRepository.GetByCodigo(Convert.ToInt32(dto.EstructuraDescriptiva));
+                if (estructuraDescriptiva == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Descriptiva Invalida";
+                    return result;
+
+
+                }
+
+
+                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra1 Invalido";
+                    return result;
+                }
+                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra2 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra3 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra4 is not null && dto.Extra4.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra4 Invalido";
+                    return result;
+                }
+                if (dto.Extra5 is not null && dto.Extra5.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra5 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra6 is not null && dto.Extra6.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra6 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra7 is not null && dto.Extra7.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra7 Invalido";
+                    return result;
+                }
+                if (dto.Extra8 is not null && dto.Extra8.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra8 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra9 is not null && dto.Extra9.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra9 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra10 is not null && dto.Extra10.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra10 Invalido";
+                    return result;
+                }
+                if (dto.Extra11 is not null && dto.Extra11.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra11 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra12 is not null && dto.Extra12.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra12 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra13 is not null && dto.Extra13.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra13 Invalido";
+                    return result;
+                }
+                if (dto.Extra14 is not null && dto.Extra14.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra14 Invalido";
+                    return result;
+                }
+
+                if (dto.Extra15 is not null && dto.Extra15.Length > 100)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Extra15 Invalido";
+                    return result;
+                }
+
+                if (dto.ValorComplementario <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Valor Complementario Invalido";
+                    return result;
+
+                }
+
+
+
+
+
+                codigoParcela.CODIGO_PARCELA = dto.CodigoParcela;
+                codigoParcela.CODIGO_D_VALOR_CONSTRUCCION = dto.CodigoDValorConstruccion;
+                codigoParcela.CODIGO_VALOR_CONSTRUCCION = dto.CodigoValorConstruccion;
+                codigoParcela.CODIGO_INMUEBLE = dto.CodigoInmueble;
+                codigoParcela.CODIGO_CATASTRO = dto.CodigoCatastro;
+                codigoParcela.ESTRUCTURA_NIVEL1_ID = dto.EstructuraNivel1Id;
+                codigoParcela.ESTRUCTURA_NIVEL2_ID = dto.EstructuraNivel2Id;
+                codigoParcela.ESTRUCTURA_NIVEL3_ID = dto.EstructuraNivel3Id;
+                codigoParcela.ESTRUCTURA_NIVEL4_ID = dto.EstructuraNivel4Id;
+                codigoParcela.ESTRUCTURA_DESCRIPTIVA = estructuraDescriptiva.DESCRIPCION;
+                codigoParcela.EXTRA1 = dto.Extra1;
+                codigoParcela.EXTRA2 = dto.Extra2;
+                codigoParcela.EXTRA3 = dto.Extra3;
+                codigoParcela.EXTRA4 = dto.Extra4;
+                codigoParcela.EXTRA5 = dto.Extra5;
+                codigoParcela.EXTRA6 = dto.Extra6;
+                codigoParcela.EXTRA7 = dto.Extra7;
+                codigoParcela.EXTRA8 = dto.Extra8;
+                codigoParcela.EXTRA9 = dto.Extra9;
+                codigoParcela.EXTRA10 = dto.Extra10;
+                codigoParcela.EXTRA11 = dto.Extra11;
+                codigoParcela.EXTRA12 = dto.Extra12;
+                codigoParcela.EXTRA13 = dto.Extra13;
+                codigoParcela.EXTRA14 = dto.Extra14;
+                codigoParcela.EXTRA15 = dto.Extra15;
+                codigoParcela.VALOR_COMPLEMENTARIO = dto.ValorComplementario;
+
+
+                codigoParcela.CODIGO_EMPRESA = conectado.Empresa;
+                codigoParcela.USUARIO_INS = conectado.Usuario;
+                codigoParcela.FECHA_INS = DateTime.Now;
+
+                await _repository.Update(codigoParcela);
+                var resultDto = await MapDValorConstruccion(codigoParcela);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+            return result;
+
+
+
+
+        }
+
 
     }
 }

@@ -29,6 +29,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<CAT_D_VALOR_CONSTRUCCION> GetByCodigo(int codigoParcela)
+        {
+            try
+            {
+
+                var result = await _context.CAT_D_VALOR_CONSTRUCCION.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_PARCELA == codigoParcela)
+                    .FirstOrDefaultAsync();
+                return (CAT_D_VALOR_CONSTRUCCION)result!;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return null;
+            }
+
+        }
+
         public async Task<ResultDto<CAT_D_VALOR_CONSTRUCCION>> Add(CAT_D_VALOR_CONSTRUCCION entity)
         {
             ResultDto<CAT_D_VALOR_CONSTRUCCION> result = new ResultDto<CAT_D_VALOR_CONSTRUCCION>(null);
@@ -57,6 +76,36 @@ namespace Convertidor.Data.Repository.Catastro
             }
 
 
+
+        }
+
+        public async Task<ResultDto<CAT_D_VALOR_CONSTRUCCION>> Update(CAT_D_VALOR_CONSTRUCCION entity)
+        {
+            ResultDto<CAT_D_VALOR_CONSTRUCCION> result = new ResultDto<CAT_D_VALOR_CONSTRUCCION>(null);
+
+            try
+            {
+                CAT_D_VALOR_CONSTRUCCION entityUpdate = await GetByCodigo(entity.CODIGO_PARCELA);
+                if (entityUpdate != null)
+                {
+
+
+                    _context.CAT_D_VALOR_CONSTRUCCION.Update(entity);
+                    await _context.SaveChangesAsync();
+                    result.Data = entity;
+                    result.IsValid = true;
+                    result.Message = "";
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
 
         }
 
