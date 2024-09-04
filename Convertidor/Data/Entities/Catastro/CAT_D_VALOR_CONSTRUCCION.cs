@@ -1,19 +1,17 @@
 ﻿namespace Convertidor.Data.Entities.Catastro
 {
-    public class CAT_DOCUMENTOS_RAMO
+    public class CAT_D_VALOR_CONSTRUCCION
     {
-        public int CODIGO_DOCU_RAMO { get; set; }
-        public int CODIGO_CONTRIBUYENTE { get; set; }
-        public int CODIGO_CONTRIBUYENTE_FK { get; set; }
-        public int TRIBUTO { get; set; } 
-        public int CODIGO_IDENTIFICADOR { get; set; }
-        public int CODIGO_ESTADO { get; set; }
-        public int CODIGO_MUNICIPIO { get; set; }
-        public int TIPO_DOCUMENTO_ID { get; set; }
-        public string NUMERO_DOCUMENTO { get; set; }
-        public DateTime FECHA_DOCUMENTO { get; set; }
-        public string OBSERVACION { get; set; } = string.Empty;
-        public string DESCRIPCION { get; set; } = string.Empty;
+        public int CODIGO_PARCELA { get; set; }
+        public int CODIGO_D_VALOR_CONSTRUCCION { get; set; }
+        public int CODIGO_VALOR_CONSTRUCCION { get; set; }
+        public int CODIGO_INMUEBLE { get; set; }
+        public string CODIGO_CATASTRO { get; set; } = string.Empty;
+        public int ESTRUCTURA_NIVEL1_ID { get; set; }
+        public int ESTRUCTURA_NIVEL2_ID { get; set; }
+        public int ESTRUCTURA_NIVEL3_ID { get; set; }
+        public int ESTRUCTURA_NIVEL4_ID { get; set; }
+        public string ESTRUCTURA_DESCRIPTIVA { get; set; } = string.Empty;
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;
         public string EXTRA3 { get; set; } = string.Empty;
@@ -22,9 +20,6 @@
         public int USUARIO_UPD { get; set; }
         public DateTime FECHA_UPD { get; set; }
         public int CODIGO_EMPRESA { get; set; }
-        public string ORIGEN { get; set; } = string.Empty;
-        public string TIPO_TRANSACCION { get; set; } = string.Empty;
-        public int CODIGO_APLICACION { get; set; }
         public string EXTRA4 { get; set; } = string.Empty;
         public string EXTRA5 { get; set; } = string.Empty;
         public string EXTRA6 { get; set; } = string.Empty;
@@ -37,6 +32,6 @@
         public string EXTRA13 { get; set; } = string.Empty;
         public string EXTRA14 { get; set; } = string.Empty;
         public string EXTRA15 { get; set; } = string.Empty;
-        public int CODIGO_FICHA { get; set; }
+        public int VALOR_COMPLEMENTARIO { get; set; }
     }
 }
