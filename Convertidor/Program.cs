@@ -238,6 +238,7 @@ builder.Services.AddTransient<ICatDireccionesRepository, CatDireccionesRepositor
 builder.Services.AddTransient<ICatDocumentosLegalesRepository, CatDocumentosLegalesRepository>();
 builder.Services.AddTransient<ICatDocumentosRamoRepository, CatDocumentosRamoRepository>();
 builder.Services.AddTransient<ICatDValorConstruccionRepository, CatDValorConstruccionRepository>();
+builder.Services.AddTransient<ICatDValorTierraRepository, CatDValorTierraRepository>();
 
 
 //CATASTRO Services
@@ -256,6 +257,7 @@ builder.Services.AddTransient<ICatDireccionesService, CatDireccionesService>();
 builder.Services.AddTransient<ICatDocumentosLegalesService, CatDocumentosLegalesService>();
 builder.Services.AddTransient<ICatDocumentosRamoService, CatDocumentosRamoService>();
 builder.Services.AddTransient<ICatDValorConstruccionService, CatDValorConstruccionService>();
+builder.Services.AddTransient<ICatDValorTierraService, CatDValorTierraService>();
 
 
 //RH

@@ -32,6 +32,7 @@ namespace Convertidor.Data
         public DbSet<CAT_DOCUMENTOS_LEGALES> CAT_DOCUMENTOS_LEGALES { get; set; }
         public DbSet<CAT_DOCUMENTOS_RAMO> CAT_DOCUMENTOS_RAMO { get; set; }
         public DbSet<CAT_D_VALOR_CONSTRUCCION> CAT_D_VALOR_CONSTRUCCION { get; set; }
+        public DbSet<CAT_D_VALOR_TIERRA> CAT_D_VALOR_TIERRA { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -214,6 +215,18 @@ namespace Convertidor.Data
                  });
                  builder.ToTable("CAT_D_VALOR_CONSTRUCCION");
              });
+
+
+            modelBuilder
+            .Entity<CAT_D_VALOR_TIERRA>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_VALOR_TIERRA,
+
+                });
+                builder.ToTable("CAT_D_VALOR_TIERRA");
+            });
 
             
         }
