@@ -252,18 +252,6 @@ namespace Convertidor.Services.Catastro
 
                 }
 
-                var estructuraDescriptiva = await _catDescriptivasRepository.GetByCodigo(Convert.ToInt32(dto.EstructuraDescriptiva));
-                if(estructuraDescriptiva == null) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Estructura Descriptiva Invalida";
-                    return result;
-
-
-                }
-
-                
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
@@ -402,7 +390,7 @@ namespace Convertidor.Services.Catastro
                 entity.ESTRUCTURA_NIVEL2_ID = dto.EstructuraNivel2Id;
                 entity.ESTRUCTURA_NIVEL3_ID = dto.EstructuraNivel3Id;
                 entity.ESTRUCTURA_NIVEL4_ID = dto.EstructuraNivel4Id;
-                entity.ESTRUCTURA_DESCRIPTIVA = estructuraDescriptiva.DESCRIPCION;
+                entity.ESTRUCTURA_DESCRIPTIVA = dto.EstructuraDescriptiva;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
@@ -613,18 +601,6 @@ namespace Convertidor.Services.Catastro
 
                 }
 
-                var estructuraDescriptiva = await _catDescriptivasRepository.GetByCodigo(Convert.ToInt32(dto.EstructuraDescriptiva));
-                if (estructuraDescriptiva == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Estructura Descriptiva Invalida";
-                    return result;
-
-
-                }
-
-
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
@@ -763,7 +739,7 @@ namespace Convertidor.Services.Catastro
                 codigoParcela.ESTRUCTURA_NIVEL2_ID = dto.EstructuraNivel2Id;
                 codigoParcela.ESTRUCTURA_NIVEL3_ID = dto.EstructuraNivel3Id;
                 codigoParcela.ESTRUCTURA_NIVEL4_ID = dto.EstructuraNivel4Id;
-                codigoParcela.ESTRUCTURA_DESCRIPTIVA = estructuraDescriptiva.DESCRIPCION;
+                codigoParcela.ESTRUCTURA_DESCRIPTIVA = dto.EstructuraDescriptiva;
                 codigoParcela.EXTRA1 = dto.Extra1;
                 codigoParcela.EXTRA2 = dto.Extra2;
                 codigoParcela.EXTRA3 = dto.Extra3;
