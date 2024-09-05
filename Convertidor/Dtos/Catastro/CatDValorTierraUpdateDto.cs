@@ -1,6 +1,6 @@
 ﻿namespace Convertidor.Dtos.Catastro
 {
-    public class CatDValorTierraResponseDto
+    public class CatDValorTierraUpdateDto
     {
         public int CodigoValorTierra { get; set; }
         public int CodigoDValorTierraUrbFk { get; set; }
@@ -10,11 +10,7 @@
         public int ParroquiaId { get; set; }
         public int SectorId { get; set; }
         public DateTime FechaIniVigValor { get; set; }
-        public string FechaIniVigValorString { get; set; }
-        public FechaDto FechaIniVigValorObj { get; set; }
         public DateTime FechaFinVigValor { get; set; }
-        public string FechaFinVigValorString { get; set; }
-        public FechaDto FechaFinVigValorObj { get; set; }
         public int VialidadPrincipalId { get; set; }
         public int VialidadDesdeId { get; set; }
         public int VialidadHastaId { get; set; }

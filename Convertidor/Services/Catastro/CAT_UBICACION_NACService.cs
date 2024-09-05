@@ -168,8 +168,8 @@ namespace Convertidor.Services.Catastro
             List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
             try
             {
-                var municipios = await _repository.GetCiudades();
-                foreach (var item in municipios)
+                var ciudades = await _repository.GetCiudades();
+                foreach (var item in ciudades)
                 {
                     SelectListDescriptiva resultItem = new SelectListDescriptiva();
                     resultItem.Id = (int)item.CIUDAD;

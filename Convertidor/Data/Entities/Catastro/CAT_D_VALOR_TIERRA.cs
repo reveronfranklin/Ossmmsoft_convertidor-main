@@ -14,7 +14,7 @@
         public int VIALIDAD_PRINCIPAL_ID { get; set; }
         public int VIALIDAD_DESDE_ID { get; set; }
         public int VIALIDAD_HASTA_ID { get; set; }
-        public int VALOR_TIERRA { get; set; }
+        public decimal VALOR_TIERRA { get; set; }
         public string OBSERVACIONES { get; set; } = string.Empty;
         public string EXTRA1 { get; set; } = string.Empty;
         public string EXTRA2 { get; set; } = string.Empty;
