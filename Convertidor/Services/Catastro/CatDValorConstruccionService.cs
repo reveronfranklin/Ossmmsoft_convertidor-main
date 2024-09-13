@@ -6,48 +6,35 @@ using Convertidor.Utility;
 
 namespace Convertidor.Services.Catastro
 {
-    public class CatDocumentosLegalesService : ICatDocumentosLegalesService
+    public class CatDValorConstruccionService : ICatDValorConstruccionService
     {
-        private readonly ICatDocumentosLegalesRepository _repository;
+        private readonly ICatDValorConstruccionRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ICatDescriptivasRepository _catDescriptivasRepository;
 
-        public CatDocumentosLegalesService(ICatDocumentosLegalesRepository repository,
-                                           ISisUsuarioRepository sisUsuarioRepository)
+        public CatDValorConstruccionService(ICatDValorConstruccionRepository repository,
+                                            ISisUsuarioRepository sisUsuarioRepository,
+                                            ICatDescriptivasRepository catDescriptivasRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _catDescriptivasRepository = catDescriptivasRepository;
         }
 
-        public async Task<CatDocumentosLegalesResponseDto> MapDocumentosLegales(CAT_DOCUMENTOS_LEGALES entity)
+        public async Task<CatDValorConstruccionResponseDto> MapDValorConstruccion(CAT_D_VALOR_CONSTRUCCION entity)
         {
-            CatDocumentosLegalesResponseDto dto = new CatDocumentosLegalesResponseDto();
+            CatDValorConstruccionResponseDto dto = new CatDValorConstruccionResponseDto();
 
-            dto.CodigoDocumentosLegales = entity.CODIGO_DOCUMENTOS_LEGALES;
-            dto.CodigoFicha = entity.CODIGO_FICHA;
-            dto.DocumentoNumero = entity.DOCUMENTO_NUMERO;
-            dto.FolioNumero = entity.FOLIO_NUMERO;
-            dto.TomoNumero = entity.TOMO_NUMERO;
-            dto.ProfNumero = entity.PROF_NUMERO;
-            dto.FechaRegistro = entity.FECHA_REGISTRO;
-            dto.FechaRegistroString = entity.FECHA_REGISTRO.ToString("u");
-            FechaDto fechaRegistroObj = FechaObj.GetFechaDto(entity.FECHA_REGISTRO);
-            dto.FechaRegistroObj = (FechaDto)fechaRegistroObj;
-            dto.AreaTerreno = entity.AREA_TERRENO;
-            dto.AreaConstruccion = entity.AREA_CONSTRUCCION;
-            dto.Protocolo = entity.PROTOCOLO;
-            dto.MontoRegistro = entity.MONTO_REGISTRO;
-            dto.ServTerreno = entity.SERV_TERRENO;
-            dto.PrecioTerreno = entity.PRECIO_TERRENO;
-            dto.NumeroCivico = entity.NUMERO_CIVICO;
-            dto.FechaPrimeraVisita = entity.FECHA_PRIMERA_VISITA;
-            dto.FechaPrimeraVisitaString = entity.FECHA_PRIMERA_VISITA.ToString("u");
-            FechaDto fechaPrimeraVisita = FechaObj.GetFechaDto(entity.FECHA_PRIMERA_VISITA);
-            dto.FechaPrimeraVisitaObj = (FechaDto) fechaPrimeraVisita;
-            dto.FechaLevantamiento = entity.FECHA_LEVANTAMIENTO;
-            dto.FechaLevantamientoString = entity.FECHA_LEVANTAMIENTO.ToString("u");
-            FechaDto fechaLevantamiento = FechaObj.GetFechaDto(entity.FECHA_LEVANTAMIENTO);
-            dto.FechaLevantamientoObj = (FechaDto)fechaLevantamiento;
-            dto.ControlArchivo = entity.CONTROL_ARCHIVO;
+            dto.CodigoParcela = entity.CODIGO_PARCELA;
+            dto.CodigoDValorConstruccion = entity.CODIGO_D_VALOR_CONSTRUCCION;
+            dto.CodigoValorConstruccion = entity.CODIGO_VALOR_CONSTRUCCION;
+            dto.CodigoInmueble = entity.CODIGO_INMUEBLE;
+            dto.CodigoCatastro = entity.CODIGO_CATASTRO;
+            dto.EstructuraNivel1Id = entity.ESTRUCTURA_NIVEL1_ID;
+            dto.EstructuraNivel2Id = entity.ESTRUCTURA_NIVEL2_ID;
+            dto.EstructuraNivel3Id = entity.ESTRUCTURA_NIVEL3_ID;
+            dto.EstructuraNivel4Id = entity.ESTRUCTURA_NIVEL4_ID;
+            dto.EstructuraDescriptiva = entity.ESTRUCTURA_DESCRIPTIVA;
             dto.Extra1 = entity.EXTRA1;
             dto.Extra2 = entity.EXTRA2;
             dto.Extra3 = entity.EXTRA3;
@@ -63,22 +50,23 @@ namespace Convertidor.Services.Catastro
             dto.Extra13 = entity.EXTRA13;
             dto.Extra14 = entity.EXTRA14;
             dto.Extra15 = entity.EXTRA15;
-           
+            dto.ValorComplementario = entity.VALOR_COMPLEMENTARIO;
+
 
 
             return dto;
 
         }
 
-        public async Task<List<CatDocumentosLegalesResponseDto>> MapListDirecciones(List<CAT_DOCUMENTOS_LEGALES> dtos)
+        public async Task<List<CatDValorConstruccionResponseDto>> MapListDValorConstruccion(List<CAT_D_VALOR_CONSTRUCCION> dtos)
         {
-            List<CatDocumentosLegalesResponseDto> result = new List<CatDocumentosLegalesResponseDto>();
+            List<CatDValorConstruccionResponseDto> result = new List<CatDValorConstruccionResponseDto>();
 
 
             foreach (var item in dtos)
             {
                 if (item == null) continue;
-                var itemResult = await MapDocumentosLegales(item);
+                var itemResult = await MapDValorConstruccion(item);
 
                 result.Add(itemResult);
             }
@@ -86,17 +74,17 @@ namespace Convertidor.Services.Catastro
 
         }
 
-        public async Task<ResultDto<List<CatDocumentosLegalesResponseDto>>> GetAll()
+        public async Task<ResultDto<List<CatDValorConstruccionResponseDto>>> GetAll()
         {
 
-            ResultDto<List<CatDocumentosLegalesResponseDto>> result = new ResultDto<List<CatDocumentosLegalesResponseDto>>(null);
+            ResultDto<List<CatDValorConstruccionResponseDto>> result = new ResultDto<List<CatDValorConstruccionResponseDto>>(null);
             try
             {
-                var documentosLegales = await _repository.GetAll();
-                var cant = documentosLegales.Count();
-                if (documentosLegales != null && documentosLegales.Count() > 0)
+                var dValorConstruccion = await _repository.GetAll();
+                var cant = dValorConstruccion.Count();
+                if (dValorConstruccion != null && dValorConstruccion.Count() > 0)
                 {
-                    var listDto = await MapListDirecciones(documentosLegales);
+                    var listDto = await MapListDValorConstruccion(dValorConstruccion);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -124,171 +112,146 @@ namespace Convertidor.Services.Catastro
 
         }
 
-        public async Task<ResultDto<CatDocumentosLegalesResponseDto>> Create(CatDocumentosLegalesUpdateDto dto)
+
+        public async Task<ResultDto<CatDValorConstruccionResponseDto>> Create(CatDValorConstruccionUpdateDto dto)
         {
 
-            ResultDto<CatDocumentosLegalesResponseDto> result = new ResultDto<CatDocumentosLegalesResponseDto>(null);
+            ResultDto<CatDValorConstruccionResponseDto> result = new ResultDto<CatDValorConstruccionResponseDto>(null);
             try
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
 
-                if (dto.CodigoFicha <= 0)
+                if (dto.CodigoDValorConstruccion <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Ficha Invalido";
+                    result.Message = "Codigo D Valor Construccion Invalido";
                     return result;
 
                 }
 
-                if (dto.DocumentoNumero < 0)
+                if (dto.CodigoValorConstruccion < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Documento Numero Invalido ";
+                    result.Message = "Codigo Valor Construccion Invalido ";
                     return result;
                 }
 
-                if (dto.FolioNumero.Length > 15)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Folio Numero Invalido";
-                    return result;
-
-                }
-
-                if (dto.TomoNumero.Length > 15)
+                if (dto.CodigoInmueble <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tomo Numero Invalido";
+                    result.Message = "Codigo Inmueble Invalido";
                     return result;
 
                 }
 
-                if (dto.ProfNumero.Length > 15)
+                if (dto.CodigoCatastro.Length > 20)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Prof Numero Invalido";
+                    result.Message = "Codigo Catastro Invalido";
                     return result;
 
                 }
 
-                if (dto.FechaRegistro == null)
+                if (dto.EstructuraNivel1Id <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Fecha Registro Invalido";
+                    result.Message = "Estructura Nivel 1 Id Invalido";
                     return result;
 
                 }
 
-                if (dto.AreaTerreno <= 0)
+                var estructuraNivelID1 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel1Id);
+                if (estructuraNivelID1 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 1 Id Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.EstructuraNivel2Id <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Area Terreno Invalido";
+                    result.Message = "Estructura Nivel 2 Id Invalido";
                     return result;
 
                 }
-                if (dto.AreaConstruccion <= 0)
+
+                var estructuraNivelID2 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel2Id);
+                if (estructuraNivelID2 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 2 Id Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.EstructuraNivel3Id <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Area Construccion Invalido";
+                    result.Message = "Estructura Nivel 3 Id Invalido";
+                    return result;
+                }
+
+                var estructuraNivelID3 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel3Id);
+                if (estructuraNivelID3 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 3 Id Invalida";
                     return result;
 
+
                 }
-                if (dto.Protocolo.Length > 15)
+
+                if (dto.EstructuraNivel4Id <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Protocolo Invalido";
+                    result.Message = "Estructura Nivel 4 Id Invalida";
+                    return result;
+                }
+
+                var estructuraNivelID4 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel4Id);
+                if (estructuraNivelID4 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 4 Id Invalida";
                     return result;
 
+
                 }
-                if (dto.MontoRegistro <= 0)
+
+                if (dto.EstructuraDescriptiva.Length > 10)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Monto Registro Invalido";
+                    result.Message = "Estructura Descriptiva Invalida";
                     return result;
 
                 }
 
-                if (dto.ServTerreno <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Serv Terreno Invalido";
-                    return result;
-
-                }
-
-                if (dto.PrecioTerreno <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Precio Terreno Invalido";
-                    return result;
-
-                }
-
-                if (dto.NumeroCivico <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Civico Invalido";
-                    return result;
-
-                }
-
-                if (dto.FechaPrimeraVisita == null)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Invalida";
-                    return result;
-
-                }
-
-                if (dto.FechaLevantamiento == null)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Levantamiento Invalido";
-                    return result;
-
-                }
-
-                if (dto.ControlArchivo <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Control Archivo Invalido";
-                    return result;
-
-                }
-
-               
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
                     result.Data = null;
@@ -404,27 +367,30 @@ namespace Convertidor.Services.Catastro
                     return result;
                 }
 
-               
+                if (dto.ValorComplementario <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Valor Complementario Invalido";
+                    return result;
+
+                }
 
 
-                CAT_DOCUMENTOS_LEGALES entity = new CAT_DOCUMENTOS_LEGALES();
-                entity.CODIGO_DOCUMENTOS_LEGALES = await _repository.GetNextKey();
-                entity.CODIGO_FICHA = dto.CodigoFicha;
-                entity.DOCUMENTO_NUMERO = dto.DocumentoNumero;
-                entity.FOLIO_NUMERO = dto.FolioNumero;
-                entity.TOMO_NUMERO = dto.TomoNumero;
-                entity.PROF_NUMERO = dto.ProfNumero;
-                entity.FECHA_REGISTRO = dto.FechaRegistro;
-                entity.AREA_TERRENO = dto.AreaTerreno;
-                entity.AREA_CONSTRUCCION = dto.AreaConstruccion;
-                entity.PROTOCOLO = dto.Protocolo;
-                entity.MONTO_REGISTRO = dto.MontoRegistro;
-                entity.SERV_TERRENO = dto.ServTerreno;
-                entity.PRECIO_TERRENO = dto.PrecioTerreno;
-                entity.NUMERO_CIVICO = dto.NumeroCivico;
-                entity.FECHA_PRIMERA_VISITA = dto.FechaPrimeraVisita;
-                entity.FECHA_LEVANTAMIENTO = dto.FechaLevantamiento;
-                entity.CONTROL_ARCHIVO = dto.ControlArchivo;
+
+
+                CAT_D_VALOR_CONSTRUCCION entity = new CAT_D_VALOR_CONSTRUCCION();
+                entity.CODIGO_PARCELA = await _repository.GetNextKey();
+                entity.CODIGO_D_VALOR_CONSTRUCCION = dto.CodigoDValorConstruccion;
+                entity.CODIGO_VALOR_CONSTRUCCION = dto.CodigoValorConstruccion;
+                entity.CODIGO_INMUEBLE = dto.CodigoInmueble;
+                entity.CODIGO_CATASTRO = dto.CodigoCatastro;
+                entity.ESTRUCTURA_NIVEL1_ID = dto.EstructuraNivel1Id;
+                entity.ESTRUCTURA_NIVEL2_ID = dto.EstructuraNivel2Id;
+                entity.ESTRUCTURA_NIVEL3_ID = dto.EstructuraNivel3Id;
+                entity.ESTRUCTURA_NIVEL4_ID = dto.EstructuraNivel4Id;
+                entity.ESTRUCTURA_DESCRIPTIVA = dto.EstructuraDescriptiva;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
@@ -440,6 +406,7 @@ namespace Convertidor.Services.Catastro
                 entity.EXTRA13 = dto.Extra13;
                 entity.EXTRA14 = dto.Extra14;
                 entity.EXTRA15 = dto.Extra15;
+                entity.VALOR_COMPLEMENTARIO = dto.ValorComplementario;
 
 
                 entity.CODIGO_EMPRESA = conectado.Empresa;
@@ -449,7 +416,7 @@ namespace Convertidor.Services.Catastro
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await MapDocumentosLegales(created.Data);
+                    var resultDto = await MapDValorConstruccion(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -481,184 +448,158 @@ namespace Convertidor.Services.Catastro
             return result;
         }
 
-        public async Task<ResultDto<CatDocumentosLegalesResponseDto>> Update(CatDocumentosLegalesUpdateDto dto)
+        public async Task<ResultDto<CatDValorConstruccionResponseDto>> Update(CatDValorConstruccionUpdateDto dto)
         {
 
-            ResultDto<CatDocumentosLegalesResponseDto> result = new ResultDto<CatDocumentosLegalesResponseDto>(null);
+            ResultDto<CatDValorConstruccionResponseDto> result = new ResultDto<CatDValorConstruccionResponseDto>(null);
             try
             {
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoDocumentosLegales = await _repository.GetByCodigo(dto.CodigoDocumentosLegales);
+                var codigoParcela = await _repository.GetByCodigo(dto.CodigoParcela);
 
 
 
-                if (codigoDocumentosLegales == null)
+                if (codigoParcela == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Documentos Legales Invalido";
+                    result.Message = "Codigo Parcela Invalido";
                     return result;
 
                 }
 
-                if (dto.CodigoFicha <= 0)
+                if (dto.CodigoDValorConstruccion <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Ficha Invalido";
+                    result.Message = "Codigo D Valor Construccion Invalido";
                     return result;
 
                 }
 
-                if (dto.DocumentoNumero < 0)
+                if (dto.CodigoValorConstruccion < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Documento Numero Invalido ";
+                    result.Message = "Codigo Valor Construccion Invalido ";
                     return result;
                 }
 
-                if (dto.FolioNumero.Length > 15)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Folio Numero Invalido";
-                    return result;
-
-                }
-
-                if (dto.TomoNumero.Length > 15)
+                if (dto.CodigoInmueble <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tomo Numero Invalido";
+                    result.Message = "Codigo Inmueble Invalido";
                     return result;
 
                 }
 
-                if (dto.ProfNumero.Length > 15)
+                if (dto.CodigoCatastro.Length > 20)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Prof Numero Invalido";
+                    result.Message = "Codigo Catastro Invalido";
                     return result;
 
                 }
 
-                if (dto.FechaRegistro == null)
+                if (dto.EstructuraNivel1Id <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Fecha Registro Invalido";
+                    result.Message = "Estructura Nivel 1 Id Invalido";
                     return result;
 
                 }
 
-                if (dto.AreaTerreno <= 0)
+                var estructuraNivelID1 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel1Id);
+                if (estructuraNivelID1 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 1 Id Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.EstructuraNivel2Id <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Area Terreno Invalido";
+                    result.Message = "Estructura Nivel 2 Id Invalido";
                     return result;
 
                 }
-                if (dto.AreaConstruccion <= 0)
+
+                var estructuraNivelID2 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel2Id);
+                if (estructuraNivelID2 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 2 Id Invalida";
+                    return result;
+
+
+                }
+
+                if (dto.EstructuraNivel3Id <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Area Construccion Invalido";
+                    result.Message = "Estructura Nivel 3 Id Invalido";
+                    return result;
+                }
+
+                var estructuraNivelID3 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel3Id);
+                if (estructuraNivelID3 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 3 Id Invalida";
                     return result;
 
+
                 }
-                if (dto.Protocolo.Length > 15)
+
+                if (dto.EstructuraNivel4Id <= 0)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Protocolo Invalido";
+                    result.Message = "Estructura Nivel 4 Id Invalida";
+                    return result;
+                }
+
+                var estructuraNivelID4 = await _catDescriptivasRepository.GetByIdAndTitulo(49, dto.EstructuraNivel4Id);
+                if (estructuraNivelID4 == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Estructura Nivel 4 Id Invalida";
                     return result;
 
+
                 }
-                if (dto.MontoRegistro <= 0)
+
+                if (dto.EstructuraDescriptiva.Length > 10)
                 {
 
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Monto Registro Invalido";
+                    result.Message = "Estructura Descriptiva Invalida";
                     return result;
 
                 }
-
-                if (dto.ServTerreno <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Serv Terreno Invalido";
-                    return result;
-
-                }
-
-                if (dto.PrecioTerreno <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Precio Terreno Invalido";
-                    return result;
-
-                }
-
-                if (dto.NumeroCivico <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Civico Invalido";
-                    return result;
-
-                }
-
-                if (dto.FechaPrimeraVisita == null)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Invalida";
-                    return result;
-
-                }
-
-                if (dto.FechaLevantamiento == null)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Levantamiento Invalido";
-                    return result;
-
-                }
-
-                if (dto.ControlArchivo <= 0)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Control Archivo Invalido";
-                    return result;
-
-                }
-
 
                 if (dto.Extra1 is not null && dto.Extra1.Length > 100)
                 {
@@ -775,49 +716,54 @@ namespace Convertidor.Services.Catastro
                     return result;
                 }
 
+                if (dto.ValorComplementario <= 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Valor Complementario Invalido";
+                    return result;
+
+                }
 
 
 
-                codigoDocumentosLegales.CODIGO_DOCUMENTOS_LEGALES = dto.CodigoDocumentosLegales;
-                codigoDocumentosLegales.CODIGO_FICHA = dto.CodigoFicha;
-                codigoDocumentosLegales.DOCUMENTO_NUMERO = dto.DocumentoNumero;
-                codigoDocumentosLegales.FOLIO_NUMERO = dto.FolioNumero;
-                codigoDocumentosLegales.TOMO_NUMERO = dto.TomoNumero;
-                codigoDocumentosLegales.PROF_NUMERO = dto.ProfNumero;
-                codigoDocumentosLegales.FECHA_REGISTRO = dto.FechaRegistro;
-                codigoDocumentosLegales.AREA_TERRENO = dto.AreaTerreno;
-                codigoDocumentosLegales.AREA_CONSTRUCCION = dto.AreaConstruccion;
-                codigoDocumentosLegales.PROTOCOLO = dto.Protocolo;
-                codigoDocumentosLegales.MONTO_REGISTRO = dto.MontoRegistro;
-                codigoDocumentosLegales.SERV_TERRENO = dto.ServTerreno;
-                codigoDocumentosLegales.PRECIO_TERRENO = dto.PrecioTerreno;
-                codigoDocumentosLegales.NUMERO_CIVICO = dto.NumeroCivico;
-                codigoDocumentosLegales.FECHA_PRIMERA_VISITA = dto.FechaPrimeraVisita;
-                codigoDocumentosLegales.FECHA_LEVANTAMIENTO = dto.FechaLevantamiento;
-                codigoDocumentosLegales.CONTROL_ARCHIVO = dto.ControlArchivo;
-                codigoDocumentosLegales.EXTRA1 = dto.Extra1;
-                codigoDocumentosLegales.EXTRA2 = dto.Extra2;
-                codigoDocumentosLegales.EXTRA3 = dto.Extra3;
-                codigoDocumentosLegales.EXTRA4 = dto.Extra4;
-                codigoDocumentosLegales.EXTRA5 = dto.Extra5;
-                codigoDocumentosLegales.EXTRA6 = dto.Extra6;
-                codigoDocumentosLegales.EXTRA7 = dto.Extra7;
-                codigoDocumentosLegales.EXTRA8 = dto.Extra8;
-                codigoDocumentosLegales.EXTRA9 = dto.Extra9;
-                codigoDocumentosLegales.EXTRA10 = dto.Extra10;
-                codigoDocumentosLegales.EXTRA11 = dto.Extra11;
-                codigoDocumentosLegales.EXTRA12 = dto.Extra12;
-                codigoDocumentosLegales.EXTRA13 = dto.Extra13;
-                codigoDocumentosLegales.EXTRA14 = dto.Extra14;
-                codigoDocumentosLegales.EXTRA15 = dto.Extra15;
 
 
-                codigoDocumentosLegales.CODIGO_EMPRESA = conectado.Empresa;
-                codigoDocumentosLegales.USUARIO_INS = conectado.Usuario;
-                codigoDocumentosLegales.FECHA_INS = DateTime.Now;
+                codigoParcela.CODIGO_PARCELA = dto.CodigoParcela;
+                codigoParcela.CODIGO_D_VALOR_CONSTRUCCION = dto.CodigoDValorConstruccion;
+                codigoParcela.CODIGO_VALOR_CONSTRUCCION = dto.CodigoValorConstruccion;
+                codigoParcela.CODIGO_INMUEBLE = dto.CodigoInmueble;
+                codigoParcela.CODIGO_CATASTRO = dto.CodigoCatastro;
+                codigoParcela.ESTRUCTURA_NIVEL1_ID = dto.EstructuraNivel1Id;
+                codigoParcela.ESTRUCTURA_NIVEL2_ID = dto.EstructuraNivel2Id;
+                codigoParcela.ESTRUCTURA_NIVEL3_ID = dto.EstructuraNivel3Id;
+                codigoParcela.ESTRUCTURA_NIVEL4_ID = dto.EstructuraNivel4Id;
+                codigoParcela.ESTRUCTURA_DESCRIPTIVA = dto.EstructuraDescriptiva;
+                codigoParcela.EXTRA1 = dto.Extra1;
+                codigoParcela.EXTRA2 = dto.Extra2;
+                codigoParcela.EXTRA3 = dto.Extra3;
+                codigoParcela.EXTRA4 = dto.Extra4;
+                codigoParcela.EXTRA5 = dto.Extra5;
+                codigoParcela.EXTRA6 = dto.Extra6;
+                codigoParcela.EXTRA7 = dto.Extra7;
+                codigoParcela.EXTRA8 = dto.Extra8;
+                codigoParcela.EXTRA9 = dto.Extra9;
+                codigoParcela.EXTRA10 = dto.Extra10;
+                codigoParcela.EXTRA11 = dto.Extra11;
+                codigoParcela.EXTRA12 = dto.Extra12;
+                codigoParcela.EXTRA13 = dto.Extra13;
+                codigoParcela.EXTRA14 = dto.Extra14;
+                codigoParcela.EXTRA15 = dto.Extra15;
+                codigoParcela.VALOR_COMPLEMENTARIO = dto.ValorComplementario;
 
-                await _repository.Update(codigoDocumentosLegales);
-                var resultDto = await MapDocumentosLegales(codigoDocumentosLegales);
+
+                codigoParcela.CODIGO_EMPRESA = conectado.Empresa;
+                codigoParcela.USUARIO_INS = conectado.Usuario;
+                codigoParcela.FECHA_INS = DateTime.Now;
+
+                await _repository.Update(codigoParcela);
+                var resultDto = await MapDValorConstruccion(codigoParcela);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -838,25 +784,24 @@ namespace Convertidor.Services.Catastro
 
         }
 
-
-        public async Task<ResultDto<CatDocumentosLegalesDeleteDto>> Delete(CatDocumentosLegalesDeleteDto dto)
+        public async Task<ResultDto<CatDValorConstruccionDeleteDto>> Delete(CatDValorConstruccionDeleteDto dto)
         {
 
-            ResultDto<CatDocumentosLegalesDeleteDto> result = new ResultDto<CatDocumentosLegalesDeleteDto>(null);
+            ResultDto<CatDValorConstruccionDeleteDto> result = new ResultDto<CatDValorConstruccionDeleteDto>(null);
             try
             {
 
-                var codigoDocumentosLegales = await _repository.GetByCodigo(dto.CodigoDocumentosLegales);
-                if (codigoDocumentosLegales == null)
+                var codigoParcela = await _repository.GetByCodigo(dto.CodigoParcela);
+                if (codigoParcela == null)
                 {
                     result.Data = dto;
                     result.IsValid = false;
-                    result.Message = "Codigo Documentos Legales no existe";
+                    result.Message = "Codigo Parcela no existe";
                     return result;
                 }
 
 
-                var deleted = await _repository.Delete(dto.CodigoDocumentosLegales);
+                var deleted = await _repository.Delete(dto.CodigoParcela);
 
                 if (deleted.Length > 0)
                 {
@@ -885,7 +830,6 @@ namespace Convertidor.Services.Catastro
 
             return result;
         }
-
 
 
     }

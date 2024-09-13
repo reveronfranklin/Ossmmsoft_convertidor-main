@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Catastro
 {
-    public class CatDocumentosLegalesRepository : ICatDocumentosLegalesRepository
+    public class CatDocumentosRamoRepository : ICatDocumentosRamoRepository
     {
         private readonly DataContextCat _context;
 
-        public CatDocumentosLegalesRepository(DataContextCat context)
+        public CatDocumentosRamoRepository(DataContextCat context)
         {
             _context = context;
         }
 
-        public async Task<List<CAT_DOCUMENTOS_LEGALES>> GetAll()
+        public async Task<List<CAT_DOCUMENTOS_RAMO>> GetAll()
         {
             try
             {
-                var result = await _context.CAT_DOCUMENTOS_LEGALES.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CAT_DOCUMENTOS_RAMO.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -29,15 +29,15 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<CAT_DOCUMENTOS_LEGALES> GetByCodigo(int codigoDocumentosLegales)
+        public async Task<CAT_DOCUMENTOS_RAMO> GetByCodigo(int codigoDocuRamo)
         {
             try
             {
 
-                var result = await _context.CAT_DOCUMENTOS_LEGALES.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_DOCUMENTOS_LEGALES == codigoDocumentosLegales)
+                var result = await _context.CAT_DOCUMENTOS_RAMO.DefaultIfEmpty()
+                    .Where(x => x.CODIGO_DOCU_RAMO == codigoDocuRamo)
                     .FirstOrDefaultAsync();
-                return (CAT_DOCUMENTOS_LEGALES)result!;
+                return (CAT_DOCUMENTOS_RAMO)result!;
 
             }
             catch (Exception ex)
@@ -48,15 +48,15 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<ResultDto<CAT_DOCUMENTOS_LEGALES>> Add(CAT_DOCUMENTOS_LEGALES entity)
+        public async Task<ResultDto<CAT_DOCUMENTOS_RAMO>> Add(CAT_DOCUMENTOS_RAMO entity)
         {
-            ResultDto<CAT_DOCUMENTOS_LEGALES> result = new ResultDto<CAT_DOCUMENTOS_LEGALES>(null);
+            ResultDto<CAT_DOCUMENTOS_RAMO> result = new ResultDto<CAT_DOCUMENTOS_RAMO>(null);
             try
             {
 
 
 
-                await _context.CAT_DOCUMENTOS_LEGALES.AddAsync(entity);
+                await _context.CAT_DOCUMENTOS_RAMO.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
 
@@ -79,18 +79,18 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<ResultDto<CAT_DOCUMENTOS_LEGALES>> Update(CAT_DOCUMENTOS_LEGALES entity)
+        public async Task<ResultDto<CAT_DOCUMENTOS_RAMO>> Update(CAT_DOCUMENTOS_RAMO entity)
         {
-            ResultDto<CAT_DOCUMENTOS_LEGALES> result = new ResultDto<CAT_DOCUMENTOS_LEGALES>(null);
+            ResultDto<CAT_DOCUMENTOS_RAMO> result = new ResultDto<CAT_DOCUMENTOS_RAMO>(null);
 
             try
             {
-                CAT_DOCUMENTOS_LEGALES entityUpdate = await GetByCodigo(entity.CODIGO_DOCUMENTOS_LEGALES);
+                CAT_DOCUMENTOS_RAMO entityUpdate = await GetByCodigo(entity.CODIGO_DOCU_RAMO);
                 if (entityUpdate != null)
                 {
 
 
-                    _context.CAT_DOCUMENTOS_LEGALES.Update(entity);
+                    _context.CAT_DOCUMENTOS_RAMO.Update(entity);
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -109,15 +109,15 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
-        public async Task<string> Delete(int codigoDocumentosLegales)
+        public async Task<string> Delete(int codigoDocuRamo)
         {
 
             try
             {
-                CAT_DOCUMENTOS_LEGALES entity = await GetByCodigo(codigoDocumentosLegales);
+                CAT_DOCUMENTOS_RAMO entity = await GetByCodigo(codigoDocuRamo);
                 if (entity != null)
                 {
-                    _context.CAT_DOCUMENTOS_LEGALES.Remove(entity);
+                    _context.CAT_DOCUMENTOS_RAMO.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
                 return "";
@@ -136,8 +136,8 @@ namespace Convertidor.Data.Repository.Catastro
             try
             {
                 int result = 0;
-                var last = await _context.CAT_DOCUMENTOS_LEGALES.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_DOCUMENTOS_LEGALES)
+                var last = await _context.CAT_DOCUMENTOS_RAMO.DefaultIfEmpty()
+                    .OrderByDescending(x => x.CODIGO_DOCU_RAMO)
                     .FirstOrDefaultAsync();
                 if (last == null)
                 {
@@ -145,7 +145,7 @@ namespace Convertidor.Data.Repository.Catastro
                 }
                 else
                 {
-                    result = last.CODIGO_DOCUMENTOS_LEGALES + 1;
+                    result = last.CODIGO_DOCU_RAMO + 1;
                 }
 
                 return (int)result!;
