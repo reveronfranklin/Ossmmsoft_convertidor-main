@@ -22,6 +22,8 @@
         public decimal Total1 { get; set; }
         
         public decimal Total2 { get; set; }
+        public decimal Total3 { get; set; }
+        public decimal Total4 { get; set; }
 
     }
 

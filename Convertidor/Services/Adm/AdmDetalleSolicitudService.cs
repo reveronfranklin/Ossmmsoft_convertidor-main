@@ -51,7 +51,7 @@ namespace Convertidor.Services.Adm
             }
             itemResult.Descripcion = dtos.DESCRIPCION;
             itemResult.PrecioUnitario = dtos.PRECIO_UNITARIO;
-            itemResult.PrecioTotal = itemResult.PrecioUnitario * itemResult.Cantidad;
+            itemResult.PrecioTotal = (decimal)dtos.TOTAL;
             itemResult.PorDescuento = dtos.POR_DESCUENTO;
             itemResult.MontoDescuento = dtos.MONTO_DESCUENTO;
             itemResult.TipoImpuestoId = dtos.TIPO_IMPUESTO_ID;
@@ -135,10 +135,16 @@ namespace Convertidor.Services.Adm
                 if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
                 {
 
-                    var total = await GetTotalMonto(detalleSolicitud);
+                    var totalMasImpuesto = await GetTotalMonto(detalleSolicitud);
+                    var totalImpuesto = await GetTotalImpuesto(detalleSolicitud);
+                    var total = await GetTotal(detalleSolicitud);
                     var totalPuc = await GetTotalMontoPuc(codigoSolicitud);
-                    result.Total1 = total;
+                    
+                    result.Total1 = totalMasImpuesto;
                     result.Total2 = totalPuc;
+                    result.Total3 = total;
+                    result.Total4 = totalImpuesto;
+                    
                     result.Data = detalleSolicitud;
                     result.IsValid = true;
                     result.Message = "";
@@ -217,6 +223,72 @@ namespace Convertidor.Services.Adm
                   
                     
                     var total  = detalleSolicitud.Sum(p => p.TotalMasImpuesto);
+                    result = (decimal)total; 
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+        
+        public async Task<decimal> GetTotalImpuesto(List<AdmDetalleSolicitudResponseDto> detalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+             
+                if (detalleSolicitud != null && detalleSolicitud.Count > 0)
+                {
+                  
+                    
+                    var total  = detalleSolicitud.Sum(p => p.MontoImpuesto);
+                    result = (decimal)total; 
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+        
+        public async Task<decimal> GetTotal(List<AdmDetalleSolicitudResponseDto> detalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+             
+                if (detalleSolicitud != null && detalleSolicitud.Count > 0)
+                {
+                  
+                    
+                    var total  = detalleSolicitud.Sum(p => p.Total);
                     result = (decimal)total; 
                    
                     
@@ -361,14 +433,14 @@ namespace Convertidor.Services.Adm
               
                 var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
 
-                var producto = await _admProductosRepository.GetByCodigo(dto.CodigoProducto);
+                /*var producto = await _admProductosRepository.GetByCodigo(dto.CodigoProducto);
                 if (producto==null)
                 {
                       result.Data = null;
                        result.IsValid = false;
                        result.Message = "Seleccione un Producto Valido";
                        return result;
-                }
+                }*/
                 
                 codigoDetallesolicitud.CODIGO_SOLICITUD = dto.CodigoSolicitud;
                 codigoDetallesolicitud.CANTIDAD = dto.Cantidad;
@@ -477,7 +549,7 @@ namespace Convertidor.Services.Adm
                 }
 
 
-                var solicitudProducto =
+                /*var solicitudProducto =
                     await _repository.GetByCodigoSolicitudProducto(dto.CodigoSolicitud, dto.CodigoProducto);
                 if (solicitudProducto != null)
                 {
@@ -485,7 +557,7 @@ namespace Convertidor.Services.Adm
                     result.IsValid = false;
                     result.Message = "Ya existe este producto en la solicitud";
                     return result;
-                }
+                }*/
                 
                 if (dto.Cantidad <= 0)
                 {
@@ -535,14 +607,21 @@ namespace Convertidor.Services.Adm
                 }
 
                 var descriptivaImpuesto = await _admDescriptivaRepository.GetByCodigo(dto.TipoImpuestoId);
-                var producto = await _admProductosRepository.GetByCodigo(dto.CodigoProducto);
-                if (producto==null)
+                /*if (dto.CodigoProducto > 0)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Seleccione un Producto Valido";
-                    return result;
-                }
+                    var producto = await _admProductosRepository.GetByCodigo(dto.CodigoProducto);
+               
+                
+                    if (producto==null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Seleccione un Producto Valido";
+                        return result;
+                    }
+                }*/
+                
+             
               
 
             ADM_DETALLE_SOLICITUD entity = new ADM_DETALLE_SOLICITUD();
@@ -558,11 +637,14 @@ namespace Convertidor.Services.Adm
             entity.MONTO_DESCUENTO = 0;
             entity.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
 
-            entity.POR_IMPUESTO = ConvertStringToDecimal(descriptivaImpuesto.EXTRA1);
-            entity.MONTO_IMPUESTO =  ((entity.PRECIO_UNITARIO * entity.CANTIDAD) * entity.POR_IMPUESTO )/100 ;
+          
             entity.CODIGO_PRODUCTO = dto.CodigoProducto;
             entity.CODIGO_PRESUPUESTO = (int)solicitud.CODIGO_PRESUPUESTO;
             entity.CODIGO_PRODUCTO = dto.CodigoProducto;
+            
+            
+            entity.POR_IMPUESTO = ConvertStringToDecimal(descriptivaImpuesto.EXTRA1);
+            entity.MONTO_IMPUESTO =  ((entity.PRECIO_UNITARIO * entity.CANTIDAD) * entity.POR_IMPUESTO )/100 ;
             entity.TOTAL = entity.PRECIO_UNITARIO * entity.CANTIDAD;
             entity.TOTAL_MAS_IMPUESTO =
                 entity.TOTAL + (decimal)entity.MONTO_IMPUESTO;

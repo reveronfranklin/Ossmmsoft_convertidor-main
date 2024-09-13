@@ -8,9 +8,12 @@ namespace Convertidor.Data.Repository.Adm
     public class AdmDetalleSolicitudRepository: IAdmDetalleSolicitudRepository
     {
         private readonly DataContextAdm _context;
-        public AdmDetalleSolicitudRepository(DataContextAdm context)
+        private readonly IOssConfigRepository _ossConfigRepository;
+
+        public AdmDetalleSolicitudRepository(DataContextAdm context,IOssConfigRepository ossConfigRepository)
         {
             _context = context;
+            _ossConfigRepository = ossConfigRepository;
         }
 
         public async Task<ADM_DETALLE_SOLICITUD> GetCodigoDetalleSolicitud(int codigoDetalleSolicitud)
@@ -98,6 +101,17 @@ namespace Convertidor.Data.Repository.Adm
                     {
                         resultItem.DescripcionProducto =producto.DESCRIPCION;
                     }
+                    resultItem.LineaImpuesto = false;
+                    string variableImpuesto = "DESCRIPTIVA_IMPUESTO";
+                    var config = await _ossConfigRepository.GetByClave(variableImpuesto);
+                    if (config != null)
+                    {
+                        if (resultItem.TipoImpuestoId ==int.Parse(config.VALOR))
+                        {
+                            resultItem.LineaImpuesto = true;
+                        }
+                    }
+                    
                     result.Add(resultItem);
                 }
                 
