@@ -63,6 +63,54 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+        
+        
+        
+        public async  Task RecalculaImpuesto(int codigoPresupuesto,int codigoSolicitud)
+        {
+            
+
+            
+            try
+            {
+                var tipoImpuesto = 0;
+                string variableImpuesto = "DESCRIPTIVA_IMPUESTO";
+                var config = await _ossConfigRepository.GetByClave(variableImpuesto);
+                if (config != null)
+                {
+
+                    tipoImpuesto = int.Parse(config.VALOR);
+
+                }
+                var detalleImpuesto = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_IMPUESTO_ID==tipoImpuesto).FirstOrDefaultAsync();
+                if (detalleImpuesto != null)
+                {
+                    FormattableString xqueryDiario = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET POR_IMPUESTO=0,MONTO_IMPUESTO=0,TOTAL_MAS_IMPUESTO=ROUND(TOTAL, 2)  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud}";
+
+                    var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                    
+                    FormattableString xqueryDiarioTipoImpuesto = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET TIPO_IMPUESTO_ID =528 ,POR_IMPUESTO=0,MONTO_IMPUESTO=0,TOTAL_MAS_IMPUESTO=ROUND(TOTAL, 2)  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID <> {tipoImpuesto}";
+
+                    var resultDiarioTipoImpuesto =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioTipoImpuesto);
+                    
+                    
+                    FormattableString xqueryDiarioDESCRIPCION = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET DESCRIPCION='IVA'  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID = {tipoImpuesto}";
+
+                    var resultDiarioDescripcion =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioDESCRIPCION);
+                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var mess = ex.InnerException.Message;
+
+                throw;
+            }
+
+            
+        }
+        
         public async Task<List<AdmDetalleSolicitudResponseDto>> GetByCodigoSolicitud(int codigoSolicitud) 
         {
             try

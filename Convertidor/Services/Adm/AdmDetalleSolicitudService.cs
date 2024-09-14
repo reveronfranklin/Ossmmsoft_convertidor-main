@@ -446,6 +446,7 @@ namespace Convertidor.Services.Adm
                 codigoDetallesolicitud.CANTIDAD = dto.Cantidad;
                 codigoDetallesolicitud.UDM_ID = dto.UdmId;
                 codigoDetallesolicitud.DESCRIPCION = dto.Descripcion;
+              
                 codigoDetallesolicitud.PRECIO_UNITARIO = dto.PrecioUnitario;
                 codigoDetallesolicitud.POR_DESCUENTO = 0;
                 codigoDetallesolicitud.MONTO_DESCUENTO =0;
@@ -459,7 +460,10 @@ namespace Convertidor.Services.Adm
                 codigoDetallesolicitud.TOTAL = codigoDetallesolicitud.PRECIO_UNITARIO * codigoDetallesolicitud.CANTIDAD;
                 codigoDetallesolicitud.TOTAL_MAS_IMPUESTO =
                     codigoDetallesolicitud.TOTAL + (decimal)codigoDetallesolicitud.MONTO_IMPUESTO;
-
+                codigoDetallesolicitud.TOTAL_MAS_IMPUESTO =
+                    Math.Round((decimal)codigoDetallesolicitud.TOTAL_MAS_IMPUESTO, 2);
+                
+                
                 var totalPuc = await TotalPuc(dto.CodigoDetalleSolicitud);
                 if (codigoDetallesolicitud.TOTAL_MAS_IMPUESTO < totalPuc)
                 {
@@ -468,13 +472,16 @@ namespace Convertidor.Services.Adm
                     result.Message = "Esta intentando Modificar Precio o Cantidad y supera lo cargado en PUC";
                     return result;
                 }
+                
+                
+                
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 codigoDetallesolicitud.CODIGO_EMPRESA = conectado.Empresa;
                 codigoDetallesolicitud.USUARIO_UPD = conectado.Usuario;
                 codigoDetallesolicitud.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoDetallesolicitud);
-
+                await _repository.RecalculaImpuesto((int)solicitud.CODIGO_PRESUPUESTO, solicitud.CODIGO_SOLICITUD);
                 var resultDto =  await MapDetalleSolicitudDto(codigoDetallesolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -648,7 +655,9 @@ namespace Convertidor.Services.Adm
             entity.TOTAL = entity.PRECIO_UNITARIO * entity.CANTIDAD;
             entity.TOTAL_MAS_IMPUESTO =
                 entity.TOTAL + (decimal)entity.MONTO_IMPUESTO;
-
+            entity.TOTAL_MAS_IMPUESTO =
+                Math.Round((decimal)entity.TOTAL_MAS_IMPUESTO, 2);
+            
             var conectado = await _sisUsuarioRepository.GetConectado();
             entity.CODIGO_EMPRESA = conectado.Empresa;
             entity.USUARIO_INS = conectado.Usuario;
@@ -659,11 +668,11 @@ namespace Convertidor.Services.Adm
             
             if (created.IsValid && created.Data != null)
             {
-                
-            
+
+                await _repository.RecalculaImpuesto((int)solicitud.CODIGO_PRESUPUESTO, solicitud.CODIGO_SOLICITUD);
                 var resultDto = await MapDetalleSolicitudDto(created.Data);
                 result.Data = resultDto;
-                result.IsValid = true;
+;                result.IsValid = true;
                 result.Message = "";
             }
             else

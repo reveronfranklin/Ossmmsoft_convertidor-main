@@ -14,5 +14,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_DETALLE_SOLICITUD>> Update(ADM_DETALLE_SOLICITUD entity);
         Task<string> Delete(int codigoSolicitud);
         Task<int> GetNextKey();
+
+        Task RecalculaImpuesto(int codigoPresupuesto, int codigoSolicitud);
     }
 }
