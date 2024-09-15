@@ -276,6 +276,12 @@ namespace Convertidor.Services.Adm
             }
 
         }
+
+
+        public async Task<TotalesResponseDto> GetTotales(int codigoPresupuesto, int codigoSolicitud)
+        {
+            return await _repository.GetTotales(codigoPresupuesto, codigoSolicitud);
+        }
         
         public async Task<decimal> GetTotal(List<AdmDetalleSolicitudResponseDto> detalleSolicitud)
         {

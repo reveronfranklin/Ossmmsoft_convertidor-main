@@ -63,7 +63,54 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+
+        public async Task<TotalesResponseDto> GetTotales(int codigoPresupuesto, int codigoSolicitud)
+        {
+            TotalesResponseDto result = new TotalesResponseDto();
+
+            var tipoImpuesto = 0;
+            string variableImpuesto = "DESCRIPTIVA_IMPUESTO";
+            var config = await _ossConfigRepository.GetByClave(variableImpuesto);
+            if (config != null)
+            {
+
+                tipoImpuesto = int.Parse(config.VALOR);
+
+            }
+            var detalle = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud && x.CODIGO_PRESUPUESTO==codigoPresupuesto ).ToListAsync();
+            if (detalle.Count > 0)
+            {
+                decimal? sum = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto).Sum(x => x.TOTAL);
+                result.Base = (decimal)sum;
+                var detalleImpuesto = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_IMPUESTO_ID==tipoImpuesto).FirstOrDefaultAsync();
+                if (detalleImpuesto != null)
+                {
+                    result.Impuesto = (decimal)detalleImpuesto.TOTAL;
+                  
+                }
+                else
+                {
+                    decimal? sumImpuesto = detalle.Sum(x => x.MONTO_IMPUESTO);
+                    result.Base = (decimal)sumImpuesto;
+                }
+
+                result.TotalMasImpuesto = result.Base + result.Impuesto;
+                result.PorcentajeImpuesto =  (result.Impuesto/result.Base ) * 100;
+            }
+            else
+            {
+                result.Base = 0;
+                result.Impuesto = 0;
+                result.TotalMasImpuesto=0;
+                result.PorcentajeImpuesto = 0;
+            }
+            
+            
         
+
+
+            return result;
+        }
         
         
         public async  Task RecalculaImpuesto(int codigoPresupuesto,int codigoSolicitud)

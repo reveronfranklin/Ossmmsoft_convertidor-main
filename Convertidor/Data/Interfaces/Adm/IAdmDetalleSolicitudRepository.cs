@@ -16,5 +16,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<int> GetNextKey();
 
         Task RecalculaImpuesto(int codigoPresupuesto, int codigoSolicitud);
+        Task<TotalesResponseDto> GetTotales(int codigoPresupuesto, int codigoSolicitud);
     }
 }

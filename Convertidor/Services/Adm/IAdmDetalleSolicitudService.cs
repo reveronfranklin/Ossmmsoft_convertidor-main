@@ -9,5 +9,6 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmDetalleSolicitudResponseDto>> Update(AdmDetalleSolicitudUpdateDto dto);
         Task<ResultDto<AdmDetalleSolicitudResponseDto>> Create(AdmDetalleSolicitudUpdateDto dto);
         Task<ResultDto<AdmDetalleSolicitudDeleteDto>> Delete(AdmDetalleSolicitudDeleteDto dto);
+        Task<TotalesResponseDto> GetTotales(int codigoPresupuesto, int codigoSolicitud);
     }
 }
