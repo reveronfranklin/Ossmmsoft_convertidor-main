@@ -102,9 +102,14 @@ namespace Convertidor.Services.Adm
         {
 
             ResultDto<List<AdmPucSolicitudResponseDto>> result = new ResultDto<List<AdmPucSolicitudResponseDto>>(null);
+            
+
             try
             {
                 var pucSolicitud = await _repository.GetByDetalleSolicitud(filter.CodigoDetalleSolicitud);
+                
+                
+                
                 
                 if ( pucSolicitud !=null && pucSolicitud.Count() > 0)
                 {

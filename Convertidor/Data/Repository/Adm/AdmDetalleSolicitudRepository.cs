@@ -158,16 +158,173 @@ namespace Convertidor.Data.Repository.Adm
             
         }
         
-        public async Task<List<AdmDetalleSolicitudResponseDto>> GetByCodigoSolicitud(int codigoSolicitud) 
+        
+        public async Task<decimal> GetTotalMonto(List<ADM_DETALLE_SOLICITUD> detalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+             
+                if (detalleSolicitud != null && detalleSolicitud.Count > 0)
+                {
+                  
+                    
+                    var total  = detalleSolicitud.Sum(p => p.TOTAL_MAS_IMPUESTO);
+                    result = (decimal)total; 
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+        
+        public async Task<decimal> GetTotalImpuesto(List<ADM_DETALLE_SOLICITUD> detalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+             
+                if (detalleSolicitud != null && detalleSolicitud.Count > 0)
+                {
+                  
+                    
+                    var total  = detalleSolicitud.Sum(p => p.MONTO_IMPUESTO);
+                    result = (decimal)total; 
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+
+        
+        public async Task<decimal> GetTotal(List<ADM_DETALLE_SOLICITUD> detalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+             
+                if (detalleSolicitud != null && detalleSolicitud.Count > 0)
+                {
+                  
+                    
+                    var total  = detalleSolicitud.Sum(p => p.TOTAL);
+                    result = (decimal)total; 
+                   
+                    
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+
+        
+        public async Task<string> UpdateSearchText(int codigoSolicitud)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET ADM.ADM_DETALLE_SOLICITUD.SEARCH_TEXT = TRIM(DESCRIPCION) || (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  = ADM.ADM_DETALLE_SOLICITUD.TIPO_IMPUESTO_ID) WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        public async Task<ResultDto<List<AdmDetalleSolicitudResponseDto>>> GetByCodigoSolicitud(AdmSolicitudesFilterDto filter) 
         {
             try
             {
 
 
-                List<AdmDetalleSolicitudResponseDto> result = new List<AdmDetalleSolicitudResponseDto>();
+                await UpdateSearchText(filter.CodigoSolicitud);
+                if (filter.PageNumber == 0) filter.PageNumber = 1;
+                if (filter.PageSize == 0) filter.PageSize = 4000;
 
-                var detalle = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud).ToListAsync();
-                foreach (var item in detalle)
+                if (string.IsNullOrEmpty(filter.SearchText))
+                {
+                    filter.SearchText = "";
+                }
+                var totalRegistros = 0;
+                var totalPage = 0;
+                List<AdmDetalleSolicitudResponseDto> alldata = new List<AdmDetalleSolicitudResponseDto>();
+                ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
+               
+                List<ADM_DETALLE_SOLICITUD> pageData = new List<ADM_DETALLE_SOLICITUD>();
+                var detalle = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==filter.CodigoSolicitud).ToListAsync();
+               
+                totalRegistros = detalle.Count;
+
+                totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                if (filter.SearchText.Length>0)
+                {
+                   
+                    
+                    pageData = detalle
+                        .Where(x =>x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToList();
+                }
+                else
+                {
+                    pageData = detalle
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToList();
+                }
+                
+                
+                
+                foreach (var item in pageData)
                 {
                     AdmDetalleSolicitudResponseDto resultItem = new AdmDetalleSolicitudResponseDto();
                     resultItem.CodigoDetalleSolicitud = item.CODIGO_DETALLE_SOLICITUD;
@@ -207,16 +364,31 @@ namespace Convertidor.Data.Repository.Adm
                         }
                     }
                     
-                    result.Add(resultItem);
+                    alldata.Add(resultItem);
                 }
                 
+                
+                var totalMasImpuesto = await GetTotalMonto(detalle);
+                var totalImpuesto = await GetTotalImpuesto(detalle);
+                var total = await GetTotal(detalle);
+                result.Total3 = total;
+                result.Total1 = totalMasImpuesto;
+                result.Total4 = totalImpuesto;
+                
+                result.CantidadRegistros = totalRegistros;
+                result.TotalPage = totalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = alldata;
                 return result;
+
 
 
             }
             catch (Exception ex) 
             {
-                var res = ex.InnerException.Message;
+                var res = ex.Message;
                 return null;
             }
         }

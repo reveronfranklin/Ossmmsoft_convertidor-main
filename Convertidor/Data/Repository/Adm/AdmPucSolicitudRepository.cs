@@ -151,6 +151,10 @@ namespace Convertidor.Data.Repository.Adm
         }
 
         
+
+
+        
+        
         public async Task<bool> ExisteByDetalleSolicitud(int codigoDetalleSolicitud)
         {
             bool result = false;

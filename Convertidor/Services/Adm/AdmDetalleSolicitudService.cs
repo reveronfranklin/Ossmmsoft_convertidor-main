@@ -124,30 +124,24 @@ namespace Convertidor.Services.Adm
 
         }
 
-        public async  Task<ResultDto<List<AdmDetalleSolicitudResponseDto>>> GetByCodigoSolicitud(int codigoSolicitud)
+        public async  Task<ResultDto<List<AdmDetalleSolicitudResponseDto>>> GetByCodigoSolicitud(AdmSolicitudesFilterDto filter)
         {
 
             ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
             try
             {
-                var detalleSolicitud = await  _repository.GetByCodigoSolicitud(codigoSolicitud);
+                var detalleSolicitud = await  _repository.GetByCodigoSolicitud(filter);
           
-                if (detalleSolicitud != null && detalleSolicitud.Count() > 0)
+            
+           
+                
+                if (detalleSolicitud.Data != null && detalleSolicitud.Data.Count() > 0)
                 {
-
-                    var totalMasImpuesto = await GetTotalMonto(detalleSolicitud);
-                    var totalImpuesto = await GetTotalImpuesto(detalleSolicitud);
-                    var total = await GetTotal(detalleSolicitud);
-                    var totalPuc = await GetTotalMontoPuc(codigoSolicitud);
                     
-                    result.Total1 = totalMasImpuesto;
+                    var totalPuc = await GetTotalMontoPuc(filter.CodigoSolicitud);
+                    result = detalleSolicitud;
                     result.Total2 = totalPuc;
-                    result.Total3 = total;
-                    result.Total4 = totalImpuesto;
-                    
-                    result.Data = detalleSolicitud;
-                    result.IsValid = true;
-                    result.Message = "";
+                
 
 
                     return result;

@@ -772,11 +772,13 @@ namespace Convertidor.Services.Adm
                     result.Message = $"Solicitud debe estar en estatus {Estatus.GetStatus("PE")}";
                     return result;
                 }
-                
-                var admDetalleSolicitud =
-                    await _admDetalleSolicitudRepository.GetByCodigoSolicitud(codigoSolicitud);
 
-                if (admDetalleSolicitud == null || admDetalleSolicitud.Count == 0)
+                AdmSolicitudesFilterDto filter = new AdmSolicitudesFilterDto();
+                filter.CodigoSolicitud = codigoSolicitud;
+                var admDetalleSolicitud =
+                    await _admDetalleSolicitudRepository.GetByCodigoSolicitud(filter);
+
+                if (admDetalleSolicitud == null || admDetalleSolicitud.Data.Count == 0)
                 {
                     result.Data = false;
                     result.IsValid = false;
@@ -792,7 +794,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
                 
-                var totalDetalle = admDetalleSolicitud.Sum(p => p.TotalMasImpuesto);
+                var totalDetalle = admDetalleSolicitud.Data.Sum(p => p.TotalMasImpuesto);
                 var totalPuc = pucSolicitud.Sum(p => p.MONTO);
                 if (totalDetalle != totalPuc)
                 {

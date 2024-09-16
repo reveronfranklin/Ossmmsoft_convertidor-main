@@ -217,7 +217,10 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
-          public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuestoPendientes(AdmSolicitudesFilterDto filter) 
+
+        
+        
+        public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuestoPendientes(AdmSolicitudesFilterDto filter) 
         {
             ResultDto<List<AdmSolicitudesResponseDto>> result = new ResultDto<List<AdmSolicitudesResponseDto>>(null);
 

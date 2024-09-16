@@ -51,7 +51,7 @@ namespace Convertidor.Controllers
         }
         [HttpPost]
         [Route("[action]")]
-        public async  Task<IActionResult> GetByCodigoSolicitud(AdmDetalleSolicitudFilterDto filter)
+        public async  Task<IActionResult> GetByCodigoSolicitud(AdmSolicitudesFilterDto filter)
         {
             ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
             var conectado = await _sisUsuarioRepository.GetConectado();
@@ -64,7 +64,7 @@ namespace Convertidor.Controllers
                 result.Message = userValid.Message;
                 return Ok(result);
             }
-            result =await  _service.GetByCodigoSolicitud(filter.CodigoSolicitud);
+            result =await  _service.GetByCodigoSolicitud(filter);
             return Ok(result);
         }
 
