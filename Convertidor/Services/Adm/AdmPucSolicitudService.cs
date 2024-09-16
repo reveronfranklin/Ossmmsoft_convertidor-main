@@ -596,7 +596,22 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                var preSaldo = await _preVSaldosRepository.GetByCodigo(dto.CodigoSaldo);
+                if (preSaldo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Saldo Invalido";
+                    return result;
+                }
 
+                if (preSaldo.DISPONIBLE < dto.Monto)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto supera el disponible";
+                    return result;
+                }
             ADM_PUC_SOLICITUD entity = new ADM_PUC_SOLICITUD();
             entity.CODIGO_PUC_SOLICITUD = await _repository.GetNextKey();
             entity.CODIGO_DETALLE_SOLICITUD = dto.CodigoDetalleSolicitud;
