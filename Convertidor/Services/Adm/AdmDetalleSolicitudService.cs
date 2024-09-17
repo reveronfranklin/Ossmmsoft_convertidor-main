@@ -555,6 +555,15 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                var existeImpuesto =
+                    await _repository.ExisteImpuesto((int)solicitud.CODIGO_PRESUPUESTO, solicitud.CODIGO_SOLICITUD);
+                if (existeImpuesto == true)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"No puede agregar mas de una linea de impuesto";
+                    return result;
+                }
 
                 /*var solicitudProducto =
                     await _repository.GetByCodigoSolicitudProducto(dto.CodigoSolicitud, dto.CodigoProducto);

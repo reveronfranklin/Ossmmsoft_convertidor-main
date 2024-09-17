@@ -111,7 +111,29 @@ namespace Convertidor.Data.Repository.Adm
 
             return result;
         }
-        
+
+
+        public async Task<bool> ExisteImpuesto(int codigoPresupuesto, int codigoSolicitud)
+        {
+            var result = false;
+            var tipoImpuesto = 0;
+            string variableImpuesto = "DESCRIPTIVA_IMPUESTO";
+            var config = await _ossConfigRepository.GetByClave(variableImpuesto);
+            if (config != null)
+            {
+
+                tipoImpuesto = int.Parse(config.VALOR);
+
+            }
+            
+            var detalleImpuesto = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_IMPUESTO_ID==tipoImpuesto).FirstOrDefaultAsync();
+            if (detalleImpuesto != null)
+            {
+                result = true;
+            }
+
+            return result;
+        }
         
         public async  Task RecalculaImpuesto(int codigoPresupuesto,int codigoSolicitud)
         {
@@ -392,7 +414,7 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
-   public List<AdmDetalleSolicitudResponseDto> GetByCodigoSolicitudBk(int codigoSolicitud) 
+         public List<AdmDetalleSolicitudResponseDto> GetByCodigoSolicitudBk(int codigoSolicitud) 
         {
             try
             {

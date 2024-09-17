@@ -17,5 +17,6 @@ namespace Convertidor.Data.Interfaces.Adm
 
         Task RecalculaImpuesto(int codigoPresupuesto, int codigoSolicitud);
         Task<TotalesResponseDto> GetTotales(int codigoPresupuesto, int codigoSolicitud);
+        Task<bool> ExisteImpuesto(int codigoPresupuesto, int codigoSolicitud);
     }
 }
