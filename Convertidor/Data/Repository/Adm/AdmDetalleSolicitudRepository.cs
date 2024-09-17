@@ -366,10 +366,10 @@ namespace Convertidor.Data.Repository.Adm
                     
                     alldata.Add(resultItem);
                 }
-                
-                
+
+                var totales = GetTotales(filter.CodigoPresupuesto,filter.CodigoSolicitud);
                 var totalMasImpuesto = await GetTotalMonto(detalle);
-                var totalImpuesto = await GetTotalImpuesto(detalle);
+                var totalImpuesto = totales.Result.Impuesto;
                 var total = await GetTotal(detalle);
                 result.Total3 = total;
                 result.Total1 = totalMasImpuesto;

@@ -9,19 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_DETALLE_SOLICITUD.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_DETALLE_SOLICITUD.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmDetalleSolicitudRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPucSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmDetalleSolicitudFilterDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmDetalleSolicitudFilterDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmPucSolicitudService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmDetalleSolicitudService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,22 +35,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -260,6 +232,7 @@
       <workItem from="1725470049623" duration="731000" />
       <workItem from="1726183147566" duration="32395000" />
       <workItem from="1726493361098" duration="7801000" />
+      <workItem from="1726532825972" duration="1678000" />
     </task>
     <servers />
   </component>
@@ -1732,32 +1705,6 @@
           <option name="timeStamp" value="338" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>94</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'GetUserPermissions'">
-            <startOffsets>
-              <option value="2820" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2895" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="339" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>104</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'GetModelUserAction'">
-            <startOffsets>
-              <option value="3160" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3242" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="348" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreCompromisosController.cs</url>
           <line>138</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreCompromisosController.cs" containingFunctionPresentation="Method 'AnularDesdeSolicitud'">
@@ -2200,19 +2147,6 @@
           <option name="timeStamp" value="407" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>117</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
-            <startOffsets>
-              <option value="3461" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3500" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="408" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
           <line>63</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Create'">
@@ -2486,19 +2420,6 @@
           <option name="timeStamp" value="440" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs</url>
-          <line>97</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'GetTotales'">
-            <startOffsets>
-              <option value="3674" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3740" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="441" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs</url>
           <line>55</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" containingFunctionPresentation="Method 'GetByCodigoSolicitud'">
@@ -2536,6 +2457,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="444" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs</url>
+          <line>370</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'GetByCodigoSolicitud'">
+            <startOffsets>
+              <option value="14089" />
+            </startOffsets>
+            <endOffsets>
+              <option value="14141" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="445" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
