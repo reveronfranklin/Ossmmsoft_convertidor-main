@@ -9,9 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmDetalleSolicitudRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -236,7 +234,7 @@
       <workItem from="1725470049623" duration="731000" />
       <workItem from="1726183147566" duration="32395000" />
       <workItem from="1726493361098" duration="7801000" />
-      <workItem from="1726532825972" duration="2545000" />
+      <workItem from="1726532825972" duration="3590000" />
     </task>
     <servers />
   </component>
@@ -2376,10 +2374,10 @@
           <line>144</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'RecalculaImpuesto'">
             <startOffsets>
-              <option value="5033" />
+              <option value="5037" />
             </startOffsets>
             <endOffsets>
-              <option value="5054" />
+              <option value="5058" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="435" />
@@ -2441,10 +2439,10 @@
           <line>291</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'UpdateSearchText'">
             <startOffsets>
-              <option value="9882" />
+              <option value="9886" />
             </startOffsets>
             <endOffsets>
-              <option value="9956" />
+              <option value="9960" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="443" />
@@ -2454,10 +2452,10 @@
           <line>296</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'UpdateSearchText'">
             <startOffsets>
-              <option value="10061" />
+              <option value="10065" />
             </startOffsets>
             <endOffsets>
-              <option value="10079" />
+              <option value="10083" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="444" />
@@ -2467,10 +2465,10 @@
           <line>392</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'GetByCodigoSolicitud'">
             <startOffsets>
-              <option value="14899" />
+              <option value="14903" />
             </startOffsets>
             <endOffsets>
-              <option value="14951" />
+              <option value="14955" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="445" />

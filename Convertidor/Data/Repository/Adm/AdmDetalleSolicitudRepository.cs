@@ -91,7 +91,7 @@ namespace Convertidor.Data.Repository.Adm
                 else
                 {
                     decimal? sumImpuesto = detalle.Sum(x => x.MONTO_IMPUESTO);
-                    result.Base = (decimal)sumImpuesto;
+                    result.Impuesto = (decimal)sumImpuesto;
                 }
 
                 result.TotalMasImpuesto = result.Base + result.Impuesto;
