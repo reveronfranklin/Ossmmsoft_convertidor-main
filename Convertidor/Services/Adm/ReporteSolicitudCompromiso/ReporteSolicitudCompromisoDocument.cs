@@ -126,8 +126,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                    col.Item().Component(new CuerpoComponent(Model.Cuerpo, Model.Encabezado));
                    col.Item().ExtendVertical().Row(row =>
                    {
-                      row.ConstantItem(50).ExtendVertical().BorderVertical(1);
-                      row.ConstantItem(50).ExtendVertical().BorderVertical(1);
+                      row.ConstantItem(75).ExtendVertical().BorderVertical(1);
+                      row.ConstantItem(75).ExtendVertical().BorderVertical(1);
+                      row.ConstantItem(75).ExtendVertical().BorderVertical(1);
                       row.RelativeItem(3).ExtendVertical().BorderVertical(1);
                       row.ConstantItem(100).ExtendVertical().BorderVertical(1);
                       row.ConstantItem(100).ExtendVertical().BorderVertical(1);
@@ -172,24 +173,26 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 });
 
 
+                var bolivares = Model.Encabezado.Base;
+                var montoImpuesto = Model.Encabezado.Impuesto;
+                var total = Model.Encabezado.TotalMasImpuesto;
+                var porcImpuesto = Model.Encabezado.PorcentajeImpuesto;
+                var totalBolivares = bolivares.ToString("N", formato);
+                var totalImpuesto = montoImpuesto.ToString("N", formato);
+                var totales = total.ToString("N", formato);
+                var porcImpuestoString = porcImpuesto.ToString("N", formato);
+                
                 footer.Cell().Column(col =>
                 {
 
                     col.Item().BorderTop(1).BorderLeft(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).Bold();
-                    col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text("16%    " + "  IVA").FontSize(8).Bold();
+                    col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text($"{porcImpuestoString}%    " + "  IVA").FontSize(8).Bold();
                     col.Item().Width(100).BorderLeft(1).AlignRight().AlignMiddle().PaddingRight(3).PaddingBottom(10).Text("TOTAL").FontSize(8).Bold();
 
                 });
 
                     
-                    var bolivares = Model.Cuerpo.Sum(x => x.TotalBolivares);
-                   
-                    var montoImpuesto = bolivares * (decimal)0.16;
-                    var total = bolivares + montoImpuesto;
-
-                    var totalBolivares = bolivares.ToString("N", formato);
-                    var totalImpuesto = montoImpuesto.ToString("N", formato);
-                    var totales = total.ToString("N", formato);
+                  
 
                     footer.Cell().Column(col =>
                     {

@@ -102,9 +102,14 @@ namespace Convertidor.Services.Adm
         {
 
             ResultDto<List<AdmPucSolicitudResponseDto>> result = new ResultDto<List<AdmPucSolicitudResponseDto>>(null);
+            
+
             try
             {
                 var pucSolicitud = await _repository.GetByDetalleSolicitud(filter.CodigoDetalleSolicitud);
+                
+                
+                
                 
                 if ( pucSolicitud !=null && pucSolicitud.Count() > 0)
                 {
@@ -229,6 +234,12 @@ namespace Convertidor.Services.Adm
                 else
                 {
                     result = false;
+                    if (nuevoMonto > codigoDetallesolicitud.TOTAL_MAS_IMPUESTO)
+                    {
+                        result = true;
+                    }
+                   
+                    
                 }
               
 
@@ -420,7 +431,7 @@ namespace Convertidor.Services.Adm
 
                 await _repository.Update(codigoPucsolicitud);
                 //ACTUALIZAR PRE_V_SALDO
-                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.CodigoFinanciado);
+                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.FinanciadoId);
                 var resultDto = await MapPucSolicitudDto(codigoPucsolicitud);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -590,7 +601,22 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                var preSaldo = await _preVSaldosRepository.GetByCodigo(dto.CodigoSaldo);
+                if (preSaldo == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Saldo Invalido";
+                    return result;
+                }
 
+                if (preSaldo.DISPONIBLE < dto.Monto)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto supera el disponible";
+                    return result;
+                }
             ADM_PUC_SOLICITUD entity = new ADM_PUC_SOLICITUD();
             entity.CODIGO_PUC_SOLICITUD = await _repository.GetNextKey();
             entity.CODIGO_DETALLE_SOLICITUD = dto.CodigoDetalleSolicitud;
@@ -617,7 +643,7 @@ namespace Convertidor.Services.Adm
             {
                 
                 //ACTUALIZAR PRE_V_SALDO
-                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.CodigoFinanciado);
+                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.FinanciadoId);
                 var resultDto = await MapPucSolicitudDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -647,6 +673,47 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+
+        public async Task<ResultDto<bool>> EliminarImputacion(AdmSolicitudesDeleteDto dto)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(dto.CodigoSolicitud);
+                if (solicitud == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "No existe Esta Solicitud";
+                    return result;
+                }
+
+                var status = Estatus.GetStatusObj(solicitud.STATUS);
+                if (status.Modificable == false)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
+                    return result;
+                }
+                
+                await _repository.EliminaImputacion((int)dto.CodigoPresupuesto, dto.CodigoSolicitud);
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "Imputacion Eliminada Satisfactoriamente";
+            }
+        
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+
+        }
         public async Task<ResultDto<AdmPucSolicitudDeleteDto>> Delete(AdmPucSolicitudDeleteDto dto) 
         {
             ResultDto<AdmPucSolicitudDeleteDto> result = new ResultDto<AdmPucSolicitudDeleteDto>(null);
@@ -665,7 +732,7 @@ namespace Convertidor.Services.Adm
 
                 var deleted = await _repository.Delete(dto.CodigoPucSolicitud);
                 //ACTUALIZAR PRE_V_SALDO
-                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(codigoPucSolicitud.CODIGO_PRESUPUESTO,codigoPucSolicitud.CODIGO_ICP,codigoPucSolicitud.CODIGO_PUC,(int)codigoPucSolicitud.CODIGO_FINANCIADO);
+                _preVSaldosRepository.RecalculaSaldosPreIcpPucFi(codigoPucSolicitud.CODIGO_PRESUPUESTO,codigoPucSolicitud.CODIGO_ICP,codigoPucSolicitud.CODIGO_PUC,(int)codigoPucSolicitud.FINANCIADO_ID);
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;

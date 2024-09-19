@@ -645,8 +645,14 @@ namespace Convertidor.Services.Adm
                 //SE GENERA EL PROXIMO NUMERO DE SOLICITUD
                 var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(descriptivaSolicitud.CODIGO);
                 var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie((int)entity.CODIGO_PRESUPUESTO , sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
-
-                entity.NUMERO_SOLICITUD = numeroSolicitud;
+                if (!numeroSolicitud.IsValid)
+                {
+                    result.Data = null;
+                    result.IsValid = numeroSolicitud.IsValid;
+                    result.Message = numeroSolicitud.Message;
+                    return result;
+                }
+                entity.NUMERO_SOLICITUD = numeroSolicitud.Data;
                 entity.FECHA_SOLICITUD = dto.FechaSolicitud;
                 entity.CODIGO_SOLICITANTE = dto.CodigoSolicitante;
                 entity.TIPO_SOLICITUD_ID = dto.TipoSolicitudId;
@@ -766,11 +772,13 @@ namespace Convertidor.Services.Adm
                     result.Message = $"Solicitud debe estar en estatus {Estatus.GetStatus("PE")}";
                     return result;
                 }
-                
-                var admDetalleSolicitud =
-                    await _admDetalleSolicitudRepository.GetByCodigoSolicitud(codigoSolicitud);
 
-                if (admDetalleSolicitud == null || admDetalleSolicitud.Count == 0)
+                AdmSolicitudesFilterDto filter = new AdmSolicitudesFilterDto();
+                filter.CodigoSolicitud = codigoSolicitud;
+                var admDetalleSolicitud =
+                    await _admDetalleSolicitudRepository.GetByCodigoSolicitud(filter);
+
+                if (admDetalleSolicitud == null || admDetalleSolicitud.Data.Count == 0)
                 {
                     result.Data = false;
                     result.IsValid = false;
@@ -786,7 +794,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
                 
-                var totalDetalle = admDetalleSolicitud.Sum(p => p.TotalMasImpuesto);
+                var totalDetalle = admDetalleSolicitud.Data.Sum(p => p.TotalMasImpuesto);
                 var totalPuc = pucSolicitud.Sum(p => p.MONTO);
                 if (totalDetalle != totalPuc)
                 {

@@ -230,6 +230,15 @@ builder.Services.AddTransient<ICatArrendamientosInmueblesRepository, CatArrendam
 builder.Services.AddTransient<ICatAuditoriaRepository, CatAuditoriaRepository>();
 builder.Services.AddTransient<ICatAvaluoConstruccionRepository, CatAvaluoConstruccionRepository>();
 builder.Services.AddTransient<ICatAvaluoTerrenoRepository, CatAvaluoTerrenoRepository>();
+builder.Services.AddTransient<ICatCalcXTriangulacionRepository, CatCalcXTriangulacionRepository>();
+builder.Services.AddTransient<ICatControlParcelasRepository, CatControlParcelasRepository>();
+builder.Services.AddTransient<ICAT_UBICACION_NACRepository, CAT_UBICACION_NACRepository>();
+builder.Services.AddTransient<ICatDesgloseRepository, CatDesgloseRepository>();
+builder.Services.AddTransient<ICatDireccionesRepository, CatDireccionesRepository>();
+builder.Services.AddTransient<ICatDocumentosLegalesRepository, CatDocumentosLegalesRepository>();
+builder.Services.AddTransient<ICatDocumentosRamoRepository, CatDocumentosRamoRepository>();
+builder.Services.AddTransient<ICatDValorConstruccionRepository, CatDValorConstruccionRepository>();
+builder.Services.AddTransient<ICatDValorTierraRepository, CatDValorTierraRepository>();
 
 
 //CATASTRO Services
@@ -240,6 +249,15 @@ builder.Services.AddTransient<ICatArrendamientosInmueblesService, CatArrendamien
 builder.Services.AddTransient<ICatAuditoriaService, CatAuditoriaService>();
 builder.Services.AddTransient<ICatAvaluoConstruccionService, CatAvaluoConstruccionService>();
 builder.Services.AddTransient<ICatAvaluoTerrenoService, CatAvaluoTerrenoService>();
+builder.Services.AddTransient<ICatCalcXTriangulacionService, CatCalcXTriangulacionService>();
+builder.Services.AddTransient<ICatControlParcelasService, CatControlParcelasService>();
+builder.Services.AddTransient<ICAT_UBICACION_NACService, CAT_UBICACION_NACService>();
+builder.Services.AddTransient<ICatDesgloseService, CatDesgloseService>();
+builder.Services.AddTransient<ICatDireccionesService, CatDireccionesService>();
+builder.Services.AddTransient<ICatDocumentosLegalesService, CatDocumentosLegalesService>();
+builder.Services.AddTransient<ICatDocumentosRamoService, CatDocumentosRamoService>();
+builder.Services.AddTransient<ICatDValorConstruccionService, CatDValorConstruccionService>();
+builder.Services.AddTransient<ICatDValorTierraService, CatDValorTierraService>();
 
 
 //RH

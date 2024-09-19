@@ -28,6 +28,8 @@
         
         public decimal? TOTAL { get; set; }
         public decimal? TOTAL_MAS_IMPUESTO { get; set; }
+
+        public string SEARCH_TEXT  { get; set; }= string.Empty;
     }
 }
 

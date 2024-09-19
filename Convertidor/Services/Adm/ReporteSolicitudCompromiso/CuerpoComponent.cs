@@ -54,8 +54,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                       header.Cell().ColumnSpan(6).Row(row =>
                       {
 
-                          row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("CANTIDAD").FontSize(7).Bold();
-                          row.ConstantItem(50).Border(1).AlignCenter().Element(CellStyle).Text("   UNIDAD\n" + "DE MEDIDA").FontSize(7).Bold();
+                          row.ConstantItem(75).Border(1).AlignCenter().Element(CellStyle).Text("CANTIDAD").FontSize(7).Bold();
+                          row.ConstantItem(75).Border(1).AlignCenter().Element(CellStyle).Text("   UNIDAD\n" + "DE MEDIDA").FontSize(7).Bold();
                           row.RelativeItem(3).Border(1).AlignCenter().Element(CellStyle).PaddingLeft(50).Text("DESCRIPCION").FontSize(7).Bold();
                           row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("   PRECIO\n" + "UNITARIO").FontSize(7).Bold();
                           row.ConstantItem(100).Column(col =>
@@ -79,8 +79,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
 
-                    row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.Cantidad).FontSize(7);
-                    row.ConstantItem(50).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.DescripcionUdmId).FontSize(7);
+                    row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.Cantidad).FontSize(7);
+                    row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.DescripcionUdmId).FontSize(7);
                     row.RelativeItem(3).BorderVertical(1).AlignLeft().PaddingLeft(10).PaddingTop(3).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(7);
                     var precio = item.PrecioUnitario.ToString("N", formato);
                     row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(precio).FontSize(7);
@@ -95,8 +95,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                             col.Item().ExtendVertical().Row(row =>
                             {
-                                row.ConstantItem(50).ExtendVertical().BorderVertical(1);
-                                row.ConstantItem(50).ExtendVertical().BorderVertical(1);
+                                row.ConstantItem(75).ExtendVertical().BorderVertical(1);
+                                row.ConstantItem(75).ExtendVertical().BorderVertical(1);
                                 row.RelativeItem(3).ExtendVertical().BorderVertical(1);
                                 row.ConstantItem(100).ExtendVertical().BorderVertical(1);
                                 row.ConstantItem(100).ExtendVertical().BorderVertical(1);

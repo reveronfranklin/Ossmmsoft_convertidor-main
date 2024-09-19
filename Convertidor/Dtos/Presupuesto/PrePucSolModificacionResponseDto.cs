@@ -22,4 +22,10 @@ public class PrePucSolModificacionResponseDto
     public decimal MontoAnulado { get; set; }
     public int CodigoPresupuesto { get; set; }
     public string Status { get; set; }
+    
+    
+    public string SearchText
+    {
+        get { return $"{DescripcionFinanciado}-{CodigoIcpConcat}-{CodigoPucConcat}-{DenominacionIcp}-{DenominacionPuc}"; }
+    }
 }

@@ -197,7 +197,16 @@ namespace Convertidor.Services.Presupuesto
                 var ossConfig = await _ossConfigRepository.GetByClave(literalCompromiso);
                 var sisDescriptiva = await _sisDescriptivaRepository.GetByCodigoDescripcion(ossConfig.VALOR);
                 var numeroCompromiso = await _serieDocumentosRepository.GenerateNextSerie((int)admSolicitud.CODIGO_PRESUPUESTO,sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
-                entity.NUMERO_COMPROMISO = numeroCompromiso;
+                if (!numeroCompromiso.IsValid)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = numeroCompromiso.Message;
+                    return result;
+                    
+                }
+                
+                entity.NUMERO_COMPROMISO = numeroCompromiso.Data;
                 entity.FECHA_COMPROMISO = DateTime.Now;
                 entity.CODIGO_PROVEEDOR = (int)admSolicitud.CODIGO_PROVEEDOR;
                 entity.FECHA_ENTREGA = null;
@@ -220,12 +229,15 @@ namespace Convertidor.Services.Presupuesto
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var admDetalleSolicitud =
-                        await _admDetalleSolicitudRepository.GetByCodigoSolicitud(codigoSolicitud);
 
-                    if (admDetalleSolicitud != null && admDetalleSolicitud.Count > 0)
+                    AdmSolicitudesFilterDto filter = new AdmSolicitudesFilterDto();
+                    filter.CodigoSolicitud = codigoSolicitud;
+                    var admDetalleSolicitud =
+                        await _admDetalleSolicitudRepository.GetByCodigoSolicitud(filter);
+
+                    if (admDetalleSolicitud.Data != null && admDetalleSolicitud.Data.Count > 0)
                     {
-                        foreach (var item in admDetalleSolicitud)
+                        foreach (var item in admDetalleSolicitud.Data)
                         {
                             PRE_DETALLE_COMPROMISOS detailEntity = new PRE_DETALLE_COMPROMISOS();
                             detailEntity.CODIGO_COMPROMISO = created.Data.CODIGO_COMPROMISO;

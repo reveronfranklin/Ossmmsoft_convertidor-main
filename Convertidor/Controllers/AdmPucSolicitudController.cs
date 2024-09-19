@@ -117,6 +117,25 @@ namespace Convertidor.Controllers
             return Ok(result);
 
         }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> EliminarImputacion(AdmSolicitudesDeleteDto dto)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            /*var conectado = await _sisUsuarioRepository.GetConectado();
+            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmPucSolicitud, ActionType.Delete);
+            if (userValid.IsValid == false)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = userValid.Message;
+                return Ok(result);
+            }*/
+            result = await _service.EliminarImputacion(dto);
+            return Ok(result);
+
+        }
 
     }
 }

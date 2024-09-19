@@ -1,9 +1,11 @@
 ﻿using Convertidor.Data.Entities.Catastro;
+using Convertidor.Data.Entities.Sis;
+using Convertidor.Data.Interfaces.Catastro;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Catastro
 {
-	public class CAT_UBICACION_NACRepository 
+	public class CAT_UBICACION_NACRepository : ICAT_UBICACION_NACRepository
     {
 		
 
@@ -95,18 +97,313 @@ namespace Convertidor.Data.Repository.Catastro
         }
 
 
-      
-        public async Task<CAT_UBICACION_NAC> getPais()
+        public async Task<CAT_UBICACION_NAC> GetPais(int pais)
         {
 
-            CAT_UBICACION_NAC result = new CAT_UBICACION_NAC();
-            var paisConfig = _configuration.GetValue<string>("PaisConfig");
-            if (paisConfig.ToString().Length > 0)
+            try
             {
-                result = await GetByKey(Int16.Parse(paisConfig));
-
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty().Where(x => x.PAIS == pais && x.ENTIDAD == 0).FirstOrDefaultAsync();
+                return result;
             }
-            return result;
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        public async Task<List<CAT_UBICACION_NAC>> GetPaises()
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS != 0 && x.ENTIDAD == 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<List<CAT_UBICACION_NAC>> GetEstados()
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS != 0 && x.ENTIDAD != 0 && x.MUNICIPIO == 0 && x.CIUDAD == 0 && x.PARROQUIA == 0 &&
+                    x.SECTOR == 0 && x.URBANIZACION == 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<List<CAT_UBICACION_NAC>> GetMunicipios()
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS != 0 && x.ENTIDAD != 0 && x.MUNICIPIO != 0 && x.CIUDAD == 0 && x.PARROQUIA == 0 &&
+                    x.SECTOR == 0 && x.URBANIZACION == 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<List<CAT_UBICACION_NAC>> GetCiudades()
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS != 0 && x.ENTIDAD != 0 && x.MUNICIPIO == 0 && x.CIUDAD != 0 && x.PARROQUIA == 0 &&
+                    x.SECTOR == 0 && x.URBANIZACION == 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<List<CAT_UBICACION_NAC>> GetParroquias()
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS != 0 && x.ENTIDAD != 0 && x.MUNICIPIO == 0 && x.CIUDAD == 0 && x.PARROQUIA != 0 &&
+                    x.SECTOR == 0 && x.URBANIZACION == 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<List<CAT_UBICACION_NAC>> GetSectores()
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS != 0 && x.ENTIDAD != 0 && x.MUNICIPIO == 0 && x.CIUDAD == 0 && x.PARROQUIA == 0 &&
+                    x.SECTOR != 0 && x.URBANIZACION == 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<List<CAT_UBICACION_NAC>> GetUrbanizaciones()
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS != 0 && x.ENTIDAD != 0 && x.MUNICIPIO == 0 && x.CIUDAD == 0 && x.PARROQUIA == 0 &&
+                    x.SECTOR == 0 && x.URBANIZACION != 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+
+
+        public async Task<CAT_UBICACION_NAC> GetEstado(int pais, int estado)
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<CAT_UBICACION_NAC> GetMunicipio(int pais, int estado, int municipio)
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == municipio).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<CAT_UBICACION_NAC> GetCiudad(int pais, int estado, int municipio, int ciudad)
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == municipio &&
+                    x.CIUDAD == ciudad && x.PARROQUIA == 0 && x.SECTOR == 0 && x.URBANIZACION == 0).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<CAT_UBICACION_NAC> GetParroquia(int pais, int estado, int municipio, int ciudad, int Parroquia)
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == 0 &&
+                    x.CIUDAD == 0 && x.PARROQUIA == Parroquia && x.SECTOR == 0 && x.URBANIZACION == 0).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<CAT_UBICACION_NAC> GetSector(int pais, int estado, int municipio, int ciudad, int parroquia, int Sector)
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == 0 &&
+                    x.CIUDAD == 0 && x.PARROQUIA == 0 && x.SECTOR == Sector && x.URBANIZACION == 0).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<CAT_UBICACION_NAC> GetUrbanizacion(int pais, int estado, int municipio,
+            int ciudad, int parroquia, int Sector, int urbanizacion)
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == 0 &&
+                    x.CIUDAD == 0 && x.PARROQUIA == 0 && x.SECTOR == 0 && x.URBANIZACION == urbanizacion).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<CAT_UBICACION_NAC> GetManzana(int pais, int estado, int municipio,
+           int ciudad, int parroquia, int Sector, int urbanizacion,int manzana)
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == 0 &&
+                    x.CIUDAD == 0 && x.PARROQUIA == 0 && x.SECTOR == 0 && x.URBANIZACION == 0 && x.MANZANA == manzana).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+        public async Task<CAT_UBICACION_NAC> GetParcela(int pais, int estado, int municipio,
+           int ciudad, int parroquia, int Sector, int urbanizacion, int manzana,int parcela)
+        {
+
+            try
+            {
+                var result = await _context.CAT_UBICACION_NAC.DefaultIfEmpty()
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == 0 &&
+                    x.CIUDAD == 0 && x.PARROQUIA == 0 && x.SECTOR == 0 && x.URBANIZACION == 0 && x.MANZANA == 0 && x.PARCELA == parcela).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
         }
 
 

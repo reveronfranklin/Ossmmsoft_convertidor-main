@@ -28,5 +28,6 @@
         public decimal? Total { get; set; }
         public decimal? TotalMasImpuesto { get; set; }
 
+        public bool LineaImpuesto { get; set; }
     }
 }

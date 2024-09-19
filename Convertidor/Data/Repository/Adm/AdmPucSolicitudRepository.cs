@@ -85,6 +85,30 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
+        public async  Task EliminaImputacion(int codigoPresupuesto,int codigoSolicitud)
+        {
+            
+            
+            try
+            {
+
+                    FormattableString xqueryDiario = $"DELETE FROM  ADM.ADM_PUC_SOLICITUD WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud}";
+
+                    var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+
+            }
+            catch (Exception ex)
+            {
+                var mess = ex.InnerException.Message;
+
+                throw;
+            }
+
+            
+        }
+     
+        
         public async Task<List<ADM_PUC_SOLICITUD>> GetByDetalleSolicitud(int codigoDetalleSolicitud) 
         {
             try
@@ -126,6 +150,10 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
+        
+
+
+        
         
         public async Task<bool> ExisteByDetalleSolicitud(int codigoDetalleSolicitud)
         {

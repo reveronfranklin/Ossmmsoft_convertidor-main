@@ -25,6 +25,15 @@ namespace Convertidor.Data
         public DbSet<CAT_AUDITORIA> CAT_AUDITORIA { get; set; }
         public DbSet<CAT_AVALUO_CONSTRUCCION> CAT_AVALUO_CONSTRUCCION { get; set; }
         public DbSet<CAT_AVALUO_TERRENO> CAT_AVALUO_TERRENO { get; set; }
+        public DbSet<CAT_CALC_X_TRIANGULACION> CAT_CALC_X_TRIANGULACION { get; set; }
+        public DbSet<CAT_CONTROL_PARCELAS> CAT_CONTROL_PARCELAS { get; set; }
+        public DbSet<CAT_DESGLOSE> CAT_DESGLOSE { get; set; }
+        public DbSet<CAT_DIRECCIONES> CAT_DIRECCIONES { get; set; }
+        public DbSet<CAT_DOCUMENTOS_LEGALES> CAT_DOCUMENTOS_LEGALES { get; set; }
+        public DbSet<CAT_DOCUMENTOS_RAMO> CAT_DOCUMENTOS_RAMO { get; set; }
+        public DbSet<CAT_D_VALOR_CONSTRUCCION> CAT_D_VALOR_CONSTRUCCION { get; set; }
+        public DbSet<CAT_D_VALOR_TIERRA> CAT_D_VALOR_TIERRA { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -131,10 +140,98 @@ namespace Convertidor.Data
                      builder.ToTable("CAT_AVALUO_TERRENO");
                  });
 
+            modelBuilder
+                .Entity<CAT_CALC_X_TRIANGULACION>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_TRIANGULACION,
+
+                    });
+                    builder.ToTable("CAT_CALC_X_TRIANGULACION");
+                });
+
+            modelBuilder
+               .Entity<CAT_CONTROL_PARCELAS>(builder =>
+               {
+                   builder.HasKey(table => new
+                   {
+                       table.CODIGO_CONTROL_PARCELA,
+
+                   });
+                   builder.ToTable("CAT_CONTROL_PARCELAS");
+               });
+
+            modelBuilder
+              .Entity<CAT_DESGLOSE>(builder =>
+              {
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_DESGLOSE,
+
+                  });
+                  builder.ToTable("CAT_DESGLOSE");
+              });
+                        modelBuilder
+              .Entity<CAT_DIRECCIONES>(builder =>
+              {
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_DIRECCION,
+
+                  });
+                  builder.ToTable("CAT_DIRECCIONES");
+              });
+
+            modelBuilder
+              .Entity<CAT_DOCUMENTOS_LEGALES>(builder =>
+              {
+                  builder.HasKey(table => new
+                  {
+                      table.CODIGO_DOCUMENTOS_LEGALES,
+
+                  });
+                  builder.ToTable("CAT_DOCUMENTOS_LEGALES");
+              });
+
+            modelBuilder
+             .Entity<CAT_DOCUMENTOS_RAMO>(builder =>
+             {
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_DOCU_RAMO,
+
+                 });
+                 builder.ToTable("CAT_DOCUMENTOS_RAMO");
+             });
+
+            modelBuilder
+             .Entity<CAT_D_VALOR_CONSTRUCCION>(builder =>
+             {
+                 builder.HasKey(table => new
+                 {
+                     table.CODIGO_PARCELA,
+
+                 });
+                 builder.ToTable("CAT_D_VALOR_CONSTRUCCION");
+             });
+
+
+            modelBuilder
+            .Entity<CAT_D_VALOR_TIERRA>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_VALOR_TIERRA,
+
+                });
+                builder.ToTable("CAT_D_VALOR_TIERRA");
+            });
+
             
         }
 
-
+        
 
     }
 }

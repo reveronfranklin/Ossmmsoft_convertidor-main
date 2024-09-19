@@ -25,11 +25,11 @@ namespace Convertidor.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetByPresupuesto(AdmOrdenPagoFilterDto filter)
         {
-            var result = await _service.GetAll();
+                var result = await _service.GetByPresupuesto(filter);
             return Ok(result);
         }
 
@@ -38,6 +38,22 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> Update(AdmOrdenPagoUpdateDto dto)
         {
             var result = await _service.Update(dto);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Aprobar(AdmOrdenPagoAprobarAnular dto)
+        {
+            var result = await _service.Aprobar(dto);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Anular(AdmOrdenPagoAprobarAnular dto)
+        {
+            var result = await _service.Anular(dto);
             return Ok(result);
         }
 

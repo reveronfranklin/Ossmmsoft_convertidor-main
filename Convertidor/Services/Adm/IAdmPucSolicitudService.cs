@@ -11,5 +11,7 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmPucSolicitudDeleteDto>> Delete(AdmPucSolicitudDeleteDto dto);
         Task<ResultDto<bool>> PresupuestoExiste(int codigoPresupuesto);
         Task<ResultDto<AdmPucSolicitudResponseDto>> GetByCodigo(int codigoPucSolicitud);
+
+        Task<ResultDto<bool>> EliminarImputacion(AdmSolicitudesDeleteDto dto);
     }
 }

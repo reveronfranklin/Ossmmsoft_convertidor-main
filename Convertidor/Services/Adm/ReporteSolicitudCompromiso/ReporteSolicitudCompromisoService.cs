@@ -26,6 +26,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
+        private readonly IOssConfigRepository _ossConfigRepository;
 
         public ReporteSolicitudCompromisoService(IAdmSolicitudesService admSolicitudesService,
                                                  IAdmSolicitudesRepository admSolicitudesRepository,
@@ -36,7 +37,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                                  IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
                                                  IAdmDescriptivaRepository admDescriptivaRepository,
                                                  IConfiguration configuration,
-                                                 IWebHostEnvironment env)
+                                                 IWebHostEnvironment env,
+                                                 IOssConfigRepository ossConfigRepository)
         {
             _admSolicitudesService = admSolicitudesService;
             _admSolicitudesRepository = admSolicitudesRepository;
@@ -48,6 +50,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             _admDescriptivaRepository = admDescriptivaRepository;
             _configuration = configuration;
             _env = env;
+            _ossConfigRepository = ossConfigRepository;
         }
 
         public async Task<ReporteSolicitudCompromisoDto> GenerateData (AdmSolicitudesFilterDto filter) 
@@ -70,11 +73,23 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             {
                 EncabezadoReporteDto result = new EncabezadoReporteDto();
                 
-                await _admSolicitudesRepository.UpdateMontoEnLetras(filter.CodigoSolicitud);
+               
                 
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
-    
-
+                
+                
+                //Buscamos los totales y agregamos a el emcabezado
+                var totales =
+                    await _admDetalleSolicitudService.GetTotales((int)solicitud.CODIGO_PRESUPUESTO,
+                        solicitud.CODIGO_SOLICITUD);
+                
+                await _admSolicitudesRepository.UpdateMontoEnLetras(filter.CodigoSolicitud,totales.TotalMasImpuesto);
+                result.Base = totales.Base;
+                result.Impuesto = totales.Impuesto;
+                result.TotalMasImpuesto = totales.TotalMasImpuesto;
+                result.PorcentajeImpuesto = totales.PorcentajeImpuesto;
+                
+                
                 
                 result.CodigoSolicitud = solicitud.CODIGO_SOLICITUD;
                 if(solicitud.ANO != null) 
@@ -193,11 +208,17 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             try
             {
                 List<CuerpoReporteDto> result = new List<CuerpoReporteDto>();
-                var detalle =await   _admDetalleSolicitudService.GetByCodigoSolicitud(filter.CodigoSolicitud);
+                var detalle =await   _admDetalleSolicitudService.GetByCodigoSolicitud(filter);
+                var tipoImpuesto = 0;
+                string variableImpuesto = "DESCRIPTIVA_IMPUESTO";
+                var config = await _ossConfigRepository.GetByClave(variableImpuesto);
+                if (config != null)
+                {
+                    tipoImpuesto = int.Parse(config.VALOR);
+                }
+                CuerpoReporteDto itemIva = new CuerpoReporteDto();
+                var detalleImpuesto = detalle.Data.Where(x => x.TipoImpuestoId == tipoImpuesto).FirstOrDefault();
                 
-
-
-
 
                 if (detalle.Data.Count > 0 )
                      {
@@ -214,12 +235,31 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 resultItem.DescripcionUdmId = descriptiva.DESCRIPCION;
                                 resultItem.DescripcionArticulo = item.Descripcion;
                                 resultItem.PrecioUnitario = item.PrecioUnitario;
-                                resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
-                 
-                                
-                                
-                                result.Add(resultItem);
+                                resultItem.TotalBolivares = (decimal)item.Total;
 
+
+                                if (tipoImpuesto != item.TipoImpuestoId)
+                                {
+                                    result.Add(resultItem);
+                                }
+                               
+
+                            }
+
+                            if (detalleImpuesto != null)
+                            {
+                                CuerpoReporteDto resultItem = new CuerpoReporteDto();
+
+                                resultItem.Cantidad = detalleImpuesto.Cantidad;
+
+                                var descriptiva = await _admDescriptivaRepository.GetByCodigo(detalleImpuesto.UdmId);
+
+                                resultItem.DescripcionUdmId = descriptiva.DESCRIPCION;
+                                resultItem.DescripcionArticulo = detalleImpuesto.Descripcion;
+                                resultItem.PrecioUnitario = detalleImpuesto.PrecioUnitario;
+                                resultItem.TotalBolivares = (decimal)detalleImpuesto.Total;
+                                result.Add(resultItem);
+                             
                             }
                           
                           return result;
