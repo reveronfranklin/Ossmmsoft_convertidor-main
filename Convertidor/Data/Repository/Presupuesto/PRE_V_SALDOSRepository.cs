@@ -53,13 +53,20 @@ namespace Convertidor.Data.Repository.Presupuesto
             if ( filter.SearchText.Length > 0)
             {
                 preVSaldos = await _context.PRE_V_SALDOS.
-                    Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.CODIGO_PUC_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DESCRIPCION_FINANCIADO.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_ICP.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.UNIDAD_EJECUTORA.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_PUC.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())))
+                    Where(x => 
+                        x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && 
+                        x.DISPONIBLE>0 &&
+                        (x.CODIGO_ICP_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.CODIGO_PUC_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DESCRIPCION_FINANCIADO.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_ICP.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.UNIDAD_EJECUTORA.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_PUC.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())))
+                    .OrderBy(x=>x.CODIGO_ICP_CONCAT)
+                    .ThenBy(x=> x.CODIGO_PUC_CONCAT)
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize)
                     .ToListAsync();
 
                 totalRegistros = _context.PRE_V_SALDOS
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0 && (x.CODIGO_ICP_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.CODIGO_PUC_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DESCRIPCION_FINANCIADO.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_ICP.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.UNIDAD_EJECUTORA.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_PUC.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())))
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                x.DISPONIBLE>0 &&
+                                (x.CODIGO_ICP_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.CODIGO_PUC_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DESCRIPCION_FINANCIADO.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_ICP.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.UNIDAD_EJECUTORA.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_PUC.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())))
                     .Count();
 
                 totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
@@ -67,6 +74,9 @@ namespace Convertidor.Data.Repository.Presupuesto
             else
             {
                 preVSaldos = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0)
+                    
+                    .OrderBy(x=>x.CODIGO_ICP_CONCAT)
+                    .ThenBy(x=> x.CODIGO_PUC_CONCAT)
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize)
                     .ToListAsync();
@@ -146,7 +156,12 @@ namespace Convertidor.Data.Repository.Presupuesto
         {
            ListIcpPucConDisponible result = new ListIcpPucConDisponible();
 
-            var preVSaldos = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_SALDO == codigoSaldo && x.DISPONIBLE>0).ToListAsync();
+            var preVSaldos = await _context.PRE_V_SALDOS
+                .Where(x => x.CODIGO_SALDO == codigoSaldo && x.DISPONIBLE>0)
+                
+                .OrderBy(x=>x.CODIGO_ICP_CONCAT)
+                .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                .ToListAsync();
 
             if (preVSaldos!=null)
             {
@@ -201,7 +216,11 @@ namespace Convertidor.Data.Repository.Presupuesto
         {
             List<PreFinanciadoDto> result = new List<PreFinanciadoDto>();
 
-            var preVSaldos = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto ).ToListAsync();
+            var preVSaldos = await _context.PRE_V_SALDOS
+                .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto )
+                .OrderBy(x=>x.CODIGO_ICP_CONCAT)
+                .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                .ToListAsync();
 
             if (preVSaldos.Count > 0)
             {
@@ -327,7 +346,10 @@ namespace Convertidor.Data.Repository.Presupuesto
             {
 
                 var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x=>x.CODIGO_EMPRESA==filter.CodigoEmpresa && x.ANO>=filter.AnoDesde && x.ANO<= filter.AnoHasta).ToListAsync();
+                    .Where(x=>x.CODIGO_EMPRESA==filter.CodigoEmpresa && x.ANO>=filter.AnoDesde && x.ANO<= filter.AnoHasta)
+                    .OrderBy(x=>x.CODIGO_ICP_CONCAT)
+                    .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                    .ToListAsync();
                 return (IEnumerable<PRE_V_SALDOS>)result;
             }
             catch (Exception ex)
@@ -344,7 +366,11 @@ namespace Convertidor.Data.Repository.Presupuesto
             {
 
                 var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO== codigoPresupuesto).ToListAsync();
+                    .Where(x => x.CODIGO_PRESUPUESTO== codigoPresupuesto)
+                    
+                    .OrderBy(x=>x.CODIGO_ICP_CONCAT)
+                    .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                    .ToListAsync();
                 return (List<PRE_V_SALDOS>)result;
             }
             catch (Exception ex)

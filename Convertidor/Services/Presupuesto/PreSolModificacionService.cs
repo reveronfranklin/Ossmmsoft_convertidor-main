@@ -281,7 +281,10 @@ namespace Convertidor.Services.Presupuesto
         {
             PreSolModificacionResponseDto itemResult = new PreSolModificacionResponseDto();
             itemResult.CodigoSolModificacion = dto.CODIGO_SOL_MODIFICACION;
-            itemResult.TipoModificacionId = dto.TIPO_MODIFICACION_ID;
+            
+            try
+            { 
+                itemResult.TipoModificacionId = dto.TIPO_MODIFICACION_ID;
             itemResult.DescripcionTipoModificacion = "";
             var tipoModificacionId = listDescriptiva.Where(x=>x.DESCRIPCION_ID== dto.TIPO_MODIFICACION_ID).FirstOrDefault();
             if (tipoModificacionId != null)
@@ -339,6 +342,14 @@ namespace Convertidor.Services.Presupuesto
             itemResult.CodigoPresupuesto = dto.CODIGO_PRESUPUESTO;
             itemResult.StatusProceso = await GetStatusProceso(dto);
             return itemResult;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                var a = dto.CODIGO_SOL_MODIFICACION;
+                throw;
+            }
+          
 
         }
 
