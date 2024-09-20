@@ -15,13 +15,15 @@ namespace Convertidor.Services.Adm
         private readonly IPRE_PRESUPUESTOSRepository _prePresupuestosRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IAdmCompromisoOpService _admCompromisoOpService;
+        private readonly IPreCompromisosService _preCompromisosService;
 
         public AdmOrdenPagoService(IAdmOrdenPagoRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmProveedoresRepository admProveedoresRepository,
                                      IPRE_PRESUPUESTOSRepository prePresupuestosRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
-                                     IAdmCompromisoOpService admCompromisoOpService)
+                                     IAdmCompromisoOpService admCompromisoOpService,
+                                         IPreCompromisosService preCompromisosService )
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -29,6 +31,7 @@ namespace Convertidor.Services.Adm
             _prePresupuestosRepository = prePresupuestosRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _admCompromisoOpService = admCompromisoOpService;
+            _preCompromisosService = preCompromisosService;
         }
 
 
@@ -55,7 +58,14 @@ namespace Convertidor.Services.Adm
             AdmOrdenPagoResponseDto itemResult = new AdmOrdenPagoResponseDto();
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.ANO = dtos.ANO;
-            itemResult.CodigoCompromiso = await _admCompromisoOpService.GetCompromisosByOrdenPago(dtos.CODIGO_ORDEN_PAGO);
+            itemResult.CodigoCompromiso = (int)dtos.CODIGO_COMPROMISO;
+            var compromiso = await _preCompromisosService.GetByCompromiso((int)dtos.CODIGO_COMPROMISO);
+            if (compromiso != null)
+            {
+                itemResult.NumeroCompromiso = compromiso.NumeroCompromiso;
+            }
+
+            
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
             itemResult.NombreProveedor = "";
             var proveedor = proveedores.Where(x=>x.CODIGO_PROVEEDOR==itemResult.CodigoProveedor).FirstOrDefault();
@@ -163,7 +173,7 @@ namespace Convertidor.Services.Adm
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoOrdenPago = await _repository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
+                var codigoOrdenPago = await _repository.GetCodigoOrdenPago((int)dto.CodigoOrdenPago);
                 if (codigoOrdenPago == null)
                 {
                     result.Data = null;
@@ -172,25 +182,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
               
-
-                if (dto.CodigoProveedor < 0)
+                var compromiso = await _preCompromisosService.GetByCompromiso(dto.CodigoCompromiso);
+                if (compromiso == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Proveedor Invalido";
+                    result.Message = "Compromiso Invalido";
                     return result;
                 }
 
-                var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-                if (proveedor==null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Proveedor Invalido";
-                    return result;
-                }
 
-              
 
                 if (dto.FechaOrdenPago == null)
                 {
@@ -293,7 +294,7 @@ namespace Convertidor.Services.Adm
                 }
                 
                 codigoOrdenPago.ANO = presupuesto.ANO;
-                codigoOrdenPago.CODIGO_PROVEEDOR = dto.CodigoProveedor;
+                codigoOrdenPago.CODIGO_PROVEEDOR = compromiso.CodigoProveedor;
                 codigoOrdenPago.FECHA_ORDEN_PAGO = dto.FechaOrdenPago;
                 codigoOrdenPago.TIPO_ORDEN_PAGO_ID = dto.TipoOrdenPagoId;
                 codigoOrdenPago.CANTIDAD_PAGO = dto.CantidadPago;
@@ -343,7 +344,7 @@ namespace Convertidor.Services.Adm
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
-                var codigoOrdenPago = await _repository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
+                var codigoOrdenPago = await _repository.GetCodigoOrdenPago((int)dto.CodigoOrdenPago);
                 if (codigoOrdenPago != null)
                 {
                     result.Data = null;
@@ -352,25 +353,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
               
-
-                if (dto.CodigoProveedor <= 0)
+                var compromiso = await _preCompromisosService.GetByCompromiso(dto.CodigoCompromiso);
+                if (compromiso == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Proveedor Invalido";
+                    result.Message = "Compromiso Invalido";
                     return result;
                 }
 
-                
-                var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-                if (proveedor==null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Proveedor Invalido";
-                    return result;
-                }
-             
+            
 
 
                 if (dto.FechaOrdenPago == null)
@@ -477,7 +469,7 @@ namespace Convertidor.Services.Adm
             ADM_ORDEN_PAGO entity = new ADM_ORDEN_PAGO();
             entity.CODIGO_ORDEN_PAGO = await _repository.GetNextKey();
             entity.ANO = presupuesto.ANO;
-            entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
+            entity.CODIGO_PROVEEDOR = compromiso.CodigoProveedor;
             entity.NUMERO_ORDEN_PAGO = await _repository.GetNextOrdenPago(dto.CodigoPresupuesto);
             entity.FECHA_ORDEN_PAGO = dto.FechaOrdenPago;
             entity.TIPO_ORDEN_PAGO_ID = dto.TipoOrdenPagoId;
