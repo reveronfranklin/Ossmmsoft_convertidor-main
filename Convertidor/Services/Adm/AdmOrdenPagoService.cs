@@ -58,14 +58,7 @@ namespace Convertidor.Services.Adm
             AdmOrdenPagoResponseDto itemResult = new AdmOrdenPagoResponseDto();
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.ANO = dtos.ANO;
-            itemResult.CodigoCompromiso = (int)dtos.CODIGO_COMPROMISO;
-            var compromiso = await _preCompromisosService.GetByCompromiso((int)dtos.CODIGO_COMPROMISO);
-            if (compromiso != null)
-            {
-                itemResult.NumeroCompromiso = compromiso.NumeroCompromiso;
-            }
 
-            
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
             itemResult.NombreProveedor = "";
             var proveedor = proveedores.Where(x=>x.CODIGO_PROVEEDOR==itemResult.CodigoProveedor).FirstOrDefault();
