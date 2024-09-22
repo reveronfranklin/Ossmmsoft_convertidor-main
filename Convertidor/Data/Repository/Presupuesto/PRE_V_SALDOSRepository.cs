@@ -56,7 +56,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                     Where(x => 
                         x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && 
                         x.DISPONIBLE>0 &&
-                        (x.CODIGO_ICP_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.CODIGO_PUC_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DESCRIPCION_FINANCIADO.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_ICP.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.UNIDAD_EJECUTORA.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_PUC.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())))
+                        x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                     .OrderBy(x=>x.CODIGO_ICP_CONCAT)
                     .ThenBy(x=> x.CODIGO_PUC_CONCAT)
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -66,7 +66,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                 totalRegistros = _context.PRE_V_SALDOS
                     .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
                                 x.DISPONIBLE>0 &&
-                                (x.CODIGO_ICP_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.CODIGO_PUC_CONCAT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DESCRIPCION_FINANCIADO.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_ICP.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.UNIDAD_EJECUTORA.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.DENOMINACION_PUC.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())))
+                                x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                     .Count();
 
                 totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;

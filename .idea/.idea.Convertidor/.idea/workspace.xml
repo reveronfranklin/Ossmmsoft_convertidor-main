@@ -9,8 +9,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmOrdenPagoResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmOrdenPagoResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Presupuesto/PRE_V_SALDOS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Presupuesto/PRE_V_SALDOS.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +36,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -236,7 +237,8 @@
       <workItem from="1726532825972" duration="4370000" />
       <workItem from="1726761567578" duration="10852000" />
       <workItem from="1726861591892" duration="4726000" />
-      <workItem from="1726930608253" duration="843000" />
+      <workItem from="1726930608253" duration="1588000" />
+      <workItem from="1727036132865" duration="392000" />
     </task>
     <servers />
   </component>
@@ -1895,10 +1897,10 @@
           <line>297</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'RecalcularSaldo'">
             <startOffsets>
-              <option value="12078" />
+              <option value="11208" />
             </startOffsets>
             <endOffsets>
-              <option value="12214" />
+              <option value="11344" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="378" />
@@ -2285,10 +2287,10 @@
           <line>285</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'RecalculaSaldosPreIcpPucFi'">
             <startOffsets>
-              <option value="11877" />
+              <option value="11007" />
             </startOffsets>
             <endOffsets>
-              <option value="11914" />
+              <option value="11044" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="430" />
@@ -2324,10 +2326,10 @@
           <line>275</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'RecalculaSaldosPreIcpPucFi'">
             <startOffsets>
-              <option value="11515" />
+              <option value="10645" />
             </startOffsets>
             <endOffsets>
-              <option value="11662" />
+              <option value="10792" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="433" />

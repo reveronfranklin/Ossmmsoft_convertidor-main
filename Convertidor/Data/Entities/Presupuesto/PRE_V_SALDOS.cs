@@ -44,8 +44,8 @@
         public int? CODIGO_PRESUPUESTO { get; set; }
         public DateTime? FECHA_SOLICITUD { get; set; }
         public string DESCRIPTIVA_FINANCIADO { get; set; } = string.Empty;
-
-
+        public string SEARCH_TEXT { get; set; } = string.Empty;
+        
     }
 }
 
