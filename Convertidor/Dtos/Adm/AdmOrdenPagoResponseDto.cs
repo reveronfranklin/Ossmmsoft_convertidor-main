@@ -5,8 +5,7 @@
 
         public int CodigoOrdenPago { get; set; }
         public int? ANO { get; set; }
-
-        public string CodigoCompromiso { get; set; } = string.Empty;
+        
         
         public int CodigoProveedor { get; set; }
         public string NombreProveedor { get; set; } = string.Empty;

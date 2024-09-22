@@ -2,9 +2,10 @@
 {
     public class AdmOrdenPagoUpdateDto
     {
+        public int? CodigoOrdenPago { get; set; }
         public int CodigoPresupuesto { get; set; }
-        public int CodigoOrdenPago { get; set; }
-        public int CodigoProveedor { get; set; }
+        public int CodigoCompromiso { get; set; }
+       
         public DateTime FechaOrdenPago { get; set; }
         public int TipoOrdenPagoId { get; set; }
         public int CantidadPago { get; set; }
