@@ -14,13 +14,15 @@ namespace Convertidor.Services.Adm
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
         private readonly IAdmPucSolicitudRepository _admPucSolicitudRepository;
         private readonly IAdmProductosRepository _admProductosRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
         private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
         public AdmDetalleSolicitudService(IAdmDetalleSolicitudRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IAdmSolicitudesRepository admSolicitudesRepository,
                                      IAdmPucSolicitudRepository admPucSolicitudRepository,
-                                     IAdmProductosRepository admProductosRepository
+                                     IAdmProductosRepository admProductosRepository,
+                                     IOssConfigRepository ossConfigRepository
                                     
                                 
                                      )
@@ -31,7 +33,7 @@ namespace Convertidor.Services.Adm
             _admSolicitudesRepository = admSolicitudesRepository;
             _admPucSolicitudRepository = admPucSolicitudRepository;
             _admProductosRepository = admProductosRepository;
-        
+            _ossConfigRepository = ossConfigRepository;
         }
 
         public async Task<AdmDetalleSolicitudResponseDto> MapDetalleSolicitudDto(ADM_DETALLE_SOLICITUD dtos)
@@ -356,9 +358,32 @@ namespace Convertidor.Services.Adm
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = TraduccionErrores.AdmDetalleSolicitudNoexiste; 
-                    return result;
+                        return result;
                 }
                
+                
+                string variableImpuesto = "DESCRIPTIVA_IMPUESTO";
+                var config = await _ossConfigRepository.GetByClave(variableImpuesto);
+                if (config != null)
+                {
+                    if (codigoDetallesolicitud.TIPO_IMPUESTO_ID ==int.Parse(config.VALOR) && dto.TipoImpuestoId!=int.Parse(config.VALOR) )
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message ="No puede modificar el tipo de Impuesto, Elimine la linea y cree nuevamente"; 
+                        return result;
+                    }
+                    
+                    if ( dto.TipoImpuestoId==int.Parse(config.VALOR) && codigoDetallesolicitud.TIPO_IMPUESTO_ID !=int.Parse(config.VALOR) )
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message ="No puede modificar el tipo de Impuesto, Elimine la linea y cree nuevamente"; 
+                        return result;
+                    }
+                   
+                }
+                
               
                 if (dto.CodigoSolicitud<0)
                 {

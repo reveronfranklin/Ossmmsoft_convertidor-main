@@ -268,15 +268,25 @@ namespace Convertidor.Data.Repository.Presupuesto
             {
 
                 
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE_P_CREATE_SALDOS_DIARIOS({codigo_presupuesto},{codigoIcp},{codigoPuc},{codigoFinanciado});\nEND;";
+                /*FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE_P_CREATE_SALDOS_DIARIOS({codigo_presupuesto},{codigoIcp},{codigoPuc},{codigoFinanciado});\nEND;";
 
                 var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 
 
                 FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_P_ACTUALIZAR_SALDOS({codigo_presupuesto},{codigoIcp},{codigoPuc},{codigoFinanciado});\nEND;";
-                var result = _context.Database.ExecuteSqlInterpolated(xquery);
+                var result = _context.Database.ExecuteSqlInterpolated(xquery);*/
 
             
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_CREATE_SALDOS_DIARIOS({DateTime.Now},{codigo_presupuesto});\nEND;";
+
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+
+                FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
+                var result = _context.Database.ExecuteSqlInterpolated(xquery);
+
+                
+                
 
                 var aprobacion = result; 
 
