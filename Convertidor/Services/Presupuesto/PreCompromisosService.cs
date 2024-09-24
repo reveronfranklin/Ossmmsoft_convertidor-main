@@ -281,8 +281,8 @@ namespace Convertidor.Services.Presupuesto
                                         entityPuc.FINANCIADO_ID = itemPuc.FINANCIADO_ID;
                                         entityPuc.CODIGO_FINANCIADO = (int)itemPuc.CODIGO_FINANCIADO;
                                         entityPuc.MONTO = itemPuc.MONTO;
-                                        entityPuc.MONTO_CAUSADO = itemPuc.MONTO;
-                                        entityPuc.MONTO_ANULADO = itemPuc.MONTO_ANULADO;
+                                        entityPuc.MONTO_CAUSADO = 0;
+                                        entityPuc.MONTO_ANULADO = 0;
                                         entityPuc.EXTRA1 = "";
                                         entityPuc.EXTRA2 = "";
                                         entityPuc.EXTRA3 = "";

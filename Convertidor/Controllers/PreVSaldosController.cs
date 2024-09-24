@@ -85,13 +85,13 @@ namespace Convertidor.Controllers
                 result.LinkData = $"No DAta";
             }
 
-           
+            result = await _service.GetAllByPresupuestoIpcPuc(filter);
            
             
             
             //********
             
-            var cacheKey = $"GetAllByPresupuestoIpcPuc{filter.CodigoPresupuesto.ToString()}-{filter.CodigoPuc.ToString()}-{filter.CodigoIPC.ToString()}";
+            /*var cacheKey = $"GetAllByPresupuestoIpcPuc{filter.CodigoPresupuesto.ToString()}-{filter.CodigoPuc.ToString()}-{filter.CodigoIPC.ToString()}";
             var listPresupuesto= await _distributedCache.GetAsync(cacheKey);
             if (listPresupuesto != null)
             {
@@ -108,9 +108,10 @@ namespace Convertidor.Controllers
                     var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
                     var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
                     await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                    _distributedCache.Remove(cacheKey);
                 }
                
-            }
+            }*/
             
             try
             {
