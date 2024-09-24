@@ -7,10 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" afterDir="false" />
-    </list>
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -238,7 +235,7 @@
       <workItem from="1726861591892" duration="4726000" />
       <workItem from="1726930608253" duration="1588000" />
       <workItem from="1727036132865" duration="2478000" />
-      <workItem from="1727127553920" duration="3773000" />
+      <workItem from="1727127553920" duration="6450000" />
     </task>
     <servers />
   </component>
@@ -1894,13 +1891,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs</url>
-          <line>297</line>
+          <line>307</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'RecalcularSaldo'">
             <startOffsets>
-              <option value="11208" />
+              <option value="11700" />
             </startOffsets>
             <endOffsets>
-              <option value="11344" />
+              <option value="11836" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="378" />
@@ -2284,13 +2281,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs</url>
-          <line>285</line>
+          <line>295</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'RecalculaSaldosPreIcpPucFi'">
             <startOffsets>
-              <option value="11007" />
+              <option value="11499" />
             </startOffsets>
             <endOffsets>
-              <option value="11044" />
+              <option value="11536" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="430" />
@@ -2326,10 +2323,10 @@
           <line>275</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'RecalculaSaldosPreIcpPucFi'">
             <startOffsets>
-              <option value="10645" />
+              <option value="10647" />
             </startOffsets>
             <endOffsets>
-              <option value="10792" />
+              <option value="10794" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="433" />

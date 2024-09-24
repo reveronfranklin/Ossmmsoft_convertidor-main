@@ -719,7 +719,7 @@ namespace Convertidor.Services.Adm
             ResultDto<AdmPucSolicitudDeleteDto> result = new ResultDto<AdmPucSolicitudDeleteDto>(null);
             try
             {
-
+                
                 var codigoPucSolicitud = await _repository.GetCodigoPucSolicitud(dto.CodigoPucSolicitud);
                 if (codigoPucSolicitud == null)
                 {
@@ -728,7 +728,24 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Puc Solicitud no existe";
                     return result;
                 }
-              
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoPucSolicitud.CODIGO_SOLICITUD);
+                if (solicitud == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existe Esta Solicitud";
+                    return result;
+                }
+                
+                var status = Estatus.GetStatusObj(solicitud.STATUS);
+                if (status.Modificable == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Solicitud no puede ser modificada, se encuentra en status: {status.Descripcion}";
+                    return result;
+                }
+                
 
                 var deleted = await _repository.Delete(dto.CodigoPucSolicitud);
                 //ACTUALIZAR PRE_V_SALDO
