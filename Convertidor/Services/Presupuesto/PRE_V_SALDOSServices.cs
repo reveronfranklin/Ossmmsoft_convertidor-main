@@ -59,6 +59,13 @@ namespace Convertidor.Services.Presupuesto
                 var preVSaldos = await _repository.GetAllByPresupuesto(filter.CodigoPresupuesto);
                 if (preVSaldos.Count() > 0)
                 {
+                    var denominacionPresupuesto = "";
+                    var firstSaldo = preVSaldos.FirstOrDefault();
+                    var presupuestoSaldo = await _pRE_PRESUPUESTOSRepository.GetByCodigo((int)firstSaldo.CODIGO_EMPRESA, (int)firstSaldo.CODIGO_PRESUPUESTO);
+                    if (presupuestoSaldo != null)
+                    {
+                        denominacionPresupuesto= presupuesto.DENOMINACION;
+                    }
                     if (filter.CodigoIPC>0) {
                         preVSaldos = preVSaldos.Where(x => x.CODIGO_ICP == filter.CodigoIPC).ToList();
                     }
@@ -70,7 +77,7 @@ namespace Convertidor.Services.Presupuesto
                     foreach (var item in preVSaldos)
                     {
 
-                        resultList.Add(await MapPRE_V_SADOSTOPreVSaldosGetDto(item));
+                        resultList.Add(await MapPRE_V_SADOSTOPreVSaldosGetDto(item,denominacionPresupuesto));
                     }
 
 
@@ -111,15 +118,25 @@ namespace Convertidor.Services.Presupuesto
             ResultDto<List<PreVSaldosGetDto>> result = new ResultDto<List<PreVSaldosGetDto>>(null);
             try
             {
+                var denominacionPresupuesto = "";
                 var pRE_V_SALDOs = await _repository.GetAll(filter);
                 if (pRE_V_SALDOs.Count() > 0)
                 {
 
+                    var firstSaldo = pRE_V_SALDOs.FirstOrDefault();
+                    
+                    var presupuestoSaldo = await _pRE_PRESUPUESTOSRepository.GetByCodigo((int)firstSaldo.CODIGO_EMPRESA, (int)firstSaldo.CODIGO_PRESUPUESTO);
+                    if (presupuestoSaldo != null)
+                    {
+                        denominacionPresupuesto= presupuesto.DENOMINACION;
+                    }
+
+                    
                     List<PreVSaldosGetDto> resultList = new List<PreVSaldosGetDto>();
                     foreach (var item in pRE_V_SALDOs)
                     {
 
-                        resultList.Add(await MapPRE_V_SADOSTOPreVSaldosGetDto(item));
+                        resultList.Add(await MapPRE_V_SADOSTOPreVSaldosGetDto(item,denominacionPresupuesto));
                     }
 
 
@@ -158,7 +175,7 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
-        public async Task<PreVSaldosGetDto> MapPRE_V_SADOSTOPreVSaldosGetDto(PRE_V_SALDOS entity)
+        public async Task<PreVSaldosGetDto> MapPRE_V_SADOSTOPreVSaldosGetDto(PRE_V_SALDOS entity,string denominacionPresupuesto)
         {
             try
             {
@@ -203,16 +220,8 @@ namespace Convertidor.Services.Presupuesto
                 dto.CodigoEmpresa = entity.CODIGO_EMPRESA;
                 dto.CodigoPresupuesto = entity.CODIGO_PRESUPUESTO;
                 dto.FechaSolicitud = entity.FECHA_SOLICITUD;
-                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo((int)dto.CodigoEmpresa, (int)dto.CodigoPresupuesto);
-                if (presupuesto != null)
-                {
-                    dto.DescripcionPresupuesto = presupuesto.DENOMINACION;
-                }
-                else
-                {
-                    dto.DescripcionPresupuesto = "";
-                }
-
+                dto.DescripcionPresupuesto = denominacionPresupuesto;
+               
 
 
                 return dto;
