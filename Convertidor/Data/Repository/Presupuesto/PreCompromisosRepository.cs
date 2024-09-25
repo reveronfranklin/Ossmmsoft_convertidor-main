@@ -94,6 +94,30 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         }
         
+        
+        public string UpdateMontoEnLetras(int codigoCompromiso,decimal monto)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE PRE_COMPROMISOS  SET MONTO_LETRAS= UPPER(SIS.SIS_MONTOESCRITO({monto},2)) WHERE PRE_COMPROMISOS.CODIGO_COMPROMISO ={codigoCompromiso}";
+
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<PRE_COMPROMISOS> GetByCodigo(int codigoCompromiso)
         {
             try

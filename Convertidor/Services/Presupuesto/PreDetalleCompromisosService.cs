@@ -100,9 +100,10 @@ namespace Convertidor.Services.Presupuesto
             itemResult.TipoImpuestoId = dto.TIPO_IMPUESTO_ID;
             itemResult.PorImpuesto = dto.POR_IMPUESTO;
             itemResult.MontoImpuesto = dto.MONTO_IMPUESTO;
-            itemResult.Extra1 = dto.EXTRA1;
-            itemResult.Extra2 = dto.EXTRA2;
-            itemResult.Extra3 = dto.EXTRA3;
+            if (dto.TOTAL == null) dto.TOTAL = 0;
+            itemResult.Total = dto.TOTAL;
+            if (dto.TOTAL_MAS_IMPUESTO == null) dto.TOTAL_MAS_IMPUESTO = 0;
+            itemResult.TotalMasImpuesto = dto.TOTAL_MAS_IMPUESTO;
             itemResult.CodigoPresupuesto = dto.CODIGO_PRESUPUESTO;
            
 
@@ -318,6 +319,8 @@ namespace Convertidor.Services.Presupuesto
                 codigoDetalleCompromiso.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
                 codigoDetalleCompromiso.POR_IMPUESTO = dto.PorImpuesto;
                 codigoDetalleCompromiso.MONTO_IMPUESTO = dto.MontoImpuesto;
+                codigoDetalleCompromiso.TOTAL = codigoDetalleCompromiso.CANTIDAD * codigoDetalleCompromiso.PRECIO_UNITARIO;
+                codigoDetalleCompromiso.TOTAL_MAS_IMPUESTO = codigoDetalleCompromiso.TOTAL + codigoDetalleCompromiso.MONTO_IMPUESTO;
                 codigoDetalleCompromiso.EXTRA1 = dto.Extra1;
                 codigoDetalleCompromiso.EXTRA2 = dto.Extra2;
                 codigoDetalleCompromiso.EXTRA3 = dto.Extra3;
@@ -520,6 +523,8 @@ namespace Convertidor.Services.Presupuesto
                 entity.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
                 entity.POR_IMPUESTO = dto.PorImpuesto;
                 entity.MONTO_IMPUESTO = dto.MontoImpuesto;
+                entity.TOTAL = entity.CANTIDAD * entity.PRECIO_UNITARIO;
+                entity.TOTAL_MAS_IMPUESTO = entity.TOTAL + entity.MONTO_IMPUESTO;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;

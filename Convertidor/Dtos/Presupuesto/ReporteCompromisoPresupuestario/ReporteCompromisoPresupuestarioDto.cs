@@ -33,7 +33,12 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public string MontoEnLetras { get; set; } = string.Empty;
         public string Motivo { get; set; } = string.Empty;
         public string Firmante { get; set; } = string.Empty;
+        public decimal Tolal { get; set; }
+        public decimal Impuesto { get; set; }
+        public decimal TolalMasImpuesto { get; set; }
+        
         public string TelefonoProveedor { get { return $"{CodigoArea}{LineaComunicacion}"; } }
+        public List<PrePucCompromisosResponseDto> PucCompromisos { get; set; }
     }
 
     public class CuerpoReporteDto 
