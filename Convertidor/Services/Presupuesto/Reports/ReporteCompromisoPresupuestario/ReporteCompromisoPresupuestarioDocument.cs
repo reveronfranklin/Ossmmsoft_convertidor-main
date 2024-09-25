@@ -101,9 +101,17 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     row.RelativeItem().Component(new CuerpoComponent(Model.Cuerpo,Model.Encabezado));
                     
                 });
+                column.Item().Row(row =>
+                {
+
+                    row.RelativeItem().Component(new PucComponent(Model.Cuerpo,Model.Encabezado));
+                    
+                });
+              
 
                 
             });
+         
             
             
         }
@@ -131,10 +139,10 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                 });
 
 
-                var bolivares = Model.Cuerpo.Sum(x => x.TotalBolivares);
+                var bolivares =Model.Encabezado.Tolal;
 
-                var montoImpuesto = bolivares * (decimal)0.16;
-                var total = bolivares + montoImpuesto;
+                var montoImpuesto = Model.Encabezado.Impuesto;
+                var total =Model.Encabezado.TolalMasImpuesto;
 
                 var totalBolivares = bolivares.ToString("N", formato);
                 var totalImpuesto = montoImpuesto.ToString("N", formato);
@@ -145,8 +153,8 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     footer.Cell().ColumnSpan(6).BorderVertical(1).BorderTop(1).Row(row =>
                     {
                         row.RelativeItem(5).PaddingLeft(10).PaddingRight(5).AlignLeft().Text($"MONTO TOTAL EN LETRA :\n{Model.Encabezado.MontoEnLetras.ToUpper()}").FontSize(8).Bold();
+        
                         row.ConstantItem(70).AlignRight().AlignBottom().PaddingRight(2).Text("TOTAL").FontSize(8).Bold();
-
                         
                         row.ConstantItem(70).BorderLeft(1).AlignRight().Column(col =>
                         {

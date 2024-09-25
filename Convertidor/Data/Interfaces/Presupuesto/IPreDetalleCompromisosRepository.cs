@@ -13,6 +13,9 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<ResultDto<PRE_DETALLE_COMPROMISOS>> Update(PRE_DETALLE_COMPROMISOS entity);
         Task<string> Delete(int codigoDetalleCompromiso);
         Task<int> GetNextKey();
+        decimal GetTotal(int codigoCompromiso);
+        decimal GetTotalMonto(int codigoCompromiso);
+        decimal GetTotalImpuesto(int codigoCompromiso);
     }
 }
 

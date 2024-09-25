@@ -15,9 +15,9 @@
         public int TipoImpuestoId { get; set; }
         public decimal PorImpuesto { get; set; }
         public decimal MontoImpuesto { get; set; }
-        public string Extra1 { get; set; } = string.Empty;
-        public string Extra2 { get; set; } = string.Empty;
-        public string Extra3 { get; set; } = string.Empty;
         public int CodigoPresupuesto { get; set; }
+        public decimal Total { get; set; }
+        public decimal TotalMasImpuesto { get; set; }
+        
     }
 }

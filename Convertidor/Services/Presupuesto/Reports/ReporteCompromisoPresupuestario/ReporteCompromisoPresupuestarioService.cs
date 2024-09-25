@@ -22,7 +22,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IConfiguration _configuration;
-        
+        private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
+
 
         public ReporteCompromisoPresupuestarioService(IPreCompromisosRepository preCompromisosRepository,
                                                       IPreDetalleCompromisosService preDetalleCompromisosService,
@@ -34,7 +35,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                                                       IAdmComunicacionProveedorRepository admComProveedorRepository,
                                                       IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
                                                       IAdmDescriptivaRepository admDescriptivaRepository,
-                                                      IConfiguration configuration)
+                                                      IConfiguration configuration,
+                                                      IPreDetalleCompromisosRepository preDetalleCompromisosRepository)
         {
             _preCompromisosRepository = preCompromisosRepository;
             _preDetalleCompromisosService = preDetalleCompromisosService;
@@ -47,33 +49,63 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
             _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _configuration = configuration;
- 
+            _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
         }
 
         public async Task<ReporteCompromisoPresupuestarioDto> GenerateData(FilterPreCompromisosDto filter)
         {
             ReporteCompromisoPresupuestarioDto result = new ReporteCompromisoPresupuestarioDto();
             var encabezado = await GenerateDataEncabezadoDto(filter);
+            encabezado.PucCompromisos =await  GetPuc(filter.CodigoCompromiso);
             var cuerpo = await GenerateDataCuerpoDto(filter);
 
-            result.Encabezado = encabezado;
+                result.Encabezado = encabezado;
             result.Cuerpo = cuerpo;
 
             return result;
 
         }
+
+        public async Task<List<PrePucCompromisosResponseDto>> GetPuc(int codigoCompromiso)
+        {
+            List<PrePucCompromisosResponseDto> result = new List<PrePucCompromisosResponseDto>();
+            var detalle = await _preDetalleCompromisosService.GetByCodigoCompromiso(codigoCompromiso);
+            if (detalle.Count > 0)
+            {
+
+                foreach (var item in detalle)
+                {
+
+                  
+                        
+                    var pucCompromisos = await _prePucCompromisosService.GetByDetalleCompromiso(item.CodigoDetalleCompromiso);
+                    if(pucCompromisos.Data.Count > 0) 
+                    {
+                        result.AddRange(pucCompromisos.Data);
+                          
+                    }
+                
+
+                }
+
+                    
+                return result;
+            }
+            return result;
+        }
+        
         public async Task<EncabezadoReporteDto> GenerateDataEncabezadoDto(FilterPreCompromisosDto filter)
         {
 
             try
             {
                 EncabezadoReporteDto result = new EncabezadoReporteDto();
+                decimal totalMasImpuesto = _preDetalleCompromisosRepository.GetTotal(filter.CodigoCompromiso);
+                decimal totalImpuesto = _preDetalleCompromisosRepository.GetTotalImpuesto(filter.CodigoCompromiso);
+                decimal total = _preDetalleCompromisosRepository.GetTotalMonto(filter.CodigoCompromiso);
+                _preCompromisosRepository.UpdateMontoEnLetras(filter.CodigoCompromiso, totalMasImpuesto);
                 var compromiso = await _preCompromisosRepository.GetByNumeroYFecha(filter.NumeroCompromiso,filter.fechaCompromiso);
-
-
-
                 result.NumeroCompromiso = compromiso.NUMERO_COMPROMISO;
-              
                 result.FechaCompromiso = compromiso.FECHA_COMPROMISO;
                 result.FechaCompromisoString = compromiso.FECHA_COMPROMISO.ToString("u");
                 FechaDto fechaCompromisoObj = FechaObj.GetFechaDto(compromiso.FECHA_COMPROMISO);
@@ -81,10 +113,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(compromiso.CODIGO_SOLICITUD);
                 result.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
                 var icp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(solicitud.CODIGO_SOLICITANTE);
-
-
                 result.Denominacion = icp.DENOMINACION;
-
                 var icpConcat = $"{icp.CODIGO_SECTOR}.{icp.CODIGO_PROGRAMA}.{icp.CODIGO_SUBPROGRAMA}.{icp.CODIGO_PROYECTO}.{icp.CODIGO_ACTIVIDAD}";
                 result.IcpConcat = icpConcat;
                 result.codigoSector = icp.CODIGO_SECTOR;
@@ -92,20 +121,12 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 result.codigoSubPrograma = icp.CODIGO_SUBPROGRAMA;
                 result.codigoProyecto = icp.CODIGO_PROYECTO;
                 result.codigoActividad = icp.CODIGO_ACTIVIDAD;
-
-                result.MontoEnLetras = solicitud.MONTO_LETRAS;
-                if (solicitud.MONTO_LETRAS == null)
-                {
-                    solicitud.MONTO_LETRAS = "";
-                    result.MontoEnLetras = solicitud.MONTO_LETRAS;
-
-                }
-                if (solicitud.FIRMANTE == null)
-                {
-                    solicitud.FIRMANTE = "";
-                    result.Firmante = solicitud.FIRMANTE;
-
-                }
+                result.TolalMasImpuesto = totalMasImpuesto;
+                result.Impuesto = totalImpuesto;
+                result.Tolal = total;
+                result.MontoEnLetras = compromiso.MONTO_LETRAS;
+                result.Firmante = compromiso.FIRMANTE;
+              
 
                 
                 var Proveedor = await _admProveedoresRepository.GetByCodigo((int)solicitud.CODIGO_PROVEEDOR);

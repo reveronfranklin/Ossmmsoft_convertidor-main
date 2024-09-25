@@ -31,6 +31,59 @@ namespace Convertidor.Data.Repository.Rh
         }
 
     
+        public decimal GetTotal(int codigoCompromiso)
+        {
+            try
+            {
+                PRE_DETALLE_COMPROMISOS detalle = new PRE_DETALLE_COMPROMISOS();
+                
+                var result =  _context.PRE_DETALLE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_COMPROMISO == codigoCompromiso).Sum(x=>x.TOTAL_MAS_IMPUESTO);
+
+                return (decimal)result;
+            }
+            catch (Exception ex)
+            {
+               
+                return 0;
+            }
+
+        }
+        public decimal GetTotalImpuesto(int codigoCompromiso)
+        {
+            try
+            {
+                PRE_DETALLE_COMPROMISOS detalle = new PRE_DETALLE_COMPROMISOS();
+                
+                var result =  _context.PRE_DETALLE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_COMPROMISO == codigoCompromiso).Sum(x=>x.MONTO_IMPUESTO);
+
+                return (decimal)result;
+            }
+            catch (Exception ex)
+            {
+               
+                return 0;
+            }
+
+        }
+        public decimal GetTotalMonto(int codigoCompromiso)
+        {
+            try
+            {
+                PRE_DETALLE_COMPROMISOS detalle = new PRE_DETALLE_COMPROMISOS();
+                
+                var result =  _context.PRE_DETALLE_COMPROMISOS.DefaultIfEmpty().Where(e => e.CODIGO_COMPROMISO == codigoCompromiso).Sum(x=>x.TOTAL);
+
+                return (decimal)result;
+            }
+            catch (Exception ex)
+            {
+               
+                return 0;
+            }
+
+        }
+
+        
         public async Task<List<PRE_DETALLE_COMPROMISOS>> GetAll()
         {
             try

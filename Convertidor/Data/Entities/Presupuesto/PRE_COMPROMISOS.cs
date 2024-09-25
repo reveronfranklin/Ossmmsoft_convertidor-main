@@ -25,5 +25,9 @@
         public int? TIPO_RENGLON_ID { get; set; }
         public string NUMERO_ORDEN { get; set; } = string.Empty;
         public string SEARCH_TEXT { get; set; }
+        public string MONTO_LETRAS { get; set; }
+        public string FIRMANTE { get; set; }
+        
+        
     }
 }

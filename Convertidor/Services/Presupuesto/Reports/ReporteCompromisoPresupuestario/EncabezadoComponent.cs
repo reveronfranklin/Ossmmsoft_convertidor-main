@@ -35,7 +35,9 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
             formato.NumberDecimalSeparator = ",";
             formato.NumberDecimalDigits = 2;
             
-            container.Table(table =>
+            container
+                .Border(1)
+                .Table(table =>
             {
                 
                 table.ColumnsDefinition(columns =>
