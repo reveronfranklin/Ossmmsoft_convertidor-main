@@ -15,7 +15,7 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPrePucSolicitudModificacionRepository _prePucSolicitudModificacionRepository;
         private readonly IPreDescriptivaRepository _preDescriptivaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-      
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
 
 
         public PrePucModificacionService(IPrePucModificacionRepository repository,
@@ -26,7 +26,8 @@ namespace Convertidor.Services.Presupuesto
                                          IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
                                          IPrePucSolicitudModificacionRepository prePucSolicitudModificacionRepository,
                                          IPreDescriptivaRepository preDescriptivaRepository,
-                                         ISisUsuarioRepository sisUsuarioRepository
+                                         ISisUsuarioRepository sisUsuarioRepository,
+                                         IPRE_V_SALDOSRepository preVSaldosRepository
                                      
                                          )
         {
@@ -39,7 +40,7 @@ namespace Convertidor.Services.Presupuesto
             _prePucSolicitudModificacionRepository = prePucSolicitudModificacionRepository;
             _preDescriptivaRepository = preDescriptivaRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
-           
+            _preVSaldosRepository = preVSaldosRepository;
         }
 
         public async Task<ResultDto<List<PrePucModificacionResponseDto>>> GetAll()
@@ -415,6 +416,8 @@ namespace Convertidor.Services.Presupuesto
                 codigoPucModificacion.USUARIO_UPD = conectado.Usuario;
                 codigoPucModificacion.FECHA_UPD = DateTime.Now;
                 await _repository.Update(codigoPucModificacion);
+                
+                
 
                 var resultDto = await MapPrePucModificacion(codigoPucModificacion);
                 result.Data = resultDto;
@@ -636,6 +639,8 @@ namespace Convertidor.Services.Presupuesto
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
+                    await _preVSaldosRepository.RecalcularSaldo(dto.CodigoPresupuesto);
+                    
                     var resultDto = await MapPrePucModificacion(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
@@ -688,6 +693,7 @@ namespace Convertidor.Services.Presupuesto
 
                 if (deleted.Length > 0)
                 {
+                    await _preVSaldosRepository.RecalcularSaldo(codigoPucModificacion.CODIGO_PRESUPUESTO);
                     result.Data = dto;
                     result.IsValid = false;
                     result.Message = deleted;
@@ -740,7 +746,7 @@ namespace Convertidor.Services.Presupuesto
                 codigoPucModificacion.USUARIO_UPD = conectado.Usuario;
                 codigoPucModificacion.FECHA_UPD = DateTime.Now;
                 await _repository.Update(codigoPucModificacion);
-
+                await _preVSaldosRepository.RecalcularSaldo(codigoPucModificacion.CODIGO_PRESUPUESTO);
                 
                 result.Data = true;
                 result.IsValid = true;

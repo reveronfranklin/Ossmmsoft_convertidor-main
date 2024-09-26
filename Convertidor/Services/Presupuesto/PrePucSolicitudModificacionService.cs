@@ -465,6 +465,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
+                    await _preVSaldosRepository.RecalcularSaldo(dto.CodigoPresupuesto);
                     var resultDto = await MapPrePucSoliModificacion(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
@@ -520,7 +521,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                 codigoPucModificacion.USUARIO_UPD = conectado.Usuario;
                 codigoPucModificacion.FECHA_UPD = DateTime.Now;
                 await _repository.Update(codigoPucModificacion);
-
+                await _preVSaldosRepository.RecalcularSaldo(codigoPucModificacion.CODIGO_PRESUPUESTO);
                 var resultDto = await MapPrePucSoliModificacion(codigoPucModificacion);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -566,7 +567,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
                 }
                 var deleted = await _repository.Delete(dto.CodigoPucSolModificacion);
-
+                await _preVSaldosRepository.RecalcularSaldo(codigoPucModificacion.CODIGO_PRESUPUESTO);
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;
