@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.ADM;
+﻿using System.Globalization;
+using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
 using Convertidor.Utility;
@@ -40,9 +41,13 @@ namespace Convertidor.Data.Repository.Adm
         public async Task<string> UpdateMontoEnLetras(int codigoSolicitud,decimal monto)
         {
 
+
+            string montoString = monto.ToString(CultureInfo.InvariantCulture);
             try
             {
-                FormattableString xqueryDiario = $"UPDATE ADM_SOLICITUDES  SET MONTO_LETRAS= UPPER(SIS.SIS_MONTOESCRITO({monto})) WHERE ADM_SOLICITUDES.CODIGO_SOLICITUD ={codigoSolicitud}";
+            
+                
+                FormattableString xqueryDiario = $"CALL ADM.ADM_P_MONTO_LETRAS({codigoSolicitud}, {monto});";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 
