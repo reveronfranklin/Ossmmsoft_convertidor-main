@@ -260,7 +260,79 @@ namespace Convertidor.Services.Sis
             return result;
         }
 
-         public async Task<List<AuthModelUserAction>> GetModelUserAction(int userId)
+           public async Task<List<AuthModelUserAction>> GetModelUserAction(int userId)
+          {
+              List<AuthModelUserAction> result = new List<AuthModelUserAction>();
+             
+
+                  var user = await _sisUsuarioRepository.GetByCodigo(userId);
+
+                  List<AuthPermissionResponseDto> allPermissions = new List<AuthPermissionResponseDto>();
+                  AuthUserGroupFilterDto userGroupFilter = new AuthUserGroupFilterDto();
+                  userGroupFilter.UserId = userId;
+                  var groupsByUser = await _ossAuthUserGroupService.GetByUser(userGroupFilter);
+                  if (groupsByUser.Data != null && groupsByUser.Data.Count > 0)
+                  {
+                      foreach (var itemGroupByUser in groupsByUser.Data)
+                      {
+                          AuthGroupPermissionFilterDto filter = new AuthGroupPermissionFilterDto();
+                          filter.GroupId = itemGroupByUser.GroupId;
+                          var permissionByGroup = await _ossAuthGroupPermissionsRepository.GetByGroup(filter);
+                          if (permissionByGroup.Data != null && permissionByGroup.Data.Count > 0)
+                          {
+                              foreach (var itemPermissionByGroup in permissionByGroup.Data)
+                              {
+                                  AuthPermissionResponseDto allPermissionsItem = new AuthPermissionResponseDto();
+                                  AuthPermissionFilterDto permissionFilter = new AuthPermissionFilterDto();
+                                  permissionFilter.Id = itemPermissionByGroup.PermisionId;
+                                  var permission = await _ossAuthPermissionsService.GetById(permissionFilter);
+                                  if (permission.Data != null)
+                                  {
+                                      allPermissions.Add(permission.Data);
+                                  }
+                              }
+                          }
+                      }
+
+
+
+                  }
+
+                  AuthUserPermisionFilterDto filterUserPermission = new AuthUserPermisionFilterDto();
+                  filterUserPermission.UserId = userId;
+                  var permissionByUser = await _ossAuthUserPermissionRepository.GetByUser(filterUserPermission);
+                  if (permissionByUser.Data != null && permissionByUser.Data.Count > 0)
+                  {
+                      foreach (var itempermissionByUser in permissionByUser.Data)
+                      {
+                          AuthPermissionResponseDto allPermissionsItem = new AuthPermissionResponseDto();
+                          AuthPermissionFilterDto permissionFilter = new AuthPermissionFilterDto();
+                          permissionFilter.Id = itempermissionByUser.PermisionId;
+                          var permission = await _ossAuthPermissionsService.GetById(permissionFilter);
+                          if (permission.Data != null)
+                          {
+                              allPermissions.Add(permission.Data);
+                          }
+                      }
+                  }
+
+                  foreach (var item in allPermissions)
+                  {
+
+                      AuthModelUserAction newPermisionByModel = new AuthModelUserAction();
+                      newPermisionByModel.Model = item.Model;
+                      newPermisionByModel.Action = item.Codename;
+                      newPermisionByModel.Login = user.LOGIN;
+
+                      result.Add(newPermisionByModel);
+
+                  }
+
+
+              return result;
+          }
+        
+         public async Task<List<AuthModelUserAction>> GetModelUserActionRESPALDO(int userId)
           {
               List<AuthModelUserAction> result = new List<AuthModelUserAction>();
               var cacheKey = $"List<AuthModelUserAction>-{userId}";
