@@ -20,6 +20,7 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPRE_INDICE_CAT_PRGRepository _pRE_INDICE_CAT_PRGRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IPreDescriptivasService _preDescriptivasService;
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
 
         public PrePucCompromisosService(IPrePucCompromisosRepository repository,
                                       IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
@@ -31,7 +32,8 @@ namespace Convertidor.Services.Presupuesto
                                       IAdmPucSolicitudRepository admPucSolicitudRepository,
                                       IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
                                       ISisUsuarioRepository sisUsuarioRepository,
-                                      IPreDescriptivasService preDescriptivasService
+                                      IPreDescriptivasService preDescriptivasService,
+                                      IPRE_V_SALDOSRepository preVSaldosRepository
         )
 		{
             _repository = repository;
@@ -45,6 +47,7 @@ namespace Convertidor.Services.Presupuesto
            _pRE_INDICE_CAT_PRGRepository = pRE_INDICE_CAT_PRGRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _preDescriptivasService = preDescriptivasService;
+            _preVSaldosRepository = preVSaldosRepository;
         }
 
 
@@ -450,7 +453,7 @@ namespace Convertidor.Services.Presupuesto
                 codigoPucCompromiso.USUARIO_UPD = conectado.Usuario;
                 codigoPucCompromiso.FECHA_UPD = DateTime.Now;
                 await _repository.Update(codigoPucCompromiso);
-
+                await _preVSaldosRepository.RecalcularSaldo(codigoPucCompromiso.CODIGO_PRESUPUESTO);
                 var resultDto = await MapPrePucCompromisos(codigoPucCompromiso);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -691,6 +694,8 @@ namespace Convertidor.Services.Presupuesto
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
+                    
+                    await _preVSaldosRepository.RecalcularSaldo(dto.CodigoPresupuesto);
                     var resultDto = await MapPrePucCompromisos(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
@@ -743,9 +748,10 @@ namespace Convertidor.Services.Presupuesto
 
 
                 var deleted = await _repository.Delete(dto.CodigoPucCompromiso);
-
+                await _preVSaldosRepository.RecalcularSaldo(codigoPucCompromiso.CODIGO_PRESUPUESTO);
                 if (deleted.Length > 0)
                 {
+                    
                     result.Data = dto;
                     result.IsValid = false;
                     result.Message = deleted;
