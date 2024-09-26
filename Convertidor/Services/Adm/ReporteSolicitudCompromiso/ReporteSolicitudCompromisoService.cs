@@ -286,6 +286,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             var result = "No Data";
             var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
             var fileName = $"ReporteSolicitudCompromiso-{filter.CodigoSolicitud}.pdf";
+            var separatorPatch = @settings.SeparatorPatch;
             var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
 
 
@@ -310,7 +311,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 }
                 else
                 {
-                    filePath = $"{@settings.ExcelFiles}/{fileName}";
+                    filePath = $"{@settings.ExcelFiles}{separatorPatch}{fileName}";
 
                     result = fileName;
                     var document = new ReporteSolicitudCompromisoDocument(reporte, pathLogo);
