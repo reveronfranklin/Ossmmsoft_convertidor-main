@@ -16,6 +16,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> UpdateStatus(int codigoSolicitud, string status);
         Task<string> UpdateSearchText(int codigoPresupuesto);
         Task<string> UpdateMontoEnLetras(int codigoSolicitud, decimal monto);
-
+        Task<string> LimpiaCaractereDetalle(int codigoSolicitud);
     }
 }
