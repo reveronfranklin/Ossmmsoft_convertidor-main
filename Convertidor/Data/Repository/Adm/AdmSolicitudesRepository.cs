@@ -42,7 +42,7 @@ namespace Convertidor.Data.Repository.Adm
 
             try
             {
-                FormattableString xqueryDiario = $"UPDATE ADM_SOLICITUDES  SET MONTO_LETRAS= UPPER(SIS.SIS_MONTOESCRITO({monto},2)) WHERE ADM_SOLICITUDES.CODIGO_SOLICITUD ={codigoSolicitud}";
+                FormattableString xqueryDiario = $"UPDATE ADM_SOLICITUDES  SET MONTO_LETRAS= UPPER(SIS.SIS_MONTOESCRITO({monto})) WHERE ADM_SOLICITUDES.CODIGO_SOLICITUD ={codigoSolicitud}";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 
