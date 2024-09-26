@@ -56,6 +56,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         public async Task<ReporteSolicitudCompromisoDto> GenerateData (AdmSolicitudesFilterDto filter) 
         {
           ReporteSolicitudCompromisoDto result = new ReporteSolicitudCompromisoDto();
+
+          await _admSolicitudesRepository.LimpiaCaractereDetalle(filter.CodigoSolicitud);
           var encabezado = await GenerateDataEncabezadoDto (filter);
           var cuerpo = await GenerateDataCuerpoDto (filter);
         

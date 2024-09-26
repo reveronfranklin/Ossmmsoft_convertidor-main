@@ -63,6 +63,29 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
+        public async Task<string> LimpiaCaractereDetalle(int codigoSolicitud)
+        {
+
+            try
+            {
+           
+
+                FormattableString xqueryDiario = 
+                    $"UPDATE ADM_DETALLE_SOLICITUD SET DESCRIPCION = REPLACE(DESCRIPCION , CHR(10), '')   WHERE ADM_DETALLE_SOLICITUD.CODIGO_SOLICITUD ={codigoSolicitud}";
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<string> UpdateSearchText(int codigoPresupuesto)
         {
 
