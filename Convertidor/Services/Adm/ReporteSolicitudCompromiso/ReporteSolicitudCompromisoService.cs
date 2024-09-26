@@ -77,15 +77,18 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 
                
                 
-                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
+                //var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
                 
                 
                 //Buscamos los totales y agregamos a el emcabezado
                 var totales =
-                    await _admDetalleSolicitudService.GetTotales((int)solicitud.CODIGO_PRESUPUESTO,
-                        solicitud.CODIGO_SOLICITUD);
+                    await _admDetalleSolicitudService.GetTotales((int)filter.CodigoPresupuesto,
+                        filter.CodigoSolicitud);
                 
                 await _admSolicitudesRepository.UpdateMontoEnLetras(filter.CodigoSolicitud,totales.TotalMasImpuesto);
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
+
+                
                 result.Base = totales.Base;
                 result.Impuesto = totales.Impuesto;
                 result.TotalMasImpuesto = totales.TotalMasImpuesto;

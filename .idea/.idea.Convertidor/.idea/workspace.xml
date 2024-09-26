@@ -9,7 +9,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +36,9 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -264,7 +268,7 @@
       <workItem from="1726930608253" duration="1588000" />
       <workItem from="1727036132865" duration="2478000" />
       <workItem from="1727127553920" duration="10463000" />
-      <workItem from="1727206521649" duration="29144000" />
+      <workItem from="1727206521649" duration="33843000" />
     </task>
     <servers />
   </component>
@@ -499,13 +503,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs</url>
-          <line>100</line>
+          <line>105</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'UpdateSearchText'">
             <startOffsets>
-              <option value="3457" />
+              <option value="3513" />
             </startOffsets>
             <endOffsets>
-              <option value="3475" />
+              <option value="3531" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="95" />
@@ -1426,13 +1430,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs</url>
-          <line>321</line>
+          <line>326</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'GetByPresupuestoPendientes'">
             <startOffsets>
-              <option value="14662" />
+              <option value="14718" />
             </startOffsets>
             <endOffsets>
-              <option value="14704" />
+              <option value="14760" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="306" />
@@ -2063,13 +2067,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs</url>
-          <line>318</line>
+          <line>321</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" containingFunctionPresentation="Method 'ReportData'">
             <startOffsets>
-              <option value="13326" />
+              <option value="13450" />
             </startOffsets>
             <endOffsets>
-              <option value="13399" />
+              <option value="13523" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="398" />
@@ -2518,42 +2522,81 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs</url>
-          <line>315</line>
+          <line>318</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" containingFunctionPresentation="Method 'ReportData'">
             <startOffsets>
-              <option value="13202" />
+              <option value="13326" />
             </startOffsets>
             <endOffsets>
-              <option value="13265" />
+              <option value="13389" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="475" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs</url>
-          <line>305</line>
+          <line>308</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" containingFunctionPresentation="Method 'ReportData'">
             <startOffsets>
-              <option value="12926" />
+              <option value="13050" />
             </startOffsets>
             <endOffsets>
-              <option value="12967" />
+              <option value="13091" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="476" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs</url>
-          <line>264</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" containingFunctionPresentation="Method 'GetModelUserAction'">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs</url>
+          <line>49</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'UpdateMontoEnLetras'">
             <startOffsets>
-              <option value="12600" />
+              <option value="1299" />
             </startOffsets>
             <endOffsets>
-              <option value="12667" />
+              <option value="1392" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="477" />
+          <option name="timeStamp" value="478" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs</url>
+          <line>87</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" containingFunctionPresentation="Method 'GenerateDataEncabezadoDto'">
+            <startOffsets>
+              <option value="4564" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4665" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="479" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs</url>
+          <line>44</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'UpdateMontoEnLetras'">
+            <startOffsets>
+              <option value="1156" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1222" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="480" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs</url>
+          <line>62</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" containingFunctionPresentation="Method 'UpdateMontoEnLetras'">
+            <startOffsets>
+              <option value="1901" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1919" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="481" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
