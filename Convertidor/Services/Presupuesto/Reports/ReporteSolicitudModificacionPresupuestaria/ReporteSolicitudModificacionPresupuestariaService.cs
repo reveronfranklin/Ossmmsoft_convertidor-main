@@ -247,7 +247,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
             var result = "No Data";
             var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
             var fileName = $"ReporteSolicitudModificacionPresupuestaria-{filter.CodigoSolModificacion}.pdf";
-            var filePath = $"{@settings.ExcelFiles}/{fileName}.pdf";
+            var sepatatorParch = @settings.SeparatorPatch;
+            var filePath = $"{@settings.ExcelFiles}{sepatatorParch}{fileName}.pdf";
 
            
             if (filter == null)
@@ -274,7 +275,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
                 {
 
 
-                    filePath = $"{@settings.ExcelFiles}/{fileName}";
+                    filePath = $"{@settings.ExcelFiles}{sepatatorParch}{fileName}";
 
 
                     result = fileName;
