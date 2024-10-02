@@ -131,7 +131,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     }
 
 
-                    if (solicitud.TIPO_SOLICITUD_ID == 825)
+                    if (solicitud.TIPO_SOLICITUD_ID == 825 || solicitud.TIPO_SOLICITUD_ID == 854)
                     {
                         result.RevisadoPor = "GERENCIA DE NÓMINA";
                         result.ConfirmadoPor = "DIRECCIÓN DE TALENTO HUMANO";
