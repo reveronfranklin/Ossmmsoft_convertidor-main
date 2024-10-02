@@ -470,6 +470,9 @@ namespace Convertidor.Services.Presupuesto
          
         public async Task<ResultDto<List<PreCompromisosResponseDto>>> GetByPresupuesto(PreCompromisosFilterDto filter)
         {
+           
+            var actualizaMontos = await _preDetalleCompromisosRepository.ActualizaMontos(filter.CodigoPresupuesto);
+
             return await _repository.GetByPresupuesto(filter);
         }
 
@@ -1060,6 +1063,7 @@ namespace Convertidor.Services.Presupuesto
             try
             {
 
+          
                 var compromisos = await _repository.GetByNumeroYFecha(numeroCompromiso,fechaCompromiso);
                 if (compromisos == null)
                 {

@@ -20,5 +20,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<bool> ExisteImpuesto(int codigoPresupuesto, int codigoSolicitud);
 
         Task<string> DeleteBySolicitud(int codigoSolicitud);
+        Task<string> ActualizaMontos(int codigoPresupuesto);
     }
 }

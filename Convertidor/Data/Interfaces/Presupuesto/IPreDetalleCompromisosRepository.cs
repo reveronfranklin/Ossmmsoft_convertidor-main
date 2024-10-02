@@ -16,6 +16,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         decimal GetTotal(int codigoCompromiso);
         decimal GetTotalMonto(int codigoCompromiso);
         decimal GetTotalImpuesto(int codigoCompromiso);
+        Task<string> ActualizaMontos(int codigoPresupuesto);
     }
 }
 

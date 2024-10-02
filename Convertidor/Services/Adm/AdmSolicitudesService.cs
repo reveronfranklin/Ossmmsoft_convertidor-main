@@ -168,8 +168,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                //var updateSearchText = await _repository.UpdateSearchText(filter.CodigoPresupuesto);
-                
+                var updateMontos = await _admDetalleSolicitudRepository.ActualizaMontos(filter.CodigoPresupuesto);
+            
                 //generamos las listas pra pasar a las busquedas
                 var icps = await _preIndiceCatPrgRepository.GetAll();
                 var listIcp = icps.ToList();
@@ -254,9 +254,9 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Presupuesto Invalido";
                     return result;
                 }
+                var updateMontos = await _admDetalleSolicitudRepository.ActualizaMontos(filter.CodigoPresupuesto);
 
-                //var updateSearchText = await _repository.UpdateSearchText(filter.CodigoPresupuesto);
-                
+             
                 //generamos las listas pra pasar a las busquedas
                 var icps = await _preIndiceCatPrgRepository.GetAll();
                 var listIcp = icps.ToList();

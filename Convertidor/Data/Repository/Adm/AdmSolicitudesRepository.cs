@@ -129,7 +129,7 @@ namespace Convertidor.Data.Repository.Adm
             }
             try
             {
-
+              
                 var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
                 var totalRegistros = 0;
                 var totalPage = 0;
