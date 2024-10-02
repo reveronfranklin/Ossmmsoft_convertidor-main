@@ -83,11 +83,11 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     row.RelativeItem(4).BorderBottom(1).BorderTop(1).AlignCenter().PaddingRight(10).Text("SOLICITUD DE COMPROMISO").SemiBold().FontSize(14);
                     row.RelativeItem().Column(col => 
                     {
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("N° Solicitud").FontSize(8).SemiBold();
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.NumeroSolicitud).FontSize(8);
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("Fecha").FontSize(8).SemiBold();
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.FechaSolicitud.ToShortDateString()).FontSize(8);
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(6).Text("").FontSize(8).SemiBold();
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("N° Solicitud").FontSize(10).SemiBold();
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.NumeroSolicitud).FontSize(10);
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("Fecha").FontSize(10).SemiBold();
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.FechaSolicitud.ToShortDateString()).FontSize(10);
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(6).Text("").FontSize(10).SemiBold();
 
                     });
                 });
@@ -168,8 +168,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 footer.Cell().ColumnSpan(4).BorderLeft(1).Column(col =>
                 {
-                    col.Item().BorderLeft(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text("MONTO TOTAL EN LETRA :").FontSize(8).Bold();
-                    col.Item().BorderLeft(1).PaddingLeft(5).AlignLeft().PaddingBottom(10).Text($"{Model.Encabezado.MontoLetras.ToUpper()}").FontSize(8);
+                    col.Item().BorderLeft(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text("MONTO TOTAL EN LETRA :").FontSize(10).Bold();
+                    col.Item().BorderLeft(1).PaddingLeft(5).AlignLeft().PaddingBottom(10).Text($"{Model.Encabezado.MontoLetras.ToUpper()}").FontSize(10);
                 });
 
 
@@ -188,9 +188,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 footer.Cell().Column(col =>
                 {
 
-                    col.Item().BorderTop(1).BorderLeft(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).Bold();
-                    col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text($"{porcImpuestoString}").FontSize(8).Bold();
-                    col.Item().Width(100).BorderLeft(1).AlignRight().AlignMiddle().PaddingRight(3).PaddingBottom(10).Text("TOTAL").FontSize(8).Bold();
+                    col.Item().BorderTop(1).BorderLeft(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(10).Bold();
+                    col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text($"{porcImpuestoString}").FontSize(10).Bold();
+                    col.Item().Width(100).BorderLeft(1).AlignRight().AlignMiddle().PaddingRight(3).PaddingBottom(10).Text("TOTAL").FontSize(10).Bold();
 
                 });
 
@@ -200,33 +200,33 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     footer.Cell().Column(col =>
                     {
 
-                        col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalBolivares).FontSize(7);
-                        col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalImpuesto).FontSize(7);
-                        col.Item().Width(100).Border(1).AlignRight().AlignMiddle().BorderBottom(1).Padding(1).PaddingBottom(10).PaddingRight(3).Text(totales).FontSize(7);
+                        col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalBolivares).FontSize(10);
+                        col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalImpuesto).FontSize(10);
+                        col.Item().Width(100).Border(1).AlignRight().AlignMiddle().BorderBottom(1).Padding(1).PaddingBottom(10).PaddingRight(3).Text(totales).FontSize(10);
 
 
                     });
 
                     footer.Cell().ColumnSpan(6).Column(col =>
                     {
-                        col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :").FontSize(8).Bold();
-                        col.Item().BorderVertical(1).PaddingLeft(3).PaddingBottom(3).Text(Model.Encabezado.Motivo).FontSize(7);
+                        col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :").FontSize(10).Bold();
+                        col.Item().BorderVertical(1).PaddingLeft(3).PaddingBottom(3).Text(Model.Encabezado.Motivo).FontSize(10);
                     });
 
                     footer.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).Text($"Elaborado Por :       ").FontSize(8).Bold();
-                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).Text($"Revisado Por :       ").FontSize(8).Bold();
-                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).Text($"Confirmado Por :       ").FontSize(8).Bold();
+                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).Text($"Elaborado Por :       ").FontSize(10).Bold();
+                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).Text($"Revisado Por :       ").FontSize(10).Bold();
+                        row.RelativeItem().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).Text($"Confirmado Por :       ").FontSize(10).Bold();
 
 
                     });
 
                     footer.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.Firmante}").FontSize(8).SemiBold();
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.RevisadoPor}").FontSize(8).SemiBold();
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.ConfirmadoPor}").FontSize(8).Bold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.Firmante}").FontSize(10).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.RevisadoPor}").FontSize(10).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.ConfirmadoPor}").FontSize(10).Bold();
 
                     });
 
