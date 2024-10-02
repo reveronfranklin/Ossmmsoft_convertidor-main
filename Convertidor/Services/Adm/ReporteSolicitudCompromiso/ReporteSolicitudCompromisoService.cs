@@ -154,13 +154,10 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 var usuario =await  _sisUsuarioRepository.GetByCodigo((int)solicitud.USUARIO_INS);
                 if (usuario != null)
                 {
-                    var persona = await _rhPersonasRepository.GetCodigoPersona(usuario.CODIGO_USUARIO);
-                    if (persona != null)
-                    {
-                        firmante =
-                            $"{persona.NOMBRE} \n C.I: {persona.CEDULA} \n FIRMA: ________________________________________________________________________";
-
-                    }
+                    
+                    firmante =
+                        $"{usuario.USUARIO} \n C.I: {usuario.CEDULA} \n FIRMA: ________________________________________________________";
+                    
                  
                 }
                 result.Firmante = firmante;

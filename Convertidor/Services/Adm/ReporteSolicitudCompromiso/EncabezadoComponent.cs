@@ -25,7 +25,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
             QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
 
-            var headerStyle = TextStyle.Default.SemiBold().FontSize(10).Fallback();
+            var headerStyle = TextStyle.Default.SemiBold().FontSize(11).Fallback();
             NumberFormatInfo formato = new CultureInfo("es-AR").NumberFormat;
 
             
