@@ -525,6 +525,27 @@ namespace Convertidor.Data.Repository.Adm
                 return ex.Message;
             }
         }
+
+
+        public async Task<string> ActualizaMontos(int codigoPresupuesto)
+        {
+            
+            try
+            {
+                FormattableString xqueryDiario =$"UPDATE  adm.ADM_DETALLE_SOLICITUD  SET  TOTAL_MAS_IMPUESTO=  decode(por_impuesto,0,round(cantidad*precio_unitario,2),((cantidad*precio_unitario)+(por_impuesto*round((cantidad*precio_unitario)/100,2) ))),TOTAL=(cantidad*precio_unitario),MONTO_IMPUESTO=decode(por_impuesto,0,0,(por_impuesto*round(cantidad*precio_unitario,2)/100 ) ) WHERE codigo_presupuesto = {codigoPresupuesto} AND TOTAL IS NULL";
+                ;
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
+        }
         
         public async Task<string> DeleteBySolicitud(int codigoSolicitud)
         {
