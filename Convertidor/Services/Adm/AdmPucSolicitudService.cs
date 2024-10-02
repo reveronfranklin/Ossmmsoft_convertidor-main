@@ -699,6 +699,10 @@ namespace Convertidor.Services.Adm
                 }
                 
                 await _repository.EliminaImputacion((int)dto.CodigoPresupuesto, dto.CodigoSolicitud);
+                
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)dto.CodigoPresupuesto);
+                
                 result.Data = true;
                 result.IsValid = true;
                 result.Message = "Imputacion Eliminada Satisfactoriamente";

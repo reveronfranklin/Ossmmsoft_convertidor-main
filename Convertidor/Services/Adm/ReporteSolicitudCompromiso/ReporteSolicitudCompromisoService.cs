@@ -27,6 +27,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
         private readonly IOssConfigRepository _ossConfigRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IRhPersonasRepository _rhPersonasRepository;
 
         public ReporteSolicitudCompromisoService(IAdmSolicitudesService admSolicitudesService,
                                                  IAdmSolicitudesRepository admSolicitudesRepository,
@@ -38,7 +40,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                                  IAdmDescriptivaRepository admDescriptivaRepository,
                                                  IConfiguration configuration,
                                                  IWebHostEnvironment env,
-                                                 IOssConfigRepository ossConfigRepository)
+                                                 IOssConfigRepository ossConfigRepository,
+                                                 ISisUsuarioRepository sisUsuarioRepository,
+                                                 IRhPersonasRepository rhPersonasRepository)
         {
             _admSolicitudesService = admSolicitudesService;
             _admSolicitudesRepository = admSolicitudesRepository;
@@ -51,6 +55,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             _configuration = configuration;
             _env = env;
             _ossConfigRepository = ossConfigRepository;
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _rhPersonasRepository = rhPersonasRepository;
         }
 
         public async Task<ReporteSolicitudCompromisoDto> GenerateData (AdmSolicitudesFilterDto filter) 
@@ -123,6 +129,18 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         result.Denominacion = item.DENOMINACION;
 
                     }
+
+
+                    if (solicitud.TIPO_SOLICITUD_ID == 825)
+                    {
+                        result.RevisadoPor = "GERENCIA DE NÓMINA";
+                        result.ConfirmadoPor = "DIRECCIÓN DE TALENTO HUMANO";
+                    }else
+                    {
+                        result.RevisadoPor = "";
+                        result.ConfirmadoPor ="DIRECCIÓN DE ADMINISTRACION Y FINANZAS";
+                    }
+                 
                 }
                 result.MontoLetras = solicitud.MONTO_LETRAS;
                 if(solicitud.MONTO_LETRAS == null) 
@@ -131,12 +149,21 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     result.MontoLetras = solicitud.MONTO_LETRAS;
                 
                 }
-                if(solicitud.FIRMANTE == null) 
-                {
-                    solicitud.FIRMANTE = "";
-                    result.Firmante = solicitud.FIRMANTE;
 
+                var firmante = "";
+                var usuario =await  _sisUsuarioRepository.GetByCodigo((int)solicitud.USUARIO_INS);
+                if (usuario != null)
+                {
+                    var persona = await _rhPersonasRepository.GetCodigoPersona(usuario.CODIGO_USUARIO);
+                    if (persona != null)
+                    {
+                        firmante =
+                            $"{persona.NOMBRE} \n C.I: {persona.CEDULA} \n FIRMA: ________________________________________________________________________";
+
+                    }
+                 
                 }
+                result.Firmante = firmante;
                
                 result.CodigoProveedor = (int)solicitud.CODIGO_PROVEEDOR;
 

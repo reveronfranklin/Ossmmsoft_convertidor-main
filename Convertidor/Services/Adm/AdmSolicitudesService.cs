@@ -21,6 +21,7 @@ namespace Convertidor.Services.Adm
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly ISisSerieDocumentosRepository _serieDocumentosRepository;
         private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
 
         public AdmSolicitudesService(IAdmSolicitudesRepository repository,
             IAdmDetalleSolicitudRepository admDetalleSolicitudRepository,
@@ -31,7 +32,8 @@ namespace Convertidor.Services.Adm
             IAdmProveedoresRepository admProveedoresRepository,
             IAdmDescriptivaRepository admDescriptivaRepository,
             ISisSerieDocumentosRepository serieDocumentosRepository,
-            ISisDescriptivaRepository sisDescriptivaRepository)
+            ISisDescriptivaRepository sisDescriptivaRepository,
+            IPRE_V_SALDOSRepository preVSaldosRepository)
         {
             _repository = repository;
             _admDetalleSolicitudRepository = admDetalleSolicitudRepository;
@@ -43,6 +45,7 @@ namespace Convertidor.Services.Adm
             _admProveedoresRepository = admProveedoresRepository;
             _serieDocumentosRepository = serieDocumentosRepository;
             _sisDescriptivaRepository = sisDescriptivaRepository;
+            _preVSaldosRepository = preVSaldosRepository;
         }
 
       
@@ -507,7 +510,9 @@ namespace Convertidor.Services.Adm
                 }
                 
                 await _repository.UpdateStatus(solicitud.CODIGO_SOLICITUD,dto.Status);
-                
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)solicitud.CODIGO_PRESUPUESTO);
+
                 result.Data = true;
                 result.IsValid = true;
                 result.Message = "";
@@ -720,7 +725,11 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                
+                await _admDetalleSolicitudRepository.DeleteBySolicitud(dto.CodigoSolicitud);
                 var deleted = await _repository.Delete(dto.CodigoSolicitud);
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)codigoSolicitud.CODIGO_PRESUPUESTO);
 
                 if (deleted.Length > 0)
                 {

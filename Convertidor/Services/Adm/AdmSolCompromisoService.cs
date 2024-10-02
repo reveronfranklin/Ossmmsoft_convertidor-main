@@ -15,18 +15,21 @@ namespace Convertidor.Services.Adm
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly IPRE_PRESUPUESTOSRepository _pRE_PRESUPUESTOSRepository;
+        private readonly IAdmDetalleSolicitudRepository _admDetalleSolicitudRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
 
         public AdmSolCompromisoService(IAdmSolCompromisoRepository repository,
                                        IAdmDescriptivaRepository admDescriptivaRepository,
                                        ISisUsuarioRepository sisUsuarioRepository,
                                        IAdmProveedoresRepository admProveedoresRepository,
-                                       IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository)
+                                       IPRE_PRESUPUESTOSRepository pRE_PRESUPUESTOSRepository,
+                                       IAdmDetalleSolicitudRepository admDetalleSolicitudRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admProveedoresRepository = admProveedoresRepository;
             _pRE_PRESUPUESTOSRepository = pRE_PRESUPUESTOSRepository;
+            _admDetalleSolicitudRepository = admDetalleSolicitudRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
         }
 
@@ -306,6 +309,14 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                if (codigoSolCompromiso.STATUS != "PE")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Compromiso no esta pendiente";
+                    return result;
+                }
+
                 var tipoSolCompromisoId = await _admDescriptivaRepository.GetByIdAndTitulo(22, dto.TipoSolCompromisoId);
                 if (tipoSolCompromisoId == false)
                 {
@@ -469,8 +480,16 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Solicitud Compromiso no existe";
                     return result;
                 }
+                if (codigosolCompromiso.STATUS != "PE")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Compromiso no esta pendiente";
+                    return result;
+                }
 
 
+              
                 var deleted = await _repository.Delete(dto.CodigoSolCompromiso);
 
                 if (deleted.Length > 0)

@@ -718,6 +718,18 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
+                var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoCompromiso.CODIGO_SOLICITUD);
+                if (solicitud != null)
+                {
+                    if (dto.FechaCompromiso < solicitud.FECHA_SOLICITUD)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = $"Fecha compromiso Invalida, no puede ser menor que la Solicitud: {solicitud.FECHA_SOLICITUD}";
+                        return result;
+                    }
+                }
+
 
                 if (dto.FechaCompromiso == null)
                 {

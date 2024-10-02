@@ -282,6 +282,8 @@ namespace Convertidor.Data.Repository.Adm
         }
 
         
+        
+        
         public async Task<string> UpdateSearchText(int codigoSolicitud)
         {
 
@@ -522,6 +524,33 @@ namespace Convertidor.Data.Repository.Adm
             {
                 return ex.Message;
             }
+        }
+        
+        public async Task<string> DeleteBySolicitud(int codigoSolicitud)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"DELETE FROM  ADM.ADM_DETALLE_SOLICITUD  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                
+                FormattableString xqueryDiarioPUC = $"DELETE FROM  ADM.ADM_PUC_SOLICITUD  WHERE CODIGO_SOLICITUD ={codigoSolicitud}";
+
+                var resultDiarioPUC = _context.Database.ExecuteSqlInterpolated(xqueryDiarioPUC);
+
+                
+                
+                
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
         }
         public async Task<int> GetNextKey()
         {

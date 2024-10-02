@@ -180,13 +180,16 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 var totalBolivares = bolivares.ToString("N", formato);
                 var totalImpuesto = montoImpuesto.ToString("N", formato);
                 var totales = total.ToString("N", formato);
-                var porcImpuestoString = porcImpuesto.ToString("N", formato);
-                
+                var porcImpuestoString = $"{porcImpuesto.ToString("N", formato)}%  IVA";
+                if (porcImpuesto == 0)
+                {
+                    porcImpuestoString = "";
+                }
                 footer.Cell().Column(col =>
                 {
 
                     col.Item().BorderTop(1).BorderLeft(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(8).Bold();
-                    col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text($"{porcImpuestoString}%    " + "  IVA").FontSize(8).Bold();
+                    col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text($"{porcImpuestoString}").FontSize(8).Bold();
                     col.Item().Width(100).BorderLeft(1).AlignRight().AlignMiddle().PaddingRight(3).PaddingBottom(10).Text("TOTAL").FontSize(8).Bold();
 
                 });
@@ -221,9 +224,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                     footer.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.Firmante}  \n FIRMA: ________________________________________________________________________").FontSize(8).SemiBold();
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"         ").FontSize(8).SemiBold();
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"DIRECCION DE ADMINISTRACION Y FINANZAS").FontSize(8).Bold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.Firmante}").FontSize(8).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.RevisadoPor}").FontSize(8).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.ConfirmadoPor}").FontSize(8).Bold();
 
                     });
 

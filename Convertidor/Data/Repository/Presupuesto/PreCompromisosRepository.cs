@@ -81,6 +81,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 FormattableString xqueryAnulaCompromiso =  $"UPDATE PRE.PRE_COMPROMISOS SET STATUS='AN' ,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_COMPROMISO = {codigoCompromiso}";
                 var resultXqueryAnulaCompromiso = _context.Database.ExecuteSqlInterpolated(xqueryAnulaCompromiso);
 
+                FormattableString xqueryPendienteSolicitud =  $"UPDATE ADM.ADM_SOLICITUDES SET STATUS='AN' ,USUARIO_UPD = { conectado.Usuario},FECHA_UPD = SYSDATE  WHERE CODIGO_SOLICITUD = {codigoSolicitud}";
+                var resultXqueryPendienteSolicitud = _context.Database.ExecuteSqlInterpolated(xqueryPendienteSolicitud);
                 
                 return "";
             }
