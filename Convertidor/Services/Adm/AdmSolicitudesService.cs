@@ -510,7 +510,9 @@ namespace Convertidor.Services.Adm
                 }
                 
                 await _repository.UpdateStatus(solicitud.CODIGO_SOLICITUD,dto.Status);
-                
+                //ACTUALIZAR PRE_V_SALDO
+                await _preVSaldosRepository.RecalcularSaldo((int)solicitud.CODIGO_PRESUPUESTO);
+
                 result.Data = true;
                 result.IsValid = true;
                 result.Message = "";
