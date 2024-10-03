@@ -171,9 +171,9 @@ namespace Convertidor.Data.Repository.Adm
                     var resultDiarioTipoImpuesto =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioTipoImpuesto);
                     
                     
-                    FormattableString xqueryDiarioDESCRIPCION = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET DESCRIPCION='IVA'  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID = {tipoImpuesto}";
+                    //FormattableString xqueryDiarioDESCRIPCION = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET DESCRIPCION='IVA'  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID = {tipoImpuesto}";
 
-                    var resultDiarioDescripcion =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioDESCRIPCION);
+                    //var resultDiarioDescripcion =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioDESCRIPCION);
                     
                 }
 
