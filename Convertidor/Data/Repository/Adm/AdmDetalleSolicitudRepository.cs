@@ -171,9 +171,9 @@ namespace Convertidor.Data.Repository.Adm
                     var resultDiarioTipoImpuesto =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioTipoImpuesto);
                     
                     
-                    FormattableString xqueryDiarioDESCRIPCION = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET DESCRIPCION='IVA'  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID = {tipoImpuesto}";
+                    //FormattableString xqueryDiarioDESCRIPCION = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET DESCRIPCION='IVA'  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID = {tipoImpuesto}";
 
-                    var resultDiarioDescripcion =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioDESCRIPCION);
+                    //var resultDiarioDescripcion =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioDESCRIPCION);
                     
                 }
 
@@ -318,7 +318,7 @@ namespace Convertidor.Data.Repository.Adm
 
 
                 await UpdateSearchText(filter.CodigoSolicitud);
-                if (filter.PageNumber == 0) filter.PageNumber = 1;
+                filter.PageNumber = filter.PageNumber +1;
                 if (filter.PageSize == 0) filter.PageSize = 4000;
 
                 if (string.IsNullOrEmpty(filter.SearchText))
@@ -412,6 +412,7 @@ namespace Convertidor.Data.Repository.Adm
                 
                 result.CantidadRegistros = totalRegistros;
                 result.TotalPage = totalPage;
+                if (filter.PageNumber > 0) filter.PageNumber = filter.PageNumber - 1;
                 result.Page = filter.PageNumber;
                 result.IsValid = true;
                 result.Message = "";
