@@ -55,7 +55,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 table.Cell().ColumnSpan(6).Column(col =>
                 {
                     col.Item().BorderTop(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text("PARA: ").Style(headerStyle);
-                    col.Item().BorderBottom(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text(ModelEncabezado.Denominacion).Style(headerStyle);
+                    col.Item().BorderBottom(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text(ModelEncabezado.UnidadEjecutora).Style(headerStyle);
                     col.Item().BorderTop(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text("SOLICITANTE: ").Style(headerStyle);
                     col.Item().BorderBottom(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text(ModelEncabezado.UnidadEjecutora).Style(headerStyle);
                     col.Item().BorderTop(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text("PROVEEDOR: ").Style(headerStyle);
@@ -65,7 +65,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         ModelEncabezado.Vivienda =" ";
                         
                     }
-                    col.Item().BorderBottom(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.NombreProveedor}    {ModelEncabezado.DireccionProveedor.TrimStart()}     {ModelEncabezado.TelefonoProveedor.Trim()}").Style(headerStyle);
+                    col.Item().BorderBottom(1).BorderVertical(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.NombreProveedor}    {ModelEncabezado.DireccionProveedor.TrimStart()}     {ModelEncabezado.TelefonoProveedor.Trim()} {ModelEncabezado.Rif.Trim()}").Style(headerStyle);
                     
                 });
 

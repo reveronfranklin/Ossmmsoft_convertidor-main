@@ -7,7 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/EncabezadoComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/EncabezadoComponent.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -243,6 +245,7 @@
       <workItem from="1727467290360" duration="3004000" />
       <workItem from="1727817915494" duration="17850000" />
       <workItem from="1727885094741" duration="25160000" />
+      <workItem from="1727966316754" duration="304000" />
     </task>
     <servers />
   </component>
@@ -2473,10 +2476,10 @@
           <line>556</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'ActualizaMontos'">
             <startOffsets>
-              <option value="21469" />
+              <option value="21473" />
             </startOffsets>
             <endOffsets>
-              <option value="21487" />
+              <option value="21491" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="495" />
@@ -2512,10 +2515,10 @@
           <line>583</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'DeleteBySolicitud'">
             <startOffsets>
-              <option value="22314" />
+              <option value="22318" />
             </startOffsets>
             <endOffsets>
-              <option value="22332" />
+              <option value="22336" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="498" />
@@ -2577,10 +2580,10 @@
           <line>404</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'GetByCodigoSolicitud'">
             <startOffsets>
-              <option value="15314" />
+              <option value="15318" />
             </startOffsets>
             <endOffsets>
-              <option value="15394" />
+              <option value="15398" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="511" />
