@@ -82,11 +82,14 @@ namespace Convertidor.Data.Repository.Adm
             {
                 decimal? sum = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto).Sum(x => x.TOTAL);
                 result.Base = (decimal)sum;
+                
+                decimal? sumImponible = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto && x.MONTO_IMPUESTO>0).Sum(x => x.TOTAL);
+                result.BaseImponible = (decimal)sumImponible;
                 var detalleImpuesto = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_IMPUESTO_ID==tipoImpuesto).FirstOrDefaultAsync();
                 if (detalleImpuesto != null)
                 {
                     result.Impuesto = (decimal)detalleImpuesto.TOTAL;
-                  
+                    result.BaseImponible = result.Base;
                 }
                 else
                 {
@@ -95,7 +98,7 @@ namespace Convertidor.Data.Repository.Adm
                 }
 
                 result.TotalMasImpuesto = result.Base + result.Impuesto;
-                result.PorcentajeImpuesto =  (result.Impuesto/result.Base ) * 100;
+                result.PorcentajeImpuesto =  (result.Impuesto/result.BaseImponible ) * 100;
             }
             else
             {
@@ -323,7 +326,10 @@ namespace Convertidor.Data.Repository.Adm
                 ResultDto<List<AdmDetalleSolicitudResponseDto>> result = new ResultDto<List<AdmDetalleSolicitudResponseDto>>(null);
                
                 List<ADM_DETALLE_SOLICITUD> pageData = new List<ADM_DETALLE_SOLICITUD>();
-                var detalle = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==filter.CodigoSolicitud).ToListAsync();
+                var detalle = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty()
+                    .Where(x =>x.CODIGO_SOLICITUD==filter.CodigoSolicitud)
+                    .OrderBy(X=>X.CODIGO_DETALLE_SOLICITUD)
+                    .ToListAsync();
                
                 totalRegistros = detalle.Count;
 
@@ -391,10 +397,10 @@ namespace Convertidor.Data.Repository.Adm
                     alldata.Add(resultItem);
                 }
 
-                var totales = GetTotales(filter.CodigoPresupuesto,filter.CodigoSolicitud);
-                var totalMasImpuesto = await GetTotalMonto(detalle);
-                var totalImpuesto = totales.Result.Impuesto;
-                var total = await GetTotal(detalle);
+                var totales =await  GetTotales(filter.CodigoPresupuesto,filter.CodigoSolicitud);
+                var totalMasImpuesto = totales.TotalMasImpuesto;
+                var totalImpuesto = totales.Impuesto;
+                var total = totales.Base;
                 result.Total3 = total;
                 result.Total1 = totalMasImpuesto;
                 result.Total4 = totalImpuesto;
