@@ -98,7 +98,12 @@ namespace Convertidor.Data.Repository.Adm
                 }
 
                 result.TotalMasImpuesto = result.Base + result.Impuesto;
-                result.PorcentajeImpuesto =  (result.Impuesto/result.BaseImponible ) * 100;
+                result.PorcentajeImpuesto = 0;
+                if(result.BaseImponible != 0)
+                {
+                    result.PorcentajeImpuesto = (result.Impuesto / result.BaseImponible) * 100;
+                }
+
             }
             else
             {
