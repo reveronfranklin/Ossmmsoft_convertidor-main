@@ -586,7 +586,7 @@ namespace Convertidor.Services.Adm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = $"No puede agregar mas de una linea de impuesto";
+                    result.Message = $"No puede agregar mas de una linea de impuesto, el impuesto es el ultimo item a agregar";
                     return result;
                 }
 

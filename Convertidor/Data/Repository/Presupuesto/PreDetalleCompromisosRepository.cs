@@ -54,8 +54,8 @@ namespace Convertidor.Data.Repository.Rh
             
             try
             {
-                FormattableString xqueryDiario =$"UPDATE  PRE.PRE_DETALLE_COMPROMISOS  SET  TOTAL_MAS_IMPUESTO=  decode(por_impuesto,0,round(cantidad*precio_unitario,2),((cantidad*precio_unitario)+(por_impuesto*round((cantidad*precio_unitario)/100,2) ))),TOTAL=(cantidad*precio_unitario),MONTO_IMPUESTO=decode(por_impuesto,0,0,(por_impuesto*round(cantidad*precio_unitario,2)/100 ) ) WHERE codigo_presupuesto = {codigoPresupuesto} AND TOTAL IS NULL";
-                ;
+                FormattableString xqueryDiario =$"UPDATE  PRE.PRE_DETALLE_COMPROMISOS  SET  TOTAL_MAS_IMPUESTO=  decode(por_impuesto,0,round(cantidad*precio_unitario,2),((cantidad*precio_unitario)+(por_impuesto*round((cantidad*precio_unitario)/100,2) ))),TOTAL=(cantidad*precio_unitario),MONTO_IMPUESTO=decode(por_impuesto,0,0,(por_impuesto*round(cantidad*precio_unitario,2)/100 ) ) WHERE codigo_presupuesto = {codigoPresupuesto} AND TOTAL IS NULL OR TOTAL=0";
+                
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 

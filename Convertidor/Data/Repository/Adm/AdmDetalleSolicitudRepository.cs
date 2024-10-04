@@ -402,7 +402,7 @@ namespace Convertidor.Data.Repository.Adm
                     alldata.Add(resultItem);
                 }
 
-                var totales =await  GetTotales(filter.CodigoPresupuesto,filter.CodigoSolicitud);
+                    var totales =await  GetTotales(filter.CodigoPresupuesto,filter.CodigoSolicitud);
                 var totalMasImpuesto = totales.TotalMasImpuesto;
                 var totalImpuesto = totales.Impuesto;
                 var total = totales.Base;
