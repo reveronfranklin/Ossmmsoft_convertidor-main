@@ -107,7 +107,7 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> CrearCompromisoDesdeSolicitud(FilterCrearCompromisoDesdeSolictud filter)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);
-            var conectado = await _sisUsuarioRepository.GetConectado();
+            /*var conectado = await _sisUsuarioRepository.GetConectado();
             var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.Aprobar);
             if (userValid.IsValid == false)
             {
@@ -115,7 +115,7 @@ namespace Convertidor.Controllers
                 result.IsValid = false;
                 result.Message = userValid.Message;
                 return Ok(result);
-            }
+            }*/
             
             result = await _service.CrearCompromisoDesdeSolicitud(filter.CodigoSolicitud);
             return Ok(result);
