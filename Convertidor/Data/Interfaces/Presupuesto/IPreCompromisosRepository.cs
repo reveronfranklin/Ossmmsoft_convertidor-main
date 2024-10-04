@@ -21,7 +21,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<string> AprobarCompromiso(int codigoCompromiso);
         Task<string> AnularCompromiso(int codigoCompromiso, int codigoSolicitud);
 
-        string UpdateMontoEnLetras(int codigoCompromiso, decimal monto);
+        Task<string> UpdateMontoEnLetras(int codigoCompromiso, decimal monto);
 
     }
 }

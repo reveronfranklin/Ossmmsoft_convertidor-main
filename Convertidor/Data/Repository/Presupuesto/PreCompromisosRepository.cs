@@ -1,4 +1,5 @@
 ﻿
+using System.Globalization;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
@@ -97,16 +98,19 @@ namespace Convertidor.Data.Repository.Presupuesto
         }
         
         
-        public string UpdateMontoEnLetras(int codigoCompromiso,decimal monto)
+        public async Task<string> UpdateMontoEnLetras(int codigoCompromiso,decimal monto)
         {
 
+
+       
             try
             {
-                FormattableString xqueryDiario = $"UPDATE PRE_COMPROMISOS  SET MONTO_LETRAS= UPPER(SIS.SIS_MONTOESCRITO({monto},2)) WHERE PRE_COMPROMISOS.CODIGO_COMPROMISO ={codigoCompromiso}";
-
-                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-
+            
                 
+                FormattableString xqueryDiario = $"CALL PRE.PRE_P_MONTO_LETRAS({codigoCompromiso}, {monto});";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
                 
                 return "";
             }
