@@ -181,7 +181,9 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = solicitudPuedeSerAprobada.Message;
                     return result;
                 }
-                
+
+
+              
                 
                 
                 PRE_COMPROMISOS entity = new PRE_COMPROMISOS();
@@ -470,7 +472,7 @@ namespace Convertidor.Services.Presupuesto
          
         public async Task<ResultDto<List<PreCompromisosResponseDto>>> GetByPresupuesto(PreCompromisosFilterDto filter)
         {
-           
+            //filter.SearchText = "CMC-CMP-00373";
             var actualizaMontos = await _preDetalleCompromisosRepository.ActualizaMontos(filter.CodigoPresupuesto);
 
             return await _repository.GetByPresupuesto(filter);

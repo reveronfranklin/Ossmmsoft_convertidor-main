@@ -8,13 +8,13 @@ using System.Globalization;
 
 namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 {
-    public class ReporteCompromisoPresupuestarioDocument : IDocument
+    public class ReporteCompromisoPresupuestarioDocumentbk : IDocument
     {
         public static Image LogoImage { get; } = Image.FromFile("logo.png");
         public ReporteCompromisoPresupuestarioDto Model;
         private readonly string _patchLogo;
 
-        public ReporteCompromisoPresupuestarioDocument(ReporteCompromisoPresupuestarioDto model,
+        public ReporteCompromisoPresupuestarioDocumentbk(ReporteCompromisoPresupuestarioDto model,
                                                   string patchLogo)
         {
             Model = model;
@@ -75,11 +75,11 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     {
    
                         col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.NumeroCompromiso).FontSize(12).Bold().FontColor(Colors.Red.Medium);
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("N° COMPROMISO").FontSize(11).SemiBold();
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.FechaCompromiso.ToShortDateString()).FontSize(11);
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("Fecha").FontSize(11).SemiBold();
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(6).Text(encabezado.ModelEncabezado.NumeroSolicitud).FontSize(11).SemiBold();
-                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("N° SOLICITUD").FontSize(11).SemiBold();
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("N° COMPROMISO").FontSize(8).SemiBold();
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text(encabezado.ModelEncabezado.FechaCompromiso.ToShortDateString()).FontSize(8);
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("Fecha").FontSize(8).SemiBold();
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(6).Text(encabezado.ModelEncabezado.NumeroSolicitud).FontSize(8).SemiBold();
+                        col.Item().Width(120).BorderBottom(1).BorderRight(1).BorderLeft(1).BorderTop(1).AlignCenter().AlignTop().PaddingBottom(5).Text("N° SOLICITUD").FontSize(8).SemiBold();
                     });
                 
                     
@@ -150,59 +150,35 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                 table.Footer(footer =>
                 {
                     
-                    footer.Cell().ColumnSpan(4).BorderLeft(1).Column(col =>
+                    footer.Cell().ColumnSpan(6).BorderVertical(1).BorderTop(1).Row(row =>
                     {
-                        col.Item().BorderLeft(1).BorderTop(1).PaddingLeft(5).AlignLeft().Text("MONTO TOTAL EN LETRA :").FontSize(11).Bold();
-                        col.Item().BorderLeft(1).PaddingLeft(5).AlignLeft().PaddingBottom(10).Text($"{Model.Encabezado.MontoEnLetras.ToUpper()}").FontSize(11);
-                    });
-
-
-                    var bolivares = Model.Encabezado.Base;
-                    var montoImpuesto = Model.Encabezado.Impuesto;
-                    var total = Model.Encabezado.TolalMasImpuesto;
-                    var porcImpuesto = Model.Encabezado.PorcentajeImpuesto;
-                    var totalBolivares = bolivares.ToString("N", formato);
-                    var totalImpuesto = montoImpuesto.ToString("N", formato);
-                    var totales = total.ToString("N", formato);
-                    var porcImpuestoString = $"{porcImpuesto.ToString("N", formato)}%  IVA";
-                    if (porcImpuesto == 0)
-                    {
-                        porcImpuestoString = "";
-                    }
-                    footer.Cell().Column(col =>
-                    {
-
-                        col.Item().BorderTop(1).BorderLeft(1).Width(100).AlignRight().PaddingRight(3).Text("SUBTOTAL").FontSize(11).Bold();
-                        col.Item().Width(100).BorderLeft(1).AlignRight().PaddingRight(3).Text($"{porcImpuestoString}").FontSize(11).Bold();
-                        col.Item().Width(100).BorderLeft(1).AlignRight().AlignMiddle().PaddingRight(3).PaddingBottom(10).Text("TOTAL").FontSize(11).Bold();
+                        row.RelativeItem(5).PaddingLeft(10).PaddingRight(5).AlignLeft().Text($"MONTO TOTAL EN LETRA :\n{Model.Encabezado.MontoEnLetras.ToUpper()}").FontSize(8).Bold();
+                        
+                        row.ConstantItem(70).AlignRight().AlignBottom().PaddingRight(2).Text("TOTAL").FontSize(8).Bold();
+                        
+                        row.ConstantItem(70).BorderLeft(1).AlignRight().Column(col =>
+                        {
+                            col.Item().BorderBottom(1).ExtendHorizontal().PaddingVertical(20);
+                            col.Item().ExtendHorizontal().AlignRight().PaddingBottom(-1).PaddingRight(3).Text(totalBolivares).FontSize(7);
+                        });
 
                     });
 
-                    footer.Cell().Column(col =>
-                    {
-
-                        col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalBolivares).FontSize(11);
-                        col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalImpuesto).FontSize(11);
-                        col.Item().Width(100).Border(1).AlignRight().AlignMiddle().BorderBottom(1).Padding(1).PaddingBottom(10).PaddingRight(3).Text(totales).FontSize(11);
-
-
-                    });
-                    
                     footer.Cell().ColumnSpan(6).Column(col =>
                     {
-                        col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :").FontSize(11).Bold();
-                        col.Item().BorderVertical(1).PaddingLeft(3).PaddingBottom(3).Text(Model.Encabezado.Motivo).FontSize(11);
+                        col.Item().BorderVertical(1).BorderTop(1).PaddingLeft(3).Text("MOTIVO  :").FontSize(8).Bold();
+                        col.Item().BorderVertical(1).PaddingLeft(3).PaddingBottom(3).Text(Model.Encabezado.Motivo).FontSize(7);
                     });
 
                     footer.Cell().ColumnSpan(2).Column(col =>
                     {
-                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).PaddingVertical(3).Text($"ANALISTA").FontSize(11).Bold();
-                        col.Item().BorderVertical(1).Text($"{Model.Encabezado.Firmante}").FontSize(11);
-                        col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).PaddingVertical(4).Text($"FIRMA : ________________________________________     ").FontSize(11).Bold();
+                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).PaddingVertical(3).Text($"ANALISTA").FontSize(8).Bold();
+                        col.Item().BorderVertical(1).Text($"{Model.Encabezado.Firmante}").FontSize(7);
+                        col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).PaddingVertical(4).Text($"FIRMA : ________________________________________     ").FontSize(8).Bold();
 
                     });
 
-                    footer.Cell().ColumnSpan(4).BorderVertical(1).BorderBottom(1).BorderTop(1).AlignBottom().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(5).Text($"DIRECCION DE PLANIFICACION Y PRESUPUESTO").FontSize(11).Bold();
+                    footer.Cell().ColumnSpan(4).BorderVertical(1).BorderBottom(1).BorderTop(1).AlignBottom().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(5).Text($"DIRECCION DE PLANIFICACION Y PRESUPUESTO").FontSize(8).Bold();
 
                 });
             });

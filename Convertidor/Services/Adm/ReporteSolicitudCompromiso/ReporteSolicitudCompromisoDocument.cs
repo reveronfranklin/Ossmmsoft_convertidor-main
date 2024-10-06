@@ -194,18 +194,15 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 });
 
-                    
-                  
+                footer.Cell().Column(col =>
+                {
 
-                    footer.Cell().Column(col =>
-                    {
-
-                        col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalBolivares).FontSize(11);
-                        col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalImpuesto).FontSize(11);
-                        col.Item().Width(100).Border(1).AlignRight().AlignMiddle().BorderBottom(1).Padding(1).PaddingBottom(10).PaddingRight(3).Text(totales).FontSize(11);
+                    col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalBolivares).FontSize(11);
+                    col.Item().Width(100).Border(1).AlignRight().Padding(1).PaddingRight(3).Text(totalImpuesto).FontSize(11);
+                    col.Item().Width(100).Border(1).AlignRight().AlignMiddle().BorderBottom(1).Padding(1).PaddingBottom(10).PaddingRight(3).Text(totales).FontSize(11);
 
 
-                    });
+                });
 
                     footer.Cell().ColumnSpan(6).Column(col =>
                     {
