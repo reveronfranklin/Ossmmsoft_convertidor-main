@@ -235,7 +235,7 @@ namespace Convertidor.Data.Repository.Presupuesto
         {
             ResultDto<List<PreCompromisosResponseDto>> result = new ResultDto<List<PreCompromisosResponseDto>>(null);
 
-            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageNumber == 0) filter.PageNumber = filter.PageNumber+1;
             if (filter.PageSize == 0) filter.PageSize = 100;
             if (filter.PageSize >100) filter.PageSize = 100;
             if (filter.SearchText == null) filter.SearchText = "";
@@ -289,6 +289,22 @@ namespace Convertidor.Data.Repository.Presupuesto
                         .ToListAsync();
                 }
                 
+                if (filter.SearchText.Length > 0 && filter.Status.Length==0)
+                {
+                    totalRegistros = _context.PRE_COMPROMISOS
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto  && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = await _context.PRE_COMPROMISOS.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto   && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .OrderByDescending(x => x.FECHA_COMPROMISO)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                
                 List<PreCompromisosResponseDto> resultData = new List<PreCompromisosResponseDto>();
                 foreach (var item in pageData)
                 {
@@ -320,7 +336,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                     
                     resultData.Add(itemData);
                 }
-                
+
+                if (filter.PageNumber > 0) filter.PageNumber = filter.PageNumber - 1;
                 result.CantidadRegistros = totalRegistros;
                 result.TotalPage = totalPage;
                 result.Page = filter.PageNumber;

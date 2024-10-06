@@ -464,7 +464,7 @@ namespace Convertidor.Services.Adm
              
                 solicitud.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
 
-                
+    
                 solicitud.CODIGO_EMPRESA = conectado.Empresa;
                 solicitud.USUARIO_UPD = conectado.Usuario;
                 solicitud.FECHA_UPD = DateTime.Now;
@@ -669,7 +669,6 @@ namespace Convertidor.Services.Adm
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
-
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
@@ -802,6 +801,9 @@ namespace Convertidor.Services.Adm
                     result.Message = "Solicitud No tiene PUC";
                     return result;
                 }
+                
+             
+                
                 
                 var totalDetalle = admDetalleSolicitud.Data.Sum(p => p.TotalMasImpuesto);
                 var totalPuc = pucSolicitud.Sum(p => p.MONTO);

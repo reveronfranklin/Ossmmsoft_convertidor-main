@@ -124,7 +124,15 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 result.TolalMasImpuesto = totalMasImpuesto;
                 result.Impuesto = totalImpuesto;
                 result.Tolal = total;
+                result.Base = total;
                 result.MontoEnLetras = compromiso.MONTO_LETRAS;
+                result.PorcentajeImpuesto = 0;
+                if (result.Impuesto > 0)
+                {
+                    result.PorcentajeImpuesto = (result.Impuesto /   result.Tolal ) * 100;
+                    
+                }
+               
                 
                 
                 result.Firmante = compromiso.FIRMANTE;

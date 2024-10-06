@@ -36,6 +36,11 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public decimal Tolal { get; set; }
         public decimal Impuesto { get; set; }
         public decimal TolalMasImpuesto { get; set; }
+        public decimal Base { get; set; }
+        
+        public decimal PorcentajeImpuesto { get; set; }
+        
+        
         
         public string TelefonoProveedor { get { return $"{CodigoArea}{LineaComunicacion}"; } }
         public List<PrePucCompromisosResponseDto> PucCompromisos { get; set; }

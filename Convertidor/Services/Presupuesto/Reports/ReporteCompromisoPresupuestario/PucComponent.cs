@@ -25,7 +25,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
             QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
 
 
-            var headerStyle = TextStyle.Default.SemiBold().FontSize(7).Fallback();
+            var headerStyle = TextStyle.Default.SemiBold().FontSize(11).Fallback();
             NumberFormatInfo formato = new CultureInfo("es-AR").NumberFormat;
             static IContainer CellStyle(IContainer container) => container;
             formato.CurrencyGroupSeparator = ".";
@@ -62,10 +62,10 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     header.Cell().ColumnSpan(6).Row(row =>
                     {
 
-                        row.ConstantItem(80).Border(1).AlignCenter().Element(CellStyle).Text("SE-PR-SP-PY-AC").FontSize(7).Bold();
-                        row.ConstantItem(80).Border(1).AlignCenter().Element(CellStyle).Text("GR-PA-GE-ES-SE-EX").FontSize(7).Bold();
-                        row.RelativeItem(3).Border(1).AlignCenter().Element(CellStyle).PaddingLeft(40).Text("FINANCIADO").FontSize(7).Bold();
-                        row.ConstantItem(60).Border(1).AlignCenter().Element(CellStyle).Text("MONTO").FontSize(7).Bold();
+                        row.ConstantItem(110).Border(1).AlignCenter().Element(CellStyle).Text("SE-PR-SP-PY-AC").FontSize(11).Bold();
+                        row.ConstantItem(110).Border(1).AlignCenter().Element(CellStyle).Text("GR-PA-GE-ES-SE-EX").FontSize(11).Bold();
+                        row.RelativeItem(3).Border(1).AlignCenter().Element(CellStyle).PaddingLeft(40).Text("FINANCIADO").FontSize(11).Bold();
+                        row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("MONTO").FontSize(11).Bold();
                         /*row.ConstantItem(70).Column(col =>
                         {
                             col.Item().Border(1).AlignCenter().Element(CellStyle).Text("").FontSize(7).Bold();
@@ -83,11 +83,11 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
-                        row.ConstantItem(80).BorderVertical(1).AlignCenter().PaddingRight(3).Element(CellStyle).Text(item.CodigoIcpConcat).FontSize(7);
-                        row.ConstantItem(80).BorderVertical(1).AlignCenter().PaddingRight(3).Element(CellStyle).Text(item.CodigoPucConcat).FontSize(8);
-                        row.RelativeItem(3).BorderVertical(1).AlignLeft().PaddingLeft(10).Element(CellStyle).Text(item.DescripcionFinanciado).FontSize(8);
+                        row.ConstantItem(110).BorderVertical(1).AlignCenter().PaddingRight(3).Element(CellStyle).Text(item.CodigoIcpConcat).FontSize(11);
+                        row.ConstantItem(110).BorderVertical(1).AlignCenter().PaddingRight(3).Element(CellStyle).Text(item.CodigoPucConcat).FontSize(11);
+                        row.RelativeItem(3).BorderVertical(1).AlignLeft().PaddingLeft(10).Element(CellStyle).Text(item.DescripcionFinanciado).FontSize(11);
                         var precio = item.Monto.ToString("N", formato);
-                        row.ConstantItem(60).BorderVertical(1).AlignRight().PaddingRight(3).Element(CellStyle).Text(precio).FontSize(7);
+                        row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).Element(CellStyle).Text(precio).FontSize(11);
                         /*var totalBolivares = item.TotalBolivares.ToString("N", formato);
                         row.ConstantItem(70).BorderVertical(1).AlignRight().PaddingRight(3).Element(CellStyle).Text(totalBolivares).FontSize(7);
                         */
@@ -106,10 +106,10 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
 
                                                  col.Item().ExtendVertical().Row(row =>
                                                  {
-                                                     row.ConstantItem(80).ExtendVertical().BorderVertical(1);
-                                                     row.ConstantItem(80).ExtendVertical().BorderVertical(1);
+                                                     row.ConstantItem(110).ExtendVertical().BorderVertical(1);
+                                                     row.ConstantItem(110).ExtendVertical().BorderVertical(1);
                                                      row.RelativeItem(3).ExtendVertical().BorderVertical(1);
-                                                     row.ConstantItem(60).ExtendVertical().BorderVertical(1);
+                                                     row.ConstantItem(100).ExtendVertical().BorderVertical(1);
                                                  });
                                              });
 
