@@ -49,6 +49,32 @@ namespace Convertidor.Data.Repository.Rh
 
         }
         
+        public async Task<string> LimpiaEnrer()
+        {
+            
+            try
+            {
+                FormattableString xqueryDiario =$" UPDATE PRE.PRE_DETALLE_COMPROMISOS  SET DESCRIPCION = REPLACE(DESCRIPCION, CHR(10), ' ') WHERE DESCRIPCION LIKE '%'||CHR(10)||'%';";
+                
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                
+                
+                xqueryDiario =$" UPDATE PRE.PRE_DETALLE_COMPROMISOS  SET DESCRIPCION = REPLACE(DESCRIPCION, CHR(9), ' ') WHERE DESCRIPCION LIKE '%'||CHR(9)||'%';";
+
+                _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
+        }
+        
+       
         public async Task<string> ActualizaMontos(int codigoPresupuesto)
         {
             

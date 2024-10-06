@@ -55,6 +55,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
         public async Task<ReporteCompromisoPresupuestarioDto> GenerateData(FilterPreCompromisosDto filter)
         {
             ReporteCompromisoPresupuestarioDto result = new ReporteCompromisoPresupuestarioDto();
+            await _preDetalleCompromisosRepository.LimpiaEnrer();
             var encabezado = await GenerateDataEncabezadoDto(filter);
             encabezado.PucCompromisos =await  GetPuc(filter.CodigoCompromiso);
             var cuerpo = await GenerateDataCuerpoDto(filter);
@@ -193,6 +194,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                         resultItem.CodigoDetalleCompromiso = item.CodigoDetalleCompromiso;
                         resultItem.DescripcionUdm = descriptiva.DESCRIPCION;
                         resultItem.DescripcionArticulo = item.Descripcion;
+                        //resultItem.DescripcionArticulo = LimpiarCaracteres.LimpiarEnter(item.Descripcion);
                         resultItem.PrecioUnitario = item.PrecioUnitario;
                         resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
                         
