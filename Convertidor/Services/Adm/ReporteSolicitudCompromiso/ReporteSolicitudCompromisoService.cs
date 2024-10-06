@@ -29,6 +29,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
         private readonly IOssConfigRepository _ossConfigRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IRhPersonasRepository _rhPersonasRepository;
+        private readonly IAdmDetalleSolicitudRepository _admDetalleSolicitudRepository;
 
         public ReporteSolicitudCompromisoService(IAdmSolicitudesService admSolicitudesService,
                                                  IAdmSolicitudesRepository admSolicitudesRepository,
@@ -42,7 +43,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                                  IWebHostEnvironment env,
                                                  IOssConfigRepository ossConfigRepository,
                                                  ISisUsuarioRepository sisUsuarioRepository,
-                                                 IRhPersonasRepository rhPersonasRepository)
+                                                 IRhPersonasRepository rhPersonasRepository,
+                                                 IAdmDetalleSolicitudRepository admDetalleSolicitudRepository)
         {
             _admSolicitudesService = admSolicitudesService;
             _admSolicitudesRepository = admSolicitudesRepository;
@@ -57,6 +59,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
             _ossConfigRepository = ossConfigRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _rhPersonasRepository = rhPersonasRepository;
+            _admDetalleSolicitudRepository = admDetalleSolicitudRepository;
         }
 
         public async Task<ReporteSolicitudCompromisoDto> GenerateData (AdmSolicitudesFilterDto filter) 
@@ -92,6 +95,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                         filter.CodigoSolicitud);
                 
                 await _admSolicitudesRepository.UpdateMontoEnLetras(filter.CodigoSolicitud,totales.TotalMasImpuesto);
+
+                await _admDetalleSolicitudRepository.LimpiaEnrer();
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(filter.CodigoSolicitud);
 
                 
@@ -262,7 +267,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 var descriptiva = await _admDescriptivaRepository.GetByCodigo(item.UdmId);
 
                                 resultItem.DescripcionUdmId = descriptiva.DESCRIPCION;
-                                resultItem.DescripcionArticulo = item.Descripcion;
+                                resultItem.DescripcionArticulo = LimpiarCaracteres.LimpiarEnter( item.Descripcion);
                                 resultItem.PrecioUnitario = item.PrecioUnitario;
                                 resultItem.TotalBolivares = (decimal)item.Total;
 

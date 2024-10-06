@@ -143,6 +143,30 @@ namespace Convertidor.Data.Repository.Adm
             return result;
         }
         
+        public async Task<string> LimpiaEnrer()
+        {
+            
+            try
+            {
+                FormattableString xqueryDiario =$" UPDATE adm.ADM_DETALLE_SOLICITUD  SET DESCRIPCION = REPLACE(DESCRIPCION, CHR(10), ' ') WHERE DESCRIPCION LIKE '%'||CHR(10)||'%';";
+                
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+
+                 xqueryDiario =$" UPDATE adm.ADM_DETALLE_SOLICITUD  SET DESCRIPCION = REPLACE(DESCRIPCION, CHR(9), ' ') WHERE DESCRIPCION LIKE '%'||CHR(9)||'%';";
+
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
+        }
+
+        
         public async  Task RecalculaImpuesto(int codigoPresupuesto,int codigoSolicitud)
         {
             

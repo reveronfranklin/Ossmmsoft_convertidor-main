@@ -21,5 +21,6 @@ namespace Convertidor.Data.Interfaces.Adm
 
         Task<string> DeleteBySolicitud(int codigoSolicitud);
         Task<string> ActualizaMontos(int codigoPresupuesto);
+        Task<string> LimpiaEnrer();
     }
 }
