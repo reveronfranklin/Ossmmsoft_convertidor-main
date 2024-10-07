@@ -176,7 +176,16 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 if(proveedor != null)
                 {
                     result.NombreProveedor = proveedor.NOMBRE_PROVEEDOR;
-                    result.Rif = proveedor.RIF;
+                    
+                    if (solicitud.TIPO_SOLICITUD_ID == 825 || solicitud.TIPO_SOLICITUD_ID == 854)
+                    {
+                        result.Rif = ""; 
+                    }else
+                    {
+                        result.Rif = proveedor.RIF; 
+                    }
+                    
+                  
                 }
 
 
