@@ -188,7 +188,7 @@ namespace Convertidor.Data.Repository.Adm
             try 
             {
                 var admPucSolicitud = await _context.ADM_PUC_SOLICITUD
-                    .Where(x=>x.CODIGO_SOLICITUD==dto.CodigoSolicitud && x.CODIGO_PUC==dto.CodigoPuc && x.CODIGO_ICP==dto.CodigoIcp && x.FINANCIADO_ID==dto.FinanciadoId && x.CODIGO_FINANCIADO==dto.CodigoFinanciado)
+                    .Where(x=>x.CODIGO_SOLICITUD==dto.CodigoSolicitud && x.CODIGO_DETALLE_SOLICITUD==dto.CodigoDetalleSolicitud && x.CODIGO_PUC==dto.CodigoPuc && x.CODIGO_ICP==dto.CodigoIcp && x.FINANCIADO_ID==dto.FinanciadoId && x.CODIGO_FINANCIADO==dto.CodigoFinanciado)
                     .FirstOrDefaultAsync();
 
                 result.Data = admPucSolicitud;

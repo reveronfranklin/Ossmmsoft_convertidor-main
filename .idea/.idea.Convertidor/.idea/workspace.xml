@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" afterDir="false" />
-    </list>
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -247,7 +245,7 @@
       <workItem from="1727983259678" duration="5771000" />
       <workItem from="1728058039187" duration="1388000" />
       <workItem from="1728061509519" duration="23003000" />
-      <workItem from="1728324138171" duration="3535000" />
+      <workItem from="1728324138171" duration="4054000" />
     </task>
     <servers />
   </component>
