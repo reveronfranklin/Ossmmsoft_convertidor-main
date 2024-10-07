@@ -23,6 +23,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IConfiguration _configuration;
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
 
         public ReporteCompromisoPresupuestarioService(IPreCompromisosRepository preCompromisosRepository,
@@ -36,7 +37,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                                                       IPRE_INDICE_CAT_PRGRepository pRE_INDICE_CAT_PRGRepository,
                                                       IAdmDescriptivaRepository admDescriptivaRepository,
                                                       IConfiguration configuration,
-                                                      IPreDetalleCompromisosRepository preDetalleCompromisosRepository)
+                                                      IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
+                                                      ISisUsuarioRepository sisUsuarioRepository)
         {
             _preCompromisosRepository = preCompromisosRepository;
             _preDetalleCompromisosService = preDetalleCompromisosService;
@@ -50,6 +52,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
             _admDescriptivaRepository = admDescriptivaRepository;
             _configuration = configuration;
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
         public async Task<ReporteCompromisoPresupuestarioDto> GenerateData(FilterPreCompromisosDto filter)
@@ -94,6 +97,45 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
             }
             return result;
         }
+
+        public async Task<string> GetFirmante(int codigoCompromiso)
+        {
+
+            string result = "";
+
+
+            var detalle = await _preDetalleCompromisosRepository.GetByCodigoCompromiso(codigoCompromiso);
+            if (detalle.Any())
+            {
+                var ultimoDetalle = detalle.OrderByDescending(x => x.CODIGO_DETALLE_COMPROMISO).FirstOrDefault();
+                var listPuc =
+                    await _prePucCompromisosRepository.GetListByCodigoDetalleCompromiso(ultimoDetalle
+                        .CODIGO_DETALLE_COMPROMISO);
+                if (listPuc != null)
+                {
+                    var ultimoPuc = listPuc.OrderByDescending(x => x.CODIGO_PUC_COMPROMISO).FirstOrDefault();
+                    if (ultimoPuc != null)
+                    {
+                      
+                        var usuario =await  _sisUsuarioRepository.GetByCodigo((int)ultimoPuc.USUARIO_INS);
+                        if (usuario != null)
+                        {
+                    
+                            result =
+                                $"{usuario.USUARIO} \n C.I: {usuario.CEDULA}";
+                    
+                 
+                        }
+                    }
+                }
+            }
+            else
+            {
+                result = "";
+            }
+            return result;
+
+        }
         
         public async Task<EncabezadoReporteDto> GenerateDataEncabezadoDto(FilterPreCompromisosDto filter)
         {
@@ -136,7 +178,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                
                 
                 
-                result.Firmante = compromiso.FIRMANTE;
+                result.Firmante = await GetFirmante(compromiso.CODIGO_COMPROMISO);
               
 
                 
