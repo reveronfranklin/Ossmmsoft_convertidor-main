@@ -143,11 +143,17 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
             try
             {
                 EncabezadoReporteDto result = new EncabezadoReporteDto();
-                decimal totalMasImpuesto = _preDetalleCompromisosRepository.GetTotal(filter.CodigoCompromiso);
-                decimal totalImpuesto = _preDetalleCompromisosRepository.GetTotalImpuesto(filter.CodigoCompromiso);
-                decimal total = _preDetalleCompromisosRepository.GetTotalMonto(filter.CodigoCompromiso);
-                _preCompromisosRepository.UpdateMontoEnLetras(filter.CodigoCompromiso, totalMasImpuesto);
                 var compromiso = await _preCompromisosRepository.GetByNumeroYFecha(filter.NumeroCompromiso,filter.fechaCompromiso);
+             
+                var totales = await _preDetalleCompromisosRepository.GetTotales(compromiso.CODIGO_PRESUPUESTO,filter.CodigoCompromiso);
+
+                
+                decimal totalMasImpuesto =totales.TotalMasImpuesto;
+                decimal totalImpuesto = totales.Impuesto;
+                decimal total = totales.Base;
+                
+                _preCompromisosRepository.UpdateMontoEnLetras(filter.CodigoCompromiso, totalMasImpuesto);
+                compromiso = await _preCompromisosRepository.GetByNumeroYFecha(filter.NumeroCompromiso,filter.fechaCompromiso);
                 result.NumeroCompromiso = compromiso.NUMERO_COMPROMISO;
                 result.FechaCompromiso = compromiso.FECHA_COMPROMISO;
                 result.FechaCompromisoString = compromiso.FECHA_COMPROMISO.ToString("u");

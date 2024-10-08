@@ -1,4 +1,5 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
+using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Data.Interfaces.Presupuesto
 {
@@ -18,6 +19,6 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         decimal GetTotalImpuesto(int codigoCompromiso);
         Task<string> ActualizaMontos(int codigoPresupuesto);
         Task<string> LimpiaEnrer();
+        Task<TotalesResponseDto> GetTotales(int codigoPresupuesto, int codigoCompromiso);
     }
 }
-

@@ -256,6 +256,9 @@ namespace Convertidor.Services.Presupuesto
                             detailEntity.TIPO_IMPUESTO_ID = item.TipoImpuestoId;
                             detailEntity.POR_IMPUESTO = item.PorImpuesto;
                             detailEntity.MONTO_IMPUESTO = (decimal)item.MontoImpuesto ;
+                            detailEntity.TOTAL = (decimal)item.Total;
+                            detailEntity.TOTAL_MAS_IMPUESTO = (decimal)item.TotalMasImpuesto;
+                            
                             //TODO VERIFICAR SI SE AGREGA CODIGO PRODUCTO
                             //detailEntity.CODIGO_PRODUCTO = item.CodigoProducto;
                             detailEntity.CODIGO_PRESUPUESTO = (int)item.CodigoPresupuesto;

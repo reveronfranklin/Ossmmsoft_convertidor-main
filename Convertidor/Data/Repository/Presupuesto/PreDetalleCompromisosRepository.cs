@@ -1,5 +1,7 @@
 ﻿using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Data.Repository.Sis;
+using Convertidor.Dtos.Adm;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Rh
@@ -8,10 +10,13 @@ namespace Convertidor.Data.Repository.Rh
     {
 		
         private readonly DataContextPre _context;
+        private readonly DataContextSis _contextSis;
 
-        public PreDetalleCompromisosRepository(DataContextPre context)
+
+        public PreDetalleCompromisosRepository(DataContextPre context,DataContextSis contextSis)
         {
             _context = context;
+            _contextSis = contextSis;
         }
       
         public async Task<PRE_DETALLE_COMPROMISOS> GetByCodigo(int codigoDetalleCompromiso)
@@ -75,6 +80,65 @@ namespace Convertidor.Data.Repository.Rh
         }
         
        
+        
+        public async Task<TotalesResponseDto> GetTotales(int codigoPresupuesto, int codigoCompromiso)
+        {
+            TotalesResponseDto result = new TotalesResponseDto();
+
+            var tipoImpuesto = 0;
+            string variableImpuesto = "DESCRIPTIVA_IMPUESTO";
+            var config = await _contextSis.OSS_CONFIG.Where(x=>x.CLAVE==variableImpuesto).FirstOrDefaultAsync();
+            if (config != null)
+            {
+
+                tipoImpuesto = int.Parse(config.VALOR);
+
+            }
+            var detalle = await _context.PRE_DETALLE_COMPROMISOS.DefaultIfEmpty().Where(x =>x.CODIGO_COMPROMISO==codigoCompromiso && x.CODIGO_PRESUPUESTO==codigoPresupuesto ).ToListAsync();
+            if (detalle.Count > 0)
+            {
+                decimal? sum = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto).Sum(x => x.TOTAL);
+                result.Base = (decimal)sum;
+                
+                decimal? sumImponible = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto && x.MONTO_IMPUESTO>0).Sum(x => x.TOTAL);
+                result.BaseImponible = (decimal)sumImponible;
+                var detalleImpuesto = await _context.PRE_DETALLE_COMPROMISOS.DefaultIfEmpty().Where(x =>x.CODIGO_COMPROMISO==codigoCompromiso && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_IMPUESTO_ID==tipoImpuesto).FirstOrDefaultAsync();
+                if (detalleImpuesto != null)
+                {
+                    result.Impuesto = (decimal)detalleImpuesto.TOTAL;
+                    result.BaseImponible = result.Base;
+                }
+                else
+                {
+                    decimal? sumImpuesto = detalle.Sum(x => x.MONTO_IMPUESTO);
+                    result.Impuesto = (decimal)sumImpuesto;
+                }
+
+                result.TotalMasImpuesto = result.Base + result.Impuesto;
+                result.PorcentajeImpuesto = 0;
+                if(result.BaseImponible != 0)
+                {
+                    result.PorcentajeImpuesto = (result.Impuesto / result.BaseImponible) * 100;
+                }
+
+            }
+            else
+            {
+                result.Base = 0;
+                result.Impuesto = 0;
+                result.TotalMasImpuesto=0;
+                result.PorcentajeImpuesto = 0;
+            }
+            
+            
+        
+
+
+            return result;
+        }
+
+
+        
         public async Task<string> ActualizaMontos(int codigoPresupuesto)
         {
             
