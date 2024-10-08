@@ -182,13 +182,19 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
 
-
-              
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo((int)admSolicitud.CODIGO_EMPRESA,(int)admSolicitud.CODIGO_PRESUPUESTO);
+                if (presupuesto == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Presupuesto Invalido";
+                    return result;
+                }
                 
                 
                 PRE_COMPROMISOS entity = new PRE_COMPROMISOS();
                 entity.CODIGO_COMPROMISO = await _repository.GetNextKey();
-                entity.ANO = (int)admSolicitud.ANO;
+                entity.ANO = (int)presupuesto.ANO;
                 entity.CODIGO_SOLICITUD = admSolicitud.CODIGO_SOLICITUD;
                 
                 //var tipoSolicitudTitulo = await _admDescriptivaRepository.GetByTitulo(35);
@@ -229,7 +235,7 @@ namespace Convertidor.Services.Presupuesto
                 entity.FECHA_INS = DateTime.Now;
 
                 var created = await _repository.Add(entity);
-                if (created.IsValid && created.Data != null)
+                if (created.IsValid ==true)
                 {
 
                     AdmSolicitudesFilterDto filter = new AdmSolicitudesFilterDto();
@@ -306,19 +312,32 @@ namespace Convertidor.Services.Presupuesto
                         }
                     }
 
-                }
+                    
+                    admSolicitud.ANO = presupuesto.ANO;
+                    admSolicitud.STATUS = "AP";
+                    admSolicitud.USUARIO_UPD = conectado.Usuario;
+                    admSolicitud.FECHA_UPD=DateTime.Now;
+                    await _admSolicitudesRepository.Update(admSolicitud);
 
-                admSolicitud.STATUS = "AP";
-                admSolicitud.USUARIO_UPD = conectado.Usuario;
-                admSolicitud.FECHA_UPD=DateTime.Now;
-                await _admSolicitudesRepository.Update(admSolicitud);
-
-                await _admPucSolicitudRepository.UpdateMontoComprometido(admSolicitud.CODIGO_SOLICITUD);
+                    await _admPucSolicitudRepository.UpdateMontoComprometido(admSolicitud.CODIGO_SOLICITUD);
       
                 
-                result.Data = true;
-                result.IsValid = true;
-                result.Message = "";
+                    result.Data = true;
+                    result.IsValid = true;
+                    result.Message = "";
+                    
+                    
+                }
+                else
+                {
+                    
+                 
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = created.Message;
+                }
+
+              
                 
             }
             catch (Exception ex)
