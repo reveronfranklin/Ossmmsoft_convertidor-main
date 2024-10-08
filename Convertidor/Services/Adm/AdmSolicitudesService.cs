@@ -359,13 +359,7 @@ namespace Convertidor.Services.Adm
 
                 }
 
-                if (dto.FechaSolicitud == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Solicitud Invalida";
-                    return result;
-                }
+               
                 if (dto.CodigoSolicitante <= 0)
                 {
                     result.Data = null;
@@ -452,6 +446,14 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                
+                if (dto.FechaSolicitud < codigoPresupuesto.FECHA_DESDE)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Solicitud Invalida,debe estar en el periodo del presupuesto";
+                    return result;
+                }
                 
                 solicitud.CODIGO_SOLICITUD = dto.CodigoSolicitud;
                 solicitud.ANO = codigoPresupuesto.ANO;
@@ -544,16 +546,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-   
-             
-
-                if (dto.FechaSolicitud == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Solicitud Invalida";
-                    return result;
-                }
+                
                 if (dto.CodigoSolicitante <= 0)
                 {
                     result.Data = null;
@@ -641,7 +634,13 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
             
-                
+                if (dto.FechaSolicitud < codigoPresupuesto.FECHA_DESDE)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Fecha Solicitud Invalida,debe estar en el periodo del presupuesto";
+                    return result;
+                }
                 
                 ADM_SOLICITUDES entity = new ADM_SOLICITUDES();
                 entity.CODIGO_SOLICITUD = await _repository.GetNextKey();
