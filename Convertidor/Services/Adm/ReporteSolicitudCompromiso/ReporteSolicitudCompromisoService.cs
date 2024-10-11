@@ -298,7 +298,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 var descriptiva = await _admDescriptivaRepository.GetByCodigo(detalleImpuesto.UdmId);
 
                                 resultItem.DescripcionUdmId = descriptiva.DESCRIPCION;
-                                resultItem.DescripcionArticulo = detalleImpuesto.Descripcion;
+                                resultItem.DescripcionArticulo = LimpiarCaracteres.LimpiarEnter( detalleImpuesto.Descripcion);
                                 resultItem.PrecioUnitario = detalleImpuesto.PrecioUnitario;
                                 resultItem.TotalBolivares = (decimal)detalleImpuesto.Total;
                                 result.Add(resultItem);
