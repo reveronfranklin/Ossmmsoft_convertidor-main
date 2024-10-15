@@ -329,7 +329,7 @@ namespace Convertidor.Data.Repository.Presupuesto
                   
                     itemData.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
                     itemData.CodigoDirEntrega = item.CODIGO_DIR_ENTREGA;
-
+                    itemData.OrigenId = 805;
         
                     
 

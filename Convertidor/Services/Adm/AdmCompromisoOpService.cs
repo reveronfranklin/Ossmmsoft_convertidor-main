@@ -205,28 +205,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
                 
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+              
 
                 var codigopresupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (dto.CodigoPresupuesto < 0)
@@ -252,9 +231,6 @@ namespace Convertidor.Services.Adm
                 codigoCompromisoOp.CODIGO_IDENTIFICADOR = dto.CodigoIdentificador;
                 codigoCompromisoOp.CODIGO_ORDEN_PAGO = dto.CodigoOrdenPago;
                 codigoCompromisoOp.CODIGO_PROVEEDOR = dto.CodigoProveedor;
-                codigoCompromisoOp.EXTRA1 = dto.Extra1;
-                codigoCompromisoOp.EXTRA2 = dto.Extra2;
-                codigoCompromisoOp.EXTRA3 = dto.Extra3;
                 codigoCompromisoOp.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 codigoCompromisoOp.CODIGO_VAL_CONTRATO = dto.CodigoValContrato;
 
@@ -342,28 +318,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+             
 
                 var codigopresupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (dto.CodigoPresupuesto < 0)
@@ -390,9 +345,7 @@ namespace Convertidor.Services.Adm
             entity.CODIGO_IDENTIFICADOR = dto.CodigoIdentificador;
             entity.CODIGO_ORDEN_PAGO = dto.CodigoOrdenPago;
             entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
-            entity.EXTRA1 = dto.Extra1;
-            entity.EXTRA2 = dto.Extra2;
-            entity.EXTRA3 = dto.Extra3;
+
             entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
             entity.CODIGO_VAL_CONTRATO = dto.CodigoValContrato;
            
