@@ -166,7 +166,7 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
                 var preCompromisoPorSolicitud = await _repository.GetByCodigoSolicitud(codigoSolicitud);
-                if (preCompromisoPorSolicitud != null)
+                if (preCompromisoPorSolicitud != null && preCompromisoPorSolicitud.STATUS=="PE")
                 {
                     result.Data = false;
                     result.IsValid = false;

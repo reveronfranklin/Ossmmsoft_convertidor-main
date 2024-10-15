@@ -497,9 +497,12 @@ namespace Convertidor.Services.Adm
                 compromisoOp.CodigoPresupuesto = compromiso.CodigoPresupuesto;
                 compromisoOp.CodigoOrdenPago = created.Data.CODIGO_ORDEN_PAGO;
                 compromisoOp.CodigoValContrato = 0;
-                compromisoOp.OrigenCompromisoId = dto.TipoOrdenPagoId; 
+                compromisoOp.OrigenCompromisoId = dto.OrigenId; 
                 compromisoOp.CodigoIdentificador = compromiso.CodigoCompromiso; 
                 var compromisOpCreated = await _admCompromisoOpService.Create(compromisoOp);
+                
+                //TODO
+                //CREAR LOS PUC
                 
                 
                 var descriptivas = await _admDescriptivaRepository.GetAll();

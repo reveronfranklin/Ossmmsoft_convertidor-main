@@ -18,6 +18,7 @@
         public int? NumeroComprobante2 { get; set; }
         public int? NumeroComprobante3 { get; set; }
         public int? NumeroComprobante4 { get; set; }
+        public int OrigenId { get; set; }
     }
 }
 
