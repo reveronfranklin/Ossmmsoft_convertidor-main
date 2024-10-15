@@ -72,6 +72,31 @@ namespace Convertidor.Controllers
 
 
         }
+        [HttpGet]
+        [Route("[action]/{fileName}")]
+        public async Task<IActionResult> GetTxtFiles(string fileName)
+        {
+            
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.ExcelFiles;
+            var filePatch = $"{destino}/{fileName}";
+
+            if (!System.IO.File.Exists(filePatch))
+            {
+                fileName = "NO_DATA.txt";
+                filePatch = $"{destino}/{fileName}";
+            }
+            var provider = new FileExtensionContentTypeProvider();
+            if (provider.TryGetContentType(filePatch,out var contenttype))
+            {
+                contenttype = "application/txt";
+            }
+            var bytes =await System.IO.File.ReadAllBytesAsync(filePatch);
+            var result = File(bytes, contenttype, Path.GetFileName(filePatch));
+            return result;
+
+
+        }
         
      
 

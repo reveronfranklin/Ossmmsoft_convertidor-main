@@ -83,13 +83,13 @@ namespace Convertidor.Data.Repository.Adm
                 decimal? sum = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto).Sum(x => x.TOTAL);
                 result.Base = (decimal)sum;
                 
-                decimal? sumImponible = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto && x.MONTO_IMPUESTO>0).Sum(x => x.TOTAL);
+                decimal? sumImponible = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto && x.POR_IMPUESTO>0).Sum(x => x.TOTAL);
                 result.BaseImponible = (decimal)sumImponible;
                 var detalleImpuesto = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_IMPUESTO_ID==tipoImpuesto).FirstOrDefaultAsync();
                 if (detalleImpuesto != null)
                 {
                     result.Impuesto = (decimal)detalleImpuesto.TOTAL;
-                    result.BaseImponible = result.Base;
+                    
                 }
                 else
                 {
@@ -186,11 +186,11 @@ namespace Convertidor.Data.Repository.Adm
                 var detalleImpuesto = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty().Where(x =>x.CODIGO_SOLICITUD==codigoSolicitud && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_IMPUESTO_ID==tipoImpuesto).FirstOrDefaultAsync();
                 if (detalleImpuesto != null)
                 {
-                    FormattableString xqueryDiario = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET POR_IMPUESTO=0,MONTO_IMPUESTO=0,TOTAL_MAS_IMPUESTO=ROUND(TOTAL, 2)  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud}";
+                    FormattableString xqueryDiario = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET MONTO_IMPUESTO=0,TOTAL_MAS_IMPUESTO=ROUND(TOTAL, 2)  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud}";
 
                     var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                     
-                    FormattableString xqueryDiarioTipoImpuesto = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET TIPO_IMPUESTO_ID =528 ,POR_IMPUESTO=0,MONTO_IMPUESTO=0,TOTAL_MAS_IMPUESTO=ROUND(TOTAL, 2)  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID <> {tipoImpuesto}";
+                    FormattableString xqueryDiarioTipoImpuesto = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET MONTO_IMPUESTO=0,TOTAL_MAS_IMPUESTO=ROUND(TOTAL, 2)  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID <> {tipoImpuesto}";
 
                     var resultDiarioTipoImpuesto =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioTipoImpuesto);
                     

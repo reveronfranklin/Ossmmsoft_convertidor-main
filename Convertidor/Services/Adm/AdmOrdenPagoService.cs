@@ -489,6 +489,19 @@ namespace Convertidor.Services.Adm
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
+                
+                //CREAMOS EL COMPROMISO DE LA ORDEN DE PAGO
+                AdmCompromisoOpUpdateDto compromisoOp = new AdmCompromisoOpUpdateDto();
+                compromisoOp.CodigoCompromisoOp = 0;
+                compromisoOp.CodigoProveedor = compromiso.CodigoProveedor;
+                compromisoOp.CodigoPresupuesto = compromiso.CodigoPresupuesto;
+                compromisoOp.CodigoOrdenPago = created.Data.CODIGO_ORDEN_PAGO;
+                compromisoOp.CodigoValContrato = 0;
+                compromisoOp.OrigenCompromisoId = 0; //TODO
+                compromisoOp.CodigoIdentificador = 0; //TODO
+                var compromisOpCreated = await _admCompromisoOpService.Create(compromisoOp);
+                
+                
                 var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByAll();
                 var resultDto = await MapOrdenPagoDto(created.Data,descriptivas,proveedores);
