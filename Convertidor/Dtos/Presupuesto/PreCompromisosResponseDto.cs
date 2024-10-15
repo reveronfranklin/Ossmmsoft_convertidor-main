@@ -17,6 +17,8 @@
         public string DescripcionStatus { get; set; } = string.Empty;
         public int CodigoPresupuesto { get; set; }
         public int OrigenId { get; set; }
+        public string OrigenDescripcion { get; set; }
+       
 
     }
 }
