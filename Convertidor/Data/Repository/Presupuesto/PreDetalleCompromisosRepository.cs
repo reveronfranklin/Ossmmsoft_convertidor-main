@@ -100,13 +100,13 @@ namespace Convertidor.Data.Repository.Rh
                 decimal? sum = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto).Sum(x => x.TOTAL);
                 result.Base = (decimal)sum;
                 
-                decimal? sumImponible = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto && x.MONTO_IMPUESTO>0).Sum(x => x.TOTAL);
+                decimal? sumImponible = detalle.Where(x=>x.TIPO_IMPUESTO_ID!=tipoImpuesto && x.POR_IMPUESTO>0).Sum(x => x.TOTAL);
                 result.BaseImponible = (decimal)sumImponible;
                 var detalleImpuesto = await _context.PRE_DETALLE_COMPROMISOS.DefaultIfEmpty().Where(x =>x.CODIGO_COMPROMISO==codigoCompromiso && x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.TIPO_IMPUESTO_ID==tipoImpuesto).FirstOrDefaultAsync();
                 if (detalleImpuesto != null)
                 {
                     result.Impuesto = (decimal)detalleImpuesto.TOTAL;
-                    result.BaseImponible = result.Base;
+          
                 }
                 else
                 {
