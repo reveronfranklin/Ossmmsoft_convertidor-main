@@ -199,8 +199,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                     result.LineaComunicacion = comProveedor.LINEA_COMUNICACION;
                 }
               
-
-                result.Motivo = compromiso.MOTIVO;
+                result.Motivo = LimpiarCaracteres.LimpiarEnter(compromiso.MOTIVO);;
+               
 
 
                 return result;
@@ -242,6 +242,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                         resultItem.CodigoDetalleCompromiso = item.CodigoDetalleCompromiso;
                         resultItem.DescripcionUdm = descriptiva.DESCRIPCION;
                         resultItem.DescripcionArticulo = item.Descripcion;
+                        
                         //resultItem.DescripcionArticulo = LimpiarCaracteres.LimpiarEnter(item.Descripcion);
                         resultItem.PrecioUnitario = item.PrecioUnitario;
                         resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);

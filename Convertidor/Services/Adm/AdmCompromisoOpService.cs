@@ -281,6 +281,8 @@ namespace Convertidor.Services.Adm
 
             return result;
         }
+        
+        
 
         public async Task<ResultDto<AdmCompromisoOpResponseDto>> Create(AdmCompromisoOpUpdateDto dto)
         {
@@ -297,8 +299,15 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo compromiso op ya existe";
                     return result;
                 }
-                var origenCompromisoId = await _admDescriptivaRepository.GetByIdAndTitulo(3, dto.OrigenCompromisoId);
                 if (dto.OrigenCompromisoId < 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "origen compromiso Id invalido";
+                    return result;
+                }
+                var origenCompromiso = await _admDescriptivaRepository.GetByIdAndTitulo(3, dto.OrigenCompromisoId);
+                if (origenCompromiso==false)
                 {
                     result.Data = null;
                     result.IsValid = false;

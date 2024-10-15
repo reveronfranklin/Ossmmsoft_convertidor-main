@@ -166,7 +166,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                  
                 }
                 result.Firmante = firmante;
-                result.Motivo = solicitud.MOTIVO;
+                result.Motivo = LimpiarCaracteres.LimpiarEnter(solicitud.MOTIVO);;
                 result.CodigoProveedor = (int)solicitud.CODIGO_PROVEEDOR;
 
                 result.NombreProveedor = "";
