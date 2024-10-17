@@ -7,7 +7,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Rh/RH_TMP_RETENCIONES_FAOV.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Rh/RH_TMP_RETENCIONES_FAOV.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhTmpRetencionesFaovDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhTmpRetencionesFaovDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/EncabezadoComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/EncabezadoComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,6 +41,10 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -258,6 +271,8 @@
       <workItem from="1728736621064" duration="5568000" />
       <workItem from="1728752623936" duration="3678000" />
       <workItem from="1729003910253" duration="9569000" />
+      <workItem from="1729030161189" duration="5364000" />
+      <workItem from="1729117170497" duration="5890000" />
     </task>
     <servers />
   </component>
@@ -1328,26 +1343,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs</url>
-          <line>202</line>
+          <line>206</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" containingFunctionPresentation="Method 'UpdateSearchText'">
             <startOffsets>
-              <option value="8013" />
+              <option value="8077" />
             </startOffsets>
             <endOffsets>
-              <option value="8031" />
+              <option value="8095" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="314" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs</url>
-          <line>351</line>
+          <line>357</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" containingFunctionPresentation="Method 'GetByPresupuesto'">
             <startOffsets>
-              <option value="15295" />
+              <option value="15505" />
             </startOffsets>
             <endOffsets>
-              <option value="15324" />
+              <option value="15534" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="315" />
@@ -1604,10 +1619,10 @@
           <line>387</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'AnularDesdeSolicitud'">
             <startOffsets>
-              <option value="19259" />
+              <option value="19301" />
             </startOffsets>
             <endOffsets>
-              <option value="19329" />
+              <option value="19371" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="361" />
@@ -1656,10 +1671,10 @@
           <line>176</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'CrearCompromisoDesdeSolicitud'">
             <startOffsets>
-              <option value="8068" />
+              <option value="8110" />
             </startOffsets>
             <endOffsets>
-              <option value="8172" />
+              <option value="8214" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="365" />
@@ -1708,10 +1723,10 @@
           <line>206</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'CrearCompromisoDesdeSolicitud'">
             <startOffsets>
-              <option value="9725" />
+              <option value="9767" />
             </startOffsets>
             <endOffsets>
-              <option value="9818" />
+              <option value="9860" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="370" />
@@ -1721,10 +1736,10 @@
           <line>205</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'CrearCompromisoDesdeSolicitud'">
             <startOffsets>
-              <option value="9635" />
+              <option value="9677" />
             </startOffsets>
             <endOffsets>
-              <option value="9708" />
+              <option value="9750" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="371" />
@@ -1900,13 +1915,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs</url>
-          <line>91</line>
+          <line>95</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" containingFunctionPresentation="Method 'AnularCompromiso'">
             <startOffsets>
-              <option value="4802" />
+              <option value="4866" />
             </startOffsets>
             <endOffsets>
-              <option value="4820" />
+              <option value="4884" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="406" />
@@ -2004,13 +2019,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs</url>
-          <line>506</line>
+          <line>509</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="20647" />
+              <option value="20712" />
             </startOffsets>
             <endOffsets>
-              <option value="20724" />
+              <option value="20789" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="416" />
@@ -2280,10 +2295,10 @@
           <line>729</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'UpdateFechaMotivo'">
             <startOffsets>
-              <option value="31488" />
+              <option value="31530" />
             </startOffsets>
             <endOffsets>
-              <option value="31547" />
+              <option value="31589" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="491" />
@@ -2293,10 +2308,10 @@
           <line>748</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'UpdateFechaMotivo'">
             <startOffsets>
-              <option value="32198" />
+              <option value="32240" />
             </startOffsets>
             <endOffsets>
-              <option value="32302" />
+              <option value="32344" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="492" />
@@ -2368,13 +2383,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs</url>
-          <line>118</line>
+          <line>122</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" containingFunctionPresentation="Method 'UpdateMontoEnLetras'">
             <startOffsets>
-              <option value="5362" />
+              <option value="5426" />
             </startOffsets>
             <endOffsets>
-              <option value="5380" />
+              <option value="5444" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="516" />
@@ -2462,10 +2477,10 @@
           <line>177</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'CrearCompromisoDesdeSolicitud'">
             <startOffsets>
-              <option value="8189" />
+              <option value="8231" />
             </startOffsets>
             <endOffsets>
-              <option value="8234" />
+              <option value="8276" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="542" />
@@ -2488,23 +2503,23 @@
           <line>237</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'CrearCompromisoDesdeSolicitud'">
             <startOffsets>
-              <option value="11244" />
+              <option value="11286" />
             </startOffsets>
             <endOffsets>
-              <option value="11288" />
+              <option value="11330" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="545" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs</url>
-          <line>381</line>
+          <line>387</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="16056" />
+              <option value="16266" />
             </startOffsets>
             <endOffsets>
-              <option value="16075" />
+              <option value="16285" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="546" />
@@ -2549,43 +2564,17 @@
           <option name="timeStamp" value="551" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
-          <line>39</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
-            <startOffsets>
-              <option value="1552" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1642" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="552" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs</url>
-          <line>52</line>
+          <line>51</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="1951" />
+              <option value="1792" />
             </startOffsets>
             <endOffsets>
-              <option value="1973" />
+              <option value="1814" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="553" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs</url>
-          <line>42</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" containingFunctionPresentation="Method 'Add'">
-            <startOffsets>
-              <option value="1491" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1629" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="554" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs</url>
@@ -2690,6 +2679,71 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="562" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
+          <line>43</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
+            <startOffsets>
+              <option value="1801" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1873" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="563" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
+          <line>61</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
+            <startOffsets>
+              <option value="2543" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2612" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="564" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
+          <line>89</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
+            <startOffsets>
+              <option value="4325" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4385" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="565" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
+          <line>103</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
+            <startOffsets>
+              <option value="4826" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4848" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="566" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs</url>
+          <line>83</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs" containingFunctionPresentation="Method 'GetTxtFiles'">
+            <startOffsets>
+              <option value="2732" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2770" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="567" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

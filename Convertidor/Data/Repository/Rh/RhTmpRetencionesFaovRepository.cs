@@ -36,11 +36,10 @@ namespace Convertidor.Data.Repository.Rh
             {
                 var desde =DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", null);
                 var hasta= DateTime.ParseExact(fechaHasta, "dd/MM/yyyy", null);
-                string desdeString = desde.ToShortDateString();
-                string hastaString = hasta.ToShortDateString();
+
                 var qry =
-                    $"DECLARE \nBEGIN\nRH_P_RETENCION_FAOV({procesoId},{tipoNomina},'{desdeString}','{hastaString}');\nEND;";
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH_P_RETENCION_FAOV({procesoId},{tipoNomina},'{desdeString}','{hastaString}');\nEND;";
+                    $"DECLARE \nBEGIN\nRH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desde},{hasta});\nEND;";
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desde},{hasta});\nEND;";
                 //FormattableString xqueryDiario = $"CALL RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{fechaDesde},{fechaHasta});";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);

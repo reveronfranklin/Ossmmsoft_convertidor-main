@@ -123,10 +123,23 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 var icp = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(solicitud.CODIGO_SOLICITANTE);
                 if (icp != null)
                 {
+                    result.Para = "";
+                    var configPara = _ossConfigRepository.GetByClave("PARA_SOLICITUD_Y_COMPROMISO");
+                    if (configPara.Result != null)
+                    {
 
+                        var unidadPara = int.Parse(configPara.Result.VALOR);
+                        var icpPara = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(unidadPara);
+                        if (icpPara != null)
+                        {
+                            result.Para =icpPara.UNIDAD_EJECUTORA;
+                        }
+                      
+                    }
+                    
 
                     result.UnidadEjecutora = icp.UNIDAD_EJECUTORA;
-
+                
                     var presupuesto = await _pRE_INDICE_CAT_PRGRepository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
 
                     foreach (var item in presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DENOMINACION.Contains("PRESUPUESTO")))

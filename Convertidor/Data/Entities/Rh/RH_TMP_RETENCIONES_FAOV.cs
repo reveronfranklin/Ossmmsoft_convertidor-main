@@ -9,6 +9,7 @@
         public string NOMBRES_APELLIDOS { get; set; }
         public string DESCRIPCION_CARGO { get; set; }
         public DateTime FECHA_INGRESO { get; set; }
+        public DateTime? FECHA_EGRESO { get; set; }
         public decimal MONTO_FAOV_TRABAJADOR { get; set; }
         public decimal MONTO_FAOV_PATRONO { get; set; }
         public decimal MONTO_TOTAL_RETENCION { get; set; }

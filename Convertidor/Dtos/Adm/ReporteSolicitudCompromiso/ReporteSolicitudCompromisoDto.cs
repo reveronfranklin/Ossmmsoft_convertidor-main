@@ -20,6 +20,7 @@ namespace Convertidor.Dtos.Adm.ReporteSolicitudCompromiso
         public FechaDto FechaSolicitudObj { get; set; }
         public string Denominacion { get; set; } = string.Empty;
         public string UnidadEjecutora { get; set; }
+        public string Para { get; set; }
         public int CodigoSolicitante { get; set; }
         public int CodigoProveedor { get; set; }
         public string NombreProveedor { get; set; } = string.Empty;
