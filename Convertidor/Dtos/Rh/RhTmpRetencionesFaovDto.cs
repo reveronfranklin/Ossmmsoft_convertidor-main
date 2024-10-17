@@ -10,6 +10,7 @@
         public string NombresApellidos { get; set; }
         public string DescripcionCargo { get; set; }
         public DateTime FechaIngreso { get; set; }
+        public DateTime? FechaEgreso { get; set; }
         public decimal MontoFaovTrabajador { get; set; }
         public decimal MontoFaovPatrono { get; set; }
         public decimal MontoTotalRetencion { get; set; }
