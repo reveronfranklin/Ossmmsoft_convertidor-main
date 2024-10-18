@@ -23,6 +23,7 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public string CodigoArea { get; set; } = string.Empty;
         public string LineaComunicacion { get; set; } = string.Empty;
         public string IcpConcat { get; set; } = string.Empty;
+        public string Para { get; set; }
         public string codigoSector { get; set; }
         public string codigoPrograma { get; set; }
         public string codigoSubPrograma { get; set; }

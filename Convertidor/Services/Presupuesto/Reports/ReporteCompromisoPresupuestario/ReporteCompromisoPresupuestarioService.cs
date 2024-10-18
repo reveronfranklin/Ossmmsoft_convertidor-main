@@ -24,6 +24,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
         private readonly IConfiguration _configuration;
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
 
 
         public ReporteCompromisoPresupuestarioService(IPreCompromisosRepository preCompromisosRepository,
@@ -38,7 +39,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                                                       IAdmDescriptivaRepository admDescriptivaRepository,
                                                       IConfiguration configuration,
                                                       IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
-                                                      ISisUsuarioRepository sisUsuarioRepository)
+                                                      ISisUsuarioRepository sisUsuarioRepository,
+                                                      IOssConfigRepository ossConfigRepository)
         {
             _preCompromisosRepository = preCompromisosRepository;
             _preDetalleCompromisosService = preDetalleCompromisosService;
@@ -53,6 +55,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
             _configuration = configuration;
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _ossConfigRepository = ossConfigRepository;
         }
 
         public async Task<ReporteCompromisoPresupuestarioDto> GenerateData(FilterPreCompromisosDto filter)
@@ -196,7 +199,19 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 }
               
                 result.Motivo = LimpiarCaracteres.LimpiarEnter(compromiso.MOTIVO);;
-               
+                result.Para = "";
+                var configPara =await _ossConfigRepository.GetByClave("PARA_SOLICITUD_Y_COMPROMISO");
+                if (configPara != null)
+                {
+
+                    var unidadPara = int.Parse(configPara.VALOR);
+                    var icpPara = await _pRE_INDICE_CAT_PRGRepository.GetByCodigo(unidadPara);
+                    if (icpPara != null)
+                    {
+                        result.Para =icpPara.UNIDAD_EJECUTORA;
+                    }
+                      
+                }
 
 
                 return result;

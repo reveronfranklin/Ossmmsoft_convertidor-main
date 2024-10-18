@@ -5,6 +5,7 @@
         public int CodigoCompromiso { get; set; }
         public int Ano { get; set; }
         public int CodigoSolicitud { get; set; }
+        public string NumeroSolicitud { get; set; } = string.Empty;
         public string NumeroCompromiso { get; set; } = string.Empty;
         public DateTime FechaCompromiso { get; set; }
         public string FechaCompromisoString { get; set; }
