@@ -16,16 +16,19 @@ namespace Convertidor.Data.Repository.Presupuesto
         private readonly DataContextPre _context;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IAdmSolicitudesRepository _solicitudesRepository;
 
 
         public PreCompromisosRepository(
                                         DataContextPre context,
                                         IAdmProveedoresRepository admProveedoresRepository,
-                                        ISisUsuarioRepository sisUsuarioRepository )
+                                        ISisUsuarioRepository sisUsuarioRepository,
+                                        IAdmSolicitudesRepository solicitudesRepository)
         {
             _context = context;
             _admProveedoresRepository = admProveedoresRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _solicitudesRepository = solicitudesRepository;
         }
       
         
@@ -197,7 +200,7 @@ namespace Convertidor.Data.Repository.Presupuesto
 
             try
             {
-                FormattableString xqueryDiario = $"UPDATE PRE.PRE_COMPROMISOS SET PRE.PRE_COMPROMISOS.SEARCH_TEXT = TRIM(NUMERO_COMPROMISO) || STATUS || TRIM(MOTIVO)  || (SELECT NOMBRE_PROVEEDOR FROM ADM.ADM_PROVEEDORES   WHERE  ADM.ADM_PROVEEDORES.CODIGO_PROVEEDOR  =PRE.PRE_COMPROMISOS.CODIGO_PROVEEDOR) WHERE CODIGO_PRESUPUESTO ={codigoPresupuesto}";
+                FormattableString xqueryDiario = $"UPDATE PRE.PRE_COMPROMISOS SET PRE.PRE_COMPROMISOS.SEARCH_TEXT = TRIM(NUMERO_COMPROMISO) || STATUS || TRIM(MOTIVO)  || (SELECT NOMBRE_PROVEEDOR FROM ADM.ADM_PROVEEDORES   WHERE  ADM.ADM_PROVEEDORES.CODIGO_PROVEEDOR  =PRE.PRE_COMPROMISOS.CODIGO_PROVEEDOR) || (SELECT NUMERO_SOLICITUD FROM ADM.ADM_SOLICITUDES   WHERE  ADM.ADM_SOLICITUDES.CODIGO_SOLICITUD  =PRE.PRE_COMPROMISOS.CODIGO_SOLICITUD) WHERE CODIGO_PRESUPUESTO ={codigoPresupuesto}";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 return "";
@@ -316,6 +319,13 @@ namespace Convertidor.Data.Repository.Presupuesto
                     itemData.CodigoCompromiso = item.CODIGO_COMPROMISO;
                     itemData.Ano = presupuesto.ANO;
                     itemData.CodigoSolicitud = item.CODIGO_SOLICITUD;
+                    itemData.NumeroSolicitud = "";
+                    var solicitud = await _solicitudesRepository.GetByCodigoSolicitud(item.CODIGO_SOLICITUD);
+                    if (solicitud != null)
+                    {
+                        itemData.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
+                    }
+                   
                     itemData.NumeroCompromiso = item.NUMERO_COMPROMISO;
                     itemData.FechaCompromiso = item.FECHA_COMPROMISO;
                     itemData.FechaCompromisoString = Fecha.GetFechaString(item.FECHA_COMPROMISO);
