@@ -89,7 +89,7 @@ namespace Convertidor.Data.Repository.Adm
                 if (detalleImpuesto != null)
                 {
                     result.Impuesto = (decimal)detalleImpuesto.TOTAL;
-                    if (result.BaseImponible == 0) result.BaseImponible = (decimal)detalleImpuesto.TOTAL;
+                    if (result.BaseImponible == 0) result.BaseImponible =  result.Base;
 
                 }
                 else
