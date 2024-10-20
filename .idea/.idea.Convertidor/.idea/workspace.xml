@@ -8,7 +8,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/ReporteOrdenServicioPresupuestarioDocument.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/ReporteOrdenServicioPresupuestarioDocument.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -273,7 +272,7 @@
       <workItem from="1729117170497" duration="8265000" />
       <workItem from="1729174724984" duration="4238000" />
       <workItem from="1729272584543" duration="2888000" />
-      <workItem from="1729374793454" duration="15410000" />
+      <workItem from="1729374793454" duration="15900000" />
     </task>
     <servers />
   </component>

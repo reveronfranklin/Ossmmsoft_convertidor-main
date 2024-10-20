@@ -203,7 +203,7 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
                     });
                     footer.Cell().ColumnSpan(2).Column(col =>
                     {
-                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().PaddingRight(15).PaddingVertical(3).Text($"Revisado por:").FontSize(11).Bold();
+                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().PaddingRight(20).PaddingVertical(3).Text($"Revisado por:").FontSize(11).Bold();
                         col.Item().BorderVertical(1).Text($"").FontSize(11);
                         col.Item().BorderVertical(1).Text($"").FontSize(11);
                         col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).AlignCenter().PaddingVertical(4).Text($"Director(a) Administración").FontSize(11).Bold();
