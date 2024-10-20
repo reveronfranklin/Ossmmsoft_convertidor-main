@@ -28,5 +28,7 @@
         public string? MontoLetras { get; set; } = string.Empty;
         public string? Firmante { get; set; } = string.Empty;
         
+        public bool OrdenServicio { get; set; }
+        
     }
 }

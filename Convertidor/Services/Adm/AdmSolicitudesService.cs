@@ -150,6 +150,25 @@ namespace Convertidor.Services.Adm
             }
             return result;
         }
+
+        public bool TieneOrdenServicio(string status,int tipoSolicitudId)
+        {
+            bool result = false;
+
+            List<int> tiposSolicitud = new List<int>();
+            tiposSolicitud.Add(803);
+            tiposSolicitud.Add(816);
+
+            var tipo = tiposSolicitud.FirstOrDefault(x => x == tipoSolicitudId);
+            if (tipo>0 && status != "PE")
+            {
+                result = true;
+            }
+          
+            
+            
+            return result;
+        }
         public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter)
         {
             
@@ -203,7 +222,8 @@ namespace Convertidor.Services.Adm
                             Nota = sol.Nota,
                             Status = sol.Status,
                             DescripcionStatus=sol.DescripcionStatus,
-                            CodigoPresupuesto=sol.CodigoPresupuesto
+                            CodigoPresupuesto=sol.CodigoPresupuesto,
+                            OrdenServicio = TieneOrdenServicio(sol.Status,(int)sol.TipoSolicitudId)
                         
                         };
                     
