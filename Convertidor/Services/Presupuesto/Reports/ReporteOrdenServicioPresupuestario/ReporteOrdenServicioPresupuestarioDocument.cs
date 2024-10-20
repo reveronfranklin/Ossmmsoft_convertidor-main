@@ -196,7 +196,7 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
 
                     footer.Cell().ColumnSpan(2).Column(col =>
                     {
-                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).PaddingVertical(3).Text($"Elaborado por:").FontSize(11).Bold();
+                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignCenter().PaddingRight(10).PaddingVertical(3).Text($"Elaborado por:").FontSize(11).Bold();
                         col.Item().BorderVertical(1).Text($"{Model.Encabezado.Firmante}").FontSize(11);
                         col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).PaddingVertical(4).Text($"FIRMA : ________________________________________     ").FontSize(11).Bold();
 
