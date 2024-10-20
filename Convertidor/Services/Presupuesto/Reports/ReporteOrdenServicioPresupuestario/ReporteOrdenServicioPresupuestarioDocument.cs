@@ -196,13 +196,27 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
 
                     footer.Cell().ColumnSpan(2).Column(col =>
                     {
-                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).PaddingVertical(3).Text($"ANALISTA").FontSize(11).Bold();
+                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().AlignRight().PaddingRight(15).PaddingVertical(3).Text($"Elaborado por:").FontSize(11).Bold();
                         col.Item().BorderVertical(1).Text($"{Model.Encabezado.Firmante}").FontSize(11);
                         col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).PaddingVertical(4).Text($"FIRMA : ________________________________________     ").FontSize(11).Bold();
 
                     });
+                    footer.Cell().ColumnSpan(2).Column(col =>
+                    {
+                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().PaddingRight(15).PaddingVertical(3).Text($"Revisado por:").FontSize(11).Bold();
+                        col.Item().BorderVertical(1).Text($"").FontSize(11);
+                        col.Item().BorderVertical(1).Text($"").FontSize(11);
+                        col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).AlignCenter().PaddingVertical(4).Text($"Director(a) Administración").FontSize(11).Bold();
 
-                    footer.Cell().ColumnSpan(4).BorderVertical(1).BorderBottom(1).BorderTop(1).AlignBottom().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(5).Text($"DIRECCION DE PLANIFICACION Y PRESUPUESTO").FontSize(11).Bold();
+                    });
+                    footer.Cell().ColumnSpan(2).Column(col =>
+                    {
+                        col.Item().BorderVertical(1).BorderTop(1).AlignTop().AlignCenter().PaddingRight(15).PaddingVertical(3).Text($"Aprobado por:").FontSize(11).Bold();
+                        col.Item().BorderVertical(1).Text($"").FontSize(11);
+                        col.Item().BorderVertical(1).Text($"").FontSize(11);
+                        col.Item().BorderVertical(1).BorderBottom(1).PaddingLeft(4).AlignCenter().PaddingVertical(4).Text($"Presidente(a)").FontSize(11).Bold();
+
+                    });
 
                 });
             });
