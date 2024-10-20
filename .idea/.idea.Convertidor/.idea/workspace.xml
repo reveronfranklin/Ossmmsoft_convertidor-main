@@ -7,7 +7,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/ReporteOrdenServicioPresupuestarioController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/CuerpoComponent.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/EncabezadoComponent.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/IReporteOrdenServicioPresupuestarioService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/PucComponent.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/ReporteOrdenServicioPresupuestarioDocument.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/ReporteOrdenServicioPresupuestarioService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/FilterBySolicitud.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/FilterBySolicitud.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Presupuesto/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,6 +44,13 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -260,6 +279,8 @@
       <workItem from="1729030161189" duration="5364000" />
       <workItem from="1729117170497" duration="8265000" />
       <workItem from="1729174724984" duration="4238000" />
+      <workItem from="1729272584543" duration="2888000" />
+      <workItem from="1729374793454" duration="7808000" />
     </task>
     <servers />
   </component>
@@ -2318,26 +2339,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs</url>
-          <line>580</line>
+          <line>581</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'ActualizaMontos'">
             <startOffsets>
-              <option value="22148" />
+              <option value="22216" />
             </startOffsets>
             <endOffsets>
-              <option value="22166" />
+              <option value="22234" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="495" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs</url>
-          <line>607</line>
+          <line>608</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmDetalleSolicitudRepository.cs" containingFunctionPresentation="Method 'DeleteBySolicitud'">
             <startOffsets>
-              <option value="22993" />
+              <option value="23061" />
             </startOffsets>
             <endOffsets>
-              <option value="23011" />
+              <option value="23079" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="498" />
@@ -2731,6 +2752,58 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="570" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoDocument.cs</url>
+          <line>178</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoDocument.cs" containingFunctionPresentation="Lambda expression inside Method 'ComposeFooter'">
+            <startOffsets>
+              <option value="7036" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7091" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="571" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
+          <line>278</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'GetTotales'">
+            <startOffsets>
+              <option value="9515" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9587" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="572" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/ReporteOrdenServicioPresupuestarioController.cs</url>
+          <line>39</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/ReporteOrdenServicioPresupuestarioController.cs" containingFunctionPresentation="Method 'ReportData'">
+            <startOffsets>
+              <option value="1329" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1376" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="573" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/ReporteOrdenServicioPresupuestarioService.cs</url>
+          <line>185</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/ReporteOrdenServicioPresupuestarioService.cs" containingFunctionPresentation="Method 'GenerateDataEncabezadoDto'">
+            <startOffsets>
+              <option value="9674" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9693" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="577" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
