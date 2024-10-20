@@ -11,6 +11,12 @@
         public int CodigoSolModificacion { get; set; }
         public string DePara { get; set; }
     }
+    public class FilterReporteBySolicitud
+    {
+        public int CodigoSolModificacion { get; set; }
+      
+    }
+    
 }
         
     

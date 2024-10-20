@@ -34,6 +34,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Services.Adm.ReporteSolicitudCompromiso;
 using Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestario;
+using Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupuestario;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -483,6 +484,7 @@ builder.Services.AddTransient<IAdmProductosService, AdmProductosService>();
 builder.Services.AddTransient<IAdmSolCompromisoService, AdmSolCompromisoService>();
 builder.Services.AddTransient<IAdmDetalleSolCompromisoService, AdmDetalleSolCompromisoService>();
 builder.Services.AddTransient<IReporteSolicitudCompromisoService, ReporteSolicitudCompromisoService>();
+builder.Services.AddTransient<IReporteOrdenServicioPresupuestarioService, ReporteOrdenServicioPresupuestarioService>();
 
 
 

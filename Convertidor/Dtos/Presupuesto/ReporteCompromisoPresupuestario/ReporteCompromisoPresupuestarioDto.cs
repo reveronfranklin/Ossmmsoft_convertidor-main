@@ -40,6 +40,7 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public decimal Base { get; set; }
         
         public decimal PorcentajeImpuesto { get; set; }
+        public string Titulo { get; set; } = string.Empty;
         
         
         
