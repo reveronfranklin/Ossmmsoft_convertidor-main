@@ -144,6 +144,26 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                             
                      
                         });
+                        table.Cell().ColumnSpan(6).Row(row =>
+                        {
+                            row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                            row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                            row.ConstantItem(400).BorderVertical(1).AlignLeft().PaddingLeft(3).PaddingTop(3).Element(CellStyle).Text($"").FontSize(11);
+                            row.ConstantItem(120).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                            row.ConstantItem(120).BorderVertical(0).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                            
+                     
+                        });
+                        table.Cell().ColumnSpan(6).Row(row =>
+                        {
+                            row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                            row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                            row.ConstantItem(400).BorderVertical(1).AlignLeft().PaddingLeft(3).PaddingTop(3).Element(CellStyle).Text($"").FontSize(11);
+                            row.ConstantItem(120).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                            row.ConstantItem(120).BorderVertical(0).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                            
+                     
+                        });
                     }
 
                    
