@@ -56,13 +56,15 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                           row.ConstantItem(75).Border(1).AlignCenter().Element(CellStyle).Text("CANTIDAD").FontSize(11).Bold();
                           row.ConstantItem(75).Border(1).AlignCenter().Element(CellStyle).Text("   UNIDAD\n" + "DE MEDIDA").FontSize(11).Bold();
-                          row.ConstantItem(465).Border(1).AlignCenter().Element(CellStyle).PaddingLeft(50).Text("DESCRIPCION").FontSize(11).Bold();
-                          row.ConstantItem(100).Border(1).AlignCenter().Element(CellStyle).Text("   PRECIO\n" + "UNITARIO").FontSize(11).Bold();
-                          row.ConstantItem(100).Column(col =>
+                          row.ConstantItem(400).Border(1).AlignCenter().Element(CellStyle).PaddingLeft(50).Text("DESCRIPCION").FontSize(11).Bold();
+                          row.ConstantItem(120).Border(1).AlignCenter().Element(CellStyle).Text("   PRECIO\n" + "UNITARIO").FontSize(11).Bold();
+                          
+                          row.ConstantItem(150).Border(0).BorderBottom(1).AlignCenter().Element(CellStyle).Text("   TOTAL\n" + "BOLIVARES").FontSize(11).Bold();
+                          /*row.ConstantItem(125).Border(1).Column(col =>
                           {
-                              col.Item().Border(1).AlignCenter().Element(CellStyle).Text("TOTAL").FontSize(11).Bold();
-                              col.Item().Border(1).AlignCenter().Element(CellStyle).Text("BOLIVARES").FontSize(11).Bold();
-                          });
+                              col.Item().BorderRight(0).AlignCenter().Element(CellStyle).Text("TOTAL").FontSize(11).Bold();
+                              col.Item().BorderRight(0).AlignCenter().Element(CellStyle).Text("BOLIVARES").FontSize(11).Bold();
+                          });*/
 
                       });
 
@@ -81,13 +83,13 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                     row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.Cantidad).FontSize(11);
                     row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.DescripcionUdmId).FontSize(11);
-                    row.ConstantItem(465).BorderVertical(1).AlignLeft().PaddingLeft(10).PaddingTop(3).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(11);
+                    row.ConstantItem(400).BorderVertical(1).AlignLeft().PaddingLeft(3).PaddingTop(3).Element(CellStyle).Text(item.DescripcionArticulo).FontSize(11);
                     var precio = item.PrecioUnitario.ToString("N", formato);
-                    row.ConstantItem(100).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(precio).FontSize(11);
+                    row.ConstantItem(120).BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(precio).FontSize(11);
                     var totalBolivares = item.TotalBolivares.ToString("N", formato);
-                    row.ConstantItem(100).BorderVertical(0).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(totalBolivares).FontSize(11);
+                    row.ConstantItem(120).BorderVertical(0).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(totalBolivares).FontSize(11);
 
-                     if (contador == ModelCuerpo.LongCount())
+                     /*if (contador == ModelCuerpo.LongCount())
                      {
 
                             table.Cell().ColumnSpan(6).ExtendVertical().Column(col =>
@@ -104,7 +106,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                             });
 
-                        }
+                        }*/
                      
                     });
 

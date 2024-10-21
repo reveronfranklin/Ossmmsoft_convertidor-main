@@ -289,7 +289,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 var descriptiva = await _admDescriptivaRepository.GetByCodigo(item.UdmId);
 
                                 resultItem.DescripcionUdmId = descriptiva.DESCRIPCION;
-                                resultItem.DescripcionArticulo = LimpiarCaracteres.LimpiarEnter( item.Descripcion);
+                                resultItem.DescripcionArticulo = $"{LimpiarCaracteres.LimpiarEnter( item.Descripcion)}";
+                               // resultItem.DescripcionArticulo = $"{LimpiarCaracteres.LimpiarEnter( item.Descripcion)} ({item.CodigoDetalleSolicitud})";
+
                                 resultItem.PrecioUnitario = item.PrecioUnitario;
                                 resultItem.TotalBolivares = (decimal)item.Total;
                                 result.Add(resultItem);
