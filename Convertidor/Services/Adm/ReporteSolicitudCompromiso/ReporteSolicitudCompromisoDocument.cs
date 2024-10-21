@@ -124,7 +124,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                table.Cell().ColumnSpan(6).ExtendVertical().PaddingTop(10).BorderVertical(1).Column(col =>
                {
                    col.Item().Component(new CuerpoComponent(Model.Cuerpo, Model.Encabezado));
-                   col.Item().ExtendVertical().Row(row =>
+                  col.Item().ExtendVertical().Row(row =>
                    {
                       row.ConstantItem(75).ExtendVertical().BorderVertical(1);
                       row.ConstantItem(75).ExtendVertical().BorderVertical(1);
