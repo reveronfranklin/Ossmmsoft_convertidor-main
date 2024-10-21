@@ -20,6 +20,7 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public string UnidadEjecutora { get; set; } = string.Empty;
         public string NombreProveedor { get; set; } = string.Empty;
         public string Rif { get; set; }
+        public string Direccion { get; set; }
         public string CodigoArea { get; set; } = string.Empty;
         public string LineaComunicacion { get; set; } = string.Empty;
         public string IcpConcat { get; set; } = string.Empty;

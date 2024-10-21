@@ -26,6 +26,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupues
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IOssConfigRepository _ossConfigRepository;
+        private readonly IAdmDireccionProveedorRepository _admDireccionProveedorRepository;
 
 
         public ReporteOrdenServicioPresupuestarioService(IPreCompromisosRepository preCompromisosRepository,
@@ -41,7 +42,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupues
                                                       IConfiguration configuration,
                                                       IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
                                                       ISisUsuarioRepository sisUsuarioRepository,
-                                                      IOssConfigRepository ossConfigRepository)
+                                                      IOssConfigRepository ossConfigRepository,
+                                                      IAdmDireccionProveedorRepository admDireccionProveedorRepository)
         {
             _preCompromisosRepository = preCompromisosRepository;
             _preDetalleCompromisosService = preDetalleCompromisosService;
@@ -57,6 +59,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupues
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _ossConfigRepository = ossConfigRepository;
+            _admDireccionProveedorRepository = admDireccionProveedorRepository;
         }
 
         public async Task<ReporteCompromisoPresupuestarioDto> GenerateData(FilterReporteBySolicitud filter)
@@ -104,35 +107,21 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupues
             return result;
         }
 
-        public async Task<string> GetFirmante(int codigoCompromiso)
+        public async Task<string> GetFirmante(int codigoSolicitud)
         {
 
             string result = "";
-
-
-            var detalle = await _preDetalleCompromisosRepository.GetByCodigoCompromiso(codigoCompromiso);
-            if (detalle.Any())
+            var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoSolicitud);
+            if (solicitud != null)
             {
-                var ultimoDetalle = detalle.OrderByDescending(x => x.CODIGO_DETALLE_COMPROMISO).FirstOrDefault();
-                var listPuc =
-                    await _prePucCompromisosRepository.GetListByCodigoDetalleCompromiso(ultimoDetalle
-                        .CODIGO_DETALLE_COMPROMISO);
-                if (listPuc != null)
+                var usuario =await  _sisUsuarioRepository.GetByCodigo((int)solicitud.USUARIO_INS);
+                if (usuario != null)
                 {
-                    var ultimoPuc = listPuc.OrderByDescending(x => x.CODIGO_PUC_COMPROMISO).FirstOrDefault();
-                    if (ultimoPuc != null)
-                    {
-                      
-                        var usuario =await  _sisUsuarioRepository.GetByCodigo((int)ultimoPuc.USUARIO_INS);
-                        if (usuario != null)
-                        {
                     
-                            result =
-                                $"{usuario.USUARIO} \n C.I: {usuario.CEDULA}";
+                    result =
+                        $"{usuario.USUARIO} \n C.I: {usuario.CEDULA}";
                     
                  
-                        }
-                    }
                 }
             }
             else
@@ -191,14 +180,20 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupues
                 }
               
                 
-                result.Firmante = await GetFirmante(compromiso.CODIGO_COMPROMISO);
+                result.Firmante = await GetFirmante(filter.CodigoSolModificacion);
               
 
                 
                 var Proveedor = await _admProveedoresRepository.GetByCodigo((int)solicitud.CODIGO_PROVEEDOR);
                 result.NombreProveedor = Proveedor.NOMBRE_PROVEEDOR;
                 result.Rif = Proveedor.RIF;
-
+                result.Direccion = "";
+                var dirProveedor =
+                    await _admDireccionProveedorRepository.GetByCodigoProveedor((int)solicitud.CODIGO_PROVEEDOR);
+                if (dirProveedor != null)
+                {
+                    result.Direccion = $"{dirProveedor.VIALIDAD} {dirProveedor.VIVIENDA}";
+                }
                 var comProveedor = await _admComProveedorRepository.GetBycodigoProveedor(Proveedor.CODIGO_PROVEEDOR);
                 if (comProveedor != null) 
                 {
