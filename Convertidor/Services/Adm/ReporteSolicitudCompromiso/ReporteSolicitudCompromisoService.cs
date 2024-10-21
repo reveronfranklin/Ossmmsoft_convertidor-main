@@ -277,9 +277,9 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                 
 
                 if (detalle.Data.Count > 0 )
-                     {
-                  
-                            foreach (var item in detalle.Data)
+                {
+                    var cuerpo = detalle.Data.OrderBy(x=>x.CodigoDetalleSolicitud).ToList();
+                            foreach (var item in cuerpo)
                             {
 
                                 CuerpoReporteDto resultItem = new CuerpoReporteDto();
@@ -292,17 +292,17 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 resultItem.DescripcionArticulo = LimpiarCaracteres.LimpiarEnter( item.Descripcion);
                                 resultItem.PrecioUnitario = item.PrecioUnitario;
                                 resultItem.TotalBolivares = (decimal)item.Total;
+                                result.Add(resultItem);
 
-
-                                if (tipoImpuesto != item.TipoImpuestoId)
+                                /*if (tipoImpuesto != item.TipoImpuestoId)
                                 {
                                     result.Add(resultItem);
-                                }
+                                }*/
                                
 
                             }
 
-                            if (detalleImpuesto != null)
+                            /*if (detalleImpuesto != null)
                             {
                                 CuerpoReporteDto resultItem = new CuerpoReporteDto();
 
@@ -316,7 +316,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                                 resultItem.TotalBolivares = (decimal)detalleImpuesto.Total;
                                 result.Add(resultItem);
                              
-                            }
+                            }*/
                           
                           return result;
                      }
