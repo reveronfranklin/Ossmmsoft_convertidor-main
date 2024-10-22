@@ -73,9 +73,10 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
 
         }
 
-        public async Task<List<PrePucCompromisosResponseDto>> GetPuc(int codigoCompromiso)
+        public async Task<List<PrePucCompromisosResumenResponseDto>> GetPuc(int codigoCompromiso)
         {
             List<PrePucCompromisosResponseDto> result = new List<PrePucCompromisosResponseDto>();
+            List<PrePucCompromisosResumenResponseDto> resultResumen = new List<PrePucCompromisosResumenResponseDto>();
             var detalle = await _preDetalleCompromisosService.GetByCodigoCompromiso(codigoCompromiso);
             if (detalle.Count > 0)
             {
@@ -94,11 +95,22 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 
 
                 }
+                var agrupado = result
+                    .GroupBy(v => new { v.CodigoIcpConcat, v.CodigoPucConcat,v.DescripcionFinanciado })
+                    .Select(grupo => new PrePucCompromisosResumenResponseDto
+                    {
+                        CodigoIcpConcat = grupo.Key.CodigoIcpConcat,
+                        CodigoPucConcat = grupo.Key.CodigoPucConcat,
+                        DescripcionFinanciado=grupo.Key.DescripcionFinanciado,
+                        Monto = grupo.Sum(v => v.Monto)
+                    });
 
+
+                resultResumen = agrupado.ToList();
                     
-                return result;
+                return resultResumen;
             }
-            return result;
+            return resultResumen;
         }
 
         public async Task<string> GetFirmante(int codigoCompromiso)
@@ -258,12 +270,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                         resultItem.PrecioUnitario = item.PrecioUnitario;
                         resultItem.TotalBolivares = (item.PrecioUnitario * item.Cantidad);
                         
-                        var pucCompromisos = await _prePucCompromisosService.GetByDetalleCompromiso(item.CodigoDetalleCompromiso);
-                        if(pucCompromisos.Data.Count > 0) 
-                        {
-                          resultItem.PucCompromisos = pucCompromisos.Data;
-                          
-                        }
+                      
                         result.Add(resultItem);
 
                     }

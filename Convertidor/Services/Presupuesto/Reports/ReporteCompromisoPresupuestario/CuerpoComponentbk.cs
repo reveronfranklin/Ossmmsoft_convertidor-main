@@ -97,7 +97,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                 
                 
                              int contador = 0;
-                             var pucCompromisos = ModelEncabezado.PucCompromisos.OrderBy(x => x.CodigoDetalleCompromiso).ToList();
+                             var pucCompromisos = ModelEncabezado.PucCompromisos.ToList();
                 
                                  foreach (var itemPuc in pucCompromisos)
                                  {

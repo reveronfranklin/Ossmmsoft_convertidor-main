@@ -181,6 +181,12 @@ namespace Convertidor.Services.Presupuesto
             {
                 itemResult.DescripcionFinanciado = descriptiva.Data.Descripcion;
             }
+
+            var preSaldo= await _preVSaldosRepository.GetByCodigo(dto.CODIGO_SALDO);
+            if (preSaldo != null)
+            {
+                itemResult.DescripcionFinanciado = preSaldo.DESCRIPCION_FINANCIADO;
+            }
             itemResult.CodigoFinanciado = dto.CODIGO_FINANCIADO;
             itemResult.Monto = dto.MONTO;
             itemResult.MontoCausado = dto.MONTO_CAUSADO;
