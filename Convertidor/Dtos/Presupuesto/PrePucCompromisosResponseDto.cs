@@ -23,4 +23,15 @@
         public string Extra3 { get; set; } = string.Empty;
         public int CodigoPresupuesto { get; set; }
     }
+    
+    
+    public class PrePucCompromisosResumenResponseDto
+    {
+      
+        public string CodigoIcpConcat { get; set; }
+        public string CodigoPucConcat { get; set; }
+        public string DescripcionFinanciado { get; set; }
+        public decimal Monto { get; set; }
+       
+    }
 }

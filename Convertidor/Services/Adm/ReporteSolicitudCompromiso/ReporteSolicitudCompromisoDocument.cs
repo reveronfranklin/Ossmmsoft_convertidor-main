@@ -127,10 +127,10 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                   col.Item().ExtendVertical().Row(row =>
                    {
                       row.ConstantItem(75).ExtendVertical().BorderVertical(1);
-                      row.ConstantItem(75).ExtendVertical().BorderVertical(1);
-                      row.ConstantItem(400).ExtendVertical().BorderVertical(1);
-                      row.ConstantItem(120).ExtendVertical().BorderVertical(1);
-                      row.ConstantItem(120).ExtendVertical().BorderVertical(0);
+                      row.ConstantItem(90).ExtendVertical().BorderVertical(1);
+                      row.ConstantItem(495).ExtendVertical().BorderVertical(1);
+                      row.RelativeItem().ExtendVertical().BorderVertical(1);
+                      row.RelativeItem().ExtendVertical().BorderVertical(0);
                    });
 
                });

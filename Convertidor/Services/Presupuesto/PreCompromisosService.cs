@@ -749,7 +749,7 @@ namespace Convertidor.Services.Presupuesto
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(codigoCompromiso.CODIGO_SOLICITUD);
                 if (solicitud != null)
                 {
-                    if (dto.FechaCompromiso < solicitud.FECHA_SOLICITUD)
+                    if (dto.FechaCompromiso.Date < solicitud.FECHA_SOLICITUD.Date)
                     {
                         result.Data = null;
                         result.IsValid = false;

@@ -46,7 +46,7 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         
         
         public string TelefonoProveedor { get { return $"{CodigoArea}{LineaComunicacion}"; } }
-        public List<PrePucCompromisosResponseDto> PucCompromisos { get; set; }
+        public List<PrePucCompromisosResumenResponseDto> PucCompromisos { get; set; }
     }
 
     public class CuerpoReporteDto 
@@ -63,7 +63,7 @@ namespace Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario
         public int FinanciadoId { get; set; }
         public decimal MontoImpuesto { get; set; }
         public decimal Monto { get; set; }
-        public List<PrePucCompromisosResponseDto> PucCompromisos { get; set; }
+        //public List<PrePucCompromisosResumenResponseDto> PucCompromisos { get; set; }
 
     }
 }
