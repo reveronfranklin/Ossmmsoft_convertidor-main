@@ -19,6 +19,8 @@
         public int? NumeroComprobante3 { get; set; }
         public int? NumeroComprobante4 { get; set; }
         public int OrigenId { get; set; }
+        public DateTime FechaPlazoDesde { get; set; }
+        public DateTime FechaPlazoHasta { get; set; }
     }
 }
 

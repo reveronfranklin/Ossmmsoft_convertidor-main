@@ -15,9 +15,9 @@
         public string DescripcionFinanciado { get; set; } = string.Empty;
         public int CodigoFinanciado { get; set; }
         public int CodigoSaldo { get; set; }
-        public int Monto { get; set; }
-        public int MontoPagado { get; set; }
-        public int MontoAnulado { get; set; }
+        public decimal Monto { get; set; }
+        public decimal MontoPagado { get; set; }
+        public  decimal MontoAnulado { get; set; }
         public int CodigoCompromisoOp { get; set; }
         public int CodigoPresupuesto { get; set; }
     }
