@@ -63,6 +63,7 @@
     <None Remove="Dtos\Rh\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Data\DestinoRepository\" />
     <Folder Include="Migrations\" />
     <Folder Include="Data\Entities\RentasMunicipales\" />
     <Folder Include="Data\Repository\RentasMunicipales\" />

@@ -7,7 +7,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoInterfaces/ADM/IAdmOrdenPagoDestinoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmOrdenPagoDestinoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_BENEFICIARIOS_OP.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_CONTACTO_PROVEEDOR.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_DESCRIPTIVAS.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_ORDEN_PAGO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_PROVEEDORES.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_PUC_ORDEN_PAGO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/PRE/PRE_V_SALDOS.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/IAdmOrdenPagoDestinoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Convertidor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Convertidor.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DestinoDataContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoDataContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,29 +48,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -295,6 +288,9 @@
       <workItem from="1729374793454" duration="19487000" />
       <workItem from="1729517418750" duration="12367000" />
       <workItem from="1729687870726" duration="8577000" />
+      <workItem from="1729814924014" duration="7431000" />
+      <workItem from="1729980705557" duration="4507000" />
+      <workItem from="1730139161547" duration="6749000" />
     </task>
     <servers />
   </component>
@@ -1976,13 +1972,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs</url>
-          <line>488</line>
+          <line>559</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="19577" />
+              <option value="23345" />
             </startOffsets>
             <endOffsets>
-              <option value="19621" />
+              <option value="23389" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="412" />
@@ -2028,13 +2024,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs</url>
-          <line>509</line>
+          <line>580</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="20712" />
+              <option value="24589" />
             </startOffsets>
             <endOffsets>
-              <option value="20789" />
+              <option value="24666" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="416" />
@@ -2171,13 +2167,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs</url>
-          <line>112</line>
+          <line>121</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" containingFunctionPresentation="Method 'GetByPresupuesto'">
             <startOffsets>
-              <option value="5543" />
+              <option value="6289" />
             </startOffsets>
             <endOffsets>
-              <option value="5599" />
+              <option value="6345" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="463" />
@@ -2675,6 +2671,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="567" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs</url>
+          <line>404</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="17404" />
+            </startOffsets>
+            <endOffsets>
+              <option value="17493" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="568" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

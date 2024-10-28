@@ -25,6 +25,8 @@ using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using Convertidor.Data.DestinoInterfaces.ADM;
+using Convertidor.Data.DestinoRepository.ADM;
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Data.Repository.Cnt;
 using Convertidor.Services.Cnt;
@@ -33,6 +35,7 @@ using Convertidor.Services.Rh.Report.HistoricoNomina;
 using Microsoft.Extensions.DependencyInjection;
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Services.Adm.ReporteSolicitudCompromiso;
+using Convertidor.Services.Destino.ADM;
 using Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestario;
 using Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupuestario;
 
@@ -488,6 +491,10 @@ builder.Services.AddTransient<IReporteOrdenServicioPresupuestarioService, Report
 
 
 
+
+//Postgress services
+builder.Services.AddTransient<IAdmOrdenPagoDestinoService, AdmOrdenPagoDestinoService>();
+builder.Services.AddTransient<IAdmOrdenPagoDestinoRepository, AdmOrdenPagoDestinoRepository>();
 
 
 

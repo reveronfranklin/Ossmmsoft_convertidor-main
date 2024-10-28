@@ -425,9 +425,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-            
-
-
+                
                 if (dto.FechaOrdenPago == null)
                 {
                     result.Data = null;
@@ -435,7 +433,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Fecha Orden Pago Invalida";
                     return result;
                 }
-                var tipoOrdenPagoId = await _admDescriptivaRepository.GetByIdAndTitulo(14, dto.TipoOrdenPagoId);
+                var tipoOrdenPagoId = await _admDescriptivaRepository.GetByIdAndTitulo(3, dto.TipoOrdenPagoId);
                 if (tipoOrdenPagoId==false)
                 {
                     result.Data = null;
