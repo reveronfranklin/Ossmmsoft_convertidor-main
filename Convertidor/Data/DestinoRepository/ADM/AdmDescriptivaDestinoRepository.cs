@@ -4,54 +4,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.DestinoRepository.ADM
 {
-    public class AdmOrdenPagoDestinoRepository: IAdmOrdenPagoDestinoRepository
+    public class AdmDescriptivaDestinoRepository: IAdmDescriptivaDestinoRepository
     {
         private readonly DestinoDataContext _context;
-        public AdmOrdenPagoDestinoRepository(DestinoDataContext context)
+        public AdmDescriptivaDestinoRepository(DestinoDataContext context)
         {
             _context = context;
         }
 
-        public async Task<ADM_ORDEN_PAGO> GetCodigoOrdenPago(int codigoOrdenPago)
-        {
-            try
-            {
-                var result = await _context.ADM_ORDEN_PAGO
-                    .Where(e => e.CODIGO_ORDEN_PAGO == codigoOrdenPago)
-                    .DefaultIfEmpty()
-                    .FirstOrDefaultAsync();
-
-                return (ADM_ORDEN_PAGO)result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.Message;
-                return null;
-            }
-
-        }
+      
 
     
         
     
-        public async Task<ResultDto<ADM_ORDEN_PAGO>>Add(ADM_ORDEN_PAGO entity) 
+        public async Task<ResultDto<bool>>Add(ADM_DESCRIPTIVAS entities) 
         {
 
-            ResultDto<ADM_ORDEN_PAGO> result = new ResultDto<ADM_ORDEN_PAGO>(null);
+            ResultDto<bool> result = new ResultDto<bool>(false);
             try 
             {
-                await _context.ADM_ORDEN_PAGO.AddAsync(entity);
+                await _context.ADM_DESCRIPTIVAS.AddAsync(entities);
                 await _context.SaveChangesAsync();
 
 
-                result.Data = entity;
+                result.Data = true;
                 result.IsValid = true;
                 result.Message = "";
                 return result;
             }
             catch (Exception ex)
             {
-                result.Data = null;
+                result.Data = false;
                 result.IsValid = false;
                 if (ex.InnerException != null)
                 {
@@ -67,16 +50,21 @@ namespace Convertidor.Data.DestinoRepository.ADM
         }
 
     
-        public async Task<string>Delete(int codigoOrdenPago) 
+        public async Task<string>Delete(int idDescriptiva) 
         {
             try
             {
-                ADM_ORDEN_PAGO entity = await GetCodigoOrdenPago(codigoOrdenPago);
-                if (entity != null)
+
+                var proveedor = await _context.ADM_DESCRIPTIVAS.Where(x => x.DESCRIPCION_ID == idDescriptiva)
+                    .DefaultIfEmpty()
+                    .FirstOrDefaultAsync();
+                if (proveedor!=null)
                 {
-                    _context.ADM_ORDEN_PAGO.Remove(entity);
+                    _context.ADM_DESCRIPTIVAS.Remove(proveedor);
                     await _context.SaveChangesAsync();
                 }
+              
+             
                 return "";
             }
             catch (Exception ex)

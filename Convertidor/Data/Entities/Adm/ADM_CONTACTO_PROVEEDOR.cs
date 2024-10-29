@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Convertidor.Data.Entities.ADM
+namespace Convertidor.Data.Entities.Adm
 {
 	public class ADM_CONTACTO_PROVEEDOR
 	{

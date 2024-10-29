@@ -24,9 +24,10 @@ namespace Convertidor.Data
         public DbSet<ADM_ORDEN_PAGO> ADM_ORDEN_PAGO { get; set; }
         public DbSet<ADM_PUC_ORDEN_PAGO> ADM_PUC_ORDEN_PAGO { get; set; }
         public DbSet<PRE_V_SALDOS> PRE_V_SALDOS { get; set; }
+        public DbSet<ADM_RETENCIONES_OP> ADM_RETENCIONES_OP { get; set; }
+        public DbSet<ADM_PROVEEDORES> ADM_PROVEEDORES { get; set; }
         
         
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -99,16 +100,43 @@ namespace Convertidor.Data
                    
                 });
             modelBuilder
+                .Entity<ADM_RETENCIONES_OP>(builder =>
+                {
+
+                    builder.ToTable("ADM_RETENCIONES_OP");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_RETENCION_OP,
+                   
+
+                    });
+                   
+                });
+            
+            modelBuilder
+                .Entity<ADM_PROVEEDORES>(builder =>
+                {
+
+                    builder.ToTable("ADM_PROVEEDORES");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_PROVEEDOR,
+                   
+
+                    });
+                   
+                });
+            
+            
+            modelBuilder
                 .Entity<PRE_V_SALDOS>(builder =>
                 {
                     builder.ToTable("PRE_V_SALDOS");
                     builder.HasKey(table => new
                     {
-                        table.CODIGO_PRESUPUESTO,
+                       
                         table.CODIGO_SALDO,
-                        table.CODIGO_ICP,
-                        table.CODIGO_PUC,
-                        table.CODIGO_FINANCIADO
+                      
 
                     });
                    

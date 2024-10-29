@@ -26,7 +26,9 @@ using QuestPDF.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using Convertidor.Data.DestinoInterfaces.ADM;
+using Convertidor.Data.DestinoInterfaces.PRE;
 using Convertidor.Data.DestinoRepository.ADM;
+using Convertidor.Data.DestinoRepository.PRE;
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Data.Repository.Cnt;
 using Convertidor.Services.Cnt;
@@ -496,9 +498,13 @@ builder.Services.AddTransient<IReporteOrdenServicioPresupuestarioService, Report
 builder.Services.AddTransient<IAdmOrdenPagoDestinoService, AdmOrdenPagoDestinoService>();
 builder.Services.AddTransient<IAdmOrdenPagoDestinoRepository, AdmOrdenPagoDestinoRepository>();
 
-
-
-
+builder.Services.AddTransient<IAdmPucOrdenPagoDestinoRepository, AdmPucOrdenPagoDestinoRepository>();
+builder.Services.AddTransient<IAdmBeneficiariosOpDestinoRepository, AdmBeneficiariosOpDestinoRepository>();
+builder.Services.AddTransient<IAdmRetencionesOpDestinoRepository, AdmRetencionesOpDestinoRepository>();
+builder.Services.AddTransient<IAdmProveedoresDestinoRepository, AdmProveedoresDestinoRepository>();
+builder.Services.AddTransient<IAdmContactosProveedorDestinoRepository, AdmContactosProveedorDestinoRepository>();
+builder.Services.AddTransient<IAdmDescriptivaDestinoRepository, AdmDescriptivaDestinoRepository>();
+builder.Services.AddTransient<IPreVSaldoDestinoRepository, PreVSaldoDestinoRepository>();
 
 
 

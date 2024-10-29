@@ -6,6 +6,7 @@ namespace Convertidor.Data.Interfaces.Adm
     {
         Task<ADM_RETENCIONES_OP> GetCodigoRetencionOp(int codigoRetencionOp);
         Task<List<ADM_RETENCIONES_OP>> GetAll();
+        Task<List<ADM_RETENCIONES_OP>> GetByOrdenPago(int codigoOrdenPago);
         Task<ResultDto<ADM_RETENCIONES_OP>> Add(ADM_RETENCIONES_OP entity);
         Task<ResultDto<ADM_RETENCIONES_OP>> Update(ADM_RETENCIONES_OP entity);
         Task<string> Delete(int codigoRetencionOp);
