@@ -44,6 +44,20 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
+        public async Task<List<ADM_BENEFICIARIOS_OP>> GetByOrdenPago(int codigoOrdenPago)
+        {
+            try
+            {
+                var result = await _context.ADM_BENEFICIARIOS_OP.Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).DefaultIfEmpty().ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+        
         public async Task<ResultDto<ADM_BENEFICIARIOS_OP>> Add(ADM_BENEFICIARIOS_OP entity)
         {
 
@@ -111,6 +125,25 @@ namespace Convertidor.Data.Repository.Adm
                 return ex.Message;
             }
         }
+        
+        public async Task<string> DeleteByOrdenPago(int codigoOrdenPago)
+        {
+            try
+            {
+                var entities = await GetByOrdenPago (codigoOrdenPago);
+                if (entities != null)
+                {
+                    _context.ADM_BENEFICIARIOS_OP.RemoveRange(entities);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        
         public async Task<int> GetNextKey()
         {
             try

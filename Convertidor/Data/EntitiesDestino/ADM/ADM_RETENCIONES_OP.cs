@@ -1,4 +1,4 @@
-﻿namespace Convertidor.Data.Entities.Adm
+﻿namespace Convertidor.Data.EntitiesDestino.ADM
 {
     public class ADM_RETENCIONES_OP
     {

@@ -1,4 +1,4 @@
-using Convertidor.Data.Entities.ADM;
+using Convertidor.Data.Entities.Adm;
 
 namespace Convertidor.Data.Interfaces.Adm;
 

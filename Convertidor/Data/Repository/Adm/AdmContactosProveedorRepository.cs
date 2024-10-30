@@ -1,4 +1,4 @@
-﻿using Convertidor.Data.Entities.ADM;
+﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Microsoft.EntityFrameworkCore;
 

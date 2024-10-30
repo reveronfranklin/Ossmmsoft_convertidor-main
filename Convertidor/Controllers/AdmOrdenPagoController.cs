@@ -3,6 +3,7 @@
 // HTML to PDF
 using Convertidor.Dtos.Adm;
 using Convertidor.Services.Adm;
+using Convertidor.Services.Destino.ADM;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,13 +16,12 @@ namespace Convertidor.Controllers
     {
        
         private readonly IAdmOrdenPagoService _service;
+        private readonly IAdmOrdenPagoDestinoService _destinoService;
 
-        public AdmOrdenPagoController(IAdmOrdenPagoService service)
+        public AdmOrdenPagoController(IAdmOrdenPagoService service,IAdmOrdenPagoDestinoService destinoService)
         {
-
             _service = service;
-
-
+            _destinoService = destinoService;
         }
 
 
@@ -72,6 +72,14 @@ namespace Convertidor.Controllers
             var result = await _service.Delete(dto);
             return Ok(result);
 
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Replicar(AdmOrdenPagoDeleteDto filter)
+        {
+            var result = await _destinoService.CopiarOrdenPago(filter.CodigoOrdenPago);
+            return Ok(result);
         }
 
     }

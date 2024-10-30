@@ -1,5 +1,7 @@
 ﻿
 using Convertidor.Data.EntitiesDestino;
+using Convertidor.Data.EntitiesDestino.ADM;
+using Convertidor.Data.EntitiesDestino.PRE;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data
@@ -15,14 +17,133 @@ namespace Convertidor.Data
         public DbSet<IndiceCategoriaPrograma> IndiceCategoriaPrograma { get; set; }
         public DbSet<ConceptosRetenciones> ConceptosRetenciones { get; set; }
         public DbSet<HistoricoRetenciones> HistoricoRetenciones { get; set; }
-
-
-
+        
+        public DbSet<ADM_BENEFICIARIOS_OP> ADM_BENEFICIARIOS_OP { get; set; }
+        public DbSet<ADM_CONTACTO_PROVEEDOR> ADM_CONTACTO_PROVEEDOR { get; set; }
+        public DbSet<ADM_DESCRIPTIVAS> ADM_DESCRIPTIVAS { get; set; }
+        public DbSet<ADM_ORDEN_PAGO> ADM_ORDEN_PAGO { get; set; }
+        public DbSet<ADM_PUC_ORDEN_PAGO> ADM_PUC_ORDEN_PAGO { get; set; }
+        public DbSet<PRE_V_SALDOS> PRE_V_SALDOS { get; set; }
+        public DbSet<ADM_RETENCIONES_OP> ADM_RETENCIONES_OP { get; set; }
+        public DbSet<ADM_PROVEEDORES> ADM_PROVEEDORES { get; set; }
+        
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             base.OnModelCreating(modelBuilder);
+            
+            modelBuilder
+                .Entity<ADM_BENEFICIARIOS_OP>(builder =>
+                {
 
+                    builder.ToTable("ADM_BENEFICIARIOS_OP");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_BENEFICIARIO_OP,
+                   
+
+                    });
+                   
+                });
+            modelBuilder
+                .Entity<ADM_CONTACTO_PROVEEDOR>(builder =>
+                {
+
+                    builder.ToTable("ADM_CONTACTO_PROVEEDOR");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_CONTACTO_PROVEEDOR,
+                   
+
+                    });
+                   
+                });
+            modelBuilder
+                .Entity<ADM_DESCRIPTIVAS>(builder =>
+                {
+
+                    builder.ToTable("ADM_DESCRIPTIVAS");
+                    builder.HasKey(table => new
+                    {
+                        table.DESCRIPCION_ID,
+                   
+
+                    });
+                   
+                });
+            
+            modelBuilder
+                .Entity<ADM_ORDEN_PAGO>(builder =>
+                {
+
+                    builder.ToTable("ADM_ORDEN_PAGO");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_ORDEN_PAGO,
+                   
+
+                    });
+                   
+                });
+            modelBuilder
+                .Entity<ADM_PUC_ORDEN_PAGO>(builder =>
+                {
+
+                    builder.ToTable("ADM_PUC_ORDEN_PAGO");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_PUC_ORDEN_PAGO,
+                   
+
+                    });
+                   
+                });
+            modelBuilder
+                .Entity<ADM_RETENCIONES_OP>(builder =>
+                {
+
+                    builder.ToTable("ADM_RETENCIONES_OP");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_RETENCION_OP,
+                   
+
+                    });
+                   
+                });
+            
+            modelBuilder
+                .Entity<ADM_PROVEEDORES>(builder =>
+                {
+
+                    builder.ToTable("ADM_PROVEEDORES");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_PROVEEDOR,
+                   
+
+                    });
+                   
+                });
+            
+            
+            modelBuilder
+                .Entity<PRE_V_SALDOS>(builder =>
+                {
+                    builder.ToTable("PRE_V_SALDOS");
+                    builder.HasKey(table => new
+                    {
+                       
+                        table.CODIGO_SALDO,
+                      
+
+                    });
+                   
+                });
+
+            
+            
             modelBuilder
            .Entity<ConceptosRetenciones>(builder =>
            {
@@ -39,6 +160,8 @@ namespace Convertidor.Data
                   .HasMaxLength(1000)
                   .HasDefaultValueSql("('')");
            });
+            
+            
             modelBuilder
           .Entity<HistoricoRetenciones>(builder =>
           {

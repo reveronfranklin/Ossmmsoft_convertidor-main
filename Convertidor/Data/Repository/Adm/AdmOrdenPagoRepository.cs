@@ -18,7 +18,7 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
                 var result = await _context.ADM_ORDEN_PAGO
-                    .Where(e => e.CODIGO_ORDEN_PAGO == codigoOrdenPago).FirstOrDefaultAsync();
+                    .Where(e => e.CODIGO_ORDEN_PAGO == codigoOrdenPago).DefaultIfEmpty().FirstOrDefaultAsync();
 
                 return (ADM_ORDEN_PAGO)result;
             }

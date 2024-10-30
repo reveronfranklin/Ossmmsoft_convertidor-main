@@ -63,7 +63,7 @@ namespace Convertidor.Services.Adm
             itemResult.FinanciadoId = dtos.FINANCIADO_ID;
 
             itemResult.DescripcionFinanciado = "";
-            var financiadoIdObj = await _preDescriptivaRepository.GetByCodigo(dtos.FINANCIADO_ID);
+            var financiadoIdObj = await _preDescriptivaRepository.GetByCodigo((int)dtos.FINANCIADO_ID);
             if (financiadoIdObj!= null)
             {
                 itemResult.DescripcionFinanciado = financiadoIdObj.DESCRIPCION;
@@ -546,8 +546,8 @@ namespace Convertidor.Services.Adm
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var puc = await _prePlanUnicoCuentasRepository.GetAll();
-                    var icp = await _preIndiceCatPrgRepository.GetAll();
+                    var puc = await _prePlanUnicoCuentasRepository.GetAllByCodigoPresupuesto( dto.CodigoPresupuesto);
+                    var icp = await _preIndiceCatPrgRepository.GetAllByCodigoPresupuesto( dto.CodigoPresupuesto);
                     var resultDto = await MapPucOrdenPagoDto(created.Data,puc.ToList(),icp.ToList());
                     result.Data = resultDto;
                     result.IsValid = true;
