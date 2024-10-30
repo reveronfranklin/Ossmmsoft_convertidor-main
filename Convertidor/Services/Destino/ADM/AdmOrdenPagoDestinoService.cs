@@ -12,6 +12,7 @@ namespace Convertidor.Services.Destino.ADM
 {
     public class AdmOrdenPagoDestinoService : IAdmOrdenPagoDestinoService
     {
+        private readonly IMapper _mapper;
         private readonly IAdmOrdenPagoRepository _repository;
         private readonly IAdmOrdenPagoDestinoRepository _destinoRepository;
         private readonly IAdmPucOrdenPagoRepository _pucOrdenPagoRepository;
@@ -31,6 +32,7 @@ namespace Convertidor.Services.Destino.ADM
 
 
         public AdmOrdenPagoDestinoService(
+                        IMapper mapper,
                         IAdmOrdenPagoRepository repository,
                         IAdmOrdenPagoDestinoRepository destinoRepository ,
                         IAdmPucOrdenPagoRepository pucOrdenPagoRepository,
@@ -48,6 +50,7 @@ namespace Convertidor.Services.Destino.ADM
                         IPreVSaldoDestinoRepository preVSaldoDestinoRepository,
                         IPRE_V_SALDOSRepository preVSaldosRepository)
         {
+            _mapper = mapper;
             _repository = repository;
             _destinoRepository = destinoRepository;
             _pucOrdenPagoRepository = pucOrdenPagoRepository;
@@ -373,30 +376,31 @@ namespace Convertidor.Services.Destino.ADM
             var descriptiva = await _admDescriptivaRepository.GetByCodigo(ordenPagoOrigen.TIPO_ORDEN_PAGO_ID);
             if (descriptiva != null)
             {
-                var newDestido = MapDescriptiva(descriptiva);
-
+                //var newDestido = MapDescriptiva(descriptiva);
+                var newDestido = _mapper.Map<ADM_DESCRIPTIVAS>(descriptiva);
                 await _admDescriptivaDestinoRepository.Add(newDestido);
             }
             descriptiva = await _admDescriptivaRepository.GetByCodigo((int)ordenPagoOrigen.TIPO_PAGO_ID);
             if (descriptiva != null)
             {
-                var newDestido = MapDescriptiva(descriptiva);
+                //var newDestido = MapDescriptiva(descriptiva);
+                var newDestido = _mapper.Map<ADM_DESCRIPTIVAS>(descriptiva);
 
                 await _admDescriptivaDestinoRepository.Add(newDestido);
             }
             descriptiva = await _admDescriptivaRepository.GetByCodigo((int)ordenPagoOrigen.FRECUENCIA_PAGO_ID);
             if (descriptiva != null)
             {
-                var newDestido = MapDescriptiva(descriptiva);
-
+                //var newDestido = MapDescriptiva(descriptiva);
+                var newDestido = _mapper.Map<ADM_DESCRIPTIVAS>(descriptiva);
                 await _admDescriptivaDestinoRepository.Add(newDestido);
             }
             
             var contactosOrigen = await _admContactosProveedorRepository.GetByProveedor(ordenPagoOrigen.CODIGO_PROVEEDOR);
             if (contactosOrigen != null)
             {   
-                var newDestido = MapProveedorContactos(contactosOrigen);
-
+                //var newDestido = MapProveedorContactos(contactosOrigen);
+                var newDestido = _mapper.Map<List<ADM_CONTACTO_PROVEEDOR>>(contactosOrigen);
                 await _admContactosProveedorDestinoRepository.Add(newDestido);
                 
             }
@@ -404,13 +408,16 @@ namespace Convertidor.Services.Destino.ADM
             var proveedorOrigen = await _admProveedoresRepository.GetByCodigo(ordenPagoOrigen.CODIGO_PROVEEDOR);
             if (proveedorOrigen != null)
             {   
-                var newDestido = MapProveedor(proveedorOrigen);
-
+                //var newDestido = MapProveedor(proveedorOrigen);
+                var newDestido = _mapper.Map<ADM_PROVEEDORES>(proveedorOrigen);
                 await _admProveedoresDestinoRepository.Add(newDestido);
                 
             }
             
-            var newOrden = Map(ordenPagoOrigen);
+            
+            
+            //var newOrden = Map(ordenPagoOrigen);
+            var newOrden = _mapper.Map<ADM_ORDEN_PAGO>(ordenPagoOrigen);
             var orderCreated = await _destinoRepository.Add(newOrden);
             if (orderCreated.IsValid == true)
             {
@@ -420,8 +427,8 @@ namespace Convertidor.Services.Destino.ADM
                {
               
 
-                   var newDestido = MapPuc(pucOrdenPagoOrigen);
-
+                   //var newDestido = MapPuc(pucOrdenPagoOrigen);
+                   var newDestido = _mapper.Map<List<ADM_PUC_ORDEN_PAGO>>(pucOrdenPagoOrigen);
                    await _pucOrdenPagoDestinoRepository.Add(newDestido);
 
                    
@@ -431,7 +438,8 @@ namespace Convertidor.Services.Destino.ADM
                    {
                        await _preVSaldoDestinoRepository.Delete(item.Key.CODIGO_PRESUPUESTO, item.Key.CODIGO_SALDO);
                        var saldo = await _preVSaldosRepository.GetByCodigo(item.Key.CODIGO_SALDO);
-                       var newSaldo = MapPreVSaldo(saldo);
+                    //   var newSaldo = MapPreVSaldo(saldo);
+                       var newSaldo = _mapper.Map<PRE_V_SALDOS>(saldo);
                        await _preVSaldoDestinoRepository.Add(newSaldo);
                    }
                }
@@ -439,8 +447,8 @@ namespace Convertidor.Services.Destino.ADM
                var beneficiariosOp =await _admBeneficiariosOpRepository.GetByOrdenPago(codigoOrdenPago);
                if (beneficiariosOp.Count > 0)
                {
-                   var newBeneficiario = MapBeneficiario(beneficiariosOp);
-
+                  // var newBeneficiario = MapBeneficiario(beneficiariosOp);
+                   var newBeneficiario = _mapper.Map<List<ADM_BENEFICIARIOS_OP>>(beneficiariosOp);
                    await _admBeneficiariosOpDestinoRepository.Add(newBeneficiario);
                }
 
@@ -450,8 +458,8 @@ namespace Convertidor.Services.Destino.ADM
                {
                    
            
-                   var newRetenciones = MapRetenciones(retencionesOp);
-
+                   //var newRetenciones = MapRetenciones(retencionesOp);
+                   var newRetenciones = _mapper.Map<List<ADM_RETENCIONES_OP>>(retencionesOp);
                    await _admRetencionesOpDestinoRepository.Add(newRetenciones);
                }
             }
