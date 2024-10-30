@@ -58,7 +58,7 @@ namespace Convertidor.Services.Adm
             return result;
         }
         
-        public async Task<AdmOrdenPagoResponseDto> MapOrdenPagoDto(ADM_ORDEN_PAGO dtos,List<ADM_DESCRIPTIVAS> descriptivas,List<ADM_PROVEEDORES> proveedores)
+        public async Task<AdmOrdenPagoResponseDto> MapOrdenPagoDto(ADM_ORDEN_PAGO dtos,List<ADM_DESCRIPTIVAS> descriptivas,ADM_PROVEEDORES proveedor)
         {
 
        
@@ -70,11 +70,8 @@ namespace Convertidor.Services.Adm
 
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
             itemResult.NombreProveedor = "";
-            var proveedor = proveedores.Where(x=>x.CODIGO_PROVEEDOR==itemResult.CodigoProveedor).FirstOrDefault();
-            if (proveedor != null)
-            {
-                itemResult.NombreProveedor = proveedor.NOMBRE_PROVEEDOR;
-            }
+            itemResult.NombreProveedor = proveedor.NOMBRE_PROVEEDOR;
+          
             itemResult.NumeroOrdenPago = dtos.NUMERO_ORDEN_PAGO;
             itemResult.FechaOrdenPago = dtos.FECHA_ORDEN_PAGO;
             itemResult.FechaOrdenPagoString =Fecha.GetFechaString(dtos.FECHA_ORDEN_PAGO);
@@ -154,12 +151,12 @@ namespace Convertidor.Services.Adm
         {
             
             var descriptivas = await _admDescriptivaRepository.GetAll();
-            var proveedores = await _admProveedoresRepository.GetByAll();
+           
             List<AdmOrdenPagoResponseDto> result = new List<AdmOrdenPagoResponseDto>();
             {
                 foreach (var item in dtos)
                 {
-
+                    var proveedores = await _admProveedoresRepository.GetByCodigo(item.CODIGO_PROVEEDOR);
                     var itemResult = await MapOrdenPagoDto(item,descriptivas,proveedores);
 
                     result.Add(itemResult);
@@ -323,7 +320,7 @@ namespace Convertidor.Services.Adm
 
                 await _repository.Update(codigoOrdenPago);
                 var descriptivas = await _admDescriptivaRepository.GetAll();
-                var proveedores = await _admProveedoresRepository.GetByAll();
+                var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);
                 var resultDto = await MapOrdenPagoDto(codigoOrdenPago,descriptivas,proveedores);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -574,10 +571,11 @@ namespace Convertidor.Services.Adm
                 //CREAR LOS PUC a parir del compromiso
                 await CrearPucOrdenPagoDesdeCompromiso(dto.CodigoCompromiso,created.Data.CODIGO_ORDEN_PAGO);
                 
-                var descriptivas = await _admDescriptivaRepository.GetAll();
-                var proveedores = await _admProveedoresRepository.GetByAll();
+               var descriptivas = await _admDescriptivaRepository.GetAll();
+                var proveedores = await _admProveedoresRepository.GetByCodigo(compromisoOp.CodigoProveedor );
                 var resultDto = await MapOrdenPagoDto(created.Data,descriptivas,proveedores);
-                result.Data = resultDto;
+                result.Data = resultDto; 
+                //resultDto;
                 result.IsValid = true;
                 result.Message = "";
             }
@@ -686,7 +684,7 @@ namespace Convertidor.Services.Adm
 
                 await _repository.Update(codigoOrdenPago);
                 var descriptivas = await _admDescriptivaRepository.GetAll();
-                var proveedores = await _admProveedoresRepository.GetByAll();
+                var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);
                 var resultDto = await MapOrdenPagoDto(codigoOrdenPago,descriptivas,proveedores);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -735,7 +733,7 @@ namespace Convertidor.Services.Adm
 
                 await _repository.Update(codigoOrdenPago);
                 var descriptivas = await _admDescriptivaRepository.GetAll();
-                var proveedores = await _admProveedoresRepository.GetByAll();
+                var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);
                 var resultDto = await MapOrdenPagoDto(codigoOrdenPago,descriptivas,proveedores);
                 result.Data = resultDto;
                 result.IsValid = true;
