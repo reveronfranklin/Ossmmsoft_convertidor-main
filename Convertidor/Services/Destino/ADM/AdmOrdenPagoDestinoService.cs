@@ -347,7 +347,29 @@ namespace Convertidor.Services.Destino.ADM
                 return newDestido;
         }
 
-        
+        public async Task<string> LimpiaTablasOrdenPago(int codigoOrdenPago,Data.Entities.Adm.ADM_ORDEN_PAGO ordenPagoOrigen)
+        {
+            try
+            {
+                await _pucOrdenPagoDestinoRepository.Delete(codigoOrdenPago);                              
+                await _admBeneficiariosOpDestinoRepository.Delete(codigoOrdenPago);                        
+                await _admRetencionesOpDestinoRepository.Delete(codigoOrdenPago);                          
+                await _destinoRepository.Delete(codigoOrdenPago);                                          
+                await _admContactosProveedorDestinoRepository.Delete(ordenPagoOrigen.CODIGO_PROVEEDOR);    
+                await _admProveedoresDestinoRepository.Delete(ordenPagoOrigen.CODIGO_PROVEEDOR);           
+                await _admDescriptivaDestinoRepository.Delete(ordenPagoOrigen.TIPO_ORDEN_PAGO_ID);         
+                await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.TIPO_PAGO_ID);          
+                await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.FRECUENCIA_PAGO_ID);
+                return "";
+            }
+            catch (Exception e)
+            {
+                  return e.Message;  
+               
+            }
+           
+            
+        }
         
         
         public async  Task<ResultDto<bool>> CopiarOrdenPago(int codigoOrdenPago)
@@ -361,17 +383,15 @@ namespace Convertidor.Services.Destino.ADM
                 result.Message = "Orden de Pago No existe";
                 return result;
             }
-            
-            await _pucOrdenPagoDestinoRepository.Delete(codigoOrdenPago);
-            await _admBeneficiariosOpDestinoRepository.Delete(codigoOrdenPago);
-            await _admRetencionesOpDestinoRepository.Delete(codigoOrdenPago);
-            await _destinoRepository.Delete(codigoOrdenPago);
-            await _admContactosProveedorDestinoRepository.Delete(ordenPagoOrigen.CODIGO_PROVEEDOR);
-            await _admProveedoresDestinoRepository.Delete(ordenPagoOrigen.CODIGO_PROVEEDOR);
-            await _admDescriptivaDestinoRepository.Delete(ordenPagoOrigen.TIPO_ORDEN_PAGO_ID);
-            await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.TIPO_PAGO_ID);
-            await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.FRECUENCIA_PAGO_ID);
 
+           var resultDeleted = await  LimpiaTablasOrdenPago(codigoOrdenPago,ordenPagoOrigen);
+           if (resultDeleted != "")
+           {
+               result.Data = false;                       
+               result.IsValid = false;                    
+               result.Message = $"Error eliminando datos de Orden de Pago: {resultDeleted}";
+               return result;                             
+           }
 
             var descriptiva = await _admDescriptivaRepository.GetByCodigo(ordenPagoOrigen.TIPO_ORDEN_PAGO_ID);
             if (descriptiva != null)

@@ -8,16 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Adm/Replica/AdmBeneficiariosOpProfile.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Adm/Replica/AdmContactosProveedorProfile.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Adm/Replica/AdmDescriptivaProfile.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Adm/Replica/AdmOrdenPagoProfile.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Adm/Replica/AdmProveedorProfile.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Adm/Replica/AdmPucOrdenPagoProfile.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Adm/Replica/AdmRetencionesOpProfile.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Pre/Replica/PreVSaldoProfile.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -289,7 +281,7 @@
       <workItem from="1730139161547" duration="19002000" />
       <workItem from="1730216224720" duration="22940000" />
       <workItem from="1730291672963" duration="898000" />
-      <workItem from="1730294534249" duration="13842000" />
+      <workItem from="1730294534249" duration="16776000" />
     </task>
     <servers />
   </component>
@@ -2634,13 +2626,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs</url>
-          <line>389</line>
+          <line>386</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" containingFunctionPresentation="Method 'CrearPucOrdenPagoDesdeCompromiso'">
             <startOffsets>
-              <option value="17003" />
+              <option value="16902" />
             </startOffsets>
             <endOffsets>
-              <option value="17017" />
+              <option value="16916" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="593" />
