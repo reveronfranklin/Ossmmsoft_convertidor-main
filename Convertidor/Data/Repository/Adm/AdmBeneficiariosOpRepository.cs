@@ -125,6 +125,25 @@ namespace Convertidor.Data.Repository.Adm
                 return ex.Message;
             }
         }
+        
+        public async Task<string> DeleteByOrdenPago(int codigoOrdenPago)
+        {
+            try
+            {
+                var entities = await GetByOrdenPago (codigoOrdenPago);
+                if (entities != null)
+                {
+                    _context.ADM_BENEFICIARIOS_OP.RemoveRange(entities);
+                    await _context.SaveChangesAsync();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        
         public async Task<int> GetNextKey()
         {
             try

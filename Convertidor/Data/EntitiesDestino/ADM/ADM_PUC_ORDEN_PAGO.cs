@@ -5,10 +5,10 @@
         public int CODIGO_PUC_ORDEN_PAGO { get; set; }
         public int CODIGO_ORDEN_PAGO { get; set; }
         public int CODIGO_PUC_COMPROMISO { get; set; }
-        public int CODIGO_ICP { get; set; }
-        public int CODIGO_PUC { get; set; }
-        public int FINANCIADO_ID { get; set; }
-        public int CODIGO_FINANCIADO { get; set; }
+        public int? CODIGO_ICP { get; set; }
+        public int? CODIGO_PUC { get; set; }
+        public int? FINANCIADO_ID { get; set; }
+        public int? CODIGO_FINANCIADO { get; set; }
         public int CODIGO_SALDO { get; set; }
         public decimal MONTO { get; set; }
         public decimal MONTO_PAGADO { get; set; }

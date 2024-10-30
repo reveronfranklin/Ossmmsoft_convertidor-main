@@ -360,7 +360,7 @@ namespace Convertidor.Services.Destino.ADM
             }
             
             await _pucOrdenPagoDestinoRepository.Delete(codigoOrdenPago);
-            await _admBeneficiariosOpRepository.Delete(codigoOrdenPago);
+            await _admBeneficiariosOpDestinoRepository.Delete(codigoOrdenPago);
             await _admRetencionesOpDestinoRepository.Delete(codigoOrdenPago);
             await _destinoRepository.Delete(codigoOrdenPago);
             await _admContactosProveedorDestinoRepository.Delete(ordenPagoOrigen.CODIGO_PROVEEDOR);
@@ -445,8 +445,11 @@ namespace Convertidor.Services.Destino.ADM
                }
 
                var retencionesOp = await _admRetencionesOpRepository.GetByOrdenPago(codigoOrdenPago);
-               if (retencionesOp.Count > 0)
+              
+               if (retencionesOp.Count>0)
                {
+                   
+           
                    var newRetenciones = MapRetenciones(retencionesOp);
 
                    await _admRetencionesOpDestinoRepository.Add(newRetenciones);

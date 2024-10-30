@@ -63,7 +63,7 @@ namespace Convertidor.Services.Adm
             itemResult.FinanciadoId = dtos.FINANCIADO_ID;
 
             itemResult.DescripcionFinanciado = "";
-            var financiadoIdObj = await _preDescriptivaRepository.GetByCodigo(dtos.FINANCIADO_ID);
+            var financiadoIdObj = await _preDescriptivaRepository.GetByCodigo((int)dtos.FINANCIADO_ID);
             if (financiadoIdObj!= null)
             {
                 itemResult.DescripcionFinanciado = financiadoIdObj.DESCRIPCION;

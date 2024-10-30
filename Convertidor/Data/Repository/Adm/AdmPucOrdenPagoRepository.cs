@@ -47,7 +47,7 @@ namespace Convertidor.Data.Repository.Adm
         {
             try
             {
-                var result = await _context.ADM_PUC_ORDEN_PAGO.DefaultIfEmpty().Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).ToListAsync();
+                var result = await _context.ADM_PUC_ORDEN_PAGO.Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).ToListAsync();
                 return result;
             }
             catch (Exception ex) 

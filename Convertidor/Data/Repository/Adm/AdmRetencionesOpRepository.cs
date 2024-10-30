@@ -48,7 +48,7 @@ namespace Convertidor.Data.Repository.Adm
             {
                 var result = await _context.ADM_RETENCIONES_OP
                     
-                    .Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).DefaultIfEmpty().ToListAsync();
+                    .Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).ToListAsync();
                 return result;
             }
             catch (Exception ex) 

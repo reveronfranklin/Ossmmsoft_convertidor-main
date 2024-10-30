@@ -55,11 +55,12 @@ namespace Convertidor.Data.DestinoRepository.ADM
             try
             {
 
-                var listPuc = await _context.ADM_RETENCIONES_OP.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago)
-                    .DefaultIfEmpty()
-                    .ToListAsync();
-                if (listPuc.Count > 0)
+                var result = await _context.ADM_RETENCIONES_OP.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago).AnyAsync();
+                if (result==true)
                 {
+                    var listPuc = await _context.ADM_RETENCIONES_OP.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago)
+                   
+                        .ToListAsync();
                     _context.ADM_RETENCIONES_OP.RemoveRange(listPuc);
                     await _context.SaveChangesAsync();
                 }
