@@ -158,6 +158,7 @@ namespace Convertidor.Services.Adm
             List<int> tiposSolicitud = new List<int>();
             tiposSolicitud.Add(803);
             tiposSolicitud.Add(816);
+            tiposSolicitud.Add(804);
 
             var tipo = tiposSolicitud.FirstOrDefault(x => x == tipoSolicitudId);
             if (tipo>0 && status != "PE")

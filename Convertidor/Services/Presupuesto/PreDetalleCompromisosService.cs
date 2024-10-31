@@ -632,8 +632,8 @@ namespace Convertidor.Services.Presupuesto
                   return result;
                 }
 
-
-                result = await MapListPreCompromisosDto(compromisos);
+                var CompromisosOrder = compromisos.OrderBy(x => x.CODIGO_DETALLE_COMPROMISO).ToList();
+                result = await MapListPreCompromisosDto(CompromisosOrder);
                 
 
             }
