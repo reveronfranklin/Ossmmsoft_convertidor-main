@@ -12,5 +12,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<int> GetNextKey();
         Task<ResultDto<List<ADM_ORDEN_PAGO>>> GetByPresupuesto(AdmOrdenPagoFilterDto filter);
         Task<string> GetNextOrdenPago(int codigoPresupuesto);
+        Task<string> UpdateMontoEnLetras(int codigoOrdenPago, decimal monto);
     }
 }

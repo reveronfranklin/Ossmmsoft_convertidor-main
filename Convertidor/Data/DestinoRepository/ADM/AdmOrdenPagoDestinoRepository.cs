@@ -71,12 +71,17 @@ namespace Convertidor.Data.DestinoRepository.ADM
         {
             try
             {
-                ADM_ORDEN_PAGO entity = await GetCodigoOrdenPago(codigoOrdenPago);
+               /* ADM_ORDEN_PAGO entity = await GetCodigoOrdenPago(codigoOrdenPago);
                 if (entity != null)
                 {
                     _context.ADM_ORDEN_PAGO.Remove(entity);
                     await _context.SaveChangesAsync();
-                }
+                }*/
+                
+                
+                FormattableString xquerySaldo = $"DELETE FROM public.\"ADM_ORDEN_PAGO\" WHERE  \"CODIGO_ORDEN_PAGO\" = {codigoOrdenPago}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
                 return "";
             }
             catch (Exception ex)

@@ -57,16 +57,23 @@ namespace Convertidor.Data.DestinoRepository.PRE
             try
             {
 
-                var saldo = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.CODIGO_SALDO == codigoSaldo)
+               /* var saldo = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.CODIGO_SALDO == codigoSaldo)
                     .DefaultIfEmpty()
                     .FirstOrDefaultAsync();
                 if (saldo!=null)
                 {
                     _context.PRE_V_SALDOS.Remove(saldo);
                     await _context.SaveChangesAsync();
-                }
+                }*/
               
-             
+                
+               FormattableString xquerySaldo = $"DELETE FROM public.\"PRE_V_SALDOS\" WHERE \"CODIGO_PRESUPUESTO\" = {codigoPresupuesto} AND \"CODIGO_SALDO\" = {codigoSaldo}";
+               var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
+
+         
+                
+                
                 return "";
             }
             catch (Exception ex)

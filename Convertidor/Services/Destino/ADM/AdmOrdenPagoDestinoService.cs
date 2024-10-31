@@ -372,9 +372,19 @@ namespace Convertidor.Services.Destino.ADM
         }
         
         
+        
         public async  Task<ResultDto<bool>> CopiarOrdenPago(int codigoOrdenPago)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);
+            decimal monto = 0;
+            var pucOrdenPagoOrigen = await _pucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+            if (pucOrdenPagoOrigen.Count > 0)
+            {
+                monto = pucOrdenPagoOrigen.Sum(x => x.MONTO);
+            }
+            
+            await _repository.UpdateMontoEnLetras(codigoOrdenPago, monto);
+            
             var ordenPagoOrigen = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
             if (ordenPagoOrigen == null)
             {
@@ -442,7 +452,7 @@ namespace Convertidor.Services.Destino.ADM
             if (orderCreated.IsValid == true)
             {
 
-               var pucOrdenPagoOrigen=await  _pucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+              
                if (pucOrdenPagoOrigen.Count > 0)
                {
               

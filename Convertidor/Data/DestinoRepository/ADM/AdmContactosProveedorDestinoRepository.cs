@@ -55,16 +55,18 @@ namespace Convertidor.Data.DestinoRepository.ADM
             try
             {
 
-                var contactos = await _context.ADM_CONTACTO_PROVEEDOR.Where(x => x.CODIGO_PROVEEDOR == codigoProveedor)
+               /* var contactos = await _context.ADM_CONTACTO_PROVEEDOR.Where(x => x.CODIGO_PROVEEDOR == codigoProveedor)
                     .DefaultIfEmpty()
                     .ToListAsync();
                 if (contactos.Count > 0)
                 {
                     _context.ADM_CONTACTO_PROVEEDOR.RemoveRange(contactos);
                     await _context.SaveChangesAsync();
-                }
+                }*/
               
-             
+                FormattableString xquerySaldo = $"DELETE FROM public.\"ADM_CONTACTO_PROVEEDOR\" WHERE  \"CODIGO_PROVEEDOR\" = {codigoProveedor}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
                 return "";
             }
             catch (Exception ex)

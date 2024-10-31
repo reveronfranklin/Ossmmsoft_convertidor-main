@@ -55,7 +55,7 @@ namespace Convertidor.Data.DestinoRepository.ADM
             try
             {
 
-                var result = await _context.ADM_RETENCIONES_OP.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago).AnyAsync();
+                /*var result = await _context.ADM_RETENCIONES_OP.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago).AnyAsync();
                 if (result==true)
                 {
                     var listPuc = await _context.ADM_RETENCIONES_OP.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago)
@@ -63,8 +63,10 @@ namespace Convertidor.Data.DestinoRepository.ADM
                         .ToListAsync();
                     _context.ADM_RETENCIONES_OP.RemoveRange(listPuc);
                     await _context.SaveChangesAsync();
-                }
-              
+                }*/
+                FormattableString xquerySaldo = $"DELETE FROM public.\"ADM_RETENCIONES_OP\" WHERE  \"CODIGO_ORDEN_PAGO\" = {codigoOrdenPago}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
              
                 return "";
             }
