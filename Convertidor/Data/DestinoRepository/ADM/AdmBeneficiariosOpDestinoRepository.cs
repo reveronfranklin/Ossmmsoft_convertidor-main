@@ -55,15 +55,17 @@ namespace Convertidor.Data.DestinoRepository.ADM
             try
             {
 
-                var listPuc = await _context.ADM_BENEFICIARIOS_OP.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago)
+                /*var listPuc = await _context.ADM_BENEFICIARIOS_OP.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago)
                     .DefaultIfEmpty()
                     .ToListAsync();
                 if (listPuc.Count > 0)
                 {
                     _context.ADM_BENEFICIARIOS_OP.RemoveRange(listPuc);
                     await _context.SaveChangesAsync();
-                }
-              
+                }*/
+                FormattableString xquerySaldo = $"DELETE FROM public.\"ADM_BENEFICIARIOS_OP\" WHERE  \"CODIGO_ORDEN_PAGO\" = {codigoOrdenPago}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
              
                 return "";
             }

@@ -26,8 +26,7 @@ namespace Convertidor.Data
         public DbSet<PRE_V_SALDOS> PRE_V_SALDOS { get; set; }
         public DbSet<ADM_RETENCIONES_OP> ADM_RETENCIONES_OP { get; set; }
         public DbSet<ADM_PROVEEDORES> ADM_PROVEEDORES { get; set; }
-        
-        
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -142,7 +141,8 @@ namespace Convertidor.Data
                    
                 });
 
-            
+         
+
             
             modelBuilder
            .Entity<ConceptosRetenciones>(builder =>

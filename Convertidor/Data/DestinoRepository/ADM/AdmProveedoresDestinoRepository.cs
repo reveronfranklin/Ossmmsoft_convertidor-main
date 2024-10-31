@@ -55,15 +55,19 @@ namespace Convertidor.Data.DestinoRepository.ADM
             try
             {
 
-                var proveedor = await _context.ADM_PROVEEDORES.Where(x => x.CODIGO_PROVEEDOR == codigoProveedor)
+                /*var proveedor = await _context.ADM_PROVEEDORES.Where(x => x.CODIGO_PROVEEDOR == codigoProveedor)
                     .DefaultIfEmpty()
                     .FirstOrDefaultAsync();
                 if (proveedor!=null)
                 {
                     _context.ADM_PROVEEDORES.Remove(proveedor);
                     await _context.SaveChangesAsync();
-                }
+                }*/
               
+                
+                FormattableString xquerySaldo = $"DELETE FROM public.\"ADM_PROVEEDORES\" WHERE  \"CODIGO_PROVEEDOR\" = {codigoProveedor}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
              
                 return "";
             }

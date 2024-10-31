@@ -49,5 +49,7 @@
         public decimal? NUMERO_COMPROBANTE4 { get; set; }
         public string? SEARCH_TEXT { get; set; } = string.Empty;
         
+        public string? MONTO_LETRAS { get; set; }= string.Empty;
+        
     }
 }

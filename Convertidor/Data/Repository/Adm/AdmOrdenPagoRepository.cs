@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.Adm;
+﻿using System.Globalization;
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
 using Microsoft.EntityFrameworkCore;
@@ -254,6 +255,33 @@ namespace Convertidor.Data.Repository.Adm
                 var msg = ex.Message;
                 return 0;
             }
+
+
+
+        }
+        
+        
+        public async Task<string> UpdateMontoEnLetras(int codigoOrdenPago,decimal monto)
+        {
+
+
+            string montoString = monto.ToString(CultureInfo.InvariantCulture);
+            try
+            {
+            
+                
+                FormattableString xqueryDiario = $"CALL ADM.ADM_P_MONTO_LETRAS_OP({codigoOrdenPago}, {monto});";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
 
 
 

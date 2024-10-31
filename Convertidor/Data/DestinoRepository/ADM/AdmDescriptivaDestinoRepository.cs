@@ -55,15 +55,19 @@ namespace Convertidor.Data.DestinoRepository.ADM
             try
             {
 
-                var proveedor = await _context.ADM_DESCRIPTIVAS.Where(x => x.DESCRIPCION_ID == idDescriptiva)
+               /* var proveedor = await _context.ADM_DESCRIPTIVAS.Where(x => x.DESCRIPCION_ID == idDescriptiva)
                     .DefaultIfEmpty()
                     .FirstOrDefaultAsync();
                 if (proveedor!=null)
                 {
                     _context.ADM_DESCRIPTIVAS.Remove(proveedor);
                     await _context.SaveChangesAsync();
-                }
+                }*/
               
+                
+                FormattableString xquerySaldo = $"DELETE FROM public.\"ADM_DESCRIPTIVAS\" WHERE  \"DESCRIPCION_ID\" = {idDescriptiva}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
              
                 return "";
             }
