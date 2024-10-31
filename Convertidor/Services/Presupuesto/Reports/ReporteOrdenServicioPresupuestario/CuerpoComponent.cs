@@ -6,6 +6,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using System.Globalization;
+using MathNet.Numerics;
 
 namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
 {
@@ -24,7 +25,7 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
         {
             QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
 
-
+            int contador = 1;
             var headerStyle = TextStyle.Default.SemiBold().FontSize(11).Fallback();
             NumberFormatInfo formato = new CultureInfo("es-AR").NumberFormat;
             static IContainer CellStyle(IContainer container) => container;
@@ -72,11 +73,22 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
                       });
 
                 });
-
+                decimal totalLongitudLineas = 0;
                 foreach (var item in ModelCuerpo)
                 {
-
-
+                    contador++;
+                    if (item.DescripcionArticulo.Length < 75)
+                    {
+                        totalLongitudLineas = totalLongitudLineas +1;
+                    }
+                    else
+                    {
+                        decimal lineasPorTexto = (decimal)item.DescripcionArticulo.Trim().Length/75;
+                        lineasPorTexto = Math.Ceiling(lineasPorTexto);
+                        totalLongitudLineas = totalLongitudLineas+lineasPorTexto;
+                    }
+                    
+                    
                     table.Cell().ColumnSpan(6).Row(row =>
                     {
                         row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(item.Cantidad).FontSize(11);
@@ -86,35 +98,28 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
                         row.RelativeItem().BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(precio).FontSize(11);
                         var totalBolivares = item.TotalBolivares.ToString("N", formato);
                         row.RelativeItem().BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text(totalBolivares).FontSize(11);
+                        
+                    });
 
-
-
+                }
+                var lineasImpresas = totalLongitudLineas;
+                var lineas = 36-lineasImpresas;
+                for (int i = 0; i < lineas; i++)
+                {
+                    table.Cell().ColumnSpan(6).Row(row =>
+                    {
+                        row.ConstantItem(75).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                        row.ConstantItem(90).BorderVertical(1).AlignCenter().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                        row.ConstantItem(495).BorderVertical(1).AlignLeft().PaddingLeft(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                        row.RelativeItem().BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                        row.RelativeItem().BorderVertical(1).AlignRight().PaddingRight(3).PaddingTop(3).Element(CellStyle).Text("").FontSize(11);
+                        
                     });
 
                 }
                 
-                foreach (var i in Enumerable.Range(0, 15))
-                {
-                    table.Cell().ColumnSpan(6).BorderLeft(1).Column(col =>
-                    {
-                        col.Item().Row(row =>
-                        {
-
-                            col.Item().ExtendVertical().Row(row =>
-                            {
-                                row.ConstantItem(75).ExtendVertical().BorderVertical(1);
-                                row.ConstantItem(90).ExtendVertical().BorderVertical(1);
-                                row.ConstantItem(495).ExtendVertical().BorderVertical(1);
-                                
-                                row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("          " ).FontSize(11).Bold();
-                          
-                                row.RelativeItem().Border(1).AlignCenter().Element(CellStyle).Text("          " ).FontSize(11).Bold();
-                            });
-                        });
-
-                    });
-
-                }
+                
+             
 
             });
 
