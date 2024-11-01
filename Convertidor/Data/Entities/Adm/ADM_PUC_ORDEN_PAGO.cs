@@ -23,6 +23,8 @@
         public int CODIGO_EMPRESA { get; set; }
         public int CODIGO_COMPROMISO_OP { get; set; }
         public int CODIGO_PRESUPUESTO { get; set; }
+        
+        public decimal? MONTO_COMPROMISO { get; set; }
 
     }
 }

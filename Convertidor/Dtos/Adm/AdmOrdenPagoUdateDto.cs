@@ -21,6 +21,7 @@
         public int OrigenId { get; set; }
         public DateTime FechaPlazoDesde { get; set; }
         public DateTime FechaPlazoHasta { get; set; }
+        public bool ConFactura { get; set; }
     }
 }
 

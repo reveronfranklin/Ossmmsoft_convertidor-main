@@ -58,15 +58,21 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                 var result = await _context.PRE_PLAN_UNICO_CUENTAS.DefaultIfEmpty()
                             .Where(x=> x.CODIGO_PRESUPUESTO == codigoPresupuesto)
-                            .OrderBy(x => x.CODIGO_GRUPO)
-                            .ThenBy(x => x.CODIGO_NIVEL1)
-                            .ThenBy(x => x.CODIGO_NIVEL2)
-                            .ThenBy(x => x.CODIGO_NIVEL3)
-                            .ThenBy(x => x.CODIGO_NIVEL4)
-                            .ThenBy(x => x.CODIGO_NIVEL5)
-                            .ThenBy(x => x.CODIGO_NIVEL6)
+                    
                             .ToListAsync();
 
+                
+                
+                result = result
+                 
+                    .OrderBy(x => x.CODIGO_GRUPO)
+                    .ThenBy(x => x.CODIGO_NIVEL1)
+                    .ThenBy(x => x.CODIGO_NIVEL2)
+                    .ThenBy(x => x.CODIGO_NIVEL3)
+                    .ThenBy(x => x.CODIGO_NIVEL4)
+                    .ThenBy(x => x.CODIGO_NIVEL5)
+                    .ThenBy(x => x.CODIGO_NIVEL6)
+                    .ToList();
 
                 return (List<PRE_PLAN_UNICO_CUENTAS>)result;
             }

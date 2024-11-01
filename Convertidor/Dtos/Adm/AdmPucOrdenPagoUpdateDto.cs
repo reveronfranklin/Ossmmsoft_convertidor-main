@@ -18,5 +18,6 @@
         public string Extra3 { get; set; } = string.Empty;
         public int CodigoCompromisoOp { get; set; }
         public int CodigoPresupuesto { get; set; }
+        public decimal MontoCompromiso { get; set; }
     }
 }

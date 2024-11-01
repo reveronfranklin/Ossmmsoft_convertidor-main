@@ -17,6 +17,7 @@ namespace Convertidor.Services.Adm
         private readonly IPRE_INDICE_CAT_PRGRepository _preIndiceCatPrgRepository;
         private readonly IPRE_PLAN_UNICO_CUENTASRepository _prePlanUnicoCuentasRepository;
         private readonly IPreDescriptivaRepository _preDescriptivaRepository;
+        private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
 
         public AdmPucOrdenPagoService(IAdmPucOrdenPagoRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -26,7 +27,8 @@ namespace Convertidor.Services.Adm
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IPRE_INDICE_CAT_PRGRepository preIndiceCatPrgRepository,
                                      IPRE_PLAN_UNICO_CUENTASRepository prePlanUnicoCuentasRepository,
-                                     IPreDescriptivaRepository preDescriptivaRepository)
+                                     IPreDescriptivaRepository preDescriptivaRepository,
+                                     IPRE_V_SALDOSRepository preVSaldosRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -37,29 +39,20 @@ namespace Convertidor.Services.Adm
             _preIndiceCatPrgRepository = preIndiceCatPrgRepository;
             _prePlanUnicoCuentasRepository = prePlanUnicoCuentasRepository;
             _preDescriptivaRepository = preDescriptivaRepository;
+            _preVSaldosRepository = preVSaldosRepository;
         }
 
       
-        public async Task<AdmPucOrdenPagoResponseDto> MapPucOrdenPagoDto(ADM_PUC_ORDEN_PAGO dtos,List<PRE_PLAN_UNICO_CUENTAS> listPuc,List<PRE_INDICE_CAT_PRG> listIcp)
+        public async Task<AdmPucOrdenPagoResponseDto> MapPucOrdenPagoDto(ADM_PUC_ORDEN_PAGO dtos)
         {
             AdmPucOrdenPagoResponseDto itemResult = new AdmPucOrdenPagoResponseDto();
             itemResult.CodigoPucOrdenPago = dtos.CODIGO_PUC_ORDEN_PAGO;
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.CodigoPucCompromiso = dtos.CODIGO_PUC_COMPROMISO;
             itemResult.CodigoIcp = dtos.CODIGO_ICP;
-            itemResult.DescripcionIcp = "";
-            var icp = listPuc.Where(x => x.CODIGO_PUC == dtos.CODIGO_ICP).FirstOrDefault();
-            if (icp !=null)
-            {
-                itemResult.DescripcionIcp =icp.DENOMINACION;
-            }
-            itemResult.DescripcionPuc = "";
+          
             itemResult.CodigoPuc = dtos.CODIGO_PUC;
-            var puc = listPuc.Where(x => x.CODIGO_PUC == dtos.CODIGO_PUC).FirstOrDefault();
-            if (puc!=null)
-            {
-                itemResult.DescripcionPuc = puc.DENOMINACION;
-            }
+          
             itemResult.FinanciadoId = dtos.FINANCIADO_ID;
 
             itemResult.DescripcionFinanciado = "";
@@ -75,8 +68,18 @@ namespace Convertidor.Services.Adm
             itemResult.Monto = dtos.MONTO;
             itemResult.MontoPagado = dtos.MONTO_PAGADO;
             itemResult.MontoAnulado=dtos.MONTO_ANULADO;
+            if (dtos.MONTO_COMPROMISO == null) dtos.MONTO_COMPROMISO = 0;
+            itemResult.MontoCompromiso = (decimal)dtos.MONTO_COMPROMISO;
             itemResult.CodigoCompromisoOp = dtos.CODIGO_COMPROMISO_OP;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            var saldo = await _preVSaldosRepository.GetByCodigo(dtos.CODIGO_SALDO);
+            if (saldo != null)
+            {
+                itemResult.IcpConcat = saldo.CODIGO_ICP_CONCAT;
+                itemResult.PucConcat = saldo.CODIGO_PUC_CONCAT;
+                itemResult.DescripcionIcp = saldo.DENOMINACION_ICP;
+                itemResult.DescripcionPuc = saldo.DENOMINACION_PUC;
+            }
             
 
             return itemResult;
@@ -87,12 +90,10 @@ namespace Convertidor.Services.Adm
             List<AdmPucOrdenPagoResponseDto> result = new List<AdmPucOrdenPagoResponseDto>();
             {
 
-                var puc = await _prePlanUnicoCuentasRepository.GetAll();
-                var icp = await _preIndiceCatPrgRepository.GetAll();
-                foreach (var item in dtos)
+                 foreach (var item in dtos)
                 {
 
-                    var itemResult = await MapPucOrdenPagoDto(item,puc.ToList(),icp.ToList());
+                    var itemResult = await MapPucOrdenPagoDto(item);
 
                     result.Add(itemResult);
                 }
@@ -100,7 +101,7 @@ namespace Convertidor.Services.Adm
             }
         }
 
-        public async Task<ResultDto<List<AdmPucOrdenPagoResponseDto>>> GetAll()
+        /*public async Task<ResultDto<List<AdmPucOrdenPagoResponseDto>>> GetAll()
         {
 
             ResultDto<List<AdmPucOrdenPagoResponseDto>> result = new ResultDto<List<AdmPucOrdenPagoResponseDto>>(null);
@@ -136,7 +137,7 @@ namespace Convertidor.Services.Adm
                 return result;
             }
 
-        }
+        }*/
         
         public async Task<ResultDto<List<AdmPucOrdenPagoResponseDto>>> GetByOrdenPago(int codigoOrdenPago)
         {
@@ -144,8 +145,8 @@ namespace Convertidor.Services.Adm
             ResultDto<List<AdmPucOrdenPagoResponseDto>> result = new ResultDto<List<AdmPucOrdenPagoResponseDto>>(null);
             try
             {
+              
                 var pucOrdenPago = await _repository.GetByOrdenPago(codigoOrdenPago);
-                var cant = pucOrdenPago.Count();
                 if (pucOrdenPago != null && pucOrdenPago.Count() > 0)
                 {
                     var listDto = await MapListPucOrdenPagoDto(pucOrdenPago);
@@ -353,9 +354,8 @@ namespace Convertidor.Services.Adm
                 codigoPucOrdenPago.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoPucOrdenPago);
-                var puc = await _prePlanUnicoCuentasRepository.GetAll();
-                var icp = await _preIndiceCatPrgRepository.GetAll();
-                var resultDto = await MapPucOrdenPagoDto(codigoPucOrdenPago,puc.ToList(),icp.ToList());
+             
+                var resultDto = await MapPucOrdenPagoDto(codigoPucOrdenPago);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -532,6 +532,7 @@ namespace Convertidor.Services.Adm
                 entity.MONTO = dto.Monto;
                 entity.MONTO_PAGADO = dto.MontoPagado;
                 entity.MONTO_ANULADO = dto.MontoAnulado;
+                entity.MONTO_COMPROMISO = dto.MontoCompromiso;
                 entity.EXTRA1 = dto.Extra1;
                 entity.EXTRA2 = dto.Extra2;
                 entity.EXTRA3 = dto.Extra3;
@@ -546,9 +547,7 @@ namespace Convertidor.Services.Adm
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-                    var puc = await _prePlanUnicoCuentasRepository.GetAllByCodigoPresupuesto( dto.CodigoPresupuesto);
-                    var icp = await _preIndiceCatPrgRepository.GetAllByCodigoPresupuesto( dto.CodigoPresupuesto);
-                    var resultDto = await MapPucOrdenPagoDto(created.Data,puc.ToList(),icp.ToList());
+                    var resultDto = await MapPucOrdenPagoDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
