@@ -55,10 +55,10 @@ namespace Convertidor.Services.Adm
             try
             {
                 var compromisoOp = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
-                var cant = compromisoOp.Count();
+              
                 if (compromisoOp != null && compromisoOp.Count() > 0)
                 {
-                    var listDto = await MapListCompromisoOpDto(compromisoOp);
+                    var listDto =  MapListCompromisoOpDto(compromisoOp);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -85,7 +85,7 @@ namespace Convertidor.Services.Adm
             }
 
         }
-        public async Task<AdmCompromisoOpResponseDto> MapCompromisoOpDto(ADM_COMPROMISO_OP dtos)
+        public AdmCompromisoOpResponseDto MapCompromisoOpDto(ADM_COMPROMISO_OP dtos)
         {
             AdmCompromisoOpResponseDto itemResult = new AdmCompromisoOpResponseDto();
             itemResult.CodigoCompromisoOp = dtos.CODIGO_COMPROMISO_OP;
@@ -93,23 +93,22 @@ namespace Convertidor.Services.Adm
             itemResult.CodigoIdentificador = dtos.CODIGO_IDENTIFICADOR;
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
-            itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
-            itemResult.CodigoValContrato = dtos.CODIGO_VAL_CONTRATO;
+            itemResult.CodigoPresupuesto = (int)dtos.CODIGO_PRESUPUESTO;
+
+            if (dtos.CODIGO_VAL_CONTRATO == null) dtos.CODIGO_VAL_CONTRATO = 0;
+            itemResult.CodigoValContrato = (int)dtos.CODIGO_VAL_CONTRATO;
 
             return itemResult;
         }
 
-        public async Task<List<AdmCompromisoOpResponseDto>> MapListCompromisoOpDto(List<ADM_COMPROMISO_OP> dtos)
+        public  List<AdmCompromisoOpResponseDto> MapListCompromisoOpDto(List<ADM_COMPROMISO_OP> dtos)
         {
             List<AdmCompromisoOpResponseDto> result = new List<AdmCompromisoOpResponseDto>();
             {
                 foreach (var item in dtos)
                 {
 
-                    var itemResult = await MapCompromisoOpDto(item);
+                    var itemResult =  MapCompromisoOpDto(item);
 
                     result.Add(itemResult);
                 }
@@ -127,7 +126,7 @@ namespace Convertidor.Services.Adm
                 var cant = compromisoOp.Count();
                 if (compromisoOp != null && compromisoOp.Count() > 0)
                 {
-                    var listDto = await MapListCompromisoOpDto(compromisoOp);
+                    var listDto =  MapListCompromisoOpDto(compromisoOp);
 
                     result.Data = listDto;
                     result.IsValid = true;
@@ -233,17 +232,13 @@ namespace Convertidor.Services.Adm
                 codigoCompromisoOp.CODIGO_PROVEEDOR = dto.CodigoProveedor;
                 codigoCompromisoOp.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 codigoCompromisoOp.CODIGO_VAL_CONTRATO = dto.CodigoValContrato;
-
-
-
-
                 codigoCompromisoOp.CODIGO_EMPRESA = conectado.Empresa;
                 codigoCompromisoOp.USUARIO_UPD = conectado.Usuario;
                 codigoCompromisoOp.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoCompromisoOp);
 
-                var resultDto = await MapCompromisoOpDto(codigoCompromisoOp);
+                var resultDto =  MapCompromisoOpDto(codigoCompromisoOp);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -358,7 +353,7 @@ namespace Convertidor.Services.Adm
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
-                var resultDto = await MapCompromisoOpDto(created.Data);
+                var resultDto =  MapCompromisoOpDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";

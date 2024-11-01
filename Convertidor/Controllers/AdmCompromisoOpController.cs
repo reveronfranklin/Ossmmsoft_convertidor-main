@@ -24,6 +24,18 @@ namespace Convertidor.Controllers
 
         }
 
+        
+  
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByOrdenPago(AdmOrdenPagoDeleteDto dto)
+        {
+            var result = await _service.GetByOrdenPago(dto.CodigoOrdenPago);
+            return Ok(result);
+        }
+        
+        
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetAll()
