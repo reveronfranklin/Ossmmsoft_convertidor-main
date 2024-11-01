@@ -102,7 +102,11 @@ namespace Convertidor.Services.Adm
             itemResult.NumeroComprobante2 = dtos.NUMERO_COMPROBANTE2;
             itemResult.numeroComprobante3 = dtos.NUMERO_COMPROBANTE3;
             itemResult.NumeroComprobante4 = dtos.NUMERO_COMPROBANTE4;
-
+            itemResult.ConFactura = false;
+            if (dtos.CON_FACTURA == 1)
+            {
+                itemResult.ConFactura = true;
+            }
             return itemResult;
         }
 
@@ -312,7 +316,11 @@ namespace Convertidor.Services.Adm
                 codigoOrdenPago.NUMERO_COMPROBANTE3 = dto.NumeroComprobante3;
                 codigoOrdenPago.NUMERO_COMPROBANTE4 = dto.NumeroComprobante4;
 
-
+                codigoOrdenPago.CON_FACTURA = 0;
+                if (dto.ConFactura)
+                {
+                    codigoOrdenPago.CON_FACTURA = 1;
+                }
                 
                 codigoOrdenPago.CODIGO_EMPRESA = conectado.Empresa;
                 codigoOrdenPago.USUARIO_UPD = conectado.Usuario;
@@ -365,6 +373,7 @@ namespace Convertidor.Services.Adm
                                 newPuc.CodigoSaldo = itemPucCompromiso.CODIGO_SALDO;  
                                 newPuc.CodigoSaldo = itemPucCompromiso.CODIGO_SALDO;  
                                 newPuc.Monto = itemPucCompromiso.MONTO;  
+                                newPuc.MontoCompromiso= itemPucCompromiso.MONTO; 
                                 newPuc.MontoPagado = 0;  
                                 newPuc.MontoAnulado =0;  
                                 newPuc.Extra1 ="";  
@@ -548,6 +557,12 @@ namespace Convertidor.Services.Adm
             entity.NUMERO_COMPROBANTE4 = dto.NumeroComprobante4;
             entity.FECHA_PLAZO_DESDE = dto.FechaPlazoDesde;
             entity.FECHA_PLAZO_HASTA = dto.FechaPlazoHasta;
+            entity.CON_FACTURA = 0;
+            if (dto.ConFactura)
+            {
+                entity.CON_FACTURA = 1;
+            }
+            
             entity.CODIGO_EMPRESA = conectado.Empresa;
             entity.USUARIO_INS = conectado.Usuario;
             entity.FECHA_INS = DateTime.Now;

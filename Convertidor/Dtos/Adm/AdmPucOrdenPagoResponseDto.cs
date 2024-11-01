@@ -20,5 +20,9 @@
         public  decimal MontoAnulado { get; set; }
         public int CodigoCompromisoOp { get; set; }
         public int CodigoPresupuesto { get; set; }
+        public decimal MontoCompromiso { get; set; }
+        public string IcpConcat { get; set; }
+        public string PucConcat { get; set; }
+        
     }
 }
