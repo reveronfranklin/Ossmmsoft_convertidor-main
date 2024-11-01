@@ -8,8 +8,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreDetalleCompromisosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreDetalleCompromisosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmCompromisoOpController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmCompromisoOpController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_COMPROMISO_OP.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_COMPROMISO_OP.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmCompromisoOpResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmCompromisoOpResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmCompromisoOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmCompromisoOpService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -271,7 +274,7 @@
       <workItem from="1730139161547" duration="19002000" />
       <workItem from="1730216224720" duration="22940000" />
       <workItem from="1730291672963" duration="898000" />
-      <workItem from="1730294534249" duration="46397000" />
+      <workItem from="1730294534249" duration="50998000" />
     </task>
     <servers />
   </component>
@@ -340,10 +343,10 @@
           <line>558</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="23358" />
+              <option value="23382" />
             </startOffsets>
             <endOffsets>
-              <option value="23417" />
+              <option value="23441" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="19" />
@@ -578,10 +581,10 @@
           <line>596</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="24821" />
+              <option value="24845" />
             </startOffsets>
             <endOffsets>
-              <option value="24895" />
+              <option value="24919" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="127" />
@@ -1644,10 +1647,10 @@
           <line>805</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'SolicitudPuedeSerAprobada'">
             <startOffsets>
-              <option value="33019" />
+              <option value="33043" />
             </startOffsets>
             <endOffsets>
-              <option value="33131" />
+              <option value="33155" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="364" />
@@ -2164,10 +2167,10 @@
           <line>747</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="31045" />
+              <option value="31069" />
             </startOffsets>
             <endOffsets>
-              <option value="31121" />
+              <option value="31145" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="485" />
@@ -2177,10 +2180,10 @@
           <line>725</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="30125" />
+              <option value="30149" />
             </startOffsets>
             <endOffsets>
-              <option value="30214" />
+              <option value="30238" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="486" />
@@ -2229,10 +2232,10 @@
           <line>277</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'GetByPresupuestoPendiente'">
             <startOffsets>
-              <option value="12148" />
+              <option value="12172" />
             </startOffsets>
             <endOffsets>
-              <option value="12246" />
+              <option value="12270" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="493" />
@@ -2307,10 +2310,10 @@
           <line>815</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'SolicitudPuedeSerAprobada'">
             <startOffsets>
-              <option value="33461" />
+              <option value="33485" />
             </startOffsets>
             <endOffsets>
-              <option value="33544" />
+              <option value="33568" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="518" />
@@ -2320,10 +2323,10 @@
           <line>352</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="15499" />
+              <option value="15523" />
             </startOffsets>
             <endOffsets>
-              <option value="15558" />
+              <option value="15582" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="534" />
@@ -2333,10 +2336,10 @@
           <line>494</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="21097" />
+              <option value="21121" />
             </startOffsets>
             <endOffsets>
-              <option value="21133" />
+              <option value="21157" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="535" />
@@ -2359,10 +2362,10 @@
           <line>478</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="20356" />
+              <option value="20380" />
             </startOffsets>
             <endOffsets>
-              <option value="20405" />
+              <option value="20429" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="537" />
@@ -2398,10 +2401,10 @@
           <line>845</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" containingFunctionPresentation="Method 'SolicitudPuedeSerAprobada'">
             <startOffsets>
-              <option value="34568" />
+              <option value="34592" />
             </startOffsets>
             <endOffsets>
-              <option value="34588" />
+              <option value="34612" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="543" />
@@ -2652,6 +2655,71 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="629" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteSolicitudModificacionPresupuestaria/ReporteSolicitudModificacionPresupuestariaService.cs</url>
+          <line>242</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteSolicitudModificacionPresupuestaria/ReporteSolicitudModificacionPresupuestariaService.cs" containingFunctionPresentation="Method 'ReportData'">
+            <startOffsets>
+              <option value="11115" />
+            </startOffsets>
+            <endOffsets>
+              <option value="11168" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="630" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/ReporteOrdenServicioPresupuestarioService.cs</url>
+          <line>302</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/ReporteOrdenServicioPresupuestarioService.cs" containingFunctionPresentation="Method 'ReportData'">
+            <startOffsets>
+              <option value="14185" />
+            </startOffsets>
+            <endOffsets>
+              <option value="14204" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="631" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmCompromisoOpController.cs</url>
+          <line>33</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmCompromisoOpController.cs" containingFunctionPresentation="Method 'GetByOrdenPago'">
+            <startOffsets>
+              <option value="770" />
+            </startOffsets>
+            <endOffsets>
+              <option value="834" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="632" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmCompromisoOpService.cs</url>
+          <line>53</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmCompromisoOpService.cs" containingFunctionPresentation="Method 'GetByOrdenPago'">
+            <startOffsets>
+              <option value="2268" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2375" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="633" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmCompromisoOpService.cs</url>
+          <line>56</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmCompromisoOpService.cs" containingFunctionPresentation="Method 'GetByOrdenPago'">
+            <startOffsets>
+              <option value="2422" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2495" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="634" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
