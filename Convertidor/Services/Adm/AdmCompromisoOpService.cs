@@ -13,13 +13,17 @@ namespace Convertidor.Services.Adm
         private readonly IPRE_PRESUPUESTOSRepository _prePresupuestosRepository;
         private readonly IAdmOrdenPagoRepository _admOrdenPagoRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IPreCompromisosRepository _preCompromisosRepository;
+        private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
 
         public AdmCompromisoOpService(IAdmCompromisoOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmProveedoresRepository admProveedoresRepository,
                                      IPRE_PRESUPUESTOSRepository prePresupuestosRepository,
                                      IAdmOrdenPagoRepository admOrdenPagoRepository,
-                                     IAdmDescriptivaRepository admDescriptivaRepository)
+                                     IAdmDescriptivaRepository admDescriptivaRepository,
+                                     IPreCompromisosRepository preCompromisosRepository,
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -27,6 +31,8 @@ namespace Convertidor.Services.Adm
             _prePresupuestosRepository = prePresupuestosRepository;
             _admOrdenPagoRepository = admOrdenPagoRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _preCompromisosRepository = preCompromisosRepository;
+            _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
         }
 
 
@@ -60,7 +66,7 @@ namespace Convertidor.Services.Adm
                 {
                     var listDto =  MapListCompromisoOpDto(compromisoOp);
 
-                    result.Data = listDto;
+                    result.Data = await listDto;
                     result.IsValid = true;
                     result.Message = "";
 
@@ -85,12 +91,33 @@ namespace Convertidor.Services.Adm
             }
 
         }
-        public AdmCompromisoOpResponseDto MapCompromisoOpDto(ADM_COMPROMISO_OP dtos)
+        public async  Task<AdmCompromisoOpResponseDto> MapCompromisoOpDto(ADM_COMPROMISO_OP dtos)
         {
             AdmCompromisoOpResponseDto itemResult = new AdmCompromisoOpResponseDto();
             itemResult.CodigoCompromisoOp = dtos.CODIGO_COMPROMISO_OP;
             itemResult.OrigenCompromisoId = dtos.ORIGEN_COMPROMISO_ID;
+            itemResult.OrigenDescripcion = "";
+            var descriptivaOrigen = await _admDescriptivaRepository.GetByCodigo(itemResult.OrigenCompromisoId);
+            if (descriptivaOrigen != null)
+            {
+                itemResult.OrigenDescripcion = descriptivaOrigen.DESCRIPCION;
+            }
             itemResult.CodigoIdentificador = dtos.CODIGO_IDENTIFICADOR;
+            itemResult.Numero = "";
+            var compromiso = await _preCompromisosRepository.GetByCodigo(itemResult.CodigoIdentificador);
+            if (compromiso != null)
+            {
+                itemResult.Numero = compromiso.NUMERO_COMPROMISO;
+                itemResult.Fecha = compromiso.FECHA_COMPROMISO;
+            }
+
+            itemResult.Monto = 0;
+           var pucOrdenPago=  await _admPucOrdenPagoRepository.GetByOrdenPago(itemResult.CodigoIdentificador);
+           if (pucOrdenPago.Count > 0)
+           {
+               itemResult.Monto = pucOrdenPago.Sum(x => x.MONTO);
+           }
+            
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
             itemResult.CodigoPresupuesto = (int)dtos.CODIGO_PRESUPUESTO;
@@ -101,14 +128,14 @@ namespace Convertidor.Services.Adm
             return itemResult;
         }
 
-        public  List<AdmCompromisoOpResponseDto> MapListCompromisoOpDto(List<ADM_COMPROMISO_OP> dtos)
+        public  async Task<List<AdmCompromisoOpResponseDto>> MapListCompromisoOpDto(List<ADM_COMPROMISO_OP> dtos)
         {
             List<AdmCompromisoOpResponseDto> result = new List<AdmCompromisoOpResponseDto>();
             {
                 foreach (var item in dtos)
                 {
 
-                    var itemResult =  MapCompromisoOpDto(item);
+                    var itemResult = await  MapCompromisoOpDto(item);
 
                     result.Add(itemResult);
                 }
@@ -128,7 +155,7 @@ namespace Convertidor.Services.Adm
                 {
                     var listDto =  MapListCompromisoOpDto(compromisoOp);
 
-                    result.Data = listDto;
+                    result.Data = await listDto;
                     result.IsValid = true;
                     result.Message = "";
 
@@ -239,7 +266,7 @@ namespace Convertidor.Services.Adm
                 await _repository.Update(codigoCompromisoOp);
 
                 var resultDto =  MapCompromisoOpDto(codigoCompromisoOp);
-                result.Data = resultDto;
+                result.Data = await resultDto;
                 result.IsValid = true;
                 result.Message = "";
             }
@@ -354,7 +381,7 @@ namespace Convertidor.Services.Adm
             if (created.IsValid && created.Data != null)
             {
                 var resultDto =  MapCompromisoOpDto(created.Data);
-                result.Data = resultDto;
+                result.Data = await resultDto;
                 result.IsValid = true;
                 result.Message = "";
             }

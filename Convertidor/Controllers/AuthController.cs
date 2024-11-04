@@ -160,6 +160,7 @@ namespace Convertidor.Controllers
                     authResponse.Roles = result.UserData.Roles;
                     authResponse.Token = result.AccessToken;
                     authResponse.RefreshToken = result.RefreshToken;
+                    authResponse.IsActive = true;
                     return Ok(authResponse);
                 }
                 else
@@ -178,7 +179,7 @@ namespace Convertidor.Controllers
         }
 
         [HttpPost]
-        [Route("[action]"), Authorize]
+        [Route("[action]"),Authorize]
         public async Task<ActionResult<ResultLoginDto>> RefreshToken(ResultRefreshTokenDto refreshTokento)
         {
             ResultLoginDto resultLogin = new ResultLoginDto();
@@ -226,6 +227,9 @@ namespace Convertidor.Controllers
             return Ok(resultLogin);
         }
 
+        
+  
+        
         private RefreshToken GenerateRefreshToken(string token)
         {
             string? userName = string.Empty;
@@ -268,13 +272,11 @@ namespace Convertidor.Controllers
                 return Unauthorized("Token expired.");
             }
 
-            string token = _service.GetToken(sisUsuario);
-            var newRefreshToken = GenerateRefreshToken(token);
-            SetRefreshToken(newRefreshToken);
+            var roles= await _sisUsuarioRepository.GetRolByUserName(userName);
 
             resultLogin.Message = "";
-            resultLogin.RefreshToken = newRefreshToken.Refresh_Token; 
-            resultLogin.AccessToken = token;
+            resultLogin.RefreshToken = refreshTokento.RefreshToken ;
+            resultLogin.AccessToken = refreshTokento.AccessToken;
             resultLogin.Name = sisUsuario.LOGIN;
             UserData userData = new UserData();
             userData.Id = sisUsuario.CODIGO_USUARIO;
@@ -288,7 +290,7 @@ namespace Convertidor.Controllers
             authResponse.Id = resultLogin.UserData.Id.ToString();
             authResponse.Email = resultLogin.UserData.Email;
             authResponse.FullName = resultLogin.UserData.FullName;
-            authResponse.Roles = resultLogin.UserData.Roles;
+            authResponse.Roles =roles;
             authResponse.Token = resultLogin.AccessToken;
             authResponse.RefreshToken = resultLogin.RefreshToken;
             

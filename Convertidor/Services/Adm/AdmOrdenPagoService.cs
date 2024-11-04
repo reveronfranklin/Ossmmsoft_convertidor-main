@@ -203,8 +203,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Fecha Orden Pago Invalida";
                     return result;
                 }
-                var tipoOrdenPagoId = await _admDescriptivaRepository.GetByIdAndTitulo(14, dto.TipoOrdenPagoId);
-                if (tipoOrdenPagoId == false)
+                var tipoOrdenPago = await _admDescriptivaRepository.GetByCodigo(dto.TipoOrdenPagoId);
+                if (tipoOrdenPago==null)
                 {
                     result.Data = null;
                     result.IsValid = false;

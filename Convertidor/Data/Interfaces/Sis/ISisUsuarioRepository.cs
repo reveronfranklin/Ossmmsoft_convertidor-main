@@ -15,7 +15,7 @@ namespace Convertidor.Data.Interfaces.Sis
         Task<List<UserRole>> GetRolByUserName(string usuario);
         Task<UserConectadoDto> GetConectado();
         Task<SIS_USUARIOS> GetByCodigo(int codigousuario);
-
+        Task<List<UserRole>> GetRolByUser(int codigousuario);
 	}
 }
 
