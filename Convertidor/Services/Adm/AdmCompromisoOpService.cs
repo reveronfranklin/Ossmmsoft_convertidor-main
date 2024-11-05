@@ -124,7 +124,7 @@ namespace Convertidor.Services.Adm
 
             if (dtos.CODIGO_VAL_CONTRATO == null) dtos.CODIGO_VAL_CONTRATO = 0;
             itemResult.CodigoValContrato = (int)dtos.CODIGO_VAL_CONTRATO;
-
+            itemResult.Descripcion = "";
             return itemResult;
         }
 

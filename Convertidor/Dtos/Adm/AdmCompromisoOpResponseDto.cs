@@ -14,5 +14,6 @@
         public int CodigoPresupuesto { get; set; }
         public int CodigoValContrato { get; set; }
         public decimal Monto { get; set; }
+        public string Descripcion { get; set; }
     }
 }
