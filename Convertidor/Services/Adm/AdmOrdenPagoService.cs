@@ -97,7 +97,7 @@ namespace Convertidor.Services.Adm
                 FechaDto fechaComprobanteObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_COMPROBANTE);
                 itemResult.FechaComprobanteObj = (FechaDto)fechaComprobanteObj;
             }
-           
+          
         
             itemResult.NumeroComprobante2 = dtos.NUMERO_COMPROBANTE2;
             itemResult.numeroComprobante3 = dtos.NUMERO_COMPROBANTE3;
