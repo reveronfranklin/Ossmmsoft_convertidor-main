@@ -100,12 +100,14 @@ namespace Convertidor.Data.Repository.Catastro
                         .Take(filter.PageSize)
                         .ToListAsync();
                 }
-             
-                
-               
+
+
+                var contador = 1;
                 foreach (var item in pageData)
                 {
                     ProductResponse itemData = new ProductResponse();
+                    itemData.Key = contador;
+                    contador++;
                     itemData.Id= item.CODIGO_BIEN;
                     itemData.Articulo= item.ARTICULO;
                     itemData.Descripcion= item.ESPECIFICACION;
@@ -156,6 +158,7 @@ namespace Convertidor.Data.Repository.Catastro
                     .FirstOrDefaultAsync();
               
                     ProductResponse itemData = new ProductResponse();
+                    itemData.Key = item.CODIGO_BIEN;
                     itemData.Id= item.CODIGO_BIEN;
                     itemData.Articulo= item.ARTICULO;
                     itemData.Descripcion= item.ESPECIFICACION;

@@ -221,8 +221,8 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
                     footer.Cell().ColumnSpan(6).Row(row =>
                     {
                         row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignLeft().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.Firmante}").FontSize(11).SemiBold();
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.RevisadoPor}").FontSize(11).SemiBold();
-                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignTop().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.ConfirmadoPor}").FontSize(11).Bold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignBottom().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.RevisadoPor}").FontSize(11).SemiBold();
+                        row.RelativeItem().BorderVertical(1).BorderBottom(1).AlignBottom().AlignCenter().Padding(3).PaddingLeft(8).PaddingBottom(3).Text($"{Model.Encabezado.ConfirmadoPor}").FontSize(11).Bold();
 
                     });
 

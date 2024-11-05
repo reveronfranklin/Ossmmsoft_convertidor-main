@@ -858,8 +858,8 @@ namespace Convertidor.Services.Bm
 
 
                     Paragraph logos = new Paragraph();
-                    logo1.ScaleAbsolute(30f, 25f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(20);
-                    logo2.ScaleAbsolute(40f, 25f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(20);
+                    logo1.ScaleAbsolute(30f, 35f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(20);
+                    logo2.ScaleAbsolute(45f, 35f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(20);
 
                     logos.SetPaddingBottom(0);
 
@@ -867,7 +867,7 @@ namespace Convertidor.Services.Bm
 
                     logos.Add(fecha).SetTextAlignment(TextAlignment.CENTER)
                                     .SetHorizontalAlignment(HorizontalAlignment.CENTER)
-                                    .SetFontSize(8);
+                                    .SetFontSize(6);
 
                     logos.Add(logo2).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetMarginLeft(10).SetMarginRight(30);
 
@@ -891,7 +891,7 @@ namespace Convertidor.Services.Bm
                     code128.SetCodeType(Barcode128.CODE128);
                     Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
                     code128Image.SetWidth(100);
-                    code128Image.SetHeight(20);
+                    code128Image.SetHeight(15);
                     // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
                     // this image does not fit the cell, but it does in addCell().
                     // In iText7 there is no constructor (new Cell(Image img)),
