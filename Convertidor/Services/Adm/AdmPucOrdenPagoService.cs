@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.Adm;
+﻿using System.Globalization;
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
@@ -42,6 +43,78 @@ namespace Convertidor.Services.Adm
             _preVSaldosRepository = preVSaldosRepository;
         }
 
+        
+        
+        
+        public async Task<ResultDto<bool>> UpdateField(UpdateFieldDto dto)
+        {
+
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+                CultureInfo cultures = new CultureInfo("en-US");
+
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var ordenPagoPuc = await _repository.GetCodigoPucOrdenPago(dto.Id);
+                if (ordenPagoPuc == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Orden de Pago no existe";
+                    return result;
+                }
+
+                if (dto.Field != "monto")
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Campo a actualizar Invalido";
+                    return result;
+                }
+                decimal valor;
+     
+
+                if (!Decimal.TryParse(dto.Value, out valor))
+                {
+                    
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Valor invalido";
+                    return result;
+
+
+                }
+             
+
+                decimal valorDto = Convert.ToDecimal(dto.Value, cultures);
+
+                ordenPagoPuc.MONTO = valorDto;
+
+                ordenPagoPuc.CODIGO_EMPRESA = conectado.Empresa;
+                ordenPagoPuc.USUARIO_UPD = conectado.Usuario;
+                ordenPagoPuc.FECHA_UPD = DateTime.Now;
+
+
+                await _repository.Update(ordenPagoPuc);
+                
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        
       
         public async Task<AdmPucOrdenPagoResponseDto> MapPucOrdenPagoDto(ADM_PUC_ORDEN_PAGO dtos)
         {

@@ -809,6 +809,24 @@ namespace Convertidor.Services.Bm
             doc.Close();
         }
 
+        public static string DisplayCamelCaseString(string camelCase)
+        {
+            List<char> chars = new List<char>();
+            chars.Add(camelCase[0]);
+            foreach(char c in camelCase.Skip(1))
+            {
+                if (char.IsUpper(c))
+                {
+                    chars.Add(' ');
+                    chars.Add(char.ToLower(c));
+                }
+                else
+                    chars.Add(c);
+            }
+
+            return new string(chars.ToArray());
+        }
+        
         protected async void GenerateMultipleFont(List<Bm1GetDto> placas, string dest)
         {
             // 2.5 * 72 = 180 5 * 72= 432
@@ -858,16 +876,19 @@ namespace Convertidor.Services.Bm
 
 
                     Paragraph logos = new Paragraph();
-                    logo1.ScaleAbsolute(30f, 25f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(20);
-                    logo2.ScaleAbsolute(40f, 25f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(20);
+                    logo1.ScaleAbsolute(35f, 35f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(20);
+                    logo2.ScaleAbsolute(50f, 35f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(18);
 
                     logos.SetPaddingBottom(0);
 
                     logos.Add(logo1).SetHorizontalAlignment(HorizontalAlignment.LEFT);
-
-                    logos.Add(fecha).SetTextAlignment(TextAlignment.CENTER)
+                    
+                    
+                    //.SetTextAlignment(TextAlignment.CENTER)
+                    logos.Add(fecha)
+                                    .SetVerticalAlignment(VerticalAlignment.TOP)
                                     .SetHorizontalAlignment(HorizontalAlignment.CENTER)
-                                    .SetFontSize(8);
+                                    .SetFontSize(7);
 
                     logos.Add(logo2).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetMarginLeft(10).SetMarginRight(30);
 
@@ -891,7 +912,7 @@ namespace Convertidor.Services.Bm
                     code128.SetCodeType(Barcode128.CODE128);
                     Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
                     code128Image.SetWidth(100);
-                    code128Image.SetHeight(20);
+                    code128Image.SetHeight(15);
                     // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
                     // this image does not fit the cell, but it does in addCell().
                     // In iText7 there is no constructor (new Cell(Image img)),
@@ -910,14 +931,14 @@ namespace Convertidor.Services.Bm
 
                     table.AddCell(cell1);
 
-                    Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(6);
-                    Paragraph texto3 = new Paragraph(item.UnidadTrabajo);
+                    Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(7);
+                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(6);;
 
                     Cell cell2 = new Cell(2, 1);
                     cell2.SetBorder(null);
-                    cell2.Add(texto2).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(3)
+                    cell2.Add(texto2).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(2)
                                                     .SetTextAlignment(TextAlignment.CENTER);
-                    cell2.Add(texto3).SetFontSize(5).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(2).SetMarginBottom(1)
+                    cell2.Add(texto3).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(3).SetMarginBottom(1)
                                                     .SetTextAlignment(TextAlignment.CENTER);
                     table.AddFooterCell(cell2);
 
