@@ -2,7 +2,7 @@ namespace Convertidor.Dtos.Bm.Mobil;
 
 public class ProductResponse
 {
-    public int Key { get; set; }
+    public string Key { get; set; }
     public int Id { get; set; }
     public string Articulo { get; set; }
     public string Descripcion { get; set; }

@@ -106,7 +106,7 @@ namespace Convertidor.Data.Repository.Catastro
                 foreach (var item in pageData)
                 {
                     ProductResponse itemData = new ProductResponse();
-                    itemData.Key = contador;
+                    itemData.Key = contador.ToString();
                     contador++;
                     itemData.Id= item.CODIGO_BIEN;
                     itemData.Articulo= item.ARTICULO;
@@ -158,7 +158,7 @@ namespace Convertidor.Data.Repository.Catastro
                     .FirstOrDefaultAsync();
               
                     ProductResponse itemData = new ProductResponse();
-                    itemData.Key = item.CODIGO_BIEN;
+                    itemData.Key = item.CODIGO_BIEN.ToString();
                     itemData.Id= item.CODIGO_BIEN;
                     itemData.Articulo= item.ARTICULO;
                     itemData.Descripcion= item.ESPECIFICACION;

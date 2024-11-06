@@ -49,6 +49,15 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> UpdateField(UpdateFieldDto dto)
+        {
+            var result = await _service.UpdateField(dto);
+            return Ok(result);
+        }
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Create(AdmPucOrdenPagoUpdateDto dto)
