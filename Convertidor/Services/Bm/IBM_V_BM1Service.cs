@@ -14,5 +14,6 @@ public interface IBM_V_BM1Service
     Task<ResultDto<List<Bm1GetDto>>> GetAllByIcp(int codigoIcp, DateTime? desde,DateTime? hasta);
     Task<List<ProductResponse>> GetProductMobil(ProductFilterDto filter);
     Task<ProductResponse> GetProductMobilById(ProductFilterDto filter);
+    Task<ResultDto<List<Bm1GetDto>>> GetByListPlacas(Bm1Filter filter);
 
 }

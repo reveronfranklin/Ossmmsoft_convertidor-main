@@ -10,6 +10,7 @@ using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Path = System.IO.Path;
@@ -391,6 +392,61 @@ namespace Convertidor.Services.Bm
             var result = await _repository.GetProductMobil(filter);
             return result;
         }
+        
+        public async Task<ResultDto<List<Bm1GetDto>>> GetByListPlacas(Bm1Filter filter)
+        {
+
+            var listIcpSeleccionado = filter.ListIcpSeleccionado;
+            ResultDto<List<Bm1GetDto>> response = new ResultDto<List<Bm1GetDto>>(null);
+            try
+            {
+
+
+
+                listIcpSeleccionado = listIcpSeleccionado.Where(x => x.CodigoIcp > 0).ToList();
+                List<Bm1GetDto> searchList = new List<Bm1GetDto>();
+                if (listIcpSeleccionado.Count > 0)
+                {
+                    foreach (var item in listIcpSeleccionado)
+                    {
+
+                        var itemFilter = await GetAllByIcp(item.CodigoIcp,filter.FechaDesde,filter.FechaHasta);
+
+                        if (itemFilter.Data.Count > 0)
+                        {
+
+                            searchList.AddRange(itemFilter.Data);
+
+                        }
+                    }
+                }
+                else
+                {
+                    var allData = await GetAll(filter.FechaDesde,filter.FechaHasta);
+                    searchList = allData.Data;
+
+                } 
+             
+                
+                
+                response.Data = searchList;
+                response.IsValid = true;
+                response.Message = "";
+                response.LinkData ="";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.IsValid = true;
+                response.Message = ex.InnerException.Message;
+                return response;
+            }
+
+        }
+
+
+        
         public async Task<ResultDto<List<Bm1GetDto>>> GetByListIcp(Bm1Filter filter)
         {
 
@@ -836,7 +892,7 @@ namespace Convertidor.Services.Bm
             Document doc = new Document(
                                             pdfDoc,
                                             new PageSize(pageSize)
-
+    
                                         );
 
             //var _env = "development";
@@ -849,7 +905,7 @@ namespace Convertidor.Services.Bm
 
             doc.SetFont(font);
 
-            doc.SetMargins(3, 0, 0, 0);
+            doc.SetMargins(0, 0, 0, 0);
             
             //String code = "675-FH-A12";
             try
@@ -869,10 +925,10 @@ namespace Convertidor.Services.Bm
                     //PdfFont  font = PdfFontFactory.CreateFont(pathFont, PdfEncodings.IDENTITY_H);
 
                     var pathLogo = @settings.BmFiles;
-                    Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacaoBN.png")));
+                    Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacao.png")));
                     var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
                     //Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
-                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierdaBN.png")));
+                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
 
 
                     Paragraph logos = new Paragraph();
@@ -932,7 +988,7 @@ namespace Convertidor.Services.Bm
                     table.AddCell(cell1);
 
                     Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(7);
-                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(6);;
+                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(6).SetBold();;
 
                     Cell cell2 = new Cell(2, 1);
                     cell2.SetBorder(null);
@@ -958,58 +1014,6 @@ namespace Convertidor.Services.Bm
             }
 
         }
-
-        //protected async void GenerateMultipleQuest(List<Bm1GetDto> placas, string dest)
-        //{
-
-        //    var settings = _configuration.GetSection("Settings").Get<Settings>();
-        //    var destino = @settings.ExcelFiles;
-        //    var fileName = $"{destino}placas).pdf";
-        //    var pathlogo = settings.BmFiles;
-        //    try
-        //    {
-
-
-        //        var intNumeroCopias = 2;
-        //        QuestPDF.Fluent.Document.Create(documento =>
-
-        //            documento.Page(page =>
-        //          {
-        //              for (int i = 1; i <= intNumeroCopias; i++)
-        //              {
-
-        //                  {
-
-        //                      foreach (var item in placas)
-        //                      {
-        //                          page.Size(170, 85);
-
-        //                          page.Header().Row(fila =>
-        //                             {
-        //                                 fila.ConstantItem(60).Height(10).Width(10).Image(filePath: pathlogo + "Escudo de chacao.png")
-        //                             .FitWidth().FitHeight();
-        //                                 fila.RelativeItem().Border(0).Column(col =>
-        //                             {
-        //                                 col.Item().AlignCenter().Text($"{item.FechaMovimiento.ToString()}").Bold().FontSize(7);
-
-        //                                 col.Item().AlignCenter().Text("Bienes Municipales").FontSize(9);
-
-        //                             });
-
-        //                                 fila.RelativeItem().Height(10).Width(10).Border(0).Image(filePath: pathlogo + "logo concejo.png");
-        //                             });
-
-        //                      }
-        //                  }
-        //              }
-        //          })).GeneratePdf(fileName);
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        var message = ex.Message;
-        //    }
-        //}
 
         public async Task CreateBardCodeMultiple(List<Bm1GetDto> bienes)
         {
