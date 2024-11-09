@@ -10,7 +10,6 @@
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/IBM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/IBM_V_BM1Service.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +35,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -282,7 +283,7 @@
       <workItem from="1730644405949" duration="4518000" />
       <workItem from="1730732153217" duration="81705000" />
       <workItem from="1731086199595" duration="14981000" />
-      <workItem from="1731158824860" duration="1652000" />
+      <workItem from="1731158824860" duration="8087000" />
     </task>
     <servers />
   </component>
@@ -2806,19 +2807,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="678" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>1034</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'CreateBardCodeMultiple'">
-            <startOffsets>
-              <option value="43231" />
-            </startOffsets>
-            <endOffsets>
-              <option value="43274" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="679" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -932,19 +932,21 @@ namespace Convertidor.Services.Bm
 
 
                     Paragraph logos = new Paragraph();
-                    logo1.ScaleAbsolute(35f, 35f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(20);
-                    logo2.ScaleAbsolute(50f, 35f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(18);
+                    logo1.ScaleAbsolute(35f, 34f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(18);
+                    logo2.ScaleAbsolute(58f, 34f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(10);
 
                     logos.SetPaddingBottom(0);
 
-                    logos.Add(logo1).SetHorizontalAlignment(HorizontalAlignment.LEFT);
+                    logos.Add(logo1);//.SetHorizontalAlignment(HorizontalAlignment.LEFT);
                     
                     
                     //.SetTextAlignment(TextAlignment.CENTER)
                     logos.Add(fecha)
                                     .SetVerticalAlignment(VerticalAlignment.TOP)
                                     .SetHorizontalAlignment(HorizontalAlignment.CENTER)
-                                    .SetFontSize(7);
+                                    .SetMarginLeft(15)
+                                    .SetFontSize(7)
+                                    .SetBold();
 
                     logos.Add(logo2).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetMarginLeft(10).SetMarginRight(30);
 
@@ -978,7 +980,8 @@ namespace Convertidor.Services.Bm
 
                     Cell cell1 = new Cell(2, 1);
                     cell1.SetBorder(null);
-                    cell1.SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(0)
+                    cell1.SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                                                            .SetPaddingBottom(0)
                                                            .SetTextAlignment(TextAlignment.CENTER);
                     Paragraph texto = new Paragraph();
                     texto.Add("Bienes Municipales");
@@ -988,11 +991,11 @@ namespace Convertidor.Services.Bm
                     table.AddCell(cell1);
 
                     Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(7);
-                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(6).SetBold();;
+                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(7).SetBold();;
 
                     Cell cell2 = new Cell(2, 1);
                     cell2.SetBorder(null);
-                    cell2.Add(texto2).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(2)
+                    cell2.Add(texto2).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(1)
                                                     .SetTextAlignment(TextAlignment.CENTER);
                     cell2.Add(texto3).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingBottom(3).SetMarginBottom(1)
                                                     .SetTextAlignment(TextAlignment.CENTER);
