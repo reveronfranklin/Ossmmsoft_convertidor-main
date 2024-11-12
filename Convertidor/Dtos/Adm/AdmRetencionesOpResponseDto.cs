@@ -15,5 +15,6 @@
         public decimal? MontoRetenido { get; set; }
         public int? CodigoPresupuesto { get; set; }
         public decimal? BaseImponible { get; set; }
+        public string NumeroComprobante  { get; set; }
     }
 }

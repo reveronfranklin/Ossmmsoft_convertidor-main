@@ -19,6 +19,8 @@
         public int? CODIGO_PRESUPUESTO { get; set; }
         public string? EXTRA4 { get; set; } = string.Empty;
         public decimal? BASE_IMPONIBLE { get; set; }
+        
+        public string? NUMERO_COMPROBANTE { get; set; } = string.Empty;
 
     }
 }
