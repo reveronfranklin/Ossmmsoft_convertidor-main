@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
 {
@@ -108,7 +109,8 @@ namespace Convertidor.Services.Adm
             if (compromiso != null)
             {
                 itemResult.Numero = compromiso.NUMERO_COMPROMISO;
-                itemResult.Fecha = compromiso.FECHA_COMPROMISO;
+               
+                itemResult.Fecha =  Fecha.GetFechaString(compromiso.FECHA_COMPROMISO.Date);
             }
 
             itemResult.Monto = 0;
