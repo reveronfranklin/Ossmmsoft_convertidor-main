@@ -59,7 +59,7 @@ namespace Convertidor.Services.Presupuesto.ReporteCompromisoPresupuestario
                     col.Item().BorderVertical(1).BorderTop(1).AlignLeft().PaddingLeft(4).Text("SEÑORES: ").Style(headerStyle);
                     col.Item().BorderVertical(1).BorderBottom(1).AlignLeft().PaddingLeft(4).Text(ModelEncabezado.NombreProveedor).Style(headerStyle).FontSize(11);
                     col.Item().BorderVertical(1).AlignLeft().PaddingLeft(4).Text("SOLICITANTE: ").Style(headerStyle);
-                    col.Item().BorderVertical(1).BorderBottom(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.IcpConcat}  {ModelEncabezado.Denominacion} {ModelEncabezado.Rif}").Style(headerStyle).FontSize(11);
+                    col.Item().BorderVertical(1).BorderBottom(1).AlignLeft().PaddingLeft(4).Text($"{ModelEncabezado.IcpConcat}  {ModelEncabezado.Denominacion} ").Style(headerStyle).FontSize(11);
                    
                  
                    
