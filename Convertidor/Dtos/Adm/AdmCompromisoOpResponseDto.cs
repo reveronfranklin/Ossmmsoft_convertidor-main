@@ -7,7 +7,7 @@
         public string OrigenDescripcion { get; set; }
         public int CodigoIdentificador { get; set; }
         public string Numero { get; set; }
-        public DateTime Fecha { get; set; }
+        public string Fecha { get; set; }
         
         public int CodigoOrdenPago { get; set; }
         public int CodigoProveedor { get; set; }

@@ -194,7 +194,13 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-
+                if (compromiso.FechaCompromiso.Date > dto.FechaOrdenPago.Date)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"La fecha de la Orden de Pago({dto.FechaOrdenPago.Date}) no puede ser menor a la fecha del compromiso({compromiso.FechaCompromiso.Date})";
+                    return result;
+                }
 
                 if (dto.FechaOrdenPago == null)
                 {
