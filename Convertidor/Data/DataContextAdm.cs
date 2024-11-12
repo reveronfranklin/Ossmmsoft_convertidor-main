@@ -46,8 +46,8 @@ namespace Convertidor.Data
         public DbSet<ADM_PRODUCTOS> ADM_PRODUCTOS { get; set; }
         public DbSet<ADM_SOL_COMPROMISO> ADM_SOL_COMPROMISO { get; set; }
         public DbSet<ADM_DETALLE_SOL_COMPROMISO> ADM_DETALLE_SOL_COMPROMISO { get; set; }
-
-
+        public DbSet<ADM_RETENCIONES> ADM_RETENCIONES { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,7 +56,17 @@ namespace Convertidor.Data
 
 
 
+            modelBuilder
+                .Entity<ADM_RETENCIONES>(builder =>
+                {
+                  
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_RETENCION,
 
+                    });
+                    builder.ToTable("ADM_RETENCIONES");
+                });
 
             modelBuilder
                 .Entity<ADM_DESCRIPTIVAS>(builder =>
