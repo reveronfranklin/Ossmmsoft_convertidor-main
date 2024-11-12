@@ -449,6 +449,7 @@ builder.Services.AddTransient<IAdmChequesRepository, AdmChequesRepository>();
 builder.Services.AddTransient<IAdmProductosRepository, AdmProductosRepository>();
 builder.Services.AddTransient<IAdmSolCompromisoRepository, AdmSolCompromisoRepository>();
 builder.Services.AddTransient<IAdmDetalleSolCompromisoRepository, AdmDetalleSolCompromisoRepository>();
+builder.Services.AddTransient<IAdmRetencionesRepository, AdmRetencionesRepository>();
 
 
 
@@ -490,6 +491,7 @@ builder.Services.AddTransient<IAdmSolCompromisoService, AdmSolCompromisoService>
 builder.Services.AddTransient<IAdmDetalleSolCompromisoService, AdmDetalleSolCompromisoService>();
 builder.Services.AddTransient<IReporteSolicitudCompromisoService, ReporteSolicitudCompromisoService>();
 builder.Services.AddTransient<IReporteOrdenServicioPresupuestarioService, ReporteOrdenServicioPresupuestarioService>();
+builder.Services.AddTransient<IAdmRetencionesService, AdmRetencionesService>();
 
 
 

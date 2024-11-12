@@ -11,12 +11,12 @@ namespace Convertidor.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    public class AdmRetencionesOpController : ControllerBase
+    public class AdmRetencionesController : ControllerBase
     {
        
-        private readonly IAdmRetencionesOpService _service;
+        private readonly IAdmRetencionesService _service;
 
-        public AdmRetencionesOpController(IAdmRetencionesOpService service)
+        public AdmRetencionesController(IAdmRetencionesService service)
         {
 
             _service = service;
@@ -32,17 +32,10 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
         
+      
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetByOrdenPago(AdmRetencionesFilterDto filter)
-        {
-            var result = await _service.GetByOrdenPago(filter);
-            return Ok(result);
-        }
-
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> Update(AdmRetencionesOpUpdateDto dto)
+        public async Task<IActionResult> Update(AdmRetencionesUpdateDto dto)
         {
             var result = await _service.Update(dto);
             return Ok(result);
@@ -50,7 +43,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(AdmRetencionesOpUpdateDto dto)
+        public async Task<IActionResult> Create(AdmRetencionesUpdateDto dto)
         {
             var result = await _service.Create(dto);
             return Ok(result);
@@ -58,7 +51,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Delete(AdmRetencionesOpDeleteDto dto)
+        public async Task<IActionResult> Delete(AdmRetencionesDeleteDto dto)
         {
             var result = await _service.Delete(dto);
             return Ok(result);

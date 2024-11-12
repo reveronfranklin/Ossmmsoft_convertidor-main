@@ -984,7 +984,7 @@ namespace Convertidor.Services.Bm
                                                             .SetPaddingBottom(0)
                                                            .SetTextAlignment(TextAlignment.CENTER);
                     Paragraph texto = new Paragraph();
-                    texto.Add("Bienes Municipales");
+                    texto.Add("B i e n e s  M u n i c i p a l e s");
                     cell1.Add(texto).SetFontSize(7).SetBold().SetPaddingTop(0);
                     cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER));
 
