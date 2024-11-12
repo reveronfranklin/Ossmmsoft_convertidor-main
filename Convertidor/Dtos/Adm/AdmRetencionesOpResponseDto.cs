@@ -11,6 +11,8 @@
         public string ConceptoPago  { get; set; }
         public decimal? PorRetencion { get; set; }
         public decimal? MontoRetencion { get; set; }
+        
+        public decimal? MontoRetenido { get; set; }
         public int? CodigoPresupuesto { get; set; }
         public decimal? BaseImponible { get; set; }
     }

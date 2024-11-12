@@ -59,6 +59,8 @@ namespace Convertidor.Services.Adm
             
             if (dtos.BASE_IMPONIBLE == null) dtos.BASE_IMPONIBLE = 0;
             itemResult.BaseImponible = dtos.BASE_IMPONIBLE;
+
+            itemResult.MontoRetenido = dtos.MONTO_RETENCION;
             
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             return itemResult;
