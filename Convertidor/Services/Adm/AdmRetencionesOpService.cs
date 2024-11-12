@@ -63,6 +63,7 @@ namespace Convertidor.Services.Adm
             itemResult.MontoRetenido = dtos.MONTO_RETENCION;
             
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            itemResult.NumeroComprobante = dtos.NUMERO_COMPROBANTE;
             return itemResult;
             
         }
@@ -214,6 +215,13 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
                
+                if (dto.NumeroComprobante != null && dto.NumeroComprobante.Length>20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "La longitud Maxima del Comprobante es de 20 digitos";
+                    return result;
+                }
             
 
 
@@ -245,7 +253,7 @@ namespace Convertidor.Services.Adm
             
                 codigoRetencionOp.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 codigoRetencionOp.BASE_IMPONIBLE = dto.BaseImponible;
-
+                codigoRetencionOp.NUMERO_COMPROBANTE = dto.NumeroComprobante;
                 codigoRetencionOp.CODIGO_EMPRESA = conectado.Empresa;
                 codigoRetencionOp.USUARIO_UPD = conectado.Usuario;
                 codigoRetencionOp.FECHA_UPD = DateTime.Now;
@@ -322,7 +330,13 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-              
+                if (dto.NumeroComprobante != null && dto.NumeroComprobante.Length>20)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "La longitud Maxima del Comprobante es de 20 digitos";
+                    return result;
+                }
 
 
                 var presupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
@@ -353,7 +367,7 @@ namespace Convertidor.Services.Adm
                 entity.MONTO_RETENCION = dto.MontoRetencion;
                 entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 entity.BASE_IMPONIBLE = dto.BaseImponible;
-
+                entity.NUMERO_COMPROBANTE = dto.NumeroComprobante;
 
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
