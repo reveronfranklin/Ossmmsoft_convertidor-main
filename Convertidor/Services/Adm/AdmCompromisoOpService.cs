@@ -304,8 +304,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "origen compromiso Id invalido";
                     return result;
                 }
-                var origenCompromiso = await _admDescriptivaRepository.GetByIdAndTitulo(3, dto.OrigenCompromisoId);
-                if (origenCompromiso==false)
+                var origenCompromiso = await _admDescriptivaRepository.GetByCodigo(dto.OrigenCompromisoId);
+                if (origenCompromiso==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
