@@ -268,19 +268,19 @@ namespace Convertidor.Services.Destino.ADM
                 itemNewDestido.CODIGO_BENEFICIARIO_OP = item.CODIGO_BENEFICIARIO_OP;
                 itemNewDestido.CODIGO_ORDEN_PAGO = item.CODIGO_ORDEN_PAGO;
                 itemNewDestido.CODIGO_PROVEEDOR = item.CODIGO_PROVEEDOR;
-                itemNewDestido.CODIGO_CONTACTO_PROVEEDOR = item.CODIGO_CONTACTO_PROVEEDOR;
+                itemNewDestido.CODIGO_CONTACTO_PROVEEDOR = (int)item.CODIGO_CONTACTO_PROVEEDOR;
                 itemNewDestido.MONTO = item.MONTO;
                 itemNewDestido.MONTO_PAGADO = item.MONTO_PAGADO;
                 itemNewDestido.MONTO_ANULADO = item.MONTO_ANULADO;
                 itemNewDestido.EXTRA1 = item.EXTRA1;
                 itemNewDestido.EXTRA2 = item.EXTRA2;
                 itemNewDestido.EXTRA3 = item.EXTRA3;
-                itemNewDestido.USUARIO_INS = item.USUARIO_INS;
-                itemNewDestido.FECHA_INS = item.FECHA_INS;
-                itemNewDestido.USUARIO_UPD = item.USUARIO_UPD;
-                itemNewDestido.FECHA_UPD = item.FECHA_UPD;
-                itemNewDestido.CODIGO_EMPRESA = item.CODIGO_EMPRESA;
-                itemNewDestido.CODIGO_PRESUPUESTO = item.CODIGO_PRESUPUESTO;
+                itemNewDestido.USUARIO_INS = (int)item.USUARIO_INS;
+                itemNewDestido.FECHA_INS = (DateTime)item.FECHA_INS;
+                itemNewDestido.USUARIO_UPD = (int)item.USUARIO_UPD;
+                itemNewDestido.FECHA_UPD = (DateTime)item.FECHA_UPD;
+                itemNewDestido.CODIGO_EMPRESA = (int)item.CODIGO_EMPRESA;
+                itemNewDestido.CODIGO_PRESUPUESTO = (int)item.CODIGO_PRESUPUESTO;
                 newDestido.Add(itemNewDestido);
             }
            
