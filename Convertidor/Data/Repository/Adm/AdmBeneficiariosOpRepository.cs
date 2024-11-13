@@ -58,6 +58,21 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
         
+        public async Task<ADM_BENEFICIARIOS_OP> GetByOrdenPagoProveedor(int codigoOrdenPago,int codigoProveedor)
+        {
+            try
+            {
+                var result = await _context.ADM_BENEFICIARIOS_OP.Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago && x.CODIGO_PROVEEDOR==codigoProveedor).DefaultIfEmpty().FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+
+        
         public async Task<ResultDto<ADM_BENEFICIARIOS_OP>> Add(ADM_BENEFICIARIOS_OP entity)
         {
 

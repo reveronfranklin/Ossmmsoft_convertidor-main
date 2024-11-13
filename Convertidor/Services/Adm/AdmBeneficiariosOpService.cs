@@ -34,14 +34,17 @@ namespace Convertidor.Services.Adm
             itemResult.CodigoBeneficiarioOp = dtos.CODIGO_BENEFICIARIO_OP;
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.CodigoProveedor=dtos.CODIGO_PROVEEDOR;
-            itemResult.CodigoContactoProveedor = dtos.CODIGO_CONTACTO_PROVEEDOR;
+            itemResult.NombreProveedor = "";
+            var proveedor = await _admProveedoresRepository.GetByCodigo(dtos.CODIGO_PROVEEDOR);
+            if (proveedor != null)
+            {
+                itemResult.NombreProveedor = proveedor.NOMBRE_PROVEEDOR;
+            }
+          
             itemResult.Monto = dtos.MONTO;
             itemResult.MontoAnulado = dtos.MONTO_ANULADO;
             itemResult.MontoPagado = dtos.MONTO_PAGADO;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
-            itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            itemResult.CodigoPresupuesto = (int)dtos.CODIGO_PRESUPUESTO;
            
             
             return itemResult;
@@ -62,13 +65,13 @@ namespace Convertidor.Services.Adm
             }
         }
 
-        public async Task<ResultDto<List<AdmBeneficiariosOpResponseDto>>> GetAll()
+        public async Task<ResultDto<List<AdmBeneficiariosOpResponseDto>>> GetByOrdenPago(AdmOrdenPagoBeneficiarioFlterDto filter)
         {
 
             ResultDto<List<AdmBeneficiariosOpResponseDto>> result = new ResultDto<List<AdmBeneficiariosOpResponseDto>>(null);
             try
             {
-                var beneficiariosOp = await _repository.GetAll();
+                var beneficiariosOp = await _repository.GetByOrdenPago(filter.CodigoOrdenPago);
                 var cant = beneficiariosOp.Count();
                 if (beneficiariosOp != null && beneficiariosOp.Count() > 0)
                 {
@@ -112,12 +115,12 @@ namespace Convertidor.Services.Adm
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo impuesto op no existe";
+                    result.Message = "Codigo Beneficiario no existe";
                     return result;
                 }
 
-                var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (dto.CodigoOrdenPago < 0 )
+                var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
+                if (ordenPago==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -126,8 +129,8 @@ namespace Convertidor.Services.Adm
                 }
 
 
-                var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-                if (dto.CodigoProveedor <0 )
+                var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
+                if (proveedor==null)
                 {
                     
                     result.Data = null;
@@ -163,31 +166,9 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
-
-                var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if(dto.CodigoPresupuesto < 0) 
+              
+                var presupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                if(presupuesto==null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -201,13 +182,10 @@ namespace Convertidor.Services.Adm
                 codigoBeneficiarioOp.CODIGO_BENEFICIARIO_OP = dto.CodigoBeneficiarioOp;
                 codigoBeneficiarioOp.CODIGO_ORDEN_PAGO=dto.CodigoOrdenPago;
                 codigoBeneficiarioOp.CODIGO_PROVEEDOR = dto.CodigoProveedor;
-                codigoBeneficiarioOp.CODIGO_CONTACTO_PROVEEDOR = dto.CodigoContactoProveedor;
                 codigoBeneficiarioOp.MONTO=dto.Monto;
                 codigoBeneficiarioOp.MONTO_PAGADO=dto.MontoPagado;
                 codigoBeneficiarioOp.MONTO_ANULADO = dto.MontoAnulado;
-                codigoBeneficiarioOp.EXTRA1 = dto.Extra1;
-                codigoBeneficiarioOp.EXTRA2 = dto.Extra2;
-                codigoBeneficiarioOp.EXTRA3 = dto.Extra3;
+           
                 codigoBeneficiarioOp.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
 
 
@@ -249,8 +227,8 @@ namespace Convertidor.Services.Adm
                 }
 
                 
-                var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (dto.CodigoOrdenPago < 0 )
+                var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
+                if (ordenPago==null )
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -258,8 +236,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                var codigoProveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-                if (dto.CodigoProveedor <0)
+                var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
+                if (proveedor==null)
                 {
 
                     result.Data = null;
@@ -267,6 +245,16 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo proveedor invalido";
                     return result;
                 }
+                var proOrdenPagoProveedor = await _repository.GetByOrdenPagoProveedor(dto.CodigoOrdenPago,dto.CodigoProveedor);
+                if (proOrdenPagoProveedor!=null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Ya existe este Proveedor para la orden de Pago";
+                    return result;
+                }
+                
 
                 if (dto.Monto < 0)
                 {
@@ -295,29 +283,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
-
+              
                 var codigoPresupuesto = await _preSUPUESTOSRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (dto.CodigoPresupuesto < 0)
                 {
@@ -332,13 +298,9 @@ namespace Convertidor.Services.Adm
                 entity.CODIGO_BENEFICIARIO_OP = await _repository.GetNextKey();
                 entity.CODIGO_ORDEN_PAGO = dto.CodigoOrdenPago;
                 entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
-                entity.CODIGO_CONTACTO_PROVEEDOR = dto.CodigoContactoProveedor;
                 entity.MONTO = dto.Monto;
                 entity.MONTO_PAGADO = dto.MontoPagado;
                 entity.MONTO_ANULADO = dto.MontoAnulado;
-                entity.EXTRA1 = dto.Extra1;
-                entity.EXTRA2 = dto.Extra2;
-                entity.EXTRA3 = dto.Extra3;
                 entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
 
 
