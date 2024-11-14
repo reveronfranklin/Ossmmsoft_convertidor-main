@@ -45,7 +45,8 @@ namespace Convertidor.Controllers
         {
             var res = await _indiceCategoriaProgramaService.UpdateIcpPadre(filter.CodigoPresupuesto);
             var result = await _indiceCategoriaProgramaService.GetAllByCodigoPresupuesto(filter);
-                return Ok(result);
+            return Ok(result);
+            
         }
         [HttpPost]
         [Route("[action]")]

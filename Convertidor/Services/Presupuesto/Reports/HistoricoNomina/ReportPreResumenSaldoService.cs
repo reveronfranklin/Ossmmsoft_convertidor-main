@@ -26,20 +26,20 @@ public class ReportPreResumenSaldoService:IReportPreResumenSaldoService
         var result = "No Data";
         var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
         var fileName= $"ResumenSaldo-{filter.CodigoPresupuesto}.pdf";
-        var filePath = $"{ @settings.ExcelFiles}/{fileName}.pdf";
+        var filePath = $"{ @settings.ExcelFiles}{@settings.SeparatorPatch}{fileName}.pdf";
         FilterPRE_PRESUPUESTOSDto filterPresupuesto = new FilterPRE_PRESUPUESTOSDto();
         filterPresupuesto.CodigoPresupuesto = filter.CodigoPresupuesto;
         var presupuesto = await _presupuestosService.GetByCodigo(filterPresupuesto);
         var resumen = await _services.GetAllByPresupuesto(filter.CodigoPresupuesto);
-        if (resumen == null)
+        if (resumen.IsValid == false)
         {
-            return "No Data";
+            return "NO_DATA.pdf";
         }
         else
         {
             var document = new ResumenSaldoDocument(presupuesto.Data.Denominacion,resumen.Data,pathLogo);
             fileName= $"ResumenSaldo-{filter.CodigoPresupuesto}.pdf";
-            filePath = $"{ @settings.ExcelFiles}/{fileName}";
+            filePath = $"{ @settings.ExcelFiles}{@settings.SeparatorPatch}{fileName}";
             document.GeneratePdf(filePath);
             result =fileName;
           

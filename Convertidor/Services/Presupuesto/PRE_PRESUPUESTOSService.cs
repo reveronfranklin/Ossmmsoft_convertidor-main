@@ -188,7 +188,7 @@ namespace Convertidor.Services.Presupuesto
                 
                 var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
 
-                if (filter.CodigoPresupuesto == 0) {
+               /* if (filter.CodigoPresupuesto == 0) {
 
                     var ultimo = presupuesto.OrderByDescending(x => x.CODIGO_PRESUPUESTO).ToList();
 
@@ -201,7 +201,7 @@ namespace Convertidor.Services.Presupuesto
                 }
                 else {
                     presupuesto = presupuesto.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto).ToList();
-                }
+                }*/
 
 
                 if (presupuesto.Count() >0)
