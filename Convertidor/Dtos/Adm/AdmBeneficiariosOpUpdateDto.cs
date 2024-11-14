@@ -10,4 +10,11 @@
         public decimal MontoAnulado { get; set; }
         public int CodigoPresupuesto { get; set; }
     }
+    public class AdmBeneficiariosOpUpdateMontoDto
+    {
+        public int CodigoBeneficiarioOp { get; set; }
+       
+        public decimal Monto { get; set; }
+       
+    }
 }

@@ -10,7 +10,8 @@ public interface IAdmProveedoresRepository
     Task<ResultDto<ADM_PROVEEDORES>> Update(ADM_PROVEEDORES entity);
     Task<string> Delete(int id);
     Task<int> GetNextKey();
-    
+    Task<ADM_PROVEEDORES> GetByTipo(int idTipoProveedor);
+
 
 
 }
