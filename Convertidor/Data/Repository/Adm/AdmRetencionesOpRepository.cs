@@ -57,6 +57,7 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+      
 
         public async Task<ResultDto<ADM_RETENCIONES_OP>>Add(ADM_RETENCIONES_OP entity) 
         {

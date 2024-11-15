@@ -12,20 +12,31 @@ namespace Convertidor.Services.Adm
         private readonly IAdmOrdenPagoRepository _admOrdenPagoRepository;
         private readonly IPRE_PRESUPUESTOSRepository _preSUPUESTOSRepository;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
-     
+        private readonly IAdmCompromisoOpRepository _admCompromisoOpRepository;
+        private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
+        private readonly IAdmRetencionesOpRepository _admRetencionesOpRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
+
 
         public AdmBeneficiariosOpService(IAdmBeneficiariosOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmOrdenPagoRepository admOrdenPagoRepository,
                                      IPRE_PRESUPUESTOSRepository preSUPUESTOSRepository,
-                                     IAdmProveedoresRepository admProveedoresRepository)
+                                     IAdmProveedoresRepository admProveedoresRepository,
+                                     IAdmCompromisoOpRepository admCompromisoOpRepository,
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository,
+                                     IAdmRetencionesOpRepository admRetencionesOpRepository,
+                                     IOssConfigRepository ossConfigRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admOrdenPagoRepository = admOrdenPagoRepository;
             _preSUPUESTOSRepository = preSUPUESTOSRepository;
             _admProveedoresRepository = admProveedoresRepository;
-            
+            _admCompromisoOpRepository = admCompromisoOpRepository;
+            _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
+            _admRetencionesOpRepository = admRetencionesOpRepository;
+            _ossConfigRepository = ossConfigRepository;
         }
 
         public async Task<AdmBeneficiariosOpResponseDto> MapBeneficiariosOpDto(ADM_BENEFICIARIOS_OP dtos)
@@ -65,33 +76,126 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task<ResultDto<List<AdmBeneficiariosOpResponseDto>>> CreateDefaultValue(AdmOrdenPagoBeneficiarioFlterDto filter)
+        {
+            int codigoPresupuesto = 0;
+            ResultDto<List<AdmBeneficiariosOpResponseDto>> result = new ResultDto<List<AdmBeneficiariosOpResponseDto>>(null);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var compromisos = await _admCompromisoOpRepository.GetCodigoOrdenPago(filter.CodigoOrdenPago);
+            if (compromisos.Count > 0)
+            {
+                var compromiso = compromisos.FirstOrDefault();
+                codigoPresupuesto = (int)compromiso.CODIGO_PRESUPUESTO;
+                var beneficiarioCompromiso =
+                    await _repository.GetByOrdenPagoProveedor(filter.CodigoOrdenPago, compromiso.CODIGO_PROVEEDOR);
+                if (beneficiarioCompromiso == null)
+                {
+                    ADM_BENEFICIARIOS_OP entity = new ADM_BENEFICIARIOS_OP();
+                    entity.CODIGO_BENEFICIARIO_OP = await _repository.GetNextKey();
+                    entity.CODIGO_ORDEN_PAGO = filter.CodigoOrdenPago;
+                    entity.CODIGO_PROVEEDOR = compromiso.CODIGO_PROVEEDOR;
+                    entity.MONTO = 0;
+                    var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(filter.CodigoOrdenPago);
+                    if (pucOrdenPago.Count > 0)
+                    {
+                        entity.MONTO = pucOrdenPago.Sum(x => x.MONTO);
+                    }
+                    entity.MONTO_PAGADO =    entity.MONTO ;
+                    entity.MONTO_ANULADO = 0;//entity.MONTO ;
+                    entity.CODIGO_PRESUPUESTO = compromiso.CODIGO_PRESUPUESTO;
+
+
+
+                    entity.CODIGO_EMPRESA = conectado.Empresa;
+                    entity.USUARIO_INS = conectado.Usuario;
+                    entity.FECHA_INS = DateTime.Now;
+
+                    var created = await _repository.Add(entity);
+                }
+            }
+
+            var retenciones = await _admRetencionesOpRepository.GetByOrdenPago(filter.CodigoOrdenPago);
+            if (retenciones.Count > 0)
+            {
+
+                var tipoProveedorFisco = _ossConfigRepository.GetByClave("TIPO_PROVEEDOR_FISCO");
+                if (tipoProveedorFisco != null)
+                {
+
+                    int codigoTipoProveedor = int.Parse(tipoProveedorFisco.Result.VALOR);
+                    var proveedor = await _admProveedoresRepository.GetByTipo(codigoTipoProveedor);
+                    if (proveedor != null)
+                    {
+                        var beneficiarioCompromiso =
+                            await _repository.GetByOrdenPagoProveedor(filter.CodigoOrdenPago, proveedor.CODIGO_PROVEEDOR);
+                        if (beneficiarioCompromiso == null)
+                        {
+                            ADM_BENEFICIARIOS_OP entity = new ADM_BENEFICIARIOS_OP();
+                            entity.CODIGO_BENEFICIARIO_OP = await _repository.GetNextKey();
+                            entity.CODIGO_ORDEN_PAGO = filter.CodigoOrdenPago;
+                            entity.CODIGO_PROVEEDOR = proveedor.CODIGO_PROVEEDOR;
+                            entity.MONTO = 0;
+                            var retencionesOp = await _admRetencionesOpRepository.GetByOrdenPago(filter.CodigoOrdenPago);
+                            if (retencionesOp.Count > 0)
+                            {
+                                entity.MONTO = retencionesOp.Sum(x => (decimal)x.MONTO_RETENCION);
+                            }
+                            entity.MONTO_PAGADO =    entity.MONTO ;
+                            entity.MONTO_ANULADO =    entity.MONTO ;
+                            entity.CODIGO_PRESUPUESTO = codigoPresupuesto;
+
+
+
+                            entity.CODIGO_EMPRESA = conectado.Empresa;
+                            entity.USUARIO_INS = conectado.Usuario;
+                            entity.FECHA_INS = DateTime.Now;
+
+                            var created = await _repository.Add(entity);
+                        }
+                    }
+                  
+                    
+                }
+
+
+            }
+            
+            
+            
+            
+            var beneficiariosOp = await _repository.GetByOrdenPago(filter.CodigoOrdenPago);
+            var cant = beneficiariosOp.Count();
+            if (beneficiariosOp != null && beneficiariosOp.Count() > 0)
+            {
+                var listDto = await MapListBeneficiariosOpDto(beneficiariosOp);
+
+                result.Data = listDto;
+                result.IsValid = true;
+                result.Message = "";
+
+
+                return result;
+            }
+            else
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "No data";
+
+                return result;
+            }
+            
+            return result;
+        }
+
         public async Task<ResultDto<List<AdmBeneficiariosOpResponseDto>>> GetByOrdenPago(AdmOrdenPagoBeneficiarioFlterDto filter)
         {
 
             ResultDto<List<AdmBeneficiariosOpResponseDto>> result = new ResultDto<List<AdmBeneficiariosOpResponseDto>>(null);
             try
             {
-                var beneficiariosOp = await _repository.GetByOrdenPago(filter.CodigoOrdenPago);
-                var cant = beneficiariosOp.Count();
-                if (beneficiariosOp != null && beneficiariosOp.Count() > 0)
-                {
-                    var listDto = await MapListBeneficiariosOpDto(beneficiariosOp);
-
-                    result.Data = listDto;
-                    result.IsValid = true;
-                    result.Message = "";
-
-
-                    return result;
-                }
-                else
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "No data";
-
-                    return result;
-                }
+               result= await CreateDefaultValue(filter);
+               return result;
             }
             catch (Exception ex)
             {
@@ -103,6 +207,56 @@ namespace Convertidor.Services.Adm
 
         }
 
+        public async Task<ResultDto<AdmBeneficiariosOpResponseDto>> UpdateMonto(AdmBeneficiariosOpUpdateMontoDto dto)
+        {
+            ResultDto<AdmBeneficiariosOpResponseDto> result = new ResultDto<AdmBeneficiariosOpResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var codigoBeneficiarioOp = await _repository.GetCodigoBeneficiarioOp(dto.CodigoBeneficiarioOp);
+                if (codigoBeneficiarioOp == null) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Beneficiario no existe";
+                    return result;
+                }
+
+             
+
+                if (dto.Monto < 0)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto invalido";
+                    return result;
+                }
+
+   
+                codigoBeneficiarioOp.MONTO=dto.Monto;
+             
+                codigoBeneficiarioOp.USUARIO_UPD = conectado.Usuario;
+                codigoBeneficiarioOp.FECHA_UPD = DateTime.Now;
+
+                await _repository.Update(codigoBeneficiarioOp);
+
+                var resultDto = await MapBeneficiariosOpDto(codigoBeneficiarioOp);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+        
         public async Task<ResultDto<AdmBeneficiariosOpResponseDto>> Update(AdmBeneficiariosOpUpdateDto dto)
         {
             ResultDto<AdmBeneficiariosOpResponseDto> result = new ResultDto<AdmBeneficiariosOpResponseDto>(null);

@@ -30,6 +30,21 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
+        public async Task<ADM_PROVEEDORES> GetByTipo(int idTipoProveedor)
+        {
+            try
+            {
+                var result = await _context.ADM_PROVEEDORES.DefaultIfEmpty().Where(e => e.TIPO_PROVEEDOR_ID == idTipoProveedor).FirstOrDefaultAsync();
+
+                return (ADM_PROVEEDORES)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
     
         public async Task<List<ADM_PROVEEDORES>> GetByAll()
         {
