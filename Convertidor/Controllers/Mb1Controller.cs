@@ -78,6 +78,7 @@ namespace Convertidor.Controllers
             ProductFilterDto filter = new ProductFilterDto();
             filter.CodigoBien = dto.Id;
             var result = await _service.GetProductMobilById(filter);
+            result.Descripcion = dto.Descripcion;
             return Ok(result);
         }
         

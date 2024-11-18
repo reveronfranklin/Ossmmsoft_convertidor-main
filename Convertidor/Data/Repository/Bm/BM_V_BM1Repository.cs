@@ -173,8 +173,13 @@ namespace Convertidor.Data.Repository.Catastro
                     {
                         foreach (var itemFotos in fotos)
                         {
-                            listFotos.Add(itemFotos.FOTO);
-                            MinFile(item.NRO_PLACA, itemFotos.FOTO);
+                            var foto = listFotos.Where(x => x == itemFotos.FOTO).FirstOrDefault();
+                            if (foto == null)
+                            {
+                                listFotos.Add(itemFotos.FOTO);
+                                MinFile(item.NRO_PLACA, itemFotos.FOTO);
+                            }
+                          
                             
                         }
                      

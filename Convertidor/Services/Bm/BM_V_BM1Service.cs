@@ -24,17 +24,20 @@ namespace Convertidor.Services.Bm
         private readonly IBM_V_BM1Repository _repository;
         private readonly IConfiguration _configuration;
         private readonly IBmMovBienesRepository _bmMovBienesRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
 
 
         public BM_V_BM1Service(IBM_V_BM1Repository repository,
                                 IConfiguration configuration,
-                                IBmMovBienesRepository bmMovBienesRepository
+                                IBmMovBienesRepository bmMovBienesRepository,
+                                IOssConfigRepository ossConfigRepository
                                 )
 
         {
             _repository = repository;
             _configuration = configuration;
             _bmMovBienesRepository = bmMovBienesRepository;
+            _ossConfigRepository = ossConfigRepository;
         }
 
 
@@ -906,6 +909,20 @@ namespace Convertidor.Services.Bm
             doc.SetFont(font);
 
             doc.SetMargins(0, 0, 0, 0);
+            var fileNameEscudo = "";
+            var fileNameLogo = "";
+            var configLogoEscudo = await _ossConfigRepository.GetByClave("ESCUDO_CHACAO");
+            if (configLogoEscudo != null)
+            {
+                fileNameEscudo = configLogoEscudo.VALOR;
+            }
+            
+            var configLogo = await _ossConfigRepository.GetByClave("LOGO_CHACAO");
+            if (configLogo != null)
+            {
+                fileNameLogo = configLogo.VALOR;
+            }
+
             
             //String code = "675-FH-A12";
             try
@@ -925,10 +942,10 @@ namespace Convertidor.Services.Bm
                     //PdfFont  font = PdfFontFactory.CreateFont(pathFont, PdfEncodings.IDENTITY_H);
 
                     var pathLogo = @settings.BmFiles;
-                    Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacao.png")));
+                    Image logo1 = new Image(ImageDataFactory.Create(pathLogo + (fileNameEscudo)));
                     var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
                     //Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
-                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + (fileNameLogo)));
 
 
                     Paragraph logos = new Paragraph();
