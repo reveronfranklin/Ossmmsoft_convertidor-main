@@ -482,7 +482,14 @@ namespace Convertidor.Services.Bm
                     var allData = await GetAll(filter.FechaDesde,filter.FechaHasta);
                     searchList = allData.Data;
 
-                } 
+                }
+
+                if (!string.IsNullOrEmpty(filter.SearchValue) && filter.SearchValue.Length > 0)
+                {
+                    searchList = searchList.Where(x => x.SearchText.Contains(filter.SearchValue)).ToList();
+
+                }
+                
                 var fileName = $"";
                // var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
