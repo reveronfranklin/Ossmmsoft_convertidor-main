@@ -87,7 +87,7 @@ namespace Convertidor.Data.Repository.Catastro
                 {
                     pageData = await _context.BM_V_BM1.DefaultIfEmpty()
                         .Where(x =>x.CODIGO_ICP==filter.CodigoDepartamentoResponsable )
-                        .OrderBy(x => x.NRO_PLACA)
+                        .OrderBy(x => x.CODIGO_BIEN)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
@@ -95,19 +95,19 @@ namespace Convertidor.Data.Repository.Catastro
                 else
                 {
                     pageData = await _context.BM_V_BM1.DefaultIfEmpty()
-                        .OrderBy(x => x.NRO_PLACA)
+                        .OrderBy(x => x.CODIGO_BIEN)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
                 }
 
 
-                var contador = 1;
+  
                 foreach (var item in pageData)
                 {
                     ProductResponse itemData = new ProductResponse();
-                    itemData.Key = contador.ToString();
-                    contador++;
+                    itemData.Key =item.CODIGO_BIEN.ToString();
+                  
                     itemData.Id= item.CODIGO_BIEN;
                     itemData.Articulo= item.ARTICULO;
                     itemData.Descripcion= item.ESPECIFICACION;

@@ -962,7 +962,7 @@ namespace Convertidor.Services.Bm
                                     .SetVerticalAlignment(VerticalAlignment.TOP)
                                     .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                                     .SetMarginLeft(15)
-                                    .SetFontSize(7)
+                                    .SetFontSize(6)
                                     .SetBold();
 
                     logos.Add(logo2).SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetMarginLeft(10).SetMarginRight(30);
@@ -986,7 +986,7 @@ namespace Convertidor.Services.Bm
                     code128.SetCode(item.NumeroPlaca);
                     code128.SetCodeType(Barcode128.CODE128);
                     Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
-                    code128Image.SetWidth(100);
+                    code128Image.SetWidth(130);
                     code128Image.SetHeight(15);
                     // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
                     // this image does not fit the cell, but it does in addCell().
@@ -1002,13 +1002,13 @@ namespace Convertidor.Services.Bm
                                                            .SetTextAlignment(TextAlignment.CENTER);
                     Paragraph texto = new Paragraph();
                     texto.Add("B i e n e s  M u n i c i p a l e s");
-                    cell1.Add(texto).SetFontSize(7).SetBold().SetPaddingTop(0);
+                    cell1.Add(texto).SetFontSize(8).SetBold().SetPaddingTop(0);
                     cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER));
 
                     table.AddCell(cell1);
 
-                    Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(7);
-                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(7).SetBold();;
+                    Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(7).SetBold();
+                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(6).SetBold();;
 
                     Cell cell2 = new Cell(2, 1);
                     cell2.SetBorder(null);
