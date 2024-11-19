@@ -8,8 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Bm/Bm1Filter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Bm/Bm1Filter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,6 +35,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -293,7 +293,7 @@
       <workItem from="1731158824860" duration="12777000" />
       <workItem from="1731360104210" duration="35605000" />
       <workItem from="1731594105093" duration="29809000" />
-      <workItem from="1731847336609" duration="28723000" />
+      <workItem from="1731847336609" duration="30016000" />
     </task>
     <servers />
   </component>
@@ -3184,26 +3184,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>912</line>
+          <line>919</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GenerateMultipleFont'">
             <startOffsets>
-              <option value="37950" />
+              <option value="38208" />
             </startOffsets>
             <endOffsets>
-              <option value="37972" />
+              <option value="38230" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="733" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>1032</line>
+          <line>1039</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GenerateMultipleFont'">
             <startOffsets>
-              <option value="43378" />
+              <option value="43636" />
             </startOffsets>
             <endOffsets>
-              <option value="43456" />
+              <option value="43714" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="734" />
@@ -3275,29 +3275,42 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>495</line>
+          <line>502</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GetByListIcp'">
             <startOffsets>
-              <option value="21609" />
+              <option value="21867" />
             </startOffsets>
             <endOffsets>
-              <option value="21650" />
+              <option value="21908" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="745" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>929</line>
+          <line>936</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GenerateMultipleFont'">
             <startOffsets>
-              <option value="38502" />
+              <option value="38760" />
             </startOffsets>
             <endOffsets>
-              <option value="38526" />
+              <option value="38784" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="747" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
+          <line>486</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GetByListIcp'">
+            <startOffsets>
+              <option value="21122" />
+            </startOffsets>
+            <endOffsets>
+              <option value="21201" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="748" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
