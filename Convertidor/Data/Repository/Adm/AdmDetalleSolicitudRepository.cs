@@ -423,6 +423,14 @@ namespace Convertidor.Data.Repository.Adm
                             resultItem.LineaImpuesto = true;
                         }
                     }
+
+                    resultItem.TieneDiferencia = false;
+                    resultItem.TotalPuc = await TotalPuc(resultItem.CodigoDetalleSolicitud);
+                    if (resultItem.TotalPuc != resultItem.Total)
+                    {
+                        resultItem.TieneDiferencia = true;
+                    }
+                    
                     
                     alldata.Add(resultItem);
                 }
@@ -453,6 +461,44 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+        public async Task<decimal> TotalPuc(int codigoDetalleSolicitud)
+        {
+
+            decimal result = 0;
+            try
+            {
+              
+                var pucSolicitud = await  _context.ADM_PUC_SOLICITUD.Where(x=>x.CODIGO_DETALLE_SOLICITUD==codigoDetalleSolicitud).ToListAsync();
+                if (pucSolicitud != null && pucSolicitud.Count > 0)
+                {
+                    decimal total = 0;
+                    foreach (var item in pucSolicitud)
+                    {
+                        total = total + item.MONTO;
+                    }
+
+                    result = total;
+
+
+                }
+                else
+                {
+                    result = 0;
+                }
+              
+
+
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                return result;
+            }
+
+        }
+
+        
          public List<AdmDetalleSolicitudResponseDto> GetByCodigoSolicitudBk(int codigoSolicitud) 
         {
             try
