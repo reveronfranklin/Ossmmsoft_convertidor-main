@@ -487,6 +487,16 @@ namespace Convertidor.Services.Adm
                     codigoDetallesolicitud.TOTAL + (decimal)codigoDetallesolicitud.MONTO_IMPUESTO;
                 codigoDetallesolicitud.TOTAL_MAS_IMPUESTO =
                     Math.Round((decimal)codigoDetallesolicitud.TOTAL_MAS_IMPUESTO, 2);
+
+             
+              
+            
+                    
+                 
+                   
+                
+
+               
                 
                 
                 var totalPuc = await TotalPuc(dto.CodigoDetalleSolicitud);
@@ -665,6 +675,10 @@ namespace Convertidor.Services.Adm
             entity.CANTIDAD_ANULADA = 0;
             entity.UDM_ID = dto.UdmId;
             entity.DESCRIPCION = dto.Descripcion;
+            string variableImpuesto = "DESCRIPTIVA_IMPUESTO";
+          
+            
+            
             entity.PRECIO_UNITARIO = dto.PrecioUnitario;
             entity.POR_DESCUENTO=0;
             entity.MONTO_DESCUENTO = 0;
@@ -677,12 +691,25 @@ namespace Convertidor.Services.Adm
             
             
             entity.POR_IMPUESTO = ConvertStringToDecimal(descriptivaImpuesto.EXTRA1);
+            
+            
             entity.MONTO_IMPUESTO =  ((entity.PRECIO_UNITARIO * entity.CANTIDAD) * entity.POR_IMPUESTO )/100 ;
             entity.TOTAL = entity.PRECIO_UNITARIO * entity.CANTIDAD;
             entity.TOTAL_MAS_IMPUESTO =
                 entity.TOTAL + (decimal)entity.MONTO_IMPUESTO;
             entity.TOTAL_MAS_IMPUESTO =
                 Math.Round((decimal)entity.TOTAL_MAS_IMPUESTO, 2);
+            
+            
+            var config = await _ossConfigRepository.GetByClave(variableImpuesto);
+            if (config != null)
+            {
+                if (dto.TipoImpuestoId==int.Parse(config.VALOR) )
+                {
+                    var totales = GetTotales((int)solicitud.CODIGO_PRESUPUESTO, dto.CodigoSolicitud);
+                    dto.PrecioUnitario = (totales.Result.BaseImponible*ConvertStringToDecimal(descriptivaImpuesto.EXTRA1))/100 ;
+                }
+            }
             
             var conectado = await _sisUsuarioRepository.GetConectado();
             entity.CODIGO_EMPRESA = conectado.Empresa;

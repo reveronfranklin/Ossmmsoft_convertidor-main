@@ -29,5 +29,7 @@
         public decimal? TotalMasImpuesto { get; set; }
 
         public bool LineaImpuesto { get; set; }
+        public decimal? TotalPuc { get; set; }
+        public bool TieneDiferencia { get; set; }
     }
 }
