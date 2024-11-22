@@ -1,4 +1,6 @@
-﻿using Convertidor.Data.Interfaces.Bm;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
+using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
 using Convertidor.Dtos.Bm.Mobil;
 using Ganss.Excel;
@@ -786,7 +788,11 @@ namespace Convertidor.Services.Bm
 
                 var pathLogo = @settings.BmFiles;
                 Image logo1 = new Image(ImageDataFactory.Create(pathLogo + ("EscudoChacao.png")));
-                var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
+
+                string dia = item.FechaMovimiento.Day.ToString("d2");
+               
+                string mes = item.FechaMovimiento.Month.ToString("d2");
+                var fecha = $"{dia}/{mes}/{item.FechaMovimiento.Year.ToString()}";
                 //Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
                 Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.png")));
                 
@@ -875,23 +881,40 @@ namespace Convertidor.Services.Bm
 
             doc.Close();
         }
-
-        public static string DisplayCamelCaseString(string camelCase)
+      
+     
+        public static string CapitalizarAPA(string s)
         {
-            List<char> chars = new List<char>();
-            chars.Add(camelCase[0]);
-            foreach(char c in camelCase.Skip(1))
+            // Aplicar ToTitleCase como base
+            TextInfo textInfo = new CultureInfo("en-US").TextInfo;
+            string resultado = textInfo.ToTitleCase(s.ToLower());
+
+            // Lista de artículos en español
+            string[] articulos ={ "El","La","Los", "Las", "Un", "Una", "Unos", "Unas","Y","De","Del","e","Al"};
+       
+
+            string frase = resultado;
+
+            // Convertir la frase en un arreglo de palabras
+            string[] palabras = frase.Split(' ');
+            var palabraResultado = "";
+            // Recorrer cada palabra del arreglo
+            foreach (string palabra in palabras)
             {
-                if (char.IsUpper(c))
+                bool contieneArticulo = articulos.Contains(palabra);
+                if (contieneArticulo)
                 {
-                    chars.Add(' ');
-                    chars.Add(char.ToLower(c));
+                    palabraResultado = palabraResultado + " " + palabra.ToLower();
                 }
                 else
-                    chars.Add(c);
+                {
+                    palabraResultado = palabraResultado + " " + palabra;
+                }
+                
+               
             }
 
-            return new string(chars.ToArray());
+            return palabraResultado;
         }
         
    protected async void GenerateMultipleFont(List<Bm1GetDto> placas, string dest)
@@ -930,6 +953,8 @@ namespace Convertidor.Services.Bm
                 fileNameLogo = configLogo.VALOR;
             }
 
+            
+            
             try
             {
                 var intNumeroCopias = 2;
@@ -946,11 +971,15 @@ namespace Convertidor.Services.Bm
                     
                     var pathLogo = @settings.BmFiles;
                     Image logo1 = new Image(ImageDataFactory.Create(pathLogo + (fileNameEscudo)));
-                    var fecha = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
-                    //Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
+               
+                    string dia = item.FechaMovimiento.Day.ToString("d2");
+                    string mes = item.FechaMovimiento.Month.ToString("d2");
+                    var fecha = $"{dia}/{mes}/{item.FechaMovimiento.Year.ToString()}";
+
+                    
                     Image logo2 = new Image(ImageDataFactory.Create(pathLogo + (fileNameLogo)));
                     logo1.ScaleAbsolute(35f, 34f);
-                    logo2.ScaleAbsolute(58f, 30f);
+                    logo2.ScaleAbsolute(58f, 25f);
 
 
                     
@@ -971,7 +1000,7 @@ namespace Convertidor.Services.Bm
                     textoFecha.Add(fecha);
                     
                     Cell textCell = new Cell().Add(textoFecha);
-                    textCell.SetPaddingTop(22);
+                    textCell.SetPaddingTop(16);
                     //textCell.SetVerticalAlignment(VerticalAlignment.BOTTOM);
                     
                     textCell.SetBorder(Border.NO_BORDER);
@@ -1006,8 +1035,8 @@ namespace Convertidor.Services.Bm
                     code128.SetCode(item.NumeroPlaca);
                     code128.SetCodeType(Barcode128.CODE128);
                     Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
-                    code128Image.SetWidth(100);
-                    code128Image.SetHeight(15);
+                    code128Image.SetWidth(122);
+                    code128Image.SetHeight(18);
                     // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
                     // this image does not fit the cell, but it does in addCell().
                     // In iText7 there is no constructor (new Cell(Image img)),
@@ -1026,7 +1055,12 @@ namespace Convertidor.Services.Bm
                     cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER));
                     Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(7).SetBold();
                     cell1.Add(texto2);
-                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(6).SetBold();;
+                    //var capitalizar = Capitalizar(item.UnidadTrabajo);
+                 
+                    var unidadTrabajo =CapitalizarAPA(item.UnidadTrabajo);
+                
+                    
+                    Paragraph texto3 = new Paragraph(unidadTrabajo).SetFontSize(6).SetBold();;
                     cell1.Add(texto3);
                     
                     
@@ -1051,170 +1085,8 @@ namespace Convertidor.Services.Bm
 
         }
        
-        protected async void GenerateMultipleFontPOSITION(List<Bm1GetDto> placas, string dest)
-        {
-            // 2.5 * 72 = 180 5 * 72= 432
-            Rectangle pageSize = new Rectangle(170, 85);
-            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
-
-            Document doc = new Document(
-                                            pdfDoc,
-                                            new PageSize(pageSize)
-    
-                                        );
-
-            //var _env = "development";
-            var settings = _configuration.GetSection("Settings").Get<Settings>();
-            
-            var pathFont = $"{settings.BmFiles + ("arial.ttf")}";
-            FontProgram fontProgram =
-                    FontProgramFactory.CreateFont(pathFont);
-            PdfFont font = PdfFontFactory.CreateFont(fontProgram, PdfEncodings.WINANSI,PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
-
-            doc.SetFont(font);
-
-            doc.SetMargins(0, 0, 0, 0);
-            var fileNameEscudo = "";
-            var fileNameLogo = "";
-            var configLogoEscudo = await _ossConfigRepository.GetByClave("ESCUDO_CHACAO");
-            if (configLogoEscudo != null)
-            {
-                fileNameEscudo = configLogoEscudo.VALOR;
-            }
-            
-            var configLogo = await _ossConfigRepository.GetByClave("LOGO_CHACAO");
-            if (configLogo != null)
-            {
-                fileNameLogo = configLogo.VALOR;
-            }
-
-            
-            //String code = "675-FH-A12";
-            try
-            {
-                /*var intNumeroCopias = 2;
-                for (int i = 1; i <= intNumeroCopias; i++)
-                {
-                    pdfDoc.AddNewPage();
-                }*/
-
-                int currentPageNumber = 0;
-                foreach (var item in placas)
-                {
-                    currentPageNumber++;
-                    Table table = new Table(UnitValue.CreatePercentArray(1)).UseAllAvailableWidth();
-                    
-                    //PdfFont  font = PdfFontFactory.CreateFont(pathFont, PdfEncodings.IDENTITY_H);
-
-                    var pathLogo = @settings.BmFiles;
-                    Image logo1 = new Image(ImageDataFactory.Create(pathLogo + (fileNameEscudo)));
-                    var fechaPlaca = $"{item.FechaMovimiento.Day.ToString()}/{item.FechaMovimiento.Month.ToString()}/{item.FechaMovimiento.Year.ToString()}";
-                   
-                    
-                    //Image logo2 = new Image(ImageDataFactory.Create(pathLogo + ("LogoIzquierda.jpeg")));
-                    Image logo2 = new Image(ImageDataFactory.Create(pathLogo + (fileNameLogo)));
-                   
-
-                    Paragraph logos = new Paragraph();
-                    logo1.ScaleAbsolute(35f, 34f).SetTextAlignment(TextAlignment.LEFT).SetMarginRight(18);
-                    logo2.ScaleAbsolute(58f, 34f).SetTextAlignment(TextAlignment.RIGHT).SetMarginLeft(10);
-                 
-                    logos.SetPaddingBottom(0);
-                    logo1.SetFixedPosition(currentPageNumber, 5, 48);
-                    logos.Add(logo1);//.SetHorizontalAlignment(HorizontalAlignment.LEFT);
-                    
-                    // Agregar un salto de línea
-                    
-                    //.SetTextAlignment(TextAlignment.CENTER)
-                    
-                    Paragraph paragraph = new Paragraph(fechaPlaca);
-                    paragraph.SetFontSize(6);
-                    paragraph.SetFixedPosition(70, 52,60);
-                    logos.Add(paragraph);
-                    logos.Add("");
-                        
-                                    /*.SetVerticalAlignment(VerticalAlignment.TOP)
-                                    .SetHorizontalAlignment(HorizontalAlignment.CENTER)
-                                    .SetMarginLeft(15)
-                                  
-                                    .SetFontSize(6)
-                                    .SetBold();*/
-
-                    
-                    logo2.SetFixedPosition(currentPageNumber, 96, 48);
-                    logos.Add(logo2);//.SetHorizontalAlignment(HorizontalAlignment.RIGHT).SetMarginLeft(10).SetMarginRight(30);
-                    
-                    Cell cell = new Cell(1, 3);
-                    cell.SetPaddingBottom(0);
-                    cell.SetBorder(null);
-                    cell.Add(logos);
-
-
-                    table.AddHeaderCell(cell);
-
-              
-
-                    Barcode128 code128 = new Barcode128(pdfDoc);
-
-                    // If value is positive, the text distance under the bars. If zero or negative,
-                    // the text distance above the bars.
-                    code128.SetBaseline(10);
-                    code128.SetSize(12);
-                    code128.SetCode(item.NumeroPlaca.Trim());
-                    code128.SetCodeType(Barcode128.CODE128);
-                  
-                    Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
-                    code128Image.SetWidth(105);
-                    code128Image.SetHeight(16);
-                    code128Image.SetFontSize(6);
-                    
-                    // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
-                    // this image does not fit the cell, but it does in addCell().
-                    // In iText7 there is no constructor (new Cell(Image img)),
-                    // so the image adding to the cell can be done only using method add().
-
-
-
-                    Cell cell1 = new Cell(2, 1);
-                    cell1.SetBorder(null);
-                    cell1.SetHorizontalAlignment(HorizontalAlignment.CENTER)
-                                                            .SetPaddingBottom(0)
-                                                           .SetTextAlignment(TextAlignment.CENTER);
-                    Paragraph texto = new Paragraph();
-                    texto.Add("B i e n e s  M u n i c i p a l e s");
-                    cell1.Add(texto).SetFontSize(8).SetBold().SetPaddingTop(0).SetPaddingBottom(2);
-                    cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingTop(2));
-                    cell1.SetFixedPosition(4, 20, 80);
-                    table.AddCell(cell1);
-
-                    Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(7).SetBold();
-                    Paragraph texto3 = new Paragraph(DisplayCamelCaseString(item.UnidadTrabajo)).SetFontSize(6).SetBold();;
-                    
-                    Cell cell2 = new Cell(2, 1);
-                    cell2.SetBorder(null);
-                    cell2.Add(texto2).SetHorizontalAlignment(HorizontalAlignment.CENTER)
-                                                    .SetTextAlignment(TextAlignment.CENTER);
-                    cell2.Add(texto3).SetHorizontalAlignment(HorizontalAlignment.CENTER)
-                                                    .SetTextAlignment(TextAlignment.CENTER);
-                    cell2.SetFixedPosition(4, 1, 40);
-                    table.AddFooterCell(cell2);
-
-                    doc.Add(table);
-
-
-                }
-
-                doc.Close();
-
-            }
-            
-
-            catch(System.IO.IOException cause) 
-            {
-                throw new iText.IO.Exceptions.IOException("Character code exception.", cause);
-            }
-
-        }
+      
+  
         public async Task CreateBardCodeMultiple(List<Bm1GetDto> bienes)
         {
 
