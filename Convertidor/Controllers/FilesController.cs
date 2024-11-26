@@ -27,23 +27,34 @@ namespace Convertidor.Controllers
         [Route("[action]/{nroPlaca}/{foto}")]
         public async Task<IActionResult> GetImage(string nroPlaca,string foto)
         {
+
+            try
+            {
+                var settings = _configuration.GetSection("Settings").Get<Settings>();
+                var destino = @settings.BmFiles;
+                var filePatch = $"{destino}{nroPlaca}/{foto}";
+
+                if (!System.IO.File.Exists(filePatch))
+                {
+                    foto = "no-product-image.png";
+                    filePatch = $"{destino}/{foto}";
+                }
+                var provider = new FileExtensionContentTypeProvider();
+                if (provider.TryGetContentType(filePatch,out var contenttype))
+                {
+                    contenttype = "image/png";
+                }
+                var bytes =await System.IO.File.ReadAllBytesAsync(filePatch);
+                return File(bytes, contenttype, Path.GetFileName(filePatch));
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             
-            var settings = _configuration.GetSection("Settings").Get<Settings>();
-            var destino = @settings.BmFiles;
-            var filePatch = $"{destino}{nroPlaca}/{foto}";
-
-            if (!System.IO.File.Exists(filePatch))
-            {
-                foto = "1.png";
-            }
-            var provider = new FileExtensionContentTypeProvider();
-            if (provider.TryGetContentType(filePatch,out var contenttype))
-            {
-                contenttype = "image/png";
-            }
-            var bytes =await System.IO.File.ReadAllBytesAsync(filePatch);
-            return File(bytes, contenttype, Path.GetFileName(filePatch));
-
+         
 
         }
         

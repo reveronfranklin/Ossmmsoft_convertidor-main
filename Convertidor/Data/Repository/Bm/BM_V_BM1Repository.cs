@@ -76,32 +76,43 @@ namespace Convertidor.Data.Repository.Catastro
             List<ProductResponse> result = new List<ProductResponse>();
 
             if (filter.PageNumber == 0) filter.PageNumber = 1;
-            if (filter.PageSize == 0) filter.PageSize = 100;
-            if (filter.PageSize >100) filter.PageSize = 100;
+            if (filter.PageSize == 0) filter.PageSize = 20;
+            //if (filter.PageSize >100) filter.PageSize = 20;
             
             try
             {
                 
                 List<BM_V_BM1> pageData = new List<BM_V_BM1>();
-                if (filter.CodigoDepartamentoResponsable > 0)
+                if (filter.SearhText.Length > 0)
                 {
                     pageData = await _context.BM_V_BM1.DefaultIfEmpty()
-                        .Where(x =>x.CODIGO_ICP==filter.CodigoDepartamentoResponsable )
+                        .Where(x=>x.NRO_PLACA.Trim().ToLower().Contains(filter.SearhText.Trim().ToLower()))
                         .OrderBy(x => x.CODIGO_BIEN)
-                        .Skip((filter.PageNumber - 1) * filter.PageSize)
-                        .Take(filter.PageSize)
                         .ToListAsync();
                 }
                 else
                 {
-                    pageData = await _context.BM_V_BM1.DefaultIfEmpty()
-                        .OrderBy(x => x.CODIGO_BIEN)
-                        .Skip((filter.PageNumber - 1) * filter.PageSize)
-                        .Take(filter.PageSize)
-                        .ToListAsync();
+                    if (filter.CodigoDepartamentoResponsable > 0)
+                    {
+                        pageData = await _context.BM_V_BM1.DefaultIfEmpty()
+                            .Where(x =>x.CODIGO_ICP==filter.CodigoDepartamentoResponsable )
+                            .OrderBy(x => x.CODIGO_BIEN)
+                            .Skip((filter.PageNumber - 1) * filter.PageSize)
+                            .Take(filter.PageSize)
+                            .ToListAsync();
+                    }
+                    else
+                    {
+                        pageData = await _context.BM_V_BM1.DefaultIfEmpty()
+                            .OrderBy(x => x.CODIGO_BIEN)
+                            .Skip((filter.PageNumber - 1) * filter.PageSize)
+                            .Take(filter.PageSize)
+                            .ToListAsync();
+                    }
                 }
+              
 
-
+              
   
                 foreach (var item in pageData)
                 {

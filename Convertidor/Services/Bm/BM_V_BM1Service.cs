@@ -1005,7 +1005,7 @@ namespace Convertidor.Services.Bm
                     
                     textCell.SetBorder(Border.NO_BORDER);
                     textCell.SetFontSize(6);
-                    textCell.SetTextAlignment(TextAlignment.RIGHT);
+                    textCell.SetTextAlignment(TextAlignment.CENTER);
                     textCell.SetBold();
     
                     Cell imageCell2 = new Cell().Add(logo2);
@@ -1036,7 +1036,7 @@ namespace Convertidor.Services.Bm
                     code128.SetCodeType(Barcode128.CODE128);
                     Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
                     code128Image.SetWidth(122);
-                    code128Image.SetHeight(18);
+                    code128Image.SetHeight(16);
                     // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
                     // this image does not fit the cell, but it does in addCell().
                     // In iText7 there is no constructor (new Cell(Image img)),
@@ -1051,8 +1051,12 @@ namespace Convertidor.Services.Bm
                                                            .SetTextAlignment(TextAlignment.CENTER);
                     Paragraph texto = new Paragraph();
                     texto.Add("Bienes Municipales");
-                    cell1.Add(texto).SetFontSize(8).SetBold().SetPaddingTop(0);
-                    cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER));
+
+                    cell1.Add(texto).SetFontSize(8).SetBold().SetPaddingTop(5).SetVerticalAlignment(VerticalAlignment.TOP);
+                  
+                    
+                    cell1.Add(code128Image.SetHorizontalAlignment(HorizontalAlignment.CENTER).SetPaddingTop(30).SetMarginTop(6));
+                    
                     Paragraph texto2 = new Paragraph("Concejo Municipal de Chacao").SetFontSize(7).SetBold();
                     cell1.Add(texto2);
                     //var capitalizar = Capitalizar(item.UnidadTrabajo);

@@ -63,12 +63,22 @@ namespace Convertidor.Controllers
             var result = await _service.Create(dto);
             return Ok(result);
         }
+        
         [HttpPost]
         //[Route("[action]/{id:int}")] 
         [Route("[action]/{id}")]
         public async Task<IActionResult> AddImage(int id, [FromForm]List<IFormFile> files)
         {
                 var result = await _service.AddImage(id,files);
+            return Ok(result);
+        }   
+      
+        [HttpPost]
+        //[Route("[action]/{id:int}")] 
+        [Route("[action]/{id}")]
+        public async Task<IActionResult> AddOneImage(int id, IFormFile file)
+        {
+            var result = await _service.AddOneImage(id,file);
             return Ok(result);
         }   
         

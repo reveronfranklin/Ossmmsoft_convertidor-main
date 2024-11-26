@@ -10,6 +10,7 @@ public interface IBmBienesFotoService
     Task<ResultDto<BmBienesFotoDeleteDto>> Delete(BmBienesFotoDeleteDto dto);
     Task<string> CopiarArchivos();
     Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImage(int codigoBien, List<IFormFile> files);
+    Task<ResultDto<string>> AddOneImage(int codigoBien, IFormFile files);
     Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImageModel(BmBienesimageUpdateDto dto);
     Task CreateBardCode();
 
