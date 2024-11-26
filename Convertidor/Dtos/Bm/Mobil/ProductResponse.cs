@@ -21,6 +21,7 @@ public class ProductFilterDto
     public int PageNumber { get; set; }
     public int? CodigoBien { get; set; } 
     public int CodigoDepartamentoResponsable { get; set; }
+    public string SearhText { get; set; }
   
   
 }

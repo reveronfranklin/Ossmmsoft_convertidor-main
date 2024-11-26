@@ -9,6 +9,13 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Bm/Mobil/ProductResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Bm/Mobil/ProductResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BmBienesFotoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmBienesFotoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/IBmBienesFotoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/IBmBienesFotoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,39 +41,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -320,7 +294,8 @@
       <workItem from="1731594105093" duration="29809000" />
       <workItem from="1731847336609" duration="31185000" />
       <workItem from="1732042639591" duration="69710000" />
-      <workItem from="1732292723398" duration="4312000" />
+      <workItem from="1732292723398" duration="46835000" />
+      <workItem from="1732639487463" duration="9002000" />
     </task>
     <servers />
   </component>
@@ -487,19 +462,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs</url>
-          <line>27</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" containingFunctionPresentation="Method 'ProcesarFotos'">
-            <startOffsets>
-              <option value="596" />
-            </startOffsets>
-            <endOffsets>
-              <option value="641" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs</url>
@@ -1261,13 +1223,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs</url>
-          <line>95</line>
+          <line>105</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="2561" />
+              <option value="2862" />
             </startOffsets>
             <endOffsets>
-              <option value="2601" />
+              <option value="2902" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="292" />
@@ -2470,13 +2432,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs</url>
-          <line>83</line>
+          <line>94</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs" containingFunctionPresentation="Method 'GetTxtFiles'">
             <startOffsets>
-              <option value="2732" />
+              <option value="3032" />
             </startOffsets>
             <endOffsets>
-              <option value="2770" />
+              <option value="3070" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="567" />
@@ -3169,6 +3131,97 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="749" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs</url>
+          <line>65</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs" containingFunctionPresentation="Method 'GetPdfFiles'">
+            <startOffsets>
+              <option value="1928" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1997" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="751" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs</url>
+          <line>52</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs" containingFunctionPresentation="Method 'GetImage'">
+            <startOffsets>
+              <option value="1664" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1685" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="754" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs</url>
+          <line>71</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" containingFunctionPresentation="Method 'AddImage'">
+            <startOffsets>
+              <option value="1839" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1886" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="756" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs</url>
+          <line>72</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" containingFunctionPresentation="Method 'AddImage'">
+            <startOffsets>
+              <option value="1899" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1917" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="757" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs</url>
+          <line>88</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" containingFunctionPresentation="Method 'AddImageModel'">
+            <startOffsets>
+              <option value="2398" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2447" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="758" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs</url>
+          <line>27</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" containingFunctionPresentation="Method 'ProcesarFotos'">
+            <startOffsets>
+              <option value="596" />
+            </startOffsets>
+            <endOffsets>
+              <option value="641" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="759" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
+          <line>922</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GenerateMultipleFont'">
+            <startOffsets>
+              <option value="38162" />
+            </startOffsets>
+            <endOffsets>
+              <option value="38206" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="760" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

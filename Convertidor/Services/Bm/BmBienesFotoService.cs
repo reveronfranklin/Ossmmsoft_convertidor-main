@@ -331,6 +331,101 @@ namespace Convertidor.Services.Bm
             }
             return false;
         }
+
+        public async Task<ResultDto<string>> AddOneImage(int codigoBien, IFormFile files)
+        {
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.BmFiles;
+            var numeroPlaca = "";
+            var titulo = "";
+
+
+
+
+            ResultDto<string> result = new ResultDto<string>(null);
+            var numeroPlacaObj = await _bienesRepository.GetByCodigoBien(codigoBien);
+            if (numeroPlacaObj == null)
+            {
+                result.Data = "";
+                result.IsValid = false;
+                result.Message = "Numero placa Invalido";
+                return result;
+            }
+            else
+            {
+                numeroPlaca = numeroPlacaObj.NUMERO_PLACA;
+            }
+            try
+            {
+
+
+          
+                        string fileName = files.FileName;
+                        fileName = files.FileName.Replace(" ", "_");
+                        var findPlacaFoto =
+                            await _repository.GetByNumeroPlacaFoto(numeroPlacaObj.NUMERO_PLACA, fileName);
+                        if (findPlacaFoto != null)
+                        {
+                            result.Data = "";
+                            result.IsValid = false;
+                            result.Message = $"Ya existe la foto: {files.FileName}";
+                            return result;
+                        }
+
+                        if (fileName.Length > 13)
+                        {
+
+                            var longitud = files.FileName.Length - 14;
+                            titulo = fileName.Substring(14, longitud);
+
+                        }
+
+                        if (!Directory.Exists($"{destino}{numeroPlaca}"))
+                        {
+                            Directory.CreateDirectory($"{destino}{numeroPlaca}");
+                        }
+                        var filePatch = $"{destino}{numeroPlaca}/{fileName}";
+                        if (!File.Exists($"{filePatch}"))
+                        {
+                            using (var stream = System.IO.File.Create(filePatch))
+                            {
+                                await files.CopyToAsync(stream);
+                            }
+                        }
+                        if (File.Exists($"{filePatch}"))
+                        {
+                            BmBienesFotoUpdateDto dtoCreate = new BmBienesFotoUpdateDto();
+                            dtoCreate.CodigoBienFoto = 0;
+                            dtoCreate.CodigoBien = numeroPlacaObj.CODIGO_BIEN;
+                            dtoCreate.NumeroPlaca = numeroPlacaObj.NUMERO_PLACA;
+                            dtoCreate.Foto = fileName;
+                            dtoCreate.Titulo = titulo;
+                            var created = await Create(dtoCreate);
+
+                            MinFile(numeroPlacaObj.NUMERO_PLACA, fileName);
+
+                        }
+                    
+              
+                        result.Data = files.FileName;
+                        result.IsValid = true;
+                        result.Message = "";
+                        return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+            
+            
+           
+
+            return result;
+        }
         public async Task<ResultDto<List<BmBienesFotoResponseDto>>> AddImage(int codigoBien, List<IFormFile> files)
         {
 
