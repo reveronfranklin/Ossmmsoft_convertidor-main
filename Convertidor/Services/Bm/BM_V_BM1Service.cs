@@ -1035,7 +1035,7 @@ namespace Convertidor.Services.Bm
                     code128.SetCode(item.NumeroPlaca);
                     code128.SetCodeType(Barcode128.CODE128);
                     Image code128Image = new Image(code128.CreateFormXObject(pdfDoc));
-                    code128Image.SetWidth(122);
+                    code128Image.SetWidth(105);
                     code128Image.SetHeight(16);
                     // Notice that in iText5 in default PdfPCell constructor (new PdfPCell(Image img))
                     // this image does not fit the cell, but it does in addCell().
