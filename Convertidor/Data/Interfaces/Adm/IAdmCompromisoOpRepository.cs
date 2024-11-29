@@ -10,6 +10,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_COMPROMISO_OP>> Update(ADM_COMPROMISO_OP entity);
         Task<string> Delete(int codigoCompromisoOp);
         Task<int> GetNextKey();
-        Task<List<ADM_COMPROMISO_OP>> GetCodigoOrdenPago(int codigoOrdenPago);
+        Task<List<ADM_COMPROMISO_OP>> GetCodigoOrdenPago(int codigoOrdenPago, int codigoPresupuesto);
     }
 }

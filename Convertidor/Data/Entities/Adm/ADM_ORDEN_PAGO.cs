@@ -50,5 +50,7 @@
         public string? SEARCH_TEXT { get; set; } = string.Empty;
         public string? MONTO_LETRAS { get; set; }= string.Empty;
         public int? CON_FACTURA { get; set; }
+
+        public string? TITULO_REPORTE { get; set; }= string.Empty;
     }
 }

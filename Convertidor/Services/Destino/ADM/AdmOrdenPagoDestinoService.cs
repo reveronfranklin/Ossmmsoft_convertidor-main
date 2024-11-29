@@ -29,6 +29,10 @@ namespace Convertidor.Services.Destino.ADM
         private readonly IAdmDescriptivaDestinoRepository _admDescriptivaDestinoRepository;
         private readonly IPreVSaldoDestinoRepository _preVSaldoDestinoRepository;
         private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
+        private readonly IAdmCompromisoOpRepository _admCompromisoOpRepository;
+        private readonly IPreCompromisosRepository _preCompromisosRepository;
+        private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
 
 
         public AdmOrdenPagoDestinoService(
@@ -48,7 +52,11 @@ namespace Convertidor.Services.Destino.ADM
                         IAdmDescriptivaRepository admDescriptivaRepository,
                         IAdmDescriptivaDestinoRepository admDescriptivaDestinoRepository,
                         IPreVSaldoDestinoRepository preVSaldoDestinoRepository,
-                        IPRE_V_SALDOSRepository preVSaldosRepository)
+                        IPRE_V_SALDOSRepository preVSaldosRepository,
+                        IAdmCompromisoOpRepository admCompromisoOpRepository,
+                        IPreCompromisosRepository preCompromisosRepository,
+                        IAdmSolicitudesRepository admSolicitudesRepository,
+                        IOssConfigRepository ossConfigRepository)
         {
             _mapper = mapper;
             _repository = repository;
@@ -67,6 +75,10 @@ namespace Convertidor.Services.Destino.ADM
             _admDescriptivaDestinoRepository = admDescriptivaDestinoRepository;
             _preVSaldoDestinoRepository = preVSaldoDestinoRepository;
             _preVSaldosRepository = preVSaldosRepository;
+            _admCompromisoOpRepository = admCompromisoOpRepository;
+            _preCompromisosRepository = preCompromisosRepository;
+            _admSolicitudesRepository = admSolicitudesRepository;
+            _ossConfigRepository = ossConfigRepository;
         }
 
         
@@ -370,8 +382,42 @@ namespace Convertidor.Services.Destino.ADM
            
             
         }
-        
-        
+
+        public async Task<string> GetTituloReporteOrdenPago(int codigoOrdenPago,Data.Entities.Adm.ADM_ORDEN_PAGO ordenPago)
+        {
+
+            string tituLo = "ORDEN DE PAGO";
+            
+          
+            
+            var compromisoOp = await _admCompromisoOpRepository.GetCodigoOrdenPago(codigoOrdenPago,ordenPago.CODIGO_PRESUPUESTO);
+            if (compromisoOp.Count > 0)
+            {
+                var compromisoItem = compromisoOp.Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).FirstOrDefault();
+                if (compromisoItem != null)
+                {
+                    var preCompromiso =
+                        await _preCompromisosRepository.GetByCodigo(compromisoItem.CODIGO_IDENTIFICADOR);
+                    if (preCompromiso != null)
+                    {
+                        var solicitud =
+                            await _admSolicitudesRepository.GetByCodigoSolicitud(preCompromiso.CODIGO_SOLICITUD);
+                        if(solicitud!=null)
+                        { 
+                            var ossConfig = await _ossConfigRepository.GetByClave($"TITULO_ORDEN_PAGO_{solicitud.TIPO_SOLICITUD_ID}");
+                           if (ossConfig != null)
+                           {
+                               tituLo =ossConfig.VALOR;
+                           }
+                        }
+                    }
+                }
+            }
+
+            return tituLo;
+
+
+        }
         
         public async  Task<ResultDto<bool>> CopiarOrdenPago(int codigoOrdenPago)
         {
@@ -393,6 +439,12 @@ namespace Convertidor.Services.Destino.ADM
                 result.Message = "Orden de Pago No existe";
                 return result;
             }
+            
+            
+            var tituloReporteOrden = await GetTituloReporteOrdenPago(codigoOrdenPago,ordenPagoOrigen);
+            ordenPagoOrigen.TITULO_REPORTE = tituloReporteOrden;
+            await _repository.Update(ordenPagoOrigen);
+            
 
            var resultDeleted = await  LimpiaTablasOrdenPago(codigoOrdenPago,ordenPagoOrigen);
            if (resultDeleted != "")

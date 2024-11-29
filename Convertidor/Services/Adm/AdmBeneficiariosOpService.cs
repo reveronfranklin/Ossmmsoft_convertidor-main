@@ -81,7 +81,7 @@ namespace Convertidor.Services.Adm
             int codigoPresupuesto = 0;
             ResultDto<List<AdmBeneficiariosOpResponseDto>> result = new ResultDto<List<AdmBeneficiariosOpResponseDto>>(null);
             var conectado = await _sisUsuarioRepository.GetConectado();
-            var compromisos = await _admCompromisoOpRepository.GetCodigoOrdenPago(filter.CodigoOrdenPago);
+            var compromisos = await _admCompromisoOpRepository.GetCodigoOrdenPago(filter.CodigoOrdenPago,filter.CodigoPresupuesto);
             if (compromisos.Count > 0)
             {
                 var compromiso = compromisos.FirstOrDefault();

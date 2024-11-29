@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Microsoft.EntityFrameworkCore;
+using ADM_ORDEN_PAGO = Convertidor.Data.EntitiesDestino.ADM.ADM_ORDEN_PAGO;
 
 namespace Convertidor.Data.Repository.Adm
 {
@@ -11,13 +12,13 @@ namespace Convertidor.Data.Repository.Adm
         {
             _context = context;
         }
-
-        public async Task<List<ADM_COMPROMISO_OP>> GetCodigoOrdenPago(int codigoOrdenPago)
+  
+        public async Task<List<ADM_COMPROMISO_OP>> GetCodigoOrdenPago(int codigoOrdenPago, int codigoPresupuesto)
         {
             try
             {
                 var result = await _context.ADM_COMPROMISO_OP
-                    .Where(e => e.CODIGO_ORDEN_PAGO == codigoOrdenPago).ToListAsync();
+                    .Where(e => e.CODIGO_ORDEN_PAGO == codigoOrdenPago && e.CODIGO_PRESUPUESTO==codigoPresupuesto).ToListAsync();
 
                 return result;
             }
@@ -156,5 +157,7 @@ namespace Convertidor.Data.Repository.Adm
 
 
         }
+
+    
     }
 }

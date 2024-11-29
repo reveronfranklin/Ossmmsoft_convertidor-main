@@ -37,10 +37,10 @@ namespace Convertidor.Services.Adm
         }
 
 
-        public async Task<string> GetCompromisosByOrdenPago(int codigoOrdenPago)
+        public async Task<string> GetCompromisosByOrdenPago(int codigoOrdenPago,int codigoPresupuesto)
         {
             string result = "";
-            var compromisoOp = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
+            var compromisoOp = await _repository.GetCodigoOrdenPago(codigoOrdenPago,codigoPresupuesto);
             if (compromisoOp != null && compromisoOp.Count > 0)
             {
 
@@ -55,13 +55,13 @@ namespace Convertidor.Services.Adm
 
         }
         
-        public async Task<ResultDto<List<AdmCompromisoOpResponseDto>>> GetByOrdenPago(int codigoOrdenPago)
+        public async Task<ResultDto<List<AdmCompromisoOpResponseDto>>> GetByOrdenPago(int codigoOrdenPago,int codigoPresupuesto)
         {
 
             ResultDto<List<AdmCompromisoOpResponseDto>> result = new ResultDto<List<AdmCompromisoOpResponseDto>>(null);
             try
             {
-                var compromisoOp = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
+                var compromisoOp = await _repository.GetCodigoOrdenPago(codigoOrdenPago,codigoPresupuesto);
               
                 if (compromisoOp != null && compromisoOp.Count() > 0)
                 {
