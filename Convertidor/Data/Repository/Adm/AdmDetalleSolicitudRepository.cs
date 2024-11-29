@@ -99,6 +99,9 @@ namespace Convertidor.Data.Repository.Adm
                 }
 
                 result.TotalMasImpuesto = result.Base + result.Impuesto;
+                
+                result.TotalMasImpuesto = 
+                    Math.Round((decimal)   result.TotalMasImpuesto , 2);
                 result.PorcentajeImpuesto = 0;
                 if(result.BaseImponible != 0)
                 {
@@ -426,7 +429,7 @@ namespace Convertidor.Data.Repository.Adm
 
                     resultItem.TieneDiferencia = false;
                     resultItem.TotalPuc = await TotalPuc(resultItem.CodigoDetalleSolicitud);
-                    if (resultItem.TotalPuc != resultItem.Total)
+                    if (resultItem.TotalPuc != resultItem.TotalMasImpuesto)
                     {
                         resultItem.TieneDiferencia = true;
                     }

@@ -31,7 +31,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetByOrdenPago(AdmOrdenPagoDeleteDto dto)
         {
-            var result = await _service.GetByOrdenPago(dto.CodigoOrdenPago);
+            var result = await _service.GetByOrdenPago(dto.CodigoOrdenPago,dto.CodigoPresupuesto);
             return Ok(result);
         }
         
