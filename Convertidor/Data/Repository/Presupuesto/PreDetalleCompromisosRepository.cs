@@ -114,8 +114,19 @@ namespace Convertidor.Data.Repository.Rh
                     result.Impuesto = (decimal)sumImpuesto;
                 }
 
-                result.TotalMasImpuesto = result.Base + result.Impuesto;
+           
                 result.PorcentajeImpuesto = 0;
+                
+                var totalMasImpuesto=  detalle.Sum(x => x.TOTAL_MAS_IMPUESTO);
+                result.TotalMasImpuesto = (decimal)totalMasImpuesto;
+                result.Base= Math.Ceiling((decimal)result.Base * 100) / 100; //Math.Round((decimal)result.Base, 2);
+                result.BaseImponible=Math.Ceiling((decimal)result.BaseImponible * 100) / 100;// Math.Round((decimal)result.BaseImponible, 2);
+                
+                result.Impuesto= Math.Round((decimal)result.Impuesto, 2);
+                
+                
+                
+                
                 if(result.BaseImponible != 0)
                 {
                     result.PorcentajeImpuesto = (result.Impuesto / result.BaseImponible) * 100;

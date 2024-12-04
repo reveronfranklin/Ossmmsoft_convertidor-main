@@ -1,7 +1,5 @@
-﻿using Convertidor.Dtos.Presupuesto;
+﻿
 using Convertidor.Dtos.Presupuesto.ReporteCompromisoPresupuestario;
-using Microsoft.CodeAnalysis.Scripting.Hosting;
-using NPOI.SS.Formula.Functions;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;

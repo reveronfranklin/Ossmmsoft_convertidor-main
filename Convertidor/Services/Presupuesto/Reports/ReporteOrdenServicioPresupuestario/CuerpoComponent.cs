@@ -102,6 +102,8 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
                     });
 
                 }
+                
+            
                 var lineasImpresas = totalLongitudLineas;
                 var lineas = 36-lineasImpresas;
                 for (int i = 0; i < lineas; i++)
