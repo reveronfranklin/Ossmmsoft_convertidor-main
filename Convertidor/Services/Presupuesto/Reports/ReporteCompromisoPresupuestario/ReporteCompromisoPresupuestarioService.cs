@@ -163,11 +163,19 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 var totales = await _preDetalleCompromisosRepository.GetTotales(compromiso.CODIGO_PRESUPUESTO,filter.CodigoCompromiso);
 
                 
-                decimal totalMasImpuesto =totales.TotalMasImpuesto;
-                decimal totalImpuesto = totales.Impuesto;
-                decimal total = totales.Base;
+                //decimal totalMasImpuesto =totales.TotalMasImpuesto;
+                //decimal totalImpuesto = totales.Impuesto;
+                //decimal total = totales.Base;
                 
-                _preCompromisosRepository.UpdateMontoEnLetras(filter.CodigoCompromiso, totalMasImpuesto);
+                result.TolalMasImpuesto  =totales.TotalMasImpuesto;
+                result.Impuesto = totales.Impuesto;
+                result.Tolal = totales.Base;
+                result.Base = totales.Base;
+                result.PorcentajeImpuesto = totales.PorcentajeImpuesto;
+                
+                
+                
+                _preCompromisosRepository.UpdateMontoEnLetras(filter.CodigoCompromiso, totales.TotalMasImpuesto);
                 compromiso = await _preCompromisosRepository.GetByNumeroYFecha(filter.NumeroCompromiso,filter.fechaCompromiso);
                 result.NumeroCompromiso = compromiso.NUMERO_COMPROMISO;
                 result.FechaCompromiso = compromiso.FECHA_COMPROMISO;
@@ -185,12 +193,11 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 result.codigoSubPrograma = icp.CODIGO_SUBPROGRAMA;
                 result.codigoProyecto = icp.CODIGO_PROYECTO;
                 result.codigoActividad = icp.CODIGO_ACTIVIDAD;
-                result.TolalMasImpuesto = totalMasImpuesto;
-                result.Impuesto = totalImpuesto;
-                result.Tolal = total;
-                result.Base = total;
+         
                 result.MontoEnLetras = compromiso.MONTO_LETRAS;
-                result.PorcentajeImpuesto = totales.PorcentajeImpuesto;
+                
+                
+          
                
                
                 

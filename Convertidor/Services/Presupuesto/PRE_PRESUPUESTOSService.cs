@@ -111,14 +111,6 @@ namespace Convertidor.Services.Presupuesto
             {
                 
                 
-                var cacheKey = $"ListPresupuesto";
-                var listPresupuesto= await _distributedCache.GetAsync(cacheKey);
-                if (listPresupuesto != null)
-                {
-                    result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<ListPresupuestoDto>> > (listPresupuesto);
-                }
-                else
-                {
                     var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
                     if (presupuesto.Count() > 0)
                     {
@@ -151,18 +143,7 @@ namespace Convertidor.Services.Presupuesto
                         result.IsValid = true;
                         result.Message = "";
                     }
-                    if (result.Data.Count > 0)
-                    {
-                        var options = new DistributedCacheEntryOptions()
-                            .SetAbsoluteExpiration(DateTime.Now.AddDays(15))
-                            .SetSlidingExpiration(TimeSpan.FromDays(1));
-                        var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
-                        var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
-                        await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
-                    }
-               
-                }
-                
+                    
                 
            
             }

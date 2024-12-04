@@ -97,11 +97,18 @@ namespace Convertidor.Data.Repository.Adm
                     decimal? sumImpuesto = detalle.Sum(x => x.MONTO_IMPUESTO);
                     result.Impuesto = (decimal)sumImpuesto;
                 }
-
-                result.TotalMasImpuesto = result.Base + result.Impuesto;
+                var totalMasImpuesto=  detalle.Sum(x => x.TOTAL_MAS_IMPUESTO);
+                result.TotalMasImpuesto = (decimal)totalMasImpuesto;
                 
-                result.TotalMasImpuesto = 
-                    Math.Round((decimal)   result.TotalMasImpuesto , 2);
+                //result.Base= Math.Round((decimal)result.Base, 2);
+                //result.BaseImponible= Math.Round((decimal)result.BaseImponible, 2);
+                
+                result.Base= Math.Ceiling((decimal)result.Base * 100) / 100; //Math.Round((decimal)result.Base, 2);
+                result.BaseImponible=Math.Ceiling((decimal)result.BaseImponible * 100) / 100;// Math.Round((decimal)result.BaseImponible, 2);
+                
+                
+                result.Impuesto= Math.Round((decimal)result.Impuesto, 2);
+                //result.TotalMasImpuesto = result.Base + result.Impuesto;
                 result.PorcentajeImpuesto = 0;
                 if(result.BaseImponible != 0)
                 {
@@ -438,14 +445,14 @@ namespace Convertidor.Data.Repository.Adm
                     alldata.Add(resultItem);
                 }
 
-                    var totales =await  GetTotales(filter.CodigoPresupuesto,filter.CodigoSolicitud);
+                var totales =await  GetTotales(filter.CodigoPresupuesto,filter.CodigoSolicitud);
                 var totalMasImpuesto = totales.TotalMasImpuesto;
                 var totalImpuesto = totales.Impuesto;
                 var total = totales.Base;
                 result.Total3 = total;
                 result.Total1 = totalMasImpuesto;
                 result.Total4 = totalImpuesto;
-                
+                    
                 result.CantidadRegistros = totalRegistros;
                 result.TotalPage = totalPage;
                 if (filter.PageNumber > 0) filter.PageNumber = filter.PageNumber - 1;
