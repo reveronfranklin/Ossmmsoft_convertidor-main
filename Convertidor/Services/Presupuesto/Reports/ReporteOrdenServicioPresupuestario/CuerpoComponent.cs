@@ -73,7 +73,7 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
                       });
 
                 });
-                decimal totalLongitudLineas = 0;
+                int totalLongitudLineas = 0;
                 foreach (var item in ModelCuerpo)
                 {
                     contador++;
@@ -83,8 +83,8 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
                     }
                     else
                     {
-                        decimal lineasPorTexto = (decimal)item.DescripcionArticulo.Trim().Length/75;
-                        lineasPorTexto = Math.Ceiling(lineasPorTexto);
+                        int lineasPorTexto = (int)item.DescripcionArticulo.Trim().Length/75;
+                    
                         totalLongitudLineas = totalLongitudLineas+lineasPorTexto;
                     }
                     
@@ -105,7 +105,18 @@ namespace Convertidor.Services.Presupuesto.ReporteOrdenSercicioPresupuestario
                 
             
                 var lineasImpresas = totalLongitudLineas;
-                var lineas = 36-lineasImpresas;
+                var lineas = 0;
+                int canidadMaxima = 32;
+
+                if (canidadMaxima - lineasImpresas <= 0)
+                {
+                    lineas = canidadMaxima;
+                }
+                else
+                {
+                   lineas =  canidadMaxima-lineasImpresas;
+                }
+                   
                 for (int i = 0; i < lineas; i++)
                 {
                     table.Cell().ColumnSpan(6).Row(row =>
