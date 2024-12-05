@@ -41,18 +41,10 @@ namespace Convertidor.Services.Adm
                 itemResult.DescripcionTipoRetencion = descriptivaTipoRetencion.DESCRIPCION;
             }
             itemResult.ConceptoPago = dtos.CONCEPTO_PAGO;
-            if (dtos.TIPO_PERSONA_ID == null) dtos.TIPO_PERSONA_ID = 0;
-            itemResult.TipoPersonaId = dtos.TIPO_PERSONA_ID;
+            if (dtos.EXTRA1 == null) dtos.EXTRA1 = "";
+            itemResult.Codigo = dtos.EXTRA1;
             
-            itemResult.DescripcionTipoPersona = "";
-            if (dtos.TIPO_PERSONA_ID > 0)
-            {
-                var admDescriptivaTipoPersona=    await _admDescriptivaRepository.GetByCodigo((int)dtos.TIPO_PERSONA_ID);
-                if (admDescriptivaTipoPersona != null)
-                {
-                    itemResult.DescripcionTipoPersona =admDescriptivaTipoPersona.DESCRIPCION;
-                }
-            }
+         
            
             
             if (dtos.POR_RETENCION == null) dtos.POR_RETENCION = 0;
@@ -164,17 +156,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.TipoPersonaId != null && dto.TipoPersonaId > 0)
-                {
-                    var tipoPersona = await _admDescriptivaRepository.GetByCodigo( (int)dto.TipoPersonaId);
-                    if (tipoPersona==null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "tipo Persona Id invalido";
-                        return result;
-                    }
-                }
+           
                 if (  string.IsNullOrEmpty(dto.ConceptoPago))
                 {
                     result.Data = null;
@@ -217,7 +199,7 @@ namespace Convertidor.Services.Adm
           
                 codigoRetencion.TIPO_RETENCION_ID = dto.TipoRetencionId;
                 codigoRetencion.CODIGO_RETENCION = dto.CodigoRetencion;
-                codigoRetencion.TIPO_PERSONA_ID = dto.TipoPersonaId;
+                codigoRetencion.EXTRA1 = dto.Codigo;
                 codigoRetencion.POR_RETENCION = dto.PorRetencion;
                 codigoRetencion.MONTO_RETENCION = dto.MontoRetencion;
                 codigoRetencion.BASE_IMPONIBLE = dto.BaseImponible;
@@ -269,17 +251,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.TipoPersonaId != null && dto.TipoPersonaId > 0)
-                {
-                    var tipoPersona = await _admDescriptivaRepository.GetByCodigo( (int)dto.TipoPersonaId);
-                    if (tipoPersona==null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "tipo Persona Id invalido";
-                        return result;
-                    }
-                }
+            
                 if (  string.IsNullOrEmpty(dto.ConceptoPago))
                 {
                     result.Data = null;
@@ -324,7 +296,7 @@ namespace Convertidor.Services.Adm
                 ADM_RETENCIONES entity = new ADM_RETENCIONES();
                 entity.CODIGO_RETENCION = await _repository.GetNextKey();
                 entity.TIPO_RETENCION_ID = dto.TipoRetencionId;
-                entity.TIPO_PERSONA_ID = dto.TipoPersonaId;
+                entity.EXTRA1 = dto.Codigo;
                 entity.POR_RETENCION = dto.PorRetencion;
                 entity.MONTO_RETENCION = dto.MontoRetencion;
                 entity.BASE_IMPONIBLE = dto.BaseImponible;
