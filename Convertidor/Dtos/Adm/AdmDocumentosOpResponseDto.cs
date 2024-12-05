@@ -9,7 +9,15 @@
         public FechaDto FechaComprobanteObj { get; set; }
         public string PeriodoImpositivo { get; set; } = string.Empty;
         public int TipoOperacionId { get; set; }
+        public string DescripcionTipoOperacion { get; set; } = string.Empty;
         public int TipoDocumentoId { get; set; }
+        public string DescripcionTipoDocumento{ get; set; } = string.Empty;
+        public int TipoTransaccionId { get; set; }
+        public string DescripcionTipoTransaccion { get; set; } = string.Empty;
+        public int TipoImpuestoId { get; set; }
+        public string DescripcionTipoImpuesto { get; set; } = string.Empty;
+        public int? EstatusFiscoId { get; set; }
+        public string DescripcionEstatusFisco { get; set; } = string.Empty;
         public DateTime FechaDocumento { get; set; }
         public string FechaDocumentoString { get; set; }
         public FechaDto FechaDocumentoObj { get; set; }
@@ -19,15 +27,11 @@
         public int BaseImponible { get; set; }
         public int MontoImpuesto { get; set; }
         public string? NumeroDocumentoAfectado { get; set; } = string.Empty;
-        public int TipoTransaccionId { get; set; }
-        public int TipoImpuestoId { get; set; }
+
         public int MontoImpuestoExento { get; set; }
         public int MontoRetenido { get; set; }
-        public string Extra1 { get; set; } = string.Empty;
-        public string Extra2 { get; set; } = string.Empty;
-        public string Extra3 { get; set; } = string.Empty;
         public int CodigoPresupuesto { get; set; }
         public string? NumeroExpediente { get; set; } = string.Empty;
-        public int? EstatusFiscoId { get; set; }
+        
     }
 }

@@ -54,9 +54,6 @@ namespace Convertidor.Services.Adm
             itemResult.TipoImpuestoId = dtos.TIPO_IMPUESTO_ID;
             itemResult.MontoImpuestoExento = dtos.MONTO_IMPUESTO_EXENTO;
             itemResult.MontoRetenido = dtos.MONTO_RETENIDO;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
             itemResult.NumeroExpediente = dtos.NUMERO_EXPEDIENTE;
             itemResult.EstatusFiscoId = dtos.ESTATUS_FISCO_ID;
@@ -118,6 +115,45 @@ namespace Convertidor.Services.Adm
 
         }
 
+        public async Task<ResultDto<List<AdmDocumentosOpResponseDto>>> GetByCodigoOrdenPago(AdmDocumentosFilterDto dto)
+        {
+
+            ResultDto<List<AdmDocumentosOpResponseDto>> result = new ResultDto<List<AdmDocumentosOpResponseDto>>(null);
+            try
+            {
+                var documentosOp = await _repository.GetByCodigoOrdenPago(dto.CodigoOrdenPago);
+                var cant = documentosOp.Count();
+                if (documentosOp != null && documentosOp.Count() > 0)
+                {
+                    var listDto = await MapListDocumentosOpDto(documentosOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        
         public async Task<ResultDto<AdmDocumentosOpResponseDto>> Update(AdmDocumentosOpUpdateDto dto)
         {
             ResultDto<AdmDocumentosOpResponseDto> result = new ResultDto<AdmDocumentosOpResponseDto>(null);

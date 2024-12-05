@@ -6,8 +6,7 @@ public class AdmRetencionesResponseDto
     public int TipoRetencionId { get; set; }
     public string? DescripcionTipoRetencion { get; set; }=string.Empty;
     public string? ConceptoPago { get; set; }=string.Empty;
-    public int? TipoPersonaId { get; set; }
-    public string? DescripcionTipoPersona { get; set; }=string.Empty;
+    public string Codigo { get; set; }
     public decimal? BaseImponible { get; set; }
     public decimal? PorRetencion { get; set; }
     public decimal? MontoRetencion { get; set; }
