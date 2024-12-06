@@ -7,6 +7,7 @@ namespace Convertidor.Data.Interfaces.Adm
 
         Task<ADM_DESCRIPTIVAS> GetByCodigoDescriptiva(int descripcionId);
         Task<List<ADM_DESCRIPTIVAS>> GetByTitulo(int tituloId);
+        Task<string> GetDescripcion(int descripcionId);
         Task<List<ADM_DESCRIPTIVAS>> GetAll();
         Task<ADM_DESCRIPTIVAS> GetByCodigo(int descripcionId);
         Task<ResultDto<ADM_DESCRIPTIVAS>> Add(ADM_DESCRIPTIVAS entity);

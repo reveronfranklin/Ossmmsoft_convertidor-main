@@ -58,6 +58,21 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
+        
+        public async Task<List<ADM_IMPUESTOS_OP>> GetByCodigoOrdenPago(int codigoOrdenPago)
+        {
+            try
+            {
+                var result = await _context.ADM_IMPUESTOS_OP.DefaultIfEmpty().Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+
 
         public async Task<ResultDto<ADM_IMPUESTOS_OP>> Add(ADM_IMPUESTOS_OP entity)
         {

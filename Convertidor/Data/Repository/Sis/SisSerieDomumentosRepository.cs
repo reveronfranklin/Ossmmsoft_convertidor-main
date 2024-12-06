@@ -175,7 +175,14 @@ namespace Convertidor.Data.Repository.Sis
                     serieDocumentos.NUMERO_SERIE_ACTUAL =serieDocumentos.NUMERO_SERIE_ACTUAL+ 1;
                     int number =  serieDocumentos.NUMERO_SERIE_ACTUAL;;
                     string paddedNumber = number.ToString().PadLeft(serieDocumentos.MAX_DIGITOS, '0');
-                    serieCompuesta = $"{serieDocumentos.SERIE_LETRAS}{paddedNumber}";
+
+                    var serieLetras = serieDocumentos.SERIE_LETRAS;
+                    if (serieLetras == "{RRRRMM}")
+                    {
+                        var mes = DateTime.Now.Month.ToString().PadLeft(2, '0');
+                        serieLetras = $"{DateTime.Now.Year}{mes} ";
+                    }
+                    serieCompuesta = $"{serieLetras.Trim()}{paddedNumber.Trim()}";
                   
                     serieDocumentos.SERIE_COMPUESTA_ACTUAL = serieCompuesta;
                     _context.SIS_SERIE_DOCUMENTOS.Update(serieDocumentos);

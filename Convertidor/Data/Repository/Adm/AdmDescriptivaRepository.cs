@@ -28,6 +28,26 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+        
+        public async Task<string> GetDescripcion(int descripcionId)
+        {
+            try
+            {
+                var result = "";
+                var descriptiva = await _context.ADM_DESCRIPTIVAS.DefaultIfEmpty().Where(e => e.DESCRIPCION_ID == descripcionId).FirstOrDefaultAsync();
+                if (descriptiva != null)
+                {
+                    result = descriptiva.DESCRIPCION;
+                }
+                return (string)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         public async Task<ADM_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo)
         {
             try

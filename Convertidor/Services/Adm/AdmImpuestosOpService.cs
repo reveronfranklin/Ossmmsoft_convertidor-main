@@ -32,11 +32,12 @@ namespace Convertidor.Services.Adm
             itemResult.CodigoImpuestoOp = dtos.CODIGO_IMPUESTO_OP;
             itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
             itemResult.TipoImpuestoId=dtos.TIPO_IMPUESTO_ID;
+            if (dtos.POR_IMPUESTO == null) dtos.POR_IMPUESTO = 0;
             itemResult.PorImpuesto = dtos.POR_IMPUESTO;
+            if (dtos.MONTO_IMPUESTO == null) dtos.MONTO_IMPUESTO = 0;
             itemResult.MontoImpuesto = dtos.MONTO_IMPUESTO;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
+            itemResult.DescripcionTipoImpuesto = await _admDescriptivaRepository.GetDescripcion( itemResult.TipoImpuestoId);
+           
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
            
             
@@ -96,6 +97,46 @@ namespace Convertidor.Services.Adm
 
         }
 
+        
+        public async Task<ResultDto<List<AdmImpuestosOpResponseDto>>> GetByCodigoOrdenPago(int codigoOrdenPago)
+        {
+
+            ResultDto<List<AdmImpuestosOpResponseDto>> result = new ResultDto<List<AdmImpuestosOpResponseDto>>(null);
+            try
+            {
+                var impuestosOp = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);
+                var cant = impuestosOp.Count();
+                if (impuestosOp != null && impuestosOp.Count() > 0)
+                {
+                    var listDto = await MapListImpuestosOpDto(impuestosOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
+        
         public async Task<ResultDto<AdmImpuestosOpResponseDto>> Update(AdmImpuestosOpUpdateDto dto)
         {
             ResultDto<AdmImpuestosOpResponseDto> result = new ResultDto<AdmImpuestosOpResponseDto>(null);
