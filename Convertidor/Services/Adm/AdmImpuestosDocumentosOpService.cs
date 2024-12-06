@@ -11,18 +11,21 @@ namespace Convertidor.Services.Adm
         private readonly IAdmDocumentosOpRepository _admDocumentosOpRepository;
         private readonly IAdmRetencionesOpRepository _admRetencionesOpRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IAdmRetencionesRepository _admRetencionesRepository;
 
         public AdmImpuestosDocumentosOpService(IAdmImpuestosDocumentosOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IAdmDocumentosOpRepository admDocumentosOpRepository,
                                      IAdmRetencionesOpRepository admRetencionesOpRepository,
-                                     IAdmDescriptivaRepository admDescriptivaRepository)
+                                     IAdmDescriptivaRepository admDescriptivaRepository,
+                                     IAdmRetencionesRepository admRetencionesRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDocumentosOpRepository = admDocumentosOpRepository;
             _admRetencionesOpRepository = admRetencionesOpRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _admRetencionesRepository = admRetencionesRepository;
         }
 
         public async Task<AdmImpuestosDocumentosOpResponseDto> MapImpuestosDocumentosOpDto(ADM_IMPUESTOS_DOCUMENTOS_OP dtos)
@@ -31,16 +34,26 @@ namespace Convertidor.Services.Adm
             itemResult.CodigoImpuestoDocumentoOp = dtos.CODIGO_IMPUESTO_DOCUMENTO_OP;
             itemResult.CodigoDocumentoOp = dtos.CODIGO_DOCUMENTO_OP;
             itemResult.CodigoRetencion = dtos.CODIGO_RETENCION;
+            itemResult.DescripcionCodigoRetencion = "";
+            var retencion = await _admRetencionesRepository.GetCodigoRetencion(itemResult.CodigoRetencion);
+            if (retencion != null)
+            {
+                itemResult.DescripcionCodigoRetencion = retencion.CONCEPTO_PAGO;
+            }
+            
+            
             itemResult.TipoRetencionId=dtos.TIPO_RETENCION_ID;
-            itemResult.TipoImpuestoId=dtos.TIPO_IMPUESTO_ID;
+            itemResult.DescripcionTipoRetencion = "";
+            
+        
+            itemResult.DescripcionTipoRetencion =
+                await _admDescriptivaRepository.GetDescripcion(itemResult.TipoRetencionId);
             itemResult.PeriodoImpositivo = dtos.PERIODO_IMPOSITIVO;
             itemResult.BaseImponible = dtos.BASE_IMPONIBLE;
             itemResult.MontoImpuesto = dtos.MONTO_IMPUESTO;
             itemResult.MontoImpuestoExento = dtos.MONTO_IMPUESTO_EXENTO;
             itemResult.MontoRetenido = dtos.MONTO_RETENIDO;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
+           
            
             
             return itemResult;
@@ -60,6 +73,45 @@ namespace Convertidor.Services.Adm
                 return result;
             }
         }
+        
+        public async Task<ResultDto<List<AdmImpuestosDocumentosOpResponseDto>>> GetByDocumento(AdmImpuestosDocumentosOpFilterDto dto)
+        {
+
+            ResultDto<List<AdmImpuestosDocumentosOpResponseDto>> result = new ResultDto<List<AdmImpuestosDocumentosOpResponseDto>>(null);
+            try
+            {
+                var documentosOp = await _repository.GetByDocumento(dto.CodigoDocumentoOp);
+                var cant = documentosOp.Count();
+                if (documentosOp != null && documentosOp.Count() > 0)
+                {
+                    var listDto = await MapListImpuestosDocumentosOpDto(documentosOp);
+
+                    result.Data = listDto;
+                    result.IsValid = true;
+                    result.Message = "";
+
+
+                    return result;
+                }
+                else
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No data";
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
+
 
         public async Task<ResultDto<AdmImpuestosDocumentosOpResponseDto>> Update(AdmImpuestosDocumentosOpUpdateDto dto)
         {
@@ -76,17 +128,16 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo impuesto documento op no existe";
                     return result;
                 }
-
-                var codigoDocumentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
-                if (dto.CodigoDocumentoOp < 0)
+          var documentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
+                if (documentoOp==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo documento op no existe";
                     return result;
                 }
-                var codigoRetencion = await _admRetencionesOpRepository.GetCodigoRetencionOp(dto.CodigoRetencion);
-                if (dto.CodigoRetencion < 0)
+                var retencion = await _admRetencionesOpRepository.GetCodigoRetencionOp(dto.CodigoRetencion);
+                if (retencion==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -94,35 +145,19 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                 var tipoRetencionId = await _admDescriptivaRepository.GetByIdAndTitulo(19, dto.TipoRetencionId);
-              
-                if(dto.TipoRetencionId < 0) 
+                var tipoRetencion = await _admDescriptivaRepository.GetByCodigo( dto.TipoRetencionId);
+
+                if (tipoRetencion==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo retencion Id invalido";
                     return result;
                 }
+             
+             
 
-                var tipoImpuestoId = await _admDescriptivaRepository.GetByIdAndTitulo(18, dto.TipoImpuestoId);
-                if (dto.TipoImpuestoId > 0 && tipoImpuestoId==false )
-                {
-                    
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo impuesto id invalido";
-                    return result;
-                }
-
-                if (dto.PeriodoImpositivo == string.Empty && dto.PeriodoImpositivo.Length > 6)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Periodo Impositivo invalido";
-                    return result;
-                }
-
-                if (dto.BaseImponible < 0) 
+                if (dto.BaseImponible < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -130,7 +165,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoImpuesto < 0) 
+                if (dto.MontoImpuesto < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -138,7 +173,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoImpuestoExento < 0) 
+                if (dto.MontoImpuestoExento < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -146,37 +181,13 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoRetenido != null && dto.MontoRetenido < 0) 
+                if (dto.MontoRetenido != null && dto.MontoRetenido < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Monto retenido invalido";
                     return result;
                 }
-                
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
-
 
 
 
@@ -184,15 +195,14 @@ namespace Convertidor.Services.Adm
                 codigoImpuestoDocumentoOp.CODIGO_DOCUMENTO_OP=dto.CodigoDocumentoOp;
                 codigoImpuestoDocumentoOp.CODIGO_RETENCION = dto.CodigoRetencion;
                 codigoImpuestoDocumentoOp.TIPO_RETENCION_ID = dto.TipoRetencionId;
-                codigoImpuestoDocumentoOp.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-                codigoImpuestoDocumentoOp.PERIODO_IMPOSITIVO = dto.PeriodoImpositivo;
+                codigoImpuestoDocumentoOp.TIPO_IMPUESTO_ID = 0;
                 codigoImpuestoDocumentoOp.BASE_IMPONIBLE=dto.BaseImponible;
                 codigoImpuestoDocumentoOp.MONTO_IMPUESTO=dto.MontoImpuesto;
                 codigoImpuestoDocumentoOp.MONTO_IMPUESTO_EXENTO = dto.MontoImpuestoExento;
                 codigoImpuestoDocumentoOp.MONTO_RETENIDO=dto.MontoRetenido;
-                codigoImpuestoDocumentoOp.EXTRA1 = dto.Extra1;
-                codigoImpuestoDocumentoOp.EXTRA2 = dto.Extra2;
-                codigoImpuestoDocumentoOp.EXTRA3 = dto.Extra3;
+                codigoImpuestoDocumentoOp.EXTRA1 = "";
+                codigoImpuestoDocumentoOp.EXTRA2 ="";
+                codigoImpuestoDocumentoOp.EXTRA3 = "";
 
 
 
@@ -233,16 +243,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                var codigoDocumentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
-                if (dto.CodigoDocumentoOp < 0)
+                var documentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
+                if (documentoOp==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo documento op no existe";
                     return result;
                 }
-                var codigoRetencion = await _admRetencionesOpRepository.GetCodigoRetencionOp(dto.CodigoRetencion);
-                if (dto.CodigoRetencion < 0)
+                var retencion = await _admRetencionesOpRepository.GetCodigoRetencionOp(dto.CodigoRetencion);
+                if (retencion==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -250,32 +260,17 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                var tipoRetencionId = await _admDescriptivaRepository.GetByIdAndTitulo(19, dto.TipoRetencionId);
+                var tipoRetencion = await _admDescriptivaRepository.GetByCodigo( dto.TipoRetencionId);
 
-                if (dto.TipoRetencionId < 0)
+                if (tipoRetencion==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo retencion Id invalido";
                     return result;
                 }
-                var tipoImpuestoId = await _admDescriptivaRepository.GetByIdAndTitulo(18, dto.TipoImpuestoId);
-                if (dto.TipoImpuestoId > 0 && tipoImpuestoId == false)
-                {
-
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo impuesto id invalido";
-                    return result;
-                }
-
-                if (dto.PeriodoImpositivo == string.Empty && dto.PeriodoImpositivo.Length > 6)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Periodo Impositivo invalido";
-                    return result;
-                }
+             
+             
 
                 if (dto.BaseImponible < 0)
                 {
@@ -309,28 +304,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
+            
 
 
                 ADM_IMPUESTOS_DOCUMENTOS_OP entity = new ADM_IMPUESTOS_DOCUMENTOS_OP();
@@ -338,15 +312,18 @@ namespace Convertidor.Services.Adm
                 entity.CODIGO_DOCUMENTO_OP = dto.CodigoDocumentoOp;
                 entity.CODIGO_RETENCION = dto.CodigoRetencion;
                 entity.TIPO_RETENCION_ID = dto.TipoRetencionId;
-                entity.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-                entity.PERIODO_IMPOSITIVO = dto.PeriodoImpositivo;
+                entity.TIPO_IMPUESTO_ID = 0;
+                
+                var mes = DateTime.Now.Month.ToString().PadLeft(2, '0');
+                var serieLetras = $"{DateTime.Now.Year}{mes} ";
+                entity.PERIODO_IMPOSITIVO =$"{serieLetras.Trim()}";
                 entity.BASE_IMPONIBLE = dto.BaseImponible;
                 entity.MONTO_IMPUESTO = dto.MontoImpuesto;
                 entity.MONTO_IMPUESTO_EXENTO = dto.MontoImpuestoExento;
                 entity.MONTO_RETENIDO = dto.MontoRetenido;
-                entity.EXTRA1 = dto.Extra1;
-                entity.EXTRA2 = dto.Extra2;
-                entity.EXTRA3 = dto.Extra3;
+                entity.EXTRA1 = "";
+                entity.EXTRA2 = "";
+                entity.EXTRA3 = "";
 
 
 
