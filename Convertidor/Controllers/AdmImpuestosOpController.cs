@@ -32,6 +32,18 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        
+        
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByCodigoOrdenPago(AdmImpuestosOpFilterDto dto)
+        {
+            var result = await _service.GetByCodigoOrdenPago(dto.CodigoOrdenPago);
+            return Ok(result);
+        }
+
+            
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Update(AdmImpuestosOpUpdateDto dto)

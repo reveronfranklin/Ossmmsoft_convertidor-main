@@ -63,6 +63,22 @@ namespace Convertidor.Data.Repository.Sis
 
 
         }
+        
+        public async Task<SIS_DESCRIPTIVAS> GetByExtra1(string codigoDescripcion)
+        {
+            try
+            {
+                var result = await _context.SIS_DESCRIPTIVAS.DefaultIfEmpty().Where(x => x.EXTRA1 == codigoDescripcion).FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
 
         public async Task<ResultDto<SIS_DESCRIPTIVAS>> Add(SIS_DESCRIPTIVAS entity)
         {

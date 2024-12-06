@@ -13,13 +13,17 @@ namespace Convertidor.Services.Adm
         private readonly IAdmOrdenPagoRepository _admOrdenPagoRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IAdmRetencionesRepository _admRetencionesRepository;
+        private readonly ISisSerieDocumentosRepository _serieDocumentosRepository;
+        private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
 
         public AdmRetencionesOpService(IAdmRetencionesOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IPRE_PRESUPUESTOSRepository prePresupuestosRepository,
                                      IAdmOrdenPagoRepository admOrdenPagoRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
-                                     IAdmRetencionesRepository admRetencionesRepository
+                                     IAdmRetencionesRepository admRetencionesRepository,
+                                     ISisSerieDocumentosRepository serieDocumentosRepository,
+                                     ISisDescriptivaRepository sisDescriptivaRepository
                                      )
         {
             _repository = repository;
@@ -28,6 +32,8 @@ namespace Convertidor.Services.Adm
             _admOrdenPagoRepository = admOrdenPagoRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
             _admRetencionesRepository = admRetencionesRepository;
+            _serieDocumentosRepository = serieDocumentosRepository;
+            _sisDescriptivaRepository = sisDescriptivaRepository;
         }
 
       
@@ -253,7 +259,7 @@ namespace Convertidor.Services.Adm
             
                 codigoRetencionOp.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 codigoRetencionOp.BASE_IMPONIBLE = dto.BaseImponible;
-                codigoRetencionOp.NUMERO_COMPROBANTE = dto.NumeroComprobante;
+             
                 codigoRetencionOp.CODIGO_EMPRESA = conectado.Empresa;
                 codigoRetencionOp.USUARIO_UPD = conectado.Usuario;
                 codigoRetencionOp.FECHA_UPD = DateTime.Now;
@@ -275,6 +281,8 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+       
+        
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Create(AdmRetencionesOpUpdateDto dto)
         {
             ResultDto<AdmRetencionesOpResponseDto> result = new ResultDto<AdmRetencionesOpResponseDto>(null);
@@ -298,8 +306,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo orden pago invalido";
                     return result;
                 }
-                var tipoRetencionId = await _admDescriptivaRepository.GetByCodigo( dto.TipoRetencionId);
-                if (tipoRetencionId==null)
+                var tipoRetencion = await _admDescriptivaRepository.GetByCodigo( dto.TipoRetencionId);
+                if (tipoRetencion==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -330,13 +338,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.NumeroComprobante != null && dto.NumeroComprobante.Length>20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "La longitud Maxima del Comprobante es de 20 digitos";
-                    return result;
-                }
+             
 
 
                 var presupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
@@ -367,8 +369,29 @@ namespace Convertidor.Services.Adm
                 entity.MONTO_RETENCION = dto.MontoRetencion;
                 entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 entity.BASE_IMPONIBLE = dto.BaseImponible;
-                entity.NUMERO_COMPROBANTE = dto.NumeroComprobante;
-
+                if (tipoRetencion.CODIGO == "ISLR")
+                {
+                    string paddedNumber = dto.CodigoOrdenPago.ToString().PadLeft(8, '0');
+                   
+                    var mes = DateTime.Now.Month.ToString().PadLeft(2, '0');
+                    var serieLetras = $"{DateTime.Now.Year}{mes} ";
+                    entity.NUMERO_COMPROBANTE =$"{serieLetras.Trim()}{paddedNumber.Trim()}";
+                }
+                else
+                {
+                    var sisDescriptiva = await _sisDescriptivaRepository.GetByExtra1(tipoRetencion.CODIGO);
+                    var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie((int)entity.CODIGO_PRESUPUESTO , sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+                    if (!numeroSolicitud.IsValid)
+                    {
+                        result.Data = null;
+                        result.IsValid = numeroSolicitud.IsValid;
+                        result.Message = numeroSolicitud.Message;
+                        return result;
+                    }
+                    entity.NUMERO_COMPROBANTE = numeroSolicitud.Data;
+                }
+              
+                
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
