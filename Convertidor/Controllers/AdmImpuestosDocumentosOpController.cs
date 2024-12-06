@@ -23,6 +23,14 @@ namespace Convertidor.Controllers
 
 
         }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByDocumento(AdmImpuestosDocumentosOpFilterDto dto)
+        {
+            var result = await _service.GetByDocumento(dto);
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("[action]")]

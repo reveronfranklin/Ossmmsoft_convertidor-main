@@ -29,6 +29,20 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
+        public async Task<List<ADM_IMPUESTOS_DOCUMENTOS_OP>> GetByDocumento(int codigoDocumento)
+        {
+            try
+            {
+                var result = await _context.ADM_IMPUESTOS_DOCUMENTOS_OP.DefaultIfEmpty().Where(x=>x.CODIGO_DOCUMENTO_OP==codigoDocumento).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+
         public async Task<List<ADM_IMPUESTOS_DOCUMENTOS_OP>> GetAll()
         {
             try
