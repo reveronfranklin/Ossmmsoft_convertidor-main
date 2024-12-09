@@ -453,7 +453,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoDocumento < 0) 
+                if(dto.MontoDocumento >0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -461,21 +461,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.BaseImponible < 0) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Base imponible invalida";
-                    return result;
-                }
+             
 
-                if (dto.MontoImpuesto < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto impuesto invalido";
-                    return result;
-                }
 
                 var tipoTransaccion = await _admDescriptivaRepository.GetByCodigo( dto.TipoTransaccionId);
                 if (tipoTransaccion==null)
@@ -503,15 +490,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoRetenido < 0) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto retenido invalido";
-                    return result;
-                }
-               
-
+            
 
                 var presupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
                 if (presupuesto==null)
@@ -543,17 +522,76 @@ namespace Convertidor.Services.Adm
                 entity.FECHA_DOCUMENTO = dto.FechaDocumento;
                 entity.NUMERO_DOCUMENTO = dto.NumeroDocumento;
                 entity.NUMERO_CONTROL_DOCUMENTO = dto.NumeroControlDocumento;
+            
+                //TODO Calcular Impuesto dependiendo del  proveedor
+                //CALCULA EL MONTO DE LA BASE IMPONIBLE Y DEMAS PARA CUANDO ES CARGADO EL TOTAL DEL DOCUMENTO--
+                /*
+
+                    -----------------------------------------------------------------------------------------------
+                   -----------------------------------------------------------------------------------------------
+                   --CALCULA EL MONTO DE LA BASE IMPONIBLE Y DEMAS PARA CUANDO ES CARGADO EL TOTAL DEL DOCUMENTO--
+                   -----------------------------------------------------------------------------------------------
+                   -----------------------------------------------------------------------------------------------
+                   --/* 
+                   IF NVL(:ADM_DOCUMENTOS_OP.ESTATUS_FISCO_VALOR,0) = 0 Then
+                    :ADM_DOCUMENTOS_OP.MONTO_IMPUESTO := 0;
+                    :ADM_DOCUMENTOS_OP.MONTO_RETENIDO := 0;
+                    :ADM_DOCUMENTOS_OP.BASE_IMPONIBLE := 0;
+                    :ADM_DOCUMENTOS_OP.MONTO_IMPUESTO_EXENTO := :ADM_DOCUMENTOS_OP.MONTO_DOCUMENTO;
+                   ELSE                                         
+                   	:ADM_DOCUMENTOS_OP.BASE_IMPONIBLE := ROUND((NVL(:ADM_DOCUMENTOS_OP.MONTO_DOCUMENTO,0)-NVL(:ADM_DOCUMENTOS_OP.MONTO_IMPUESTO_EXENTO,0))/((:ADM_IMPUESTOS_OP.POR_IMPUESTO/100)+1),2);
+                   	:ADM_DOCUMENTOS_OP.MONTO_IMPUESTO := ROUND(NVL(:ADM_DOCUMENTOS_OP.BASE_IMPONIBLE,0)*(:ADM_IMPUESTOS_OP.POR_IMPUESTO/100),2);
+                   	:ADM_DOCUMENTOS_OP.MONTO_RETENIDO := ROUND(((NVL(:ADM_DOCUMENTOS_OP.MONTO_IMPUESTO,0)*((:ADM_DOCUMENTOS_OP.ESTATUS_FISCO_VALOR/100)+1))-(NVL(:ADM_DOCUMENTOS_OP.MONTO_IMPUESTO,0))),2);
+                   END IF;
+                   
+                   
+                   IF :ADM_DOCUMENTOS_OP.TOTAL_MONTO_DOCUMENTO > NVL(:ADM_COMPROMISO_OP.MONTO_TOTAL,NVL(:ADM_DOCUMENTOS_OP.TOTAL_MONTO_DOCUMENTO,0)) THEN
+                   	F_ALERT.OK('El Monto total de las Facturas No pueden ser Mayor al Monto del Compromiso',null,'CAUTION');
+                     RAISE FORM_TRIGGER_FAILURE;
+                   END IF;
+                   
+
+                 */
+                entity.ESTATUS_FISCO_ID = dto.EstatusFiscoId;
                 entity.MONTO_DOCUMENTO = dto.MontoDocumento;
-                entity.BASE_IMPONIBLE = dto.BaseImponible;
-                entity.MONTO_IMPUESTO = dto.MontoImpuesto;
+                
+                //buscar la descriptiva y se toma EXTRA1 EL PORCENTAJE DE RERENCION IVA
+                //SI EL PORCENTAJE ES MAYOR A CERO SE REALIZA EL CALCULO DE BASE_IMPONIBLE Y MONTO_IMPUESTO
+                var porcentajeRetencion = decimal.Parse(estatusFisco.EXTRA1);
+                var porcentajeIva = decimal.Parse(tipoImpuesto.EXTRA1);
+                if (porcentajeRetencion == 0)
+                {
+                    entity.MONTO_IMPUESTO = 0;
+                    entity.MONTO_RETENIDO = 0;
+                    entity.BASE_IMPONIBLE = 0;
+                    entity.MONTO_IMPUESTO_EXENTO = dto.MontoDocumento;
+                }
+                else
+                {
+                    
+                    entity.BASE_IMPONIBLE =  (entity.MONTO_DOCUMENTO-entity.MONTO_IMPUESTO_EXENTO)/((porcentajeIva/100)+1);
+                    entity.BASE_IMPONIBLE= Math.Ceiling((decimal)entity.BASE_IMPONIBLE * 100) / 100; 
+                   
+                    entity.MONTO_IMPUESTO = (entity.BASE_IMPONIBLE)*(porcentajeIva/100);
+                    entity.MONTO_IMPUESTO= Math.Ceiling((decimal)entity.MONTO_IMPUESTO * 100) / 100; 
+                  
+                    entity.MONTO_RETENIDO = (entity.MONTO_IMPUESTO)*((porcentajeIva/100)+1)-(entity.MONTO_IMPUESTO);
+                    entity.MONTO_RETENIDO= Math.Ceiling((decimal)entity.MONTO_RETENIDO * 100) / 100; 
+                    entity.MONTO_IMPUESTO_EXENTO = 0;
+
+                }
+              
+           
+              
+                
                 entity.NUMERO_DOCUMENTO_AFECTADO = dto.NumeroDocumentoAfectado;
                 entity.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
                 entity.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-                entity.MONTO_IMPUESTO_EXENTO = dto.MontoImpuestoExento;
-                entity.MONTO_RETENIDO = dto.MontoRetenido;
+                
+               
                 entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 entity.NUMERO_EXPEDIENTE = dto.NumeroExpediente;
-                entity.ESTATUS_FISCO_ID = dto.EstatusFiscoId;
+               
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
