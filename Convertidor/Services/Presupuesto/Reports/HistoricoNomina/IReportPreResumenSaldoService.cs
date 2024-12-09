@@ -4,5 +4,5 @@ namespace Convertidor.Services.Rh.Report.Example;
 
 public interface IReportPreResumenSaldoService
 {
-    Task<string> GeneratePdf(FilterResumenSaldo filter);
+    Task<ResultDto<string>> GeneratePdf(FilterResumenSaldo filter);
 }

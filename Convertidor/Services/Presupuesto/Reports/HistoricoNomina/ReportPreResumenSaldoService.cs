@@ -20,10 +20,12 @@ public class ReportPreResumenSaldoService:IReportPreResumenSaldoService
         _presupuestosService = presupuestosService;
     }
     
-    public async Task<string> GeneratePdf(FilterResumenSaldo filter)
+    public async Task<ResultDto<string>> GeneratePdf(FilterResumenSaldo filter)
     {
+        ResultDto<string> result = new ResultDto<string>("");
+
         var settings = _configuration.GetSection("Settings").Get<Settings>();
-        var result = "No Data";
+        result.Data = "No Data";
         var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
         var fileName= $"ResumenSaldo-{filter.CodigoPresupuesto}.pdf";
         var filePath = $"{ @settings.ExcelFiles}{@settings.SeparatorPatch}{fileName}.pdf";
@@ -33,7 +35,9 @@ public class ReportPreResumenSaldoService:IReportPreResumenSaldoService
         var resumen = await _services.GetAllByPresupuesto(filter.CodigoPresupuesto);
         if (resumen.IsValid == false)
         {
-            return "NO_DATA.pdf";
+            result.Data = "No Data";
+            result.IsValid = true;
+            result.Message = "No existen Datos";
         }
         else
         {
@@ -41,7 +45,9 @@ public class ReportPreResumenSaldoService:IReportPreResumenSaldoService
             fileName= $"ResumenSaldo-{filter.CodigoPresupuesto}.pdf";
             filePath = $"{ @settings.ExcelFiles}{@settings.SeparatorPatch}{fileName}";
             document.GeneratePdf(filePath);
-            result =fileName;
+            result.Data =fileName;
+            result.IsValid = true;
+            result.Message = "";
           
         }
       
