@@ -259,7 +259,10 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                 PRE_ASIGNACIONES_DETALLE asignacionNew = new PRE_ASIGNACIONES_DETALLE();
                 asignacionNew.CODIGO_ASIGNACION_DETALLE = await _repository.GetNextKey();
                 asignacionNew.CODIGO_ASIGNACION = entity.CodigoAsignacion;
-                asignacionNew.FECHA_DESEMBOLSO= Convert.ToDateTime(entity.FechaDesembolsoString, CultureInfo.InvariantCulture);
+                //asignacionNew.FECHA_DESEMBOLSO= Convert.ToDateTime(entity.FechaDesembolsoString, CultureInfo.InvariantCulture);
+               
+                DateTime fecha = DateTime.ParseExact(entity.FechaDesembolsoString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                asignacionNew.FECHA_DESEMBOLSO = fecha;
                 asignacionNew.CODIGO_PRESUPUESTO = asignacion.Data.CodigoPresupuesto ;
                 asignacionNew.MONTO = entity.Monto;
                 asignacionNew.NOTAS = entity.Notas;
@@ -363,7 +366,9 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
 
              
                 asignacionDetalle.CODIGO_PRESUPUESTO = asignacion.Data.CodigoPresupuesto ;
-                asignacionDetalle.FECHA_DESEMBOLSO= Convert.ToDateTime(entity.FechaDesembolsoString, CultureInfo.InvariantCulture);
+                //asignacionDetalle.FECHA_DESEMBOLSO= Convert.ToDateTime(entity.FechaDesembolsoString, CultureInfo.InvariantCulture);
+                DateTime fecha = DateTime.ParseExact(entity.FechaDesembolsoString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                asignacionDetalle.FECHA_DESEMBOLSO = fecha;
                 asignacionDetalle.CODIGO_PRESUPUESTO = asignacion.Data.CodigoPresupuesto ;
                 asignacionDetalle.MONTO = entity.Monto;
                 asignacionDetalle.NOTAS = entity.Notas;

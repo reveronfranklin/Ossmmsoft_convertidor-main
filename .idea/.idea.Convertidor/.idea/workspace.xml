@@ -9,11 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_DOCUMENTOS_OP.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_DOCUMENTOS_OP.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmDocumentosOpResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmDocumentosOpResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/HistoricoNomina/IReportPreResumenSaldoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/HistoricoNomina/IReportPreResumenSaldoService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/HistoricoNomina/ReportPreResumenSaldoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/HistoricoNomina/ReportPreResumenSaldoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,7 +291,8 @@
       <workItem from="1732639487463" duration="19389000" />
       <workItem from="1732812944935" duration="38811000" />
       <workItem from="1733326192872" duration="49368000" />
-      <workItem from="1733779903754" duration="951000" />
+      <workItem from="1733779903754" duration="3085000" />
+      <workItem from="1733835755907" duration="455000" />
     </task>
     <servers />
   </component>
@@ -3560,6 +3557,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="804" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesDetalleController.cs</url>
+          <line>44</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesDetalleController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="1151" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1191" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="805" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs</url>
+          <line>365</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="14746" />
+            </startOffsets>
+            <endOffsets>
+              <option value="14861" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="806" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
