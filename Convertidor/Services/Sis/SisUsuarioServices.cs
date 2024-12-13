@@ -480,7 +480,26 @@ namespace Convertidor.Services.Sis
             return jwt;
         }
 
-        
+        public async Task<ResultDto<bool>> TokenValid(string refreshToken)
+        {
+            ResultDto<bool> result  = new ResultDto<bool>(false);
+            var tokenValid=await _repository.TokenValid(refreshToken);
+            if (tokenValid)
+            {
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+                
+            }
+            else
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = "";
+            }
+
+            return result;
+        }
         
         public async  Task<List<RoleMenuDto>> GetMenu(string usuario)
         {
