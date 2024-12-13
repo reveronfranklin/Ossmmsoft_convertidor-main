@@ -217,6 +217,8 @@ namespace Convertidor.Data.Repository.Presupuesto
             List<PreFinanciadoDto> result = new List<PreFinanciadoDto>();
 
             var preVSaldos = await _context.PRE_V_SALDOS
+                
+                
                 .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto )
                 .OrderBy(x=>x.CODIGO_ICP_CONCAT)
                 .ThenBy(x=> x.CODIGO_PUC_CONCAT)

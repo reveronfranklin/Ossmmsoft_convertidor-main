@@ -9,7 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -292,7 +294,8 @@
       <workItem from="1732812944935" duration="38811000" />
       <workItem from="1733326192872" duration="49368000" />
       <workItem from="1733779903754" duration="3085000" />
-      <workItem from="1733835755907" duration="455000" />
+      <workItem from="1733835755907" duration="2630000" />
+      <workItem from="1733876695757" duration="13822000" />
     </task>
     <servers />
   </component>
@@ -498,19 +501,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="95" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs</url>
-          <line>26</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs" containingFunctionPresentation="Method 'GetAll'">
-            <startOffsets>
-              <option value="776" />
-            </startOffsets>
-            <endOffsets>
-              <option value="873" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="99" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_ASIGNACIONESRepository.cs</url>
@@ -1662,13 +1652,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs</url>
-          <line>307</line>
+          <line>309</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'RecalcularSaldo'">
             <startOffsets>
-              <option value="11700" />
+              <option value="11734" />
             </startOffsets>
             <endOffsets>
-              <option value="11836" />
+              <option value="11870" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="378" />
@@ -1883,13 +1873,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs</url>
-          <line>295</line>
+          <line>297</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" containingFunctionPresentation="Method 'RecalculaSaldosPreIcpPucFi'">
             <startOffsets>
-              <option value="11499" />
+              <option value="11533" />
             </startOffsets>
             <endOffsets>
-              <option value="11536" />
+              <option value="11570" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="430" />
@@ -3342,10 +3332,10 @@
           <line>169</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GenerateDataEncabezadoDto'">
             <startOffsets>
-              <option value="8416" />
+              <option value="8445" />
             </startOffsets>
             <endOffsets>
-              <option value="8467" />
+              <option value="8496" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="784" />
@@ -3355,10 +3345,10 @@
           <line>162</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GenerateDataEncabezadoDto'">
             <startOffsets>
-              <option value="8067" />
+              <option value="8096" />
             </startOffsets>
             <endOffsets>
-              <option value="8186" />
+              <option value="8215" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="785" />
@@ -3573,16 +3563,198 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs</url>
-          <line>365</line>
+          <line>368</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="14746" />
+              <option value="14948" />
             </startOffsets>
             <endOffsets>
-              <option value="14861" />
+              <option value="15063" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="806" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs</url>
+          <line>46</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionDetalleService.cs" containingFunctionPresentation="Method 'MapPreAsignacionDetalleDto'">
+            <startOffsets>
+              <option value="2325" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2405" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="807" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs</url>
+          <line>106</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="3891" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3928" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="809" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs</url>
+          <line>108</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="3958" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3976" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="810" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs</url>
+          <line>26</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreAsignacionesController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="776" />
+            </startOffsets>
+            <endOffsets>
+              <option value="873" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="811" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PrePresupuestoController.cs</url>
+          <line>63</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PrePresupuestoController.cs" containingFunctionPresentation="Method 'GetListPresupuesto'">
+            <startOffsets>
+              <option value="1948" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1971" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="812" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionService.cs</url>
+          <line>661</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreAsignacionService.cs" containingFunctionPresentation="Method 'Add'">
+            <startOffsets>
+              <option value="28055" />
+            </startOffsets>
+            <endOffsets>
+              <option value="28129" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="816" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs</url>
+          <line>220</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GenerateDataEncabezadoDto'">
+            <startOffsets>
+              <option value="11237" />
+            </startOffsets>
+            <endOffsets>
+              <option value="11254" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="817" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs</url>
+          <line>89</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GetPuc'">
+            <startOffsets>
+              <option value="5400" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5462" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="818" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs</url>
+          <line>97</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GetPuc'">
+            <startOffsets>
+              <option value="5649" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6170" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="819" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs</url>
+          <line>88</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GetPuc'">
+            <startOffsets>
+              <option value="5273" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5379" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="820" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs</url>
+          <line>66</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GenerateData'">
+            <startOffsets>
+              <option value="4491" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4540" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="821" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs</url>
+          <line>65</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GenerateData'">
+            <startOffsets>
+              <option value="4412" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4478" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="822" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucCompromisosService.cs</url>
+          <line>138</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucCompromisosService.cs" containingFunctionPresentation="Method 'GetByDetalleCompromiso'">
+            <startOffsets>
+              <option value="5663" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5682" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="823" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucCompromisosService.cs</url>
+          <line>130</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucCompromisosService.cs" containingFunctionPresentation="Method 'GetByDetalleCompromiso'">
+            <startOffsets>
+              <option value="5446" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5465" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="824" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
