@@ -9,6 +9,7 @@ namespace Convertidor.Data.Interfaces.Sis
         Task<List<SIS_USUARIOS>> GetALL();
         Task<ResultLoginDto> Login(LoginDto dto);
         Task<SIS_USUARIOS> GetByLogin(string login);
+        Task<bool> TokenValid(string refreshToken);
         Task<ResultDto<SIS_USUARIOS>> Create(SIS_USUARIOS entity);
         Task<ResultDto<SIS_USUARIOS>> Update(SIS_USUARIOS entity);
         string GetToken(SIS_USUARIOS usuario);

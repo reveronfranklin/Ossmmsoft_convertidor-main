@@ -261,6 +261,35 @@ namespace Convertidor.Data.Repository.Sis
            
         }
 
+
+
+        public async Task<bool> TokenValid(string refreshToken)
+        {
+            var result = true;
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                result = false;
+
+                return result;
+            }
+            var sisUsuario = await _context.SIS_USUARIOS.Where(x => x.REFRESHTOKEN == refreshToken).FirstOrDefaultAsync();
+            if (sisUsuario != null)
+            {
+                if (sisUsuario.TOKENEXPIRES < DateTime.Now)
+                {
+                    result = false;
+                }
+                
+            }
+            else
+            {
+                result = false;
+            }
+
+
+            return result;
+        }
+        
         public async Task<ResultLoginDto> Login(LoginDto dto)
         {
 

@@ -8,8 +8,10 @@ namespace Convertidor.Services.Sis
 
 
 
-		
-        Task<ResultLoginDto> Login(LoginDto dto);
+
+		Task<ResultLoginDto> Login(LoginDto dto);
+
+		Task<ResultDto<bool>> TokenValid(string refreshToken);
         string GetMyName();
         Task<SIS_USUARIOS> GetByLogin(string login);
      

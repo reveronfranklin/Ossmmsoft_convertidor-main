@@ -178,6 +178,20 @@ namespace Convertidor.Controllers
           
         }
 
+        
+        
+            
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> TokenValid(ResultRefreshTokenDto refreshToken)
+        {
+      
+            var result = await _service.TokenValid(refreshToken.RefreshToken);
+          
+            return Ok(result);
+        }
+
+        
         [HttpPost]
         [Route("[action]"),Authorize]
         public async Task<ActionResult<ResultLoginDto>> RefreshToken(ResultRefreshTokenDto refreshTokento)
