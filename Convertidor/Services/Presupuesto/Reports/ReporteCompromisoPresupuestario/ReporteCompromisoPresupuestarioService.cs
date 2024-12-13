@@ -87,7 +87,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                   
                         
                     var pucCompromisos = await _prePucCompromisosService.GetByDetalleCompromiso(item.CodigoDetalleCompromiso);
-                    if(pucCompromisos.Data.Count > 0) 
+                    if(pucCompromisos.Data!=null && pucCompromisos.Data.Count > 0) 
                     {
                         result.AddRange(pucCompromisos.Data);
                           
