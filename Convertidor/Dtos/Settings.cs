@@ -17,8 +17,9 @@
 
 
         public string  SeparatorPatch { get; set; }
-        
-        
-    }
+        public string TituloMenu { get; set; }
+
+
+	}
 }
 

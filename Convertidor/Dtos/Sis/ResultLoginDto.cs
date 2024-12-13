@@ -21,6 +21,7 @@
         public string Role { get; set; } = string.Empty;
         public List<UserRole>? Roles { get; set; }
         public string username { get; set; } = string.Empty;
+        public string TituloMenu { get; set; } = string.Empty;
 
     }
     public class UserRole
