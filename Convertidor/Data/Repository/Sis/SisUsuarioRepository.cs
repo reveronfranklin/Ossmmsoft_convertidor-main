@@ -303,7 +303,7 @@ namespace Convertidor.Data.Repository.Sis
                     if ((resultDiario.PASSWORDSTRING.ToUpper() == dto.Password.ToUpper() )  && (resultDiario.PRIORIDAD==1 || roles.Count() >0))
                     {
                         resultLogin.Message = "";
-
+                       
                         resultLogin.AccessToken = GetToken(resultDiario);
                         resultLogin.Name = resultDiario.LOGIN;
                         UserData userData = new UserData();
@@ -313,6 +313,8 @@ namespace Convertidor.Data.Repository.Sis
                         userData.Role = "admin";
                         userData.Roles = roles;
                         userData.Email = $"{resultDiario.LOGIN}@ossmasoft.com";
+                        var settings = _configuration.GetSection("Settings").Get<Settings>();
+                        userData.TituloMenu  = @settings.TituloMenu;  
                         resultLogin.UserData = userData;
                         return resultLogin;
                     }

@@ -15,7 +15,7 @@ namespace Convertidor.Services.Sis
         private readonly IOssUsuarioRolRepository _ossUsuarioRolRepository;
         private readonly IConfiguration _configuration;
         private readonly IRhDescriptivasService _rhDescriptivasService;
-
+        private readonly IOssConfigRepository _ossConfigRepository;
 
 
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -25,7 +25,8 @@ namespace Convertidor.Services.Sis
                                     IOssUsuarioRolRepository ossUsuarioRolRepository,
                                     IHttpContextAccessor httpContextAccessor,
                                     IConfiguration configuration,
-                                    IRhDescriptivasService rhDescriptivasService
+                                    IRhDescriptivasService rhDescriptivasService, 
+                                    IOssConfigRepository ossConfigRepository
               
                                     )
         {
@@ -34,7 +35,7 @@ namespace Convertidor.Services.Sis
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
             _rhDescriptivasService = rhDescriptivasService;
-
+            _ossConfigRepository = ossConfigRepository;
         }
 
         public async Task<ResultLoginDto> Login(LoginDto dto)
@@ -487,6 +488,8 @@ namespace Convertidor.Services.Sis
             List<RoleMenuDto> result = new List<RoleMenuDto> ();
 
 
+            
+            
             var roles = await _ossUsuarioRolRepository.GetByUsuario(usuario);
             
       
