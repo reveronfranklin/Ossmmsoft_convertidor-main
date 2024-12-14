@@ -8,11 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisUsuarioRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/ISisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/ISisUsuarioServices.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Sis/ResultLoginDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/ResultLoginDto.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +36,10 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -314,7 +316,7 @@
       <workItem from="1733326192872" duration="49368000" />
       <workItem from="1733779903754" duration="3085000" />
       <workItem from="1733835755907" duration="2630000" />
-      <workItem from="1733876695757" duration="20604000" />
+      <workItem from="1733876695757" duration="25854000" />
     </task>
     <servers />
   </component>
@@ -432,13 +434,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
-          <line>365</line>
+          <line>371</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'Login'">
             <startOffsets>
-              <option value="12001" />
+              <option value="12145" />
             </startOffsets>
             <endOffsets>
-              <option value="12022" />
+              <option value="12166" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
@@ -3673,29 +3675,42 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
-          <line>339</line>
+          <line>345</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'Login'">
             <startOffsets>
-              <option value="11039" />
+              <option value="11183" />
             </startOffsets>
             <endOffsets>
-              <option value="11083" />
+              <option value="11227" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="826" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>188</line>
+          <line>189</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'TokenValid'">
             <startOffsets>
-              <option value="5795" />
+              <option value="5856" />
             </startOffsets>
             <endOffsets>
-              <option value="5861" />
+              <option value="5922" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="827" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
+          <line>274</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'TokenValid'">
+            <startOffsets>
+              <option value="8238" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8348" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="828" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
