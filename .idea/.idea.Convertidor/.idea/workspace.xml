@@ -8,9 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Sis/ResultLoginDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/ResultLoginDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,7 +314,7 @@
       <workItem from="1733326192872" duration="49368000" />
       <workItem from="1733779903754" duration="3085000" />
       <workItem from="1733835755907" duration="2630000" />
-      <workItem from="1733876695757" duration="25854000" />
+      <workItem from="1733876695757" duration="27492000" />
     </task>
     <servers />
   </component>
@@ -434,13 +432,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
-          <line>371</line>
+          <line>381</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'Login'">
             <startOffsets>
-              <option value="12145" />
+              <option value="12626" />
             </startOffsets>
             <endOffsets>
-              <option value="12166" />
+              <option value="12647" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
@@ -3674,43 +3672,56 @@
           <option name="timeStamp" value="825" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
-          <line>345</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'Login'">
-            <startOffsets>
-              <option value="11183" />
-            </startOffsets>
-            <endOffsets>
-              <option value="11227" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="826" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>189</line>
+          <line>188</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'TokenValid'">
             <startOffsets>
-              <option value="5856" />
+              <option value="5795" />
             </startOffsets>
             <endOffsets>
-              <option value="5922" />
+              <option value="5861" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="827" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
-          <line>274</line>
+          <line>278</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'TokenValid'">
             <startOffsets>
-              <option value="8238" />
+              <option value="8446" />
             </startOffsets>
             <endOffsets>
-              <option value="8348" />
+              <option value="8556" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="828" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
+          <line>117</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
+            <startOffsets>
+              <option value="3461" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3500" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="829" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
+          <line>124</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
+            <startOffsets>
+              <option value="3851" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3869" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="830" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
