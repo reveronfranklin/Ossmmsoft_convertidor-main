@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Convertidor.Data.Entities.Sis;
 using Convertidor.Dtos.Sis;
+using iText.StyledXmlParser.Jsoup.Select;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,11 +16,14 @@ namespace Convertidor.Data.Repository.Sis
         private readonly IConfiguration _configuration;
   
         private IHttpContextAccessor _httpContextAccessor;
-        public SisUsuarioRepository(DataContextSis context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        private readonly IOssConfigRepository _ossConfigRepository;
+
+        public SisUsuarioRepository(DataContextSis context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor,IOssConfigRepository ossConfigRepository)
         {
             _context = context;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _ossConfigRepository = ossConfigRepository;
         }
 
         public async Task<List<SIS_USUARIOS>> GetALL()
@@ -344,6 +348,12 @@ namespace Convertidor.Data.Repository.Sis
                         userData.Email = $"{resultDiario.LOGIN}@ossmasoft.com";
                         var settings = _configuration.GetSection("Settings").Get<Settings>();
                         userData.TituloMenu  = @settings.TituloMenu;  
+                        var ossConfig = await _ossConfigRepository.GetByClave("TITULO_MENU");
+                        if(ossConfig!=null)
+                        {
+                            userData.TituloMenu  =ossConfig.VALOR;  
+                        }
+             
                         resultLogin.UserData = userData;
                         return resultLogin;
                     }
