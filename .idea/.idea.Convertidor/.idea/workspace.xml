@@ -8,7 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +36,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -314,7 +317,7 @@
       <workItem from="1733326192872" duration="49368000" />
       <workItem from="1733779903754" duration="3085000" />
       <workItem from="1733835755907" duration="2630000" />
-      <workItem from="1733876695757" duration="27492000" />
+      <workItem from="1733876695757" duration="30316000" />
     </task>
     <servers />
   </component>
@@ -1996,13 +1999,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs</url>
-          <line>87</line>
+          <line>88</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" containingFunctionPresentation="Method 'GetAllByPresupuestoIpcPuc'">
             <startOffsets>
-              <option value="2840" />
+              <option value="2876" />
             </startOffsets>
             <endOffsets>
-              <option value="2898" />
+              <option value="2934" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="466" />
@@ -2012,10 +2015,10 @@
           <line>121</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="4881" />
+              <option value="4886" />
             </startOffsets>
             <endOffsets>
-              <option value="4933" />
+              <option value="4938" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="467" />
@@ -3698,30 +3701,56 @@
           <option name="timeStamp" value="828" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>117</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs</url>
+          <line>120</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="3461" />
+              <option value="4836" />
             </startOffsets>
             <endOffsets>
-              <option value="3500" />
+              <option value="4869" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="829" />
+          <option name="timeStamp" value="831" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>124</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs</url>
+          <line>79</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" containingFunctionPresentation="Method 'GetAllByPresupuestoIpcPuc'">
             <startOffsets>
-              <option value="3851" />
+              <option value="2598" />
             </startOffsets>
             <endOffsets>
-              <option value="3869" />
+              <option value="2632" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="830" />
+          <option name="timeStamp" value="832" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs</url>
+          <line>52</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" containingFunctionPresentation="Method 'GetAllByPresupuestoIpcPuc'">
+            <startOffsets>
+              <option value="2247" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2281" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="833" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs</url>
+          <line>118</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" containingFunctionPresentation="Method 'GetAllByPresupuestoIpcPuc'">
+            <startOffsets>
+              <option value="4237" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4288" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="834" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

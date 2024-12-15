@@ -64,7 +64,7 @@ namespace Convertidor.Services.Presupuesto
                     var presupuestoSaldo = await _pRE_PRESUPUESTOSRepository.GetByCodigo((int)firstSaldo.CODIGO_EMPRESA, (int)firstSaldo.CODIGO_PRESUPUESTO);
                     if (presupuestoSaldo != null)
                     {
-                        denominacionPresupuesto= presupuesto.DENOMINACION;
+                        denominacionPresupuesto= presupuestoSaldo.DENOMINACION;
                     }
                     if (filter.CodigoIPC>0) {
                         preVSaldos = preVSaldos.Where(x => x.CODIGO_ICP == filter.CodigoIPC).ToList();
