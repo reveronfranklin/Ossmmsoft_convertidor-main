@@ -82,7 +82,8 @@ namespace Convertidor.Controllers
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = "No Data";
-                result.LinkData = $"No DAta";
+                result.LinkData = $"No Data";
+                return  Ok(result);
             }
 
             result = await _service.GetAllByPresupuestoIpcPuc(filter);
