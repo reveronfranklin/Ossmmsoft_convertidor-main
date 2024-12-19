@@ -500,6 +500,16 @@ builder.Services.AddTransient<IAdmRetencionesService, AdmRetencionesService>();
 builder.Services.AddTransient<IAdmOrdenPagoDestinoService, AdmOrdenPagoDestinoService>();
 builder.Services.AddTransient<IAdmOrdenPagoDestinoRepository, AdmOrdenPagoDestinoRepository>();
 
+builder.Services.AddTransient<IAdmDocumentosOpDestinoRepository, AdmDocumentosOpDestinoRepository>();
+
+builder.Services.AddTransient<IAdmImpuestoDocumentosOpDestinoRepository, AdmImpuestoDocumentosOpDestinoRepository>();
+
+builder.Services.AddTransient<IAdmRetencionesDestinoRepository, AdmRetencionesDestinoRepository>();
+
+
+
+
+builder.Services.AddTransient<IAdmOrdenPagoDestinoRepository, AdmOrdenPagoDestinoRepository>();
 builder.Services.AddTransient<IAdmPucOrdenPagoDestinoRepository, AdmPucOrdenPagoDestinoRepository>();
 builder.Services.AddTransient<IAdmBeneficiariosOpDestinoRepository, AdmBeneficiariosOpDestinoRepository>();
 builder.Services.AddTransient<IAdmRetencionesOpDestinoRepository, AdmRetencionesOpDestinoRepository>();

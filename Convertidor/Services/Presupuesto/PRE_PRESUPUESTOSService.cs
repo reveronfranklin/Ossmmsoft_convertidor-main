@@ -524,11 +524,25 @@ namespace Convertidor.Services.Presupuesto
                 presupuesto.DESCRIPCION = dto.Descripcion;
                 presupuesto.ANO = dto.Ano;
                 presupuesto.MONTO_PRESUPUESTO = dto.MontoPresupuesto;
-                presupuesto.FECHA_DESDE = Convert.ToDateTime(dto.FechaDesde, CultureInfo.InvariantCulture);
-                presupuesto.FECHA_HASTA = Convert.ToDateTime(dto.FechaHasta, CultureInfo.InvariantCulture); 
-                presupuesto.FECHA_APROBACION = Convert.ToDateTime(dto.FechaAprobacion, CultureInfo.InvariantCulture);  
+                
+                
+                DateTime fechaDesde = DateTime.ParseExact(dto.FechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                presupuesto.FECHA_DESDE = fechaDesde;
+                
+                DateTime fechaHasta = DateTime.ParseExact(dto.FechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                presupuesto.FECHA_HASTA = fechaHasta;
+          
+                string format = "yyyy-MM-ddTHH:mm:ss.fffZ";
+
+                DateTime fechaAprobacion = DateTime.ParseExact(dto.FechaAprobacion, format, CultureInfo.InvariantCulture);
+
+                
+                presupuesto.FECHA_APROBACION = fechaAprobacion;  
+                
                 presupuesto.NUMERO_ORDENANZA = dto.NumeroOrdenanza;
-                presupuesto.FECHA_ORDENANZA = Convert.ToDateTime(dto.FechaOrdenanza, CultureInfo.InvariantCulture); 
+                DateTime fechaOrdenanza = DateTime.ParseExact(dto.FechaOrdenanza, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                presupuesto.FECHA_ORDENANZA = fechaOrdenanza;
+                
                 presupuesto.EXTRA1 = dto.Extra1;
                 presupuesto.EXTRA2 = dto.Extra2;
                 presupuesto.EXTRA3 = dto.Extra3;
