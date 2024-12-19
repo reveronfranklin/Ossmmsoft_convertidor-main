@@ -8,9 +8,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoInterfaces/ADM/IAdmDocumentosOpDestinoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoInterfaces/ADM/IAdmImpuestoDocumentosOpDestinoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoInterfaces/ADM/IAdmRetencionesDestinoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmDocumentosOpDestinoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmImpuestoDocumentosOpDestinoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmRetencionesDestinoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_DOCUMENTOS_OP.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_IMPUESTOS_DOCUMENTOS_OP.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_RETENCIONES.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/PreVSaldosController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_V_SALDOSServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DestinoDataContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoDataContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -317,7 +327,7 @@
       <workItem from="1733326192872" duration="49368000" />
       <workItem from="1733779903754" duration="3085000" />
       <workItem from="1733835755907" duration="2630000" />
-      <workItem from="1733876695757" duration="30316000" />
+      <workItem from="1733876695757" duration="41469000" />
     </task>
     <servers />
   </component>
@@ -3751,6 +3761,97 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="834" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PrePresupuestoController.cs</url>
+          <line>129</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PrePresupuestoController.cs" containingFunctionPresentation="Method 'AprobarPresupuesto'">
+            <startOffsets>
+              <option value="4745" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4763" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="835" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_PRESUPUESTOSRepository.cs</url>
+          <line>286</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_PRESUPUESTOSRepository.cs" containingFunctionPresentation="Method 'AprobarPresupuesto'">
+            <startOffsets>
+              <option value="8792" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8829" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="836" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs</url>
+          <line>627</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" containingFunctionPresentation="Method 'AprobarPresupuesto'">
+            <startOffsets>
+              <option value="24962" />
+            </startOffsets>
+            <endOffsets>
+              <option value="25059" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="837" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs</url>
+          <line>633</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" containingFunctionPresentation="Method 'AprobarPresupuesto'">
+            <startOffsets>
+              <option value="25345" />
+            </startOffsets>
+            <endOffsets>
+              <option value="25412" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="838" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_PRESUPUESTOSRepository.cs</url>
+          <line>229</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_PRESUPUESTOSRepository.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="7208" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7227" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="839" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_PRESUPUESTOSRepository.cs</url>
+          <line>208</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_PRESUPUESTOSRepository.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="6287" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6387" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="840" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs</url>
+          <line>539</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="21253" />
+            </startOffsets>
+            <endOffsets>
+              <option value="21300" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="841" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

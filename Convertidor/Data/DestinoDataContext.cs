@@ -27,10 +27,56 @@ namespace Convertidor.Data
         public DbSet<ADM_RETENCIONES_OP> ADM_RETENCIONES_OP { get; set; }
         public DbSet<ADM_PROVEEDORES> ADM_PROVEEDORES { get; set; }
        
+        public DbSet<ADM_IMPUESTOS_DOCUMENTOS_OP> ADM_IMPUESTOS_DOCUMENTOS_OP { get; set; }
+        public DbSet<ADM_DOCUMENTOS_OP> ADM_DOCUMENTOS_OP { get; set; }
+        public DbSet<ADM_RETENCIONES> ADM_RETENCIONES { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             base.OnModelCreating(modelBuilder);
+            
+            modelBuilder
+                .Entity<ADM_IMPUESTOS_DOCUMENTOS_OP>(builder =>
+                {
+
+                    builder.ToTable("ADM_IMPUESTOS_DOCUMENTOS_OP");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_IMPUESTO_DOCUMENTO_OP,
+                   
+
+                    });
+                   
+                });
+            
+            modelBuilder
+                .Entity<ADM_DOCUMENTOS_OP>(builder =>
+                {
+
+                    builder.ToTable("ADM_DOCUMENTOS_OP");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_DOCUMENTO_OP,
+                   
+
+                    });
+                   
+                });
+            modelBuilder
+                .Entity<ADM_RETENCIONES>(builder =>
+                {
+
+                    builder.ToTable("ADM_RETENCIONES");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_RETENCION,
+                   
+
+                    });
+                   
+                });
+
             
             modelBuilder
                 .Entity<ADM_BENEFICIARIOS_OP>(builder =>
