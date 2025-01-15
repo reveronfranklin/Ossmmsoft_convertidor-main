@@ -19,7 +19,7 @@ namespace Convertidor.Data.Repository.Rh
             {
                 /*if (filter.Year<=0  )
                 {
-                    var lastPeriodo = await _context.RH_PERIODOS.DefaultIfEmpty().OrderByDescending(p=>p.FECHA_NOMINA).FirstOrDefaultAsync();
+                    var lastPeriodo = await _context.RH_PERIODOS.DefaultIfEmpty().Where(X=>X.FECHA_NOMINA!=null).OrderByDescending(p=>p.FECHA_NOMINA).FirstOrDefaultAsync();
                     if (lastPeriodo != null)
                     {
                         filter.Year = lastPeriodo.FECHA_NOMINA.Year;

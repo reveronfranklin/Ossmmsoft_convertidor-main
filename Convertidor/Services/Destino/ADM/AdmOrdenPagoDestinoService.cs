@@ -454,7 +454,7 @@ namespace Convertidor.Services.Destino.ADM
                result.Message = $"Error eliminando datos de Orden de Pago: {resultDeleted}";
                return result;                             
            }
-
+            
             var descriptiva = await _admDescriptivaRepository.GetByCodigo(ordenPagoOrigen.TIPO_ORDEN_PAGO_ID);
             if (descriptiva != null)
             {
