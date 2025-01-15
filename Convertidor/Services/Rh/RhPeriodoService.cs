@@ -376,7 +376,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
 
                 periodos.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
-                periodos.FECHA_NOMINA = dto.FechaNomina;
+                periodos.FECHA_NOMINA = dto.FechaNomina.Date;
                 periodos.PERIODO = dto.Periodo;
                 periodos.TIPO_NOMINA = dto.TipoNomina;
                 periodos.DESCRIPCION = dto.Descripcion;
@@ -444,7 +444,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
                 periodos.USUARIO_CIERRE = dto.Usuario;
-                periodos.FECHA_CIERRE = dto.Fecha;
+                periodos.FECHA_CIERRE = dto.Fecha.Date;
       
 
 
@@ -504,7 +504,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
                 periodos.USUARIO_PRECIERRE = dto.Usuario;
-                periodos.FECHA_PRECIERRE=dto.Fecha;
+                periodos.FECHA_PRECIERRE=dto.Fecha.Date;
              
               
              
@@ -564,7 +564,7 @@ namespace Convertidor.Data.Repository.Rh
                 }
              
                 periodos.USUARIO_PRENOMINA = dto.Usuario;
-                periodos.FECHA_PRENOMINA = dto.Fecha;
+                periodos.FECHA_PRENOMINA = dto.Fecha.Date;
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 periodos.CODIGO_EMPRESA = conectado.Empresa;
@@ -621,6 +621,7 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
 
+                
                 var periodo = GetListPeriodo().Where(x => x.Codigo == dto.Periodo).FirstOrDefault();
                 
                if (periodo==null)
@@ -652,7 +653,8 @@ namespace Convertidor.Data.Repository.Rh
                 
                 entity.CODIGO_PERIODO = await _repository.GetNextKey();
                 entity.CODIGO_TIPO_NOMINA = dto.CodigoTipoNomina;
-                entity.FECHA_NOMINA = dto.FechaNomina;
+                
+                entity.FECHA_NOMINA = dto.FechaNomina.Date;
                 entity.PERIODO = dto.Periodo;
                 entity.TIPO_NOMINA = dto.TipoNomina;
                 entity.DESCRIPCION = dto.Descripcion;

@@ -8,19 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoInterfaces/ADM/IAdmDocumentosOpDestinoRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoInterfaces/ADM/IAdmImpuestoDocumentosOpDestinoRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoInterfaces/ADM/IAdmRetencionesDestinoRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmDocumentosOpDestinoRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmImpuestoDocumentosOpDestinoRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmRetencionesDestinoRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_DOCUMENTOS_OP.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_IMPUESTOS_DOCUMENTOS_OP.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_RETENCIONES.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DestinoDataContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DestinoDataContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhPeriodoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhPeriodoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPeriodoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPeriodoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -327,7 +317,7 @@
       <workItem from="1733326192872" duration="49368000" />
       <workItem from="1733779903754" duration="3085000" />
       <workItem from="1733835755907" duration="2630000" />
-      <workItem from="1733876695757" duration="41469000" />
+      <workItem from="1733876695757" duration="50745000" />
     </task>
     <servers />
   </component>
@@ -641,19 +631,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="132" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs</url>
-          <line>28</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs" containingFunctionPresentation="Method 'GetAll'">
-            <startOffsets>
-              <option value="680" />
-            </startOffsets>
-            <endOffsets>
-              <option value="723" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="139" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhAdministrativosService.cs</url>
@@ -3852,6 +3829,110 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="841" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs</url>
+          <line>44</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="1147" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1187" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="842" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs</url>
+          <line>36</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs" containingFunctionPresentation="Method 'GetAllByYear'">
+            <startOffsets>
+              <option value="914" />
+            </startOffsets>
+            <endOffsets>
+              <option value="965" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="843" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs</url>
+          <line>28</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="680" />
+            </startOffsets>
+            <endOffsets>
+              <option value="723" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="844" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs</url>
+          <line>53</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="1370" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1410" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="845" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs</url>
+          <line>62</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="1596" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1636" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="846" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs</url>
+          <line>70</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPeriodosNominaController.cs" containingFunctionPresentation="Method 'GetPeriodoAbierto'">
+            <startOffsets>
+              <option value="1838" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1892" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="847" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhPeriodoRepository.cs</url>
+          <line>19</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhPeriodoRepository.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="451" />
+            </startOffsets>
+            <endOffsets>
+              <option value="472" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="848" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhPeriodoRepository.cs</url>
+          <line>21</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhPeriodoRepository.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="511" />
+            </startOffsets>
+            <endOffsets>
+              <option value="663" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="849" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
