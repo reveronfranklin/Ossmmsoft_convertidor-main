@@ -77,7 +77,8 @@ namespace Convertidor.Services.Bm
                                 CodigoMovBien = s.CODIGO_MOV_BIEN,
                                 FechaMovimiento = s.FECHA_MOVIMIENTO,
                                 FechaMovimientoFiltro=s.FECHA_MOVIMIENTO,
-                                NroPlaca=s.NRO_PLACA
+                                NroPlaca=s.NRO_PLACA,
+                                ValorActual=s.VALOR_ACTUAL
 
                             } into g
                             select new Bm1GetDto()
@@ -100,7 +101,8 @@ namespace Convertidor.Services.Bm
                                 CodigoMovBien = g.Key.CodigoMovBien,
                                 FechaMovimiento = g.Key.FechaMovimiento,
                                 FechaMovimientoFiltro= g.Key.FechaMovimientoFiltro,
-                                NroPlaca = g.Key.NroPlaca
+                                NroPlaca = g.Key.NroPlaca,
+                                ValorActual = g.Key.ValorActual
                                
 
                             };
@@ -146,7 +148,8 @@ namespace Convertidor.Services.Bm
                                      FechaMovimientoFiltro=s.FechaMovimientoFiltro,
                                      Year=s.Year,
                                      Month=s.Month,
-                                     NroPlaca=s.NroPlaca
+                                     NroPlaca=s.NroPlaca,
+                                     ValorActual=s.ValorActual
                                      
 
                                  } into g
@@ -167,7 +170,8 @@ namespace Convertidor.Services.Bm
                                      FechaMovimientoFiltro = (DateTime)g.Key.FechaMovimientoFiltro,
                                      Year = g.Key.Year,
                                      Month = g.Key.Month,
-                                     NroPlaca=g.Key.NroPlaca
+                                     NroPlaca=g.Key.NroPlaca,
+                                     ValorActual = g.Key.ValorActual
 
                                  };
                 /*if (listaExcel != null && listaExcel.Count() > 0)
@@ -246,7 +250,8 @@ namespace Convertidor.Services.Bm
                                 CodigoBien = s.CODIGO_BIEN,
                                 CodigoMovBien = s.CODIGO_MOV_BIEN,
                                 FechaMovimiento = s.FECHA_MOVIMIENTO,
-                                NroPlaca=s.NRO_PLACA
+                                NroPlaca=s.NRO_PLACA,
+                                ValorActual=s.VALOR_ACTUAL
                                 
 
 
@@ -272,7 +277,8 @@ namespace Convertidor.Services.Bm
                                 FechaMovimiento = g.Key.FechaMovimiento,
                                 Year = g.Key.FechaMovimiento.Year,
                                 Month = g.Key.FechaMovimiento.Month,
-                                NroPlaca = g.Key.NroPlaca
+                                NroPlaca = g.Key.NroPlaca,
+                                ValorActual = g.Key.ValorActual
                              
 
                             };
@@ -314,7 +320,8 @@ namespace Convertidor.Services.Bm
                                      FechaMovimientoFiltro=s.FechaMovimientoFiltro,
                                      Year=s.Year,
                                      Month=s.Month,
-                                     NroPlaca=s.NroPlaca
+                                     NroPlaca=s.NroPlaca,
+                                     ValorActual=s.ValorActual
 
 
                                  } into g
@@ -336,7 +343,8 @@ namespace Convertidor.Services.Bm
                                      FechaMovimientoFiltro = (DateTime)g.Key.FechaMovimientoFiltro,
                                      Year = g.Key.Year,
                                      Month = g.Key.Month,
-                                     NroPlaca = g.Key.NroPlaca
+                                     NroPlaca = g.Key.NroPlaca,
+                                     ValorActual = g.Key.ValorActual
 
 
                                  };
