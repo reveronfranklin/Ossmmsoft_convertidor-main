@@ -369,6 +369,9 @@ builder.Services.AddTransient<IRhReporteFirmaRepository, RhReporteFirmaRepositor
 builder.Services.AddTransient<IRhReporteFirmaService, RhReporteFirmaService>();
 builder.Services.AddTransient<IReportReciboPagoService, ReportReciboPagoService>();
 
+builder.Services.AddTransient<IRhVTitularesBeneficiariosRepository, RhVTitularesBeneficiariosRepository>();
+builder.Services.AddTransient<IRhVTitularesBeneficiariosService, RhVTitularesBeneficiariosService>();
+
 
 
 

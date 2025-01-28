@@ -73,6 +73,9 @@ namespace Convertidor.Data
         public DbSet<RH_H_RETENCIONES_SIND> RH_H_RETENCIONES_SIND { get; set; }
         public DbSet<RH_H_PERIODOS> RH_H_PERIODOS { get; set; }
         public DbSet<RH_V_RECIBO_PAGO> RH_V_RECIBO_PAGO { get; set; }
+        
+        public DbSet<RH_V_TITULAR_BENEFICIARIOS> RH_V_TITULAR_BENEFICIARIOS { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -83,6 +86,11 @@ namespace Convertidor.Data
             {
                     builder.HasNoKey();
                     builder.ToTable("RH_HISTORICO_NOMINA");
+            });
+            modelBuilder.Entity<RH_V_TITULAR_BENEFICIARIOS>(builder =>
+            {
+                builder.HasNoKey();
+                builder.ToTable("RH_V_TITULAR_BENEFICIARIOS");
             });
 
             modelBuilder.Entity<RH_V_REPORTE_NOMINA_TEMPORAL>(builder =>

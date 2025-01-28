@@ -3,7 +3,7 @@
 	public interface IRhPersonaService
 	{
 
-     
+		TiempoServicioResponseDto TiempoServicio(DateTime desde, DateTime hasta);
         Task<ListPersonasDto> GetByCodigoPersona(int codigoPersona);
         Task<ResultDto<List<ListSimplePersonaDto>>> GetAllSimple();
         Task<ResultDto<List<ListSimplePersonaDto>>> GetAll();

@@ -260,8 +260,18 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                 asignacionNew.CODIGO_ASIGNACION_DETALLE = await _repository.GetNextKey();
                 asignacionNew.CODIGO_ASIGNACION = entity.CodigoAsignacion;
                 //asignacionNew.FECHA_DESEMBOLSO= Convert.ToDateTime(entity.FechaDesembolsoString, CultureInfo.InvariantCulture);
+
+
+             
+
                
-                DateTime fecha = DateTime.ParseExact(entity.FechaDesembolsoString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime fecha;
+
+                // Paso 1: Convertir la cadena a DateTime
+                string formatoEntrada = "yyyy-MM-dd'T'HH:mm:ss.fff'Z'";
+                fecha = DateTime.ParseExact(entity.FechaDesembolsoString, formatoEntrada, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+                
+             
                 asignacionNew.FECHA_DESEMBOLSO = fecha;
                 asignacionNew.CODIGO_PRESUPUESTO = asignacion.Data.CodigoPresupuesto ;
                 asignacionNew.MONTO = entity.Monto;
@@ -367,7 +377,13 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
              
                 asignacionDetalle.CODIGO_PRESUPUESTO = asignacion.Data.CodigoPresupuesto ;
                 //asignacionDetalle.FECHA_DESEMBOLSO= Convert.ToDateTime(entity.FechaDesembolsoString, CultureInfo.InvariantCulture);
-                DateTime fecha = DateTime.ParseExact(entity.FechaDesembolsoString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+          
+                DateTime fecha;
+
+                // Paso 1: Convertir la cadena a DateTime
+                string formatoEntrada = "yyyy-MM-dd'T'HH:mm:ss.fff'Z'";
+                fecha = DateTime.ParseExact(entity.FechaDesembolsoString, formatoEntrada, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+
                 asignacionDetalle.FECHA_DESEMBOLSO = fecha;
                 asignacionDetalle.CODIGO_PRESUPUESTO = asignacion.Data.CodigoPresupuesto ;
                 asignacionDetalle.MONTO = entity.Monto;
