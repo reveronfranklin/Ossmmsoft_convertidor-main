@@ -646,6 +646,7 @@ public class PreAsignacionService: IPreAsignacionService
                 asignacionNew.LAEE = entity.Laee;
                 asignacionNew.COORDINADO = entity.Coordinado;
                 asignacionNew.ANO = presupuesto.ANO;
+                
                
                 asignacionNew.CODIGO_EMPRESA = conectado.Empresa;
                 asignacionNew.USUARIO_INS = conectado.Usuario;
