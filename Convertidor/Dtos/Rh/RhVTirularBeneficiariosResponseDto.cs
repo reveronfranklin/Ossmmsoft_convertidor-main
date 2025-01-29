@@ -2,6 +2,8 @@ namespace Convertidor.Dtos.Rh;
 
 public class RhVTitularBeneficiariosResponseDto
 {
+    
+    public int Id { get; set; }
     public string CedulaTitular { get; set; }
     public string CedulaBeneficiario { get; set; }
     public string? NombreTituBene { get; set; }
@@ -33,4 +35,8 @@ public class RhVTitularBeneficiariosResponseDto
     public string CargoNominal { get; set; }
     public string AntiguedadCmc { get; set; }
     public string   AntiguedadOtros { get; set; }
+    
+    public string SearchText { get { return $"{CedulaTitular}-{CedulaBeneficiario}-{NombreTituBene}-{ApellidosTituBene}-{UnidadDescripcion}-{CargoNominal}-{TipoNomina}"; } }
+
+    
 }

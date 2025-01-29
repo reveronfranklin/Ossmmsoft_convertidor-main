@@ -44,17 +44,25 @@ namespace Convertidor.Services.Adm
                 itemResult.NombreTituBene = dtos.NOMBRES_TITU_BENE;
                 itemResult.ApellidosTituBene = dtos.APELLIDOS_TITU_BENE;
                 itemResult.FechaNacimientoFamiliar = (DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR;
-                itemResult.FechaNacimientoFamiliarString =Fecha.GetFechaString((DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR); 
-                FechaDto FechaNacimientoFamiliarObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR);
-                itemResult.FechaNacimientoFamiliarObj = FechaNacimientoFamiliarObj;
                 var hasta = DateTime.Now;
-                var edad =_personaService.TiempoServicio((DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR, hasta);
-                itemResult.Edad = $"{edad.CantidadAños} Años {edad.CantidadMeses} meses {edad.CantidadDias} dias";
+                if (dtos.FECHA_NACIMIENTO_FAMILIAR == null)
+                {
+                    itemResult.FechaNacimientoFamiliarString =""; ;
+                    itemResult.FechaNacimientoFamiliarObj = null;
+                    itemResult.Edad = "";
+                }
+                else
+                {
+                    itemResult.FechaNacimientoFamiliarString =Fecha.GetFechaString((DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR); 
+                    FechaDto FechaNacimientoFamiliarObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR);
+                    itemResult.FechaNacimientoFamiliarObj = FechaNacimientoFamiliarObj;
+              
+                    var edad =_personaService.TiempoServicio((DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR, hasta);
+                    itemResult.Edad = $"{edad.CantidadAños} Años {edad.CantidadMeses} meses {edad.CantidadDias} dias";
 
-                var tiempoServicio =_personaService.TiempoServicio((DateTime)dtos.FECHA_INGRESO, hasta);
-
-                itemResult.TiempoServicio= $"{tiempoServicio.CantidadAños} Años {tiempoServicio.CantidadMeses} meses {tiempoServicio.CantidadDias} dias";
-
+                }
+            
+           
                 itemResult.Sexo = dtos.SEXO;
                 itemResult.EstadoCivil = dtos.ESTADO_CIVIL;
         
@@ -78,8 +86,23 @@ namespace Convertidor.Services.Adm
                 itemResult.Parentesco =dtos.PARENTESCO;
                 itemResult.TipoNomina = dtos.TIPO_NOMINA;
                 itemResult.FechaIngreso = (DateTime)dtos.FECHA_INGRESO;
-                itemResult.FechaIngresoString =Fecha.GetFechaString((DateTime)dtos.FECHA_INGRESO); 
-                itemResult.FechaIngresoObj=Fecha.GetFechaDto((DateTime)dtos.FECHA_INGRESO);
+                if (dtos.FECHA_INGRESO == null)
+                {
+                    itemResult.FechaIngresoString =""; 
+                    itemResult.FechaIngresoObj=null;
+                    itemResult.TiempoServicio = "";
+
+                }
+                else
+                {
+                    itemResult.FechaIngresoString =Fecha.GetFechaString((DateTime)dtos.FECHA_INGRESO); 
+                    itemResult.FechaIngresoObj=Fecha.GetFechaDto((DateTime)dtos.FECHA_INGRESO);
+                    var tiempoServicio =_personaService.TiempoServicio((DateTime)dtos.FECHA_INGRESO, hasta);
+
+                    itemResult.TiempoServicio= $"{tiempoServicio.CantidadAños} Años {tiempoServicio.CantidadMeses} meses {tiempoServicio.CantidadDias} dias";
+
+                }
+              
                 itemResult.UnidadDescripcion = dtos.UNIDAD_ADSCRIPCION;
                 itemResult.CargoNominal = dtos.CARGO_NOMINAL;
                 itemResult.AntiguedadCmc = dtos.ANTIGUEDAD_CMC;
@@ -162,23 +185,47 @@ namespace Convertidor.Services.Adm
         }
 
         
-        public async Task<ResultDto<List<RhVTitularBeneficiariosResponseDto>>> GetByTipoNomina(RhVTitularBeneficiariosFilterDto filter)
+        public async Task<ResultDto<List<RhVTitularBeneficiariosResponseDto>>> GetByTipoNomina(FilterTipoNomina filter)
         {
+            
             ResultDto<List<RhVTitularBeneficiariosResponseDto>> result = new ResultDto<List<RhVTitularBeneficiariosResponseDto>>(null);
+
             try
             {
+           
+            
+             
 
-                var titularesBeneficiarios = await _repository.GetByTipoNomina(filter.CodigoTipoNomina);
-                if (titularesBeneficiarios == null)
+                if (filter.CodigoTipoNomina==null || filter.CodigoTipoNomina.Count == 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "No Data";
                     return result;
                 }
+                List<RhVTitularBeneficiariosResponseDto> resultData = new List<RhVTitularBeneficiariosResponseDto>();
+               
+                foreach (var item in filter.CodigoTipoNomina)
+                {
+                    var titularesBeneficiarios = await _repository.GetByTipoNomina(item.CodigoTipoNomina);
+                    if (titularesBeneficiarios != null &&  titularesBeneficiarios.Count>0)
+                    {
+                        
+                        var resultDto = await  MapListRhTitularBeneficiarioDto(titularesBeneficiarios);
 
-                var resultDto = await  MapListRhTitularBeneficiarioDto(titularesBeneficiarios);
-                result.Data = resultDto;
+                        resultData.AddRange(resultDto);
+                    }
+                   
+                }
+                int contadorId = 1;
+                foreach (var item in resultData)
+                {
+                    item.Id = contadorId;
+                    contadorId++;
+                }
+
+              
+                result.Data = resultData;
                 result.IsValid = true;
                 result.Message = "";
                 return result;
