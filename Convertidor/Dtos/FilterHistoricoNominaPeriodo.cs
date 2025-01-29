@@ -14,5 +14,12 @@
         public string TipoSort { get; set; } = string.Empty;
         public string sortColumn { get; set; } = string.Empty;
     }
+	
+	public class FilterTipoNomina
+	{
+	
+		public List<RhTiposNominaResponseDto>? CodigoTipoNomina { get; set; }
+		
+	}
 }
 
