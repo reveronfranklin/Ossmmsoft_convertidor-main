@@ -9,8 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhVTirularBeneficiariosResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhVTirularBeneficiariosResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +37,13 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -318,7 +326,7 @@
       <workItem from="1738082068185" duration="28626000" />
       <workItem from="1738503666794" duration="893000" />
       <workItem from="1738518128705" duration="5383000" />
-      <workItem from="1738943739686" duration="1521000" />
+      <workItem from="1738943739686" duration="5200000" />
     </task>
     <servers />
   </component>
@@ -3934,10 +3942,10 @@
           <line>167</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="6431" />
+              <option value="6459" />
             </startOffsets>
             <endOffsets>
-              <option value="6501" />
+              <option value="6529" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="864" />
@@ -4025,10 +4033,10 @@
           <line>234</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'GetByTipoNomina'">
             <startOffsets>
-              <option value="8799" />
+              <option value="8827" />
             </startOffsets>
             <endOffsets>
-              <option value="8818" />
+              <option value="8846" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="879" />
@@ -4064,10 +4072,10 @@
           <line>219</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'GetByTipoNomina'">
             <startOffsets>
-              <option value="8376" />
+              <option value="8404" />
             </startOffsets>
             <endOffsets>
-              <option value="8395" />
+              <option value="8423" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="884" />
@@ -4077,10 +4085,10 @@
           <line>227</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'GetByTipoNomina'">
             <startOffsets>
-              <option value="8589" />
+              <option value="8617" />
             </startOffsets>
             <endOffsets>
-              <option value="8614" />
+              <option value="8642" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="885" />
@@ -4097,6 +4105,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="886" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs</url>
+          <line>76</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'MapRhTitularBeneficiarioDto'">
+            <startOffsets>
+              <option value="3109" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3173" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="887" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs</url>
+          <line>78</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'MapRhTitularBeneficiarioDto'">
+            <startOffsets>
+              <option value="3200" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3237" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="888" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

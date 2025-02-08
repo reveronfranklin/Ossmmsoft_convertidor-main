@@ -74,7 +74,7 @@ namespace Convertidor.Services.Adm
         
                 itemResult.EstadoCivil = dtos.ESTADO_CIVIL;
         
-                itemResult.NuCuenta = dtos.NU_CUENTA;
+                itemResult.NuCuenta = dtos.NU_CUENTA.Replace("'", string.Empty);;
         
                 itemResult.TpCuenta = dtos.TP_CUENTA;
         
