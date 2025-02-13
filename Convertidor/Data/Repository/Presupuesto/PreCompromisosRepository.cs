@@ -345,8 +345,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                     itemData.CodigoDirEntrega = item.CODIGO_DIR_ENTREGA;
                     itemData.OrigenId = 805;
                     itemData.OrigenDescripcion = $"COMPROMISOS PRESUPUESTARIOS";
-                    
-        
+
+                    itemData.Monto = await getTotalCompromiso(item.CODIGO_COMPROMISO);
+                   
                     
 
                     
@@ -373,7 +374,34 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
         }
 
-
+        public async Task<decimal> getTotalCompromiso(int codigoCompromiso)
+        {
+            decimal total = 0;
+            
+            var detalleCompromiso= await _context.PRE_DETALLE_COMPROMISOS.DefaultIfEmpty()
+                .Where(x => x.CODIGO_COMPROMISO == codigoCompromiso).ToListAsync();
+            if (detalleCompromiso.Count > 0)
+            {
+                foreach (var itemDetalle in detalleCompromiso)
+                {
+                    var pucCompromiso = await _context.PRE_PUC_COMPROMISOS.DefaultIfEmpty()
+                        .Where(x =>x.CODIGO_DETALLE_COMPROMISO == itemDetalle.CODIGO_DETALLE_COMPROMISO).ToListAsync();
+        
+                    if (pucCompromiso.Count > 0)
+                    {
+                        foreach (var itemPuc in pucCompromiso)
+                        {
+                            total = total + itemPuc.MONTO;
+                        }
+                    }
+                }
+            }
+            
+           
+                  
+           
+            return total;
+        }
         public async Task<ResultDto<PRE_COMPROMISOS>> Add(PRE_COMPROMISOS entity)
         {
             ResultDto<PRE_COMPROMISOS> result = new ResultDto<PRE_COMPROMISOS>(null);

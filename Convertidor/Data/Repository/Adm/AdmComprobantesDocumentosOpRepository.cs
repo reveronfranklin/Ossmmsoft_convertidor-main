@@ -43,6 +43,22 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
+        public async Task<List<ADM_COMPROBANTES_DOCUMENTOS_OP>> GetByOrdenPago(int codigoOrdenPago) 
+        {
+            try
+            {
+                var result = await _context.ADM_COMPROBANTES_DOCUMENTOS_OP
+                    
+                    .Where(x=>x.CODIGO_ORDEN_PAGO==codigoOrdenPago).ToListAsync();
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
+        
         public async Task<ResultDto<ADM_COMPROBANTES_DOCUMENTOS_OP>> Add(ADM_COMPROBANTES_DOCUMENTOS_OP entity)
         {
 

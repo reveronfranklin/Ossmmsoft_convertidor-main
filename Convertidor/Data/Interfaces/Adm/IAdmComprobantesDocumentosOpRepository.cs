@@ -10,5 +10,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_COMPROBANTES_DOCUMENTOS_OP>> Update(ADM_COMPROBANTES_DOCUMENTOS_OP entity);
         Task<string> Delete(int codigoComprobanteDocOp);
         Task<int> GetNextKey();
+        Task<List<ADM_COMPROBANTES_DOCUMENTOS_OP>> GetByOrdenPago(int codigoOrdenPago);
     }
 }

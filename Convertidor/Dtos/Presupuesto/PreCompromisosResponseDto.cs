@@ -19,6 +19,8 @@
         public int CodigoPresupuesto { get; set; }
         public int OrigenId { get; set; }
         public string OrigenDescripcion { get; set; }
+        
+        public decimal Monto { get; set; }
        
 
     }
