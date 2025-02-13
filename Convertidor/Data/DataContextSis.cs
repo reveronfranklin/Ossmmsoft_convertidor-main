@@ -14,6 +14,7 @@ namespace Convertidor.Data
 
         }
         
+        public DbSet<SIS_EMPRESAS> SIS_EMPRESAS { get; set; }
         public DbSet<AUTH_CONTENT_TYPE> AUTH_CONTENT_TYPE { get; set; }
         public DbSet<AUTH_GROUP> AUTH_GROUP { get; set; }
         public DbSet<AUTH_GROUP_PERMISSIONS> AUTH_GROUP_PERMISSIONS { get; set; }
@@ -48,6 +49,16 @@ namespace Convertidor.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder
                     
+                    
+                .Entity<SIS_EMPRESAS>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_EMPRESA,
+
+                    });
+                    builder.ToTable("SIS_EMPRESAS");
+                })  
                 .Entity<AUTH_CONTENT_TYPE>(builder =>
                 {
                     builder.HasKey(table => new

@@ -5,6 +5,7 @@ using Convertidor.Data.EntitiesDestino.ADM;
 using Convertidor.Data.EntitiesDestino.PRE;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
+using Convertidor.Dtos.Adm;
 using Convertidor.Utility;
 
 
@@ -33,6 +34,11 @@ namespace Convertidor.Services.Destino.ADM
         private readonly IPreCompromisosRepository _preCompromisosRepository;
         private readonly IAdmSolicitudesRepository _admSolicitudesRepository;
         private readonly IOssConfigRepository _ossConfigRepository;
+        private readonly IAdmComprobantesDocumentosOpDestinoRepository _admComprobantesDocumentosOpDestinoRepository;
+        private readonly IAdmComprobantesDocumentosOpRepository _admComprobantesDocumentosOpRepository;
+        private readonly ISisEmpresaRepository _sisEmpresaRepository;
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
 
 
         public AdmOrdenPagoDestinoService(
@@ -56,7 +62,13 @@ namespace Convertidor.Services.Destino.ADM
                         IAdmCompromisoOpRepository admCompromisoOpRepository,
                         IPreCompromisosRepository preCompromisosRepository,
                         IAdmSolicitudesRepository admSolicitudesRepository,
-                        IOssConfigRepository ossConfigRepository)
+                        IOssConfigRepository ossConfigRepository,
+                        IAdmComprobantesDocumentosOpDestinoRepository admComprobantesDocumentosOpDestinoRepository,
+                        IAdmComprobantesDocumentosOpRepository admComprobantesDocumentosOpRepository,
+                        ISisEmpresaRepository sisEmpresaRepository,
+                        ISisUsuarioRepository sisUsuarioRepository,
+                        ISisDescriptivaRepository sisDescriptivaRepository
+                        )
         {
             _mapper = mapper;
             _repository = repository;
@@ -79,6 +91,11 @@ namespace Convertidor.Services.Destino.ADM
             _preCompromisosRepository = preCompromisosRepository;
             _admSolicitudesRepository = admSolicitudesRepository;
             _ossConfigRepository = ossConfigRepository;
+            _admComprobantesDocumentosOpDestinoRepository = admComprobantesDocumentosOpDestinoRepository;
+            _admComprobantesDocumentosOpRepository = admComprobantesDocumentosOpRepository;
+            _sisEmpresaRepository = sisEmpresaRepository;
+            _sisUsuarioRepository = sisUsuarioRepository;
+            _sisDescriptivaRepository = sisDescriptivaRepository;
         }
 
         
@@ -365,7 +382,8 @@ namespace Convertidor.Services.Destino.ADM
             {
                 await _pucOrdenPagoDestinoRepository.Delete(codigoOrdenPago);                              
                 await _admBeneficiariosOpDestinoRepository.Delete(codigoOrdenPago);                        
-                await _admRetencionesOpDestinoRepository.Delete(codigoOrdenPago);                          
+                await _admRetencionesOpDestinoRepository.Delete(codigoOrdenPago);
+                await _admComprobantesDocumentosOpDestinoRepository.Delete(codigoOrdenPago);
                 await _destinoRepository.Delete(codigoOrdenPago);                                          
                 await _admContactosProveedorDestinoRepository.Delete(ordenPagoOrigen.CODIGO_PROVEEDOR);    
                 await _admProveedoresDestinoRepository.Delete(ordenPagoOrigen.CODIGO_PROVEEDOR);           
@@ -422,14 +440,19 @@ namespace Convertidor.Services.Destino.ADM
         public async  Task<ResultDto<bool>> CopiarOrdenPago(int codigoOrdenPago)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            
             decimal monto = 0;
             var pucOrdenPagoOrigen = await _pucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
             if (pucOrdenPagoOrigen.Count > 0)
             {
                 monto = pucOrdenPagoOrigen.Sum(x => x.MONTO);
             }
-            
+
+           
             await _repository.UpdateMontoEnLetras(codigoOrdenPago, monto);
+
+          
             
             var ordenPagoOrigen = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
             if (ordenPagoOrigen == null)
@@ -440,6 +463,27 @@ namespace Convertidor.Services.Destino.ADM
                 return result;
             }
             
+            
+            var empresa = await _sisEmpresaRepository.GetByCodigo(conectado.Empresa);
+            if (empresa != null)
+            {
+                AdmAgenteRetencionDto agenteRetencion = new AdmAgenteRetencionDto();
+                agenteRetencion.NOMBRE_AGENTE_RETENCION = empresa.NOMBRE_EMPRESA;
+                agenteRetencion.DIRECCION_AGENTE_RETENCION = empresa.EXTRA4;
+                agenteRetencion.TELEFONO_AGENTE_RETENCION = empresa.EXTRA6;
+                var sisDescriptiva = await _sisDescriptivaRepository.GetById(empresa.IDENTIFICACION_ID);
+                agenteRetencion.RIF_AGENTE_RETENCION = "";
+                if (sisDescriptiva != null)
+                {
+                    agenteRetencion.RIF_AGENTE_RETENCION = $"{sisDescriptiva.CODIGO_DESCRIPCION}{empresa.NUMERO_IDENTIFICACION}";
+                }
+
+                ordenPagoOrigen.NOMBRE_AGENTE_RETENCION = agenteRetencion.NOMBRE_AGENTE_RETENCION;
+                ordenPagoOrigen.DIRECCION_AGENTE_RETENCION = agenteRetencion.DIRECCION_AGENTE_RETENCION;
+                ordenPagoOrigen.TELEFONO_AGENTE_RETENCION = agenteRetencion.TELEFONO_AGENTE_RETENCION;
+                ordenPagoOrigen.RIF_AGENTE_RETENCION = agenteRetencion.RIF_AGENTE_RETENCION;
+                
+            }
             
             var tituloReporteOrden = await GetTituloReporteOrdenPago(codigoOrdenPago,ordenPagoOrigen);
             ordenPagoOrigen.TITULO_REPORTE = tituloReporteOrden;
@@ -538,12 +582,21 @@ namespace Convertidor.Services.Destino.ADM
               
                if (retencionesOp.Count>0)
                {
-                   
-           
                    //var newRetenciones = MapRetenciones(retencionesOp);
                    var newRetenciones = _mapper.Map<List<ADM_RETENCIONES_OP>>(retencionesOp);
                    await _admRetencionesOpDestinoRepository.Add(newRetenciones);
                }
+
+
+               var comprobantesDocumentos = await _admComprobantesDocumentosOpRepository.GetByOrdenPago(codigoOrdenPago);
+               if (comprobantesDocumentos.Count>0)
+               {
+                   var newcomprobantesDocumentos = _mapper.Map<List<ADM_COMPROBANTES_DOCUMENTOS_OP>>(retencionesOp);
+                   await _admComprobantesDocumentosOpDestinoRepository.Add(newcomprobantesDocumentos);
+               }
+
+
+
             }
             else
             {

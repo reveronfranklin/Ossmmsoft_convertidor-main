@@ -287,6 +287,33 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
+        public async Task<string> UpdateDatosAgenteRetencion(int codigoOrdenPago,  AdmAgenteRetencionDto agenteRetencion)
+        {
+
+            decimal monto = 0;
+            string montoString = monto.ToString(CultureInfo.InvariantCulture);
+            try
+            {
+        
+                
+                FormattableString xqueryDiario =$"UPDATE  ADM.ADM_ORDEN_PAGO SET DIRECCION_AGENTE_RETENCION='{agenteRetencion.DIRECCION_AGENTE_RETENCION}',NOMBRE_AGENTE_RETENCION='{agenteRetencion.NOMBRE_AGENTE_RETENCION}',RIF_AGENTE_RETENCION='{agenteRetencion.RIF_AGENTE_RETENCION}',TELEFONO_AGENTE_RETENCION='{agenteRetencion.TELEFONO_AGENTE_RETENCION}' WHERE CODIGO_ORDEN_PAGO={codigoOrdenPago}";
+              
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<string> GetNextOrdenPago(int codigoPresupuesto)
         {
             try

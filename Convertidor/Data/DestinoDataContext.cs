@@ -25,6 +25,10 @@ namespace Convertidor.Data
         public DbSet<ADM_PUC_ORDEN_PAGO> ADM_PUC_ORDEN_PAGO { get; set; }
         public DbSet<PRE_V_SALDOS> PRE_V_SALDOS { get; set; }
         public DbSet<ADM_RETENCIONES_OP> ADM_RETENCIONES_OP { get; set; }
+        
+        public DbSet<ADM_COMPROBANTES_DOCUMENTOS_OP> ADM_COMPROBANTES_DOCUMENTOS_OP { get; set; }
+        
+        
         public DbSet<ADM_PROVEEDORES> ADM_PROVEEDORES { get; set; }
        
         public DbSet<ADM_IMPUESTOS_DOCUMENTOS_OP> ADM_IMPUESTOS_DOCUMENTOS_OP { get; set; }
@@ -77,7 +81,21 @@ namespace Convertidor.Data
                    
                 });
 
+            modelBuilder
+                .Entity< ADM_COMPROBANTES_DOCUMENTOS_OP>(builder =>
+                {
+
+                    builder.ToTable("ADM_COMPROBANTES_DOCUMENTOS_OP");
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_COMPROBANTE_DOC_OP,
+                   
+
+                    });
+                   
+                });
             
+           
             modelBuilder
                 .Entity<ADM_BENEFICIARIOS_OP>(builder =>
                 {

@@ -198,6 +198,7 @@ builder.Services.AddTransient<IOssAuthPermissionRepository,OssAuthPermissionRepo
 builder.Services.AddTransient<IOssAuthUserRepository,OssAuthUserRepository>();
 builder.Services.AddTransient<IOssAuthUserGroupRepository,OssAuthUserGroupRepository>();
 builder.Services.AddTransient<IOssAuthUserPermissionsRepository,OssAuthUserPermissionsRepository>();
+builder.Services.AddTransient<ISisEmpresaRepository,SisEmpresaRepository>();
 
 
 
@@ -453,6 +454,8 @@ builder.Services.AddTransient<IAdmProductosRepository, AdmProductosRepository>()
 builder.Services.AddTransient<IAdmSolCompromisoRepository, AdmSolCompromisoRepository>();
 builder.Services.AddTransient<IAdmDetalleSolCompromisoRepository, AdmDetalleSolCompromisoRepository>();
 builder.Services.AddTransient<IAdmRetencionesRepository, AdmRetencionesRepository>();
+
+builder.Services.AddTransient<IAdmComprobantesDocumentosOpDestinoRepository, AdmComprobantesDocumentosOpDestinoRepository>();
 
 
 
