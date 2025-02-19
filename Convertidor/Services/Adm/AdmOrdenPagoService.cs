@@ -445,8 +445,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Fecha Orden Pago Invalida";
                     return result;
                 }
-                var tipoOrdenPagoId = await _admDescriptivaRepository.GetByIdAndTitulo(3, dto.TipoOrdenPagoId);
-                if (tipoOrdenPagoId==false)
+                var tipoOrdenPagoId = await _admDescriptivaRepository.GetByCodigo(dto.TipoOrdenPagoId);
+                if (tipoOrdenPagoId==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -464,8 +464,8 @@ namespace Convertidor.Services.Adm
                 }
 
              
-                var frecuenciaPagoId = await _admDescriptivaRepository.GetByIdAndTitulo(15, dto.FrecuenciaPagoId);
-                if (frecuenciaPagoId==false)
+                var frecuenciaPagoId = await _admDescriptivaRepository.GetByCodigo(dto.FrecuenciaPagoId);
+                if (frecuenciaPagoId==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -473,8 +473,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                var tipoPagoId = await _admDescriptivaRepository.GetByIdAndTitulo(16,dto.TipoPagoId);
-                if (tipoPagoId==false)
+                var tipoPagoId = await _admDescriptivaRepository.GetByCodigo(dto.TipoPagoId);
+                if (tipoPagoId==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
