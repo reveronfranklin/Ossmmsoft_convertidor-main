@@ -73,9 +73,12 @@ namespace Convertidor.Services.Adm
                 itemResult.CdBanco = dtos.CD_BANCO;
         
                 itemResult.EstadoCivil = dtos.ESTADO_CIVIL;
-        
-                itemResult.NuCuenta = dtos.NU_CUENTA.Replace("'", string.Empty);;
-        
+
+                itemResult.NuCuenta = "";
+                if (dtos.NU_CUENTA != null)
+                {
+                    itemResult.NuCuenta = dtos.NU_CUENTA.Replace("'", string.Empty);;
+                }
                 itemResult.TpCuenta = dtos.TP_CUENTA;
         
                 itemResult.DeEmail = dtos.DE_EMAIL;
@@ -85,9 +88,10 @@ namespace Convertidor.Services.Adm
                 itemResult.CodigoIcp = dtos.CODIGO_ICP;
                 itemResult.Parentesco =dtos.PARENTESCO;
                 itemResult.TipoNomina = dtos.TIPO_NOMINA;
-                itemResult.FechaIngreso = (DateTime)dtos.FECHA_INGRESO;
+             
                 if (dtos.FECHA_INGRESO == null)
                 {
+                 
                     itemResult.FechaIngresoString =""; 
                     itemResult.FechaIngresoObj=null;
                     itemResult.TiempoServicio = "";
@@ -95,6 +99,7 @@ namespace Convertidor.Services.Adm
                 }
                 else
                 {
+                    itemResult.FechaIngreso = (DateTime)dtos.FECHA_INGRESO;
                     itemResult.FechaIngresoString =Fecha.GetFechaString((DateTime)dtos.FECHA_INGRESO); 
                     itemResult.FechaIngresoObj=Fecha.GetFechaDto((DateTime)dtos.FECHA_INGRESO);
                     var tiempoServicio =_personaService.TiempoServicio((DateTime)dtos.FECHA_INGRESO, hasta);

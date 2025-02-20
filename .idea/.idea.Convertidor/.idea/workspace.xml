@@ -9,16 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_V_COMPROMISO_PENDIENTE.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmCompromisosPendientesRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmCompromisosPendientesRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/PreCompromisosController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/PreCompromisosController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextAdm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextAdm.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PreCompromisosRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/IPreCompromisosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/IPreCompromisosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Rh/RH_V_TITULAR_BENEFICIARIOS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Rh/RH_V_TITULAR_BENEFICIARIOS.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +38,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -332,7 +327,7 @@
       <workItem from="1738503666794" duration="893000" />
       <workItem from="1738518128705" duration="5383000" />
       <workItem from="1738943739686" duration="28681000" />
-      <workItem from="1739832026041" duration="8654000" />
+      <workItem from="1739832026041" duration="13621000" />
     </task>
     <servers />
   </component>
@@ -2047,26 +2042,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs</url>
-          <line>808</line>
+          <line>807</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'UpdateFechaMotivo'">
             <startOffsets>
-              <option value="35788" />
+              <option value="35787" />
             </startOffsets>
             <endOffsets>
-              <option value="35847" />
+              <option value="35846" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="491" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs</url>
-          <line>827</line>
+          <line>826</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'UpdateFechaMotivo'">
             <startOffsets>
-              <option value="36498" />
+              <option value="36497" />
             </startOffsets>
             <endOffsets>
-              <option value="36602" />
+              <option value="36601" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="492" />
@@ -3880,13 +3875,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs</url>
-          <line>167</line>
+          <line>172</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="6459" />
+              <option value="6604" />
             </startOffsets>
             <endOffsets>
-              <option value="6529" />
+              <option value="6674" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="864" />
@@ -3971,13 +3966,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs</url>
-          <line>234</line>
+          <line>239</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'GetByTipoNomina'">
             <startOffsets>
-              <option value="8827" />
+              <option value="8972" />
             </startOffsets>
             <endOffsets>
-              <option value="8846" />
+              <option value="8991" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="879" />
@@ -4010,13 +4005,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs</url>
-          <line>227</line>
+          <line>232</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'GetByTipoNomina'">
             <startOffsets>
-              <option value="8617" />
+              <option value="8762" />
             </startOffsets>
             <endOffsets>
-              <option value="8642" />
+              <option value="8787" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="885" />
@@ -4075,13 +4070,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs</url>
-          <line>571</line>
+          <line>570</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" containingFunctionPresentation="Method 'GetCompromisosPendientesByPresupuesto'">
             <startOffsets>
-              <option value="27350" />
+              <option value="27349" />
             </startOffsets>
             <endOffsets>
-              <option value="27379" />
+              <option value="27378" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="896" />
@@ -4098,6 +4093,45 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="897" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs</url>
+          <line>214</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'GetByTipoNomina'">
+            <startOffsets>
+              <option value="8087" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8173" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="899" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs</url>
+          <line>120</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'MapRhTitularBeneficiarioDto'">
+            <startOffsets>
+              <option value="5036" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5060" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="901" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs</url>
+          <line>41</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" containingFunctionPresentation="Method 'MapRhTitularBeneficiarioDto'">
+            <startOffsets>
+              <option value="1385" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1432" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="902" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
