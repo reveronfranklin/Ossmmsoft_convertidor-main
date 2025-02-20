@@ -551,7 +551,6 @@ namespace Convertidor.Services.Presupuesto
                        itemData.CodigoDirEntrega = compromiso.CODIGO_DIR_ENTREGA;
                        itemData.OrigenId = 805;
                        itemData.OrigenDescripcion = $"COMPROMISOS PRESUPUESTARIOS";
-
                        itemData.Monto = item.MONTO_POR_CAUSAR;
                        
                        
