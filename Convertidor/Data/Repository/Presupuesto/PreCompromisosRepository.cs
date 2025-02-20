@@ -251,6 +251,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             {
                 var presupuesto = await _context.PRE_PRESUPUESTOS
                     .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto ).FirstOrDefaultAsync();
+               
                 var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
                 var totalRegistros = 0;
                 var totalPage = 0;

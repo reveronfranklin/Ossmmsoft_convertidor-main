@@ -117,6 +117,9 @@ builder.Services.AddTransient<IPRE_PLAN_UNICO_CUENTASRepository, PRE_PLAN_UNICO_
 builder.Services.AddTransient<IPreAsignacionesDetalleRepository, PreAsignacionesDetalleRepository>();
 builder.Services.AddTransient<IPRE_ASIGNACIONESRepository, PRE_ASIGNACIONESRepository>();
 builder.Services.AddTransient<IPreAsignacionesDetalleRepository, PreAsignacionesDetalleRepository>();
+builder.Services.AddTransient<IAdmCompromisosPendientesRepository, AdmCompromisosPendientesRepository>();
+
+
 
 builder.Services.AddTransient<IPrePlanUnicoCuentasService, PrePlanUnicoCuentasService>();
 
