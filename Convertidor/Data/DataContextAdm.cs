@@ -47,8 +47,8 @@ namespace Convertidor.Data
         public DbSet<ADM_SOL_COMPROMISO> ADM_SOL_COMPROMISO { get; set; }
         public DbSet<ADM_DETALLE_SOL_COMPROMISO> ADM_DETALLE_SOL_COMPROMISO { get; set; }
         public DbSet<ADM_RETENCIONES> ADM_RETENCIONES { get; set; }
+        public DbSet<ADM_V_COMPROMISO_PENDIENTE> ADM_V_COMPROMISO_PENDIENTE { get; set; }
         
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
@@ -101,6 +101,13 @@ namespace Convertidor.Data
 
                     });
                     builder.ToTable("ADM_TITULOS");
+                });
+            modelBuilder
+                .Entity<ADM_V_COMPROMISO_PENDIENTE>(builder =>
+                {
+                    builder.HasNoKey();
+                  
+                    builder.ToTable("ADM_V_COMPROMISO_PENDIENTE");
                 });
             modelBuilder
                 .Entity<ADM_ACT_PROVEEDOR>(builder =>

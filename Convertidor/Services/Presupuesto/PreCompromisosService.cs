@@ -31,6 +31,8 @@ namespace Convertidor.Services.Presupuesto
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
         private readonly IPrePucCompromisosRepository _prePucCompromisosRepository;
         private readonly IOssConfigRepository _ossConfigRepository;
+        private readonly IAdmCompromisosPendientesRepository _admCompromisosPendientesRepository;
+        private readonly IAdmSolicitudesRepository _solicitudesRepository;
 
 
         private readonly IConfiguration _configuration;
@@ -50,7 +52,9 @@ namespace Convertidor.Services.Presupuesto
                                       IAdmSolicitudesService admSolicitudesService,
                                       IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
                                       IPrePucCompromisosRepository prePucCompromisosRepository,
-                                      IOssConfigRepository ossConfigRepository 
+                                      IOssConfigRepository ossConfigRepository ,
+                                      IAdmCompromisosPendientesRepository admCompromisosPendientesRepository,
+                                      IAdmSolicitudesRepository solicitudesRepository
         )
 		{
             _repository = repository;
@@ -70,7 +74,8 @@ namespace Convertidor.Services.Presupuesto
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
             _prePucCompromisosRepository = prePucCompromisosRepository;
             _ossConfigRepository = ossConfigRepository;
-         
+            _admCompromisosPendientesRepository = admCompromisosPendientesRepository;
+            _solicitudesRepository = solicitudesRepository;
         }
 
 
@@ -500,6 +505,80 @@ namespace Convertidor.Services.Presupuesto
 
             return await _repository.GetByPresupuesto(filter);
         }
+        
+        public async Task<ResultDto<List<PreCompromisosResponseDto>>> GetCompromisosPendientesByPresupuesto(PreCompromisosFilterDto filter)
+        {
+            ResultDto<List<PreCompromisosResponseDto>> result = new ResultDto<List<PreCompromisosResponseDto>>(null);
+
+            try
+            {
+                var actualizaMontos = await _preDetalleCompromisosRepository.ActualizaMontos(filter.CodigoPresupuesto);
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa,filter.CodigoPresupuesto);
+               
+
+               var compromisosPendientes= await _admCompromisosPendientesRepository.GetCompromisosPendientesPorCodigoPresupuesto(filter.CodigoPresupuesto);
+               List<PreCompromisosResponseDto> resultData = new List<PreCompromisosResponseDto>();
+               if (compromisosPendientes.Count > 0)
+               {
+                   foreach (var item in compromisosPendientes)
+                   {
+                     
+                       
+                       PreCompromisosResponseDto itemData = new PreCompromisosResponseDto();
+                       itemData.CodigoCompromiso = item.CODIGO_IDENTIFICADOR;
+                       itemData.NumeroCompromiso = item.NUMERO_IDENTIFICADOR.ToString();
+                       itemData.Ano = presupuesto.ANO;
+                       var compromiso = await _repository.GetByCodigo(item.CODIGO_IDENTIFICADOR);
+                       itemData.CodigoSolicitud = compromiso.CODIGO_SOLICITUD;
+                       itemData.NumeroSolicitud = "";
+                       var solicitud = await _solicitudesRepository.GetByCodigoSolicitud(compromiso.CODIGO_SOLICITUD);
+                       if (solicitud != null)
+                       {
+                           itemData.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
+                       }
+                       
+                      
+                       itemData.FechaCompromiso = compromiso.FECHA_COMPROMISO;
+                       itemData.FechaCompromisoString = Fecha.GetFechaString(compromiso.FECHA_COMPROMISO);
+                       itemData.FechaCompromisoObj = Fecha.GetFechaDto(compromiso.FECHA_COMPROMISO);
+                       itemData.CodigoProveedor = item.CODIGO_PROVEEDOR;
+                       itemData.Status = compromiso.STATUS;
+                       itemData.DescripcionStatus = Estatus.GetStatus(compromiso.STATUS);
+                       itemData.NombreProveedor = item.NOMBRE_PROVEEDOR;
+                       itemData.Motivo = item.MOTIVO.Trim();
+                       itemData.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+                       itemData.CodigoDirEntrega = compromiso.CODIGO_DIR_ENTREGA;
+                       itemData.OrigenId = 805;
+                       itemData.OrigenDescripcion = $"COMPROMISOS PRESUPUESTARIOS";
+
+                       itemData.Monto = item.MONTO_POR_CAUSAR;
+                       
+                       
+                       resultData.Add(itemData);
+                   }
+               }
+               
+               result.CantidadRegistros = compromisosPendientes.Count;
+               result.TotalPage = 1;
+               result.Page = filter.PageNumber;
+               result.IsValid = true;
+               result.Message = "";
+               result.Data = resultData;
+               return result;
+            }
+            catch (Exception e)
+            {
+                result.CantidadRegistros = 0;
+                result.IsValid = false;
+                result.Message = e.Message;
+                result.Data = null;
+                return result;
+            }
+           
+        }
+        
+        
 
         public async Task<List<PreCompromisosResponseDto>> MapListPreCompromisosDto(List<PRE_COMPROMISOS> dtos)
         {

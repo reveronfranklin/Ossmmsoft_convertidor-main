@@ -50,6 +50,14 @@ namespace Convertidor.Controllers
         
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> GetCompromisosPendientesByPresupuesto(PreCompromisosFilterDto filter)
+        {
+            var result = await _service.GetCompromisosPendientesByPresupuesto(filter);
+            return Ok(result);
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> GetByCompromiso(PreCompromisoFilterDto dto)
         {
             var result = await _service.GetByCompromiso(dto.CodigoCompromiso);

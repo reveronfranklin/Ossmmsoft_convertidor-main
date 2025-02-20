@@ -7,6 +7,9 @@ namespace Convertidor.Services.Presupuesto
     {
         Task<ResultDto<List<PreCompromisosResponseDto>>> GetAll();
         Task<ResultDto<List<PreCompromisosResponseDto>>> GetByPresupuesto(PreCompromisosFilterDto filter);
+
+        Task<ResultDto<List<PreCompromisosResponseDto>>> GetCompromisosPendientesByPresupuesto(
+            PreCompromisosFilterDto filter);
         Task<ResultDto<PreCompromisosResponseDto>> Update(PreCompromisosUpdateDto dto);
         Task<ResultDto<PreCompromisosResponseDto>> Create(PreCompromisosUpdateDto dto); 
         Task<ResultDto<PreCompromisosDeleteDto>> Delete(PreCompromisosDeleteDto dto);
