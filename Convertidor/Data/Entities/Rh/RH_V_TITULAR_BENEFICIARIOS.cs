@@ -23,6 +23,8 @@ public class RH_V_TITULAR_BENEFICIARIOS
     
     public int? CODIGO_ICP { get; set; }
     public string? PARENTESCO { get; set; }= String.Empty;
+    
+    public string? VINCULO { get; set; }= String.Empty;
     public int? CODIGO_TIPO_NOMINA { get; set; }
     public string? TIPO_NOMINA { get; set; }= String.Empty;
     public DateTime? FECHA_INGRESO { get; set; }

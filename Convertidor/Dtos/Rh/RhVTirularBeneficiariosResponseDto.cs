@@ -27,6 +27,7 @@ public class RhVTitularBeneficiariosResponseDto
     public string? Edad { get; set; }
     public string? TiempoServicio { get; set; }
     public string? Parentesco { get; set; }
+    public string? Vinculo { get; set; }
     public string? TipoNomina { get; set; }
     public DateTime? FechaIngreso { get; set; }
     public string? FechaIngresoString { get; set; }
