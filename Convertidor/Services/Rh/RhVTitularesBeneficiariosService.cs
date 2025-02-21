@@ -39,11 +39,15 @@ namespace Convertidor.Services.Adm
                     return itemResult;
                 }
 
+                if (dtos.CEDULA_TITULAR == "V-26411483")
+                {
+                    var detener = "";
+                }
                 itemResult.CedulaTitular = dtos.CEDULA_TITULAR;
                 itemResult.CedulaBeneficiario = dtos.CEDULA_BENEFICIARIO;
                 itemResult.NombreTituBene = dtos.NOMBRES_TITU_BENE;
                 itemResult.ApellidosTituBene = dtos.APELLIDOS_TITU_BENE;
-                itemResult.FechaNacimientoFamiliar = (DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR;
+               
                 var hasta = DateTime.Now;
                 if (dtos.FECHA_NACIMIENTO_FAMILIAR == null)
                 {
@@ -53,6 +57,7 @@ namespace Convertidor.Services.Adm
                 }
                 else
                 {
+                    itemResult.FechaNacimientoFamiliar = (DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR;
                     itemResult.FechaNacimientoFamiliarString =Fecha.GetFechaString((DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR); 
                     FechaDto FechaNacimientoFamiliarObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_NACIMIENTO_FAMILIAR);
                     itemResult.FechaNacimientoFamiliarObj = FechaNacimientoFamiliarObj;
@@ -87,6 +92,11 @@ namespace Convertidor.Services.Adm
                 itemResult.FechaEgreso = dtos.FECHA_EGRESO;
                 itemResult.CodigoIcp = dtos.CODIGO_ICP;
                 itemResult.Parentesco =dtos.PARENTESCO;
+                itemResult.Vinculo = "";
+                if (dtos.VINCULO != null)
+                {
+                    itemResult.Vinculo = dtos.VINCULO;
+                }
                 itemResult.TipoNomina = dtos.TIPO_NOMINA;
              
                 if (dtos.FECHA_INGRESO == null)
