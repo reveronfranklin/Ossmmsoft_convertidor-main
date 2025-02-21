@@ -254,7 +254,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoDocumento < 0) 
+                if(dto.MontoDocumento <= 0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -453,7 +453,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoDocumento >0) 
+                if(dto.MontoDocumento <=0) 
                 {
                     result.Data = null;
                     result.IsValid = false;
