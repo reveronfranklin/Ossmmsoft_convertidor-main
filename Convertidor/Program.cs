@@ -398,6 +398,7 @@ builder.Services.AddTransient<IBmConteoRepository, BmConteoRepository>();
 builder.Services.AddTransient<IBmConteoDetalleHistoricoRepository, BmConteoDetalleHistoricoRepository>();
 builder.Services.AddTransient<IBmConteoHistoricoRepository, BmConteoHistoricoRepository>();
 builder.Services.AddTransient<IRhVReciboPagoRepository, RhVReciboPagoRepository>();
+builder.Services.AddTransient<IBmUbicacionesRepository, BmUbicacionesRepository>();
 
 
 
@@ -420,6 +421,7 @@ builder.Services.AddTransient<IBmConteoService, BmConteoService>();
 builder.Services.AddTransient<IBmConteoDetalleService, BmConteoDetalleService>();
 builder.Services.AddTransient<IBmConteoHistoricoService, BmConteoHistoricoService>();
 builder.Services.AddTransient<IBmConteoDetalleHistoricoService, BmConteoDetalleHistoricoService>();
+builder.Services.AddTransient<IBmUbicacionesService, BmUbicacionesService>();
 
 
 

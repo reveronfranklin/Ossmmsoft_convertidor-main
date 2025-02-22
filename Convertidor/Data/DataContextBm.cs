@@ -9,6 +9,9 @@ namespace Convertidor.Data
         {
 
         }
+        
+        
+        public DbSet<BM_V_UBICACIONES> BM_V_UBICACIONES { get; set; }
         public DbSet<BM_V_BM1> BM_V_BM1 { get; set; }
         public DbSet<BM_TITULOS> BM_TITULOS { get; set; }
         public DbSet<BM_DESCRIPTIVAS> BM_DESCRIPTIVAS { get; set; }
@@ -62,6 +65,18 @@ namespace Convertidor.Data
                     });
                     builder.ToTable("BM_DESCRIPTIVAS");
                 });
+            modelBuilder
+                .Entity<BM_V_UBICACIONES>(builder =>
+                {
+
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_DIR_BIEN,
+
+                    });
+                    builder.ToTable("BM_V_UBICACIONES");
+                });
+            
             modelBuilder
                 .Entity<BM_ARTICULOS>(builder =>
                 {
