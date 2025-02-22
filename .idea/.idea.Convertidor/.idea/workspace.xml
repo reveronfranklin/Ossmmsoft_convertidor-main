@@ -8,7 +8,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/BmUbicacionesController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Bm/BM_V_UBICACIONES.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBmUbicacionesRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Bm/BmUbicacionesResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmUbicacionesService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/IBmUbicacionesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextBm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextBm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -328,7 +339,7 @@
       <workItem from="1738503666794" duration="893000" />
       <workItem from="1738518128705" duration="5383000" />
       <workItem from="1738943739686" duration="28681000" />
-      <workItem from="1739832026041" duration="16490000" />
+      <workItem from="1739832026041" duration="20995000" />
     </task>
     <servers />
   </component>
@@ -3320,10 +3331,10 @@
           <line>384</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="16065" />
+              <option value="16066" />
             </startOffsets>
             <endOffsets>
-              <option value="16124" />
+              <option value="16125" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="797" />
@@ -3333,10 +3344,10 @@
           <line>598</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="26290" />
+              <option value="26292" />
             </startOffsets>
             <endOffsets>
-              <option value="26334" />
+              <option value="26336" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="798" />
@@ -3784,19 +3795,6 @@
           <option name="timeStamp" value="854" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>497</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GetByListIcp'">
-            <startOffsets>
-              <option value="21733" />
-            </startOffsets>
-            <endOffsets>
-              <option value="21812" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="855" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs</url>
           <line>44</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmBienesFotosController.cs" containingFunctionPresentation="Method 'GetByNumeroPlaca'">
@@ -3834,19 +3832,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="858" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>117</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
-            <startOffsets>
-              <option value="3461" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3500" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="859" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
@@ -4133,6 +4118,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="905" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmUbicacionesController.cs</url>
+          <line>33</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmUbicacionesController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="720" />
+            </startOffsets>
+            <endOffsets>
+              <option value="757" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="906" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
