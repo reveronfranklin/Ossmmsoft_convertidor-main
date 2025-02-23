@@ -9,6 +9,8 @@ public class ProductResponse
     public string Responsable { get; set; }
     public string NroPlaca { get; set; }
     public int CodigoDepartamentoResponsable { get; set; }
+    public int CodigoDirBien { get; set; }
+    
     public string DescripcionDepartamentoResponsable { get; set; }
     public string[]  Images { get; set; }
 }

@@ -74,7 +74,7 @@ namespace Convertidor.Data.Repository.Catastro
         public async Task<List<ProductResponse>> GetProductMobil(ProductFilterDto filter) 
         {
             List<ProductResponse> result = new List<ProductResponse>();
-
+            var conectado = await _sisUsuarioRepository.GetConectado();
             if (filter.PageNumber == 0) filter.PageNumber = 1;
             if (filter.PageSize == 0) filter.PageSize = 20;
             //if (filter.PageSize >100) filter.PageSize = 20;
@@ -86,7 +86,7 @@ namespace Convertidor.Data.Repository.Catastro
                 if (filter.SearhText.Length > 0)
                 {
                     pageData = await _context.BM_V_BM1.DefaultIfEmpty()
-                        .Where(x=>x.NRO_PLACA.Trim().ToLower().Contains(filter.SearhText.Trim().ToLower()))
+                        .Where(x=>x.CODIGO_EMPRESA==conectado.Empresa && x.NRO_PLACA.Trim().ToLower().Contains(filter.SearhText.Trim().ToLower()))
                         .OrderBy(x => x.CODIGO_BIEN)
                         .ToListAsync();
                 }
@@ -95,7 +95,7 @@ namespace Convertidor.Data.Repository.Catastro
                     if (filter.CodigoDepartamentoResponsable > 0)
                     {
                         pageData = await _context.BM_V_BM1.DefaultIfEmpty()
-                            .Where(x =>x.CODIGO_ICP==filter.CodigoDepartamentoResponsable )
+                            .Where(x =>x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_ICP==filter.CodigoDepartamentoResponsable )
                             .OrderBy(x => x.CODIGO_BIEN)
                             .Skip((filter.PageNumber - 1) * filter.PageSize)
                             .Take(filter.PageSize)
@@ -104,6 +104,7 @@ namespace Convertidor.Data.Repository.Catastro
                     else
                     {
                         pageData = await _context.BM_V_BM1.DefaultIfEmpty()
+                            .Where(x=>x.CODIGO_EMPRESA==conectado.Empresa)
                             .OrderBy(x => x.CODIGO_BIEN)
                             .Skip((filter.PageNumber - 1) * filter.PageSize)
                             .Take(filter.PageSize)
@@ -126,8 +127,10 @@ namespace Convertidor.Data.Repository.Catastro
                     itemData.NroPlaca= item.NRO_PLACA;
                     itemData.CodigoDepartamentoResponsable= item.CODIGO_ICP;
                     itemData.DescripcionDepartamentoResponsable= item.UNIDAD_TRABAJO;
-                    var fotos = await _fotoRepository.GetByNumeroPlaca(item.NRO_PLACA);
+                    itemData.CodigoDirBien = item.CODIGO_DIR_BIEN;
                     List<string> listFotos = new List<string>(); 
+                    /*var fotos = await _fotoRepository.GetByNumeroPlaca(item.NRO_PLACA);
+                   
                     if (fotos != null && fotos.Count > 0)
                     {
                         foreach (var itemFotos in fotos)
@@ -137,7 +140,7 @@ namespace Convertidor.Data.Repository.Catastro
                             
                         }
                      
-                    }
+                    }*/
                   
                     itemData.Images = listFotos.ToArray();
                     result.Add(itemData);
@@ -176,6 +179,7 @@ namespace Convertidor.Data.Repository.Catastro
                     if (item.RESPONSABLE_BIEN == null) item.RESPONSABLE_BIEN = "";
                     itemData.Responsable= item.RESPONSABLE_BIEN;
                     itemData.NroPlaca= item.NRO_PLACA;
+                    itemData.CodigoDirBien = item.CODIGO_DIR_BIEN;
                     itemData.CodigoDepartamentoResponsable= item.CODIGO_ICP;
                     itemData.DescripcionDepartamentoResponsable= item.UNIDAD_TRABAJO;
                     var fotos = await _fotoRepository.GetByNumeroPlaca(item.NRO_PLACA);
