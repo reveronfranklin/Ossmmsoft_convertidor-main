@@ -123,6 +123,7 @@ namespace Convertidor.Data.Repository.Catastro
                     itemData.Id= item.CODIGO_BIEN;
                     itemData.Articulo= item.ARTICULO;
                     itemData.Descripcion= item.ESPECIFICACION;
+                    if (item.RESPONSABLE_BIEN == null) item.RESPONSABLE_BIEN = "";
                     itemData.Responsable= item.RESPONSABLE_BIEN;
                     itemData.NroPlaca= item.NRO_PLACA;
                     itemData.CodigoDepartamentoResponsable= item.CODIGO_ICP;
