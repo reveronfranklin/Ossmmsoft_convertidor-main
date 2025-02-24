@@ -11,6 +11,7 @@ namespace Convertidor.Data
         }
         
         
+        public DbSet<BM_V_UBICA_RESPONSABLE> BM_V_UBICA_RESPONSABLE { get; set; }
         public DbSet<BM_V_UBICACIONES> BM_V_UBICACIONES { get; set; }
         public DbSet<BM_V_BM1> BM_V_BM1 { get; set; }
         public DbSet<BM_TITULOS> BM_TITULOS { get; set; }
@@ -65,6 +66,15 @@ namespace Convertidor.Data
                     });
                     builder.ToTable("BM_DESCRIPTIVAS");
                 });
+            
+            modelBuilder
+                .Entity<BM_V_UBICA_RESPONSABLE>(builder =>
+                {
+
+                    builder.HasNoKey();
+                    builder.ToTable("BM_V_UBICA_RESPONSABLE");
+                });
+            
             modelBuilder
                 .Entity<BM_V_UBICACIONES>(builder =>
                 {
