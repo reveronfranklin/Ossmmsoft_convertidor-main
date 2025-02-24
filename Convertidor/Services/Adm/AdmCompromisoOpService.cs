@@ -114,7 +114,7 @@ namespace Convertidor.Services.Adm
             }
 
             itemResult.Monto = 0;
-           var pucOrdenPago=  await _admPucOrdenPagoRepository.GetByOrdenPago(itemResult.CodigoIdentificador);
+           var pucOrdenPago=  await _admPucOrdenPagoRepository.GetByOrdenPago(dtos.CODIGO_ORDEN_PAGO);
            if (pucOrdenPago.Count > 0)
            {
                itemResult.Monto = pucOrdenPago.Sum(x => x.MONTO);
