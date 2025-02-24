@@ -14,4 +14,12 @@ public class BmUbicacionesResponsablesResponseDto
     public string Login { get; set; }
     public int Cedula { get; set; }
     
+    public string KeyUbicacionResponsable
+    {
+        get
+        {
+            return $"{CodigoBmConteo}-{Conteo}-{CodigoDirBien}";
+        }
+    }
+    
 }
