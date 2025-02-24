@@ -43,7 +43,7 @@ namespace Convertidor.Services.Bm
                         dto.CodigoDirBien = item.CODIGO_DIR_BIEN;
                         dto.CodigoIcp = item.CODIGO_ICP;
                         dto.CodigoDirBien = item.CODIGO_DIR_BIEN;
-                        dto.UnidadTrabajo = item.UNIDAD_TRABAJO;
+                        dto.UnidadEjecutora = item.UNIDAD_TRABAJO;
                         dto.CodigoUsuario = item.CODIGO_USUARIO;
                         dto.CodigoPersona = item.CODIGO_PERSONA;
                         dto.Login = item.LOGIN;
@@ -104,7 +104,7 @@ namespace Convertidor.Services.Bm
                         dto.CodigoDirBien = item.CODIGO_DIR_BIEN;
                         dto.CodigoIcp = item.CODIGO_ICP;
                         dto.CodigoDirBien = item.CODIGO_DIR_BIEN;
-                        dto.UnidadTrabajo = item.UNIDAD_TRABAJO;
+                        dto.UnidadEjecutora = item.UNIDAD_TRABAJO;
                         dto.CodigoUsuario = item.CODIGO_USUARIO;
                         dto.CodigoPersona = item.CODIGO_PERSONA;
                         dto.Login = item.LOGIN;
