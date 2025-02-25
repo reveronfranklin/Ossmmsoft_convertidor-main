@@ -573,6 +573,7 @@ namespace Convertidor.Services.Bm
         }
    
 
+     
         public async Task<bool> ConteoIniciado(int codigoConteo)
         {
 
