@@ -32,6 +32,23 @@ namespace Convertidor.Data.Repository.Bm
             }
 
         }
+        public async Task<BM_CONTEO_DETALLE> GetByCodigoConteoConteoIcpPlaca(int codigoBmConteo,int conteo,int codigoIcp,string nroPlaca)
+        {
+            try
+            {
+                var result = await _context.BM_CONTEO_DETALLE.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_BM_CONTEO == codigoBmConteo && e.CONTEO==conteo && e.CODIGO_ICP==codigoIcp && e.NUMERO_PLACA==nroPlaca)
+                    .FirstOrDefaultAsync();
+
+                return (BM_CONTEO_DETALLE)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
 
         public async Task<List<BM_CONTEO_DETALLE>> GetAllByConteo(int codigoConteo)
         {

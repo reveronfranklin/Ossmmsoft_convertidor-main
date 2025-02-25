@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Convertidor.Services.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Dtos.Bm.Mobil;
 
 namespace Convertidor.Controllers
 {
@@ -29,6 +30,15 @@ namespace Convertidor.Controllers
             var result = await _service.GetAllByConteo(filter);
             return Ok(result);
         }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> RecibeConteo(List<ConteoCreateDto> dto) 
+        {
+            var result = await _service.RecibeConteo(dto);
+            return Ok(result);
+        }
+      
         
         [HttpPost]
         [Route("[action]")]

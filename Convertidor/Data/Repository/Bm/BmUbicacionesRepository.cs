@@ -34,6 +34,23 @@ namespace Convertidor.Data.Repository.Bm
 
         }
 
+        public async Task<BM_V_UBICACIONES> GetByCodigoDirBien(int codigoDirBien)
+        {
+            try
+            {
+             
+                var result = await _context.BM_V_UBICACIONES.DefaultIfEmpty()
+                    .Where(x=>x.CODIGO_DIR_BIEN==codigoDirBien).FirstOrDefaultAsync();
+              
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
         
 
 

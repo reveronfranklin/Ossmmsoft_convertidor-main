@@ -9,9 +9,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Bm/Mobil/ConteoCreateDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmDocumentosOpUpdateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmDocumentosOpUpdateDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoDetalleController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoDetalleController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBM_V_BM1Repository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBmConteoDetalleRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBmConteoDetalleRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBmUbicacionesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBmUbicacionesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoDetalleRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoDetalleRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/IBM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/IBM_V_BM1Service.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/IBmConteoDetalleService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/IBmConteoDetalleService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +48,18 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -347,7 +370,7 @@
       <workItem from="1738503666794" duration="893000" />
       <workItem from="1738518128705" duration="5383000" />
       <workItem from="1738943739686" duration="28681000" />
-      <workItem from="1739832026041" duration="48751000" />
+      <workItem from="1739832026041" duration="56468000" />
     </task>
     <servers />
   </component>
@@ -970,13 +993,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs</url>
-          <line>910</line>
+          <line>913</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs" containingFunctionPresentation="Method 'Anular'">
             <startOffsets>
-              <option value="34790" />
+              <option value="34937" />
             </startOffsets>
             <endOffsets>
-              <option value="34878" />
+              <option value="35025" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="226" />
@@ -1711,39 +1734,39 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs</url>
-          <line>857</line>
+          <line>858</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs" containingFunctionPresentation="Method 'PodemosAnularSolicitudDeModificacion'">
             <startOffsets>
-              <option value="32850" />
+              <option value="32911" />
             </startOffsets>
             <endOffsets>
-              <option value="32923" />
+              <option value="32984" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="382" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs</url>
-          <line>990</line>
+          <line>993</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs" containingFunctionPresentation="Method 'Aprobar'">
             <startOffsets>
-              <option value="38147" />
+              <option value="38296" />
             </startOffsets>
             <endOffsets>
-              <option value="38248" />
+              <option value="38397" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="383" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs</url>
-          <line>881</line>
+          <line>882</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs" containingFunctionPresentation="Method 'Anular'">
             <startOffsets>
-              <option value="33571" />
+              <option value="33632" />
             </startOffsets>
             <endOffsets>
-              <option value="33672" />
+              <option value="33733" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="384" />
@@ -4168,26 +4191,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs</url>
-          <line>42</line>
+          <line>45</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs" containingFunctionPresentation="Method 'GetByCodigoConteo'">
             <startOffsets>
-              <option value="1693" />
+              <option value="1936" />
             </startOffsets>
             <endOffsets>
-              <option value="1747" />
+              <option value="1990" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="917" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs</url>
-          <line>104</line>
+          <line>107</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="3811" />
+              <option value="4054" />
             </startOffsets>
             <endOffsets>
-              <option value="3920" />
+              <option value="4163" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="918" />
@@ -4230,6 +4253,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="921" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs</url>
+          <line>669</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs" containingFunctionPresentation="Method 'RecibeConteo'">
+            <startOffsets>
+              <option value="30049" />
+            </startOffsets>
+            <endOffsets>
+              <option value="30093" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="922" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoDetalleController.cs</url>
+          <line>37</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoDetalleController.cs" containingFunctionPresentation="Method 'RecibeConteo'">
+            <startOffsets>
+              <option value="918" />
+            </startOffsets>
+            <endOffsets>
+              <option value="964" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="923" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

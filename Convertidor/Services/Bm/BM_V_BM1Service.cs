@@ -586,6 +586,30 @@ namespace Convertidor.Services.Bm
 
         }
 
+        public async Task<Bm1GetDto> GetByNroPlaca(string nroPlaca)
+        {
+            Bm1GetDto response = new Bm1GetDto();
+            var bm1 =await _repository.GetByNroPlaca(nroPlaca);
+            if (bm1 != null)
+            {
+                response.UnidadTrabajo = bm1.UNIDAD_TRABAJO;
+                response.CodigoGrupo = bm1.CODIGO_GRUPO;
+                response.CodigoNivel1 = bm1.CODIGO_NIVEL1;
+                response.CodigoNivel2 = bm1.CODIGO_NIVEL2;
+                response.NumeroLote =bm1.NUMERO_LOTE;
+                response.Cantidad =bm1.CANTIDAD;
+                response.NumeroPlaca = bm1.NUMERO_PLACA;
+                response.Articulo = bm1.ARTICULO;
+                response.Especificacion = bm1.ESPECIFICACION;
+                response.Servicio = bm1.SERVICIO;
+                response.ResponsableBien = bm1.RESPONSABLE_BIEN;
+                response.CodigoBien = bm1.CODIGO_BIEN;
+                response.CodigoMovBien =bm1.CODIGO_MOV_BIEN;
+                response.FechaMovimiento = bm1.FECHA_MOVIMIENTO;
+                response.NroPlaca = bm1.NRO_PLACA;
+            }
+            return response;    
+        }
         public async Task<List<Bm1GetDto>> GetByPlaca(int codigoBien)
         {
             try
