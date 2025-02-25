@@ -11,14 +11,14 @@
         public DateTime FechaDocumento { get; set; }
         public string NumeroDocumento { get; set; } = string.Empty;
         public string NumeroControlDocumento { get; set; } = string.Empty;
-        public int MontoDocumento { get; set; }
-        public int BaseImponible { get; set; }
-        public int MontoImpuesto { get; set; }
+        public decimal MontoDocumento { get; set; }
+        public decimal BaseImponible { get; set; }
+        public decimal MontoImpuesto { get; set; }
         public string NumeroDocumentoAfectado { get; set; } = string.Empty;
         public int TipoTransaccionId { get; set; }
         public int TipoImpuestoId { get; set; }
-        public int MontoImpuestoExento { get; set; }
-        public int MontoRetenido { get; set; }
+        public decimal MontoImpuestoExento { get; set; }
+        public decimal MontoRetenido { get; set; }
     
         public int CodigoPresupuesto { get; set; }
         public string NumeroExpediente { get; set; } = string.Empty;
