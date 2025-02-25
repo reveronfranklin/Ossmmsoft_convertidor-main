@@ -598,6 +598,14 @@ namespace Convertidor.Services.Bm
                     result=$"No existe un conteo con id:{CodigoBmConteo} en detalle de Conteo";
                     return result;
                 }
+                
+                var bm1 = await _bm1Service.GetByNroPlaca(item.NroPlaca);
+                if (bm1 == null)
+                {
+                    result=$"Placa no encontrada: {item.NroPlaca}";
+                    return result;
+                }
+                
 
             }
 
@@ -612,6 +620,8 @@ namespace Convertidor.Services.Bm
             var CodigoDirBien = 0;
             ResultDto<bool> response = new ResultDto<bool>(false);
 
+            try
+            {
             var validarConteo = await ValidateConteo(dto);
             if (validarConteo != "")
             {
@@ -630,7 +640,10 @@ namespace Convertidor.Services.Bm
                 var conteoDetalle = await _repository.GetByCodigoConteoConteoIcpPlaca(CodigoBmConteo,Conteo,ubicacion.CODIGO_ICP,item.NroPlaca);
                 if (conteoDetalle != null)
                 {
-                    conteoDetalle.CANTIDAD_CONTADA =  conteoDetalle.CANTIDAD_CONTADA +1;
+                    conteoDetalle.CANTIDAD_CONTADA = 1;
+                    conteoDetalle.DIFERENCIA =conteoDetalle.CANTIDAD-conteoDetalle.CANTIDAD_CONTADA;
+                    conteoDetalle.CODIGO_ICP = ubicacion.CODIGO_ICP;
+                    conteoDetalle.UNIDAD_TRABAJO = ubicacion.UNIDAD_EJECUTORA;
                     await _repository.Update(conteoDetalle);
                 }
                 else
@@ -644,7 +657,7 @@ namespace Convertidor.Services.Bm
                         entity.CODIGO_BM_CONTEO = CodigoBmConteo;
                         entity.CONTEO = Conteo;
                         entity.CODIGO_ICP = ubicacion.CODIGO_ICP;
-                        entity.UNIDAD_TRABAJO = bm1.UnidadTrabajo;
+                        entity.UNIDAD_TRABAJO = ubicacion.UNIDAD_EJECUTORA;
                         entity.CODIGO_GRUPO = bm1.CodigoGrupo;
                         entity.CODIGO_NIVEL1 = bm1.CodigoNivel1;
                         entity.CODIGO_NIVEL2 = bm1.CodigoNivel2;
@@ -677,6 +690,16 @@ namespace Convertidor.Services.Bm
             response.Message = "";
             response.Data = true;
             return response;
+            }
+            catch (Exception e)
+            {
+                response.IsValid = false;
+                response.Message = e.Message;
+                response.Data = false;
+                return response;
+            }
+            
+            
         }
         public async Task<bool> ConteoIniciado(int codigoConteo)
         {
