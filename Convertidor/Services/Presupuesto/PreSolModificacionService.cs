@@ -3,6 +3,7 @@ using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Utility;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NPOI.OpenXmlFormats.Vml.Office;
 
 namespace Convertidor.Services.Presupuesto
@@ -907,15 +908,17 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "No existe Modificacion Presupuestaria para  ANULAR";
                     return result;
                 }
-
-                var puedeAnular = await PodemosAnularSolicitudDeModificacion(dto.CodigoSolModificacion);
+                
+                //TODO: comentado momentaneamente 
+                
+                /*var puedeAnular = await PodemosAnularSolicitudDeModificacion(dto.CodigoSolModificacion);
                 if (puedeAnular == false)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Solicitud no puede ser ANULADA (Tiene un saldo comprometido o Solicitud con Monto Modificado)";
                     return result;
-                }
+                }*/
 
 
                 //Recorremos la tabla PRE_PUC_MODIFICACION

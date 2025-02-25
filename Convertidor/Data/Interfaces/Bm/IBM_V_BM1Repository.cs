@@ -8,6 +8,7 @@ public interface IBM_V_BM1Repository
 {
     Task<List<BM_V_BM1>> GetAll();
     Task<List<BM_V_BM1>> GetByPlaca(int codigoBien);
+    Task<BM_V_BM1> GetByNroPlaca(string nroPlaca);
     Task<List<BM_V_BM1>> GetAllByCodigoIcp(int codigoIcp);
     List<ICPGetDto> GetICP();
 

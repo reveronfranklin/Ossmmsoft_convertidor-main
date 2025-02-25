@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Dtos.Bm.Mobil;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Bm
@@ -17,13 +18,16 @@ namespace Convertidor.Services.Bm
         private readonly IBmConteoRepository _bmConteoRepository;
         private readonly IBmDescriptivaRepository _bmDescriptivaRepository;
         private readonly IConfiguration _configuration;
+        private readonly IBmUbicacionesRepository _bmUbicacionesRepository;
+
         public BmConteoDetalleService(IBmConteoDetalleRepository repository,
                                 IBM_V_BM1Service bm1Service, 
                                 ISisUsuarioRepository sisUsuarioRepository,
                                 IRhPersonasRepository rhPersonasRepository,
                                 IBmConteoRepository bmConteoRepository,
                                 IBmDescriptivaRepository bmDescriptivaRepository,
-                                IConfiguration configuration)
+                                IConfiguration configuration,
+                                IBmUbicacionesRepository bmUbicacionesRepository)
 		{
             _repository = repository;
             _bm1Service = bm1Service;
@@ -32,8 +36,7 @@ namespace Convertidor.Services.Bm
             _bmConteoRepository = bmConteoRepository;
             _bmDescriptivaRepository = bmDescriptivaRepository;
             _configuration = configuration;
-           
-
+            _bmUbicacionesRepository = bmUbicacionesRepository;
         }
 
   
@@ -571,9 +574,110 @@ namespace Convertidor.Services.Bm
             }
            
         }
-   
 
-     
+        public async Task<string> ValidateConteo(List<ConteoCreateDto> dto)
+        {
+            
+            string result = "";
+            foreach (var item in dto)
+            {
+                int CodigoBmConteo = 0;
+              
+                var keyArray = item.KeyUbicacionResponsable.Split("-");
+                CodigoBmConteo=Convert.ToInt32(keyArray[0]);
+                var conteo = await _repository.GetByCodigo(CodigoBmConteo);
+                if (conteo == null)
+                {
+                    result=$"No existe un conteo con id:{CodigoBmConteo}";
+                    return result;
+                }
+
+                var existeConteo = await _repository.ExisteConteo(CodigoBmConteo);
+                if (existeConteo == false)
+                {
+                    result=$"No existe un conteo con id:{CodigoBmConteo} en detalle de Conteo";
+                    return result;
+                }
+
+            }
+
+            return result;
+        }
+        public async Task<ResultDto<bool>>  RecibeConteo(List<ConteoCreateDto> dto)
+        {
+            
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            int CodigoBmConteo = 0;
+            var Conteo = 0;
+            var CodigoDirBien = 0;
+            ResultDto<bool> response = new ResultDto<bool>(false);
+
+            var validarConteo = await ValidateConteo(dto);
+            if (validarConteo != "")
+            {
+                response.IsValid = false;
+                response.Message = validarConteo;
+                response.Data = false;
+                return response;
+            }
+            
+            foreach (var item in dto)
+            {
+                var keyArray = item.KeyUbicacionResponsable.Split("-");
+                CodigoBmConteo=Convert.ToInt32(keyArray[0]);
+                Conteo=Convert.ToInt32(keyArray[1]);
+                var ubicacion = await _bmUbicacionesRepository.GetByCodigoDirBien(item.CodigoDirBien);
+                var conteoDetalle = await _repository.GetByCodigoConteoConteoIcpPlaca(CodigoBmConteo,Conteo,ubicacion.CODIGO_ICP,item.NroPlaca);
+                if (conteoDetalle != null)
+                {
+                    conteoDetalle.CANTIDAD_CONTADA =  conteoDetalle.CANTIDAD_CONTADA +1;
+                    await _repository.Update(conteoDetalle);
+                }
+                else
+                {
+                    var nextKey =await _repository.GetNextKey();
+                    var bm1 = await _bm1Service.GetByNroPlaca(item.NroPlaca);
+                    if (bm1 != null)
+                    {
+                        BM_CONTEO_DETALLE entity = new BM_CONTEO_DETALLE();
+                        entity.CODIGO_BM_CONTEO_DETALLE = nextKey;
+                        entity.CODIGO_BM_CONTEO = CodigoBmConteo;
+                        entity.CONTEO = Conteo;
+                        entity.CODIGO_ICP = ubicacion.CODIGO_ICP;
+                        entity.UNIDAD_TRABAJO = bm1.UnidadTrabajo;
+                        entity.CODIGO_GRUPO = bm1.CodigoGrupo;
+                        entity.CODIGO_NIVEL1 = bm1.CodigoNivel1;
+                        entity.CODIGO_NIVEL2 = bm1.CodigoNivel2;
+                        entity.NUMERO_LOTE = bm1.NumeroLote;
+                        entity.CANTIDAD = bm1.Cantidad;
+                        entity.CANTIDAD_CONTADA =1;
+                        entity.DIFERENCIA =entity.CANTIDAD-entity.CANTIDAD_CONTADA;
+                        entity.NUMERO_PLACA =item.NroPlaca;
+                        entity.VALOR_ACTUAL =bm1.ValorActual;
+                        entity.ARTICULO=bm1.Articulo;
+                        entity.ESPECIFICACION =bm1.Especificacion;
+                        entity.SERVICIO = bm1.Servicio;
+                        entity.RESPONSABLE_BIEN = bm1.ResponsableBien;
+                        entity.FECHA_MOVIMIENTO = bm1.FechaMovimiento;
+                        entity.CODIGO_BIEN = bm1.CodigoBien;
+                        entity.CODIGO_MOV_BIEN = bm1.CodigoMovBien;
+                        entity.COMENTARIO = "";
+                        
+                       
+                        entity.CODIGO_EMPRESA = conectado.Empresa;
+                        entity.USUARIO_INS = conectado.Usuario;
+                        entity.FECHA_INS = DateTime.Now;
+                        var created = await _repository.Add(entity);
+                    }
+                  
+                }
+            }
+            
+            response.IsValid = true;
+            response.Message = "";
+            response.Data = true;
+            return response;
+        }
         public async Task<bool> ConteoIniciado(int codigoConteo)
         {
 

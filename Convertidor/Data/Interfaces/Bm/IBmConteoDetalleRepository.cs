@@ -5,6 +5,9 @@ namespace Convertidor.Data.Interfaces.Bm;
 public interface IBmConteoDetalleRepository
 {
     Task<BM_CONTEO_DETALLE> GetByCodigo(int conteoDetalleId);
+
+    Task<BM_CONTEO_DETALLE> GetByCodigoConteoConteoIcpPlaca(int codigoBmConteo, int conteo, int codigoIcp,
+        string nroPlaca);
     Task<List<BM_CONTEO_DETALLE>> GetAllByConteo(int codigoConteo);
     Task<List<BM_CONTEO_DETALLE>> GetAll();
     Task<ResultDto<BM_CONTEO_DETALLE>> Add(BM_CONTEO_DETALLE entity);

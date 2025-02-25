@@ -1,11 +1,13 @@
 using Convertidor.Data.Entities.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Dtos.Bm.Mobil;
 
 namespace Convertidor.Services.Bm;
 
 public interface IBmConteoDetalleService
 {
     Task<ResultDto<List<BmConteoDetalleResponseDto>>> GetAll();
+    Task<ResultDto<bool>> RecibeConteo(List<ConteoCreateDto> dto);
     Task<ResultDto<List<BmConteoDetalleResponseDto>>> GetAllByConteo(BmConteoFilterDto filter);
     Task<ResultDto<List<BmConteoDetalleResponseDto>>> Update(BmConteoDetalleUpdateDto dto);
     Task<ResultDto<List<BmConteoDetalleResumenResponseDto>>> GetResumen(int codigoConteo);
