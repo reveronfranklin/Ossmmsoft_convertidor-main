@@ -112,7 +112,7 @@ namespace Convertidor.Services.Adm
                 if (documentosOp != null && documentosOp.Count() > 0)
                 {
                     var listDto = await MapListDocumentosOpDto(documentosOp);
-
+                    result.CantidadRegistros=listDto.Count();
                     result.Data = listDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -122,6 +122,7 @@ namespace Convertidor.Services.Adm
                 }
                 else
                 {
+                    result.CantidadRegistros = 0;
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "No data";
@@ -150,7 +151,7 @@ namespace Convertidor.Services.Adm
                 if (documentosOp != null && documentosOp.Count() > 0)
                 {
                     var listDto = await MapListDocumentosOpDto(documentosOp);
-
+                    result.CantidadRegistros=listDto.Count();
                     result.Data = listDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -160,6 +161,7 @@ namespace Convertidor.Services.Adm
                 }
                 else
                 {
+                    result.CantidadRegistros = 0;
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "No data";
@@ -361,14 +363,22 @@ namespace Convertidor.Services.Adm
                 codigoDocumentoOp.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoDocumentoOp);
+                var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+                var cantidadDocumentos = 0;
+                if (documentos != null && documentos.Count() > 0)
+                {
+                    cantidadDocumentos = documentos.Count();
+                }
 
                 var resultDto = await MapDocumentosOpDto(codigoDocumentoOp);
+                result.CantidadRegistros = cantidadDocumentos;
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
             }
             catch (Exception ex)
             {
+                result.CantidadRegistros = 0;
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = ex.Message;
@@ -595,18 +605,27 @@ namespace Convertidor.Services.Adm
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
-
+             
                 var created = await _repository.Add(entity);
+                
+                var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+                var cantidadDocumentos = 0;
+                if (documentos != null && documentos.Count() > 0)
+                {
+                    cantidadDocumentos = documentos.Count();
+                }
+
                 if (created.IsValid && created.Data != null)
                 {
                     var resultDto = await MapDocumentosOpDto(created.Data);
+                    result.CantidadRegistros = cantidadDocumentos;
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
                 }
                 else
                 {
-
+                    result.CantidadRegistros = cantidadDocumentos;
                     result.Data = null;
                     result.IsValid = created.IsValid;
                     result.Message = created.Message;
@@ -633,7 +652,9 @@ namespace Convertidor.Services.Adm
             ResultDto<AdmDocumentosOpDeleteDto> result = new ResultDto<AdmDocumentosOpDeleteDto>(null);
             try
             {
-
+                
+          
+                
                 var codigoDocumentoOp = await _repository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
                 if (codigoDocumentoOp == null)
                 {
@@ -643,17 +664,25 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-
-                var deleted = await _repository.Delete(dto.CodigoDocumentoOp);
-
+               var deleted = await _repository.Delete(dto.CodigoDocumentoOp);
+               var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+               var cantidadDocumentos = 0;
+               if (documentos != null && documentos.Count() > 0)
+               {
+                   cantidadDocumentos = documentos.Count();
+               }
+               
                 if (deleted.Length > 0)
                 {
+                    result.CantidadRegistros = cantidadDocumentos;
                     result.Data = dto;
                     result.IsValid = false;
                     result.Message = deleted;
                 }
                 else
                 {
+                    
+                    result.CantidadRegistros = cantidadDocumentos;
                     result.Data = dto;
                     result.IsValid = true;
                     result.Message = deleted;
