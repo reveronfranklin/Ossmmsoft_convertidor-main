@@ -647,13 +647,12 @@ namespace Convertidor.Data.Repository.Rh
                         string fileName = file.FileName;
                         fileName =file.FileName.Replace(" ", "_");
                         var arrFileName = fileName.Split(".");
-                        
-                        var filePatch = $"{destino}{persona.Cedula}.{arrFileName[1]}";
-                       
+                        Guid uuid = Guid.NewGuid();
+                        var filePatch = $"{destino}{persona.Cedula}_{uuid.ToString()}.{arrFileName[1]}";
                         var personaUpdate = await _repository.GetCodigoPersona(persona.CodigoPersona);
                         if (personaUpdate != null)
                         {
-                            personaUpdate.FILE_NAME= $"{persona.Cedula}.{arrFileName[1]}";
+                            personaUpdate.FILE_NAME= $"{persona.Cedula}_{uuid.ToString()}.{arrFileName[1]}";
                             await _repository.Update(personaUpdate);
                         }
                         
