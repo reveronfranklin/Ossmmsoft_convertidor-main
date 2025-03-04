@@ -11,10 +11,10 @@
         public string FechaVencimientoString { get; set; }
         public FechaDto FechaVencimientoObj { get; set; }
         public int TipoGradoid { get; set; }
+        public string DescripcionTipoGrado { get; set; }
         public int GradoId { get; set; }
-        public string Extra1 { get; set; }
-        public string Extra2 { get; set; }
-        public string Extra3 { get; set; }
+        public string DecripcionGrado { get; set; }
+      
       
        
         }
