@@ -363,7 +363,7 @@ namespace Convertidor.Services.Adm
                 codigoDocumentoOp.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoDocumentoOp);
-                var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+                var documentos = await _repository.GetByCodigoOrdenPago(dto.CodigoOrdenPago);
                 var cantidadDocumentos = 0;
                 if (documentos != null && documentos.Count() > 0)
                 {
@@ -608,7 +608,7 @@ namespace Convertidor.Services.Adm
              
                 var created = await _repository.Add(entity);
                 
-                var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+                var documentos = await _repository.GetByCodigoOrdenPago(dto.CodigoOrdenPago);
                 var cantidadDocumentos = 0;
                 if (documentos != null && documentos.Count() > 0)
                 {

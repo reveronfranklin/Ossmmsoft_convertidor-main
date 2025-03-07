@@ -9,15 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/FilterDocumentoDetalleDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhDocumentosDetallesResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhDocumentosDetallesResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhDocumentosResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhDocumentosResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhDocumentosUpdate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhDocumentosUpdate.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/IRhDocumentosDetallesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/IRhDocumentosDetallesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhDocumentosDetallesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhDocumentosDetallesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhDocumentosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhDocumentosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -372,7 +365,8 @@
       <workItem from="1738518128705" duration="5383000" />
       <workItem from="1738943739686" duration="28681000" />
       <workItem from="1739832026041" duration="88009000" />
-      <workItem from="1741104823480" duration="5590000" />
+      <workItem from="1741104823480" duration="6934000" />
+      <workItem from="1741360374371" duration="444000" />
     </task>
     <servers />
   </component>
@@ -4424,6 +4418,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="939" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs</url>
+          <line>610</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="27015" />
+            </startOffsets>
+            <endOffsets>
+              <option value="27092" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="940" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
