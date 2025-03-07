@@ -10,7 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +36,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -363,7 +364,9 @@
       <workItem from="1738503666794" duration="893000" />
       <workItem from="1738518128705" duration="5383000" />
       <workItem from="1738943739686" duration="28681000" />
-      <workItem from="1739832026041" duration="78461000" />
+      <workItem from="1739832026041" duration="88009000" />
+      <workItem from="1741104823480" duration="6934000" />
+      <workItem from="1741360374371" duration="444000" />
     </task>
     <servers />
   </component>
@@ -4298,6 +4301,136 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="929" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
+          <line>31</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'GetByPresupuesto'">
+            <startOffsets>
+              <option value="943" />
+            </startOffsets>
+            <endOffsets>
+              <option value="996" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="931" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosController.cs</url>
+          <line>24</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosController.cs" containingFunctionPresentation="Method 'GetByPersona'">
+            <startOffsets>
+              <option value="554" />
+            </startOffsets>
+            <endOffsets>
+              <option value="623" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="932" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosController.cs</url>
+          <line>32</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="815" />
+            </startOffsets>
+            <endOffsets>
+              <option value="855" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="933" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosController.cs</url>
+          <line>41</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="1040" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1080" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="934" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosController.cs</url>
+          <line>50</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosController.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="1268" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1308" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="935" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs</url>
+          <line>25</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs" containingFunctionPresentation="Method 'GetByDocumento'">
+            <startOffsets>
+              <option value="599" />
+            </startOffsets>
+            <endOffsets>
+              <option value="663" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="936" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs</url>
+          <line>33</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="863" />
+            </startOffsets>
+            <endOffsets>
+              <option value="903" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="937" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs</url>
+          <line>42</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="1096" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1136" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="938" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs</url>
+          <line>51</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhDocumentosDetallesController.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="1332" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1372" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="939" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs</url>
+          <line>610</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="27015" />
+            </startOffsets>
+            <endOffsets>
+              <option value="27092" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="940" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -37,9 +37,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.CodigoDocumentoDetalle = dtos.CODIGO_DOCUMENTO_DETALLE;
                 itemResult.CodigoDocumento = dtos.CODIGO_DOCUMENTO;
                 itemResult.Descripcion = dtos.DESCRIPCION;
-                itemResult.Extra1 = dtos.EXTRA1;
-                itemResult.Extra2 = dtos.EXTRA2;
-                itemResult.Extra3 = dtos.EXTRA3;
+            
                 itemResult.FechaFinal = dtos.FECHA_FINAL;
                 itemResult.FechaFinalString =Fecha.GetFechaString(dtos.FECHA_FINAL);
                 FechaDto fechaFinalObj = Fecha.GetFechaDto(dtos.FECHA_FINAL);
@@ -75,7 +73,25 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async Task<List<RhDocumentosDetallesResponseDto>> GetByDocumento(int codigoDocumento)
+        {
+            try
+            {
 
+                var detalleDocumentos = await _repository.GetByCodigoDocumento(codigoDocumento);
+
+                var result = await MapListDocumentosDetallesDto(detalleDocumentos);
+
+
+                return (List<RhDocumentosDetallesResponseDto>)result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+        }
         public async Task<ResultDto<RhDocumentosDetallesResponseDto>> Update(RhDocumentosDetallesUpdate dto)
         {
 
@@ -167,18 +183,18 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 var codigoDocumento = await _rhDocumentosRepository.GetByCodigo(dto.CodigoDocumento);
-                if (codigoDocumento != null)
+                if (codigoDocumento == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "ya existe el Documento";
+                    result.Message = "No existe el Documento";
                     return result;
                 }
                 if (dto.Descripcion is not null && dto.Descripcion.Length>1000)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Documento  Invalido";
+                    result.Message = "Descripcion  Invalida(Obligatoria y Max 1000 Digitos)";
                     return result;
                 }
 

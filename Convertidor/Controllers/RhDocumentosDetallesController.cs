@@ -18,6 +18,15 @@ namespace Convertidor.Controllers
            
         }
 
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByDocumento(FilterDocumentoDetalleDto dto)
+        {
+            var result = await _service.GetByDocumento(dto.CodigoDocumento);
+            return Ok(result);
+        }
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Create(RhDocumentosDetallesUpdate dto)
