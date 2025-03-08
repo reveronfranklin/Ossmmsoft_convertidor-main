@@ -28,12 +28,14 @@ namespace Convertidor.Services.Bm
         private readonly IConfiguration _configuration;
         private readonly IBmMovBienesRepository _bmMovBienesRepository;
         private readonly IOssConfigRepository _ossConfigRepository;
+        private readonly IBmPlacasCuarentenaRepository _bmPlacasCuarentenaRepository;
 
 
         public BM_V_BM1Service(IBM_V_BM1Repository repository,
                                 IConfiguration configuration,
                                 IBmMovBienesRepository bmMovBienesRepository,
-                                IOssConfigRepository ossConfigRepository
+                                IOssConfigRepository ossConfigRepository,
+                                IBmPlacasCuarentenaRepository bmPlacasCuarentenaRepository
                                 )
 
         {
@@ -41,6 +43,7 @@ namespace Convertidor.Services.Bm
             _configuration = configuration;
             _bmMovBienesRepository = bmMovBienesRepository;
             _ossConfigRepository = ossConfigRepository;
+            _bmPlacasCuarentenaRepository = bmPlacasCuarentenaRepository;
         }
 
 
@@ -459,7 +462,15 @@ namespace Convertidor.Services.Bm
 
         }
 
-
+        public async Task<ResultDto<List<BmPlacas>>> GetPlacas()
+        {
+            ResultDto<List<BmPlacas>> response = new ResultDto<List<BmPlacas>>(null);
+           var placas =await _repository.GetPlacas();
+           response.Data = placas;
+           response.IsValid = true;
+           response.Message = "";
+           return response;
+        }
         
         public async Task<ResultDto<List<Bm1GetDto>>> GetByListIcp(Bm1Filter filter)
         {
@@ -479,7 +490,7 @@ namespace Convertidor.Services.Bm
                     {
 
                         var itemFilter = await GetAllByIcp(item.CodigoIcp,filter.FechaDesde,filter.FechaHasta);
-
+                        
                         if (itemFilter.Data.Count > 0)
                         {
 
@@ -501,6 +512,20 @@ namespace Convertidor.Services.Bm
 
                 }
                 
+                List<Bm1GetDto> searchListFiltrado = new List<Bm1GetDto>();
+                foreach (var item in searchList)
+                {
+                    
+                    var cuarentena = await _bmPlacasCuarentenaRepository.GetByNumeroPlaca(item.NumeroPlaca);
+                    if (cuarentena == null)
+                    {
+                        searchListFiltrado.Add(item);
+                    }
+                 
+                   
+                }
+                
+                
                 var fileName = $"";
                // var _env = "development";
                 var settings = _configuration.GetSection("Settings").Get<Settings>();
@@ -511,13 +536,13 @@ namespace Convertidor.Services.Bm
                 File.Delete(destino);
                 if (listIcpSeleccionado.Count > 0)
                 {
-                    await CreateBardCodeMultiple(searchList);
+                    await CreateBardCodeMultiple(searchListFiltrado);
                     fileName = $"placas.pdf";
                 }
               
                 
                 
-                response.Data = searchList;
+                response.Data = searchListFiltrado;
                 response.IsValid = true;
                 response.Message = "";
                 response.LinkData = $"{fileName}";

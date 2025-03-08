@@ -9,8 +9,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Bm/BmPlacas.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBM_V_BM1Repository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Bm/BmPlacaCuarentenaResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Bm/BmPlacaCuarentenaResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BmPlacasCuarentenaService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmPlacasCuarentenaService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/IBM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/IBM_V_BM1Service.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,52 +44,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -105,6 +67,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e48b45e431e847a3a9baedf2f6e3277db57e00/b1/9e958315/AsyncMethodBuilderCore.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fa3d0ae320444f1ca3cfc7bae1c2d9ec209800/02/1e054e21/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6518e12429e640b855e84dbcb556279a6dcdecc0f25132fcbc5510f956f771e7/CallSiteFactory.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7262732eee179af215faab36a7f3c3cfac93ba12af52a3888d839fe7e53420/ActionMethodExecutor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b930d5fc648ab7ec81ca7272fe2d506e2e31c028fb2d6e79230fcee460b/IDocument.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d1f68ef86315497c7b39ddb155d5cf3ace964abca69857f9943cd58479799/ServiceProvider.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dfdb3114969fc2e4201df17e3cc6ad13c459aab1a6329ce9b894e8809c80ca75/TableLayoutValidator.cs" root0="SKIP_HIGHLIGHTING" />
@@ -366,7 +329,8 @@
       <workItem from="1738943739686" duration="28681000" />
       <workItem from="1739832026041" duration="88009000" />
       <workItem from="1741104823480" duration="6934000" />
-      <workItem from="1741360374371" duration="444000" />
+      <workItem from="1741360374371" duration="1131000" />
+      <workItem from="1741385731684" duration="26844000" />
     </task>
     <servers />
   </component>
@@ -406,13 +370,13 @@
       <breakpoints>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>133</line>
+          <line>139</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
             <startOffsets>
-              <option value="4089" />
+              <option value="4315" />
             </startOffsets>
             <endOffsets>
-              <option value="4119" />
+              <option value="4345" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="3" />
@@ -2549,13 +2513,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>145</line>
+          <line>158</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'LoginMobil'">
             <startOffsets>
-              <option value="4337" />
+              <option value="4806" />
             </startOffsets>
             <endOffsets>
-              <option value="4376" />
+              <option value="4845" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="674" />
@@ -2991,52 +2955,52 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
-          <line>77</line>
+          <line>85</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'UpdateProductMobil'">
             <startOffsets>
-              <option value="1992" />
+              <option value="2205" />
             </startOffsets>
             <endOffsets>
-              <option value="2041" />
+              <option value="2254" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="727" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
-          <line>88</line>
+          <line>96</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'CreateProductMobil'">
             <startOffsets>
-              <option value="2403" />
+              <option value="2616" />
             </startOffsets>
             <endOffsets>
-              <option value="2452" />
+              <option value="2665" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="729" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
-          <line>81</line>
+          <line>89</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'UpdateProductMobil'">
             <startOffsets>
-              <option value="2213" />
+              <option value="2426" />
             </startOffsets>
             <endOffsets>
-              <option value="2231" />
+              <option value="2444" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="730" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
-          <line>91</line>
+          <line>99</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'CreateProductMobil'">
             <startOffsets>
-              <option value="2574" />
+              <option value="2787" />
             </startOffsets>
             <endOffsets>
-              <option value="2592" />
+              <option value="2805" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="736" />
@@ -3498,13 +3462,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
-          <line>185</line>
+          <line>198</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'TokenValid'">
             <startOffsets>
-              <option value="5772" />
+              <option value="6241" />
             </startOffsets>
             <endOffsets>
-              <option value="5838" />
+              <option value="6307" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="827" />
@@ -3771,26 +3735,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>580</line>
+          <line>605</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GetICP'">
             <startOffsets>
-              <option value="24228" />
+              <option value="25382" />
             </startOffsets>
             <endOffsets>
-              <option value="24249" />
+              <option value="25403" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="853" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
-          <line>51</line>
+          <line>59</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'GetByListIcp'">
             <startOffsets>
-              <option value="1202" />
+              <option value="1415" />
             </startOffsets>
             <endOffsets>
-              <option value="1251" />
+              <option value="1464" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="854" />
@@ -3810,29 +3774,16 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>473</line>
+          <line>484</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GetByListIcp'">
             <startOffsets>
-              <option value="20896" />
+              <option value="21505" />
             </startOffsets>
             <endOffsets>
-              <option value="20975" />
+              <option value="21584" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="857" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs</url>
-          <line>492</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" containingFunctionPresentation="Method 'GetByListIcp'">
-            <startOffsets>
-              <option value="21585" />
-            </startOffsets>
-            <endOffsets>
-              <option value="21649" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="858" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
@@ -4135,26 +4086,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
-          <line>61</line>
+          <line>69</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'GetProductMobil'">
             <startOffsets>
-              <option value="1473" />
+              <option value="1686" />
             </startOffsets>
             <endOffsets>
-              <option value="1525" />
+              <option value="1738" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="907" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs</url>
-          <line>156</line>
+          <line>183</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" containingFunctionPresentation="Method 'GetProductMobil'">
             <startOffsets>
-              <option value="6043" />
+              <option value="6845" />
             </startOffsets>
             <endOffsets>
-              <option value="6057" />
+              <option value="6859" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="913" />
@@ -4275,19 +4226,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="927" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs</url>
-          <line>72</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" containingFunctionPresentation="Method 'MapBmConteo'">
-            <startOffsets>
-              <option value="3309" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3385" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="928" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
@@ -4431,6 +4369,84 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="940" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmPlacaCuarentenaController.cs</url>
+          <line>34</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmPlacaCuarentenaController.cs" containingFunctionPresentation="Method 'GetByCodigo'">
+            <startOffsets>
+              <option value="846" />
+            </startOffsets>
+            <endOffsets>
+              <option value="913" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="942" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmPlacaCuarentenaController.cs</url>
+          <line>42</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmPlacaCuarentenaController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="1113" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1153" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="943" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmPlacaCuarentenaController.cs</url>
+          <line>52</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmPlacaCuarentenaController.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="1347" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1387" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="944" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
+          <line>123</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
+            <startOffsets>
+              <option value="3687" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3726" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="952" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
+          <line>152</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'LoginMobil'">
+            <startOffsets>
+              <option value="4580" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4631" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="953" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
+          <line>118</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
+            <startOffsets>
+              <option value="3478" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3529" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="954" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

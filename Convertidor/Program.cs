@@ -278,6 +278,8 @@ builder.Services.AddTransient<IConceptosRetencionesService, ConceptosRetenciones
 builder.Services.AddTransient<IHistoricoRetencionesService, HistoricoRetencionesService>();
 builder.Services.AddHttpClient<PetroClientService>();
 builder.Services.AddTransient<IPetroClientService, PetroClientService>();
+builder.Services.AddTransient<IRhDocumentosAdjuntosRepository, RhDocumentosAdjuntosRepository>();
+
 
 builder.Services.AddTransient<IRhPeriodoService, RhPeriodoService>();
 builder.Services.AddTransient<IRhHistoricoMovimientoService, RhHistoricoMovimientoService>();
@@ -400,6 +402,7 @@ builder.Services.AddTransient<IBmConteoHistoricoRepository, BmConteoHistoricoRep
 builder.Services.AddTransient<IRhVReciboPagoRepository, RhVReciboPagoRepository>();
 builder.Services.AddTransient<IBmUbicacionesRepository, BmUbicacionesRepository>();
 builder.Services.AddTransient<IBmUbicacionesResponsableRepository, BmUbicacionesResponsableRepository>();
+builder.Services.AddTransient<IBmPlacasCuarentenaRepository, BmPlacasCuarentenaRepository>();
 
 
 
@@ -424,6 +427,7 @@ builder.Services.AddTransient<IBmConteoHistoricoService, BmConteoHistoricoServic
 builder.Services.AddTransient<IBmConteoDetalleHistoricoService, BmConteoDetalleHistoricoService>();
 builder.Services.AddTransient<IBmUbicacionesService, BmUbicacionesService>();
 builder.Services.AddTransient<IBmUbicacionesResponsableService, BmUbicacionesResponsableService>();
+builder.Services.AddTransient<IBmPlacasCuarentenaService, BmPlacasCuarentenaService>();
 
 
 

@@ -14,5 +14,6 @@ public interface IBM_V_BM1Repository
 
     Task<List<ProductResponse>> GetProductMobil(ProductFilterDto filter);
     Task<ProductResponse> GetProductMobilById(ProductFilterDto filter);
+    Task<List<BmPlacas>> GetPlacas();
 
 }

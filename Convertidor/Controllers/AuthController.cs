@@ -115,6 +115,12 @@ namespace Convertidor.Controllers
 
             try
             {
+                
+                var dominio = dto.Email.Contains("@ossmasoft.com");
+                if (dominio == false)
+                {
+                    return BadRequest("Usuario o clave invalida");
+                }
                 var result = await _service.Login(dto);
                 if (result.AccessToken.Length > 10)
                 {
@@ -143,6 +149,13 @@ namespace Convertidor.Controllers
 
             try
             {
+                
+                var dominio = dto.Email.Contains("@ossmasoft.com");
+                if (dominio == false)
+                {
+                    return BadRequest("Usuario o clave invalida");
+                }
+                
                 var result = await _service.Login(dto);
                 if (result.AccessToken.Length > 10)
                 {

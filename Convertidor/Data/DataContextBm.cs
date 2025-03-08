@@ -31,12 +31,24 @@ namespace Convertidor.Data
         
         public DbSet<BM_CONTEO_HISTORICO> BM_CONTEO_HISTORICO { get; set; }
         public DbSet<BM_CONTEO_DETALLE_HISTORICO> BM_CONTEO_DETALLE_HISTORICO { get; set; }
+        public DbSet<BM_PLACAS_CUARENTENA> BM_PLACAS_CUARENTENA { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder
+                .Entity<BM_PLACAS_CUARENTENA>(builder =>
+                {
 
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_PLACA_CUARENTENA,
+
+                    });
+                    builder.ToTable("BM_PLACAS_CUARENTENA");
+                });
             modelBuilder
                 .Entity<BM_V_BM1>(builder =>
                 {
