@@ -44,6 +44,14 @@ namespace Convertidor.Controllers
             var result = await _service.GetICP();
             return Ok(result);
         }
+        
+        [HttpGet]
+        [Route("[action]")] 
+        public async Task<IActionResult> GetPlacas()
+        {
+            var result = await _service.GetPlacas();
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("[action]")] 

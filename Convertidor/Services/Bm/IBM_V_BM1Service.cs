@@ -16,5 +16,6 @@ public interface IBM_V_BM1Service
     Task<List<ProductResponse>> GetProductMobil(ProductFilterDto filter);
     Task<ProductResponse> GetProductMobilById(ProductFilterDto filter);
     Task<ResultDto<List<Bm1GetDto>>> GetByListPlacas(Bm1Filter filter);
+    Task<ResultDto<List<BmPlacas>>> GetPlacas();
 
 }

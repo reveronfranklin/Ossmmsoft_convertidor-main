@@ -32,6 +32,12 @@ namespace Convertidor.Services.Bm
             BmPlacaCuarentenaResponseDto itemResult = new BmPlacaCuarentenaResponseDto();
             itemResult.CodigoPlacaCuarentena = dtos.CODIGO_PLACA_CUARENTENA;
             itemResult.NumeroPlaca = dtos.NUMERO_PLACA;
+            itemResult.Articulo = "";
+            var bm1 = await _bmVBm1Repository.GetByNroPlaca(itemResult.NumeroPlaca);
+            if (bm1 != null)
+            {
+                itemResult.Articulo = bm1.ARTICULO;
+            }
 
             return itemResult;
 

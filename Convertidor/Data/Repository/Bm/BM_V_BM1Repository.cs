@@ -53,6 +53,33 @@ namespace Convertidor.Data.Repository.Catastro
             return lista.ToList();
 
         }
+        
+        public async Task<List<BmPlacas>> GetPlacas()
+        {
+           
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var lista = from s in  _context.BM_V_BM1.Where(x=>x.CODIGO_EMPRESA==conectado.Empresa)
+                group s by new
+                {
+                    Id = s.CODIGO_BIEN,
+                    NumeroPlaca=s.NRO_PLACA,
+                  
+                                    
+                 
+                                      
+                } into g
+                select new BmPlacas()
+                {
+                    Id = g.Key.Id,
+                    NumeroPlaca = g.Key.NumeroPlaca
+                   
+                                   
+
+                };
+            return lista.ToList();
+
+        }
+        
         public void MinFile(string nroPlaca,string foto)
         {
             var settings = _configuration.GetSection("Settings").Get<Settings>();
