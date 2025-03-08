@@ -43,6 +43,8 @@ namespace Convertidor.Data
         public DbSet<RH_FAMILIARES> RH_FAMILIARES { get; set; }
         public DbSet<RH_DOCUMENTOS> RH_DOCUMENTOS { get; set; }
         public DbSet<RH_DOCUMENTOS_DETALLES> RH_DOCUMENTOS_DETALLES { get; set; }
+        public DbSet<RH_DOCUMENTOS_ADJUNTOS> RH_DOCUMENTOS_ADJUNTOS { get; set; }
+        
 
         public DbSet<RH_EXP_LABORAL> RH_EXP_LABORAL { get; set; }
         public DbSet<RH_PERSONAS_MOV_CONTROL> RH_PERSONAS_MOV_CONTROL { get; set; }
@@ -297,6 +299,15 @@ namespace Convertidor.Data
 
                 });
                 builder.ToTable("RH_DOCUMENTOS_DETALLES");
+            });
+            modelBuilder.Entity<RH_DOCUMENTOS_ADJUNTOS>(builder =>
+            {
+                builder.HasKey(table => new
+                {
+                    table.CODIGO_DOCUMENTO_ADJUNTO,
+
+                });
+                builder.ToTable("RH_DOCUMENTOS_ADJUNTOS");
             });
             modelBuilder.Entity<RH_DESCRIPTIVAS>(builder =>
             {
