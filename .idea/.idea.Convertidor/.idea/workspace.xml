@@ -9,16 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Bm/BmPlacas.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBM_V_BM1Repository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Bm/BmPlacaCuarentenaResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Bm/BmPlacaCuarentenaResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BmPlacasCuarentenaService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmPlacasCuarentenaService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/IBM_V_BM1Service.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/IBM_V_BM1Service.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -330,7 +321,10 @@
       <workItem from="1739832026041" duration="88009000" />
       <workItem from="1741104823480" duration="6934000" />
       <workItem from="1741360374371" duration="1131000" />
-      <workItem from="1741385731684" duration="26844000" />
+      <workItem from="1741385731684" duration="27487000" />
+      <workItem from="1741544013659" duration="104000" />
+      <workItem from="1741544171708" duration="16000" />
+      <workItem from="1741559369619" duration="620000" />
     </task>
     <servers />
   </component>
