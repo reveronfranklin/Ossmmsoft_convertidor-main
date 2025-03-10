@@ -116,7 +116,7 @@ namespace Convertidor.Controllers
             try
             {
                 
-                var dominio = dto.Email.Contains("@ossmasoft.com");
+                var dominio = dto.Email.Contains("@ossmmasoft.com");
                 if (dominio == false)
                 {
                     return BadRequest("Usuario o clave invalida");
@@ -150,7 +150,7 @@ namespace Convertidor.Controllers
             try
             {
                 
-                var dominio = dto.Email.Contains("@ossmasoft.com");
+                var dominio = dto.Email.Contains("@ossmmasoft.com");
                 if (dominio == false)
                 {
                     return BadRequest("Usuario o clave invalida");
