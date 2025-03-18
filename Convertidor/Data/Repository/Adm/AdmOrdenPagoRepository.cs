@@ -46,9 +46,6 @@ namespace Convertidor.Data.Repository.Adm
                 return ex.Message;
             }
 
-
-
-
         }
         
         public async Task<ResultDto<List<ADM_ORDEN_PAGO>>> GetByPresupuesto(AdmOrdenPagoFilterDto filter) 
