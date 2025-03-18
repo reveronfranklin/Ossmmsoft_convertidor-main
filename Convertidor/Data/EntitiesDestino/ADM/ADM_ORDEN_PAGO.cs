@@ -58,6 +58,7 @@
         public string? NOMBRE_AGENTE_RETENCION { get; set; }= string.Empty;
         public string? RIF_AGENTE_RETENCION { get; set; }= string.Empty;
         public string? TELEFONO_AGENTE_RETENCION { get; set; }= string.Empty;
+        public string? NUMERO_COMPROMISO { get; set; }= string.Empty;
 
     }
 }
