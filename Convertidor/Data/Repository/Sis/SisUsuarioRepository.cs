@@ -55,11 +55,13 @@ namespace Convertidor.Data.Repository.Sis
             {
                 dto.Empresa = empresa;
                 dto.Usuario = sisUsuario.CODIGO_USUARIO;
+                dto.RefreshToken=sisUsuario.REFRESHTOKEN;
             }
             else 
             {
                 dto.Empresa = empresa;
                 dto.Usuario = 0;
+                dto.RefreshToken = "";
             }
             return dto;
 
