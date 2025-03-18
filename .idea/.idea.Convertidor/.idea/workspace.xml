@@ -9,8 +9,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/SisCuentaBancoController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/SIS_BANCOS.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/SIS_CUENTAS_BANCOS.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisBancoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisBancoService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisCuentaBancoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Sis/ISisCuentaBancoService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisBancoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisCuentaBancoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisBancoDeleteDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisBancoFilterDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisBancoResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisBancoUpdateDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisCuentaBancoDeleteDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisCuentaBancoFilterDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisCuentaBancoResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Sis/SisCuentaBancoUpdateDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisBancoService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisCuentaBancoService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor.sln.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor.sln.DotSettings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextSis.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextSis.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/SIS_DESCRIPTIVAS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Sis/SIS_DESCRIPTIVAS.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisDescriptivaRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisDescriptivaRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +61,28 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmDetalleSolicitudController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -326,7 +373,9 @@
       <workItem from="1741544013659" duration="104000" />
       <workItem from="1741544171708" duration="16000" />
       <workItem from="1741559369619" duration="1204000" />
-      <workItem from="1741614954528" duration="2433000" />
+      <workItem from="1741614954528" duration="3641000" />
+      <workItem from="1741964291653" duration="231000" />
+      <workItem from="1742237293158" duration="19284000" />
     </task>
     <servers />
   </component>
@@ -1820,13 +1869,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs</url>
-          <line>174</line>
+          <line>171</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="7693" />
+              <option value="7690" />
             </startOffsets>
             <endOffsets>
-              <option value="7712" />
+              <option value="7709" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="413" />
@@ -4352,6 +4401,136 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="953" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs</url>
+          <line>32</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="730" />
+            </startOffsets>
+            <endOffsets>
+              <option value="770" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="954" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs</url>
+          <line>40</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="960" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1000" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="955" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs</url>
+          <line>48</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="1183" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1223" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="956" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs</url>
+          <line>56</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/SisBancoController.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="1406" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1446" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="957" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/SisCuentaBancoController.cs</url>
+          <line>32</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/SisCuentaBancoController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="760" />
+            </startOffsets>
+            <endOffsets>
+              <option value="800" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="958" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/SisCuentaBancoController.cs</url>
+          <line>40</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/SisCuentaBancoController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="996" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1036" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="959" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/SisCuentaBancoController.cs</url>
+          <line>48</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/SisCuentaBancoController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="1225" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1265" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="960" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisDescriptivaRepository.cs</url>
+          <line>46</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisDescriptivaRepository.cs" containingFunctionPresentation="Method 'GetById'">
+            <startOffsets>
+              <option value="1272" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1308" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="963" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/SisCuentaBancoService.cs</url>
+          <line>288</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisCuentaBancoService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="10754" />
+            </startOffsets>
+            <endOffsets>
+              <option value="10814" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="965" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Sis/SisCuentaBancoService.cs</url>
+          <line>179</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisCuentaBancoService.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="6617" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6677" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="966" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -38,6 +38,8 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                 var result = await _context.SIS_DESCRIPTIVAS.DefaultIfEmpty().Where(x => x.DESCRIPCION_ID == id).FirstOrDefaultAsync();
+
+                
                 return result;
             }
             catch (Exception ex)

@@ -202,6 +202,8 @@ builder.Services.AddTransient<IOssAuthUserRepository,OssAuthUserRepository>();
 builder.Services.AddTransient<IOssAuthUserGroupRepository,OssAuthUserGroupRepository>();
 builder.Services.AddTransient<IOssAuthUserPermissionsRepository,OssAuthUserPermissionsRepository>();
 builder.Services.AddTransient<ISisEmpresaRepository,SisEmpresaRepository>();
+builder.Services.AddTransient<ISisBancoRepository,SisBancoRepository>();
+builder.Services.AddTransient<ISisCuentaBancoRepository,SisCuentaBancoRepository>();
 
 
 
@@ -222,6 +224,8 @@ builder.Services.AddTransient<IOssAuthGroupPermissionService, OssAuthGroupPermis
 builder.Services.AddTransient<IOssAuthUserPermissionService, OssAuthUserPermissionService>();
 builder.Services.AddTransient<IOssAuthUserGroupService, OssAuthUserGroupService>();
 builder.Services.AddTransient<IAuthModelUserServices, AuthModelUserServices>();
+builder.Services.AddTransient<ISisBancoService, SisBancoService>();
+builder.Services.AddTransient<ISisCuentaBancoService, SisCuentaBancoService>();
 
 
 

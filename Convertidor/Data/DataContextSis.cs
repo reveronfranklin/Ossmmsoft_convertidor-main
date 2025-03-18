@@ -42,6 +42,10 @@ namespace Convertidor.Data
         public virtual DbSet<SIS_DET_SOURCE> SIS_DET_SOURCE { get; set; } = null!;
         public virtual DbSet<SIS_SERIE_DOCUMENTOS> SIS_SERIE_DOCUMENTOS { get; set; } = null!;
         public virtual DbSet<SIS_DESCRIPTIVAS> SIS_DESCRIPTIVAS { get; set; } = null!;
+        public virtual DbSet<SIS_BANCOS> SIS_BANCOS { get; set; } = null!;
+        
+        public virtual DbSet<SIS_CUENTAS_BANCOS> SIS_CUENTAS_BANCOS { get; set; } = null!;
+        
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,7 +53,24 @@ namespace Convertidor.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder
                     
-                    
+                .Entity<SIS_BANCOS>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_BANCO,
+
+                    });
+                    builder.ToTable("SIS_BANCOS");
+                })  
+                .Entity<SIS_CUENTAS_BANCOS>(builder =>
+                {
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_CUENTA_BANCO,
+
+                    });
+                    builder.ToTable("SIS_CUENTAS_BANCOS");
+                })  
                 .Entity<SIS_EMPRESAS>(builder =>
                 {
                     builder.HasKey(table => new
@@ -586,7 +607,7 @@ namespace Convertidor.Data
             {
                 builder.HasKey(table => new
                 {
-                    table.CODIGO_DESCRIPCION,
+                    table.DESCRIPCION_ID,
 
                 });
                 builder.ToTable("SIS_DESCRIPTIVAS");
