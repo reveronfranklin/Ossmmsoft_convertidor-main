@@ -151,7 +151,7 @@ namespace Convertidor.Controllers
 
                     // Devolver el archivo PDF al cliente
                     //return File(pdfBytes, "application/pdf", "report.pdf");
-                    return Ok(response);
+                    return Ok(response.Content);
                 }
                 else
                 {
