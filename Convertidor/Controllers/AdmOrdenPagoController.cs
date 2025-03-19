@@ -6,6 +6,9 @@ using Convertidor.Dtos.Adm;
 using Convertidor.Services.Adm;
 using Convertidor.Services.Destino.ADM;
 using Newtonsoft.Json;
+using System;
+using System.IO;
+using Microsoft.AspNetCore.StaticFiles;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,14 +23,17 @@ namespace Convertidor.Controllers
         private readonly IAdmOrdenPagoService _service;
         private readonly IAdmOrdenPagoDestinoService _destinoService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly IConfiguration _configuration;
 
         public AdmOrdenPagoController(IAdmOrdenPagoService service,
             IAdmOrdenPagoDestinoService destinoService,
-            ISisUsuarioRepository sisUsuarioRepository)
+            ISisUsuarioRepository sisUsuarioRepository,
+            IConfiguration configuration)
         {
             _service = service;
             _destinoService = destinoService;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _configuration = configuration;
         }
 
 
@@ -150,9 +156,49 @@ namespace Convertidor.Controllers
                     // Leer la respuesta como un arreglo de bytes (PDF)
                     byte[] pdfBytes = await response.Content.ReadAsByteArrayAsync();
 
+                    // Ruta donde se guardará el archivo PDF
+                    var settings = _configuration.GetSection("Settings").Get<Settings>();
+                    var destino = @settings.ExcelFiles;
+                    var filePatch = $"{destino}/{dto.CodigoOrdenPago}.pdf";
+                   
+
+                    try
+                    {
+                        
+                        // Verifica si el archivo ya existe y lo borra si es necesario.
+                        if (System.IO.File.Exists(filePatch))
+                        {
+                            System.IO.File.Delete(filePatch);
+                            Console.WriteLine($"Archivo existente eliminado: {filePatch}");
+                        }
+                        
+                        // Guardar el array de bytes en un archivo PDF
+                    
+                       System.IO.File.WriteAllBytes(filePatch, pdfBytes);
+
+                        Console.WriteLine("PDF guardado correctamente en: " + filePatch);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error al guardar el PDF: " + ex.Message);
+                    }
+                    
+                    
+                   
+                    var provider = new FileExtensionContentTypeProvider();
+                    if (provider.TryGetContentType(filePatch,out var contenttype))
+                    {
+                        contenttype = "application/pdf";
+                    }
+                    var bytes =await System.IO.File.ReadAllBytesAsync(filePatch);
+                    var resultFile = File(bytes, contenttype, Path.GetFileName(filePatch));
+                    return resultFile;
+                    
                     // Devolver el archivo PDF al cliente
                     //return File(pdfBytes, "application/pdf", "report.pdf");
-                    return Ok(pdfBytes);
+                    
+                 
+                   
                 }
                 else
                 {

@@ -9,6 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,6 +36,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -392,7 +394,7 @@
       <workItem from="1741559369619" duration="1204000" />
       <workItem from="1741614954528" duration="3641000" />
       <workItem from="1741964291653" duration="231000" />
-      <workItem from="1742237293158" duration="47046000" />
+      <workItem from="1742237293158" duration="51678000" />
     </task>
     <servers />
   </component>
@@ -2497,13 +2499,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
-          <line>86</line>
+          <line>92</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Replicar'">
             <startOffsets>
-              <option value="2597" />
+              <option value="2810" />
             </startOffsets>
             <endOffsets>
-              <option value="2672" />
+              <option value="2885" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="638" />
@@ -4265,13 +4267,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
-          <line>37</line>
+          <line>43</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'GetByPresupuesto'">
             <startOffsets>
-              <option value="1182" />
+              <option value="1395" />
             </startOffsets>
             <endOffsets>
-              <option value="1235" />
+              <option value="1448" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="931" />
@@ -4551,52 +4553,52 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
-          <line>96</line>
+          <line>102</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'GrttRepot'">
             <startOffsets>
-              <option value="2889" />
+              <option value="3102" />
             </startOffsets>
             <endOffsets>
-              <option value="2972" />
+              <option value="3185" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="967" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
-          <line>131</line>
+          <line>137</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Report'">
             <startOffsets>
-              <option value="4096" />
+              <option value="4309" />
             </startOffsets>
             <endOffsets>
-              <option value="4162" />
+              <option value="4375" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="968" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
-          <line>167</line>
+          <line>214</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Report'">
             <startOffsets>
-              <option value="5790" />
+              <option value="7796" />
             </startOffsets>
             <endOffsets>
-              <option value="5853" />
+              <option value="7859" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="969" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
-          <line>140</line>
+          <line>147</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Report'">
             <startOffsets>
-              <option value="4552" />
+              <option value="4780" />
             </startOffsets>
             <endOffsets>
-              <option value="4585" />
+              <option value="4813" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="970" />
@@ -4704,6 +4706,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="979" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
+          <line>161</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Report'">
+            <startOffsets>
+              <option value="5520" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5575" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="980" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
+          <line>178</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Report'">
+            <startOffsets>
+              <option value="6240" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6305" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="981" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
