@@ -226,6 +226,7 @@ builder.Services.AddTransient<IOssAuthUserGroupService, OssAuthUserGroupService>
 builder.Services.AddTransient<IAuthModelUserServices, AuthModelUserServices>();
 builder.Services.AddTransient<ISisBancoService, SisBancoService>();
 builder.Services.AddTransient<ISisCuentaBancoService, SisCuentaBancoService>();
+builder.Services.AddTransient<ISisDescriptivaService, SisDescriptivaService>();
 
 
 

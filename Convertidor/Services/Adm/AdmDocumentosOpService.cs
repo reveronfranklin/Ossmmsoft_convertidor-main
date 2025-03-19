@@ -179,7 +179,7 @@ namespace Convertidor.Services.Adm
                     // Calcular el total del Impuesto exento
                     decimal totalMontoImpuestoExento = listDto.Sum(t => t.MontoImpuestoExento);
 
-                    // Calcular el total del Impuesto exento
+                    // Calcular el total del Monto exento
                     decimal totalMontoRetenido = listDto.Sum(t => t.MontoRetenido);
 
                     result.Total1 = totalBaseImponible;
