@@ -42,6 +42,8 @@ namespace Convertidor.Data
         public DbSet<ADM_VAL_CONTRATO> ADM_VAL_CONTRATO { get; set; }
         public DbSet<ADM_DETALLE_VAL_CONTRATO> ADM_DETALLE_VAL_CONTRATO { get; set; }
         public DbSet<ADM_PUC_CONTRATO> ADM_PUC_CONTRATO { get; set; }
+        
+        public DbSet<ADM_LOTE_PAGO> ADM_LOTE_PAGO { get; set; }
         public DbSet<ADM_CHEQUES> ADM_CHEQUES { get; set; }
         public DbSet<ADM_PRODUCTOS> ADM_PRODUCTOS { get; set; }
         public DbSet<ADM_SOL_COMPROMISO> ADM_SOL_COMPROMISO { get; set; }
@@ -66,6 +68,17 @@ namespace Convertidor.Data
 
                     });
                     builder.ToTable("ADM_RETENCIONES");
+                });
+            modelBuilder
+                .Entity<ADM_LOTE_PAGO>(builder =>
+                {
+                  
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_LOTE_PAGO,
+
+                    });
+                    builder.ToTable("ADM_LOTE_PAGO");
                 });
 
             modelBuilder

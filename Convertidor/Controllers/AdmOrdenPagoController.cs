@@ -150,7 +150,8 @@ namespace Convertidor.Controllers
                     byte[] pdfBytes = await response.Content.ReadAsByteArrayAsync();
 
                     // Devolver el archivo PDF al cliente
-                    return File(pdfBytes, "application/pdf", "report.pdf");
+                    //return File(pdfBytes, "application/pdf", "report.pdf");
+                    return Ok(response);
                 }
                 else
                 {
