@@ -32,6 +32,24 @@ namespace Convertidor.Data.Repository.Sis
         }
 
         
+        public async Task<List<SIS_DESCRIPTIVAS>> GetALLByTituloId(int tituloId)
+        {
+            try
+            {
+                var result = await _context.SIS_DESCRIPTIVAS.DefaultIfEmpty()
+                    .Where(x=>x.DESCRIPCION_TITULO_ID==tituloId).ToListAsync();
+                
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+        
 
         public async Task<SIS_DESCRIPTIVAS> GetById(int id)
         {
