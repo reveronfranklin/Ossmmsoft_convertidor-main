@@ -95,12 +95,27 @@ namespace Convertidor.Services.Adm
             ResultDto<List<AdmRetencionesOpResponseDto>> result = new ResultDto<List<AdmRetencionesOpResponseDto>>(null);
             try
             {
-                var retencionesOp = await _repository.GetByOrdenPago(filter.CodigoordenPago);
+                var retencionesOp = await _repository.GetByOrdenPago(filter.CodigoOrdenPago);
                 var cant = retencionesOp.Count();
                 if (retencionesOp != null && retencionesOp.Count() > 0)
                 {
                     var listDto = await MapListRetencionesOpDto(retencionesOp);
+                    
+   
+                    
+                    // Calcular el total del BaseImponible
+                    var totalBaseImponible = listDto.Sum(t => t.BaseImponible);
 
+                    // Calcular el total del Impuesto
+                    var totalMontoRetencion = listDto.Sum(t => t.MontoRetencion);
+                    
+              
+                    // Calcular el total del Impuesto exento
+                    var totalMontoRetenido = listDto.Sum(t => t.MontoRetenido);
+
+                    if (totalBaseImponible != null) result.Total1 = (decimal)totalBaseImponible;
+                    if (totalMontoRetencion != null) result.Total2 = (decimal)totalMontoRetencion;
+                    if (totalMontoRetenido != null) result.Total3 = (decimal)totalMontoRetenido;
                     result.Data = listDto;
                     result.IsValid = true;
                     result.Message = "";
