@@ -86,6 +86,26 @@ namespace Convertidor.Services.Adm
                 {
                     var listDto = await MapListImpuestosDocumentosOpDto(documentosOp);
 
+                    
+                    // Calcular el total del BaseImponible
+                    decimal totalBaseImponible = listDto.Sum(t => t.BaseImponible);
+
+                    // Calcular el total del Impuesto
+                    decimal totalMontoImpuesto = listDto.Sum(t => t.MontoImpuesto);
+                    
+                    // Calcular el total del Impuesto exento
+                    decimal totalMontoImpuestoExento = listDto.Sum(t => t.MontoImpuestoExento);
+
+                    // Calcular el total del Impuesto exento
+                    decimal totalMontoRetenido = listDto.Sum(t => t.MontoRetenido);
+
+                    result.Total1 = totalBaseImponible;
+                    result.Total2 = totalMontoImpuesto;
+                    result.Total3 = totalMontoImpuestoExento;
+                    result.Total4 = totalMontoRetenido;
+                    result.Page = 1;
+                    result.TotalPage = 1;
+                    result.CantidadRegistros = listDto.Count();
                     result.Data = listDto;
                     result.IsValid = true;
                     result.Message = "";
@@ -95,6 +115,13 @@ namespace Convertidor.Services.Adm
                 }
                 else
                 {
+                    result.Total1 = 0;
+                    result.Total2 = 0;
+                    result.Total3 = 0;
+                    result.Total4 = 0;
+                    result.Page = 1;
+                    result.TotalPage = 1;
+                    result.CantidadRegistros = 0;
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "No data";
@@ -128,7 +155,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo impuesto documento op no existe";
                     return result;
                 }
-          var documentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
+                 var documentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
                 if (documentoOp==null)
                 {
                     result.Data = null;
@@ -136,7 +163,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo documento op no existe";
                     return result;
                 }
-                var retencion = await _admRetencionesOpRepository.GetCodigoRetencionOp(dto.CodigoRetencion);
+                var retencion = await _admRetencionesRepository.GetCodigoRetencion(dto.CodigoRetencion);
                 if (retencion==null)
                 {
                     result.Data = null;
@@ -188,18 +215,28 @@ namespace Convertidor.Services.Adm
                     result.Message = "Monto retenido invalido";
                     return result;
                 }
+                
+                
 
+                var montoImpuesto=(dto.BaseImponible * (decimal)retencion.POR_RETENCION)/100;
 
-
+                if (dto.MontoImpuestoExento > montoImpuesto)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Excento no puede ser mayor a el monto del impuesto";
+                    return result;
+                }
+                
                 codigoImpuestoDocumentoOp.CODIGO_IMPUESTO_DOCUMENTO_OP = dto.CodigoImpuestoDocumentoOp;
                 codigoImpuestoDocumentoOp.CODIGO_DOCUMENTO_OP=dto.CodigoDocumentoOp;
                 codigoImpuestoDocumentoOp.CODIGO_RETENCION = dto.CodigoRetencion;
                 codigoImpuestoDocumentoOp.TIPO_RETENCION_ID = dto.TipoRetencionId;
                 codigoImpuestoDocumentoOp.TIPO_IMPUESTO_ID = 0;
                 codigoImpuestoDocumentoOp.BASE_IMPONIBLE=dto.BaseImponible;
-                codigoImpuestoDocumentoOp.MONTO_IMPUESTO=dto.MontoImpuesto;
+                codigoImpuestoDocumentoOp.MONTO_IMPUESTO = montoImpuesto;
                 codigoImpuestoDocumentoOp.MONTO_IMPUESTO_EXENTO = dto.MontoImpuestoExento;
-                codigoImpuestoDocumentoOp.MONTO_RETENIDO=dto.MontoRetenido;
+                codigoImpuestoDocumentoOp.MONTO_RETENIDO=montoImpuesto-dto.MontoImpuestoExento;
                 codigoImpuestoDocumentoOp.EXTRA1 = "";
                 codigoImpuestoDocumentoOp.EXTRA2 ="";
                 codigoImpuestoDocumentoOp.EXTRA3 = "";
@@ -251,7 +288,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo documento op no existe";
                     return result;
                 }
-                var retencion = await _admRetencionesOpRepository.GetCodigoRetencionOp(dto.CodigoRetencion);
+                var retencion = await _admRetencionesRepository.GetCodigoRetencion(dto.CodigoRetencion);
                 if (retencion==null)
                 {
                     result.Data = null;
@@ -280,13 +317,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.MontoImpuesto < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto impuesto invalido";
-                    return result;
-                }
+                
 
                 if (dto.MontoImpuestoExento < 0)
                 {
@@ -304,7 +335,15 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-            
+                var montoImpuesto=(dto.BaseImponible * (decimal)retencion.POR_RETENCION)/100;
+
+                if (dto.MontoImpuestoExento > montoImpuesto)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Excento no puede ser mayor a el monto del impuesto";
+                    return result;
+                }
 
 
                 ADM_IMPUESTOS_DOCUMENTOS_OP entity = new ADM_IMPUESTOS_DOCUMENTOS_OP();
@@ -318,9 +357,10 @@ namespace Convertidor.Services.Adm
                 var serieLetras = $"{DateTime.Now.Year}{mes} ";
                 entity.PERIODO_IMPOSITIVO =$"{serieLetras.Trim()}";
                 entity.BASE_IMPONIBLE = dto.BaseImponible;
-                entity.MONTO_IMPUESTO = dto.MontoImpuesto;
+                entity.MONTO_IMPUESTO = montoImpuesto;
                 entity.MONTO_IMPUESTO_EXENTO = dto.MontoImpuestoExento;
-                entity.MONTO_RETENIDO = dto.MontoRetenido;
+          
+                entity.MONTO_RETENIDO=montoImpuesto-dto.MontoImpuestoExento;
                 entity.EXTRA1 = "";
                 entity.EXTRA2 = "";
                 entity.EXTRA3 = "";
