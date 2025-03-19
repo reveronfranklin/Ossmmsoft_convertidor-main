@@ -2,7 +2,7 @@
 {
     public class AdmRetencionesFilterDto
     {
-        public int CodigoordenPago { get; set; }
+        public int CodigoOrdenPago { get; set; }
         
     }
 }
