@@ -130,6 +130,7 @@ namespace Convertidor.Controllers
             {
                 // Configurar el encabezado x-refresh-token
                 client.DefaultRequestHeaders.Add("x-refresh-token", refreshToken);
+              
 
                 // Configurar el cuerpo de la solicitud y el encabezado Content-Type
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
@@ -151,7 +152,7 @@ namespace Convertidor.Controllers
 
                     // Devolver el archivo PDF al cliente
                     //return File(pdfBytes, "application/pdf", "report.pdf");
-                    return Ok(response.Content);
+                    return Ok(pdfBytes);
                 }
                 else
                 {
