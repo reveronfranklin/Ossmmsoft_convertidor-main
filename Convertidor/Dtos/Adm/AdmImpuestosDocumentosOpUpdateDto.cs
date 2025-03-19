@@ -6,10 +6,10 @@
         public int CodigoDocumentoOp { get; set; }
         public int CodigoRetencion { get; set; }
         public int TipoRetencionId { get; set; }
-        public int BaseImponible { get; set; }
-        public int MontoImpuesto { get; set; }
-        public int MontoImpuestoExento { get; set; }
-        public int MontoRetenido { get; set; }
+        public decimal BaseImponible { get; set; }
+        public decimal MontoImpuesto { get; set; }
+        public decimal MontoImpuestoExento { get; set; }
+        public decimal MontoRetenido { get; set; }
    
     }
 }
