@@ -99,25 +99,23 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> Report(AdmOrdenPagoReportDto dto)
         {
 
+            
+            // Ruta donde se guardará el archivo PDF
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+            var destino = @settings.ExcelFiles;
+            var filePatch = $"{destino}/{dto.CodigoOrdenPago}.pdf";
+            
         // URL de la API
         string apiUrl = "http://ossmmasoft.com.ve:4000/api-v1.0/payment-orders/pdf/report";
         apiUrl = dto.Report;
 
         // Token de autenticación (x-refresh-token)
         string refreshToken = "eH6FFBS6Z8jBSMLTvcVHcc/SnGrA4y3pbrR5c76dN1UD+qK91AUv8hH7HJPHni1NEwGkC8IqGNpPDiVAm1ZCYw==";
-
-        var conectado = await  _sisUsuarioRepository.GetConectado();
-        if (!String.IsNullOrEmpty(conectado.RefreshToken))
+        dto.Usuario = "OSSMMADEV";
+        var sisUsuario = await _sisUsuarioRepository.GetByLogin(dto.Usuario);
+        if (sisUsuario != null)
         {
-             refreshToken = conectado.RefreshToken;
-        }
-        else
-        {
-            var sisUsuario = await _sisUsuarioRepository.GetByLogin(dto.Usuario);
-            if (sisUsuario != null)
-            {
-                refreshToken = sisUsuario.REFRESHTOKEN;
-            }
+            refreshToken = sisUsuario.REFRESHTOKEN;
         }
         
         // Cuerpo de la solicitud en formato JSON
@@ -156,10 +154,7 @@ namespace Convertidor.Controllers
                     // Leer la respuesta como un arreglo de bytes (PDF)
                     byte[] pdfBytes = await response.Content.ReadAsByteArrayAsync();
 
-                    // Ruta donde se guardará el archivo PDF
-                    var settings = _configuration.GetSection("Settings").Get<Settings>();
-                    var destino = @settings.ExcelFiles;
-                    var filePatch = $"{destino}/{dto.CodigoOrdenPago}.pdf";
+                  
                    
 
                     try
@@ -202,11 +197,16 @@ namespace Convertidor.Controllers
                 }
                 else
                 {
-                    // Mostrar el código de estado en caso de error
-                    Console.WriteLine($"Error: {response.StatusCode}");
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("Detalles del error:");
-                    Console.WriteLine(errorResponse);
+                    var fileName = "NO_DATA.pdf";
+                    filePatch = $"{destino}/{fileName}";
+                    var provider = new FileExtensionContentTypeProvider();
+                    if (provider.TryGetContentType(filePatch,out var contenttype))
+                    {
+                        contenttype = "application/pdf";
+                    }
+                    var bytes =await System.IO.File.ReadAllBytesAsync(filePatch);
+                    var resultFile = File(bytes, contenttype, Path.GetFileName(filePatch));
+                    return resultFile;
                 }
             }
             catch (HttpRequestException ex)
