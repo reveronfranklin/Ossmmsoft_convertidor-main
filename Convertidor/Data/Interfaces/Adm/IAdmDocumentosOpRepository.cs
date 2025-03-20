@@ -11,5 +11,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_DOCUMENTOS_OP>> Update(ADM_DOCUMENTOS_OP entity);
         Task<string> Delete(int codigoDocumentoOp);
         Task<int> GetNextKey();
+        Task<string> UpdateMontoRetenido(int codigoDocumentoOp, decimal monto);
     }
 }

@@ -15,6 +15,7 @@ namespace Convertidor.Services.Adm
         private readonly IAdmRetencionesRepository _admRetencionesRepository;
         private readonly ISisSerieDocumentosRepository _serieDocumentosRepository;
         private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
+        private readonly IAdmDocumentosOpRepository _admDocumentosOpRepository;
 
         public AdmRetencionesOpService(IAdmRetencionesOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -23,7 +24,8 @@ namespace Convertidor.Services.Adm
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IAdmRetencionesRepository admRetencionesRepository,
                                      ISisSerieDocumentosRepository serieDocumentosRepository,
-                                     ISisDescriptivaRepository sisDescriptivaRepository
+                                     ISisDescriptivaRepository sisDescriptivaRepository,
+                                     IAdmDocumentosOpRepository admDocumentosOpRepository
                                      )
         {
             _repository = repository;
@@ -34,6 +36,7 @@ namespace Convertidor.Services.Adm
             _admRetencionesRepository = admRetencionesRepository;
             _serieDocumentosRepository = serieDocumentosRepository;
             _sisDescriptivaRepository = sisDescriptivaRepository;
+            _admDocumentosOpRepository = admDocumentosOpRepository;
         }
 
       
@@ -181,6 +184,13 @@ namespace Convertidor.Services.Adm
 
         }
 
+        public async Task ReplicarMotoRetenidoDocumento(int codigoDocumentoOp,decimal montoRetencion)
+        {
+            await _admDocumentosOpRepository.UpdateMontoRetenido(codigoDocumentoOp,montoRetencion);
+            
+          
+        }
+        
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Update(AdmRetencionesOpUpdateDto dto)
         {
             ResultDto<AdmRetencionesOpResponseDto> result = new ResultDto<AdmRetencionesOpResponseDto>(null);
@@ -280,6 +290,8 @@ namespace Convertidor.Services.Adm
                 codigoRetencionOp.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoRetencionOp);
+                
+                
 
                 var resultDto = await MapRetencionesOpDto(codigoRetencionOp);
                 result.Data = resultDto;

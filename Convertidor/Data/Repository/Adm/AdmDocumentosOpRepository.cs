@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.Adm;
+﻿using System.Globalization;
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Microsoft.EntityFrameworkCore;
 
@@ -109,6 +110,32 @@ namespace Convertidor.Data.Repository.Adm
                 result.Message = ex.Message;
                 return result;
             }
+        }
+        
+        
+        public async Task<string> UpdateMontoRetenido(int codigoDocumentoOp,decimal monto)
+        {
+
+
+            string montoString = monto.ToString(CultureInfo.InvariantCulture);
+            try
+            {
+            
+                
+                FormattableString xqueryDiario = $"UPDATE  ADM.ADM_DOCUMENTOS_OP SET MONTO_RETENIDO = {montoString} WHERE CODIGO_DOCUMENTO_OP= {codigoDocumentoOp};";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
         }
         public async Task<string> Delete(int codigoDocumentoOp)
         {
