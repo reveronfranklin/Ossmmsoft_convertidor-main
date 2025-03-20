@@ -10,7 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +36,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -394,7 +396,7 @@
       <workItem from="1741559369619" duration="1204000" />
       <workItem from="1741614954528" duration="3641000" />
       <workItem from="1741964291653" duration="231000" />
-      <workItem from="1742237293158" duration="51678000" />
+      <workItem from="1742237293158" duration="54381000" />
     </task>
     <servers />
   </component>
@@ -1241,10 +1243,10 @@
           <line>546</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Sis/SisUsuarioServices.cs" containingFunctionPresentation="Method 'GetMenu'">
             <startOffsets>
-              <option value="18602" />
+              <option value="18600" />
             </startOffsets>
             <endOffsets>
-              <option value="18654" />
+              <option value="18652" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="276" />

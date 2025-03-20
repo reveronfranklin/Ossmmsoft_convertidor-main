@@ -493,8 +493,8 @@ namespace Convertidor.Services.Sis
             }
             else
             {
-                result.Data = false;
-                result.IsValid = false;
+                result.Data = true;
+                result.IsValid = true;
                 result.Message = "";
             }
 
