@@ -28,6 +28,22 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+        public async Task<ADM_IMPUESTOS_DOCUMENTOS_OP> GetByDocumentoCodigoRetencionTipoRetencion(int codigoDocumentoOp,int codigoRetencion,int tipoRetencionId)
+        {
+            try
+            {
+                var result = await _context.ADM_IMPUESTOS_DOCUMENTOS_OP
+                    .Where(e => e.CODIGO_DOCUMENTO_OP == codigoDocumentoOp && e.CODIGO_RETENCION==codigoRetencion && e.TIPO_RETENCION_ID==tipoRetencionId).FirstOrDefaultAsync();
+
+                return (ADM_IMPUESTOS_DOCUMENTOS_OP)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
 
         public async Task<List<ADM_IMPUESTOS_DOCUMENTOS_OP>> GetByDocumento(int codigoDocumento)
         {
@@ -42,7 +58,9 @@ namespace Convertidor.Data.Repository.Adm
                 return null;
             }
         }
-
+      
+        
+        
         public async Task<List<ADM_IMPUESTOS_DOCUMENTOS_OP>> GetAll()
         {
             try
