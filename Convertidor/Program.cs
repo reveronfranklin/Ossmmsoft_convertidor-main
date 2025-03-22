@@ -472,6 +472,7 @@ builder.Services.AddTransient<IAdmDetalleSolCompromisoRepository, AdmDetalleSolC
 builder.Services.AddTransient<IAdmRetencionesRepository, AdmRetencionesRepository>();
 
 builder.Services.AddTransient<IAdmComprobantesDocumentosOpDestinoRepository, AdmComprobantesDocumentosOpDestinoRepository>();
+builder.Services.AddTransient<IAdmLotePagoRepository, AdmLotePagoRepository>();
 
 
 
@@ -514,6 +515,9 @@ builder.Services.AddTransient<IAdmDetalleSolCompromisoService, AdmDetalleSolComp
 builder.Services.AddTransient<IReporteSolicitudCompromisoService, ReporteSolicitudCompromisoService>();
 builder.Services.AddTransient<IReporteOrdenServicioPresupuestarioService, ReporteOrdenServicioPresupuestarioService>();
 builder.Services.AddTransient<IAdmRetencionesService, AdmRetencionesService>();
+builder.Services.AddTransient<IAdmLotePagoService, AdmLotePagoService>();
+
+
 
 
 

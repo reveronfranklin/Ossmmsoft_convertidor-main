@@ -54,28 +54,40 @@ namespace Convertidor.Data.Repository.Adm
                 if ( filter.SearchText.Length==0)
                 {
                     totalRegistros = _context.ADM_LOTE_PAGO
-                        .Where(x=>x.CODIGO_EMPRESA==filter.CodigEmpresa && x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto)
+                        .Where(x=>x.CODIGO_EMPRESA==filter.CodigEmpresa && 
+                                  x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && 
+                                  x.FECHA_PAGO.Date >= filter.FechaInicio.Value.Date && 
+                                  x.FECHA_PAGO.Date <= filter.FechaFin.Value.Date)
                         .Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     
-                    pageData = await _context.ADM_LOTE_PAGO.DefaultIfEmpty()
-                        .Where(x=>x.CODIGO_EMPRESA==filter.CodigEmpresa && x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto)
+                    
+                    pageData = await _context.ADM_LOTE_PAGO
+                        .Where(x => x.CODIGO_EMPRESA == filter.CodigEmpresa && 
+                                    x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                    x.FECHA_PAGO.Date >= filter.FechaInicio.Value.Date &&
+                                    x.FECHA_PAGO.Date <= filter.FechaFin.Value.Date)
                         .OrderByDescending(x => x.CODIGO_LOTE_PAGO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
+                    
+                    
+                 
                 }
                 if ( filter.SearchText.Length>0)
                 {
                     totalRegistros = _context.ADM_LOTE_PAGO
-                        .Where(x => x.CODIGO_EMPRESA==filter.CodigEmpresa && x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x => x.CODIGO_EMPRESA==filter.CodigEmpresa && x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&  x.FECHA_PAGO.Date >= filter.FechaInicio.Value.Date &&
+                                    x.FECHA_PAGO.Date <= filter.FechaFin.Value.Date &&  x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
                     
                     pageData = await _context.ADM_LOTE_PAGO.DefaultIfEmpty()
-                        .Where(x =>x.CODIGO_EMPRESA==filter.CodigEmpresa && x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&  x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x =>x.CODIGO_EMPRESA==filter.CodigEmpresa && x.CODIGO_PRESUPUESTO==filter.CodigoPresupuesto &&  x.FECHA_PAGO.Date >= filter.FechaInicio.Value.Date &&
+                                   x.FECHA_PAGO.Date <= filter.FechaFin.Value.Date && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .OrderByDescending(x => x.CODIGO_LOTE_PAGO)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
