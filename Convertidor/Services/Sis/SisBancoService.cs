@@ -146,9 +146,6 @@ namespace Convertidor.Services.Sis
             ResultDto<SisBancoResponseDto> result = new ResultDto<SisBancoResponseDto>(null);
             try
             {
-               
-              
-
               
                 if (String.IsNullOrEmpty(dto.Nombre) )
                 {
@@ -165,6 +162,16 @@ namespace Convertidor.Services.Sis
                     return result;
                 }
                
+               
+
+                var findBanco= await _repository.GetByCodigoInterbancario(dto.CodigoInterbancario);
+                if (findBanco != null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Interbancario Invalido, ya existe un banco con este codigo";
+                    return result;
+                }
                 
                 SIS_BANCOS entity = new SIS_BANCOS();
                 entity.CODIGO_BANCO = await _repository.GetNextKey();

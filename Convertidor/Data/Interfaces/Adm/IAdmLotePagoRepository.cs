@@ -11,5 +11,6 @@ public interface IAdmLotePagoRepository
     Task<ResultDto<ADM_LOTE_PAGO>> Update(ADM_LOTE_PAGO entity);
     Task<string> Delete(int id);
     Task<int> GetNextKey();
+    Task<string> UpdateSearchText(int codigoLote);
 
 }

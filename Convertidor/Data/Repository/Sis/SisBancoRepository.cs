@@ -46,6 +46,25 @@ namespace Convertidor.Data.Repository.Sis
             }
 
         }
+        
+        public async Task<SIS_BANCOS> GetByCodigoInterbancario(string codigoInterbancario)
+        {
+            
+         
+            try
+            {
+                var result = await _context.SIS_BANCOS.DefaultIfEmpty().Where(e => e.CODIGO_INTERBANCARIO == codigoInterbancario).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
  
         public async Task<ResultDto<List<SIS_BANCOS>>> GetAll(SisBancoFilterDto filter)
         {

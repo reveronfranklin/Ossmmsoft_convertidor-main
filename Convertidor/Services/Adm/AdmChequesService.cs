@@ -45,6 +45,7 @@ namespace Convertidor.Services.Adm
         {
             AdmChequesResponseDto itemResult = new AdmChequesResponseDto();
 
+            itemResult.CodigoLote = dtos.CODIGO_LOTE_PAGO;
             itemResult.CodigoCheque = dtos.CODIGO_CHEQUE;
             itemResult.Ano = dtos.ANO;
             itemResult.CodigoCuentaBanco = dtos.CODIGO_CUENTA_BANCO;
@@ -68,21 +69,7 @@ namespace Convertidor.Services.Adm
             itemResult.FechaChequeString = Fecha.GetFechaString(dtos.FECHA_CHEQUE);
             FechaDto fechaChequeObj = Fecha.GetFechaDto(dtos.FECHA_CHEQUE);
             itemResult.FechaChequeObj =(FechaDto) fechaChequeObj;
-            if (dtos.FECHA_CONCILIACION != null)
-            {
-                itemResult.FechaConciliacion = dtos.FECHA_CONCILIACION;
-                itemResult.FechaConciliacionString = Fecha.GetFechaString((DateTime)dtos.FECHA_CONCILIACION);
-                FechaDto fechaConciliacionObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_CONCILIACION);
-                itemResult.FechaConciliacionObj =(FechaDto)fechaConciliacionObj;
-            }
-
-            if (dtos.FECHA_ANULACION != null)
-            {
-                itemResult.FechaAnulacion = dtos.FECHA_ANULACION;
-                itemResult.FechaAnulacionString =Fecha.GetFechaString((DateTime)dtos.FECHA_ANULACION);
-                FechaDto fechaanulacionObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_ANULACION);
-                itemResult.FechaAnulacionObj = (FechaDto)fechaanulacionObj;
-            }
+       
          
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
             itemResult.NombreProveedor = "";
@@ -91,13 +78,13 @@ namespace Convertidor.Services.Adm
             {
                 itemResult.NombreProveedor = proveedor.NOMBRE_PROVEEDOR;
             }
-            itemResult.CodigoContactoProveedor = dtos.CODIGO_CONTACTO_PROVEEDOR;
+    
             itemResult.PrintCount = dtos.PRINT_COUNT;
             itemResult.Motivo = dtos.MOTIVO;
             itemResult.Status = dtos.STATUS;
             itemResult.Endoso = dtos.ENDOSO;
             itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
-            itemResult.TipoBeneficiario = dtos.TIPO_BENEFICIARIO;
+
             itemResult.TipoChequeID = dtos.TIPO_CHEQUE_ID;
             itemResult.DescripcionTipoCheque = "";
             var descripcionTipoCheque = await _admDescriptivaRepository.GetByCodigo(itemResult.TipoChequeID);
@@ -233,23 +220,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Fecha Cheque Invalida";
                     return result;
                 }
-                if (dto.FechaConciliacion == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Conciliacion Invalida";
-                    return result;
-
-                }
-                if (dto.FechaAnulacion == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Anulacion Invalida";
-                    return result;
-
-                }
-
+           
                 var codigoProveedor = await _proveedoresRepository.GetByCodigo(dto.CodigoProveedor);
 
                 if (codigoProveedor==null)
@@ -261,16 +232,7 @@ namespace Convertidor.Services.Adm
                 }
 
 
-                var codigoContactoProveedor = await _contactosProveedorRepository.GetByCodigo(dto.CodigoContactoProveedor);
-                if (codigoContactoProveedor==null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Contacto Proveedor Invalido";
-                    return result;
-
-                }
-
+           
                 if (dto.PrintCount < 0)
                 {
                     result.Data = null;
@@ -320,13 +282,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.TipoBeneficiario.Length < 1) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Beneficiario Invalido";
-                    return result;
-                }
+          
 
                 var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(dto.TipoChequeID);
                 if(tipoChequeID==null) 
@@ -342,21 +298,14 @@ namespace Convertidor.Services.Adm
                 codigoCheque.NUMERO_CHEQUERA = dto.NumeroChequera;
                 codigoCheque.NUMERO_CHEQUE = dto.NumeroCheque;
                 codigoCheque.FECHA_CHEQUE = dto.FechaCheque;
-                codigoCheque.FECHA_CONCILIACION = dto.FechaConciliacion;
-                codigoCheque.FECHA_ANULACION = dto.FechaAnulacion;
+              
                 codigoCheque.CODIGO_PROVEEDOR = dto.CodigoProveedor;
-                codigoCheque.CODIGO_CONTACTO_PROVEEDOR = dto.CodigoContactoProveedor;
                 codigoCheque.PRINT_COUNT = dto.PrintCount;
                 codigoCheque.MOTIVO = dto.Motivo;
                 codigoCheque.STATUS = dto.Status;
                 codigoCheque.ENDOSO = dto.Endoso;
                 codigoCheque.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
-                codigoCheque.TIPO_BENEFICIARIO = dto.TipoBeneficiario;
                 codigoCheque.TIPO_CHEQUE_ID = dto.TipoChequeID;
-                codigoCheque.FECHA_ENTREGA = dto.FechaEntrega;
-                codigoCheque.USUARIO_ENTREGA = dto.UsuarioEntrega;
-
-
                 codigoCheque.CODIGO_EMPRESA = conectado.Empresa;
                 codigoCheque.USUARIO_UPD = conectado.Usuario;
                 codigoCheque.FECHA_UPD = DateTime.Now;
@@ -455,15 +404,8 @@ namespace Convertidor.Services.Adm
                 }
 
 
-                var codigoContactoProveedor = await _contactosProveedorRepository.GetByCodigo(dto.CodigoContactoProveedor);
-                if (codigoContactoProveedor==null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Contacto Proveedor Invalido";
-                    return result;
-
-                }
+              
+              
 
               
 
@@ -505,13 +447,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.TipoBeneficiario.Length < 1)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Beneficiario Invalido";
-                    return result;
-                }
+            
 
                 var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(dto.TipoChequeID);
                 if (tipoChequeID==null)
@@ -532,19 +468,14 @@ namespace Convertidor.Services.Adm
                 entity.NUMERO_CHEQUERA = dto.NumeroChequera;
                 entity.NUMERO_CHEQUE = dto.NumeroCheque;
                 entity.FECHA_CHEQUE = dto.FechaCheque;
-                entity.FECHA_CONCILIACION = dto.FechaConciliacion;
-                entity.FECHA_ANULACION = dto.FechaAnulacion;
                 entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
-                entity.CODIGO_CONTACTO_PROVEEDOR = dto.CodigoContactoProveedor;
                 entity.PRINT_COUNT = dto.PrintCount;
                 entity.MOTIVO = dto.Motivo;
                 entity.STATUS = "PE";
                 entity.ENDOSO = dto.Endoso;
                 entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
-                entity.TIPO_BENEFICIARIO = dto.TipoBeneficiario;
                 entity.TIPO_CHEQUE_ID = dto.TipoChequeID;
-                entity.FECHA_ENTREGA = dto.FechaEntrega;
-                entity.USUARIO_ENTREGA = dto.UsuarioEntrega;
+      
 
 
 

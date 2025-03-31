@@ -116,6 +116,26 @@ namespace Convertidor.Data.Repository.Adm
         }
         
 
+        public async Task<string> UpdateSearchText(int codigoLote)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_LOTE_PAGO SET ADM.ADM_LOTE_PAGO.SEARCH_TEXT = (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  =ADM.ADM_LOTE_PAGO.TIPO_PAGO_ID) ||\n(SELECT NO_CUENTA FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO) ||\n(SELECT CODIGO_BANCO FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO) ||\n(SELECT NOMBRE FROM SIS.SIS_BANCOS WHERE SIS.SIS_BANCOS.CODIGO_BANCO=(SELECT CODIGO_BANCO FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO)) || ADM.ADM_LOTE_PAGO.TITULO WHERE CODIGO_LOTE_PAGO ={codigoLote}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         public async Task<ResultDto<ADM_LOTE_PAGO>> Add(ADM_LOTE_PAGO entity)
         {
             ResultDto<ADM_LOTE_PAGO> result = new ResultDto<ADM_LOTE_PAGO>(null);
