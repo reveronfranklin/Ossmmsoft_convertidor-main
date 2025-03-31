@@ -1,5 +1,6 @@
 ﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Dtos.Adm;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Adm
@@ -29,17 +30,67 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
-        public async Task<List<ADM_CHEQUES>> GetAll() 
+      
+        
+        public async Task<ResultDto<List<ADM_CHEQUES>>> GetByLote(AdmChequeFilterDto filter) 
         {
+            
+            ResultDto<List<ADM_CHEQUES>> result = new ResultDto<List<ADM_CHEQUES>>(null);
+            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageSize == 0) filter.PageSize = 100;
+            if (filter.PageSize >100) filter.PageSize = 100;
+
+            if (string.IsNullOrEmpty(filter.SearchText))
+            {
+                filter.SearchText = "";
+            }
             try
             {
-                var result = await _context.ADM_CHEQUES.DefaultIfEmpty().ToListAsync();
+                var totalRegistros = 0;
+                var totalPage = 0;
+                List<ADM_CHEQUES> pageData = new List<ADM_CHEQUES>();
+                if (filter.SearchText.Length == 0)
+                {
+                    totalRegistros =  _context.ADM_CHEQUES.DefaultIfEmpty()
+                        .Where(e => e.CODIGO_LOTE_PAGO == filter.CodigoLote).Count();
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    pageData = await _context.ADM_CHEQUES
+                        .Where(x => x.CODIGO_LOTE_PAGO == filter.CodigoLote)
+                        .OrderByDescending(x => x.CODIGO_CHEQUE)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                else
+                {
+                    
+                    totalRegistros =  _context.ADM_CHEQUES.DefaultIfEmpty()
+                        .Where(e => e.CODIGO_LOTE_PAGO == filter.CodigoLote  && e.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower())).Count();
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    pageData = await _context.ADM_CHEQUES
+                            .Where(x => x.CODIGO_LOTE_PAGO == filter.CodigoLote  && x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                            .OrderByDescending(x => x.CODIGO_CHEQUE)
+                            .Skip((filter.PageNumber - 1) * filter.PageSize)
+                            .Take(filter.PageSize)
+                            .ToListAsync();
+                   
+                }
+             
+                result.CantidadRegistros = totalRegistros;
+                result.TotalPage = totalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = pageData;
                 return result;
             }
             catch (Exception ex) 
             {
-                var res = ex.InnerException.Message;
-                return null;
+                result.CantidadRegistros = 0;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                result.Data = null;
+                return result;
             }
         }
 
@@ -67,6 +118,26 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
+        
+        public async Task<string> UpdateSearchText(int codigoLote)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_CHEQUES SET ADM.ADM_CHEQUES.SEARCH_TEXT = (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  =ADM.ADM_CHEQUES.TIPO_CHEQUE_ID) ||\n(SELECT NO_CUENTA FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_CHEQUES.CODIGO_CUENTA_BANCO) ||\n(SELECT CODIGO_BANCO FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_CHEQUES.CODIGO_CUENTA_BANCO) ||\n(SELECT NOMBRE FROM SIS.SIS_BANCOS WHERE SIS.SIS_BANCOS.CODIGO_BANCO=(SELECT CODIGO_BANCO FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_CHEQUES.CODIGO_CUENTA_BANCO)) ||\n(SELECT NOMBRE_PROVEEDOR FROM ADM.ADM_PROVEEDORES WHERE CODIGO_PROVEEDOR=ADM.ADM_CHEQUES.CODIGO_PROVEEDOR)\nWHERE CODIGO_LOTE_PAGO ={codigoLote}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
         public async Task<ResultDto<ADM_CHEQUES>>Update(ADM_CHEQUES entity) 
         {
             ResultDto<ADM_CHEQUES> result = new ResultDto<ADM_CHEQUES>(null);

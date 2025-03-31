@@ -484,18 +484,16 @@ namespace Convertidor.Services.Sis
         {
             ResultDto<bool> result  = new ResultDto<bool>(false);
             var tokenValid=await _repository.TokenValid(refreshToken);
+            result.Data = tokenValid;
+            result.IsValid = tokenValid;
+            result.Message = "";
             if (tokenValid)
             {
-                result.Data = true;
-                result.IsValid = true;
                 result.Message = "";
-                
             }
             else
             {
-                result.Data = true;
-                result.IsValid = true;
-                result.Message = "";
+                result.Message = "Token Not Valid";
             }
 
             return result;

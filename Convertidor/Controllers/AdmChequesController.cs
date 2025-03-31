@@ -25,11 +25,13 @@ namespace Convertidor.Controllers
         }
 
 
-        [HttpGet]
+      
+        
+        [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetByLote(AdmChequeFilterDto dto)
         {
-            var result = await _service.GetAll();
+            var result = await _service.GetByLote(dto);
             return Ok(result);
         }
 
