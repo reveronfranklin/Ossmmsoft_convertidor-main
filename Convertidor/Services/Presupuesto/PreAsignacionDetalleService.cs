@@ -14,18 +14,21 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
         private readonly IPRE_PRESUPUESTOSService _presupuestosService;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IPRE_ASIGNACIONESRepository _preAsignacionesRepository;
+        private readonly IPRE_SALDOSRepository _saldoRepository;
 
         public PreAsignacionDetalleService(    IPreAsignacionesDetalleRepository repository,
                                                 IPreAsignacionService preAsignacionService,
                                                 IPRE_PRESUPUESTOSService presupuestosService,
                                                 ISisUsuarioRepository sisUsuarioRepository,
-                                                IPRE_ASIGNACIONESRepository preAsignacionesRepository)
+                                                IPRE_ASIGNACIONESRepository preAsignacionesRepository,
+                                                IPRE_SALDOSRepository saldoRepository )
         {
             _repository = repository;
             _preAsignacionService = preAsignacionService;
             _presupuestosService = presupuestosService;
             _sisUsuarioRepository = sisUsuarioRepository;
             _preAsignacionesRepository = preAsignacionesRepository;
+            _saldoRepository = saldoRepository;
         }
 
        
@@ -189,6 +192,18 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
             asignacionUpdated.USUARIO_UPD = conectado.Usuario;
             asignacionUpdated.FECHA_UPD = DateTime.Now;
             await _preAsignacionesRepository.Update(asignacionUpdated);
+            
+            var preSaldo = await _saldoRepository.GetAllByIcpPucFinanciado(asignacionUpdated.CODIGO_PRESUPUESTO,asignacionUpdated.CODIGO_ICP,asignacionUpdated.CODIGO_PUC,92);
+            if (preSaldo != null)
+            {
+                preSaldo.ASIGNACION=totalDesembolso;
+                preSaldo.USUARIO_UPD = conectado.Usuario;
+                preSaldo.FECHA_UPD = DateTime.Now;
+                await _saldoRepository.Update(preSaldo);
+                
+            }
+            
+            
         }
 
         public async Task<bool> PresupuestoPermiteDesembolso(int codigoPresupuesto)
@@ -203,7 +218,7 @@ public class PreAsignacionDetalleService: IPreAsignacionDetalleService
                 }
             }
 
-                return result;
+            return result;
         }
         public async Task<ResultDto<PreAsignacionesDetalleGetDto>> Add(PreAsignacionesDetalleUpdateDto entity)
         {
