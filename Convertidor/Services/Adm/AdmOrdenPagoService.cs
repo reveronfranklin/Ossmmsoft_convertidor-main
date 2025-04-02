@@ -680,7 +680,7 @@ namespace Convertidor.Services.Adm
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
                 var codigoOrdenPago = await _repository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (codigoOrdenPago != null)
+                if (codigoOrdenPago == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -729,7 +729,7 @@ namespace Convertidor.Services.Adm
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
                 var codigoOrdenPago = await _repository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (codigoOrdenPago != null)
+                if (codigoOrdenPago == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
