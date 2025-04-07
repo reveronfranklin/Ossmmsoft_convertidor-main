@@ -3,6 +3,7 @@ using Convertidor.Data.Repository.Presupuesto;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Dtos.Presupuesto.ReporteSolicitudModificacion;
 using Convertidor.Services.Rh.Report.Example;
+using Convertidor.Utility;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using NPOI.SS.Formula.Functions;
 using NuGet.Protocol.Core.Types;
@@ -136,7 +137,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
                 result.Aportar = solicitudModificacion.Data.Aportar;
                 result.OrigenPreSaldo = solicitudModificacion.Data.OrigenPreSaldo;
                 result.FechaSolicitud = solicitudModificacion.Data.FechaSolicitud;
-                result.FechaSolicitudString = solicitudModificacion.Data.FechaSolicitud.ToString("u");
+                result.FechaSolicitudString = FechaObj.GetFechaString(solicitudModificacion.Data.FechaSolicitud); //solicitudModificacion.Data.FechaSolicitud.ToString("u");
                 FechaDto fechaSolicitudObj = GetFechaDto(solicitudModificacion.Data.FechaSolicitud);
                 result.FechaSolicitudObj = (FechaDto)fechaSolicitudObj;
                 result.Ano = solicitudModificacion.Data.Ano;

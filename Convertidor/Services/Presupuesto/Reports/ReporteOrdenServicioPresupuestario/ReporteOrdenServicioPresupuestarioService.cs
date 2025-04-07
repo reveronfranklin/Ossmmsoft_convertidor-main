@@ -164,7 +164,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupues
 
                 result.NumeroCompromiso = compromiso.NUMERO_COMPROMISO;
                 result.FechaCompromiso = compromiso.FECHA_COMPROMISO;
-                result.FechaCompromisoString = compromiso.FECHA_COMPROMISO.ToString("u");
+                result.FechaCompromisoString = FechaObj.GetFechaString(compromiso.FECHA_COMPROMISO); //Obcompromiso.FECHA_COMPROMISO.ToString("u");
                 FechaDto fechaCompromisoObj = FechaObj.GetFechaDto(compromiso.FECHA_COMPROMISO);
                 result.FechaCompromisoObj = (FechaDto)fechaCompromisoObj;
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(compromiso.CODIGO_SOLICITUD);
