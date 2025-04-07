@@ -115,7 +115,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 result.NumeroSolicitud = solicitud.NUMERO_SOLICITUD;
                 result.FechaSolicitud = solicitud.FECHA_SOLICITUD;
-                result.FechaSolicitudString = solicitud.FECHA_SOLICITUD.ToString("u");
+                result.FechaSolicitudString = FechaObj.GetFechaString( solicitud.FECHA_SOLICITUD);
                 FechaDto FechaSolicitudObj = FechaObj.GetFechaDto(solicitud.FECHA_SOLICITUD);
                 result.FechaSolicitudObj = (FechaDto)FechaSolicitudObj;
                 result.CodigoSolicitante = solicitud.CODIGO_SOLICITANTE;

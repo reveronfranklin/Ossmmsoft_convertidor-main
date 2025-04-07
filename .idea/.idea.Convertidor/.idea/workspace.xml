@@ -8,7 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoService.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -347,7 +349,7 @@
       <workItem from="1743634613747" duration="7313000" />
       <workItem from="1743854286471" duration="2908000" />
       <workItem from="1743901119871" duration="3084000" />
-      <workItem from="1744046825573" duration="6337000" />
+      <workItem from="1744046825573" duration="6981000" />
     </task>
     <servers />
   </component>
@@ -3183,10 +3185,10 @@
           <line>174</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/ReporteSolicitudCompromiso/ReporteSolicitudCompromisoDocument.cs" containingFunctionPresentation="Lambda expression inside Method 'ComposeFooter'">
             <startOffsets>
-              <option value="6771" />
+              <option value="6757" />
             </startOffsets>
             <endOffsets>
-              <option value="6809" />
+              <option value="6795" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="782" />
