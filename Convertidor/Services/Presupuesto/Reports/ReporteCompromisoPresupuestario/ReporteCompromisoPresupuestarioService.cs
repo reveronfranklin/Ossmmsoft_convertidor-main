@@ -179,7 +179,8 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestar
                 compromiso = await _preCompromisosRepository.GetByNumeroYFecha(filter.NumeroCompromiso,filter.fechaCompromiso);
                 result.NumeroCompromiso = compromiso.NUMERO_COMPROMISO;
                 result.FechaCompromiso = compromiso.FECHA_COMPROMISO;
-                result.FechaCompromisoString = compromiso.FECHA_COMPROMISO.ToString("u");
+                
+                result.FechaCompromisoString = $"{compromiso.FECHA_COMPROMISO.Day}/{compromiso.FECHA_COMPROMISO.Month }/{compromiso.FECHA_COMPROMISO.Year}";
                 FechaDto fechaCompromisoObj = FechaObj.GetFechaDto(compromiso.FECHA_COMPROMISO);
                 result.FechaCompromisoObj = (FechaDto)fechaCompromisoObj;
                 var solicitud = await _admSolicitudesRepository.GetByCodigoSolicitud(compromiso.CODIGO_SOLICITUD);

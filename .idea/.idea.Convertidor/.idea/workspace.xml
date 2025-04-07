@@ -9,7 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -347,7 +347,7 @@
       <workItem from="1743634613747" duration="7313000" />
       <workItem from="1743854286471" duration="2908000" />
       <workItem from="1743901119871" duration="3084000" />
-      <workItem from="1744046825573" duration="4944000" />
+      <workItem from="1744046825573" duration="5719000" />
     </task>
     <servers />
   </component>
@@ -4971,6 +4971,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1010" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs</url>
+          <line>183</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteCompromisoPresupuestario/ReporteCompromisoPresupuestarioService.cs" containingFunctionPresentation="Method 'GenerateDataEncabezadoDto'">
+            <startOffsets>
+              <option value="9335" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9415" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1011" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
