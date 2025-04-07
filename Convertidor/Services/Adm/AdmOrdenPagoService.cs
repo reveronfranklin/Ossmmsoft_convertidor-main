@@ -710,7 +710,7 @@ namespace Convertidor.Services.Adm
 
             if (totalMontoBeneficiariosOp != totalMontoPucOrdenPago)
             {
-                result = "Monto en Beneficiarios es diferente a sus PUC";
+                result = $"Monto en Beneficiarios es diferente a sus PUC. Total Beneficiarios OP: {totalMontoBeneficiariosOp} - Total PUC OP: {totalMontoPucOrdenPago}";
             }
             
             
