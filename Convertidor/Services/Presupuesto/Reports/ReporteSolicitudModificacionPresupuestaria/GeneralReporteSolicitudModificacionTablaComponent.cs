@@ -55,7 +55,7 @@ namespace Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionP
                     table.Cell().ColumnSpan(4);
                     table.Cell().Border(1).AlignCenter().PaddingRight(2).Element(CellStyle).Text(ModelGeneral.CodigoSolicitante).FontSize(7);
                     table.Cell().Border(1).ScaleToFit().AlignLeft().PaddingLeft(5).Element(CellStyle).Text(ModelGeneral.NumeroSolModificacion).FontSize(7);
-                    table.Cell().ColumnSpan(2).Border(1).AlignCenter().Element(CellStyle).Text(ModelGeneral.FechaSolicitud.ToShortDateString()).FontSize(7);
+                    table.Cell().ColumnSpan(2).Border(1).AlignCenter().Element(CellStyle).Text(ModelGeneral.FechaSolicitudString).FontSize(7);
                     table.Cell().ColumnSpan(8).Border(1).PaddingLeft(5).Element(CellStyle).Text(ModelGeneral.Motivo).FontSize(7);
                     table.Cell().ColumnSpan(8).Border(1).AlignCenter().Element(CellStyle).Text("BASE DE CALCULO").FontSize(7);
         
