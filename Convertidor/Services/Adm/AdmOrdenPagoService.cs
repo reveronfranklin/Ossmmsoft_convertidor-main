@@ -9,6 +9,7 @@ namespace Convertidor.Services.Adm
 {
     public class AdmOrdenPagoService : IAdmOrdenPagoService
     {
+        public IPRE_V_SALDOSRepository PreSaldosRepository { get; }
         private readonly IAdmOrdenPagoRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
@@ -19,6 +20,9 @@ namespace Convertidor.Services.Adm
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
         private readonly IPrePucCompromisosRepository _prePucCompromisosRepository;
         private readonly IAdmPucOrdenPagoService _admPucOrdenPagoService;
+        private readonly IPRE_V_SALDOSRepository _preSaldosRepository;
+        private readonly IAdmBeneficariosOpService _admBeneficariosOpService;
+
 
         public AdmOrdenPagoService(IAdmOrdenPagoRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -26,11 +30,14 @@ namespace Convertidor.Services.Adm
                                      IPRE_PRESUPUESTOSRepository prePresupuestosRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IAdmCompromisoOpService admCompromisoOpService,
-                                         IPreCompromisosService preCompromisosService,
+                                     IPreCompromisosService preCompromisosService,
                                      IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
                                      IPrePucCompromisosRepository prePucCompromisosRepository,
-                                     IAdmPucOrdenPagoService admPucOrdenPagoService)
+                                     IAdmPucOrdenPagoService admPucOrdenPagoService,
+                                     IPRE_V_SALDOSRepository   preSaldosRepository,
+                                     IAdmBeneficariosOpService admBeneficariosOpService)
         {
+      
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admProveedoresRepository = admProveedoresRepository;
@@ -41,6 +48,8 @@ namespace Convertidor.Services.Adm
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
             _prePucCompromisosRepository = prePucCompromisosRepository;
             _admPucOrdenPagoService = admPucOrdenPagoService;
+            _preSaldosRepository = preSaldosRepository;
+            _admBeneficariosOpService = admBeneficariosOpService;
         }
 
 
@@ -669,8 +678,80 @@ namespace Convertidor.Services.Adm
 
             return result;
         }
+
+
+        public async Task<string> ValidaAprobarOrdenPago(ADM_ORDEN_PAGO ordenPago)
+        {
+            
+            string result = "";
+            decimal totalMontoBeneficiariosOp=0;
+            decimal totalMontoPucOrdenPago = 0;
+            if (ordenPago.STATUS != "PE")
+            {
+               
+                result = "Orden de pago no esta pendiente";
+               
+            }
+            AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
+            filter.CodigoPresupuesto = ordenPago.CODIGO_PRESUPUESTO;
+            filter.CodigoOrdenPago = ordenPago.CODIGO_ORDEN_PAGO;
+            var admBeneficiarios = await _admBeneficariosOpService.GetByOrdenPago(filter);
+            if (admBeneficiarios.Data.Count > 0)
+            {
+                totalMontoBeneficiariosOp = admBeneficiarios.Data.Sum(t => t.Monto);
+            }
+            
+            var admPucOrdenPago =await  _admPucOrdenPagoService.GetByOrdenPago(ordenPago.CODIGO_ORDEN_PAGO);
+            if (admPucOrdenPago.Data.Count > 0)
+            {
+                 
+                totalMontoPucOrdenPago = admPucOrdenPago.Data.Sum(t => t.Monto);
+            }
+
+            if (totalMontoBeneficiariosOp != totalMontoPucOrdenPago)
+            {
+                result = "Monto en Beneficiarios es diferente a sus PUC";
+            }
+            
+            
+            return result;
+
+        }
         
         
+        public async Task<string> ValidaAnularOrdenPago(ADM_ORDEN_PAGO ordenPago)
+        {
+            
+            string result = "";
+            decimal totalPagado=0;
+       
+            if (ordenPago.STATUS != "AP")
+            {
+               
+                result = "Orden de pago no esta pendiente";
+               
+            }
+            AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
+           
+            
+            var admPucOrdenPago =await  _admPucOrdenPagoService.GetByOrdenPago(ordenPago.CODIGO_ORDEN_PAGO);
+            if (admPucOrdenPago.Data.Count > 0)
+            {
+                 
+                totalPagado = admPucOrdenPago.Data.Sum(t => t.MontoPagado);
+            }
+
+            if (totalPagado!=0)
+            {
+                result = $"Orden de Pago ya tiene Pagos: {totalPagado} ";
+            }
+            
+            
+            return result;
+
+        }
+
+
         
         public async Task<ResultDto<AdmOrdenPagoResponseDto>> Aprobar(AdmOrdenPagoAprobarAnular dto)
         {
@@ -688,11 +769,13 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (codigoOrdenPago.STATUS != "PE")
+                var validaAprobarOrdenPago =await ValidaAprobarOrdenPago(codigoOrdenPago);
+                
+                if (validaAprobarOrdenPago!="")
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Orden de pago no esta pendiente";
+                    result.Message =validaAprobarOrdenPago;
                     return result;
                 }
 
@@ -704,6 +787,9 @@ namespace Convertidor.Services.Adm
                 codigoOrdenPago.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoOrdenPago);
+                
+                
+                await _preSaldosRepository.RecalcularSaldo(codigoOrdenPago.CODIGO_PRESUPUESTO);
                 var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);
                 var resultDto = await MapOrdenPagoDto(codigoOrdenPago,descriptivas,proveedores);
@@ -737,11 +823,13 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (codigoOrdenPago.STATUS != "AP")
+                var validaAnularOrdenPago =await ValidaAnularOrdenPago(codigoOrdenPago);
+                
+                if (validaAnularOrdenPago!="")
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Orden de pago no esta Aprobada";
+                    result.Message =validaAnularOrdenPago;
                     return result;
                 }
 
@@ -753,6 +841,8 @@ namespace Convertidor.Services.Adm
                 codigoOrdenPago.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoOrdenPago);
+                
+                await _preSaldosRepository.RecalcularSaldo(codigoOrdenPago.CODIGO_PRESUPUESTO);
                 var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);
                 var resultDto = await MapOrdenPagoDto(codigoOrdenPago,descriptivas,proveedores);

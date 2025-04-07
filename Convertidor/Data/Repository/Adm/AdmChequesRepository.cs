@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Adm
@@ -181,6 +182,7 @@ namespace Convertidor.Data.Repository.Adm
                 return ex.Message;
             }
         }
+        
         public async Task<int> GetNextKey()
         {
             try
@@ -210,5 +212,36 @@ namespace Convertidor.Data.Repository.Adm
 
 
         }
+        
+        public async Task<int> GetNextCheque(int numeroChequera,int codigoPresupuesto)
+        {
+            try
+            {
+                int result = 0;
+                var last = await _context.ADM_CHEQUES.Where(x=>x.CODIGO_PRESUPUESTO==codigoPresupuesto && x.NUMERO_CHEQUERA == numeroChequera)
+                   .OrderByDescending(x=>x.NUMERO_CHEQUE)
+                    .FirstOrDefaultAsync();
+                if (last == null)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = last.NUMERO_CHEQUE + 1;
+                }
+
+                return (int)result;
+
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return 0;
+            }
+
+
+
+        }
+
     }
 }
