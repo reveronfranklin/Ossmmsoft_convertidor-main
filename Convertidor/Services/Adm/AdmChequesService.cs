@@ -17,6 +17,7 @@ namespace Convertidor.Services.Adm
         private readonly ISisCuentaBancoRepository _sisCuentaBancoRepository;
         private readonly ISisBancoRepository _sisBancoRepository;
         private readonly IAdmLotePagoRepository _admLotePagoRepository;
+        private readonly IOssConfigRepository _ossConfigRepository;
 
         public AdmChequesService( IAdmChequesRepository repository,
                                       IAdmProveedoresRepository proveedoresRepository,
@@ -26,7 +27,8 @@ namespace Convertidor.Services.Adm
                                       IAdmDescriptivaRepository admDescriptivaRepository,
                                       ISisCuentaBancoRepository sisCuentaBancoRepository,
                                       ISisBancoRepository sisBancoRepository,
-                                      IAdmLotePagoRepository admLotePagoRepository)
+                                      IAdmLotePagoRepository admLotePagoRepository,
+                                      IOssConfigRepository ossConfigRepository)
         {
             _repository = repository;
             _proveedoresRepository = proveedoresRepository;
@@ -37,6 +39,7 @@ namespace Convertidor.Services.Adm
             _sisCuentaBancoRepository = sisCuentaBancoRepository;
             _sisBancoRepository = sisBancoRepository;
             _admLotePagoRepository = admLotePagoRepository;
+            _ossConfigRepository = ossConfigRepository;
         }
 
        
@@ -45,9 +48,9 @@ namespace Convertidor.Services.Adm
         {
             AdmChequesResponseDto itemResult = new AdmChequesResponseDto();
 
-            itemResult.CodigoLote = dtos.CODIGO_LOTE_PAGO;
+            itemResult.CodigoLote = (int)dtos.CODIGO_LOTE_PAGO;
             itemResult.CodigoCheque = dtos.CODIGO_CHEQUE;
-            itemResult.Ano = dtos.ANO;
+            itemResult.Ano = (int)dtos.ANO;
             itemResult.CodigoCuentaBanco = dtos.CODIGO_CUENTA_BANCO;
             var cuenta = await _sisCuentaBancoRepository.GetByCodigo(dtos.CODIGO_CUENTA_BANCO);
             if (cuenta!=null)
@@ -83,9 +86,9 @@ namespace Convertidor.Services.Adm
             itemResult.Motivo = dtos.MOTIVO;
             itemResult.Status = dtos.STATUS;
             itemResult.Endoso = dtos.ENDOSO;
-            itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+            itemResult.CodigoPresupuesto = (int)dtos.CODIGO_PRESUPUESTO;
 
-            itemResult.TipoChequeID = dtos.TIPO_CHEQUE_ID;
+            itemResult.TipoChequeID = (int)dtos.TIPO_CHEQUE_ID;
             itemResult.DescripcionTipoCheque = "";
             var descripcionTipoCheque = await _admDescriptivaRepository.GetByCodigo(itemResult.TipoChequeID);
             if (descripcionTipoCheque != null)
@@ -182,8 +185,8 @@ namespace Convertidor.Services.Adm
                     result.Message = "Lote No Existe";
                     return result;
                 }
-                var codigoCheque = await _repository.GetByCodigoCheque(dto.CodigoCheque);
-                if (codigoCheque == null)
+                var cheque = await _repository.GetByCodigoCheque(dto.CodigoCheque);
+                if (cheque == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -192,14 +195,7 @@ namespace Convertidor.Services.Adm
                 }
 
                 
-                if (dto.Ano < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Ano invalido";
-                    return result;
-
-                }
+           
 
                 var cuenta=await _sisCuentaBancoRepository.GetByCodigo(dto.CodigoCuentaBanco);
                 if (cuenta == null)
@@ -213,13 +209,7 @@ namespace Convertidor.Services.Adm
 
                
 
-                if (dto.FechaCheque == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Cheque Invalida";
-                    return result;
-                }
+             
            
                 var codigoProveedor = await _proveedoresRepository.GetByCodigo(dto.CodigoProveedor);
 
@@ -272,8 +262,8 @@ namespace Convertidor.Services.Adm
            
 
 
-                var codigopresupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigopresupuesto==null)
+                var presupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                if (presupuesto==null)
                 {
 
                     result.Data = null;
@@ -282,8 +272,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-          
-
+                dto.Ano = presupuesto.ANO;
                 var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(dto.TipoChequeID);
                 if(tipoChequeID==null) 
                 {
@@ -293,26 +282,25 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
                 
-                codigoCheque.ANO = dto.Ano;
-                codigoCheque.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
-                codigoCheque.NUMERO_CHEQUERA = dto.NumeroChequera;
-                codigoCheque.NUMERO_CHEQUE = dto.NumeroCheque;
-                codigoCheque.FECHA_CHEQUE = dto.FechaCheque;
+                cheque.ANO = dto.Ano;
+                cheque.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
               
-                codigoCheque.CODIGO_PROVEEDOR = dto.CodigoProveedor;
-                codigoCheque.PRINT_COUNT = dto.PrintCount;
-                codigoCheque.MOTIVO = dto.Motivo;
-                codigoCheque.STATUS = dto.Status;
-                codigoCheque.ENDOSO = dto.Endoso;
-                codigoCheque.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
-                codigoCheque.TIPO_CHEQUE_ID = dto.TipoChequeID;
-                codigoCheque.CODIGO_EMPRESA = conectado.Empresa;
-                codigoCheque.USUARIO_UPD = conectado.Usuario;
-                codigoCheque.FECHA_UPD = DateTime.Now;
+                cheque.FECHA_CHEQUE = dto.FechaCheque;
+              
+                cheque.CODIGO_PROVEEDOR = dto.CodigoProveedor;
+                cheque.PRINT_COUNT = dto.PrintCount;
+                cheque.MOTIVO = dto.Motivo;
+                cheque.STATUS = dto.Status;
+                cheque.ENDOSO = dto.Endoso;
+                cheque.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+           
+                cheque.CODIGO_EMPRESA = conectado.Empresa;
+                cheque.USUARIO_UPD = conectado.Usuario;
+                cheque.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(codigoCheque);
+                await _repository.Update(cheque);
 
-                var resultDto = await MapChequesDto(codigoCheque);
+                var resultDto = await MapChequesDto(cheque);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -351,14 +339,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if (dto.Ano < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Ano invalido";
-                    return result;
-
-                }
+            
                 var cuenta=await _sisCuentaBancoRepository.GetByCodigo(dto.CodigoCuentaBanco);
                 if (cuenta == null)
                 {
@@ -367,31 +348,10 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Cuenta Banco invalido";
                     return result;
                 }
-                if (dto.NumeroChequera < 0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Chequera Invalido";
-                    return result;
-                }
-
-                if (dto.NumeroCheque == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Numero Cheque Invalido";
-                    return result;
-                }
+              
 
 
-
-                if (dto.FechaCheque == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Cheque Invalida";
-                    return result;
-                }
+             
               
                 var proveedor = await _proveedoresRepository.GetByCodigo(dto.CodigoProveedor);
 
@@ -426,19 +386,12 @@ namespace Convertidor.Services.Adm
 
                 }
 
-                if (dto.Status.Length > 2)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status Invalido";
-                    return result;
-
-                }
+              
              
 
 
-                var codigopresupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
-                if (codigopresupuesto==null)
+                var presupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                if (presupuesto==null)
                 {
 
                     result.Data = null;
@@ -447,6 +400,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                dto.Ano = presupuesto.ANO;
             
 
                 var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(dto.TipoChequeID);
@@ -458,8 +412,13 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-
-
+                var ossConfigChequera = await _ossConfigRepository.GetByClave(dto.TipoChequeID.ToString());
+                if (ossConfigChequera != null)
+                {
+                    dto.NumeroChequera = int.Parse(ossConfigChequera.VALOR);
+                }
+                dto.NumeroCheque = await _repository.GetNextCheque(dto.NumeroChequera,dto.CodigoPresupuesto);
+                
                 ADM_CHEQUES entity = new ADM_CHEQUES();
                 entity.CODIGO_LOTE_PAGO = dto.CodigoLote;
                 entity.CODIGO_CHEQUE = await _repository.GetNextKey();
