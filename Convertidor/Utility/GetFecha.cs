@@ -24,7 +24,9 @@
               
                 if (fecha != null)
                 {
-                    result = $"{fecha:MM/dd/yyyy}";
+                    
+                    string dia = fecha.Value.Day.ToString();
+                    result =$"{fecha.Value.Day.ToString()}/{fecha.Value.Month.ToString()}/{fecha.Value.Year.ToString()}";
                 }
          
 
