@@ -210,9 +210,36 @@ namespace Convertidor.Data.Repository.Presupuesto
         }
 
 
-        
-
         public async Task<List<PreFinanciadoDto>> GetListFinanciadoPorPresupuesto(int codigoPresupuesto)
+        {
+            try
+            {
+                // Consulta optimizada que hace todo en la base de datos
+                var financiados = await _context.PRE_V_SALDOS
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto)
+                    .GroupBy(x => new 
+                    { 
+                        x.FINANCIADO_ID, 
+                        x.DESCRIPTIVA_FINANCIADO 
+                    })
+                    .Select(g => new PreFinanciadoDto
+                    {
+                        FinanciadoId = (int)g.Key.FINANCIADO_ID,
+                        DescripcionFinanciado = g.Key.DESCRIPTIVA_FINANCIADO
+                    })
+                    .OrderBy(x => x.FinanciadoId)
+                    .ToListAsync();
+
+                return financiados;
+            }
+            catch (Exception ex)
+            {
+             
+                return new List<PreFinanciadoDto>();
+            }
+        }
+
+        public async Task<List<PreFinanciadoDto>> GetListFinanciadoPorPresupuestoBk(int codigoPresupuesto)
         {
             List<PreFinanciadoDto> result = new List<PreFinanciadoDto>();
 
@@ -394,6 +421,22 @@ namespace Convertidor.Data.Repository.Presupuesto
         }
         
         public async Task<bool> PresupuestoExiste(int codigoPresupuesto)
+        {
+            try
+            {
+                bool existe = await _context.PRE_V_SALDOS
+                    .AsNoTracking() // Opcional: mejora rendimiento si solo es para consulta
+                    .AnyAsync(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto);
+        
+                return existe;
+            }
+            catch (Exception ex)
+            {
+              
+                return false;
+            }
+        }
+        public async Task<bool> PresupuestoExisteBk(int codigoPresupuesto)
         {
             try
             {
