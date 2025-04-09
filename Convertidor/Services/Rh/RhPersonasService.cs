@@ -268,7 +268,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Apellido = dtos.APELLIDO;
                 itemResult.Nacionalidad = dtos.NACIONALIDAD;
                 itemResult.Sexo = dtos.SEXO;
-                itemResult.FechaNacimiento = dtos.FECHA_NACIMIENTO; 
+                itemResult.FechaNacimiento =dtos.FECHA_NACIMIENTO; 
                 itemResult.FechaNacimientoString = Fecha.GetFechaString(dtos.FECHA_NACIMIENTO);
                 FechaDto FechaNacimientoObj = Fecha.GetFechaDto(dtos.FECHA_NACIMIENTO);
                 itemResult.FechaNacimientoObj = (FechaDto)FechaNacimientoObj;
@@ -505,7 +505,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Status = item.STATUS;
                 itemResult.Nacionalidad = item.NACIONALIDAD;
                 itemResult.Sexo = item.SEXO;
-                itemResult.FechaNacimiento = item.FECHA_NACIMIENTO.ToShortDateString();
+                itemResult.FechaNacimiento = FechaObj.GetFechaString(item.FECHA_NACIMIENTO);
                 itemResult.Email = "";
                 itemResult.PaisNacimiento = GetPais(paises, item.PAIS_NACIMIENTO_ID);
                 itemResult.Email = GetEmail(comunicaciones, item.CODIGO_PERSONA);
