@@ -568,8 +568,8 @@ namespace Convertidor.Data.Repository.Rh
 
             result.FechaDesde = desde;
             result.FechaHasta = hasta;
-            result.FechaDesdeString = desde.ToShortDateString();
-            result.FechaHastaString = hasta.ToShortDateString();
+            result.FechaDesdeString =FechaObj.GetFechaString(desde) ;
+            result.FechaHastaString = FechaObj.GetFechaString(hasta);
 
 
 
