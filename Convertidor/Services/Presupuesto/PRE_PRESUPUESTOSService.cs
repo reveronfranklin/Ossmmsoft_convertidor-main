@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Presupuesto;
@@ -103,6 +104,59 @@ namespace Convertidor.Services.Presupuesto
             return result;
         }
 
+
+        public async Task<ListPresupuestoDto> MapPresupuesto(PRE_PRESUPUESTOS item)
+        {
+        
+            ListPresupuestoDto dto = new ListPresupuestoDto();
+            dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
+            dto.Descripcion = item.DENOMINACION;
+            dto.Ano = item.ANO;
+            var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
+            if (preListFinanciado.Count > 0) {
+
+                dto.PreFinanciadoDto = preListFinanciado;
+            }
+
+            dto.presupuestoEnEjecucion = false;
+            var presupuestoExiste = await _pre_V_SALDOSRepository.PresupuestoExiste(item.CODIGO_PRESUPUESTO);
+            if (presupuestoExiste)
+            {
+                dto.presupuestoEnEjecucion = presupuestoExiste;
+            }
+
+            return dto;
+        }
+
+        public async Task<List<ListPresupuestoDto>> MapListPresupuesto(List<PRE_PRESUPUESTOS> presupuestos)
+        {
+            var watch = Stopwatch.StartNew();
+        
+            
+            List<ListPresupuestoDto> result = new List<ListPresupuestoDto>();
+            
+            List<ListPresupuestoDto> resultParalelismo = new List<ListPresupuestoDto>();
+            
+            
+            foreach (var item in presupuestos.OrderByDescending(x => x.FECHA_HASTA).ToList())
+            {
+             
+                var dto = await  MapPresupuesto(item);
+                result.Add(dto);
+            }
+            
+            
+            
+            watch.Stop();
+            
+            Console.WriteLine($"Total de resultados For each: {watch.ElapsedMilliseconds}");
+          
+        
+            
+         
+
+            return result;
+        }
         public async Task<ResultDto<List<ListPresupuestoDto>>> GetListPresupuesto()
         {
 
@@ -114,28 +168,9 @@ namespace Convertidor.Services.Presupuesto
                     var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
                     if (presupuesto.Count() > 0)
                     {
-                        List<ListPresupuestoDto> listDto = new List<ListPresupuestoDto>();
+                       
 
-                        foreach (var item in presupuesto.OrderByDescending(x => x.FECHA_HASTA).ToList())
-                        {
-                            ListPresupuestoDto dto = new ListPresupuestoDto();
-                            dto.CodigoPresupuesto = item.CODIGO_PRESUPUESTO;
-                            dto.Descripcion = item.DENOMINACION;
-                            dto.Ano = item.ANO;
-                            var preListFinanciado = await _pre_V_SALDOSRepository.GetListFinanciadoPorPresupuesto(dto.CodigoPresupuesto);
-                            if (preListFinanciado.Count > 0) {
-
-                                dto.PreFinanciadoDto = preListFinanciado;
-                            }
-
-                            dto.presupuestoEnEjecucion = false;
-                            var presupuestoExiste = await _pre_V_SALDOSRepository.PresupuestoExiste(item.CODIGO_PRESUPUESTO);
-                            if (presupuestoExiste)
-                            {
-                                dto.presupuestoEnEjecucion = presupuestoExiste;
-                            }
-                            listDto.Add(dto);
-                        }
+                        var listDto=await MapListPresupuesto(presupuesto.ToList());
 
 
                         result.Data = listDto;
