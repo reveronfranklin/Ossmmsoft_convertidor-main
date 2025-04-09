@@ -386,7 +386,7 @@ namespace Convertidor.Services.Adm
                 }
 
 
-                codigoDocumentoOp.FECHA_COMPROBANTE = dto.FechaComprobante;
+                codigoDocumentoOp.FECHA_COMPROBANTE = (DateTime)dto.FechaComprobante;
                 codigoDocumentoOp.PERIODO_IMPOSITIVO = dto.PeriodoImpositivo;
                 codigoDocumentoOp.TIPO_OPERACION_ID = dto.TipoOperacionId;
                 codigoDocumentoOp.TIPO_DOCUMENTO_ID = dto.TipoDocumentoId;
@@ -575,7 +575,7 @@ namespace Convertidor.Services.Adm
                 ADM_DOCUMENTOS_OP entity = new ADM_DOCUMENTOS_OP();
                 entity.CODIGO_DOCUMENTO_OP = await _repository.GetNextKey();
                 entity.CODIGO_ORDEN_PAGO = dto.CodigoOrdenPago;
-                entity.FECHA_COMPROBANTE = dto.FechaComprobante;
+                entity.FECHA_COMPROBANTE = (DateTime)dto.FechaComprobante;
                 entity.PERIODO_IMPOSITIVO = dto.PeriodoImpositivo;
                 entity.TIPO_OPERACION_ID = dto.TipoOperacionId;
                 entity.TIPO_DOCUMENTO_ID = dto.TipoDocumentoId;
