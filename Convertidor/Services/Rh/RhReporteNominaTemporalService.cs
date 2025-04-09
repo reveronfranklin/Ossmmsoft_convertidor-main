@@ -259,8 +259,46 @@ namespace Convertidor.Data.Repository.Rh
 
 
       
-       
-    public async  Task<List<RhReporteNominaResumenResponseDto>> MapListHistoricoResumen(List<RH_V_REPORTE_NOMINA_TEMPORAL> dtos)
+        public async Task<List<RhReporteNominaResumenResponseDto>> MapListHistoricoResumen(List<RH_V_REPORTE_NOMINA_TEMPORAL> dtos)
+        {
+            var groupedData = from s in dtos
+                group s by new
+                {
+                    CodigoTipoNomina=s.CODIGO_TIPO_NOMINA,
+                    CodigoPeriodo=s.CODIGO_PERIODO,
+                    Periodo=s.PERIODO,
+                    FechaNomina = s.FECHA_NOMINA,
+                    FechaNominaString=Fecha.GetFechaString(s.FECHA_NOMINA),
+                    FechaNominaObj= Fecha.GetFechaDto(s.FECHA_NOMINA),
+                    CodigoIcpConcat=s.CODIGO_ICP_CONCAT,
+                    CodigoIcp=s.CODIGO_ICP,
+                    Denominacion=s.DENOMINACION,
+                    CodigoPersona=s.CODIGO_PERSONA,
+                    Nombre=s.NOMBRE,
+                } into g
+                select g;
+    
+            // Convertir a lista con índice
+            var result = groupedData
+                .Select((g, index) => new RhReporteNominaResumenResponseDto()
+                {
+                    Id = index + 1, // ID autonumérico
+                    CodigoTipoNomina = g.Key.CodigoTipoNomina,
+                    CodigoPeriodo = g.Key.CodigoPeriodo,
+                    Periodo = g.Key.Periodo,
+                    FechaNomina = g.Key.FechaNomina,
+                    FechaNominaString = g.Key.FechaNominaString,
+                    FechaNominaObj = g.Key.FechaNominaObj,
+                    CodigoIcpConcat = g.Key.CodigoIcpConcat,
+                    CodigoIcp = g.Key.CodigoIcp,
+                    Denominacion = g.Key.Denominacion,
+                    CodigoPersona = g.Key.CodigoPersona,
+                    Nombre = g.Key.Nombre
+                }).ToList();
+    
+            return result;
+        }
+    public async  Task<List<RhReporteNominaResumenResponseDto>> MapListHistoricoResumenBk(List<RH_V_REPORTE_NOMINA_TEMPORAL> dtos)
         {
                             var lista = from s in dtos
                             group s by new
@@ -293,6 +331,7 @@ namespace Convertidor.Data.Repository.Rh
                                 Nombre = g.Key.Nombre,
                                 
                             };
+                            
            
             return lista.ToList();
 
