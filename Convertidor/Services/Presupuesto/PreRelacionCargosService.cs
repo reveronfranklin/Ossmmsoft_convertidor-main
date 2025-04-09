@@ -116,20 +116,24 @@ namespace Convertidor.Services.Presupuesto
 
                 var allCargos = await _repository.GetAllByCodigoPresupuesto(filter.CodigoPresupuesto);
                 List<PRE_RELACION_CARGOS> cargos = new List<PRE_RELACION_CARGOS>();
-
-                cargos = allCargos;
-                if (filter.CodigoIcp != null && filter.CodigoIcp > 0)
+                if (allCargos.Count() > 0)
                 {
-                    cargos = allCargos.Where(x => x.CODIGO_ICP == filter.CodigoIcp).ToList();
+                    cargos = allCargos;
+                    if (filter.CodigoIcp != null && filter.CodigoIcp > 0)
+                    {
+                        cargos = allCargos.Where(x => x.CODIGO_ICP == filter.CodigoIcp).ToList();
+                    }
                 }
+             
 
                 result.Total1 = 0;
                 result.Total2 = 0;
-                foreach (var item in cargos)
+                result.Total1=cargos.Sum(x=>x.SUELDO*x.CANTIDAD);
+                /*foreach (var item in cargos)
                 {
                     result.Total1 = result.Total1 + item.SUELDO * item.CANTIDAD;
                     
-                }
+                }*/
                 result.Total2 = result.Total1 *12;
                 
                 totalRegistros = cargos.Count();
