@@ -483,7 +483,7 @@ namespace Convertidor.Services.Bm
 
 
                 listIcpSeleccionado = listIcpSeleccionado.Where(x => x.CodigoIcp > 0).ToList();
-                List<Bm1GetDto> searchList = new List<Bm1GetDto>();
+                var searchList = new List<Bm1GetDto>();
                 if (listIcpSeleccionado.Count > 0)
                 {
                     foreach (var item in listIcpSeleccionado)

@@ -4,7 +4,7 @@
     {
         public int CodigoDocumentoOp { get; set; }
         public int CodigoOrdenPago { get; set; }
-        public DateTime FechaComprobante { get; set; }
+        public DateTime? FechaComprobante { get; set; }
         public string PeriodoImpositivo { get; set; } = string.Empty;
         public int TipoOperacionId { get; set; }
         public int TipoDocumentoId { get; set; }
