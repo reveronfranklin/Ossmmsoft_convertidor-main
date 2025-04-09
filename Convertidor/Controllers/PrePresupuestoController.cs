@@ -86,8 +86,8 @@ namespace Convertidor.Controllers
                 {
                     result = await _prePresupuestoService.GetAll(filter);
                     var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(1))
-                        .SetSlidingExpiration(TimeSpan.FromDays(1));
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
+                        .SetSlidingExpiration(TimeSpan.FromDays(20));
                     var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
                     var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
                     await _distributedCache.SetAsync(cacheKey,redisListBytes,options);

@@ -91,7 +91,7 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
-        public async Task<string> UpdateSearchText(int codigoPresupuesto)
+       /* public async Task<string> UpdateSearchText(int codigoPresupuesto)
         {
 
             try
@@ -105,11 +105,27 @@ namespace Convertidor.Data.Repository.Adm
             {
                 return ex.Message;
             }
+            
+        }*/
+        
+        
+        public async Task<string> UpdateSearchTextBySolicitud(int codigoSolicitud)
+        {
 
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.SEARCH_TEXT = TRIM(NUMERO_SOLICITUD) || STATUS || TRIM(MOTIVO) || (SELECT DENOMINACION FROM PRE.PRE_INDICE_CAT_PRG WHERE PRE.PRE_INDICE_CAT_PRG.CODIGO_ICP  = ADM.ADM_SOLICITUDES.CODIGO_SOLICITANTE) || (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  = ADM.ADM_SOLICITUDES.TIPO_SOLICITUD_ID) || (SELECT NOMBRE_PROVEEDOR FROM ADM.ADM_PROVEEDORES   WHERE  ADM.ADM_PROVEEDORES.CODIGO_PROVEEDOR  =ADM.ADM_SOLICITUDES.CODIGO_PROVEEDOR) WHERE CODIGO_SOLICITUS ={codigoSolicitud}";
 
-
-
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
         }
+        
         
         public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter) 
         {
@@ -130,7 +146,7 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
               
-                var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
+               // var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
                 var totalRegistros = 0;
                 var totalPage = 0;
               
@@ -259,7 +275,7 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
 
-                var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
+                //var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
                 var totalRegistros = 0;
                 var totalPage = 0;
               
@@ -350,9 +366,9 @@ namespace Convertidor.Data.Repository.Adm
             ResultDto<ADM_SOLICITUDES> result = new ResultDto<ADM_SOLICITUDES>(null);
             try 
             {
-                await _context.ADM_SOLICITUDES.AddAsync(entity);
+                var resultUpdate =await _context.ADM_SOLICITUDES.AddAsync(entity);
                 await _context.SaveChangesAsync();
-
+                await UpdateSearchTextBySolicitud(entity.CODIGO_SOLICITUD);
 
                 result.Data = entity;
                 result.IsValid = true;
@@ -379,6 +395,7 @@ namespace Convertidor.Data.Repository.Adm
                 {
                     _context.ADM_SOLICITUDES.Update(entity);
                     await _context.SaveChangesAsync();
+                    await UpdateSearchTextBySolicitud(entity.CODIGO_SOLICITUD);
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -450,6 +467,7 @@ namespace Convertidor.Data.Repository.Adm
                 FormattableString xqueryDiario = $"DECLARE \nBEGIN\n UPDATE  ADM_SOLICITUDESSET STATUS = {status} WHERE CODIGO_SOLICITUD= {codigoSolicitud};\nEND;";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                await UpdateSearchTextBySolicitud(codigoSolicitud);
                 // _context.PRE_MODIFICACION.Remove(entity);
                 //  await _context.SaveChangesAsync();
                 
