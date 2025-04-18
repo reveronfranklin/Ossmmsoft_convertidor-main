@@ -6,7 +6,7 @@ namespace Convertidor.Services.Presupuesto
 	public interface IPRE_PRESUPUESTOSService
 	{
 
-
+		Task<List<PRE_PRESUPUESTOS>> GetAllPresupuestoEntity();
         Task<ResultDto<GetPRE_PRESUPUESTOSDto>> GetByCodigo(FilterPRE_PRESUPUESTOSDto filter);
 
         Task<ResultDto<List<GetPRE_PRESUPUESTOSDto>>> GetAll(FilterPRE_PRESUPUESTOSDto filter);

@@ -69,6 +69,23 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
         
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Aprobar(AdmLotePagoCambioStatusDto dto)
+        {
+            var result = await _service.CambioStatus(dto);
+            return Ok(result);
+        }
+
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Anular(AdmLotePagoCambioStatusDto dto)
+        {
+            var result = await _service.CambioStatus(dto);
+            return Ok(result);
+        }
 
     }
 }
