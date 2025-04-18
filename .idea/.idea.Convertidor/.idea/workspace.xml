@@ -10,13 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/PrePresupuestoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/PrePresupuestoController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmLotePagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmLotePagoService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/IPRE_PRESUPUESTOSService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/IPRE_PRESUPUESTOSService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PRE_PRESUPUESTOSService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -361,7 +355,7 @@
       <workItem from="1744818100319" duration="1000" />
       <workItem from="1744845954769" duration="5033000" />
       <workItem from="1744909739037" duration="626000" />
-      <workItem from="1744934458658" duration="1412000" />
+      <workItem from="1744934458658" duration="2243000" />
     </task>
     <servers />
   </component>
@@ -4598,26 +4592,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
-          <line>390</line>
+          <line>392</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="17850" />
+              <option value="17978" />
             </startOffsets>
             <endOffsets>
-              <option value="17876" />
+              <option value="18004" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="975" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
-          <line>438</line>
+          <line>440</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="19804" />
+              <option value="19932" />
             </startOffsets>
             <endOffsets>
-              <option value="19842" />
+              <option value="19970" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="976" />
@@ -4676,39 +4670,39 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
-          <line>321</line>
+          <line>323</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="14987" />
+              <option value="15115" />
             </startOffsets>
             <endOffsets>
-              <option value="15030" />
+              <option value="15158" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="983" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
-          <line>459</line>
+          <line>461</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="20670" />
+              <option value="20798" />
             </startOffsets>
             <endOffsets>
-              <option value="20713" />
+              <option value="20841" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="984" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
-          <line>381</line>
+          <line>383</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="17411" />
+              <option value="17539" />
             </startOffsets>
             <endOffsets>
-              <option value="17555" />
+              <option value="17683" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="985" />
@@ -4741,13 +4735,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
-          <line>163</line>
+          <line>165</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'ReplicaImpuestoAdmRetencionesOp'">
             <startOffsets>
-              <option value="7201" />
+              <option value="7329" />
             </startOffsets>
             <endOffsets>
-              <option value="7372" />
+              <option value="7500" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="989" />
@@ -4767,26 +4761,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
-          <line>204</line>
+          <line>206</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'ReplicaImpuestoAdmRetencionesOp'">
             <startOffsets>
-              <option value="9882" />
+              <option value="10010" />
             </startOffsets>
             <endOffsets>
-              <option value="9969" />
+              <option value="10097" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="991" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
-          <line>147</line>
+          <line>149</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'ReplicarMotoRetenidoDocumento'">
             <startOffsets>
-              <option value="6630" />
+              <option value="6758" />
             </startOffsets>
             <endOffsets>
-              <option value="6717" />
+              <option value="6845" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="992" />

@@ -82,6 +82,8 @@ namespace Convertidor.Services.Adm
         {
 
             ResultDto<List<AdmImpuestosDocumentosOpResponseDto>> result = new ResultDto<List<AdmImpuestosDocumentosOpResponseDto>>(null);
+            List<AdmImpuestosDocumentosOpResponseDto> resultDefault = new List<AdmImpuestosDocumentosOpResponseDto>();
+
             try
             {
                 var documentosOp = await _repository.GetByDocumento(dto.CodigoDocumentoOp);
@@ -126,8 +128,8 @@ namespace Convertidor.Services.Adm
                     result.Page = 1;
                     result.TotalPage = 1;
                     result.CantidadRegistros = 0;
-                    result.Data = null;
-                    result.IsValid = false;
+                    result.Data = resultDefault;
+                    result.IsValid = true;
                     result.Message = "No data";
 
                     return result;
