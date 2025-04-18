@@ -42,6 +42,17 @@ namespace Convertidor.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        public async Task<IActionResult> GetAllPresupuestoEntity()
+        {
+          
+
+            var result = await _prePresupuestoService.GetAllPresupuestoEntity();
+            return Ok(result);
+        }
+
+        
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> GetList()
         {
             FilterPRE_PRESUPUESTOSDto filter = new FilterPRE_PRESUPUESTOSDto();

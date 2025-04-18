@@ -139,6 +139,98 @@ namespace Convertidor.Services.Sis
 
             return result;
         }
+        
+        
+        public async Task<ResultDto<AdmLotePagoResponseDto>> Aprobar(AdmLotePagoCambioStatusDto dto)
+        {
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            ResultDto<AdmLotePagoResponseDto> result = new ResultDto<AdmLotePagoResponseDto>(null);
+            try
+            {
+                var lotePago=await _repository.GetByCodigo(dto.CodigoLotePago);
+                if (lotePago == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Lote no existe";
+                    return result;
+                }
+
+                if (lotePago.STATUS != "PE" )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Lote de pago debe estar Pendiente para poder Aprobarlo";
+                    return result;
+                }
+                
+                lotePago.STATUS = dto.Status;
+                lotePago.SEARCH_TEXT = await GetSearchText(lotePago);
+
+                lotePago.FECHA_UPD = DateTime.Now;
+                lotePago.USUARIO_UPD = conectado.Usuario;
+                await _repository.Update(lotePago);
+                var resultDto = await  MapAdmLotePagoDto(lotePago);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = e.Message;
+            }
+            return result;
+        }
+
+        
+        public async Task<ResultDto<AdmLotePagoResponseDto>> Anular(AdmLotePagoCambioStatusDto dto)
+        {
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            ResultDto<AdmLotePagoResponseDto> result = new ResultDto<AdmLotePagoResponseDto>(null);
+            try
+            {
+                var lotePago=await _repository.GetByCodigo(dto.CodigoLotePago);
+                if (lotePago == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Lote no existe";
+                    return result;
+                }
+
+                if (lotePago.STATUS != "AP" )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Lote de pago debe estar Aprobado para poder Anularlo";
+                    return result;
+                }
+                
+                lotePago.STATUS = dto.Status;
+                lotePago.SEARCH_TEXT = await GetSearchText(lotePago);
+
+                lotePago.FECHA_UPD = DateTime.Now;
+                lotePago.USUARIO_UPD = conectado.Usuario;
+                await _repository.Update(lotePago);
+                var resultDto = await  MapAdmLotePagoDto(lotePago);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = e.Message;
+            }
+            return result;
+        }
+
+        
         public async Task<ResultDto<AdmLotePagoResponseDto>> CambioStatus(AdmLotePagoCambioStatusDto dto)
         {
             var conectado = await _sisUsuarioRepository.GetConectado();
@@ -154,6 +246,8 @@ namespace Convertidor.Services.Sis
                     return result;
                 }
 
+               
+                
                 lotePago.STATUS = dto.Status;
                 lotePago.SEARCH_TEXT = await GetSearchText(lotePago);
 

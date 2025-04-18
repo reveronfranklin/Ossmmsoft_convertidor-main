@@ -7,9 +7,12 @@ namespace Convertidor.Data.Repository.Adm
     public class AdmRetencionesRepository : IAdmRetencionesRepository
     {
         private readonly DataContextAdm _context;
-        public AdmRetencionesRepository(DataContextAdm context)
+        private readonly ISisUsuarioRepository _sisUsuarioRepository;
+
+        public AdmRetencionesRepository(DataContextAdm context,ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
+            _sisUsuarioRepository = sisUsuarioRepository;
         }
 
         public async Task<ADM_RETENCIONES> GetCodigoRetencion(int codigoRetencion)
@@ -33,7 +36,9 @@ namespace Convertidor.Data.Repository.Adm
         {
             try
             {
-                var result = await _context.ADM_RETENCIONES.DefaultIfEmpty().ToListAsync();
+                
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.ADM_RETENCIONES.Where(x=>x.CODIGO_EMPRESA==conectado.Empresa).DefaultIfEmpty().ToListAsync();
                 return result;
             }
             catch (Exception ex) 

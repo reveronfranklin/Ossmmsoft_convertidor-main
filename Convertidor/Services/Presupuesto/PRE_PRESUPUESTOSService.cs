@@ -66,7 +66,11 @@ namespace Convertidor.Services.Presupuesto
 
 
 
-      
+        public async Task<List<PRE_PRESUPUESTOS>> GetAllPresupuestoEntity()
+        {
+            var presupuesto = await _pRE_PRESUPUESTOSRepository.GetAll();
+            return presupuesto.ToList();
+        }
 
 
         public async Task<ResultDto<GetPRE_PRESUPUESTOSDto>> GetByCodigo(FilterPRE_PRESUPUESTOSDto filter)
