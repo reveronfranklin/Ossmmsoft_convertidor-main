@@ -298,6 +298,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
                 
+                var esValidoTotalBaseImpuestoVsBaseDocumento =
+                    await EsValidoTotalBaseImpuestoVsBaseDocumentoUpdate(dto.CodigoDocumentoOp, dto.CodigoImpuestoDocumentoOp,dto.BaseImponible);
+                if (esValidoTotalBaseImpuestoVsBaseDocumento ==false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Base no puede ser mayor a la base del Documento";
+                    return result;
+                }
+                
                 codigoImpuestoDocumentoOp.CODIGO_IMPUESTO_DOCUMENTO_OP = dto.CodigoImpuestoDocumentoOp;
                 codigoImpuestoDocumentoOp.CODIGO_DOCUMENTO_OP=dto.CodigoDocumentoOp;
                // codigoImpuestoDocumentoOp.CODIGO_RETENCION = dto.CodigoRetencion;
@@ -338,6 +348,67 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+
+        public async Task<bool> EsValidoTotalBaseImpuestoVsBaseDocumentoCreate(int codigoDocumentoOp,decimal nuevaBaseImponible)
+        {
+            bool result = true;
+            decimal totalBaseImponibleImpuesto = 0;
+            decimal totalBaseDocumento = 0;
+            decimal totalBaseImpuesto = 0;
+            var documentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(codigoDocumentoOp);
+            if (documentoOp != null)
+            {
+                totalBaseDocumento = documentoOp.BASE_IMPONIBLE;
+                var impuestosDocumentosOp = await _repository.GetByDocumento(codigoDocumentoOp);
+                if (impuestosDocumentosOp.Count() > 0)
+                {
+                    totalBaseImponibleImpuesto = impuestosDocumentosOp.Sum(t => t.BASE_IMPONIBLE);
+                   
+                }
+            }
+    
+            totalBaseImpuesto = nuevaBaseImponible + totalBaseImponibleImpuesto;
+            if (totalBaseImpuesto > totalBaseDocumento)
+            {
+                result = false;
+            }
+            
+
+          
+            return result;
+
+        }
+        
+        
+        public async Task<bool> EsValidoTotalBaseImpuestoVsBaseDocumentoUpdate(int codigoDocumentoOp,int codigoImpuestoDocumeto,decimal nuevaBaseImponible)
+        {
+            bool result = true;
+            decimal totalBaseImponibleImpuesto = 0;
+            decimal totalBaseDocumento = 0;
+            decimal totalBaseImpuesto = 0;
+            var documentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(codigoDocumentoOp);
+            if (documentoOp != null)
+            {
+                totalBaseDocumento = documentoOp.BASE_IMPONIBLE;
+                var impuestosDocumentosOp = await _repository.GetByDocumento(codigoDocumentoOp);
+                if (impuestosDocumentosOp.Count() > 0)
+                {
+                    totalBaseImponibleImpuesto = impuestosDocumentosOp.Where(x=>x.CODIGO_IMPUESTO_DOCUMENTO_OP!=codigoImpuestoDocumeto).Sum(t => t.BASE_IMPONIBLE);
+                   
+                }
+            }
+    
+            totalBaseImpuesto = nuevaBaseImponible + totalBaseImponibleImpuesto;
+            if (totalBaseImpuesto > totalBaseDocumento)
+            {
+                result = false;
+            }
+            
+
+          
+            return result;
+
+        }
         public async Task<ResultDto<AdmImpuestosDocumentosOpResponseDto>> Create(AdmImpuestosDocumentosOpUpdateDto dto)
         {
             ResultDto<AdmImpuestosDocumentosOpResponseDto> result = new ResultDto<AdmImpuestosDocumentosOpResponseDto>(null);
@@ -426,6 +497,15 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                var esValidoTotalBaseImpuestoVsBaseDocumento =
+                   await EsValidoTotalBaseImpuestoVsBaseDocumentoCreate(dto.CodigoDocumentoOp, dto.BaseImponible);
+                if (esValidoTotalBaseImpuestoVsBaseDocumento ==false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Base no puede ser mayor a la base del Documento";
+                    return result;
+                }
 
                 ADM_IMPUESTOS_DOCUMENTOS_OP entity = new ADM_IMPUESTOS_DOCUMENTOS_OP();
                 entity.CODIGO_IMPUESTO_DOCUMENTO_OP = await _repository.GetNextKey();

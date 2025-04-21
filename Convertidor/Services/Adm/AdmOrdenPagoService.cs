@@ -648,6 +648,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                if (codigoOrdenPago.STATUS != "PE")
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Codigo Orden Pago no Puede ser Eliminada, necesita estar en Status PENDIENTE";
+                    return result;
+                }
+                
+             
+                
 
                 var deleted = await _repository.Delete(dto.CodigoOrdenPago);
 
