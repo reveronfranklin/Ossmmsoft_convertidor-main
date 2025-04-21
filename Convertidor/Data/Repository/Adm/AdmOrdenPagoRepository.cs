@@ -217,9 +217,45 @@ namespace Convertidor.Data.Repository.Adm
                 ADM_ORDEN_PAGO entity = await GetCodigoOrdenPago(codigoOrdenPago);
                 if (entity != null)
                 {
-                    _context.ADM_ORDEN_PAGO.Remove(entity);
-                    await _context.SaveChangesAsync();
+                   /* _context.ADM_ORDEN_PAGO.Remove(entity);
+                    await _context.SaveChangesAsync();*/
+                   
+                    FormattableString  xqueryDiario = $"DELETE FROM  ADM.ADM_IMPUESTOS_DOCUMENTOS_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+
+                     _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                     
+                     xqueryDiario = $"DELETE FROM  ADM.ADM_DOCUMENTOS_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+
+                     _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                     
+                     xqueryDiario = $"DELETE FROM  ADM.ADM_IMPUESTOS_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+
+                     _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                     
+                     xqueryDiario = $"DELETE FROM  ADM.ADM_COMPROMISO_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+
+                     _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                     
+                     xqueryDiario = $"DELETE FROM  ADM.ADM_BENEFICIARIOS_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+
+                     _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                     
+                                 
+                     xqueryDiario = $"DELETE FROM  ADM.ADM_ORDEN_PAGO WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+
+                     _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 }
+                
+                
+                
+                /* TAblas a eliminar
+                 * ADM_IMPUESTOS_DOCUMENTOS_OP
+                 *ADM_DOCUMENTOS_OP
+                 * ADM_IMPUESTOS_OP
+                 * ADM_COMPROMISO_OP
+                 * ADM_BENEFICIARIOS_OP
+                 */
+                
                 return "";
             }
             catch (Exception ex)
