@@ -412,16 +412,21 @@ namespace Convertidor.Services.Adm
                 }
                 else
                 {
+                    entity.NUMERO_COMPROBANTE = "";
                     var sisDescriptiva = await _sisDescriptivaRepository.GetByExtra1(tipoRetencion.CODIGO);
-                    var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie((int)entity.CODIGO_PRESUPUESTO , sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
-                    if (!numeroSolicitud.IsValid)
+                    if (sisDescriptiva != null)
                     {
-                        result.Data = null;
-                        result.IsValid = numeroSolicitud.IsValid;
-                        result.Message = numeroSolicitud.Message;
-                        return result;
+                        var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie((int)entity.CODIGO_PRESUPUESTO , sisDescriptiva.DESCRIPCION_ID,sisDescriptiva.CODIGO_DESCRIPCION);
+                        if (!numeroSolicitud.IsValid)
+                        {
+                            result.Data = null;
+                            result.IsValid = numeroSolicitud.IsValid;
+                            result.Message = numeroSolicitud.Message;
+                            return result;
+                        }
+                        entity.NUMERO_COMPROBANTE = numeroSolicitud.Data;
                     }
-                    entity.NUMERO_COMPROBANTE = numeroSolicitud.Data;
+                   
                 }
               
                 
