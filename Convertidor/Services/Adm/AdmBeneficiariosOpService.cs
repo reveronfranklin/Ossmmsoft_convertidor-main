@@ -364,6 +364,16 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+        public async Task<ADM_BENEFICIARIOS_OP> GetByOrdenPagoProveedor(int codigoOrdenPago,int codigoProveedor)
+        {
+            
+            ADM_BENEFICIARIOS_OP result = null;
+            
+            result= await _repository.GetByOrdenPagoProveedor(codigoOrdenPago,codigoProveedor);
+
+            return result;
+        }
+
         public async Task<ResultDto<AdmBeneficiariosOpResponseDto>> Create(AdmBeneficiariosOpUpdateDto dto)
         {
             ResultDto<AdmBeneficiariosOpResponseDto> result = new ResultDto<AdmBeneficiariosOpResponseDto>(null);
