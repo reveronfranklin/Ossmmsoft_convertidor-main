@@ -1,4 +1,5 @@
-﻿using Convertidor.Dtos.Adm;
+﻿using Convertidor.Data.Entities.Adm;
+using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Services.Adm
 {
@@ -10,5 +11,6 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmBeneficiariosOpResponseDto>> Create(AdmBeneficiariosOpUpdateDto dto);
         Task<ResultDto<AdmBeneficiariosOpDeleteDto>> Delete(AdmBeneficiariosOpDeleteDto dto);
         Task<ResultDto<AdmBeneficiariosOpResponseDto>> UpdateMonto(AdmBeneficiariosOpUpdateMontoDto dto);
+        Task<ADM_BENEFICIARIOS_OP> GetByOrdenPagoProveedor(int codigoOrdenPago, int codigoProveedor);
     }
 }
