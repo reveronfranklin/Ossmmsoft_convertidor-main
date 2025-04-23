@@ -544,6 +544,8 @@ namespace Convertidor.Services.Adm
 
                 var deleted = await _repository.Delete(dto.CodigoRetencionOp);
 
+                await ReplicaRetencionesEnAdmBeneficiariosOp(codigoRetencionOp.CODIGO_ORDEN_PAGO);
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;

@@ -29,6 +29,17 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+        
+        public async Task UpdateMontoCausadoById(int codigoPucCompromiso,decimal montoCausado)
+        {
+            var entity = await GetByCodigo(codigoPucCompromiso);
+            if (entity != null)
+            {
+                entity.MONTO_CAUSADO = montoCausado;
+                await Update(entity);
+                
+            }
+        }
 
         public async Task<PRE_PUC_COMPROMISOS> GetByCodigoDetalleCompromiso(int codigoDetalleCompromiso)
         {

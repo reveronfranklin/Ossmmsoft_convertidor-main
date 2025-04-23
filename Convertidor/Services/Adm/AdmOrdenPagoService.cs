@@ -22,6 +22,7 @@ namespace Convertidor.Services.Adm
         private readonly IAdmPucOrdenPagoService _admPucOrdenPagoService;
         private readonly IPRE_V_SALDOSRepository _preSaldosRepository;
         private readonly IAdmBeneficariosOpService _admBeneficariosOpService;
+        private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
 
 
         public AdmOrdenPagoService(IAdmOrdenPagoRepository repository,
@@ -35,7 +36,8 @@ namespace Convertidor.Services.Adm
                                      IPrePucCompromisosRepository prePucCompromisosRepository,
                                      IAdmPucOrdenPagoService admPucOrdenPagoService,
                                      IPRE_V_SALDOSRepository   preSaldosRepository,
-                                     IAdmBeneficariosOpService admBeneficariosOpService)
+                                     IAdmBeneficariosOpService admBeneficariosOpService,
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository)
         {
       
             _repository = repository;
@@ -50,6 +52,7 @@ namespace Convertidor.Services.Adm
             _admPucOrdenPagoService = admPucOrdenPagoService;
             _preSaldosRepository = preSaldosRepository;
             _admBeneficariosOpService = admBeneficariosOpService;
+            _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
         }
 
 
@@ -359,6 +362,9 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+
+      
+        
         public async Task<ResultDto<bool>> CrearPucOrdenPagoDesdeCompromiso(int codigoCompromiso,int codigoOrdenPago)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);
@@ -377,27 +383,37 @@ namespace Convertidor.Services.Adm
                         {
                             foreach (var itemPucCompromiso in pucCompromiso)
                             {
-                                AdmPucOrdenPagoUpdateDto newPuc = new AdmPucOrdenPagoUpdateDto();
-                                newPuc.CodigoOrdenPago = codigoOrdenPago;
-                                newPuc.CodigoPucOrdenPago = 0;
-                                newPuc.CodigoPucCompromiso = itemPucCompromiso.CODIGO_PUC_COMPROMISO;  
-                                newPuc.CodigoIcp = itemPucCompromiso.CODIGO_ICP;  
-                                newPuc.CodigoPuc = itemPucCompromiso.CODIGO_PUC;  
-                                newPuc.FinanciadoId = itemPucCompromiso.FINANCIADO_ID;  
-                                newPuc.CodigoFinanciado = itemPucCompromiso.CODIGO_FINANCIADO;  
-                                newPuc.CodigoSaldo = itemPucCompromiso.CODIGO_SALDO;  
-                                newPuc.CodigoSaldo = itemPucCompromiso.CODIGO_SALDO;  
-                                newPuc.Monto = itemPucCompromiso.MONTO;  
-                                newPuc.MontoCompromiso= itemPucCompromiso.MONTO; 
-                                newPuc.MontoPagado = 0;  
-                                newPuc.MontoAnulado =0;  
-                                newPuc.Extra1 ="";  
-                                newPuc.Extra2 ="";  
-                                newPuc.Extra3 ="";  
-                                newPuc.CodigoCompromisoOp =codigoCompromiso;  
-                                newPuc.CodigoPresupuesto =itemPucCompromiso.CODIGO_PRESUPUESTO;
-                                await _admPucOrdenPagoService.Create(newPuc);
 
+                                if (itemPucCompromiso.MONTO - itemPucCompromiso.MONTO_CAUSADO > 0)
+                                {
+                                    AdmPucOrdenPagoUpdateDto newPuc = new AdmPucOrdenPagoUpdateDto();
+                                    newPuc.CodigoOrdenPago = codigoOrdenPago;
+                                    newPuc.CodigoPucOrdenPago = 0;
+                                    newPuc.CodigoPucCompromiso = itemPucCompromiso.CODIGO_PUC_COMPROMISO;  
+                                    newPuc.CodigoIcp = itemPucCompromiso.CODIGO_ICP;  
+                                    newPuc.CodigoPuc = itemPucCompromiso.CODIGO_PUC;  
+                                    newPuc.FinanciadoId = itemPucCompromiso.FINANCIADO_ID;  
+                                    newPuc.CodigoFinanciado = itemPucCompromiso.CODIGO_FINANCIADO;  
+                                    newPuc.CodigoSaldo = itemPucCompromiso.CODIGO_SALDO;  
+                                    newPuc.CodigoSaldo = itemPucCompromiso.CODIGO_SALDO;  
+                                    newPuc.Monto = itemPucCompromiso.MONTO-itemPucCompromiso.MONTO_CAUSADO;  
+                                    newPuc.MontoCompromiso= itemPucCompromiso.MONTO; 
+                                    newPuc.MontoPagado = 0;  
+                                    newPuc.MontoAnulado =0;  
+                                    newPuc.Extra1 ="";  
+                                    newPuc.Extra2 ="";  
+                                    newPuc.Extra3 ="";  
+                                    newPuc.CodigoCompromisoOp =codigoCompromiso;  
+                                    newPuc.CodigoPresupuesto =itemPucCompromiso.CODIGO_PRESUPUESTO;
+                                    await _admPucOrdenPagoService.Create(newPuc);
+                                
+                              
+                                    var total = await _admPucOrdenPagoRepository.GetTotalByCodigoCompromiso(itemPucCompromiso.CODIGO_PUC_COMPROMISO);
+
+                                    await _prePucCompromisosRepository.UpdateMontoCausadoById(
+                                        itemPucCompromiso.CODIGO_PUC_COMPROMISO, total);
+                                }
+ 
                             }
                         }
                         
@@ -586,6 +602,9 @@ namespace Convertidor.Services.Adm
             if (created.IsValid && created.Data != null)
             {
                 
+                //CREAR LOS PUC a parir del compromiso
+                await CrearPucOrdenPagoDesdeCompromiso(dto.CodigoCompromiso,created.Data.CODIGO_ORDEN_PAGO);
+                
                 //CREAMOS EL COMPROMISO DE LA ORDEN DE PAGO
                 AdmCompromisoOpUpdateDto compromisoOp = new AdmCompromisoOpUpdateDto();
                 compromisoOp.CodigoCompromisoOp = 0;
@@ -598,10 +617,9 @@ namespace Convertidor.Services.Adm
                 var compromisOpCreated = await _admCompromisoOpService.Create(compromisoOp);
                 
                 
-                //CREAR LOS PUC a parir del compromiso
-                await CrearPucOrdenPagoDesdeCompromiso(dto.CodigoCompromiso,created.Data.CODIGO_ORDEN_PAGO);
+             
                 
-               var descriptivas = await _admDescriptivaRepository.GetAll();
+                var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByCodigo(compromisoOp.CodigoProveedor );
                 var resultDto = await MapOrdenPagoDto(created.Data,descriptivas,proveedores);
                 result.Data = resultDto; 

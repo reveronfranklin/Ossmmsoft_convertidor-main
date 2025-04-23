@@ -12,6 +12,27 @@ namespace Convertidor.Data.Repository.Adm
             _context = context;
         }
 
+        public async Task<decimal> GetTotalByCodigoCompromiso(int codigoPucCompromiso) 
+        {
+            
+            decimal result = 0;
+            try
+            {
+                var listPuc = await _context.ADM_PUC_ORDEN_PAGO.Where(x=>x.CODIGO_PUC_COMPROMISO==codigoPucCompromiso).ToListAsync();
+                if (listPuc.Count > 0)
+                { 
+                    result =listPuc.Sum(x=>x.MONTO);
+                }
+                
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                var res = ex.InnerException.Message;
+                return 0;
+            }
+        }
+        
         public async Task<ADM_PUC_ORDEN_PAGO> GetCodigoPucOrdenPago(int CodigoPucOrdenPago)
         {
             try
