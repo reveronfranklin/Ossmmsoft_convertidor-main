@@ -16,6 +16,8 @@ namespace Convertidor.Services.Adm
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IPreCompromisosRepository _preCompromisosRepository;
         private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
+        private readonly IAdmBeneficariosOpService _admBeneficariosOpService;
+        private readonly IAdmRetencionesOpRepository _admRetencionesOpRepository;
 
         public AdmCompromisoOpService(IAdmCompromisoOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -24,7 +26,9 @@ namespace Convertidor.Services.Adm
                                      IAdmOrdenPagoRepository admOrdenPagoRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IPreCompromisosRepository preCompromisosRepository,
-                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository)
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository,
+                                     IAdmBeneficariosOpService admBeneficariosOpService,
+                                     IAdmRetencionesOpRepository admRetencionesOpRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -34,6 +38,8 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
             _preCompromisosRepository = preCompromisosRepository;
             _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
+            _admBeneficariosOpService = admBeneficariosOpService;
+            _admRetencionesOpRepository = admRetencionesOpRepository;
         }
 
 
@@ -267,6 +273,8 @@ namespace Convertidor.Services.Adm
 
                 await _repository.Update(codigoCompromisoOp);
 
+                await ReplicaCompromisosEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
+                
                 var resultDto =  MapCompromisoOpDto(codigoCompromisoOp);
                 result.Data = await resultDto;
                 result.IsValid = true;
@@ -372,8 +380,6 @@ namespace Convertidor.Services.Adm
 
             entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
             entity.CODIGO_VAL_CONTRATO = dto.CodigoValContrato;
-           
-
 
             entity.CODIGO_EMPRESA = conectado.Empresa;
             entity.USUARIO_INS = conectado.Usuario;
@@ -382,6 +388,7 @@ namespace Convertidor.Services.Adm
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
+                await ReplicaCompromisosEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
                 var resultDto =  MapCompromisoOpDto(created.Data);
                 result.Data = await resultDto;
                 result.IsValid = true;
@@ -410,6 +417,60 @@ namespace Convertidor.Services.Adm
 
             return result;
         }
+        public async Task ReplicaCompromisosEnAdmBeneficiariosOp(int codigoOrdenPago)
+        {
+
+            var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoOrdenPago);
+            decimal totalMontoRetencion = 0;
+            var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+            if (pucOrdenPago.Count > 0)
+            {
+                // Calcular el total del Impuesto
+                   var totalMontoPuc=pucOrdenPago.Sum(t => t.MONTO);
+                   var retencionesOp = await _admRetencionesOpRepository.GetByOrdenPago(codigoOrdenPago);
+                   if (retencionesOp.Count > 0)
+                   {
+                       // Calcular el total del Impuesto
+                       totalMontoRetencion = (decimal)retencionesOp.Sum(t => t.MONTO_RETENCION);
+                   }
+
+                   var proveedor = ordenPago.CODIGO_PROVEEDOR;
+                    
+                    var admBeneficiario = await _admBeneficariosOpService.GetByOrdenPagoProveedor(codigoOrdenPago,proveedor);
+                    if (admBeneficiario != null)
+                    {
+                     
+                        
+                        AdmBeneficiariosOpUpdateDto dto = new AdmBeneficiariosOpUpdateDto();
+                        dto.CodigoBeneficiarioOp = admBeneficiario.CODIGO_BENEFICIARIO_OP;
+                        dto.CodigoPresupuesto = ordenPago.CODIGO_PRESUPUESTO;
+                        dto.CodigoOrdenPago=codigoOrdenPago;
+                        dto.CodigoProveedor = admBeneficiario.CODIGO_PROVEEDOR;
+                        dto.Monto= (decimal)totalMontoPuc-totalMontoRetencion;
+                        dto.MontoAnulado = admBeneficiario.MONTO_ANULADO;
+                        dto.MontoPagado = admBeneficiario.MONTO_PAGADO;
+                        await _admBeneficariosOpService.Update(dto);
+                        
+                    }
+                    else
+                    {
+                        AdmBeneficiariosOpUpdateDto dto = new AdmBeneficiariosOpUpdateDto();
+                        dto.CodigoBeneficiarioOp = 0;
+                        dto.CodigoPresupuesto = ordenPago.CODIGO_PRESUPUESTO;
+                        dto.CodigoOrdenPago=codigoOrdenPago;
+                        dto.CodigoProveedor = proveedor;
+                        dto.Monto= (decimal)totalMontoPuc-totalMontoRetencion;
+                        dto.MontoAnulado = 0;
+                        dto.MontoPagado = 0;
+                        await _admBeneficariosOpService.Create(dto);
+
+                    }
+                
+            }
+ 
+        }
+        
+        
 
         public async Task<ResultDto<AdmCompromisoOpDeleteDto>> Delete(AdmCompromisoOpDeleteDto dto) 
         {
@@ -428,7 +489,9 @@ namespace Convertidor.Services.Adm
 
 
                 var deleted = await _repository.Delete(dto.CodigoCompromisoOp);
-
+                
+                await ReplicaCompromisosEnAdmBeneficiariosOp(codigoCompromisoOp.CODIGO_ORDEN_PAGO);
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;

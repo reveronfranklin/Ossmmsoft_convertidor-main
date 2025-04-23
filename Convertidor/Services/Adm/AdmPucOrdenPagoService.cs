@@ -19,6 +19,7 @@ namespace Convertidor.Services.Adm
         private readonly IPRE_PLAN_UNICO_CUENTASRepository _prePlanUnicoCuentasRepository;
         private readonly IPreDescriptivaRepository _preDescriptivaRepository;
         private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
+        private readonly IPrePucCompromisosRepository _prePucCompromisosRepository;
 
         public AdmPucOrdenPagoService(IAdmPucOrdenPagoRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -29,7 +30,8 @@ namespace Convertidor.Services.Adm
                                      IPRE_INDICE_CAT_PRGRepository preIndiceCatPrgRepository,
                                      IPRE_PLAN_UNICO_CUENTASRepository prePlanUnicoCuentasRepository,
                                      IPreDescriptivaRepository preDescriptivaRepository,
-                                     IPRE_V_SALDOSRepository preVSaldosRepository)
+                                     IPRE_V_SALDOSRepository preVSaldosRepository,
+                                     IPrePucCompromisosRepository prePucCompromisosRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -41,6 +43,7 @@ namespace Convertidor.Services.Adm
             _prePlanUnicoCuentasRepository = prePlanUnicoCuentasRepository;
             _preDescriptivaRepository = preDescriptivaRepository;
             _preVSaldosRepository = preVSaldosRepository;
+            _prePucCompromisosRepository = prePucCompromisosRepository;
         }
 
         
@@ -96,6 +99,12 @@ namespace Convertidor.Services.Adm
 
 
                 await _repository.Update(ordenPagoPuc);
+                var total = await _repository.GetTotalByCodigoCompromiso(ordenPagoPuc.CODIGO_PUC_COMPROMISO);
+
+                await _prePucCompromisosRepository.UpdateMontoCausadoById(
+                    ordenPagoPuc.CODIGO_PUC_COMPROMISO,
+                    total);
+
                 
                 result.Data = true;
                 result.IsValid = true;
@@ -427,7 +436,11 @@ namespace Convertidor.Services.Adm
                 codigoPucOrdenPago.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoPucOrdenPago);
-             
+                var total = await _repository.GetTotalByCodigoCompromiso(codigoPucOrdenPago.CODIGO_PUC_COMPROMISO);
+
+                await _prePucCompromisosRepository.UpdateMontoCausadoById(
+                    codigoPucOrdenPago.CODIGO_PUC_COMPROMISO,
+                    total);
                 var resultDto = await MapPucOrdenPagoDto(codigoPucOrdenPago);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -620,6 +633,12 @@ namespace Convertidor.Services.Adm
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
+
+                    var total = await _repository.GetTotalByCodigoCompromiso(entity.CODIGO_PUC_COMPROMISO);
+                    
+                    await _prePucCompromisosRepository.UpdateMontoCausadoById(
+                        entity.CODIGO_PUC_COMPROMISO,
+                        total);
                     var resultDto = await MapPucOrdenPagoDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;

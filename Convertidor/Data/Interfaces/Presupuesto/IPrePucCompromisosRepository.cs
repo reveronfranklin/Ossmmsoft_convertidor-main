@@ -12,6 +12,7 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<List<PRE_PUC_COMPROMISOS>> GetAll();
         Task<ResultDto<PRE_PUC_COMPROMISOS>> Add(PRE_PUC_COMPROMISOS entity);
         Task<ResultDto<PRE_PUC_COMPROMISOS>> Update(PRE_PUC_COMPROMISOS entity);
+        Task UpdateMontoCausadoById(int codigoPucCompromiso, decimal montoCausado);
         Task<string> Delete(int codigoPucCompromiso);
         Task<int> GetNextKey();
     }
