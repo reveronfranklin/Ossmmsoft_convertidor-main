@@ -31,6 +31,22 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+        public async Task<ADM_RETENCIONES> GetByExtra1(string extra1)
+        {
+            try
+            {
+                var result = await _context.ADM_RETENCIONES
+                    .Where(e => e.EXTRA1 == extra1).FirstOrDefaultAsync();
+
+                return (ADM_RETENCIONES)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
 
         public async Task<List<ADM_RETENCIONES>> GetAll() 
         {

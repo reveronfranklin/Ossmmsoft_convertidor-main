@@ -13,18 +13,24 @@ namespace Convertidor.Services.Adm
         private readonly IPRE_PRESUPUESTOSRepository _prePresupuestosRepository;
         private readonly IAdmOrdenPagoRepository _admOrdenPagoRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IAdmRetencionesOpService _admRetencionesOpService;
+        private readonly IAdmRetencionesRepository _admRetencionesRepository;
 
         public AdmDocumentosOpService(IAdmDocumentosOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
                                      IPRE_PRESUPUESTOSRepository prePresupuestosRepository,
                                      IAdmOrdenPagoRepository admOrdenPagoRepository,
-                                     IAdmDescriptivaRepository admDescriptivaRepository)
+                                     IAdmDescriptivaRepository admDescriptivaRepository,
+                                     IAdmRetencionesOpService admRetencionesOpService,
+                                     IAdmRetencionesRepository admRetencionesRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _prePresupuestosRepository = prePresupuestosRepository;
             _admOrdenPagoRepository = admOrdenPagoRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _admRetencionesOpService = admRetencionesOpService;
+            _admRetencionesRepository = admRetencionesRepository;
         }
 
       
@@ -419,7 +425,7 @@ namespace Convertidor.Services.Adm
                 {
                     cantidadDocumentos = documentos.Count();
                 }
-
+                await ReplicaIvaDocumentoEnAdmRetenciones(codigoDocumentoOp.CODIGO_DOCUMENTO_OP);
                 var resultDto = await MapDocumentosOpDto(codigoDocumentoOp);
                 result.CantidadRegistros = cantidadDocumentos;
                 result.Data = resultDto;
@@ -437,6 +443,36 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+        public async Task ReplicaIvaDocumentoEnAdmRetenciones(int codigoDocumento)
+        {
+            var codigoDocumentoOp = await _repository.GetCodigoDocumentoOp(codigoDocumento);
+            if (codigoDocumentoOp != null && codigoDocumentoOp.MONTO_RETENIDO>0)
+            {
+               
+                AdmRetencionesOpUpdateDto admRetencionesOpDto = new AdmRetencionesOpUpdateDto();
+                admRetencionesOpDto.CodigoRetencionOp = 0;
+                admRetencionesOpDto.CodigoOrdenPago = codigoDocumentoOp.CODIGO_ORDEN_PAGO;
+                admRetencionesOpDto.CodigoRetencion = 0;
+                admRetencionesOpDto.TipoRetencionId = 0;
+                var descriptivaRetencion =await _admDescriptivaRepository.GetByCodigo((int)codigoDocumentoOp.ESTATUS_FISCO_ID);
+                if (descriptivaRetencion != null)
+                {  
+                    admRetencionesOpDto.PorRetencion = Convert.ToDecimal(descriptivaRetencion.EXTRA1);
+                    var descriptivaIva = await _admDescriptivaRepository.GetByCodigoDescriptivaTexto("IVA");
+                    admRetencionesOpDto.TipoRetencionId = descriptivaIva.DESCRIPCION_ID;
+                    var admRetencion= await  _admRetencionesRepository.GetByExtra1(descriptivaRetencion.CODIGO);
+                    admRetencionesOpDto.CodigoRetencion = admRetencion.CODIGO_RETENCION;
+                }
+                admRetencionesOpDto.MontoRetencion = codigoDocumentoOp.MONTO_RETENIDO;
+                admRetencionesOpDto.BaseImponible = codigoDocumentoOp.BASE_IMPONIBLE;
+                admRetencionesOpDto.CodigoPresupuesto = codigoDocumentoOp.CODIGO_PRESUPUESTO;
+                admRetencionesOpDto.NumeroComprobante = "";
+                await _admRetencionesOpService.Create(admRetencionesOpDto);
+                
+            }
+            
+        }
+        
         public async Task<ResultDto<AdmDocumentosOpResponseDto>> Create(AdmDocumentosOpUpdateDto dto)
         {
             ResultDto<AdmDocumentosOpResponseDto> result = new ResultDto<AdmDocumentosOpResponseDto>(null);
@@ -667,6 +703,8 @@ namespace Convertidor.Services.Adm
 
                 if (created.IsValid && created.Data != null)
                 {
+                    
+                    await ReplicaIvaDocumentoEnAdmRetenciones(entity.CODIGO_DOCUMENTO_OP);
                     var resultDto = await MapDocumentosOpDto(created.Data);
                     result.CantidadRegistros = cantidadDocumentos;
                     result.Data = resultDto;

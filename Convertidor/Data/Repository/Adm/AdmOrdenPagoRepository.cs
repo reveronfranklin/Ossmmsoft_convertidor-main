@@ -220,7 +220,7 @@ namespace Convertidor.Data.Repository.Adm
                    /* _context.ADM_ORDEN_PAGO.Remove(entity);
                     await _context.SaveChangesAsync();*/
                    
-                    FormattableString  xqueryDiario = $"DELETE FROM  ADM.ADM_IMPUESTOS_DOCUMENTOS_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+                    FormattableString  xqueryDiario = $"DELETE FROM  ADM.ADM_IMPUESTOS_DOCUMENTOS_OP WHERE ADM.ADM_IMPUESTOS_DOCUMENTOS_OP.CODIGO_DOCUMENTO_OP IN (SELECT CODIGO_DOCUMENTO_OP FROM ADM.ADM_DOCUMENTOS_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago})";
 
                      _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                      

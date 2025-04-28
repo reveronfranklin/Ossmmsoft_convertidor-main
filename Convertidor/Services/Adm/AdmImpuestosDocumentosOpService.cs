@@ -349,26 +349,26 @@ namespace Convertidor.Services.Adm
         }
 
 
-        public async Task<bool> EsValidoTotalBaseImpuestoVsBaseDocumentoCreate(int codigoDocumentoOp,decimal nuevaBaseImponible)
+        public async Task<bool> EsValidoTotalBaseImpuestoVsBaseDocumentoCreate(int codigoDocumentoOp,decimal nuevoMontoImpuesto)
         {
             bool result = true;
-            decimal totalBaseImponibleImpuesto = 0;
-            decimal totalBaseDocumento = 0;
+            decimal totalImpuesto = 0;
+           
             decimal totalBaseImpuesto = 0;
             var documentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(codigoDocumentoOp);
             if (documentoOp != null)
             {
-                totalBaseDocumento = documentoOp.BASE_IMPONIBLE;
+              
                 var impuestosDocumentosOp = await _repository.GetByDocumento(codigoDocumentoOp);
                 if (impuestosDocumentosOp.Count() > 0)
                 {
-                    totalBaseImponibleImpuesto = impuestosDocumentosOp.Sum(t => t.BASE_IMPONIBLE);
+                    totalImpuesto = impuestosDocumentosOp.Sum(t => t.MONTO_IMPUESTO);
                    
                 }
             }
     
-            totalBaseImpuesto = nuevaBaseImponible + totalBaseImponibleImpuesto;
-            if (totalBaseImpuesto > totalBaseDocumento)
+            totalBaseImpuesto = totalImpuesto + nuevoMontoImpuesto;
+            if (documentoOp != null && totalBaseImpuesto > documentoOp.BASE_IMPONIBLE)
             {
                 result = false;
             }
