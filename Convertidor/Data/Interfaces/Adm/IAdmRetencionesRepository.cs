@@ -10,6 +10,7 @@ public interface IAdmRetencionesRepository
     Task<ResultDto<ADM_RETENCIONES>> Update(ADM_RETENCIONES entity);
     Task<string> Delete(int codigoRetencion);
     Task<int> GetNextKey();
-    
+    Task<ADM_RETENCIONES> GetByExtra1(string extra1);
+
 
 }
