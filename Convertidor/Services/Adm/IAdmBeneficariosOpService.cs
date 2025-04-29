@@ -12,5 +12,6 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmBeneficiariosOpDeleteDto>> Delete(AdmBeneficiariosOpDeleteDto dto);
         Task<ResultDto<AdmBeneficiariosOpResponseDto>> UpdateMonto(AdmBeneficiariosOpUpdateMontoDto dto);
         Task<ADM_BENEFICIARIOS_OP> GetByOrdenPagoProveedor(int codigoOrdenPago, int codigoProveedor);
+        Task ActualizaMontoDesdePucOrdenPago(AdmOrdenPagoBeneficiarioFlterDto filter);
     }
 }
