@@ -76,6 +76,64 @@ namespace Convertidor.Services.Adm
             }
         }
 
+        public async Task ActualizaMontoDesdePucOrdenPago(AdmOrdenPagoBeneficiarioFlterDto filter)
+        {
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            var compromisos = await _admCompromisoOpRepository.GetCodigoOrdenPago(filter.CodigoOrdenPago,filter.CodigoPresupuesto);
+            if (compromisos.Count > 0)
+            {
+                var compromiso = compromisos.FirstOrDefault();
+                var codigoPresupuesto = (int)compromiso.CODIGO_PRESUPUESTO;
+                var beneficiarioCompromiso =
+                    await _repository.GetByOrdenPagoProveedor(filter.CodigoOrdenPago, compromiso.CODIGO_PROVEEDOR);
+                if (beneficiarioCompromiso != null)
+                {
+                    var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(filter.CodigoOrdenPago);
+                    if (pucOrdenPago.Count > 0)
+                    {
+                       var monto = pucOrdenPago.Sum(x => x.MONTO);
+                       AdmBeneficiariosOpUpdateMontoDto dto  = new AdmBeneficiariosOpUpdateMontoDto();
+                       dto.Monto=monto;
+                       dto.CodigoBeneficiarioOp = beneficiarioCompromiso.CODIGO_BENEFICIARIO_OP;
+                       await  UpdateMonto(dto);
+                    }
+                }
+                var retenciones = await _admRetencionesOpRepository.GetByOrdenPago(filter.CodigoOrdenPago);
+                if (retenciones.Count > 0)
+                {
+                    var tipoProveedorFisco = _ossConfigRepository.GetByClave("TIPO_PROVEEDOR_FISCO");
+                    if (tipoProveedorFisco != null)
+                    {
+                        int codigoTipoProveedor = int.Parse(tipoProveedorFisco.Result.VALOR);
+                        var proveedor = await _admProveedoresRepository.GetByTipo(codigoTipoProveedor);
+                        if (proveedor != null)
+                        {
+                           
+                            var retencionesOp = await _admRetencionesOpRepository.GetByOrdenPago(filter.CodigoOrdenPago);
+                            if (retencionesOp.Count > 0)
+                            {
+                               
+                                  var totalRetencion= retencionesOp.Sum(x => (decimal)x.MONTO_RETENCION);
+                                  var beneficiarioCompromisoRetencion =
+                                      await _repository.GetByOrdenPagoProveedor(filter.CodigoOrdenPago, proveedor.CODIGO_PROVEEDOR);
+                                  if (beneficiarioCompromisoRetencion != null)
+                                  {
+                                      AdmBeneficiariosOpUpdateMontoDto dto  = new AdmBeneficiariosOpUpdateMontoDto();
+                                      dto.Monto=totalRetencion; 
+                                      dto.CodigoBeneficiarioOp = beneficiarioCompromisoRetencion.CODIGO_BENEFICIARIO_OP;
+                                      await  UpdateMonto(dto);
+                                  }
+                                 
+                                
+                            }
+                        }
+                    }
+                }
+                
+            }
+
+        } 
+        
         public async Task<ResultDto<List<AdmBeneficiariosOpResponseDto>>> CreateDefaultValue(AdmOrdenPagoBeneficiarioFlterDto filter)
         {
             int codigoPresupuesto = 0;

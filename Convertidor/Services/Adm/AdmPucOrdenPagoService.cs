@@ -20,6 +20,7 @@ namespace Convertidor.Services.Adm
         private readonly IPreDescriptivaRepository _preDescriptivaRepository;
         private readonly IPRE_V_SALDOSRepository _preVSaldosRepository;
         private readonly IPrePucCompromisosRepository _prePucCompromisosRepository;
+        private readonly IAdmBeneficariosOpService _admBeneficariosOpService;
 
         public AdmPucOrdenPagoService(IAdmPucOrdenPagoRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -31,7 +32,8 @@ namespace Convertidor.Services.Adm
                                      IPRE_PLAN_UNICO_CUENTASRepository prePlanUnicoCuentasRepository,
                                      IPreDescriptivaRepository preDescriptivaRepository,
                                      IPRE_V_SALDOSRepository preVSaldosRepository,
-                                     IPrePucCompromisosRepository prePucCompromisosRepository)
+                                     IPrePucCompromisosRepository prePucCompromisosRepository,
+                                     IAdmBeneficariosOpService admBeneficariosOpService)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -44,6 +46,7 @@ namespace Convertidor.Services.Adm
             _preDescriptivaRepository = preDescriptivaRepository;
             _preVSaldosRepository = preVSaldosRepository;
             _prePucCompromisosRepository = prePucCompromisosRepository;
+            _admBeneficariosOpService = admBeneficariosOpService;
         }
 
         
@@ -104,6 +107,10 @@ namespace Convertidor.Services.Adm
                 await _prePucCompromisosRepository.UpdateMontoCausadoById(
                     ordenPagoPuc.CODIGO_PUC_COMPROMISO,
                     total);
+                AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
+                filter.CodigoPresupuesto=ordenPagoPuc.CODIGO_PRESUPUESTO;
+                filter.CodigoOrdenPago=ordenPagoPuc.CODIGO_ORDEN_PAGO;
+                await _admBeneficariosOpService.ActualizaMontoDesdePucOrdenPago(filter);
 
                 
                 result.Data = true;
@@ -436,6 +443,12 @@ namespace Convertidor.Services.Adm
                 codigoPucOrdenPago.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoPucOrdenPago);
+                
+                AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
+                filter.CodigoPresupuesto=codigoPucOrdenPago.CODIGO_PRESUPUESTO;
+                filter.CodigoOrdenPago=codigoPucOrdenPago.CODIGO_ORDEN_PAGO;
+                await _admBeneficariosOpService.ActualizaMontoDesdePucOrdenPago(filter);
+                
                 var total = await _repository.GetTotalByCodigoCompromiso(codigoPucOrdenPago.CODIGO_PUC_COMPROMISO);
 
                 await _prePucCompromisosRepository.UpdateMontoCausadoById(
