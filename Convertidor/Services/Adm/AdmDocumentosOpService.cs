@@ -15,6 +15,7 @@ namespace Convertidor.Services.Adm
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IAdmRetencionesOpService _admRetencionesOpService;
         private readonly IAdmRetencionesRepository _admRetencionesRepository;
+        private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
 
         public AdmDocumentosOpService(IAdmDocumentosOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -22,7 +23,8 @@ namespace Convertidor.Services.Adm
                                      IAdmOrdenPagoRepository admOrdenPagoRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IAdmRetencionesOpService admRetencionesOpService,
-                                     IAdmRetencionesRepository admRetencionesRepository)
+                                     IAdmRetencionesRepository admRetencionesRepository,
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -31,6 +33,7 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
             _admRetencionesOpService = admRetencionesOpService;
             _admRetencionesRepository = admRetencionesRepository;
+            _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
         }
 
       
@@ -259,6 +262,24 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo orden pago invalido";
                     return result;
                 }
+                
+                if(dto.MontoDocumento <= 0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto documento invalido";
+                    return result;
+                }
+                
+                var isValidMonto = await IsValidTotalDocumentosVsTotalCompromisoUpdate(dto.CodigoDocumentoOp,
+                    dto.CodigoOrdenPago, dto.MontoDocumento);
+                if (isValidMonto==false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "La suma de los documentos supera el compromiso";
+                    return result;
+                }
                 if (dto.FechaComprobante ==null)
                 {
                     result.Data = null;
@@ -312,13 +333,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoDocumento <= 0) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto documento invalido";
-                    return result;
-                }
+            
 
                 if(dto.BaseImponible < 0) 
                 {
@@ -472,6 +487,68 @@ namespace Convertidor.Services.Adm
             }
             
         }
+
+        public async Task<bool> IsValidTotalDocumentosVsTotalCompromisoCreate(int codigoOrdenPago,decimal montoDocumento)
+        {
+            bool result = true;
+            decimal totalMontoDocumentos = 0;
+            decimal totalPucOrdenPago = 0;
+            var documentosOp = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);
+            var cant = documentosOp.Count();
+            if (documentosOp != null && documentosOp.Count() > 0)
+            {
+                totalMontoDocumentos = documentosOp.Sum(t => t.MONTO_DOCUMENTO);
+                var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+                if (pucOrdenPago != null && pucOrdenPago.Count() > 0)
+                {
+                    totalPucOrdenPago = pucOrdenPago.Sum(t => t.MONTO);
+                }
+
+
+            }
+
+            if (totalMontoDocumentos + montoDocumento > totalPucOrdenPago)
+            {
+                result = false;
+            }
+            
+           
+            
+            return result;
+        }
+        
+        
+        public async Task<bool> IsValidTotalDocumentosVsTotalCompromisoUpdate(int codigoDocumento,int codigoOrdenPago,decimal montoDocumento)
+        {
+            bool result = true;
+            decimal totalMontoDocumentos = 0;
+            decimal totalPucOrdenPago = 0;
+            var documentosOp = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);
+            var cant = documentosOp.Count();
+            if (documentosOp != null && documentosOp.Count() > 0)
+            {
+                totalMontoDocumentos = documentosOp
+                    .Where(t => t.CODIGO_DOCUMENTO_OP != codigoDocumento)
+                    .Sum(t => t.MONTO_DOCUMENTO);
+                var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+                if (pucOrdenPago != null && pucOrdenPago.Count() > 0)
+                {
+                    totalPucOrdenPago = pucOrdenPago.Sum(t => t.MONTO);
+                }
+
+
+            }
+
+            if (totalMontoDocumentos + montoDocumento > totalPucOrdenPago)
+            {
+                result = false;
+            }
+            
+           
+            
+            return result;
+        }
+
         
         public async Task<ResultDto<AdmDocumentosOpResponseDto>> Create(AdmDocumentosOpUpdateDto dto)
         {
@@ -494,6 +571,22 @@ namespace Convertidor.Services.Adm
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo orden pago invalido";
+                    return result;
+                }
+                if(dto.MontoDocumento <=0) 
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto documento invalido";
+                    return result;
+                }
+
+                var isValidMonto= await IsValidTotalDocumentosVsTotalCompromisoCreate(dto.CodigoOrdenPago, dto.MontoDocumento);
+                if (isValidMonto == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "La suma de los documentos supera el compromiso";
                     return result;
                 }
                 if (dto.FechaComprobante ==null)
@@ -549,14 +642,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                if(dto.MontoDocumento <=0) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Monto documento invalido";
-                    return result;
-                }
-
+               
              
 
 
