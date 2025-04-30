@@ -673,9 +673,20 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Orden Pago no Puede ser Eliminada, necesita estar en Status PENDIENTE";
                     return result;
                 }
-                
+
+                var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(dto.CodigoOrdenPago);
+                if (pucOrdenPago != null && pucOrdenPago.Count > 0)
+                {
+
+                    foreach (var item in pucOrdenPago)
+                    {
+                        await _prePucCompromisosRepository.UpdateMontoCausadoById(
+                            item.CODIGO_PUC_COMPROMISO, 0);
+                    }
+                   
+                }
              
-                
+              
 
                 var deleted = await _repository.Delete(dto.CodigoOrdenPago);
 
