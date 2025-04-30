@@ -488,13 +488,16 @@ namespace Convertidor.Services.Adm
             
         }
 
+        
+        
+        
         public async Task<bool> IsValidTotalDocumentosVsTotalCompromisoCreate(int codigoOrdenPago,decimal montoDocumento)
         {
             bool result = true;
             decimal totalMontoDocumentos = 0;
             decimal totalPucOrdenPago = 0;
             var documentosOp = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);
-            var cant = documentosOp.Count();
+          
             if (documentosOp != null && documentosOp.Count() > 0)
             {
                 totalMontoDocumentos = documentosOp.Sum(t => t.MONTO_DOCUMENTO);
