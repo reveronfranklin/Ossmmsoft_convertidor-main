@@ -18,6 +18,7 @@ namespace Convertidor.Services.Adm
         private readonly IAdmDocumentosOpRepository _admDocumentosOpRepository;
         private readonly IOssConfigRepository _ossConfigRepository;
         private readonly IAdmBeneficariosOpService _admBeneficariosOpService;
+        private readonly IAdmCompromisoOpRepository _admCompromisoOpRepository;
 
         public AdmRetencionesOpService(IAdmRetencionesOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -29,7 +30,8 @@ namespace Convertidor.Services.Adm
                                      ISisDescriptivaRepository sisDescriptivaRepository,
                                      IAdmDocumentosOpRepository admDocumentosOpRepository,
                                      IOssConfigRepository ossConfigRepository,
-                                     IAdmBeneficariosOpService admBeneficariosOpService
+                                     IAdmBeneficariosOpService admBeneficariosOpService,
+                                     IAdmCompromisoOpRepository admCompromisoOpRepository
                                      )
         {
             _repository = repository;
@@ -43,6 +45,7 @@ namespace Convertidor.Services.Adm
             _admDocumentosOpRepository = admDocumentosOpRepository;
             _ossConfigRepository = ossConfigRepository;
             _admBeneficariosOpService = admBeneficariosOpService;
+            _admCompromisoOpRepository = admCompromisoOpRepository;
         }
 
       
@@ -298,6 +301,7 @@ namespace Convertidor.Services.Adm
                 await _repository.Update(codigoRetencionOp);
                 
                 await ReplicaRetencionesEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
+                await ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
 
                 var resultDto = await MapRetencionesOpDto(codigoRetencionOp);
                 result.Data = resultDto;
@@ -439,6 +443,7 @@ namespace Convertidor.Services.Adm
                 {
 
                     await ReplicaRetencionesEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
+                    await ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
                     
                     var resultDto = await MapRetencionesOpDto(created.Data);
                     result.Data = resultDto;
@@ -469,6 +474,48 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+        public async Task ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(int codigoOrdenPago)
+        {
+
+            decimal totalRetenciones = 0;
+            decimal totalMontoDocumentos = 0;
+            
+            var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoOrdenPago);
+            var retencionesOp = await _repository.GetByOrdenPago(codigoOrdenPago);
+            if (retencionesOp.Count > 0)
+            {
+                // Calcular el total del Impuesto
+                totalRetenciones = (decimal)retencionesOp.Sum(t => t.MONTO_RETENCION);
+                
+            }
+            
+            var documentosOp = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
+            if (documentosOp != null && documentosOp.Count() > 0)
+            {
+                totalMontoDocumentos = documentosOp.Sum(t => t.MONTO_DOCUMENTO);
+            }
+         
+            var compromisos = await _admCompromisoOpRepository.GetCodigoOrdenPago(codigoOrdenPago,ordenPago.CODIGO_PRESUPUESTO);
+            if (compromisos.Count > 0)
+            {
+                var compromiso = compromisos.FirstOrDefault();
+                var beneficiarioCompromiso =
+                    await _admBeneficariosOpService.GetByOrdenPagoProveedor(codigoOrdenPago, compromiso.CODIGO_PROVEEDOR);
+                if (beneficiarioCompromiso != null)
+                {
+                    AdmBeneficiariosOpUpdateMontoDto dto  = new AdmBeneficiariosOpUpdateMontoDto();
+                    dto.Monto=totalMontoDocumentos-totalRetenciones;
+                    dto.CodigoBeneficiarioOp = beneficiarioCompromiso.CODIGO_BENEFICIARIO_OP;
+                    await  _admBeneficariosOpService.UpdateMonto(dto);
+                }
+                
+                
+            }
+            
+            
+           
+        }
+        
         public async Task ReplicaRetencionesEnAdmBeneficiariosOp(int codigoOrdenPago)
         {
 
@@ -545,6 +592,7 @@ namespace Convertidor.Services.Adm
                 var deleted = await _repository.Delete(dto.CodigoRetencionOp);
 
                 await ReplicaRetencionesEnAdmBeneficiariosOp(codigoRetencionOp.CODIGO_ORDEN_PAGO);
+                await ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(codigoRetencionOp.CODIGO_ORDEN_PAGO);
                 
                 if (deleted.Length > 0)
                 {
