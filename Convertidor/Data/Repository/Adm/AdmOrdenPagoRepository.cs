@@ -223,6 +223,9 @@ namespace Convertidor.Data.Repository.Adm
                     FormattableString  xqueryDiario = $"DELETE FROM  ADM.ADM_IMPUESTOS_DOCUMENTOS_OP WHERE ADM.ADM_IMPUESTOS_DOCUMENTOS_OP.CODIGO_DOCUMENTO_OP IN (SELECT CODIGO_DOCUMENTO_OP FROM ADM.ADM_DOCUMENTOS_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago})";
 
                      _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                     xqueryDiario = $"DELETE FROM  ADM.ADM_PUC_ORDEN_PAGO WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+
+                     _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                      
                      xqueryDiario = $"DELETE FROM  ADM.ADM_DOCUMENTOS_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
 

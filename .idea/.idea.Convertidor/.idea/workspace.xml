@@ -10,7 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +36,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -370,7 +371,7 @@
       <workItem from="1745361177084" duration="17306000" />
       <workItem from="1745537232590" duration="654000" />
       <workItem from="1745859496738" duration="6967000" />
-      <workItem from="1745961894978" duration="10373000" />
+      <workItem from="1745961894978" duration="13412000" />
     </task>
     <servers />
   </component>
@@ -5244,13 +5245,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs</url>
-          <line>262</line>
+          <line>265</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="11281" />
+              <option value="11479" />
             </startOffsets>
             <endOffsets>
-              <option value="11299" />
+              <option value="11497" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1048" />
@@ -5371,6 +5372,58 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1057" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs</url>
+          <line>690</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="29064" />
+            </startOffsets>
+            <endOffsets>
+              <option value="29124" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1058" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
+          <line>75</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="2342" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2382" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1059" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs</url>
+          <line>426</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPagoService.cs" containingFunctionPresentation="Method 'CrearPucOrdenPagoDesdeCompromiso'">
+            <startOffsets>
+              <option value="19157" />
+            </startOffsets>
+            <endOffsets>
+              <option value="19171" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1060" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmCompromisoOpRepository.cs</url>
+          <line>80</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmCompromisoOpRepository.cs" containingFunctionPresentation="Method 'Add'">
+            <startOffsets>
+              <option value="2476" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2495" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1061" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
