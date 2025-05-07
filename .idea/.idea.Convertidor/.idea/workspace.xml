@@ -10,7 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -366,7 +366,7 @@
       <workItem from="1745961894978" duration="14109000" />
       <workItem from="1746056211017" duration="2795000" />
       <workItem from="1746486835386" duration="1019000" />
-      <workItem from="1746578373901" duration="858000" />
+      <workItem from="1746578373901" duration="2802000" />
     </task>
     <servers />
   </component>
@@ -2562,26 +2562,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs</url>
-          <line>327</line>
+          <line>333</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="13949" />
+              <option value="14287" />
             </startOffsets>
             <endOffsets>
-              <option value="14008" />
+              <option value="14346" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="681" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs</url>
-          <line>580</line>
+          <line>593</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="24560" />
+              <option value="25252" />
             </startOffsets>
             <endOffsets>
-              <option value="24646" />
+              <option value="25338" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="682" />
@@ -3303,13 +3303,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs</url>
-          <line>408</line>
+          <line>421</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="17304" />
+              <option value="17996" />
             </startOffsets>
             <endOffsets>
-              <option value="17339" />
+              <option value="18031" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="803" />
@@ -5123,39 +5123,39 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs</url>
-          <line>444</line>
+          <line>457</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="19018" />
+              <option value="19710" />
             </startOffsets>
             <endOffsets>
-              <option value="19084" />
+              <option value="19776" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1039" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs</url>
-          <line>419</line>
+          <line>432</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="17835" />
+              <option value="18527" />
             </startOffsets>
             <endOffsets>
-              <option value="17922" />
+              <option value="18614" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1040" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs</url>
-          <line>440</line>
+          <line>453</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="18873" />
+              <option value="19565" />
             </startOffsets>
             <endOffsets>
-              <option value="18917" />
+              <option value="19609" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1041" />
@@ -5331,13 +5331,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs</url>
-          <line>483</line>
+          <line>496</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" containingFunctionPresentation="Method 'ReplicaRetencionesDocumentosEnAdmBeneficiariosOp'">
             <startOffsets>
-              <option value="20219" />
+              <option value="20911" />
             </startOffsets>
             <endOffsets>
-              <option value="20289" />
+              <option value="20981" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1056" />
