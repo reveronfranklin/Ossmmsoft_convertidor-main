@@ -297,12 +297,14 @@ namespace Convertidor.Data.Repository.Presupuesto
         public async Task RecalcularSaldo(int codigo_presupuesto)
         {
 
-            var codigo_presupuestoP = new SqlParameter("@Codigo_Presupuesto", codigo_presupuesto);
-          
+     
             try
             {
-                var result = await _context.PRE_PRESUPUESTOS.FromSqlRaw<PRE_PRESUPUESTOS>("execute PRE.PRE_ACTUALIZAR_SALDOS @Codigo_Presupuesto", codigo_presupuestoP).ToListAsync();
-                var aprobacion = result.FirstOrDefault();
+ 
+
+                FormattableString xquerySaldo = $"CALL PRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto})";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
 
             }
             catch (Exception ex)
