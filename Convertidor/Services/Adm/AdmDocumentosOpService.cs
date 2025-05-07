@@ -496,16 +496,17 @@ namespace Convertidor.Services.Adm
             bool result = true;
             decimal totalMontoDocumentos = 0;
             decimal totalPucOrdenPago = 0;
+            var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+            if (pucOrdenPago != null && pucOrdenPago.Count() > 0)
+            {
+                totalPucOrdenPago = pucOrdenPago.Sum(t => t.MONTO);
+            }
             var documentosOp = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);
           
             if (documentosOp != null && documentosOp.Count() > 0)
             {
                 totalMontoDocumentos = documentosOp.Sum(t => t.MONTO_DOCUMENTO);
-                var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
-                if (pucOrdenPago != null && pucOrdenPago.Count() > 0)
-                {
-                    totalPucOrdenPago = pucOrdenPago.Sum(t => t.MONTO);
-                }
+              
 
 
             }
