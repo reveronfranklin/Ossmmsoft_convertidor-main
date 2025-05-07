@@ -232,13 +232,19 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                var admRetencion = await _admRetencionesRepository.GetCodigoRetencion(dto.CodigoRetencion);
-                if (admRetencion ==null)
+                var retenciones = await _admRetencionesRepository.GetAll();
+                var retencionesPorTipo =
+                    retenciones.Where(x => x.TIPO_RETENCION_ID == dto.TipoRetencionId).FirstOrDefault();
+                if (retencionesPorTipo != null)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo retencion invalido";
-                    return result;
+                    var admRetencion = await _admRetencionesRepository.GetCodigoRetencion(dto.CodigoRetencion);
+                    if (admRetencion ==null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Codigo retencion invalido";
+                        return result;
+                    }
                 }
                 if (dto.PorRetencion < 0)
                 {
@@ -352,14 +358,21 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-                var admRetencion = await _admRetencionesRepository.GetCodigoRetencion(dto.CodigoRetencion);
-                if (admRetencion ==null)
+                var retenciones = await _admRetencionesRepository.GetAll();
+                var retencionesPorTipo =
+                    retenciones.Where(x => x.TIPO_RETENCION_ID == dto.TipoRetencionId).FirstOrDefault();
+                if (retencionesPorTipo != null)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo retencion invalido";
-                    return result;
+                    var admRetencion = await _admRetencionesRepository.GetCodigoRetencion(dto.CodigoRetencion);
+                    if (admRetencion ==null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Codigo retencion invalido";
+                        return result;
+                    }
                 }
+               
                 if (dto.PorRetencion < 0)
                 {
                     result.Data = null;
