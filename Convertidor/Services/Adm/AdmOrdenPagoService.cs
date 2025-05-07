@@ -196,7 +196,15 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Orden Pago no existe";
                     return result;
                 }
-              
+
+                var modificable= await OrdenDePagoEsModificable((int)dto.CodigoOrdenPago);
+                if (!modificable)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Orden de pago no es Modificable(Status o Tiene Pagos)";
+                    return result;
+                }
                 var compromiso = await _preCompromisosService.GetByCompromiso(dto.CodigoCompromiso);
                 if (compromiso == null)
                 {
@@ -348,6 +356,8 @@ namespace Convertidor.Services.Adm
                 var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);
                 var resultDto = await MapOrdenPagoDto(codigoOrdenPago,descriptivas,proveedores);
+                
+                await _prePresupuestosRepository.RecalcularSaldo(codigoOrdenPago.CODIGO_PRESUPUESTO);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -362,7 +372,35 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+        public async Task<bool> OrdenDePagoEsModificable(int codigoOrdenPago)
+        {
+            bool result = false;
+            
+            var ordenPago = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
+            if (ordenPago != null)
+            {
+                if (ordenPago.STATUS == "PE")
+                {
+                    result = true;
+                }
+                if (ordenPago.STATUS == "AP" || ordenPago.STATUS == "AN")
+                {
+                    result = false;
+                }
+                var admPucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+                if(admPucOrdenPago != null && admPucOrdenPago.Count>0)
+                {
+                    var montoPagado = admPucOrdenPago.Sum(x => x.MONTO_PAGADO);
+                    if (ordenPago.STATUS == "AP" && montoPagado == 0)
+                    {
+                        result = true;
+                    }
+                }
+            }
+        
+            return result;
 
+        }
       
         
         public async Task<ResultDto<bool>> CrearPucOrdenPagoDesdeCompromiso(int codigoCompromiso,int codigoOrdenPago)
@@ -616,12 +654,14 @@ namespace Convertidor.Services.Adm
                 compromisoOp.CodigoIdentificador = compromiso.CodigoCompromiso; 
                 var compromisOpCreated = await _admCompromisoOpService.Create(compromisoOp);
                 
-                
+               
+                await _prePresupuestosRepository.RecalcularSaldo(created.Data.CODIGO_PRESUPUESTO);
              
                 
                 var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByCodigo(compromisoOp.CodigoProveedor );
                 var resultDto = await MapOrdenPagoDto(created.Data,descriptivas,proveedores);
+
                 result.Data = resultDto; 
                 //resultDto;
                 result.IsValid = true;
@@ -665,6 +705,14 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Orden Pago no existe";
                     return result;
                 }
+                var modificable= await OrdenDePagoEsModificable((int)dto.CodigoOrdenPago);
+                if (!modificable)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Orden de pago no es Modificable(Status o Tiene Pagos)";
+                    return result;
+                }
 
                 if (codigoOrdenPago.STATUS != "PE")
                 {
@@ -690,6 +738,9 @@ namespace Convertidor.Services.Adm
 
                 var deleted = await _repository.Delete(dto.CodigoOrdenPago);
 
+                await _prePresupuestosRepository.RecalcularSaldo(codigoOrdenPago.CODIGO_PRESUPUESTO);
+
+                
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;

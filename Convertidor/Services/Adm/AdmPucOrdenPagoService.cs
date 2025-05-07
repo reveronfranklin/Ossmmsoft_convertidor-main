@@ -112,7 +112,7 @@ namespace Convertidor.Services.Adm
                 filter.CodigoOrdenPago=ordenPagoPuc.CODIGO_ORDEN_PAGO;
                 await _admBeneficariosOpService.ActualizaMontoDesdePucOrdenPago(filter);
 
-                
+                await _prePresupuestosRepository.RecalcularSaldo(ordenPagoPuc.CODIGO_PRESUPUESTO);
                 result.Data = true;
                 result.IsValid = true;
                 result.Message = "";
@@ -454,6 +454,8 @@ namespace Convertidor.Services.Adm
                 await _prePucCompromisosRepository.UpdateMontoCausadoById(
                     codigoPucOrdenPago.CODIGO_PUC_COMPROMISO,
                     total);
+                
+                await _prePresupuestosRepository.RecalcularSaldo(codigoPucOrdenPago.CODIGO_PRESUPUESTO);
                 var resultDto = await MapPucOrdenPagoDto(codigoPucOrdenPago);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -652,6 +654,8 @@ namespace Convertidor.Services.Adm
                     await _prePucCompromisosRepository.UpdateMontoCausadoById(
                         entity.CODIGO_PUC_COMPROMISO,
                         total);
+                    
+                    await _prePresupuestosRepository.RecalcularSaldo(entity.CODIGO_PRESUPUESTO);
                     var resultDto = await MapPucOrdenPagoDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
@@ -698,7 +702,7 @@ namespace Convertidor.Services.Adm
 
 
                 var deleted = await _repository.Delete(dto.CodigoPucOrdenPago);
-
+                await _prePresupuestosRepository.RecalcularSaldo(codigoPucOrdenPago.CODIGO_PRESUPUESTO);
                 if (deleted.Length > 0)
                 {
                     result.Data = dto;
