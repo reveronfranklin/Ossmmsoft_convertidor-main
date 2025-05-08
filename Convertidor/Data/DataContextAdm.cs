@@ -50,6 +50,11 @@ namespace Convertidor.Data
         public DbSet<ADM_DETALLE_SOL_COMPROMISO> ADM_DETALLE_SOL_COMPROMISO { get; set; }
         public DbSet<ADM_RETENCIONES> ADM_RETENCIONES { get; set; }
         public DbSet<ADM_V_COMPROMISO_PENDIENTE> ADM_V_COMPROMISO_PENDIENTE { get; set; }
+        public DbSet<ADM_V_OP_POR_PAGAR> ADM_V_OP_POR_PAGAR { get; set; }
+        public DbSet<ADM_V_OP_POR_PAGAR_BENE> ADM_V_OP_POR_PAGAR_BENE { get; set; }
+        
+        public DbSet<ADM_BENEFICIARIOS_CH> ADM_BENEFICIARIOS_CH { get; set; }
+        
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -122,6 +127,24 @@ namespace Convertidor.Data
                   
                     builder.ToTable("ADM_V_COMPROMISO_PENDIENTE");
                 });
+            
+            modelBuilder
+                .Entity<ADM_V_OP_POR_PAGAR>(builder =>
+                {
+                    builder.HasNoKey();
+                  
+                    builder.ToTable("ADM_V_OP_POR_PAGAR");
+                });
+            modelBuilder
+                .Entity<ADM_V_OP_POR_PAGAR_BENE>(builder =>
+                {
+                    builder.HasNoKey();
+                  
+                    builder.ToTable("ADM_V_OP_POR_PAGAR_BENE");
+                });
+
+            
+            
             modelBuilder
                 .Entity<ADM_ACT_PROVEEDOR>(builder =>
                 {
@@ -410,6 +433,19 @@ namespace Convertidor.Data
                 entity.HasKey(table => new
                 {
                     table.CODIGO_CHEQUE,
+
+                });
+
+
+            });
+            modelBuilder.Entity<ADM_BENEFICIARIOS_CH>(entity =>
+            {
+              
+
+                entity.ToTable("ADM_BENEFICIARIOS_CH");
+                entity.HasKey(table => new
+                {
+                    table.CODIGO_BENEFICIARIO_CH,
 
                 });
 

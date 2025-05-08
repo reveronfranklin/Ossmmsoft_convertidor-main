@@ -31,6 +31,7 @@ using Convertidor.Data.DestinoRepository.ADM;
 using Convertidor.Data.DestinoRepository.PRE;
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Data.Repository.Cnt;
+using Convertidor.Services.Adm.Pagos;
 using Convertidor.Services.Cnt;
 using Convertidor.Services.Rh.Report.Example;
 using Convertidor.Services.Rh.Report.HistoricoNomina;
@@ -473,7 +474,10 @@ builder.Services.AddTransient<IAdmRetencionesRepository, AdmRetencionesRepositor
 
 builder.Services.AddTransient<IAdmComprobantesDocumentosOpDestinoRepository, AdmComprobantesDocumentosOpDestinoRepository>();
 builder.Services.AddTransient<IAdmLotePagoRepository, AdmLotePagoRepository>();
+builder.Services.AddTransient<IAdmOrdenesPagoPorPagarBeneficiarioRepository, AdmOrdenesPagoPorPagarBeneficiarioRepository>();
+builder.Services.AddTransient<IAdmOrdenesPagoPorPagarRepository, AdmOrdenesPagoPorPagarRepository>();
 
+builder.Services.AddTransient<IAdmBeneficiariosPagosRepository, AdmBeneficiariosPagosRepository>();
 
 
 
@@ -516,6 +520,8 @@ builder.Services.AddTransient<IReporteSolicitudCompromisoService, ReporteSolicit
 builder.Services.AddTransient<IReporteOrdenServicioPresupuestarioService, ReporteOrdenServicioPresupuestarioService>();
 builder.Services.AddTransient<IAdmRetencionesService, AdmRetencionesService>();
 builder.Services.AddTransient<IAdmLotePagoService, AdmLotePagoService>();
+builder.Services.AddTransient<IAdmOrdenesPagoPorPagarService, AdmOrdenesPagoPorPagarService>();
+builder.Services.AddTransient<IAdmPagosService, AdmPagosService>();
 
 
 
