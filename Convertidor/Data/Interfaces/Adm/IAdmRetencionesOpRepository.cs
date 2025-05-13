@@ -13,6 +13,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_RETENCIONES_OP>> Add(ADM_RETENCIONES_OP entity);
         Task<ResultDto<ADM_RETENCIONES_OP>> Update(ADM_RETENCIONES_OP entity);
         Task<string> Delete(int codigoRetencionOp);
+        Task<string> DeleteByOrdePago(int codigoOrdenPago);
         Task<int> GetNextKey();
     }
 }

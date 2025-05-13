@@ -9,8 +9,6 @@ public class PagoCreateDto
     public int CodigoBanco { get; set; } 
     public int TipoChequeID { get; set; }
     public DateTime FechaPago { get; set; }
-    public string FechaPagoString { get; set; }
-    public FechaDto FechaPagoObj { get; set; }
     public string Motivo { get; set; } = string.Empty;
     public int CodigoPresupuesto { get; set; }
     

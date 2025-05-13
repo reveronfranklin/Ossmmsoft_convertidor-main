@@ -133,10 +133,12 @@ namespace Convertidor.Data.Repository.Adm
                 return ex.Message;
             }
 
-
-
-
         }
+        
+      
+        
+      
+        
         public async Task<string> Delete(int codigoDocumentoOp)
         {
             try

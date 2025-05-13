@@ -2,6 +2,7 @@
 
 // HTML to PDF
 using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Adm.Pagos;
 using Convertidor.Services.Adm;
 using Convertidor.Services.Adm.Pagos;
 
@@ -34,6 +35,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create(PagoCreateDto dto)
+        {
+            var result = await _service.Create(dto);
+            return Ok(result);
+        }
      
 
     }
