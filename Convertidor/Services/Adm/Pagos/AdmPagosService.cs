@@ -31,7 +31,8 @@ namespace Convertidor.Services.Adm.Pagos
                                       ISisBancoRepository sisBancoRepository,
                                       IAdmLotePagoRepository admLotePagoRepository,
                                         IAdmBeneficiariosPagosRepository beneficiariosPagosRepository,
-                                      IOssConfigRepository ossConfigRepository)
+                                      IOssConfigRepository ossConfigRepository
+                                    )
         {
             _repository = repository;
             _proveedoresRepository = proveedoresRepository;
@@ -185,6 +186,167 @@ namespace Convertidor.Services.Adm.Pagos
 
         }
 
+        public async Task<bool> CreateBeneficiarioPago( PagoCreateDto dto,int codigoPago)
+        {
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            try
+            {
+                ADM_BENEFICIARIOS_CH entity = new ADM_BENEFICIARIOS_CH();
+                entity.CODIGO_BENEFICIARIO_CH = await _beneficiariosPagosRepository.GetNextKey();
+                entity.CODIGO_CHEQUE = codigoPago;
+                entity.CODIGO_BENEFICIARIO_OP = dto.CodigoBeneficiarioOP;
+                entity.CODIGO_ORDEN_PAGO = dto.CodigoOrdenPago;
+                entity.NUMERO_ORDEN_PAGO = dto.NumeroOrdenPago;
+                entity.MONTO = dto.Monto;
+                entity.MONTO_ANULADO = 0;
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+                await _beneficiariosPagosRepository.Add(entity);
+         
+                return true;
+            }
+            catch (Exception e)
+            {
+               return false;
+            }
+          
+
+
+        }
+        public async Task<ResultDto<PagoResponseDto>> Create(PagoCreateDto dto)
+        {
+            ResultDto<PagoResponseDto> result = new ResultDto<PagoResponseDto>(null);
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+
+                var lote = await _admLotePagoRepository.GetByCodigo(dto.CodigoLote);
+                if (lote == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Lote No Existe";
+                    return result;
+                }
+              
+
+            
+                var cuenta=await _sisCuentaBancoRepository.GetByCodigo(dto.CodigoCuentaBanco);
+                if (cuenta == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Cuenta Banco invalido";
+                    return result;
+                }
+                
+                var proveedor = await _proveedoresRepository.GetByCodigo(dto.CodigoProveedor);
+
+                if (proveedor==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Proveedor Invalido";
+                    return result;
+                }
+
+
+                if (dto.Motivo.Length > 2000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Motivo Invalido";
+                    return result;
+
+                }
+                
+                var presupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                if (presupuesto==null)
+                {
+
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Presupuesto Invalido";
+                    return result;
+                }
+
+            
+            
+
+                var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(dto.TipoChequeID);
+                if (tipoChequeID==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Pago Invalido";
+                    return result;
+                }
+
+                int numeroChequera = 0;
+                int numeroCheque = 0;
+                var ossConfigChequera = await _ossConfigRepository.GetByClave(dto.TipoChequeID.ToString());
+                if (ossConfigChequera != null)
+                {
+                    numeroChequera = int.Parse(ossConfigChequera.VALOR);
+                }
+                numeroCheque= await _repository.GetNextCheque(numeroChequera,dto.CodigoPresupuesto);
+                
+                ADM_CHEQUES entity = new ADM_CHEQUES();
+                entity.CODIGO_LOTE_PAGO = dto.CodigoLote;
+                entity.CODIGO_CHEQUE = await _repository.GetNextKey();
+                entity.ANO = presupuesto.ANO;
+                entity.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
+                entity.NUMERO_CHEQUERA =numeroChequera;
+                entity.NUMERO_CHEQUE = numeroCheque;
+                entity.FECHA_CHEQUE = dto.FechaPago;
+                entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
+                entity.PRINT_COUNT = 0;
+                entity.MOTIVO = dto.Motivo;
+                entity.STATUS = "PE";
+                entity.ENDOSO = "S";
+                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                entity.TIPO_CHEQUE_ID = dto.TipoChequeID;
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_INS = conectado.Usuario;
+                entity.FECHA_INS = DateTime.Now;
+
+            var created = await _repository.Add(entity);
+            if (created.IsValid && created.Data != null)
+            {
+                await CreateBeneficiarioPago(dto, entity.CODIGO_CHEQUE);
+                var resultDto = await MapChequesDto(created.Data);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+            }
+            else
+            {
+
+                result.Data = null;
+                result.IsValid = created.IsValid;
+                result.Message = created.Message;
+            }
+
+            return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+
+
+            return result;
+        }
+
+        
+        
     }
  }
 

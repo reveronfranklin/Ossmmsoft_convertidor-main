@@ -15,7 +15,9 @@ namespace Convertidor.Services.Adm
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IAdmRetencionesOpService _admRetencionesOpService;
         private readonly IAdmRetencionesRepository _admRetencionesRepository;
+        private readonly IAdmRetencionesOpRepository _admRetencionesOpRepository;
         private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
+        private readonly IAdmImpuestosDocumentosOpRepository _admImpuestosDocumentosOpRepository;
 
         public AdmDocumentosOpService(IAdmDocumentosOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -24,7 +26,9 @@ namespace Convertidor.Services.Adm
                                      IAdmDescriptivaRepository admDescriptivaRepository,
                                      IAdmRetencionesOpService admRetencionesOpService,
                                      IAdmRetencionesRepository admRetencionesRepository,
-                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository)
+                                     IAdmRetencionesOpRepository admRetencionesOpRepository,
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository,
+                                     IAdmImpuestosDocumentosOpRepository admImpuestosDocumentosOpRepository)
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -33,7 +37,9 @@ namespace Convertidor.Services.Adm
             _admDescriptivaRepository = admDescriptivaRepository;
             _admRetencionesOpService = admRetencionesOpService;
             _admRetencionesRepository = admRetencionesRepository;
+            _admRetencionesOpRepository = admRetencionesOpRepository;
             _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
+            _admImpuestosDocumentosOpRepository = admImpuestosDocumentosOpRepository;
         }
 
       
@@ -458,6 +464,25 @@ namespace Convertidor.Services.Adm
             return result;
         }
 
+
+        public async Task ReconstruirRetenciones(int codigoOrdenPago)
+        {
+            //1- Eliminar todas las Retenciones de la orden de pago adm_retenciones_op
+            await _admRetencionesOpRepository.DeleteByOrdePago(codigoOrdenPago);
+            
+            //2- recorrer todos los documentos de la orden de pago y ejecutar por cada uno
+            var documentos = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);
+            if (documentos != null && documentos.Count() > 0)
+            {
+                foreach (var item in documentos)
+                {
+                    await ReplicaIvaDocumentoEnAdmRetenciones(item.CODIGO_DOCUMENTO_OP);
+                    
+                }
+            }
+            
+            //3- ReplicaIvaDocumentoEnAdmRetenciones(int codigoDocumento)
+        }
         public async Task ReplicaIvaDocumentoEnAdmRetenciones(int codigoDocumento)
         {
             var codigoDocumentoOp = await _repository.GetCodigoDocumentoOp(codigoDocumento);
@@ -761,7 +786,7 @@ namespace Convertidor.Services.Adm
                     entity.MONTO_IMPUESTO = (entity.BASE_IMPONIBLE)*(porcentajeIva/100);
                     entity.MONTO_IMPUESTO= Math.Ceiling((decimal)entity.MONTO_IMPUESTO * 100) / 100; 
                   
-                    entity.MONTO_RETENIDO = (entity.MONTO_IMPUESTO)*((porcentajeIva/100)+1)-(entity.MONTO_IMPUESTO);
+                    entity.MONTO_RETENIDO = (entity.MONTO_IMPUESTO)*((porcentajeRetencion/100)+1)-(entity.MONTO_IMPUESTO);
                     entity.MONTO_RETENIDO= Math.Ceiling((decimal)entity.MONTO_RETENIDO * 100) / 100; 
                     entity.MONTO_IMPUESTO_EXENTO = 0;
 
@@ -841,9 +866,11 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo documento op no existe";
                     return result;
                 }
+                var resultDeleted =_admImpuestosDocumentosOpRepository.DeleteByDocumento(codigoDocumentoOp.CODIGO_DOCUMENTO_OP);
 
                var deleted = await _repository.Delete(dto.CodigoDocumentoOp);
-               var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+               await ReconstruirRetenciones(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+          var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
                var cantidadDocumentos = 0;
                if (documentos != null && documentos.Count() > 0)
                {

@@ -6,4 +6,5 @@ namespace Convertidor.Services.Adm.Pagos;
 public interface IAdmPagosService
 {
     Task<ResultDto<List<PagoResponseDto>>> GetByLote(AdmChequeFilterDto dto);
+    Task<ResultDto<PagoResponseDto>> Create(PagoCreateDto dto);
 }

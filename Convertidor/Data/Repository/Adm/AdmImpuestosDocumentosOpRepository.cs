@@ -125,6 +125,29 @@ namespace Convertidor.Data.Repository.Adm
                 return result;
             }
         }
+        
+        public string DeleteByDocumento(int codigoDocumento)
+        {
+
+
+           
+            try
+            {
+            
+                
+                FormattableString xqueryDiario = $"DELETE FROM  ADM.ADM_IMPUESTOS_DOCUMENTOS_OP WHERE CODIGO_DOCUMENTO_OP= {codigoDocumento}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
+
         public async Task<string> Delete(int codigoImpuestoDocumentoOp)
         {
             try
