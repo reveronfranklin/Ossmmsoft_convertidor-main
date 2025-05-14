@@ -117,10 +117,10 @@ namespace Convertidor.Services.Adm.Pagos
             if (beneficiario != null)
             {
                 itemResult.CodigoBeneficiarioPago = beneficiario.CODIGO_BENEFICIARIO_CH;
-                itemResult.CodigoBeneficiarioOP = beneficiario.CODIGO_BENEFICIARIO_OP;
+                itemResult.CodigoBeneficiarioOP = (int)beneficiario.CODIGO_BENEFICIARIO_OP;
                 if(beneficiario.CODIGO_ORDEN_PAGO==null) beneficiario.CODIGO_ORDEN_PAGO = 0;
                 if(beneficiario.NUMERO_ORDEN_PAGO==null) beneficiario.NUMERO_ORDEN_PAGO = "";
-                itemResult.CodigoOrdenPago=beneficiario.CODIGO_ORDEN_PAGO;
+                itemResult.CodigoOrdenPago=(int)beneficiario.CODIGO_ORDEN_PAGO;
                 itemResult.NumeroOrdenPago = beneficiario.NUMERO_ORDEN_PAGO;
                 itemResult.Monto = beneficiario.MONTO;
                 itemResult.MontoAnulado = beneficiario.MONTO_ANULADO;
@@ -145,6 +145,53 @@ namespace Convertidor.Services.Adm.Pagos
                 }
                 return result;
             }
+        }
+
+        public async Task<ResultDto<bool>> UpdateMonto(PagoUpdateMontoDto dto)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+                var beneficiario = await _beneficiariosPagosRepository.GetCodigoBeneficiarioPago(dto.CodigoBeneficiarioPago);
+                if (beneficiario == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "No existen beneficiario op";
+                    return result;
+                }
+                beneficiario.MONTO = dto.Monto;
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                beneficiario.USUARIO_UPD=conectado.Usuario;
+                beneficiario.FECHA_UPD = DateTime.Now;
+                var updated = await _beneficiariosPagosRepository.Update(beneficiario);
+                if (updated.IsValid && updated.Data != null)
+                {
+                 
+                    result.Data = true;
+                    result.IsValid = true;
+                    result.Message = "";
+                }
+                else
+                {
+                    result.Data = false;
+                    result.IsValid = updated.IsValid;
+                    result.Message = updated.Message;
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = e.Message;
+                return result;
+            }
+            
+           
+            
+            
         }
 
         public async Task<ResultDto<List<PagoResponseDto>>> GetByLote(AdmChequeFilterDto dto)
@@ -221,6 +268,8 @@ namespace Convertidor.Services.Adm.Pagos
 
 
         }
+        
+        
         public async Task<ResultDto<PagoResponseDto>> Create(PagoCreateDto dto)
         {
             ResultDto<PagoResponseDto> result = new ResultDto<PagoResponseDto>(null);

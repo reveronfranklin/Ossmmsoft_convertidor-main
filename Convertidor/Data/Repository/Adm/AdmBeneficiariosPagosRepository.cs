@@ -17,7 +17,7 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
                 var result = await _context.ADM_BENEFICIARIOS_CH
-                    .Where(e => e.CODIGO_BENEFICIARIO_CH == codigoBeneficiarioPago).FirstOrDefaultAsync();
+                    .Where(e => e.CODIGO_BENEFICIARIO_CH == codigoBeneficiarioPago).DefaultIfEmpty().FirstOrDefaultAsync();
 
                 return (ADM_BENEFICIARIOS_CH)result;
             }

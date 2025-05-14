@@ -7,4 +7,5 @@ public interface IAdmPagosService
 {
     Task<ResultDto<List<PagoResponseDto>>> GetByLote(AdmChequeFilterDto dto);
     Task<ResultDto<PagoResponseDto>> Create(PagoCreateDto dto);
+    Task<ResultDto<bool>> UpdateMonto(PagoUpdateMontoDto dto);
 }
