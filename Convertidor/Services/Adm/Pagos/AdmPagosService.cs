@@ -20,6 +20,8 @@ namespace Convertidor.Services.Adm.Pagos
         private readonly IAdmLotePagoRepository _admLotePagoRepository;
         private readonly IAdmBeneficiariosPagosRepository _beneficiariosPagosRepository;
         private readonly IOssConfigRepository _ossConfigRepository;
+        private readonly IAdmBeneficiariosOpRepository _admBeneficiariosOpRepository;
+        private readonly IAdmOrdenPagoRepository _ordenPagoRepository;
 
         public AdmPagosService( IAdmChequesRepository repository,
                                       IAdmProveedoresRepository proveedoresRepository,
@@ -31,7 +33,9 @@ namespace Convertidor.Services.Adm.Pagos
                                       ISisBancoRepository sisBancoRepository,
                                       IAdmLotePagoRepository admLotePagoRepository,
                                         IAdmBeneficiariosPagosRepository beneficiariosPagosRepository,
-                                      IOssConfigRepository ossConfigRepository
+                                      IOssConfigRepository ossConfigRepository,
+                                      IAdmBeneficiariosOpRepository admBeneficiariosOpRepository,
+                                      IAdmOrdenPagoRepository ordenPagoRepository
                                     )
         {
             _repository = repository;
@@ -45,6 +49,8 @@ namespace Convertidor.Services.Adm.Pagos
             _admLotePagoRepository = admLotePagoRepository;
             _beneficiariosPagosRepository = beneficiariosPagosRepository;
             _ossConfigRepository = ossConfigRepository;
+            _admBeneficiariosOpRepository = admBeneficiariosOpRepository;
+            _ordenPagoRepository = ordenPagoRepository;
         }
 
        
@@ -186,7 +192,7 @@ namespace Convertidor.Services.Adm.Pagos
 
         }
 
-        public async Task<bool> CreateBeneficiarioPago( PagoCreateDto dto,int codigoPago)
+        public async Task<bool> CreateBeneficiarioPago( PagoCreateDto dto,int codigoPresupuesto,int codigoPago)
         {
             var conectado = await _sisUsuarioRepository.GetConectado();
             try
@@ -200,7 +206,7 @@ namespace Convertidor.Services.Adm.Pagos
                 entity.MONTO = dto.Monto;
                 entity.MONTO_ANULADO = 0;
                 entity.CODIGO_EMPRESA = conectado.Empresa;
-                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                entity.CODIGO_PRESUPUESTO = codigoPresupuesto;
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
                 await _beneficiariosPagosRepository.Add(entity);
@@ -231,24 +237,49 @@ namespace Convertidor.Services.Adm.Pagos
                     return result;
                 }
               
-
-            
-                var cuenta=await _sisCuentaBancoRepository.GetByCodigo(dto.CodigoCuentaBanco);
+                var beneficiarioOp= await _admBeneficiariosOpRepository.GetCodigoBeneficiarioOp(dto.CodigoBeneficiarioOP);
+                if (beneficiarioOp == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existen beneficiario op";
+                    return result;
+                }
+                var proveedor = await _proveedoresRepository.GetByCodigo(beneficiarioOp.CODIGO_PROVEEDOR);
+                if (proveedor==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo Proveedor Invalido";
+                    return result;
+                }
+                /*var cuenta=await _sisCuentaBancoRepository.GetByCodigoCuenta(proveedor.NUMERO_CUENTA);
                 if (cuenta == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Cuenta Banco invalido";
                     return result;
-                }
+                }*/
                 
-                var proveedor = await _proveedoresRepository.GetByCodigo(dto.CodigoProveedor);
-
-                if (proveedor==null)
+                var ordenPago= await _ordenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
+                if (ordenPago == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo Proveedor Invalido";
+                    result.Message = "No existe Orden Pago";
+                    return result;
+                }
+
+                dto.NumeroOrdenPago = ordenPago.NUMERO_ORDEN_PAGO;
+
+
+
+                if (string.IsNullOrEmpty(dto.Motivo))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Motivo Invalido";
                     return result;
                 }
 
@@ -262,7 +293,7 @@ namespace Convertidor.Services.Adm.Pagos
 
                 }
                 
-                var presupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto);
+                var presupuesto = await _prePresupuestosRepository.GetByCodigo(conectado.Empresa, (int)lote.CODIGO_PRESUPUESTO);
                 if (presupuesto==null)
                 {
 
@@ -275,7 +306,7 @@ namespace Convertidor.Services.Adm.Pagos
             
             
 
-                var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(dto.TipoChequeID);
+                var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(lote.TIPO_PAGO_ID);
                 if (tipoChequeID==null)
                 {
                     result.Data = null;
@@ -286,28 +317,28 @@ namespace Convertidor.Services.Adm.Pagos
 
                 int numeroChequera = 0;
                 int numeroCheque = 0;
-                var ossConfigChequera = await _ossConfigRepository.GetByClave(dto.TipoChequeID.ToString());
+                var ossConfigChequera = await _ossConfigRepository.GetByClave(lote.TIPO_PAGO_ID.ToString());
                 if (ossConfigChequera != null)
                 {
                     numeroChequera = int.Parse(ossConfigChequera.VALOR);
                 }
-                numeroCheque= await _repository.GetNextCheque(numeroChequera,dto.CodigoPresupuesto);
+                numeroCheque= await _repository.GetNextCheque(numeroChequera,(int)lote.CODIGO_PRESUPUESTO);
                 
                 ADM_CHEQUES entity = new ADM_CHEQUES();
                 entity.CODIGO_LOTE_PAGO = dto.CodigoLote;
                 entity.CODIGO_CHEQUE = await _repository.GetNextKey();
                 entity.ANO = presupuesto.ANO;
-                entity.CODIGO_CUENTA_BANCO = dto.CodigoCuentaBanco;
+                entity.CODIGO_CUENTA_BANCO = lote.CODIGO_CUENTA_BANCO;
                 entity.NUMERO_CHEQUERA =numeroChequera;
                 entity.NUMERO_CHEQUE = numeroCheque;
-                entity.FECHA_CHEQUE = dto.FechaPago;
-                entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
+                entity.FECHA_CHEQUE = lote.FECHA_PAGO;
+                entity.CODIGO_PROVEEDOR = beneficiarioOp.CODIGO_PROVEEDOR;
                 entity.PRINT_COUNT = 0;
                 entity.MOTIVO = dto.Motivo;
                 entity.STATUS = "PE";
                 entity.ENDOSO = "S";
-                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
-                entity.TIPO_CHEQUE_ID = dto.TipoChequeID;
+                entity.CODIGO_PRESUPUESTO = lote.CODIGO_PRESUPUESTO;
+                entity.TIPO_CHEQUE_ID =lote.TIPO_PAGO_ID;
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
@@ -315,7 +346,7 @@ namespace Convertidor.Services.Adm.Pagos
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
-                await CreateBeneficiarioPago(dto, entity.CODIGO_CHEQUE);
+                await CreateBeneficiarioPago(dto,(int)lote.CODIGO_PRESUPUESTO, entity.CODIGO_CHEQUE);
                 var resultDto = await MapChequesDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;

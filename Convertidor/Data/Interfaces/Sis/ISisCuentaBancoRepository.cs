@@ -13,4 +13,5 @@ public interface ISisCuentaBancoRepository
     Task<string> Delete(int id);
     Task<int> GetNextKey();
     Task<bool> ExisteBanco(int codigoBanco);
+    Task<SIS_CUENTAS_BANCOS> GetByCodigoCuenta(string codigoCuenta);
 }
