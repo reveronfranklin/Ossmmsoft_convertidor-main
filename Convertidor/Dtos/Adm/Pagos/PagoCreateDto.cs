@@ -2,20 +2,20 @@ namespace Convertidor.Dtos.Adm.Pagos;
 
 public class PagoCreateDto
 {
-    public int CodigoLote { get; set; }
-    public int CodigoProveedor { get; set; }
-    public int CodigoCuentaBanco { get; set; }
-    public string NroCuenta { get; set; } = string.Empty;
-    public int CodigoBanco { get; set; } 
-    public int TipoChequeID { get; set; }
-    public DateTime FechaPago { get; set; }
-    public string Motivo { get; set; } = string.Empty;
-    public int CodigoPresupuesto { get; set; }
+    
+    //Datos del Pago
+    public int CodigoLote { get; set; } //Indicado Por el usuario segun el lote donde se encuentre el pago
+    public string Motivo { get; set; } = string.Empty; //Indicado por el usuario
+  
     
     //Datos del Beneficiario
-    public int CodigoBeneficiarioOP { get; set; }
-    public int CodigoOrdenPago { get; set; }
-    public string NumeroOrdenPago { get; set; }
-    public decimal Monto { get; set; }
+    public int CodigoOrdenPago { get; set; }  //indicado por el usuario segun la vista===> ADM_V_OP_POR_PAGAR
+    public string NumeroOrdenPago { get; set; }  //indicado por el usuario segun la vista===> ADM_V_OP_POR_PAGAR
 
-}
+    public int CodigoBeneficiarioOP { get; set; } //Ingresado por el usuario segun la vista ===>ADM_V_OP_POR_PAGAR_BENE
+    
+    public decimal Monto { get; set; } //Ingresado por el usuario segun la vista ===>ADM_V_OP_POR_PAGAR_BENE
+        
+  
+
+} 

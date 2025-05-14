@@ -29,6 +29,22 @@ namespace Convertidor.Data.Repository.Sis
             }
 
         }
+        
+        public async Task<SIS_CUENTAS_BANCOS> GetByCodigoCuenta(string codigoCuenta)
+        {
+            try
+            {
+                var result = await _context.SIS_CUENTAS_BANCOS.DefaultIfEmpty().Where(e => e.NO_CUENTA == codigoCuenta).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
         public async Task<SIS_CUENTAS_BANCOS> GetById(int id)
         {
             

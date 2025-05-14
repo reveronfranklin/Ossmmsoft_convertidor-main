@@ -49,6 +49,7 @@ namespace Convertidor.Data.Repository.Adm
             {
                 var totalRegistros = 0;
                 var totalPage = 0;
+           
                 List<ADM_CHEQUES> pageData = new List<ADM_CHEQUES>();
                 if (filter.SearchText.Length == 0)
                 {
