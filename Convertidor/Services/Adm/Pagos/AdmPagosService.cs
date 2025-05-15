@@ -160,6 +160,28 @@ namespace Convertidor.Services.Adm.Pagos
                     result.Message = "No existen beneficiario op";
                     return result;
                 }
+
+                
+                if (dto.Monto<=0)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Monto Invalido";
+                    return result;
+                }
+                
+                var beneficiarioOp =
+                    await _admBeneficiariosOpRepository.GetCodigoBeneficiarioOp((int)beneficiario.CODIGO_BENEFICIARIO_OP);
+                if (beneficiarioOp != null)
+                {
+                    if (dto.Monto > beneficiarioOp.MONTO)
+                    {
+                        result.Data = false;
+                        result.IsValid = false;
+                        result.Message = $"Monto no puede ser a la orden de Pago {beneficiarioOp.MONTO }";
+                        return result;
+                    }
+                }
                 beneficiario.MONTO = dto.Monto;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 beneficiario.USUARIO_UPD=conectado.Usuario;

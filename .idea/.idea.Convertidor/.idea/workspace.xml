@@ -10,11 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmPagosController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmPagosController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_BENEFICIARIOS_CH.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_BENEFICIARIOS_CH.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmBeneficiariosPagosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmBeneficiariosPagosRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/IAdmPagosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/IAdmPagosService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -385,7 +381,8 @@
       <workItem from="1747146614253" duration="582000" />
       <workItem from="1747162683418" duration="1651000" />
       <workItem from="1747175953143" duration="6728000" />
-      <workItem from="1747229151834" duration="2487000" />
+      <workItem from="1747229151834" duration="3749000" />
+      <workItem from="1747326568866" duration="496000" />
     </task>
     <servers />
   </component>
@@ -5402,26 +5399,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>202</line>
+          <line>224</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'GetByLote'">
             <startOffsets>
-              <option value="9087" />
+              <option value="9949" />
             </startOffsets>
             <endOffsets>
-              <option value="9138" />
+              <option value="10000" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1070" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>277</line>
+          <line>299</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="11748" />
+              <option value="12610" />
             </startOffsets>
             <endOffsets>
-              <option value="11807" />
+              <option value="12669" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1071" />
@@ -5493,13 +5490,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>203</line>
+          <line>225</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'GetByLote'">
             <startOffsets>
-              <option value="9155" />
+              <option value="10017" />
             </startOffsets>
             <endOffsets>
-              <option value="9200" />
+              <option value="10062" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1080" />
