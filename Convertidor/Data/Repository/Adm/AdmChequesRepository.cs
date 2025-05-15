@@ -140,6 +140,9 @@ namespace Convertidor.Data.Repository.Adm
 
 
         }
+        
+        
+   
         public async Task<ResultDto<ADM_CHEQUES>>Update(ADM_CHEQUES entity) 
         {
             ResultDto<ADM_CHEQUES> result = new ResultDto<ADM_CHEQUES>(null);

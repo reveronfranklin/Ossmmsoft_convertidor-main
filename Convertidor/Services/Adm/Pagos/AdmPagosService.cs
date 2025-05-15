@@ -110,6 +110,8 @@ namespace Convertidor.Services.Adm.Pagos
                 FechaDto fechaEntregaObj = Fecha.GetFechaDto((DateTime)dtos.FECHA_ENTREGA);
                 itemResult.FechaEntregaObj = (FechaDto) fechaEntregaObj;
             }
+
+            itemResult.NumeroCuentaProveedor = dtos.NUMERO_CUENTA;
             itemResult.CodigoPresupuesto = (int)dtos.CODIGO_PRESUPUESTO;
            
             //Data Beneficiario Pagos
@@ -410,6 +412,7 @@ namespace Convertidor.Services.Adm.Pagos
                 entity.ENDOSO = "S";
                 entity.CODIGO_PRESUPUESTO = lote.CODIGO_PRESUPUESTO;
                 entity.TIPO_CHEQUE_ID =lote.TIPO_PAGO_ID;
+                entity.NUMERO_CUENTA = proveedor.NUMERO_CUENTA;
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;

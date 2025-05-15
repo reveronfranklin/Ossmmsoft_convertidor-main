@@ -31,5 +31,6 @@
         public int? USUARIO_ENTREGA { get; set; }
         public int? CODIGO_LOTE_PAGO { get; set; }
         public string SEARCH_TEXT { get; set; }
+        public string NUMERO_CUENTA { get; set; }
     }
 }

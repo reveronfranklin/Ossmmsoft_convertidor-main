@@ -30,6 +30,7 @@ public class PagoResponseDto
     public string NumeroOrdenPago { get; set; }
     public decimal Monto { get; set; }
     public decimal MontoAnulado { get; set; }
+    public string NumeroCuentaProveedor { get; set; }
     
     
 }
