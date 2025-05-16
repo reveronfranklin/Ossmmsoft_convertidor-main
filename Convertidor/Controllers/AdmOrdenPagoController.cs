@@ -99,7 +99,7 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> Report(AdmOrdenPagoReportDto dto)
         {
 
-            
+            var result = "";
             // Ruta donde se guardará el archivo PDF
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var destino = @settings.ExcelFiles;
@@ -176,6 +176,8 @@ namespace Convertidor.Controllers
                     catch (Exception ex)
                     {
                         Console.WriteLine("Error al guardar el PDF: " + ex.Message);
+                   
+                        result="Error al guardar el PDF: " + ex.Message; 
                     }
                     
                     
@@ -213,15 +215,17 @@ namespace Convertidor.Controllers
             {
                 // Manejar errores de red
                 Console.WriteLine($"Error en la solicitud HTTP: {ex.Message}");
+                result=$"Error en la solicitud HTTP: {ex.Message}"; 
             }
             catch (Exception ex)
             {
                 // Manejar otros errores
                 Console.WriteLine($"Error inesperado: {ex.Message}");
+                result=$"Error inesperado: {ex.Message}"; 
             }
         }
 
-            var result = "";
+        
             return Ok(result);
 
         }
