@@ -292,8 +292,81 @@ namespace Convertidor.Services.Adm.Pagos
 
 
         }
-        
-        
+
+        public async Task<ResultDto<PagoResponseDto>> Update(PagoUpdateDto dto)
+        {
+            ResultDto<PagoResponseDto> result = new ResultDto<PagoResponseDto>(null);
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            try
+            {
+                var pago = await _repository.GetByCodigoCheque(dto.CodigoPago);
+                if (pago == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo de Pago No Existe";
+                    return result;
+                }
+                
+                var beneficiario = await _beneficiariosPagosRepository.GetCodigoBeneficiarioPago(dto.CodigoBeneficiarioPago);
+                if (beneficiario == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No existen beneficiario op";
+                    return result;
+                }
+
+                if (string.IsNullOrEmpty(dto.Motivo))
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Motivo Invalido";
+                    return result;
+                }
+
+
+                if (dto.Motivo.Length > 2000)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Motivo Invalido";
+                    return result;
+
+                }
+                PagoUpdateMontoDto pagoUpdateMontoDto = new PagoUpdateMontoDto();
+                pagoUpdateMontoDto.CodigoBeneficiarioPago = dto.CodigoBeneficiarioPago;
+                pagoUpdateMontoDto.Monto = dto.Monto;
+                var resultUpdateMonto =await  UpdateMonto(pagoUpdateMontoDto);
+                if (resultUpdateMonto.IsValid == false)
+                {
+                    result.Data = null;
+                    result.IsValid = resultUpdateMonto.IsValid;
+                    result.Message = resultUpdateMonto.Message;
+                    return result;
+                }
+                
+                pago.MOTIVO=dto.Motivo;
+                pago.FECHA_UPD = DateTime.Now;
+                pago.USUARIO_UPD = conectado.Usuario;
+              
+                await _repository.Update(pago);
+                var resultDto = await MapChequesDto(pago);
+                result.Data = resultDto;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = e.Message;
+                return result;
+            }
+            
+        }
         public async Task<ResultDto<PagoResponseDto>> Create(PagoCreateDto dto)
         {
             ResultDto<PagoResponseDto> result = new ResultDto<PagoResponseDto>(null);
