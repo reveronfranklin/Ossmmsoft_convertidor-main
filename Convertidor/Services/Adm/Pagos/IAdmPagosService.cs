@@ -9,4 +9,5 @@ public interface IAdmPagosService
     Task<ResultDto<PagoResponseDto>> Create(PagoCreateDto dto);
     Task<ResultDto<bool>> UpdateMonto(PagoUpdateMontoDto dto);
     Task<ResultDto<PagoResponseDto>> Update(PagoUpdateDto dto);
+    Task<ResultDto<bool>> Delete(PagoDeleteDto dto);
 }
