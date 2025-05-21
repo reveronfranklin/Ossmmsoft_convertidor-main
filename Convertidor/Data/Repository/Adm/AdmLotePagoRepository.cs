@@ -32,7 +32,7 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
-      
+     
  
         public async Task<ResultDto<List<ADM_LOTE_PAGO>>> GetAll(AdmLotePagoFilterDto filter)
         {

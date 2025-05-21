@@ -30,7 +30,7 @@ namespace Convertidor.Services.Adm
 
                
 
-                if (ordenesPagoPendientes.Count() > 0)
+                if (ordenesPagoPendientes!=null && ordenesPagoPendientes.FirstOrDefault()!=null)
                 {
                     List<AdmOrdenPagoPendientePagoDto> listDto = new List<AdmOrdenPagoPendientePagoDto>();
 

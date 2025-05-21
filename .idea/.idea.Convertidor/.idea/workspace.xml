@@ -10,7 +10,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmLotePagoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmLotePagoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenesPagoPorPagarService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenesPagoPorPagarService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -382,7 +383,8 @@
       <workItem from="1747345456517" duration="2381000" />
       <workItem from="1747418869311" duration="4696000" />
       <workItem from="1747433266493" duration="1738000" />
-      <workItem from="1747437182687" duration="297000" />
+      <workItem from="1747437182687" duration="5285000" />
+      <workItem from="1747832153758" duration="991000" />
     </task>
     <servers />
   </component>
@@ -5474,6 +5476,45 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1088" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
+          <line>43</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'GetListICP'">
+            <startOffsets>
+              <option value="980" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1017" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1089" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenesPagoPendientesPagoController.cs</url>
+          <line>29</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenesPagoPendientesPagoController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="796" />
+            </startOffsets>
+            <endOffsets>
+              <option value="839" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1090" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenesPagoPorPagarService.cs</url>
+          <line>45</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenesPagoPorPagarService.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="1884" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1922" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1092" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
