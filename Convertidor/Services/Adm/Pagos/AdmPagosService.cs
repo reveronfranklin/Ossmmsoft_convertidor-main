@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.Adm;
+﻿using System.DirectoryServices;
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
@@ -162,6 +163,14 @@ namespace Convertidor.Services.Adm.Pagos
                     result.Message = "No existen beneficiario op";
                     return result;
                 }
+                var pago = await _repository.GetByCodigoCheque(beneficiario.CODIGO_CHEQUE);
+                if (pago == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo de Pago No Existe";
+                    return result;
+                }
 
                 
                 if (dto.Monto<=0)
@@ -169,6 +178,15 @@ namespace Convertidor.Services.Adm.Pagos
                     result.Data = false;
                     result.IsValid = false;
                     result.Message = $"Monto Invalido";
+                    return result;
+                }
+                
+                var esModificable=await PagoEsModificable((int)pago.CODIGO_LOTE_PAGO);
+                if (esModificable.Length > 0)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message =esModificable;
                     return result;
                 }
                 
@@ -263,6 +281,26 @@ namespace Convertidor.Services.Adm.Pagos
 
         }
 
+        public async Task<string> PagoEsModificable(int codigoLote)
+        {
+            var result = "";
+            var lote = await _admLotePagoRepository.GetByCodigo(codigoLote);
+            if (lote == null)
+            {
+               
+                result = "Lote no encontrado";
+                return result;
+            }
+
+            if (lote.STATUS == "AP")
+            {
+                result = "Lote Con Estatus APROBADO, do puede ser Modificado";
+                return result;
+            }
+            
+            return result;
+        }
+        
         public async Task<bool> CreateBeneficiarioPago( PagoCreateDto dto,int codigoPresupuesto,int codigoPago)
         {
             var conectado = await _sisUsuarioRepository.GetConectado();
@@ -305,6 +343,15 @@ namespace Convertidor.Services.Adm.Pagos
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo de Pago No Existe";
+                    return result;
+                }
+
+                var esModificable=await PagoEsModificable((int)pago.CODIGO_LOTE_PAGO);
+                if (esModificable.Length > 0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message =esModificable;
                     return result;
                 }
                 
@@ -366,6 +413,54 @@ namespace Convertidor.Services.Adm.Pagos
                 return result;
             }
             
+        }
+
+        public async Task<ResultDto<bool>> Delete(PagoDeleteDto dto)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+            try
+            {
+                var pago = await _repository.GetByCodigoCheque(dto.CodigoPago);
+                if (pago == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Codigo de Pago No Existe";
+                    return result;
+                }
+
+                var esModificable=await PagoEsModificable((int)pago.CODIGO_LOTE_PAGO);
+                if (esModificable.Length > 0)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message =esModificable;
+                    return result;
+                }
+                
+                var deleted = await _repository.Delete(dto.CodigoPago);
+                if (deleted.Length > 0)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message =deleted;
+                    return result;
+                }
+                result.Data = true;
+                result.IsValid = true;
+                result.Message ="";
+                return result;
+                
+                
+                
+            }
+            catch (Exception e)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = e.Message;
+                return result;
+            }
         }
         public async Task<ResultDto<PagoResponseDto>> Create(PagoCreateDto dto)
         {

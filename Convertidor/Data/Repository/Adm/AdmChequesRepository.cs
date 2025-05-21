@@ -176,8 +176,16 @@ namespace Convertidor.Data.Repository.Adm
                 ADM_CHEQUES entity = await GetByCodigoCheque(codigoCheque);
                 if (entity != null)
                 {
-                    _context.ADM_CHEQUES.Remove(entity);
-                    await _context.SaveChangesAsync();
+                    
+                    FormattableString xqueryBeneficiarioPago = $"DELETE FROM  ADM.ADM_BENEFICIARIOS_CH  WHERE CODIGO_CHEQUE = {codigoCheque}";
+                    var resultBeneficiario = await _context.Database.ExecuteSqlInterpolatedAsync(xqueryBeneficiarioPago);
+
+                    
+                    
+                    FormattableString xqueryPago = $"DELETE FROM ADM.ADM_CHEQUES WHERE CODIGO_CHEQUE = {codigoCheque}";
+                    var resulPagot = await _context.Database.ExecuteSqlInterpolatedAsync(xqueryPago);
+
+            
                 }
                 return "";
             }
