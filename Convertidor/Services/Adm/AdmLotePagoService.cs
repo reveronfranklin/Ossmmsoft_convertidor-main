@@ -5,6 +5,7 @@ using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Sis;
 using Convertidor.Services.Adm;
+using Convertidor.Services.Adm.Pagos;
 using Convertidor.Utility;
 
 
@@ -20,6 +21,8 @@ namespace Convertidor.Services.Sis
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IPRE_PRESUPUESTOSRepository _presupuestosRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
+        private readonly IAdmChequesRepository _chequesRepository;
+        private readonly IAdmPagoElectronicoService _admPagoElectronicoService;
 
 
         public AdmLotePagoService(IAdmLotePagoRepository repository,
@@ -28,7 +31,9 @@ namespace Convertidor.Services.Sis
                                         ISisBancoRepository bancoRepository,
                                       ISisUsuarioRepository sisUsuarioRepository,
                                         IPRE_PRESUPUESTOSRepository presupuestosRepository,
-                                        IAdmDescriptivaRepository admDescriptivaRepository)
+                                        IAdmDescriptivaRepository admDescriptivaRepository,
+                                        IAdmChequesRepository chequesRepository,
+                                        IAdmPagoElectronicoService admPagoElectronicoService)
 		{
             _repository = repository;
             _repository = repository;
@@ -39,6 +44,8 @@ namespace Convertidor.Services.Sis
             _sisUsuarioRepository = sisUsuarioRepository;
             _presupuestosRepository = presupuestosRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
+            _chequesRepository = chequesRepository;
+            _admPagoElectronicoService = admPagoElectronicoService;
         }
 
         
@@ -83,6 +90,7 @@ namespace Convertidor.Services.Sis
                 itemResult.SearchText=dtos.SEARCH_TEXT;
                 itemResult.Status = dtos.STATUS;
                 itemResult.Titulo = dtos.TITULO;
+                itemResult.FileName=$"/ExcelFile/{dtos.FILE_NAME}";
                 
 
       
@@ -170,10 +178,14 @@ namespace Convertidor.Services.Sis
                 lotePago.FECHA_UPD = DateTime.Now;
                 lotePago.USUARIO_UPD = conectado.Usuario;
                 await _repository.Update(lotePago);
+                await _chequesRepository.CambioEstatus(dto.Status,lotePago.CODIGO_LOTE_PAGO,conectado.Usuario,DateTime.Now);
+                var pagoElectronicp=await _admPagoElectronicoService.GenerateFilePagoElectronico(lotePago.CODIGO_LOTE_PAGO,conectado.Usuario);
                 var resultDto = await  MapAdmLotePagoDto(lotePago);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
+                result.LinkData = pagoElectronicp.LinkData;
+                result.LinkDataArlternative = pagoElectronicp.LinkDataArlternative;
                 return result;
             }
             catch (Exception e)
@@ -215,6 +227,7 @@ namespace Convertidor.Services.Sis
                 lotePago.FECHA_UPD = DateTime.Now;
                 lotePago.USUARIO_UPD = conectado.Usuario;
                 await _repository.Update(lotePago);
+                await _chequesRepository.CambioEstatus(dto.Status,lotePago.CODIGO_LOTE_PAGO,conectado.Usuario,DateTime.Now);
                 var resultDto = await  MapAdmLotePagoDto(lotePago);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -254,6 +267,8 @@ namespace Convertidor.Services.Sis
                 lotePago.FECHA_UPD = DateTime.Now;
                 lotePago.USUARIO_UPD = conectado.Usuario;
                 await _repository.Update(lotePago);
+                await _chequesRepository.CambioEstatus(dto.Status,lotePago.CODIGO_LOTE_PAGO,conectado.Usuario,DateTime.Now);
+
                 var resultDto = await  MapAdmLotePagoDto(lotePago);
                 result.Data = resultDto;
                 result.IsValid = true;

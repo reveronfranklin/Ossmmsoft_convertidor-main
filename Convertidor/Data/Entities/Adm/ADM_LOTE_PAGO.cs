@@ -16,6 +16,7 @@ public class ADM_LOTE_PAGO
     public DateTime? FECHA_UPD { get; set; }
     public int? CODIGO_EMPRESA { get; set; }
     public int? CODIGO_PRESUPUESTO { get; set; }
+    public string? FILE_NAME { get; set; } = string.Empty;
 
     
 }

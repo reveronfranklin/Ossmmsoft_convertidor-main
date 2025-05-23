@@ -16,4 +16,5 @@ public class AdmLotePagoResponseDto
     public string Status { get; set; } = string.Empty;
     public string Titulo { get; set; } = string.Empty;
     public int CodigoPresupuesto { get; set; }
+    public string FileName { get; set; } = string.Empty;
 }

@@ -13,6 +13,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> UpdateSearchText(int codigoLote);
         Task<ResultDto<List<ADM_CHEQUES>>> GetByLote(AdmChequeFilterDto filter);
         Task<string> Delete(int codigoCheque);
+        Task<string> CambioEstatus(string estatus, int codigoLote, int usuarioConectado, DateTime fechaUpdate);
 
     }
 }

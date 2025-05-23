@@ -54,7 +54,7 @@ namespace Convertidor.Data
         public DbSet<ADM_V_OP_POR_PAGAR_BENE> ADM_V_OP_POR_PAGAR_BENE { get; set; }
         
         public DbSet<ADM_BENEFICIARIOS_CH> ADM_BENEFICIARIOS_CH { get; set; }
-        
+        public DbSet<ADM_PAGOS_ELECTRONICOS> ADM_PAGOS_ELECTRONICOS { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -446,6 +446,19 @@ namespace Convertidor.Data
                 entity.HasKey(table => new
                 {
                     table.CODIGO_BENEFICIARIO_CH,
+
+                });
+
+
+            });
+            modelBuilder.Entity<ADM_PAGOS_ELECTRONICOS>(entity =>
+            {
+              
+
+                entity.ToTable("ADM_PAGOS_ELECTRONICOS");
+                entity.HasKey(table => new
+                {
+                    table.CODIGO_PAGO_ELECTRONICO,
 
                 });
 
