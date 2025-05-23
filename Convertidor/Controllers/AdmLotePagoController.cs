@@ -74,7 +74,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Aprobar(AdmLotePagoCambioStatusDto dto)
         {
-            var result = await _service.CambioStatus(dto);
+            var result = await _service.Aprobar(dto);
             return Ok(result);
         }
 
@@ -83,7 +83,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Anular(AdmLotePagoCambioStatusDto dto)
         {
-            var result = await _service.CambioStatus(dto);
+            var result = await _service.Anular(dto);
             return Ok(result);
         }
 

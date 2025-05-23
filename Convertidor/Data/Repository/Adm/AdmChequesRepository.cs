@@ -141,6 +141,26 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
+        public async Task<string> CambioEstatus(string estatus,int codigoLote,int usuarioConectado,DateTime fechaUpdate)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_CHEQUES SET STATUS = {estatus},USUARIO_UPD={usuarioConectado},FECHA_UPD={fechaUpdate} WHERE CODIGO_LOTE_PAGO ={codigoLote}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+        
         
    
         public async Task<ResultDto<ADM_CHEQUES>>Update(ADM_CHEQUES entity) 

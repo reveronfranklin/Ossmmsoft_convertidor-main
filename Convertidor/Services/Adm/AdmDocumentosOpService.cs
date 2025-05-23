@@ -446,7 +446,9 @@ namespace Convertidor.Services.Adm
                 {
                     cantidadDocumentos = documentos.Count();
                 }
-                await ReplicaIvaDocumentoEnAdmRetenciones(codigoDocumentoOp.CODIGO_DOCUMENTO_OP);
+
+                await ReconstruirRetenciones(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+           
                 var resultDto = await MapDocumentosOpDto(codigoDocumentoOp);
                 result.CantidadRegistros = cantidadDocumentos;
                 result.Data = resultDto;
@@ -483,6 +485,7 @@ namespace Convertidor.Services.Adm
             
             //3- ReplicaIvaDocumentoEnAdmRetenciones(int codigoDocumento)
         }
+        
         public async Task ReplicaIvaDocumentoEnAdmRetenciones(int codigoDocumento)
         {
             var codigoDocumentoOp = await _repository.GetCodigoDocumentoOp(codigoDocumento);
@@ -819,7 +822,7 @@ namespace Convertidor.Services.Adm
                 if (created.IsValid && created.Data != null)
                 {
                     
-                    await ReplicaIvaDocumentoEnAdmRetenciones(entity.CODIGO_DOCUMENTO_OP);
+                    await ReconstruirRetenciones(dto.CodigoOrdenPago);
                     var resultDto = await MapDocumentosOpDto(created.Data);
                     result.CantidadRegistros = cantidadDocumentos;
                     result.Data = resultDto;

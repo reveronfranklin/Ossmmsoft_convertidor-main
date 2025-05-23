@@ -243,6 +243,11 @@ namespace Convertidor.Data.Repository.Adm
 
                      _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                      
+                     
+                     xqueryDiario = $"DELETE FROM  ADM.ADM_RETENCIONES_OP WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
+
+                     _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                     
                                  
                      xqueryDiario = $"DELETE FROM  ADM.ADM_ORDEN_PAGO WHERE CODIGO_ORDEN_PAGO = {codigoOrdenPago}";
 
