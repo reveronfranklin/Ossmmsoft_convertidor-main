@@ -91,8 +91,9 @@ namespace Convertidor.Services.Adm
             }
         }
 
-     
-        
+
+   
+
         public async Task<ResultDto<List<AdmRetencionesResponseDto>>> GetAll()
         {
 

@@ -1,4 +1,5 @@
-﻿using Convertidor.Data.Entities.Adm;
+﻿using System.Globalization;
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,7 +46,23 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
-        
+
+        public async Task<string> UpdateMontos(int codigoRetencionOp,decimal montoRetencion,decimal baseImponible)
+        {
+            try
+            {
+              
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_RETENCIONES_OP SET MONTO_RETENCION={montoRetencion},BASE_IMPONIBLE={baseImponible} WHERE CODIGO_RETENCION_OP= {codigoRetencionOp}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<string> DeleteByOrdePago(int codigoOrdenPago)
         {
 

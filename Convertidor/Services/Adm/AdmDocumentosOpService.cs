@@ -491,26 +491,57 @@ namespace Convertidor.Services.Adm
             var codigoDocumentoOp = await _repository.GetCodigoDocumentoOp(codigoDocumento);
             if (codigoDocumentoOp != null && codigoDocumentoOp.MONTO_RETENIDO>0)
             {
-               
-                AdmRetencionesOpUpdateDto admRetencionesOpDto = new AdmRetencionesOpUpdateDto();
-                admRetencionesOpDto.CodigoRetencionOp = 0;
-                admRetencionesOpDto.CodigoOrdenPago = codigoDocumentoOp.CODIGO_ORDEN_PAGO;
-                admRetencionesOpDto.CodigoRetencion = 0;
-                admRetencionesOpDto.TipoRetencionId = 0;
+                int codigoRetencion = 0;
+                int tipoRetencionId = 0;
                 var descriptivaRetencion =await _admDescriptivaRepository.GetByCodigo((int)codigoDocumentoOp.ESTATUS_FISCO_ID);
                 if (descriptivaRetencion != null)
                 {  
-                    admRetencionesOpDto.PorRetencion = Convert.ToDecimal(descriptivaRetencion.EXTRA1);
+                   
                     var descriptivaIva = await _admDescriptivaRepository.GetByCodigoDescriptivaTexto("IVA");
-                    admRetencionesOpDto.TipoRetencionId = descriptivaIva.DESCRIPCION_ID;
+                    tipoRetencionId= descriptivaIva.DESCRIPCION_ID;
                     var admRetencion= await  _admRetencionesRepository.GetByExtra1(descriptivaRetencion.CODIGO);
-                    admRetencionesOpDto.CodigoRetencion = admRetencion.CODIGO_RETENCION;
+                    codigoRetencion= admRetencion.CODIGO_RETENCION;
                 }
-                admRetencionesOpDto.MontoRetencion = codigoDocumentoOp.MONTO_RETENIDO;
-                admRetencionesOpDto.BaseImponible = codigoDocumentoOp.BASE_IMPONIBLE;
-                admRetencionesOpDto.CodigoPresupuesto = codigoDocumentoOp.CODIGO_PRESUPUESTO;
-                admRetencionesOpDto.NumeroComprobante = "";
-                await _admRetencionesOpService.Create(admRetencionesOpDto);
+
+                var retencionOp =
+                    await _admRetencionesOpService.GetByOrdenPagoCodigoRetencionTipoRetencion(
+                        codigoDocumentoOp.CODIGO_ORDEN_PAGO, codigoRetencion, tipoRetencionId);
+                if (retencionOp == null)
+                {
+                    AdmRetencionesOpUpdateDto admRetencionesOpDto = new AdmRetencionesOpUpdateDto();
+                    admRetencionesOpDto.CodigoRetencionOp = 0;
+                    admRetencionesOpDto.CodigoOrdenPago = codigoDocumentoOp.CODIGO_ORDEN_PAGO;
+                    admRetencionesOpDto.CodigoRetencion = 0;
+                    admRetencionesOpDto.TipoRetencionId = 0;
+                    descriptivaRetencion =await _admDescriptivaRepository.GetByCodigo((int)codigoDocumentoOp.ESTATUS_FISCO_ID);
+                    if (descriptivaRetencion != null)
+                    {  
+                        admRetencionesOpDto.PorRetencion = Convert.ToDecimal(descriptivaRetencion.EXTRA1);
+                        var descriptivaIva = await _admDescriptivaRepository.GetByCodigoDescriptivaTexto("IVA");
+                        admRetencionesOpDto.TipoRetencionId = descriptivaIva.DESCRIPCION_ID;
+                        var admRetencion= await  _admRetencionesRepository.GetByExtra1(descriptivaRetencion.CODIGO);
+                        admRetencionesOpDto.CodigoRetencion = admRetencion.CODIGO_RETENCION;
+                    }
+                    admRetencionesOpDto.MontoRetencion = codigoDocumentoOp.MONTO_RETENIDO;
+                    admRetencionesOpDto.BaseImponible = codigoDocumentoOp.BASE_IMPONIBLE;
+                    admRetencionesOpDto.CodigoPresupuesto = codigoDocumentoOp.CODIGO_PRESUPUESTO;
+                    admRetencionesOpDto.NumeroComprobante = "";
+                    await _admRetencionesOpService.Create(admRetencionesOpDto);
+                }
+                else
+                {
+               
+                    var montoRetencion= retencionOp.MONTO_RETENCION + codigoDocumentoOp.MONTO_RETENIDO;
+                    var baseImponible= retencionOp.BASE_IMPONIBLE + codigoDocumentoOp.BASE_IMPONIBLE;
+
+                    var response= await _admRetencionesOpRepository.UpdateMontos(retencionOp.CODIGO_RETENCION_OP,(decimal)montoRetencion,(decimal)baseImponible);
+                    
+                }
+                    
+                    
+                
+                
+              
                 
             }
             
@@ -673,10 +704,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Numero control documento invalido";
                     return result;
                 }
-
-               
-             
-
+                
 
                 var tipoTransaccion = await _admDescriptivaRepository.GetByCodigo( dto.TipoTransaccionId);
                 if (tipoTransaccion==null)
@@ -784,13 +812,13 @@ namespace Convertidor.Services.Adm
                 {
                     
                     entity.BASE_IMPONIBLE =  (entity.MONTO_DOCUMENTO-entity.MONTO_IMPUESTO_EXENTO)/((porcentajeIva/100)+1);
-                    entity.BASE_IMPONIBLE= Math.Ceiling((decimal)entity.BASE_IMPONIBLE * 100) / 100; 
+                    entity.BASE_IMPONIBLE=  Math.Round( entity.BASE_IMPONIBLE, 2);//Math.Ceiling((decimal)entity.BASE_IMPONIBLE * 100) / 100; 
                    
                     entity.MONTO_IMPUESTO = (entity.BASE_IMPONIBLE)*(porcentajeIva/100);
-                    entity.MONTO_IMPUESTO= Math.Ceiling((decimal)entity.MONTO_IMPUESTO * 100) / 100; 
+                    entity.MONTO_IMPUESTO = Math.Round( entity.MONTO_IMPUESTO, 2);//Math.Ceiling((decimal)entity.MONTO_IMPUESTO * 100) / 100; 
                   
                     entity.MONTO_RETENIDO = (entity.MONTO_IMPUESTO)*((porcentajeRetencion/100)+1)-(entity.MONTO_IMPUESTO);
-                    entity.MONTO_RETENIDO= Math.Ceiling((decimal)entity.MONTO_RETENIDO * 100) / 100; 
+                    entity.MONTO_RETENIDO = Math.Round(entity.MONTO_RETENIDO, 2);//Math.Ceiling((decimal)entity.MONTO_RETENIDO * 100) / 100; 
                     entity.MONTO_IMPUESTO_EXENTO = 0;
 
                 }

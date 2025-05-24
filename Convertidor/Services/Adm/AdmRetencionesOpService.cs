@@ -153,7 +153,12 @@ namespace Convertidor.Services.Adm
             }
 
         }
-
+        public async Task<ADM_RETENCIONES_OP> GetByOrdenPagoCodigoRetencionTipoRetencion(int codigoOrdenPago,
+            int codigoRetencion, int tipoRetencionId)
+        {
+            return await _repository.GetByOrdenPagoCodigoRetencionTipoRetencion(codigoOrdenPago, codigoRetencion,
+                tipoRetencionId);
+        }
         
         public async Task<ResultDto<List<AdmRetencionesOpResponseDto>>> GetAll()
         {
