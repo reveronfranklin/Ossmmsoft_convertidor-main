@@ -15,5 +15,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> Delete(int codigoRetencionOp);
         Task<string> DeleteByOrdePago(int codigoOrdenPago);
         Task<int> GetNextKey();
+        Task<string> UpdateMontos(int codigoRetencionOp, decimal montoRetencion, decimal baseImponible);
     }
 }

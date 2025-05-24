@@ -1,4 +1,6 @@
-﻿using Convertidor.Dtos.Adm;
+﻿
+using Convertidor.Data.Entities.Adm;
+using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Services.Adm
 {
@@ -9,5 +11,8 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmRetencionesOpResponseDto>> Update(AdmRetencionesOpUpdateDto dto);
         Task<ResultDto<AdmRetencionesOpResponseDto>> Create(AdmRetencionesOpUpdateDto dto);
         Task<ResultDto<AdmRetencionesOpDeleteDto>> Delete(AdmRetencionesOpDeleteDto dto);
+
+        Task<ADM_RETENCIONES_OP> GetByOrdenPagoCodigoRetencionTipoRetencion(int codigoOrdenPago, int codigoRetencion,
+            int tipoRetencionId);
     }
 }
