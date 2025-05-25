@@ -141,6 +141,25 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
         
+        public async Task<string>UpdateMontoPagado(int codigoBeneficiarioOp,decimal montoPagado) 
+        {
+            try
+            {
+
+           
+                FormattableString xquerySaldo = $"UPDATE ADM_BENEFICIARIOS_OP SET MONTO_PAGADO={montoPagado} WHERE  CODIGO_BENEFICIARIO_OP = {codigoBeneficiarioOp}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
+             
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        
         public async Task<string> DeleteByOrdenPago(int codigoOrdenPago)
         {
             try

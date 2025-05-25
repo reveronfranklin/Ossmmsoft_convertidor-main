@@ -10,12 +10,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmRetencionesOpRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmRetencionesOpRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOpService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmRetencionesOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmRetencionesOpService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmBeneficiariosOpRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmBeneficiariosOpRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmBeneficiariosOpRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmBeneficiariosOpRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/recursos.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/recursos.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +39,9 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -405,7 +406,7 @@
       <workItem from="1747867315048" duration="7021000" />
       <workItem from="1747953964397" duration="6386000" />
       <workItem from="1748009250735" duration="4666000" />
-      <workItem from="1748037704612" duration="10027000" />
+      <workItem from="1748037704612" duration="16583000" />
     </task>
     <servers />
   </component>
@@ -5006,13 +5007,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs</url>
-          <line>210</line>
+          <line>207</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs" containingFunctionPresentation="Method 'GetNextKey'">
             <startOffsets>
-              <option value="6849" />
+              <option value="6485" />
             </startOffsets>
             <endOffsets>
-              <option value="6870" />
+              <option value="6506" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1042" />
@@ -5577,19 +5578,6 @@
           <option name="timeStamp" value="1099" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs</url>
-          <line>181</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Aprobar'">
-            <startOffsets>
-              <option value="7413" />
-            </startOffsets>
-            <endOffsets>
-              <option value="7539" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs</url>
           <line>76</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs" containingFunctionPresentation="Method 'Aprobar'">
@@ -5627,32 +5615,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1103" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs</url>
-          <line>516</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'GetAll'">
-            <startOffsets>
-              <option value="19834" />
-            </startOffsets>
-            <endOffsets>
-              <option value="19893" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1104" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs</url>
-          <line>530</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'GetAll'">
-            <startOffsets>
-              <option value="20417" />
-            </startOffsets>
-            <endOffsets>
-              <option value="20471" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1105" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOpService.cs</url>
@@ -5708,39 +5670,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs</url>
-          <line>55</line>
+          <line>54</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs" containingFunctionPresentation="Method 'UpdateMontos'">
             <startOffsets>
-              <option value="1896" />
+              <option value="1760" />
             </startOffsets>
             <endOffsets>
-              <option value="1993" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs</url>
-          <line>57</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs" containingFunctionPresentation="Method 'UpdateMontos'">
-            <startOffsets>
-              <option value="2124" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2305" />
+              <option value="1941" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1112" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs</url>
-          <line>65</line>
+          <line>62</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs" containingFunctionPresentation="Method 'UpdateMontos'">
             <startOffsets>
-              <option value="2519" />
+              <option value="2155" />
             </startOffsets>
             <endOffsets>
-              <option value="2537" />
+              <option value="2173" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1113" />
@@ -5783,6 +5732,58 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1116" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs</url>
+          <line>208</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'">
+            <startOffsets>
+              <option value="8801" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8860" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1117" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs</url>
+          <line>85</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs" containingFunctionPresentation="Method 'Anular'">
+            <startOffsets>
+              <option value="2235" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2275" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1118" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs</url>
+          <line>221</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'">
+            <startOffsets>
+              <option value="9336" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9359" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1119" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs</url>
+          <line>237</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'">
+            <startOffsets>
+              <option value="10090" />
+            </startOffsets>
+            <endOffsets>
+              <option value="10152" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1120" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
