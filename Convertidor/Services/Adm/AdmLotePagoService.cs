@@ -9,7 +9,7 @@ using Convertidor.Services.Adm.Pagos;
 using Convertidor.Utility;
 
 
-namespace Convertidor.Services.Sis
+namespace Convertidor.Services.Adm
 {
     
 	public class AdmLotePagoService: IAdmLotePagoService
@@ -23,6 +23,8 @@ namespace Convertidor.Services.Sis
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
         private readonly IAdmChequesRepository _chequesRepository;
         private readonly IAdmPagoElectronicoService _admPagoElectronicoService;
+        private readonly IAdmBeneficiariosOpRepository _admBeneficiariosOpRepository;
+        private readonly IAdmBeneficiariosPagosRepository _admBeneficiariosPagosRepository;
 
 
         public AdmLotePagoService(IAdmLotePagoRepository repository,
@@ -33,7 +35,9 @@ namespace Convertidor.Services.Sis
                                         IPRE_PRESUPUESTOSRepository presupuestosRepository,
                                         IAdmDescriptivaRepository admDescriptivaRepository,
                                         IAdmChequesRepository chequesRepository,
-                                        IAdmPagoElectronicoService admPagoElectronicoService)
+                                        IAdmPagoElectronicoService admPagoElectronicoService,
+                                        IAdmBeneficiariosOpRepository admBeneficiariosOpRepository,
+                                        IAdmBeneficiariosPagosRepository admBeneficiariosPagosRepository)
 		{
             _repository = repository;
             _repository = repository;
@@ -46,6 +50,8 @@ namespace Convertidor.Services.Sis
             _admDescriptivaRepository = admDescriptivaRepository;
             _chequesRepository = chequesRepository;
             _admPagoElectronicoService = admPagoElectronicoService;
+            _admBeneficiariosOpRepository = admBeneficiariosOpRepository;
+            _admBeneficiariosPagosRepository = admBeneficiariosPagosRepository;
         }
 
         
@@ -213,6 +219,7 @@ namespace Convertidor.Services.Sis
                     return result;
                 }
 
+                lotePago.STATUS = "AP";
                 if (lotePago.STATUS != "AP" )
                 {
                     result.Data = null;
@@ -228,6 +235,7 @@ namespace Convertidor.Services.Sis
                 lotePago.USUARIO_UPD = conectado.Usuario;
                 await _repository.Update(lotePago);
                 await _chequesRepository.CambioEstatus(dto.Status,lotePago.CODIGO_LOTE_PAGO,conectado.Usuario,DateTime.Now);
+                await AnularMontoPagadoEnOrdenPago(lotePago.CODIGO_LOTE_PAGO);
                 var resultDto = await  MapAdmLotePagoDto(lotePago);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -243,6 +251,29 @@ namespace Convertidor.Services.Sis
             return result;
         }
 
+        public async Task AnularMontoPagadoEnOrdenPago(int codigoLotePago)
+        {
+            AdmChequeFilterDto filter = new AdmChequeFilterDto();
+            filter.CodigoLote=codigoLotePago;
+            filter.SearchText = "";
+            filter.PageNumber = 1;
+            filter.PageSize = 1000;
+            var pagos=await _chequesRepository.GetByLote(filter);
+            if (pagos.Data !=null )
+            {
+                foreach (var itemPago in pagos.Data)
+                {
+                    var beneficiariosLotePago=await _admBeneficiariosPagosRepository.GetByPago(itemPago.CODIGO_CHEQUE);
+                    if (beneficiariosLotePago!=null && beneficiariosLotePago.CODIGO_BENEFICIARIO_OP!=null)
+                    {
+                        await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiariosLotePago
+                            .CODIGO_BENEFICIARIO_OP,0);
+                    }
+                }
+            }
+            
+          
+        }
         
         public async Task<ResultDto<AdmLotePagoResponseDto>> CambioStatus(AdmLotePagoCambioStatusDto dto)
         {
