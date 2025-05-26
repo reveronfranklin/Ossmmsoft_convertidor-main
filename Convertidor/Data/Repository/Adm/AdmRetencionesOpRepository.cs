@@ -85,6 +85,28 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
+        public async Task<string> DeleteByOrdePagoSinIva(int codigoOrdenPago,int idDescriptivaIva)
+        {
+
+
+           
+            try
+            {
+            
+                
+                FormattableString xqueryDiario = $"DELETE FROM  ADM.ADM_RETENCIONES_OP WHERE CODIGO_ORDEN_PAGO= {codigoOrdenPago} AND TIPO_RETENCION_ID = {idDescriptivaIva};";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
+        
 
         public async Task<List<ADM_RETENCIONES_OP>> GetAll() 
         {

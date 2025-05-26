@@ -14,6 +14,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_RETENCIONES_OP>> Update(ADM_RETENCIONES_OP entity);
         Task<string> Delete(int codigoRetencionOp);
         Task<string> DeleteByOrdePago(int codigoOrdenPago);
+        Task<string> DeleteByOrdePagoSinIva(int codigoOrdenPago, int idDescriptivaIva);
         Task<int> GetNextKey();
         Task<string> UpdateMontos(int codigoRetencionOp, decimal montoRetencion, decimal baseImponible);
     }

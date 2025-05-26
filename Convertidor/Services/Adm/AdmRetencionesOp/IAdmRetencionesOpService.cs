@@ -2,7 +2,7 @@
 using Convertidor.Data.Entities.Adm;
 using Convertidor.Dtos.Adm;
 
-namespace Convertidor.Services.Adm
+namespace Convertidor.Services.Adm.AdmRetencionesOp
 {
     public interface IAdmRetencionesOpService
     {
