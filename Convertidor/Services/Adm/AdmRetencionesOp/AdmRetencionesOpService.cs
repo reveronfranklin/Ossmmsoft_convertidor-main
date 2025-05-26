@@ -3,9 +3,9 @@ using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
 
-namespace Convertidor.Services.Adm
+namespace Convertidor.Services.Adm.AdmRetencionesOp
 {
-    public class AdmRetencionesOpService : IAdmRetencionesOpService
+    public partial class AdmRetencionesOpService : IAdmRetencionesOpService
     {
         private readonly IAdmRetencionesOpRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
@@ -49,7 +49,7 @@ namespace Convertidor.Services.Adm
         }
 
       
-        public async Task<AdmRetencionesOpResponseDto> MapRetencionesOpDto(ADM_RETENCIONES_OP dtos)
+       /* public async Task<AdmRetencionesOpResponseDto> MapRetencionesOpDto(ADM_RETENCIONES_OP dtos)
         {
             AdmRetencionesOpResponseDto itemResult = new AdmRetencionesOpResponseDto();
             itemResult.CodigoRetencionOp = dtos.CODIGO_RETENCION_OP;
@@ -71,6 +71,12 @@ namespace Convertidor.Services.Adm
 
             if (dtos.POR_RETENCION == null) dtos.POR_RETENCION = 0;
             itemResult.PorRetencion = dtos.POR_RETENCION;
+            if (dtos.POR_RETENCION == 0)
+            {
+                itemResult.PorRetencion = admRetenciones.POR_RETENCION;
+              
+            }
+         
             
             if(dtos.MONTO_RETENCION==null) dtos.MONTO_RETENCION=0;
             itemResult.MontoRetencion = dtos.MONTO_RETENCION;
@@ -99,9 +105,9 @@ namespace Convertidor.Services.Adm
                 }
                 return result;
             }
-        }
+        }*/
 
-        public async Task<ResultDto<List<AdmRetencionesOpResponseDto>>> GetByOrdenPago(AdmRetencionesFilterDto filter)
+       /* public async Task<ResultDto<List<AdmRetencionesOpResponseDto>>> GetByOrdenPago(AdmRetencionesFilterDto filter)
         {
 
             ResultDto<List<AdmRetencionesOpResponseDto>> result = new ResultDto<List<AdmRetencionesOpResponseDto>>(null);
@@ -152,15 +158,15 @@ namespace Convertidor.Services.Adm
                 return result;
             }
 
-        }
-        public async Task<ADM_RETENCIONES_OP> GetByOrdenPagoCodigoRetencionTipoRetencion(int codigoOrdenPago,
+        }*/
+        /*public async Task<ADM_RETENCIONES_OP> GetByOrdenPagoCodigoRetencionTipoRetencion(int codigoOrdenPago,
             int codigoRetencion, int tipoRetencionId)
         {
             return await _repository.GetByOrdenPagoCodigoRetencionTipoRetencion(codigoOrdenPago, codigoRetencion,
                 tipoRetencionId);
-        }
+        }*/
         
-        public async Task<ResultDto<List<AdmRetencionesOpResponseDto>>> GetAll()
+       /* public async Task<ResultDto<List<AdmRetencionesOpResponseDto>>> GetAll()
         {
 
             ResultDto<List<AdmRetencionesOpResponseDto>> result = new ResultDto<List<AdmRetencionesOpResponseDto>>(null);
@@ -196,16 +202,16 @@ namespace Convertidor.Services.Adm
                 return result;
             }
 
-        }
+        }*/
 
-        public async Task ReplicarMotoRetenidoDocumento(int codigoDocumentoOp,decimal montoRetencion)
+       /* public async Task ReplicarMotoRetenidoDocumento(int codigoDocumentoOp,decimal montoRetencion)
         {
             await _admDocumentosOpRepository.UpdateMontoRetenido(codigoDocumentoOp,montoRetencion);
             
           
-        }
+        }*/
         
-        public async Task<ResultDto<AdmRetencionesOpResponseDto>> Update(AdmRetencionesOpUpdateDto dto)
+       /* public async Task<ResultDto<AdmRetencionesOpResponseDto>> Update(AdmRetencionesOpUpdateDto dto)
         {
             ResultDto<AdmRetencionesOpResponseDto> result = new ResultDto<AdmRetencionesOpResponseDto>(null);
             try
@@ -327,11 +333,11 @@ namespace Convertidor.Services.Adm
             }
 
             return result;
-        }
+        }*/
 
        
         
-        public async Task<ResultDto<AdmRetencionesOpResponseDto>> Create(AdmRetencionesOpUpdateDto dto)
+       /* public async Task<ResultDto<AdmRetencionesOpResponseDto>> Create(AdmRetencionesOpUpdateDto dto)
         {
             ResultDto<AdmRetencionesOpResponseDto> result = new ResultDto<AdmRetencionesOpResponseDto>(null);
             try
@@ -490,9 +496,9 @@ namespace Convertidor.Services.Adm
 
 
             return result;
-        }
+        }*/
 
-        public async Task ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(int codigoOrdenPago)
+       /* public async Task ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(int codigoOrdenPago)
         {
 
             decimal totalRetenciones = 0;
@@ -532,9 +538,9 @@ namespace Convertidor.Services.Adm
             
             
            
-        }
+        }*/
         
-        public async Task ReplicaRetencionesEnAdmBeneficiariosOp(int codigoOrdenPago)
+        /*public async Task ReplicaRetencionesEnAdmBeneficiariosOp(int codigoOrdenPago)
         {
 
             var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoOrdenPago);
@@ -589,9 +595,9 @@ namespace Convertidor.Services.Adm
           
 
             
-        }
+        }*/
         
-        public async Task<ResultDto<AdmRetencionesOpDeleteDto>> Delete(AdmRetencionesOpDeleteDto dto) 
+        /*public async Task<ResultDto<AdmRetencionesOpDeleteDto>> Delete(AdmRetencionesOpDeleteDto dto) 
         {
             ResultDto<AdmRetencionesOpDeleteDto> result = new ResultDto<AdmRetencionesOpDeleteDto>(null);
             try
@@ -638,7 +644,11 @@ namespace Convertidor.Services.Adm
 
 
             return result;
-        }
+        }*/
+        
+        
     }
+    
+    
  }
 

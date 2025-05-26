@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Services.Adm.AdmRetencionesOp;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm
@@ -470,7 +471,9 @@ namespace Convertidor.Services.Adm
         public async Task ReconstruirRetenciones(int codigoOrdenPago)
         {
             //1- Eliminar todas las Retenciones de la orden de pago adm_retenciones_op
-            await _admRetencionesOpRepository.DeleteByOrdePago(codigoOrdenPago);
+            var descriptivaIva = await _admDescriptivaRepository.GetByCodigoDescriptivaTexto("IVA");
+            
+            await _admRetencionesOpRepository.DeleteByOrdePagoSinIva(codigoOrdenPago,descriptivaIva.DESCRIPCION_ID);
             
             //2- recorrer todos los documentos de la orden de pago y ejecutar por cada uno
             var documentos = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);

@@ -31,6 +31,7 @@ using Convertidor.Data.DestinoRepository.ADM;
 using Convertidor.Data.DestinoRepository.PRE;
 using Convertidor.Data.Interfaces.Cnt;
 using Convertidor.Data.Repository.Cnt;
+using Convertidor.Services.Adm.AdmRetencionesOp;
 using Convertidor.Services.Adm.Pagos;
 using Convertidor.Services.Cnt;
 using Convertidor.Services.Rh.Report.Example;

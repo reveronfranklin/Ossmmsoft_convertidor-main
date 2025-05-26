@@ -1,10 +1,11 @@
 ﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
+using Convertidor.Services.Adm.AdmRetencionesOp;
 
 namespace Convertidor.Services.Adm
 {
-    public class AdmImpuestosDocumentosOpService : IAdmImpuestosDocumentosOpService
+    public  class AdmImpuestosDocumentosOpService : IAdmImpuestosDocumentosOpService
     {
         private readonly IAdmImpuestosDocumentosOpRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
@@ -31,7 +32,7 @@ namespace Convertidor.Services.Adm
             _admRetencionesOpService = admRetencionesOpService;
         }
 
-        public async Task<AdmImpuestosDocumentosOpResponseDto> MapImpuestosDocumentosOpDto(ADM_IMPUESTOS_DOCUMENTOS_OP dtos)
+       public async Task<AdmImpuestosDocumentosOpResponseDto> MapImpuestosDocumentosOpDto(ADM_IMPUESTOS_DOCUMENTOS_OP dtos)
         {
             AdmImpuestosDocumentosOpResponseDto itemResult = new AdmImpuestosDocumentosOpResponseDto();
             itemResult.CodigoImpuestoDocumentoOp = dtos.CODIGO_IMPUESTO_DOCUMENTO_OP;
