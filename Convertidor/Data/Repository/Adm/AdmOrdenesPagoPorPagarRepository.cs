@@ -25,6 +25,7 @@ namespace Convertidor.Data.Repository.Adm
             {
                 var result = await _context.ADM_V_OP_POR_PAGAR
                     .Where(x=>x.CODIGO_PRESUPUESTO==codigoPresupuesto)
+                    .OrderByDescending(x=>x.CODIGO_ORDEN_PAGO)
                     .DefaultIfEmpty().ToListAsync();
 
                 return result;
