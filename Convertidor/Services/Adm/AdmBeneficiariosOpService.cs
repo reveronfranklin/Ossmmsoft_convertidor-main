@@ -281,7 +281,21 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-             
+                var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoBeneficiarioOp.CODIGO_ORDEN_PAGO);
+                if (ordenPago==null )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo orden pago no existe";
+                    return result;
+                }
+                if (ordenPago.STATUS=="AP" || ordenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {ordenPago.STATUS}";
+                    return result;
+                }
 
                 if (dto.Monto < 0)
                 {
@@ -337,6 +351,14 @@ namespace Convertidor.Services.Adm
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo orden pago no existe";
+                    return result;
+                }
+                  
+                if (ordenPago.STATUS=="AP" || ordenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {ordenPago.STATUS}";
                     return result;
                 }
 
@@ -457,7 +479,13 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo orden pago no existe";
                     return result;
                 }
-
+                if (ordenPago.STATUS=="AP" || ordenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {ordenPago.STATUS}";
+                    return result;
+                }
                 var proveedor = await _admProveedoresRepository.GetByCodigo(dto.CodigoProveedor);
                 if (proveedor==null)
                 {
@@ -578,7 +606,21 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
-
+                var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoBeneficiarioOp.CODIGO_ORDEN_PAGO);
+                if (ordenPago==null )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo orden pago no existe";
+                    return result;
+                }
+                if (ordenPago.STATUS=="AP" || ordenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {ordenPago.STATUS}";
+                    return result;
+                }
                 var deleted = await _repository.Delete(dto.CodigoBeneficiarioOp);
 
                 if (deleted.Length > 0)

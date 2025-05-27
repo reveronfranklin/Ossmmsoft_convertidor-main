@@ -221,11 +221,19 @@ namespace Convertidor.Services.Adm
                 }
 
                 var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if(dto.CodigoOrdenPago < 0) 
+                if(codigoOrdenPago==null) 
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo orden pago invalido";
+                    return result;
+                }
+             
+                if (codigoOrdenPago.STATUS=="AP" || codigoOrdenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {codigoOrdenPago.STATUS}";
                     return result;
                 }
             
@@ -332,11 +340,18 @@ namespace Convertidor.Services.Adm
                 }
 
                 var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (dto.CodigoOrdenPago < 0)
+                if (codigoOrdenPago==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo orden pago invalido";
+                    return result;
+                }
+                if (codigoOrdenPago.STATUS=="AP" || codigoOrdenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {codigoOrdenPago.STATUS}";
                     return result;
                 }
 
@@ -486,7 +501,21 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo Orden Pago no existe";
                     return result;
                 }
-
+                var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoCompromisoOp.CODIGO_ORDEN_PAGO);
+                if (codigoOrdenPago==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo orden pago invalido";
+                    return result;
+                }
+                if (codigoOrdenPago.STATUS=="AP" || codigoOrdenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {codigoOrdenPago.STATUS}";
+                    return result;
+                }
 
                 var deleted = await _repository.Delete(dto.CodigoCompromisoOp);
                 

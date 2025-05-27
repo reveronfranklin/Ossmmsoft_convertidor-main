@@ -269,6 +269,15 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo orden pago invalido";
                     return result;
                 }
+                if (codigoOrdenPago.STATUS=="AP" || codigoOrdenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {codigoOrdenPago.STATUS}";
+                    return result;
+                }
+                
+                
                 
                 if(dto.MontoDocumento <= 0) 
                 {
@@ -639,6 +648,13 @@ namespace Convertidor.Services.Adm
                     result.Message = "Codigo orden pago invalido";
                     return result;
                 }
+                if (codigoOrdenPago.STATUS=="AP" || codigoOrdenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {codigoOrdenPago.STATUS}";
+                    return result;
+                }
                 if(dto.MontoDocumento <=0) 
                 {
                     result.Data = null;
@@ -898,6 +914,22 @@ namespace Convertidor.Services.Adm
                     result.Data = dto;
                     result.IsValid = false;
                     result.Message = "Codigo documento op no existe";
+                    return result;
+                }
+                var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+                if (codigoOrdenPago==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo orden pago invalido";
+                    return result;
+                }
+                
+                if (codigoOrdenPago.STATUS=="AP" || codigoOrdenPago.STATUS == "AN")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Orden de Pago no puede ser modificada esta: {codigoOrdenPago.STATUS}";
                     return result;
                 }
                 var resultDeleted =_admImpuestosDocumentosOpRepository.DeleteByDocumento(codigoDocumentoOp.CODIGO_DOCUMENTO_OP);

@@ -23,6 +23,7 @@ namespace Convertidor.Services.Adm
         private readonly IPRE_V_SALDOSRepository _preSaldosRepository;
         private readonly IAdmBeneficariosOpService _admBeneficariosOpService;
         private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
+        private readonly IAdmDocumentosOpRepository _admDocumentosOpRepository;
 
 
         public AdmOrdenPagoService(IAdmOrdenPagoRepository repository,
@@ -37,7 +38,8 @@ namespace Convertidor.Services.Adm
                                      IAdmPucOrdenPagoService admPucOrdenPagoService,
                                      IPRE_V_SALDOSRepository   preSaldosRepository,
                                      IAdmBeneficariosOpService admBeneficariosOpService,
-                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository)
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository,
+                                     IAdmDocumentosOpRepository admDocumentosOpRepository)
         {
       
             _repository = repository;
@@ -53,6 +55,7 @@ namespace Convertidor.Services.Adm
             _preSaldosRepository = preSaldosRepository;
             _admBeneficariosOpService = admBeneficariosOpService;
             _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
+            _admDocumentosOpRepository = admDocumentosOpRepository;
         }
 
 
@@ -780,8 +783,20 @@ namespace Convertidor.Services.Adm
             {
                
                 result = "Orden de pago no esta pendiente";
+                return result;
                
             }
+
+            if (ordenPago.CON_FACTURA == 1)
+            {
+               var documentos = await _admDocumentosOpRepository.GetByCodigoOrdenPago(ordenPago.CODIGO_ORDEN_PAGO);
+               if (documentos == null || !documentos.Any())
+               {
+                   result = "Orden de pago es con Factura y no tiene cargados los documentos";
+                   return result;
+               }
+            }
+            
             AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
             filter.CodigoPresupuesto = ordenPago.CODIGO_PRESUPUESTO;
             filter.CodigoOrdenPago = ordenPago.CODIGO_ORDEN_PAGO;
@@ -819,6 +834,7 @@ namespace Convertidor.Services.Adm
             {
                
                 result = "Orden de pago no esta pendiente";
+                return result;
                
             }
             AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
