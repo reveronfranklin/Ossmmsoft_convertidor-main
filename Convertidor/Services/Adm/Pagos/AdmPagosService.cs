@@ -150,6 +150,23 @@ namespace Convertidor.Services.Adm.Pagos
             }
         }
 
+        public async Task<string> ValidarMontoPago(int codigoBeneficiarioOp, decimal montoPagado)
+        {
+
+           var result = "";
+            var beneficiario = await _admBeneficiariosOpRepository.GetCodigoBeneficiarioOp(codigoBeneficiarioOp);
+
+            if (beneficiario != null)
+            {
+                var pendiente = beneficiario.MONTO - beneficiario.MONTO_PAGADO;
+                if (pendiente > montoPagado)
+                {
+                    result = $"{montoPagado} es Mayor al monto Pendiente de la Orden de pago:{pendiente}";
+                }
+                
+            }
+            return result;
+        }
         public async Task<ResultDto<bool>> UpdateMonto(PagoUpdateMontoDto dto)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);
@@ -194,14 +211,19 @@ namespace Convertidor.Services.Adm.Pagos
                     await _admBeneficiariosOpRepository.GetCodigoBeneficiarioOp((int)beneficiario.CODIGO_BENEFICIARIO_OP);
                 if (beneficiarioOp != null)
                 {
-                    if (dto.Monto > beneficiarioOp.MONTO)
+                    
+                    var validarMontoPago = await ValidarMontoPago((int)beneficiario.CODIGO_BENEFICIARIO_OP, dto.Monto);
+
+                    if (validarMontoPago.Length>0)
                     {
                         result.Data = false;
                         result.IsValid = false;
-                        result.Message = $"Monto no puede ser a la orden de Pago {beneficiarioOp.MONTO }";
+                        result.Message = validarMontoPago;
                         return result;
                     }
                 }
+
+           
                 beneficiario.MONTO = dto.Monto;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 beneficiario.USUARIO_UPD=conectado.Usuario;
@@ -209,7 +231,8 @@ namespace Convertidor.Services.Adm.Pagos
                 var updated = await _beneficiariosPagosRepository.Update(beneficiario);
                 if (updated.IsValid && updated.Data != null)
                 {
-                 
+                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, dto.Monto); 
+                   
                     result.Data = true;
                     result.IsValid = true;
                     result.Message = "";
@@ -319,7 +342,8 @@ namespace Convertidor.Services.Adm.Pagos
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
                 await _beneficiariosPagosRepository.Add(entity);
-         
+                await _admBeneficiariosOpRepository.UpdateMontoPagado((int)dto.CodigoBeneficiarioOP, dto.Monto); 
+
                 return true;
             }
             catch (Exception e)
@@ -381,6 +405,17 @@ namespace Convertidor.Services.Adm.Pagos
                     return result;
 
                 }
+                var validarMontoPago = await ValidarMontoPago((int)beneficiario.CODIGO_BENEFICIARIO_OP, dto.Monto);
+
+                if (validarMontoPago.Length>0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = validarMontoPago;
+                    return result;
+                }
+                
+                
                 PagoUpdateMontoDto pagoUpdateMontoDto = new PagoUpdateMontoDto();
                 pagoUpdateMontoDto.CodigoBeneficiarioPago = dto.CodigoBeneficiarioPago;
                 pagoUpdateMontoDto.Monto = dto.Monto;
@@ -398,6 +433,7 @@ namespace Convertidor.Services.Adm.Pagos
                 pago.USUARIO_UPD = conectado.Usuario;
               
                 await _repository.Update(pago);
+             
                 var resultDto = await MapChequesDto(pago);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -428,8 +464,9 @@ namespace Convertidor.Services.Adm.Pagos
                     result.Message = "Codigo de Pago No Existe";
                     return result;
                 }
+                var beneficiario = await _beneficiariosPagosRepository.GetByPago(dto.CodigoPago);
 
-                var esModificable=await PagoEsModificable((int)pago.CODIGO_LOTE_PAGO);
+                 var esModificable=await PagoEsModificable((int)pago.CODIGO_LOTE_PAGO);
                 if (esModificable.Length > 0)
                 {
                     result.Data = false;
@@ -446,6 +483,13 @@ namespace Convertidor.Services.Adm.Pagos
                     result.Message =deleted;
                     return result;
                 }
+
+                if (beneficiario != null)
+                {
+                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, 0); 
+
+                }
+               
                 result.Data = true;
                 result.IsValid = true;
                 result.Message ="";
@@ -486,6 +530,18 @@ namespace Convertidor.Services.Adm.Pagos
                     result.Message = "No existen beneficiario op";
                     return result;
                 }
+                
+                var validarMontoPago = await ValidarMontoPago(dto.CodigoBeneficiarioOP, dto.Monto);
+
+                if (validarMontoPago.Length>0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = validarMontoPago;
+                    return result;
+                }
+                
+                
                 var proveedor = await _proveedoresRepository.GetByCodigo(beneficiarioOp.CODIGO_PROVEEDOR);
                 if (proveedor==null)
                 {
