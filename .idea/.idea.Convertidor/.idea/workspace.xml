@@ -10,8 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenesPagoPorPagarRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenesPagoPorPagarRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mapping.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mapping.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -400,7 +399,8 @@
       <workItem from="1748009250735" duration="4666000" />
       <workItem from="1748037704612" duration="24503000" />
       <workItem from="1748277676426" duration="1836000" />
-      <workItem from="1748295360417" duration="8356000" />
+      <workItem from="1748295360417" duration="9130000" />
+      <workItem from="1748392040525" duration="598000" />
     </task>
     <servers />
   </component>
@@ -5848,6 +5848,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1132" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmRetencionesOpController.cs</url>
+          <line>39</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmRetencionesOpController.cs" containingFunctionPresentation="Method 'GetByOrdenPago'">
+            <startOffsets>
+              <option value="1013" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1064" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1133" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mapping.cs</url>
+          <line>61</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mapping.cs" containingFunctionPresentation="Method 'MapRetencionesOpDto'">
+            <startOffsets>
+              <option value="2542" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2563" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1135" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
