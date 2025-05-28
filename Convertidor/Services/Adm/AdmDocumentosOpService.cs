@@ -430,14 +430,42 @@ namespace Convertidor.Services.Adm
                 codigoDocumentoOp.FECHA_DOCUMENTO = dto.FechaDocumento;
                 codigoDocumentoOp.NUMERO_DOCUMENTO = dto.NumeroDocumento;
                 codigoDocumentoOp.NUMERO_CONTROL_DOCUMENTO = dto.NumeroControlDocumento;
-                codigoDocumentoOp.MONTO_DOCUMENTO = dto.MontoDocumento;
-                codigoDocumentoOp.BASE_IMPONIBLE = dto.BaseImponible;
-                codigoDocumentoOp.MONTO_IMPUESTO = dto.MontoImpuesto;
+             
                 codigoDocumentoOp.NUMERO_DOCUMENTO_AFECTADO = dto.NumeroDocumentoAfectado;
                 codigoDocumentoOp.TIPO_TRANSACCION_ID = dto.TipoTransaccionId;
                 codigoDocumentoOp.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-                codigoDocumentoOp.MONTO_IMPUESTO_EXENTO = dto.MontoImpuestoExento;
-                codigoDocumentoOp.MONTO_RETENIDO = dto.MontoRetenido;
+                codigoDocumentoOp.MONTO_DOCUMENTO = dto.MontoDocumento;
+                
+                //buscar la descriptiva y se toma EXTRA1 EL PORCENTAJE DE RERENCION IVA
+                //SI EL PORCENTAJE ES MAYOR A CERO SE REALIZA EL CALCULO DE BASE_IMPONIBLE Y MONTO_IMPUESTO
+                var porcentajeRetencion = decimal.Parse(estatusFisco.EXTRA1);
+                var porcentajeIva = decimal.Parse(tipoImpuesto.EXTRA1);
+                if (porcentajeRetencion == 0)
+                {
+                    codigoDocumentoOp.MONTO_IMPUESTO = 0;
+                    codigoDocumentoOp.MONTO_RETENIDO = 0;
+                    codigoDocumentoOp.BASE_IMPONIBLE = 0;
+                    codigoDocumentoOp.MONTO_IMPUESTO_EXENTO = dto.MontoDocumento;
+                }
+                else
+                {
+                    
+                  
+        
+                    codigoDocumentoOp.MONTO_IMPUESTO_EXENTO = dto.MontoImpuestoExento;
+                    
+                    codigoDocumentoOp.BASE_IMPONIBLE =  (codigoDocumentoOp.MONTO_DOCUMENTO-codigoDocumentoOp.MONTO_IMPUESTO_EXENTO)/((porcentajeIva/100)+1);
+                    codigoDocumentoOp.BASE_IMPONIBLE=  Math.Round( codigoDocumentoOp.BASE_IMPONIBLE, 2);//Math.Ceiling((decimal)entity.BASE_IMPONIBLE * 100) / 100; 
+                   
+                    codigoDocumentoOp.MONTO_IMPUESTO = (codigoDocumentoOp.BASE_IMPONIBLE)*(porcentajeIva/100);
+                    codigoDocumentoOp.MONTO_IMPUESTO = Math.Round( codigoDocumentoOp.MONTO_IMPUESTO, 2);//Math.Ceiling((decimal)entity.MONTO_IMPUESTO * 100) / 100; 
+                  
+                    codigoDocumentoOp.MONTO_RETENIDO = (codigoDocumentoOp.MONTO_IMPUESTO)*((porcentajeRetencion/100)+1)-(codigoDocumentoOp.MONTO_IMPUESTO);
+                    codigoDocumentoOp.MONTO_RETENIDO = Math.Round(codigoDocumentoOp.MONTO_RETENIDO, 2);//Math.Ceiling((decimal)entity.MONTO_RETENIDO * 100) / 100; 
+                 
+
+                }
+
                 codigoDocumentoOp.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 codigoDocumentoOp.NUMERO_EXPEDIENTE = dto.NumeroExpediente;
                 codigoDocumentoOp.ESTATUS_FISCO_ID = dto.EstatusFiscoId;
