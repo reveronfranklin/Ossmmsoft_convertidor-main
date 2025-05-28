@@ -829,6 +829,7 @@ namespace Convertidor.Services.Adm
                 }
                 else
                 {
+                    entity.MONTO_IMPUESTO_EXENTO = dto.MontoImpuestoExento;
                     
                     entity.BASE_IMPONIBLE =  (entity.MONTO_DOCUMENTO-entity.MONTO_IMPUESTO_EXENTO)/((porcentajeIva/100)+1);
                     entity.BASE_IMPONIBLE=  Math.Round( entity.BASE_IMPONIBLE, 2);//Math.Ceiling((decimal)entity.BASE_IMPONIBLE * 100) / 100; 
@@ -838,7 +839,7 @@ namespace Convertidor.Services.Adm
                   
                     entity.MONTO_RETENIDO = (entity.MONTO_IMPUESTO)*((porcentajeRetencion/100)+1)-(entity.MONTO_IMPUESTO);
                     entity.MONTO_RETENIDO = Math.Round(entity.MONTO_RETENIDO, 2);//Math.Ceiling((decimal)entity.MONTO_RETENIDO * 100) / 100; 
-                    entity.MONTO_IMPUESTO_EXENTO = 0;
+                 
 
                 }
               
