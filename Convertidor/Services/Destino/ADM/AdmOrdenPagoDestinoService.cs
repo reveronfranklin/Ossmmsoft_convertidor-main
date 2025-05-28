@@ -397,6 +397,8 @@ namespace Convertidor.Services.Destino.ADM
                 await _admDescriptivaDestinoRepository.Delete(ordenPagoOrigen.TIPO_ORDEN_PAGO_ID);         
                 await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.TIPO_PAGO_ID);          
                 await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.FRECUENCIA_PAGO_ID);
+                await _admDocumentosOpDestinoRepository.DeleteByOrdenPago(codigoOrdenPago);
+                
                 return "";
             }
             catch (Exception e)

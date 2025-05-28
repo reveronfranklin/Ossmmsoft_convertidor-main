@@ -126,6 +126,24 @@ public class AdmDocumentosOpDestinoRepository:IAdmDocumentosOpDestinoRepository
                 return ex.Message;
             }
         }
+        
+        public async Task<string> DeleteByOrdenPago(int codigoOrdenPago)
+        {
+            try
+            {
+
+              
+              
+                FormattableString xquerySaldo = $"DELETE FROM public.\"ADM_DOCUMENTOS_OP\" WHERE  \"CODIGO_ORDEN_PAGO\" = {codigoOrdenPago}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<int> GetNextKey()
         {
             try
