@@ -455,6 +455,24 @@ namespace Convertidor.Services.Destino.ADM
             return result;
         }   
         
+        public async Task<DateTime> GetFechaCompromisoByOrdenPago(int codigoOrdenPago,int presupuesto)
+        {
+            DateTime result=DateTime.Now;
+            var compromisosOp =await _admCompromisoOpRepository.GetCodigoOrdenPago(codigoOrdenPago,presupuesto);
+            if (compromisosOp.Count > 0)
+            {
+                var firstCompromiso = compromisosOp.FirstOrDefault();
+                var preCompromiso = await _preCompromisosRepository.GetByCodigo(firstCompromiso.CODIGO_IDENTIFICADOR);
+                if (preCompromiso != null)
+                {
+                    result = preCompromiso.FECHA_COMPROMISO;
+                }
+            }
+      
+            
+            return result;
+        }   
+        
         public async  Task<ResultDto<bool>> CopiarOrdenPago(int codigoOrdenPago)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);
@@ -564,6 +582,7 @@ namespace Convertidor.Services.Destino.ADM
             //var newOrden = Map(ordenPagoOrigen);
             var newOrden = _mapper.Map<ADM_ORDEN_PAGO>(ordenPagoOrigen);
             newOrden.NUMERO_COMPROMISO = await GetNumeroCompromisoByOrdenPago(newOrden.CODIGO_ORDEN_PAGO,newOrden.CODIGO_PRESUPUESTO);
+            newOrden.FECHA_COMPROMISO =await GetFechaCompromisoByOrdenPago(newOrden.CODIGO_ORDEN_PAGO, newOrden.CODIGO_PRESUPUESTO);
             var orderCreated = await _destinoRepository.Add(newOrden);
             if (orderCreated.IsValid == true)
             {
