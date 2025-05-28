@@ -1,6 +1,6 @@
 ﻿using Convertidor.Dtos.Adm;
 
-namespace Convertidor.Services.Adm
+namespace Convertidor.Services.Adm.AdmDocumentosOp
 {
     public interface IAdmDocumentosOpService
     {

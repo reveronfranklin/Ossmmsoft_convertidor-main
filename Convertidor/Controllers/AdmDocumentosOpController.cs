@@ -3,6 +3,7 @@
 // HTML to PDF
 using Convertidor.Dtos.Adm;
 using Convertidor.Services.Adm;
+using Convertidor.Services.Adm.AdmDocumentosOp;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

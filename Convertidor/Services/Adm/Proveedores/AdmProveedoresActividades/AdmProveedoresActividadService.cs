@@ -4,7 +4,7 @@ using Convertidor.Dtos.Adm;
 using Convertidor.Utility;
 
 
-namespace Convertidor.Services.Adm
+namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
 {
 	public class AdmProveedoresActividadService: IAdmProveedoresActividadService
     {
