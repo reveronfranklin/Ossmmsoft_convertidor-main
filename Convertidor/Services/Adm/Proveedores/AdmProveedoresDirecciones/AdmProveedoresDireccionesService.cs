@@ -4,7 +4,7 @@ using Convertidor.Dtos.Adm;
 using Convertidor.Services.Sis;
 
 
-namespace Convertidor.Services.Adm
+namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
 {
 	public class AdmProveedoresDireccionesService: IAdmProveedoresDireccionesService
     {

@@ -3,7 +3,7 @@ using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
 
 
-namespace Convertidor.Services.Adm
+namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
 {
     
 	public class AdmProveedoresComunicacionService: IAdmProveedoresComunicacionService
