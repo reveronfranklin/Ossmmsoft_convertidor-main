@@ -641,6 +641,7 @@ namespace Convertidor.Services.Destino.ADM
                    await _admComprobantesDocumentosOpDestinoRepository.Add(newcomprobantesDocumentos);
                }
 
+               //REPLICA INFORMACION DE LOS DOCUMENTOS DE UNA ORDEN DE PAGO
                var documentosOpOrigen = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
                if (documentosOpOrigen.Count > 0)
                {

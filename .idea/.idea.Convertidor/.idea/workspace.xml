@@ -9,9 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Profiles/Adm/Replica/AdmDocumentosOpProfile.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -401,7 +399,8 @@
       <workItem from="1748277676426" duration="1836000" />
       <workItem from="1748295360417" duration="9130000" />
       <workItem from="1748392040525" duration="4663000" />
-      <workItem from="1748442721874" duration="4538000" />
+      <workItem from="1748442721874" duration="5124000" />
+      <workItem from="1748453540333" duration="397000" />
     </task>
     <servers />
   </component>
@@ -5901,6 +5900,58 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1137" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs</url>
+          <line>643</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
+            <startOffsets>
+              <option value="35883" />
+            </startOffsets>
+            <endOffsets>
+              <option value="35979" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1138" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmDocumentosOpDestinoRepository.cs</url>
+          <line>78</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmDocumentosOpDestinoRepository.cs" containingFunctionPresentation="Method 'Add'">
+            <startOffsets>
+              <option value="2374" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2393" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1139" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs</url>
+          <line>657</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
+            <startOffsets>
+              <option value="36429" />
+            </startOffsets>
+            <endOffsets>
+              <option value="36449" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1140" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs</url>
+          <line>662</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
+            <startOffsets>
+              <option value="36572" />
+            </startOffsets>
+            <endOffsets>
+              <option value="36591" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1141" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
