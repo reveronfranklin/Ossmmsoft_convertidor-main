@@ -10,44 +10,59 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
     {
         public async Task<AdmRetencionesOpResponseDto> MapRetencionesOpDto(ADM_RETENCIONES_OP dtos)
         {
-            AdmRetencionesOpResponseDto itemResult = new AdmRetencionesOpResponseDto();
-            itemResult.CodigoRetencionOp = dtos.CODIGO_RETENCION_OP;
-            itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
-            itemResult.TipoRetencionId = dtos.TIPO_RETENCION_ID;
-            itemResult.DescripcionTipoRetencion = "";
-            var descriptivaTipoRetencion = await _admDescriptivaRepository.GetByCodigo(dtos.TIPO_RETENCION_ID);
-            if (descriptivaTipoRetencion != null)
+
+            try
             {
-                itemResult.DescripcionTipoRetencion = descriptivaTipoRetencion.DESCRIPCION;
+                AdmRetencionesOpResponseDto itemResult = new AdmRetencionesOpResponseDto();
+                itemResult.CodigoRetencionOp = dtos.CODIGO_RETENCION_OP;
+                itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
+                itemResult.TipoRetencionId = dtos.TIPO_RETENCION_ID;
+                itemResult.DescripcionTipoRetencion = "";
+                var descriptivaTipoRetencion = await _admDescriptivaRepository.GetByCodigo(dtos.TIPO_RETENCION_ID);
+                if (descriptivaTipoRetencion != null)
+                {
+                    itemResult.DescripcionTipoRetencion = descriptivaTipoRetencion.DESCRIPCION;
+                }
+
+                if (dtos.CODIGO_RETENCION == null)
+                {
+                    dtos.CODIGO_RETENCION = 0;
+                }
+                itemResult.CodigoRetencion = dtos.CODIGO_RETENCION;
+                var admRetenciones = await _admRetencionesRepository.GetCodigoRetencion((int)dtos.CODIGO_RETENCION);
+                itemResult.ConceptoPago = "";
+                if (admRetenciones != null)
+                {
+                    itemResult.ConceptoPago = admRetenciones.CONCEPTO_PAGO;
+                }
+
+                if (dtos.POR_RETENCION == null) dtos.POR_RETENCION = 0;
+                itemResult.PorRetencion = dtos.POR_RETENCION;
+                if (dtos.POR_RETENCION == 0)
+                {
+                    itemResult.PorRetencion = admRetenciones.POR_RETENCION;
+
+                }
+
+
+                if (dtos.MONTO_RETENCION == null) dtos.MONTO_RETENCION = 0;
+                itemResult.MontoRetencion = dtos.MONTO_RETENCION;
+
+                if (dtos.BASE_IMPONIBLE == null) dtos.BASE_IMPONIBLE = 0;
+                itemResult.BaseImponible = dtos.BASE_IMPONIBLE;
+
+                itemResult.MontoRetenido = dtos.MONTO_RETENCION;
+
+                itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+                itemResult.NumeroComprobante = dtos.NUMERO_COMPROBANTE;
+                return itemResult;
             }
-            itemResult.CodigoRetencion = dtos.CODIGO_RETENCION;
-            var admRetenciones = await _admRetencionesRepository.GetCodigoRetencion((int)dtos.CODIGO_RETENCION);
-            itemResult.ConceptoPago = "";
-            if (admRetenciones != null)
+            catch (Exception e)
             {
-                itemResult.ConceptoPago = admRetenciones.CONCEPTO_PAGO;
+                Console.WriteLine(e);
+                throw;
             }
-
-            if (dtos.POR_RETENCION == null) dtos.POR_RETENCION = 0;
-            itemResult.PorRetencion = dtos.POR_RETENCION;
-            if (dtos.POR_RETENCION == 0)
-            {
-                itemResult.PorRetencion = admRetenciones.POR_RETENCION;
-
-            }
-
-
-            if (dtos.MONTO_RETENCION == null) dtos.MONTO_RETENCION = 0;
-            itemResult.MontoRetencion = dtos.MONTO_RETENCION;
-
-            if (dtos.BASE_IMPONIBLE == null) dtos.BASE_IMPONIBLE = 0;
-            itemResult.BaseImponible = dtos.BASE_IMPONIBLE;
-
-            itemResult.MontoRetenido = dtos.MONTO_RETENCION;
-
-            itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
-            itemResult.NumeroComprobante = dtos.NUMERO_COMPROBANTE;
-            return itemResult;
+           
 
         }
 
