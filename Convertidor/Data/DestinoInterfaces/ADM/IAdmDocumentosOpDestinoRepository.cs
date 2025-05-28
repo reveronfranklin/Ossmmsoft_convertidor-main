@@ -10,5 +10,6 @@ public interface IAdmDocumentosOpDestinoRepository
     Task<ResultDto<ADM_DOCUMENTOS_OP>> Add(ADM_DOCUMENTOS_OP entity);
     Task<ResultDto<ADM_DOCUMENTOS_OP>> Update(ADM_DOCUMENTOS_OP entity);
     Task<string> Delete(int codigoDocumentoOp);
+    Task<string> DeleteByOrdenPago(int codigoOrdenPago);
     Task<int> GetNextKey();
 }
