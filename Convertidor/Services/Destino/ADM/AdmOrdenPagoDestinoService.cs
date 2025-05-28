@@ -7,6 +7,7 @@ using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
 using Convertidor.Utility;
+using ADM_DOCUMENTOS_OP = Convertidor.Data.Entities.Adm.ADM_DOCUMENTOS_OP;
 
 
 namespace Convertidor.Services.Destino.ADM
@@ -39,6 +40,8 @@ namespace Convertidor.Services.Destino.ADM
         private readonly ISisEmpresaRepository _sisEmpresaRepository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
+        private readonly IAdmDocumentosOpDestinoRepository _admDocumentosOpDestinoRepository;
+        private readonly IAdmDocumentosOpRepository _admDocumentosOpRepository;
 
 
         public AdmOrdenPagoDestinoService(
@@ -67,7 +70,9 @@ namespace Convertidor.Services.Destino.ADM
                         IAdmComprobantesDocumentosOpRepository admComprobantesDocumentosOpRepository,
                         ISisEmpresaRepository sisEmpresaRepository,
                         ISisUsuarioRepository sisUsuarioRepository,
-                        ISisDescriptivaRepository sisDescriptivaRepository
+                        ISisDescriptivaRepository sisDescriptivaRepository,
+                        IAdmDocumentosOpDestinoRepository admDocumentosOpDestinoRepository,
+                        IAdmDocumentosOpRepository admDocumentosOpRepository
                         )
         {
             _mapper = mapper;
@@ -96,6 +101,8 @@ namespace Convertidor.Services.Destino.ADM
             _sisEmpresaRepository = sisEmpresaRepository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _sisDescriptivaRepository = sisDescriptivaRepository;
+            _admDocumentosOpDestinoRepository = admDocumentosOpDestinoRepository;
+            _admDocumentosOpRepository = admDocumentosOpRepository;
         }
 
         
@@ -634,7 +641,16 @@ namespace Convertidor.Services.Destino.ADM
                    await _admComprobantesDocumentosOpDestinoRepository.Add(newcomprobantesDocumentos);
                }
 
+               var documentosOpOrigen = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
+               if (documentosOpOrigen.Count > 0)
+               {
+                   foreach (var item in documentosOpOrigen)
+                   {
+                       var newDocumentos = _mapper.Map<Convertidor.Data.EntitiesDestino.ADM.ADM_DOCUMENTOS_OP>(item);
+                       await _admDocumentosOpDestinoRepository.Add(newDocumentos);
 
+                   }
+               }
 
             }
             else
