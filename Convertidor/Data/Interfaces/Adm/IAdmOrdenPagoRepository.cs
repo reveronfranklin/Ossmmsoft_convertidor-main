@@ -13,6 +13,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<List<ADM_ORDEN_PAGO>>> GetByPresupuesto(AdmOrdenPagoFilterDto filter);
         Task<string> GetNextOrdenPago(int codigoPresupuesto);
         Task<string> UpdateMontoEnLetras(int codigoOrdenPago, decimal monto);
+        Task<string> UpdateEstatusText(int codigoOrdenPago);
      
         Task<string> UpdateDatosAgenteRetencion(int codigoOrdenPago, AdmAgenteRetencionDto agenteRetencion);
     }

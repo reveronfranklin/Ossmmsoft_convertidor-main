@@ -5,6 +5,24 @@ namespace Convertidor.Services.Adm.AdmOrdenPago;
 
 public partial class AdmOrdenPagoService 
 {
+
+
+
+            public async Task<string> GetEstatusTextOrdenPago(int codigoOrdenPago)
+            {
+                var result = string.Empty;
+
+                await _repository.UpdateEstatusText(codigoOrdenPago);
+                var ordenPago = await _repository.GetCodigoOrdenPago(codigoOrdenPago);
+                if (ordenPago is not null)
+                {
+                    result = ordenPago.ESTATUS_TEXT;
+                }
+
+                return result;
+
+            }
+            
             public string GetDenominacionDescriptiva(List<ADM_DESCRIPTIVAS> descriptivas , int id)
             {
                 string result = "";
