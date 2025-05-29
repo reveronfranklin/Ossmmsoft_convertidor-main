@@ -96,7 +96,7 @@ namespace Convertidor.Services.Adm
                 itemResult.SearchText=dtos.SEARCH_TEXT;
                 itemResult.Status = dtos.STATUS;
                 itemResult.Titulo = dtos.TITULO;
-                itemResult.FileName=$"/ExcelFile/{dtos.FILE_NAME}";
+                itemResult.FileName=$"{dtos.FILE_NAME}";
                 
 
       
