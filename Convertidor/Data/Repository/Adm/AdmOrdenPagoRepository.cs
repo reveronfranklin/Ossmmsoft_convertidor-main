@@ -302,6 +302,34 @@ namespace Convertidor.Data.Repository.Adm
         }
         
         
+
+        public async Task<string> UpdateEstatusText(int codigoOrdenPago)
+        {
+
+
+           
+            try
+            {
+            
+                
+                FormattableString xqueryDiario = $"CALL ADM.ADM_SHOW_ESTATUS_OP({codigoOrdenPago});";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
+
+        }
+
+        
         public async Task<string> UpdateMontoEnLetras(int codigoOrdenPago,decimal monto)
         {
 

@@ -6,7 +6,7 @@ namespace Convertidor.Services.Adm.AdmOrdenPago;
 
 public partial class AdmOrdenPagoService 
 {
-          public async Task<AdmOrdenPagoResponseDto> MapOrdenPagoDto(ADM_ORDEN_PAGO dtos,List<ADM_DESCRIPTIVAS> descriptivas,ADM_PROVEEDORES proveedor)
+        public async Task<AdmOrdenPagoResponseDto> MapOrdenPagoDto(ADM_ORDEN_PAGO dtos,List<ADM_DESCRIPTIVAS> descriptivas,ADM_PROVEEDORES proveedor)
         {
 
        
@@ -55,6 +55,9 @@ public partial class AdmOrdenPagoService
             {
                 itemResult.ConFactura = true;
             }
+    
+            
+            itemResult.EstatusText=await GetEstatusTextOrdenPago(dtos.CODIGO_ORDEN_PAGO);
             return itemResult;
         }
 
