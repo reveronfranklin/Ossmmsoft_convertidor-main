@@ -34,6 +34,7 @@
         public decimal? numeroComprobante3 { get; set; }
         public decimal? NumeroComprobante4 { get; set; }
         public bool ConFactura { get; set; }
+        public string EstatusText { get; set; } = string.Empty;
     }
 }
 

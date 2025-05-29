@@ -55,6 +55,9 @@ public partial class AdmOrdenPagoService
             {
                 itemResult.ConFactura = true;
             }
+
+            if (dtos.ESTATUS_TEXT is null) dtos.ESTATUS_TEXT = "";
+            itemResult.EstatusText=dtos.ESTATUS_TEXT;
             return itemResult;
         }
 
