@@ -10,7 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mapping.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mapping.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -404,6 +404,7 @@
       <workItem from="1748458767028" duration="11076000" />
       <workItem from="1748477203438" duration="601000" />
       <workItem from="1748478073059" duration="508000" />
+      <workItem from="1748478701926" duration="1555000" />
     </task>
     <servers />
   </component>
@@ -5448,10 +5449,10 @@
           <line>208</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'">
             <startOffsets>
-              <option value="8801" />
+              <option value="8790" />
             </startOffsets>
             <endOffsets>
-              <option value="8860" />
+              <option value="8849" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1117" />
@@ -5474,10 +5475,10 @@
           <line>221</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'">
             <startOffsets>
-              <option value="9336" />
+              <option value="9325" />
             </startOffsets>
             <endOffsets>
-              <option value="9359" />
+              <option value="9348" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1119" />
@@ -5487,10 +5488,10 @@
           <line>237</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'">
             <startOffsets>
-              <option value="10090" />
+              <option value="10079" />
             </startOffsets>
             <endOffsets>
-              <option value="10152" />
+              <option value="10141" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1120" />

@@ -66,7 +66,7 @@ namespace Convertidor.Services.Adm.Pagos
                             tw.WriteLine(s);
                         tw.Close();
                     }
-                    var linkData = $"/ExcelFiles/{fileNameTxt}";
+                    var linkData = $"{fileNameTxt}";
                     result.IsValid = true;
                     result.Message = "";
                     result.LinkData = linkData;
