@@ -42,6 +42,8 @@ namespace Convertidor.Services.Destino.ADM
         private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
         private readonly IAdmDocumentosOpDestinoRepository _admDocumentosOpDestinoRepository;
         private readonly IAdmDocumentosOpRepository _admDocumentosOpRepository;
+        private readonly IAdmImpuestosDocumentosOpRepository _admImpuestosDocumentosOpRepository;
+        private readonly IAdmImpuestoDocumentosOpDestinoRepository _admImpuestoDocumentosOpDestinoRepository;
 
 
         public AdmOrdenPagoDestinoService(
@@ -72,7 +74,9 @@ namespace Convertidor.Services.Destino.ADM
                         ISisUsuarioRepository sisUsuarioRepository,
                         ISisDescriptivaRepository sisDescriptivaRepository,
                         IAdmDocumentosOpDestinoRepository admDocumentosOpDestinoRepository,
-                        IAdmDocumentosOpRepository admDocumentosOpRepository
+                        IAdmDocumentosOpRepository admDocumentosOpRepository,
+                        IAdmImpuestosDocumentosOpRepository admImpuestosDocumentosOpRepository,
+                        IAdmImpuestoDocumentosOpDestinoRepository admImpuestoDocumentosOpDestinoRepository
                         )
         {
             _mapper = mapper;
@@ -103,6 +107,8 @@ namespace Convertidor.Services.Destino.ADM
             _sisDescriptivaRepository = sisDescriptivaRepository;
             _admDocumentosOpDestinoRepository = admDocumentosOpDestinoRepository;
             _admDocumentosOpRepository = admDocumentosOpRepository;
+            _admImpuestosDocumentosOpRepository = admImpuestosDocumentosOpRepository;
+            _admImpuestoDocumentosOpDestinoRepository = admImpuestoDocumentosOpDestinoRepository;
         }
 
         
@@ -398,6 +404,7 @@ namespace Convertidor.Services.Destino.ADM
                 await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.TIPO_PAGO_ID);          
                 await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.FRECUENCIA_PAGO_ID);
                 await _admDocumentosOpDestinoRepository.DeleteByOrdenPago(codigoOrdenPago);
+          
                 
                 return "";
             }
@@ -578,7 +585,7 @@ namespace Convertidor.Services.Destino.ADM
             }
             
             var proveedorOrigen = await _admProveedoresRepository.GetByCodigo(ordenPagoOrigen.CODIGO_PROVEEDOR);
-            if (proveedorOrigen != null)
+            if (proveedorOrigen is not null)
             {   
                 //var newDestido = MapProveedor(proveedorOrigen);
                 var newDestido = _mapper.Map<ADM_PROVEEDORES>(proveedorOrigen);
@@ -651,6 +658,21 @@ namespace Convertidor.Services.Destino.ADM
                    {
                        var newDocumentos = _mapper.Map<Convertidor.Data.EntitiesDestino.ADM.ADM_DOCUMENTOS_OP>(item);
                        await _admDocumentosOpDestinoRepository.Add(newDocumentos);
+
+
+                       var impuestosOrigen =
+                          await _admImpuestosDocumentosOpRepository.GetByDocumento(item.CODIGO_DOCUMENTO_OP);
+                       if (impuestosOrigen.Count > 0)
+                       {
+                           foreach (var itemImpuesto in impuestosOrigen)
+                           {
+
+                               await _admImpuestoDocumentosOpDestinoRepository.DeleteByDocumento(itemImpuesto
+                                   .CODIGO_DOCUMENTO_OP);
+                               var newImpuestoDocumentos = _mapper.Map<Convertidor.Data.EntitiesDestino.ADM.ADM_IMPUESTOS_DOCUMENTOS_OP>(itemImpuesto);
+                               await _admImpuestoDocumentosOpDestinoRepository.Add(newImpuestoDocumentos);
+                           }
+                       }
 
                    }
                }
