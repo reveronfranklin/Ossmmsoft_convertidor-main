@@ -227,6 +227,11 @@ namespace Convertidor.Services.Adm
             {
                 var listDto = await MapListBeneficiariosOpDto(beneficiariosOp);
 
+                
+                var  monto = listDto.Sum(x => x.Monto);
+                var montoPagado = listDto.Sum(x => x.MontoPagado);
+                result.Total1=monto;
+                result.Total2 = montoPagado;
                 result.Data = listDto;
                 result.IsValid = true;
                 result.Message = "";
