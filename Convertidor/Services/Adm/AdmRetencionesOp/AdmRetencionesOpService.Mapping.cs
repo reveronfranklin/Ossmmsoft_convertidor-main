@@ -34,15 +34,17 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 if (admRetenciones != null)
                 {
                     itemResult.ConceptoPago = admRetenciones.CONCEPTO_PAGO;
+                    itemResult.PorRetencion = admRetenciones.POR_RETENCION;
                 }
+                else
+                {
+                    itemResult.PorRetencion = 0;
+                }
+              
 
                 if (dtos.POR_RETENCION == null) dtos.POR_RETENCION = 0;
                 itemResult.PorRetencion = dtos.POR_RETENCION;
-                if (dtos.POR_RETENCION == 0)
-                {
-                    itemResult.PorRetencion = admRetenciones.POR_RETENCION;
-
-                }
+              
 
 
                 if (dtos.MONTO_RETENCION == null) dtos.MONTO_RETENCION = 0;
