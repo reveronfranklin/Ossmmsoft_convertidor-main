@@ -12,7 +12,20 @@ namespace Convertidor.Data.DestinoRepository.ADM
             _context = context;
         }
 
-      
+        public async Task<ADM_PUC_ORDEN_PAGO> GetByCodigoPucOrdenPago(int codigoPucOrdenPago)
+        {
+            try
+            {
+                var pucOrdenPago =
+                    await _context.ADM_PUC_ORDEN_PAGO.Where(x => x.CODIGO_ORDEN_PAGO == codigoPucOrdenPago).FirstOrDefaultAsync();
+                return pucOrdenPago;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
 
     
         
@@ -23,8 +36,10 @@ namespace Convertidor.Data.DestinoRepository.ADM
             ResultDto<bool> result = new ResultDto<bool>(false);
             try 
             {
-                await _context.ADM_PUC_ORDEN_PAGO.AddRangeAsync(entities);
+                
+                await  _context.ADM_PUC_ORDEN_PAGO.AddRangeAsync(entities);
                 await _context.SaveChangesAsync();
+                
 
 
                 result.Data = true;
