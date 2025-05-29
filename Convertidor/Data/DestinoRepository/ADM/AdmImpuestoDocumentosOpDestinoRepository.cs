@@ -106,6 +106,23 @@ public class AdmImpuestoDocumentosOpDestinoRepository:IAdmImpuestoDocumentosOpDe
                 return result;
             }
         }
+        public async Task<string> DeleteByDocumento(int codigoDocumento)
+        {
+            try
+            {
+
+              
+              
+                FormattableString xquerySaldo = $"DELETE FROM public.\"ADM_IMPUESTOS_DOCUMENTOS_OP\" WHERE  \"CODIGO_DOCUMENTO_OP\" = {codigoDocumento}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<string> Delete(int codigoImpuestoDocumentoOp)
         {
             try
