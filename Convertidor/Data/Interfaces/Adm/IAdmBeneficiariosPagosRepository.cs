@@ -13,5 +13,6 @@ public interface IAdmBeneficiariosPagosRepository
     Task<string> Delete(int codigoBeneficiarioPago);
     Task<string> DeleteByCodigoPago(int codigoPago);
     Task<List<ADM_BENEFICIARIOS_CH>> GetByCodigoOrdenPago(int codigoOrdenPago);
+    Task<decimal> GetTotalPagadoCodigoBeneficiarioOp(int codigoBenficiarioOp);
     Task<int> GetNextKey();
 }

@@ -39,6 +39,7 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -412,7 +413,7 @@
       <workItem from="1748542600494" duration="705000" />
       <workItem from="1748543414787" duration="4501000" />
       <workItem from="1748560438867" duration="4353000" />
-      <workItem from="1748566352861" duration="300000" />
+      <workItem from="1748566352861" duration="3553000" />
     </task>
     <servers />
   </component>
@@ -5089,26 +5090,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>273</line>
+          <line>270</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'GetByLote'">
             <startOffsets>
-              <option value="11977" />
+              <option value="11812" />
             </startOffsets>
             <endOffsets>
-              <option value="12028" />
+              <option value="11863" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1070" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>532</line>
+          <line>525</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="21496" />
+              <option value="21156" />
             </startOffsets>
             <endOffsets>
-              <option value="21555" />
+              <option value="21215" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1071" />
@@ -5146,13 +5147,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>274</line>
+          <line>271</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'GetByLote'">
             <startOffsets>
-              <option value="12045" />
+              <option value="11880" />
             </startOffsets>
             <endOffsets>
-              <option value="12090" />
+              <option value="11925" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1080" />
@@ -5172,13 +5173,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>657</line>
+          <line>650</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="26500" />
+              <option value="26160" />
             </startOffsets>
             <endOffsets>
-              <option value="26547" />
+              <option value="26207" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1082" />
@@ -5250,39 +5251,39 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>449</line>
+          <line>442</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="18547" />
+              <option value="18236" />
             </startOffsets>
             <endOffsets>
-              <option value="18589" />
+              <option value="18278" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1093" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>447</line>
+          <line>440</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="18485" />
+              <option value="18174" />
             </startOffsets>
             <endOffsets>
-              <option value="18516" />
+              <option value="18205" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1094" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>376</line>
+          <line>369</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="15699" />
+              <option value="15388" />
             </startOffsets>
             <endOffsets>
-              <option value="15762" />
+              <option value="15451" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1095" />
@@ -5556,13 +5557,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>372</line>
+          <line>365</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="15507" />
+              <option value="15196" />
             </startOffsets>
             <endOffsets>
-              <option value="15580" />
+              <option value="15269" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1132" />
@@ -5773,19 +5774,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1156" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs</url>
-          <line>350</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" containingFunctionPresentation="Method 'CreateBeneficiarioPago'">
-            <startOffsets>
-              <option value="14820" />
-            </startOffsets>
-            <endOffsets>
-              <option value="14844" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1158" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
