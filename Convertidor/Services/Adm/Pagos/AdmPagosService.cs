@@ -159,7 +159,7 @@ namespace Convertidor.Services.Adm.Pagos
             if (beneficiario != null)
             {
                 var pendiente = beneficiario.MONTO - beneficiario.MONTO_PAGADO;
-                if (pendiente > montoPagado)
+                if (pendiente < montoPagado)
                 {
                     result = $"{montoPagado} es Mayor al monto Pendiente de la Orden de pago:{pendiente}";
                 }
