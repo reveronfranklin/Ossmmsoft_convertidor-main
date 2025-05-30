@@ -12,5 +12,6 @@ public interface IAdmBeneficiariosPagosRepository
     Task<ResultDto<ADM_BENEFICIARIOS_CH>> Update(ADM_BENEFICIARIOS_CH entity);
     Task<string> Delete(int codigoBeneficiarioPago);
     Task<string> DeleteByCodigoPago(int codigoPago);
+    Task<List<ADM_BENEFICIARIOS_CH>> GetByCodigoOrdenPago(int codigoOrdenPago);
     Task<int> GetNextKey();
 }
