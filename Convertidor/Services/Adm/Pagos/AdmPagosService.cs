@@ -231,14 +231,11 @@ namespace Convertidor.Services.Adm.Pagos
                 var updated = await _beneficiariosPagosRepository.Update(beneficiario);
                 if (updated.IsValid && updated.Data != null)
                 {
-                    decimal totalPagodo = 0;
-                    var beneficiarioPago = await _beneficiariosPagosRepository.GetByCodigoOrdenPago((int)beneficiario.CODIGO_ORDEN_PAGO);
-                    if (beneficiarioPago.Count>0)
-                    {
-                        totalPagodo = beneficiarioPago.Sum(x => x.MONTO);
-                    }
-                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, totalPagodo); 
-                   
+                    var totalPagado =
+                        await _beneficiariosPagosRepository.GetTotalPagadoCodigoBeneficiarioOp(
+                            (int)beneficiario.CODIGO_BENEFICIARIO_OP);
+                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, totalPagado); 
+
                     result.Data = true;
                     result.IsValid = true;
                     result.Message = "";
@@ -348,14 +345,10 @@ namespace Convertidor.Services.Adm.Pagos
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
                 await _beneficiariosPagosRepository.Add(entity);
-                decimal totalPagodo = 0;
-                var beneficiarioPago = await _beneficiariosPagosRepository.GetByCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (beneficiarioPago.Count>0)
-                {
-                    totalPagodo = beneficiarioPago.Sum(x => x.MONTO);
-                }
-                
-                await _admBeneficiariosOpRepository.UpdateMontoPagado((int)dto.CodigoBeneficiarioOP, totalPagodo); 
+                var totalPagado =
+                    await _beneficiariosPagosRepository.GetTotalPagadoCodigoBeneficiarioOp(
+                        (int)dto.CodigoBeneficiarioOP);
+                await _admBeneficiariosOpRepository.UpdateMontoPagado((int)dto.CodigoBeneficiarioOP, totalPagado); 
 
                 return true;
             }
@@ -466,6 +459,7 @@ namespace Convertidor.Services.Adm.Pagos
 
         public async Task<ResultDto<bool>> Delete(PagoDeleteDto dto)
         {
+            int codigoOrdenPago = 0;
             ResultDto<bool> result = new ResultDto<bool>(false);
             try
             {
@@ -478,7 +472,10 @@ namespace Convertidor.Services.Adm.Pagos
                     return result;
                 }
                 var beneficiario = await _beneficiariosPagosRepository.GetByPago(dto.CodigoPago);
-
+                if (beneficiario is not null)
+                {
+                    codigoOrdenPago = (int)beneficiario.CODIGO_ORDEN_PAGO;
+                }
                  var esModificable=await PagoEsModificable((int)pago.CODIGO_LOTE_PAGO);
                 if (esModificable.Length > 0)
                 {
@@ -497,17 +494,13 @@ namespace Convertidor.Services.Adm.Pagos
                     return result;
                 }
 
-                if (beneficiario != null)
-                {
-                    decimal totalPagodo = 0;
-                    var beneficiarioPago = await _beneficiariosPagosRepository.GetByCodigoOrdenPago((int)beneficiario.CODIGO_ORDEN_PAGO);
-                    if (beneficiarioPago.Count>0)
-                    {
-                        totalPagodo = beneficiarioPago.Sum(x => x.MONTO);
-                    }
-                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, totalPagodo); 
 
-                }
+                var totalPagado =
+                    await _beneficiariosPagosRepository.GetTotalPagadoCodigoBeneficiarioOp(
+                        (int)beneficiario.CODIGO_BENEFICIARIO_OP);
+                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, totalPagado); 
+
+            
                
                 result.Data = true;
                 result.IsValid = true;

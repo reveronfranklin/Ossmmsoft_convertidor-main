@@ -58,7 +58,35 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
         
+
+        public async Task<decimal> GetTotalPagadoCodigoBeneficiarioOp(int codigoBenficiarioOp)
+        {
+            decimal totalPagodo = 0;
+            var beneficiario = await GetByCodigoBeneficiarioOp(codigoBenficiarioOp);
+            if (beneficiario.Count>0)
+            {
+                totalPagodo = beneficiario.Sum(x => x.MONTO);
+            }
+            return totalPagodo;
+            
+        }
         
+        
+        public async Task<List<ADM_BENEFICIARIOS_CH>> GetByCodigoBeneficiarioOp(int codigoBenficiarioOp)
+        {
+            try
+            {
+                var result = await _context.ADM_BENEFICIARIOS_CH
+                    
+                    .Where(x=>x.CODIGO_BENEFICIARIO_OP==codigoBenficiarioOp).DefaultIfEmpty().ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+        }
         public async Task<List<ADM_BENEFICIARIOS_CH>> GetByCodigoOrdenPago(int codigoOrdenPago)
         {
             try
