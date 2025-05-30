@@ -231,7 +231,13 @@ namespace Convertidor.Services.Adm.Pagos
                 var updated = await _beneficiariosPagosRepository.Update(beneficiario);
                 if (updated.IsValid && updated.Data != null)
                 {
-                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, dto.Monto); 
+                    decimal totalPagodo = 0;
+                    var beneficiarioPago = await _beneficiariosPagosRepository.GetByCodigoOrdenPago((int)beneficiario.CODIGO_ORDEN_PAGO);
+                    if (beneficiarioPago.Count>0)
+                    {
+                        totalPagodo = beneficiarioPago.Sum(x => x.MONTO);
+                    }
+                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, totalPagodo); 
                    
                     result.Data = true;
                     result.IsValid = true;
@@ -342,7 +348,14 @@ namespace Convertidor.Services.Adm.Pagos
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
                 await _beneficiariosPagosRepository.Add(entity);
-                await _admBeneficiariosOpRepository.UpdateMontoPagado((int)dto.CodigoBeneficiarioOP, dto.Monto); 
+                decimal totalPagodo = 0;
+                var beneficiarioPago = await _beneficiariosPagosRepository.GetByCodigoOrdenPago(dto.CodigoOrdenPago);
+                if (beneficiarioPago.Count>0)
+                {
+                    totalPagodo = beneficiarioPago.Sum(x => x.MONTO);
+                }
+                
+                await _admBeneficiariosOpRepository.UpdateMontoPagado((int)dto.CodigoBeneficiarioOP, totalPagodo); 
 
                 return true;
             }
@@ -486,7 +499,13 @@ namespace Convertidor.Services.Adm.Pagos
 
                 if (beneficiario != null)
                 {
-                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, 0); 
+                    decimal totalPagodo = 0;
+                    var beneficiarioPago = await _beneficiariosPagosRepository.GetByCodigoOrdenPago((int)beneficiario.CODIGO_ORDEN_PAGO);
+                    if (beneficiarioPago.Count>0)
+                    {
+                        totalPagodo = beneficiarioPago.Sum(x => x.MONTO);
+                    }
+                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)beneficiario.CODIGO_BENEFICIARIO_OP, totalPagodo); 
 
                 }
                
