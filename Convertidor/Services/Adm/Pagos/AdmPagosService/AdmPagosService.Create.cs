@@ -20,6 +20,14 @@ public partial class AdmPagosService
                     result.Message = "Lote No Existe";
                     return result;
                 }
+                
+                if (lote.STATUS != "PE" )
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Lote de pago no muede ser Modificado esta en estatus: {lote.STATUS}";
+                    return result;
+                }
               
                 var beneficiarioOp= await _admBeneficiariosOpRepository.GetCodigoBeneficiarioOp(dto.CodigoBeneficiarioOP);
                 if (beneficiarioOp == null)
