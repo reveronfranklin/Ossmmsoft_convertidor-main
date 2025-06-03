@@ -9,28 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Anular.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Aprobar.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Create.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Delete.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Mapping.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Mutation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Queries.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Update.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagoElectronicoService/AdmPagoElectronico.Mapping.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagoElectronicoService/AdmPagoElectronicoServise.Mutation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Create.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Mapping.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Mutation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Queries.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Update.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Validation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosServices.Delete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagoElectronicoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagoElectronicoService/AdmPagoElectronicoService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Create.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Create.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Mutation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Mutation.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -433,7 +413,7 @@
       <workItem from="1748608515442" duration="1782000" />
       <workItem from="1748657090436" duration="4004000" />
       <workItem from="1748900603932" duration="2191000" />
-      <workItem from="1748987177196" duration="1062000" />
+      <workItem from="1748987177196" duration="1941000" />
     </task>
     <servers />
   </component>

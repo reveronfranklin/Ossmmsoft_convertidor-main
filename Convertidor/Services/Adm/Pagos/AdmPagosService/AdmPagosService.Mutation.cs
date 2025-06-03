@@ -10,6 +10,10 @@ public partial class AdmPagosService
             ResultDto<bool> result = new ResultDto<bool>(false);
             try
             {
+                
+              
+
+                
                 var beneficiario = await _beneficiariosPagosRepository.GetCodigoBeneficiarioPago(dto.CodigoBeneficiarioPago);
                 if (beneficiario == null)
                 {
@@ -26,6 +30,24 @@ public partial class AdmPagosService
                     result.Message = "Codigo de Pago No Existe";
                     return result;
                 }
+                
+                var lote = await _admLotePagoRepository.GetByCodigo((int)pago.CODIGO_LOTE_PAGO);
+                if (lote == null)
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = "Lote No Existe";
+                    return result;
+                }
+                
+                if (lote.STATUS != "PE" )
+                {
+                    result.Data = false;
+                    result.IsValid = false;
+                    result.Message = $"Lote de pago no muede ser Modificado esta en estatus: {lote.STATUS}";
+                    return result;
+                }
+                
 
                 
                 if (dto.Monto<=0)
