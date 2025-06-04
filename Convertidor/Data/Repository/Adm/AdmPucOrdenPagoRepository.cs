@@ -129,6 +129,24 @@ namespace Convertidor.Data.Repository.Adm
                 return result;
             }
         }
+        
+        public async Task<string>UpdateMontoAnulado(int CodigoPucOrdenPago) 
+        {
+            try
+            {
+
+           
+                FormattableString xquerySaldo = $"UPDATE ADM_PUC_ORDEN_PAGO SET MONTO_ANULADO=MONTO-MONTO_PAGADO WHERE  CODIGO_PUC_ORDEN_PAGO = {CodigoPucOrdenPago}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
+             
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<string>Delete(int CodigoPucOrdenPago) 
         {
             try

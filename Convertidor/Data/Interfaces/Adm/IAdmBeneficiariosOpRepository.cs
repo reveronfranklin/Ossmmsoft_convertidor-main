@@ -12,6 +12,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<ADM_BENEFICIARIOS_OP>> Update(ADM_BENEFICIARIOS_OP entity);
         Task<string> Delete(int codigoBeneficiarioOp);
         Task<string> UpdateMontoPagado(int codigoBeneficiarioOp, decimal montoPagado);
+        Task<string> UpdateMontoAnulado(int codigoOrdenPago);
         Task<int> GetNextKey();
     }
 }

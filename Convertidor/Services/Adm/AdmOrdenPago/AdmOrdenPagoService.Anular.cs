@@ -38,12 +38,19 @@ public partial class AdmOrdenPagoService
                 codigoOrdenPago.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoOrdenPago);
+                //ACTUALIZAR ADM_BENEFICIARIO_OP MONTO A MONTO_ANULADO
+                await _admBeneficiariosOpRepository.UpdateMontoAnulado(dto.CodigoOrdenPago);
+               
                 var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(dto.CodigoOrdenPago);
                 if (pucOrdenPago != null && pucOrdenPago.Count > 0)
                 {
 
                     foreach (var item in pucOrdenPago)
                     {
+                        
+                        //ACTUALIZAR MONTO_ANULADO=MONTO-MONTO_PAGADO EN ADM_PUC_ORDEN_PAGO
+                        await _admPucOrdenPagoRepository.UpdateMontoAnulado(item.CODIGO_PUC_ORDEN_PAGO);
+                     
                         await _prePucCompromisosRepository.UpdateMontoCausadoById(
                             item.CODIGO_PUC_COMPROMISO, 0);
                     }
