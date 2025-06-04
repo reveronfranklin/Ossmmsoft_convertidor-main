@@ -71,9 +71,12 @@ namespace Convertidor.Services.Adm
               
                 if (compromisoOp != null && compromisoOp.Count() > 0)
                 {
-                    var listDto =  MapListCompromisoOpDto(compromisoOp);
+                    var listDto = await MapListCompromisoOpDto(compromisoOp);
+                    // Calcular el total del Compromiso
+                    decimal totalMonto = listDto.Sum(t => t.Monto);
 
-                    result.Data = await listDto;
+                    result.Data =  listDto;
+                    result.Total1 = totalMonto;
                     result.IsValid = true;
                     result.Message = "";
 
