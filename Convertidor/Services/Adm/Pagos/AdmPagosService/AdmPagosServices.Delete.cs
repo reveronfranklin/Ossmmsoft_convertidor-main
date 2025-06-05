@@ -22,7 +22,7 @@ public partial class AdmPagosService
                 {
                     result.Data = false;
                     result.IsValid = false;
-                    result.Message = $"Lote de pago no muede ser eliminado esta en estatus: {pago.STATUS}";
+                    result.Message = $"Lote de pago no puede ser eliminado esta en estatus: {pago.STATUS}";
                     return result;
                 }
                 
