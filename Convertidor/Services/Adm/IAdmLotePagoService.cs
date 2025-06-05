@@ -11,5 +11,6 @@ public interface IAdmLotePagoService
     Task<ResultDto<AdmLotePagoResponseDto>> CambioStatus(AdmLotePagoCambioStatusDto dto);
     Task<ResultDto<AdmLotePagoResponseDto>> Aprobar(AdmLotePagoCambioStatusDto dto);
     Task<ResultDto<AdmLotePagoResponseDto>> Anular(AdmLotePagoCambioStatusDto dto);
+    Task ReconstruirSearchText(int codigoPresupuesto);
 
 }

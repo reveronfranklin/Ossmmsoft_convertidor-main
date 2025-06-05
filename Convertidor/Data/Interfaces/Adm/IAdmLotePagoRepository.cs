@@ -12,5 +12,6 @@ public interface IAdmLotePagoRepository
     Task<string> Delete(int id);
     Task<int> GetNextKey();
     Task<string> UpdateSearchText(int codigoLote);
+    Task ReconstruirSearchTextPago(int codigoPresupuesto);
 
 }

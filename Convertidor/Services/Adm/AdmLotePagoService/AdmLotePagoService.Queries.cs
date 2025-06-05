@@ -10,12 +10,9 @@ public partial class AdmLotePagoService
         public async Task<string> GetSearchText(ADM_LOTE_PAGO dto)
         {
             var result = "";
-            var cuentaBanco = await   _sisCuentaBancoRepository.GetById(dto.CODIGO_CUENTA_BANCO);
-            var banco=await _bancoRepository.GetByCodigo(cuentaBanco.CODIGO_BANCO);
-            var descriptivaTipoPago = await _admDescriptivaRepository.GetByCodigo(dto.TIPO_PAGO_ID);
-
-            result = $"{descriptivaTipoPago.DESCRIPCION}-{cuentaBanco.NO_CUENTA}-{banco.NOMBRE}-{dto.STATUS}-{dto.TITULO}";
-
+         
+           await _repository.UpdateSearchText(dto.CODIGO_LOTE_PAGO);
+            
             return result;
         }
         public async Task<ResultDto<List<AdmLotePagoResponseDto>>> GetAll(AdmLotePagoFilterDto filter)
@@ -25,6 +22,8 @@ public partial class AdmLotePagoService
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 filter.CodigEmpresa = conectado.Empresa;
+                
+               
                 var lotes = await _repository.GetAll(filter);
                 if (lotes.Data == null)
                 {

@@ -26,7 +26,13 @@ namespace Convertidor.Controllers
 
         }
         
-        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> ReconstruirSearchText(AdmLotePagoFilterDto dto)
+        {
+            await _service.ReconstruirSearchText(dto.CodigoPresupuesto);
+            return Ok();
+        }
    
         [HttpPost]
         [Route("[action]")]
