@@ -44,7 +44,7 @@ public partial class AdmPagosService
                 {
                     result.Data = false;
                     result.IsValid = false;
-                    result.Message = $"Lote de pago no muede ser Modificado esta en estatus: {lote.STATUS}";
+                    result.Message = $"Lote de pago no puede ser Modificado esta en estatus: {lote.STATUS}";
                     return result;
                 }
                 
