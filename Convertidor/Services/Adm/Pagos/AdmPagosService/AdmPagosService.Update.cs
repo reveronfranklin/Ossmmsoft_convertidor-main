@@ -89,7 +89,7 @@ public partial class AdmPagosService
                 pago.USUARIO_UPD = conectado.Usuario;
               
                 await _repository.Update(pago);
-             
+                await _admLotePagoRepository.UpdateSearchText((int)pago.CODIGO_LOTE_PAGO);
                 var resultDto = await MapChequesDto(pago);
                 result.Data = resultDto;
                 result.IsValid = true;

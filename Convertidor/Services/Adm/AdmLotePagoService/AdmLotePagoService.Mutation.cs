@@ -27,6 +27,13 @@ public partial class AdmLotePagoService
             
           
         }
+
+        public async Task ReconstruirSearchText(int codigoPresupuesto)
+        {
+            await _repository.ReconstruirSearchTextPago(codigoPresupuesto);
+        }
+         
+         
         
         public async Task<ResultDto<AdmLotePagoResponseDto>> CambioStatus(AdmLotePagoCambioStatusDto dto)
         {

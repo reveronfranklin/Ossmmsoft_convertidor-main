@@ -152,6 +152,7 @@ public partial class AdmPagosService
             if (created.IsValid && created.Data != null)
             {
                 await CreateBeneficiarioPago(dto,(int)lote.CODIGO_PRESUPUESTO, entity.CODIGO_CHEQUE);
+                await _admLotePagoRepository.UpdateSearchText((int)entity.CODIGO_LOTE_PAGO);
                 var resultDto = await MapChequesDto(created.Data);
                 result.Data = resultDto;
                 result.IsValid = true;

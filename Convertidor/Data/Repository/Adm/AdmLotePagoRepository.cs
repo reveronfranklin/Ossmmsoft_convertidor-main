@@ -114,26 +114,89 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
-        
+
+        public async Task<string> GetSearchTextPagos(int codigoLote)
+        {
+            string result=string.Empty;
+            try
+            {
+                var pagos =await  _context.ADM_CHEQUES.Where(x => x.CODIGO_LOTE_PAGO ==codigoLote)
+                    .ToListAsync();
+                if (pagos.Count() > 0)
+                {
+                    foreach (var item in pagos)
+                    {
+                        string nombreProveedor= string.Empty;
+                        var proveedor = await _context.ADM_PROVEEDORES
+                            .Where(X => X.CODIGO_PROVEEDOR == item.CODIGO_PROVEEDOR).FirstOrDefaultAsync();
+                        if (proveedor != null)
+                        {
+                            if (proveedor.NOMBRE_PROVEEDOR is null) proveedor.NOMBRE_PROVEEDOR = "";
+                            nombreProveedor = proveedor.NOMBRE_PROVEEDOR;
+                        }
+                        result = $"{result}{item.NUMERO_CHEQUE}{item.CODIGO_PROVEEDOR}{nombreProveedor}";
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+   
+            return result;
+                 
+        }
 
         public async Task<string> UpdateSearchText(int codigoLote)
         {
 
+            string result = string.Empty;
+            
             try
             {
-                FormattableString xqueryDiario = $"UPDATE ADM.ADM_LOTE_PAGO SET ADM.ADM_LOTE_PAGO.SEARCH_TEXT = (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  =ADM.ADM_LOTE_PAGO.TIPO_PAGO_ID) ||\n(SELECT NO_CUENTA FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO) ||\n(SELECT CODIGO_BANCO FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO) ||\n(SELECT NOMBRE FROM SIS.SIS_BANCOS WHERE SIS.SIS_BANCOS.CODIGO_BANCO=(SELECT CODIGO_BANCO FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO)) || ADM.ADM_LOTE_PAGO.TITULO WHERE CODIGO_LOTE_PAGO ={codigoLote}";
+
+                if (codigoLote == 8386)
+                {
+                    var a = 1;
+                }
+                var searchTextPagos = await GetSearchTextPagos(codigoLote);
+
+             
+                
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_LOTE_PAGO SET ADM.ADM_LOTE_PAGO.SEARCH_TEXT = (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  =ADM.ADM_LOTE_PAGO.TIPO_PAGO_ID) || (SELECT NO_CUENTA FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO) || (SELECT CODIGO_BANCO FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO) || (SELECT NOMBRE FROM SIS.SIS_BANCOS WHERE SIS.SIS_BANCOS.CODIGO_BANCO=(SELECT CODIGO_BANCO FROM SIS.SIS_CUENTAS_BANCOS  WHERE SIS.SIS_CUENTAS_BANCOS.CODIGO_CUENTA_BANCO  =ADM.ADM_LOTE_PAGO.CODIGO_CUENTA_BANCO)) || ADM.ADM_LOTE_PAGO.TITULO || { searchTextPagos}  WHERE CODIGO_LOTE_PAGO ={codigoLote}";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                var lote = await GetByCodigo(codigoLote);
+                if (lote != null)
+                {
+                    result=lote.SEARCH_TEXT;
+                    return result;
+                }
                 return "";
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return "";
             }
 
 
 
 
+        }
+
+
+        public async Task ReconstruirSearchTextPago(int codigoPresupuesto)
+        {
+            var lotes =await  _context.ADM_LOTE_PAGO.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto).ToListAsync();
+            if (lotes.Count() > 0)
+            {
+                foreach (var item in lotes)
+                {
+                  await  UpdateSearchText(item.CODIGO_LOTE_PAGO);
+                }
+            }
         }
         
         public async Task<ResultDto<ADM_LOTE_PAGO>> Add(ADM_LOTE_PAGO entity)
