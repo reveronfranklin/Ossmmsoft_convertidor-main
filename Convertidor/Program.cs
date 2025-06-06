@@ -491,6 +491,7 @@ builder.Services.AddTransient<IAdmOrdenesPagoPorPagarRepository, AdmOrdenesPagoP
 builder.Services.AddTransient<IAdmBeneficiariosPagosRepository, AdmBeneficiariosPagosRepository>();
 
 builder.Services.AddTransient<IAdmPagoElectronicoRepository, AdmPagoElectronicoRepository>();
+builder.Services.AddTransient<IAdmAdmProveedoresContactoRepository, AdmAdmProveedoresContactoRepository>();
 
 
 
@@ -499,6 +500,11 @@ builder.Services.AddTransient<IAdmPagoElectronicoRepository, AdmPagoElectronicoR
 
 
 //ADM Services
+
+
+       
+builder.Services.AddTransient<IADM_V_PAGAR_A_LA_OP_TERCEROSServices, ADM_V_PAGAR_A_LA_OP_TERCEROSServices>(); 
+    
 builder.Services.AddTransient<IAdmTituloService, AdmTituloService>();
 builder.Services.AddTransient<IAdmDescriptivasService, AdmDescriptivasService>();
 builder.Services.AddTransient<IAdmProveedoresService, AdmProveedoresService>();

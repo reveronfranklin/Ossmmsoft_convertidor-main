@@ -11,5 +11,6 @@ public class SelectListDescriptivaDto
     }  
     
     public decimal  Value { get; set; }
+    public string  Titulo { get; set; }
     
 }

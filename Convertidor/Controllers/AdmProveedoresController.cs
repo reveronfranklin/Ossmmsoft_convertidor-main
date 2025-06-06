@@ -15,13 +15,12 @@ namespace Convertidor.Controllers
     {
        
         private readonly IAdmProveedoresService _service;
+        private readonly IADM_V_PAGAR_A_LA_OP_TERCEROSServices _proveedoresService;
 
-        public AdmProveedoresController(IAdmProveedoresService service)
+        public AdmProveedoresController(IAdmProveedoresService service,IADM_V_PAGAR_A_LA_OP_TERCEROSServices proveedoresService)
         {
-
             _service = service;
-
-
+            _proveedoresService = proveedoresService;
         }
         
 
@@ -33,6 +32,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllProveedoresContactos()
+        {
+            var result = await _proveedoresService.GetAll();
+            return Ok(result);
+        }
+        
    
         [HttpPost]
         [Route("[action]")]

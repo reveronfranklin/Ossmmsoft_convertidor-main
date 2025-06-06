@@ -8,7 +8,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="" />
+    <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_V_PAGAR_A_LA_OP_TERCEROS.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmAdmProveedoresContactoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProveedoresContactoRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/ADM_V_PAGAR_A_LA_OP_TERCEROSServices.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/IADM_V_PAGAR_A_LA_OP_TERCEROSServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmProveedoresController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmProveedoresController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextAdm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextAdm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/SelectListDescriptivaDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/SelectListDescriptivaDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDescriptivasService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDescriptivasService.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +45,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -427,6 +441,8 @@
       <workItem from="1749132023961" duration="881000" />
       <workItem from="1749132983136" duration="339000" />
       <workItem from="1749133418693" duration="1434000" />
+      <workItem from="1749143680075" duration="5781000" />
+      <workItem from="1749215688586" duration="760000" />
     </task>
     <servers />
   </component>
@@ -5672,6 +5688,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1167" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmProveedoresController.cs</url>
+          <line>38</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmProveedoresController.cs" containingFunctionPresentation="Method 'GetAllProveedoresContactos'">
+            <startOffsets>
+              <option value="1130" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1178" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1168" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
