@@ -698,6 +698,7 @@ namespace Convertidor.Services.Adm
             dto.Id = entity.DESCRIPCION_ID;
             dto.Descripcion = entity.DESCRIPCION;
             dto.Value = ConvertStringToDecimal(entity.EXTRA1);
+            dto.Titulo = entity.EXTRA2;
             
             
             return dto;

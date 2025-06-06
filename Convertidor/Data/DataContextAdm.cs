@@ -12,7 +12,8 @@ namespace Convertidor.Data
         }
 
        
-
+        
+        public DbSet<ADM_V_PAGAR_A_LA_OP_TERCEROS> ADM_V_PAGAR_A_LA_OP_TERCEROS { get; set; }
         public DbSet<ADM_DESCRIPTIVAS> ADM_DESCRIPTIVAS { get; set; }
 
         public DbSet<ADM_TITULOS> ADM_TITULOS { get; set; }
@@ -108,7 +109,7 @@ namespace Convertidor.Data
                     });
                     builder.ToTable("ADM_PRODUCTOS");
                 });
-
+            
             modelBuilder
                 .Entity<ADM_TITULOS>(builder =>
                 {
@@ -119,6 +120,21 @@ namespace Convertidor.Data
 
                     });
                     builder.ToTable("ADM_TITULOS");
+                });
+            modelBuilder
+                    
+                .Entity<ADM_V_PAGAR_A_LA_OP_TERCEROS>(builder =>
+                {
+                    builder.HasNoKey();
+                  
+                    builder.ToTable("ADM_V_PAGAR_A_LA_OP_TERCEROS");
+                    
+                    // Mapeo de propiedades a nombres de columna
+                    builder.Property(e => e.CodigoProveedor).HasColumnName("CODIGO_PROVEEDOR");
+                    builder.Property(e => e.CodigoContactoProveedor).HasColumnName("CODIGO_CONTACTO_PROVEEDOR");
+                    builder.Property(e => e.PagarALaOrdenDe).HasColumnName("PAGAR_A_LA_ORDEN_DE");
+                    builder.Property(e => e.NombreProveedor).HasColumnName("NOMBRE_PROVEEDOR");
+                    builder.Property(e => e.CodigoEmpresa).HasColumnName("CODIGO_EMPRESA");
                 });
             modelBuilder
                 .Entity<ADM_V_COMPROMISO_PENDIENTE>(builder =>
