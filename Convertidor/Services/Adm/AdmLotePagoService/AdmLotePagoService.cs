@@ -25,6 +25,7 @@ namespace Convertidor.Services.Adm.AdmLotePagoService
         private readonly IAdmPagoElectronicoService _admPagoElectronicoService;
         private readonly IAdmBeneficiariosOpRepository _admBeneficiariosOpRepository;
         private readonly IAdmBeneficiariosPagosRepository _admBeneficiariosPagosRepository;
+        private readonly IAdmPagosService _admPagosService;
 
 
         public AdmLotePagoService(IAdmLotePagoRepository repository,
@@ -37,7 +38,8 @@ namespace Convertidor.Services.Adm.AdmLotePagoService
                                         IAdmChequesRepository chequesRepository,
                                         IAdmPagoElectronicoService admPagoElectronicoService,
                                         IAdmBeneficiariosOpRepository admBeneficiariosOpRepository,
-                                        IAdmBeneficiariosPagosRepository admBeneficiariosPagosRepository)
+                                        IAdmBeneficiariosPagosRepository admBeneficiariosPagosRepository,
+                                        IAdmPagosService admPagosService)
 		{
             _repository = repository;
             _repository = repository;
@@ -52,6 +54,7 @@ namespace Convertidor.Services.Adm.AdmLotePagoService
             _admPagoElectronicoService = admPagoElectronicoService;
             _admBeneficiariosOpRepository = admBeneficiariosOpRepository;
             _admBeneficiariosPagosRepository = admBeneficiariosPagosRepository;
+            _admPagosService = admPagosService;
         }
         
     
