@@ -10,7 +10,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Delete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Delete.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -437,7 +438,9 @@
       <workItem from="1749254517909" duration="1035000" />
       <workItem from="1749255913073" duration="646000" />
       <workItem from="1749256648388" duration="1916000" />
-      <workItem from="1749604398563" duration="4571000" />
+      <workItem from="1749604398563" duration="6317000" />
+      <workItem from="1749662677622" duration="135000" />
+      <workItem from="1749662906697" duration="350000" />
     </task>
     <servers />
   </component>
@@ -5312,12 +5315,6 @@
           <option name="timeStamp" value="1116" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.cs</url>
-          <line>208</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'" />
-          <option name="timeStamp" value="1117" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs</url>
           <line>91</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs" containingFunctionPresentation="Method 'Anular'">
@@ -5329,18 +5326,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1118" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.cs</url>
-          <line>221</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'" />
-          <option name="timeStamp" value="1119" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.cs</url>
-          <line>237</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService.cs" containingFunctionPresentation="Method 'Anular'" />
-          <option name="timeStamp" value="1120" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs</url>
@@ -5774,6 +5759,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1174" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Delete.cs</url>
+          <line>10</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Delete.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="264" />
+            </startOffsets>
+            <endOffsets>
+              <option value="347" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1175" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
