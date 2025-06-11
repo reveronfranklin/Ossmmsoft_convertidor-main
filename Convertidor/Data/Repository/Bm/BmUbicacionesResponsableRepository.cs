@@ -42,7 +42,7 @@ namespace Convertidor.Data.Repository.Bm
             {
              
                 var result = await _context.BM_V_UBICA_RESPONSABLE.DefaultIfEmpty() 
-                    .Where(x=>x.LOGIN==usuarioResponsable)
+                    .Where(x=>x.LOGIN.ToUpper()==usuarioResponsable.ToUpper())
                     .ToListAsync();
               
                 return result;

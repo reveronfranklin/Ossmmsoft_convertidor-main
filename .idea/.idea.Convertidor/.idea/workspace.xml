@@ -10,8 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmProveedorResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmProveedorResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Proveedores/AdmProveedores/AdmProveedoresServices.Mapping.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Proveedores/AdmProveedores/AdmProveedoresServices.Mapping.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,9 +36,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -440,6 +436,8 @@
       <workItem from="1749216659837" duration="636000" />
       <workItem from="1749254517909" duration="1035000" />
       <workItem from="1749255913073" duration="646000" />
+      <workItem from="1749256648388" duration="1916000" />
+      <workItem from="1749604398563" duration="4571000" />
     </task>
     <servers />
   </component>
@@ -5750,6 +5748,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1172" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmUbicacionesResponsableController.cs</url>
+          <line>41</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmUbicacionesResponsableController.cs" containingFunctionPresentation="Method 'GetByUsuarioResponsable'">
+            <startOffsets>
+              <option value="1021" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1100" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1173" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs</url>
+          <line>30</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="652" />
+            </startOffsets>
+            <endOffsets>
+              <option value="689" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1174" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
