@@ -8,10 +8,10 @@ namespace Convertidor.Data.Repository.Bm
 	public class BmConteoRepository: IBmConteoRepository
     {
 		
-        private readonly DataContextBm _context;
+        private readonly DataContextBmConteo _context;
         private readonly IOssConfigServices _configServices;
 
-        public BmConteoRepository(DataContextBm context,IOssConfigServices configServices)
+        public BmConteoRepository(DataContextBmConteo context,IOssConfigServices configServices)
         {
             _context = context;
             _configServices = configServices;

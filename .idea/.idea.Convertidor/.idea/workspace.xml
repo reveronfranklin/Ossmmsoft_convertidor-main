@@ -9,9 +9,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextBmConteo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextBm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextBm.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Replication.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Replication.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmBienesFotoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmBienesFotoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoDetalleHistoricoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoDetalleHistoricoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoDetalleRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoDetalleRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoHistoricoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoHistoricoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +45,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -442,7 +448,11 @@
       <workItem from="1749256648388" duration="1916000" />
       <workItem from="1749604398563" duration="6317000" />
       <workItem from="1749662677622" duration="135000" />
-      <workItem from="1749662906697" duration="5894000" />
+      <workItem from="1749662906697" duration="11334000" />
+      <workItem from="1749740362757" duration="490000" />
+      <workItem from="1749740967901" duration="864000" />
+      <workItem from="1749741908830" duration="814000" />
+      <workItem from="1749742861807" duration="2678000" />
     </task>
     <servers />
   </component>
@@ -3931,13 +3941,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs</url>
-          <line>183</line>
+          <line>186</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BM_V_BM1Repository.cs" containingFunctionPresentation="Method 'GetProductMobil'">
             <startOffsets>
-              <option value="6845" />
+              <option value="7029" />
             </startOffsets>
             <endOffsets>
-              <option value="6859" />
+              <option value="7043" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="913" />
@@ -5774,6 +5784,123 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1175" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoRepository.cs</url>
+          <line>23</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoRepository.cs" containingFunctionPresentation="Method 'GetByCodigo'">
+            <startOffsets>
+              <option value="688" />
+            </startOffsets>
+            <endOffsets>
+              <option value="808" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1176" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoRepository.cs</url>
+          <line>40</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoRepository.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="1117" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1186" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1177" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoRepository.cs</url>
+          <line>46</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoRepository.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="1296" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1332" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1178" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs</url>
+          <line>28</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="572" />
+            </startOffsets>
+            <endOffsets>
+              <option value="609" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1179" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs</url>
+          <line>119</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="4753" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4795" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1181" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs</url>
+          <line>24</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="604" />
+            </startOffsets>
+            <endOffsets>
+              <option value="687" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1182" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs</url>
+          <line>43</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" containingFunctionPresentation="Method 'GetByUsuarioResponsable'">
+            <startOffsets>
+              <option value="1098" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1281" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1183" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs</url>
+          <line>51</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmUbicacionesResponsableRepository.cs" containingFunctionPresentation="Method 'GetByUsuarioResponsable'">
+            <startOffsets>
+              <option value="1405" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1441" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1184" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs</url>
+          <line>77</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/Mb1Controller.cs" containingFunctionPresentation="Method 'GetProductMobilById'">
+            <startOffsets>
+              <option value="1946" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2002" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1185" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

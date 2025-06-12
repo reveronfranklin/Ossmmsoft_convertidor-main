@@ -12,17 +12,20 @@ namespace Convertidor.Data.Repository.Catastro
 		
 
         private readonly DataContextBm _context;
+        private readonly DataContextBmConteo _contextBmConteo;
         private readonly IConfiguration _configuration;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IBmBienesFotoRepository _fotoRepository;
 
         public BM_V_BM1Repository(DataContextBm context,
+            DataContextBmConteo contextBmConteo,
             IConfiguration configuration,  
             ISisUsuarioRepository sisUsuarioRepository,
             IBmBienesFotoRepository fotoRepository
             )
         {
             _context = context;
+            _contextBmConteo = contextBmConteo;
             _configuration = configuration;
             _sisUsuarioRepository = sisUsuarioRepository;
             _fotoRepository = fotoRepository;
@@ -112,7 +115,7 @@ namespace Convertidor.Data.Repository.Catastro
                 List<BM_V_BM1> pageData = new List<BM_V_BM1>();
                 if (filter.SearhText.Length > 0)
                 {
-                    pageData = await _context.BM_V_BM1.DefaultIfEmpty()
+                    pageData = await _contextBmConteo.BM_V_BM1.DefaultIfEmpty()
                         .Where(x=>x.CODIGO_EMPRESA==conectado.Empresa && x.NRO_PLACA.Trim().ToLower().Contains(filter.SearhText.Trim().ToLower()))
                         .OrderBy(x => x.CODIGO_BIEN)
                         .ToListAsync();
@@ -121,7 +124,7 @@ namespace Convertidor.Data.Repository.Catastro
                 {
                     if (filter.CodigoDepartamentoResponsable > 0)
                     {
-                        pageData = await _context.BM_V_BM1.DefaultIfEmpty()
+                        pageData = await _contextBmConteo.BM_V_BM1.DefaultIfEmpty()
                             .Where(x =>x.CODIGO_EMPRESA==conectado.Empresa && x.CODIGO_ICP==filter.CodigoDepartamentoResponsable )
                             .OrderBy(x => x.CODIGO_BIEN)
                             .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -130,7 +133,7 @@ namespace Convertidor.Data.Repository.Catastro
                     }
                     else
                     {
-                        pageData = await _context.BM_V_BM1.DefaultIfEmpty()
+                        pageData = await _contextBmConteo.BM_V_BM1.DefaultIfEmpty()
                             .Where(x=>x.CODIGO_EMPRESA==conectado.Empresa)
                             .OrderBy(x => x.CODIGO_BIEN)
                             .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -195,7 +198,7 @@ namespace Convertidor.Data.Repository.Catastro
                 
                 BM_V_BM1 item = new BM_V_BM1();
 
-                item = await _context.BM_V_BM1.DefaultIfEmpty()
+                item = await _contextBmConteo.BM_V_BM1.DefaultIfEmpty()
                     .Where(x =>x.CODIGO_BIEN==filter.CodigoBien )
                     .FirstOrDefaultAsync();
               
