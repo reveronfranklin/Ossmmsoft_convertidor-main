@@ -11,8 +11,23 @@ namespace Convertidor.Data
         }
         
         
+        
+        public DbSet<BM_CONTEO> BM_CONTEO { get; set; }
+        public DbSet<BM_CONTEO_DETALLE> BM_CONTEO_DETALLE { get; set; }
+        
+        public DbSet<BM_CONTEO_HISTORICO> BM_CONTEO_HISTORICO { get; set; }
+        public DbSet<BM_CONTEO_DETALLE_HISTORICO> BM_CONTEO_DETALLE_HISTORICO { get; set; }
+        public DbSet<BM_PLACAS_CUARENTENA> BM_PLACAS_CUARENTENA { get; set; }
+
         public DbSet<BM_V_UBICA_RESPONSABLE> BM_V_UBICA_RESPONSABLE { get; set; }
         public DbSet<BM_V_UBICACIONES> BM_V_UBICACIONES { get; set; }
+        
+        
+        
+        
+        
+        
+        
         public DbSet<BM_V_BM1> BM_V_BM1 { get; set; }
         public DbSet<BM_TITULOS> BM_TITULOS { get; set; }
         public DbSet<BM_DESCRIPTIVAS> BM_DESCRIPTIVAS { get; set; }
@@ -26,12 +41,6 @@ namespace Convertidor.Data
         public DbSet<BM_MOV_BIENES> BM_MOV_BIENES { get; set; }
         public DbSet<BM_SOL_MOV_BIENES> BM_SOL_MOV_BIENES { get; set; }
         public DbSet<BM_BIENES_FOTO> BM_BIENES_FOTO { get; set; }
-        public DbSet<BM_CONTEO> BM_CONTEO { get; set; }
-        public DbSet<BM_CONTEO_DETALLE> BM_CONTEO_DETALLE { get; set; }
-        
-        public DbSet<BM_CONTEO_HISTORICO> BM_CONTEO_HISTORICO { get; set; }
-        public DbSet<BM_CONTEO_DETALLE_HISTORICO> BM_CONTEO_DETALLE_HISTORICO { get; set; }
-        public DbSet<BM_PLACAS_CUARENTENA> BM_PLACAS_CUARENTENA { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
