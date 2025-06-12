@@ -1,5 +1,6 @@
 using Convertidor.Data.Entities.Adm;
 using Convertidor.Dtos.Adm;
+using iText.StyledXmlParser.Jsoup.Select;
 
 
 namespace Convertidor.Services.Adm.AdmRetencionesOp
@@ -57,6 +58,21 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoOrdenPago);
 
             var retencionesOp = await _repository.GetByOrdenPago(codigoOrdenPago);
+            if (retencionesOp.Count == 0)
+            {
+                var prooveedorFiscoConfig = await _ossConfigRepository.GetByClave("PROVEEDOR_FISCO");
+                if (prooveedorFiscoConfig != null)
+                {
+                    var proveedor = int.Parse(prooveedorFiscoConfig.VALOR);
+                    var admBeneficiario = await _admBeneficariosOpService.GetByOrdenPagoProveedor(codigoOrdenPago, proveedor);
+                    if (admBeneficiario != null)
+                    {
+                        AdmBeneficiariosOpDeleteDto dto = new AdmBeneficiariosOpDeleteDto();
+                        dto.CodigoBeneficiarioOp = admBeneficiario.CODIGO_BENEFICIARIO_OP;
+                        await _admBeneficariosOpService.Delete(dto);
+                    }
+                }
+            }
             if (retencionesOp.Count > 0)
             {
                 // Calcular el total del Impuesto
