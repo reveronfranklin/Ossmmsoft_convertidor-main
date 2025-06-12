@@ -7,10 +7,10 @@ namespace Convertidor.Data.Repository.Bm
     public class BmUbicacionesRepository: IBmUbicacionesRepository
     {
 		
-        private readonly DataContextBm _context;
+        private readonly DataContextBmConteo _context;
      
 
-        public BmUbicacionesRepository(DataContextBm context)
+        public BmUbicacionesRepository(DataContextBmConteo context)
         {
             _context = context;
             

@@ -694,6 +694,13 @@ var bmConnectionString = builder.Configuration.GetConnectionString("DefaultConne
 builder.Services.AddDbContext<DataContextBm>(options =>
     options.UseOracle(bmConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
+
+var bmConteoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionBMC");
+builder.Services.AddDbContext<DataContextBmConteo>(options =>
+    options.UseOracle(bmConteoConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
+
+
 var admConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionADM");
 builder.Services.AddDbContext<DataContextAdm>(options =>
     options.UseOracle(admConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));

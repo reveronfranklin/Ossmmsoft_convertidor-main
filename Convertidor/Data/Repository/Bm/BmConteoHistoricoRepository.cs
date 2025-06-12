@@ -8,11 +8,11 @@ namespace Convertidor.Data.Repository.Bm
 	public class BmConteoHistoricoRepository: IBmConteoHistoricoRepository
     {
 		
-        private readonly DataContextBm _context;
+        private readonly DataContextBmConteo _context;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IOssConfigServices _configServices;
 
-        public BmConteoHistoricoRepository(DataContextBm context,
+        public BmConteoHistoricoRepository(DataContextBmConteo context,
                                         ISisUsuarioRepository sisUsuarioRepository,
                                             IOssConfigServices configServices)
         {

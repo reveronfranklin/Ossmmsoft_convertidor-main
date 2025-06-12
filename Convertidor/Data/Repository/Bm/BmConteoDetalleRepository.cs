@@ -8,10 +8,10 @@ namespace Convertidor.Data.Repository.Bm
 	public class BmConteoDetalleRepository: IBmConteoDetalleRepository
     {
 		
-        private readonly DataContextBm _context;
+        private readonly DataContextBmConteo _context;
         private readonly IOssConfigServices _configServices;
 
-        public BmConteoDetalleRepository(DataContextBm context,IOssConfigServices configServices)
+        public BmConteoDetalleRepository(DataContextBmConteo context,IOssConfigServices configServices)
         {
             _context = context;
             _configServices = configServices;
@@ -201,11 +201,11 @@ namespace Convertidor.Data.Repository.Bm
            
             try
             {
-                var query=  $"DECLARE \nBEGIN\nBM.BM_P_CONTEO('{unidadTrabajo}',{codigoEmpresa},{usuario},{codigoConteo},{cantidadConteos});\nEND;";
+                var query=  $"DECLARE \nBEGIN\nBMC.BM_P_CONTEO('{unidadTrabajo}',{codigoEmpresa},{usuario},{codigoConteo},{cantidadConteos});\nEND;";
                 //FormattableString xqueryDiario = $"DECLARE \nBEGIN\nBM.BM_P_CONTEO('{unidadTrabajo}',{codigoEmpresa},{usuario},{codigoConteo},{cantidadConteos});\nEND;";
                 query =
-                    $"CALL BM.BM_P_CONTEO(''{unidadTrabajo}'',{codigoEmpresa},{usuario},{codigoConteo},{cantidadConteos});";
-                FormattableString xqueryDiario = $"CALL BM.BM_P_CONTEO(''{unidadTrabajo}'',{codigoEmpresa},{usuario},{codigoConteo},{cantidadConteos});";
+                    $"CALL BMC.BM_P_CONTEO(''{unidadTrabajo}'',{codigoEmpresa},{usuario},{codigoConteo},{cantidadConteos});";
+                FormattableString xqueryDiario = $"CALL BMC.BM_P_CONTEO(''{unidadTrabajo}'',{codigoEmpresa},{usuario},{codigoConteo},{cantidadConteos});";
 
                 var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
                 result.Data = true;

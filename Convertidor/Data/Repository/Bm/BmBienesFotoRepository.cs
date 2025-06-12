@@ -7,9 +7,9 @@ namespace Convertidor.Data.Repository.Bm
     public class BmBienesFotoRepository: IBmBienesFotoRepository
     {
 		
-        private readonly DataContextBm _context;
+        private readonly DataContextBmConteo _context;
 
-        public BmBienesFotoRepository(DataContextBm context)
+        public BmBienesFotoRepository(DataContextBmConteo context)
         {
             _context = context;
         }
