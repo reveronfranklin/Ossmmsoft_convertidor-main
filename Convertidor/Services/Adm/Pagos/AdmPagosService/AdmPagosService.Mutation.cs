@@ -140,11 +140,15 @@ public partial class AdmPagosService
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
                 await _beneficiariosPagosRepository.Add(entity);
-                var totalPagado =
+                if (dto.CodigoBeneficiarioOP > 0)
+                {
+                    var totalPagado =
                     await _beneficiariosPagosRepository.GetTotalPagadoCodigoBeneficiarioOp(
-                        (int)dto.CodigoBeneficiarioOP);
-                await _admBeneficiariosOpRepository.UpdateMontoPagado((int)dto.CodigoBeneficiarioOP, totalPagado); 
+                    (int)dto.CodigoBeneficiarioOP);
+                    await _admBeneficiariosOpRepository.UpdateMontoPagado((int)dto.CodigoBeneficiarioOP, totalPagado); 
 
+                }
+              
                 return true;
             }
             catch (Exception e)

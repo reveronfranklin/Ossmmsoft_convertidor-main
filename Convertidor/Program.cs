@@ -52,6 +52,8 @@ using Convertidor.Services.Adm.ReporteSolicitudCompromiso;
 using Convertidor.Services.Destino.ADM;
 using Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestario;
 using Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupuestario;
+using Convertidor.Data.Repository.Bm.Replica;
+using Convertidor.Services.Bm.Replica;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -421,6 +423,8 @@ builder.Services.AddTransient<IBmUbicacionesRepository, BmUbicacionesRepository>
 builder.Services.AddTransient<IBmUbicacionesResponsableRepository, BmUbicacionesResponsableRepository>();
 builder.Services.AddTransient<IBmPlacasCuarentenaRepository, BmPlacasCuarentenaRepository>();
 
+builder.Services.AddTransient<IBmReplicaRepository, BmReplicaRepository>();
+
 
 
 
@@ -445,6 +449,7 @@ builder.Services.AddTransient<IBmConteoDetalleHistoricoService, BmConteoDetalleH
 builder.Services.AddTransient<IBmUbicacionesService, BmUbicacionesService>();
 builder.Services.AddTransient<IBmUbicacionesResponsableService, BmUbicacionesResponsableService>();
 builder.Services.AddTransient<IBmPlacasCuarentenaService, BmPlacasCuarentenaService>();
+builder.Services.AddTransient<IBmReplicaConteoService, BmReplicaConteoService>();
 
 
 
@@ -698,6 +703,10 @@ builder.Services.AddDbContext<DataContextBm>(options =>
 var bmConteoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionBMC");
 builder.Services.AddDbContext<DataContextBmConteo>(options =>
     options.UseOracle(bmConteoConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
+var rhConteoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionRHC");
+builder.Services.AddDbContext<DataContextRhC>(options =>
+    options.UseOracle(rhConteoConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 
 
