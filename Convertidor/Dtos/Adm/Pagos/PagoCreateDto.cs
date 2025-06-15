@@ -15,7 +15,9 @@ public class PagoCreateDto
     public int CodigoBeneficiarioOP { get; set; } //Ingresado por el usuario segun la vista ===>ADM_V_OP_POR_PAGAR_BENE
     
     public decimal Monto { get; set; } //Ingresado por el usuario segun la vista ===>ADM_V_OP_POR_PAGAR_BENE
-        
+    
+    public int? CodigoProveedor { get; set; } //Codigo de Proveedor si el pago es sin Orden de Pago
+
   
 
 } 

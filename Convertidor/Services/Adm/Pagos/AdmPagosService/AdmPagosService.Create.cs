@@ -1,3 +1,4 @@
+using System.Xml;
 using Convertidor.Data.Entities.Adm;
 using Convertidor.Dtos.Adm.Pagos;
 
@@ -10,7 +11,17 @@ public partial class AdmPagosService
             ResultDto<PagoResponseDto> result = new ResultDto<PagoResponseDto>(null);
             try
             {
-                var conectado = await _sisUsuarioRepository.GetConectado();
+               var conectado = await _sisUsuarioRepository.GetConectado();
+               int codigoProveedor = 0;
+               if(dto.CodigoProveedor == null) dto.CodigoProveedor = 0;
+                if ( dto.Monto<=0)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Monto Invalido";
+                    return result;
+                }
+               
 
                 var lote = await _admLotePagoRepository.GetByCodigo(dto.CodigoLote);
                 if (lote == null)
@@ -20,62 +31,92 @@ public partial class AdmPagosService
                     result.Message = "Lote No Existe";
                     return result;
                 }
-                
-                if (lote.STATUS != "PE" )
+                if (lote.STATUS != "PE")
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = $"Lote de pago no puede ser Modificado esta en estatus: {lote.STATUS}";
                     return result;
                 }
-              
-                var beneficiarioOp= await _admBeneficiariosOpRepository.GetCodigoBeneficiarioOp(dto.CodigoBeneficiarioOP);
-                if (beneficiarioOp == null)
+                var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(lote.TIPO_PAGO_ID);
+                if (tipoChequeID==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "No existen beneficiario op";
+                    result.Message = "Tipo Pago Invalido";
                     return result;
                 }
-                
-                var validarMontoPago = await ValidarMontoPago(dto.CodigoBeneficiarioOP, dto.Monto);
+                dto.NumeroOrdenPago ="";
+                if (tipoChequeID.EXTRA2 != "SIN  ORDEN DE PAGO")
+                {
+                    var ordenPago= await _ordenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
+                    if (ordenPago == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "No existe Orden Pago";
+                        return result;
+                    }
 
-                if (validarMontoPago.Length>0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = validarMontoPago;
-                    return result;
+                    dto.NumeroOrdenPago = ordenPago.NUMERO_ORDEN_PAGO;
+                    var beneficiarioOp= await _admBeneficiariosOpRepository.GetCodigoBeneficiarioOp(dto.CodigoBeneficiarioOP);
+                    if (beneficiarioOp == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "No existen beneficiario op";
+                        return result;
+                    }
+                
+                    var validarMontoPago = await ValidarMontoPago(dto.CodigoBeneficiarioOP, dto.Monto);
+
+                    if (validarMontoPago.Length>0)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = validarMontoPago;
+                        return result;
+                    }
+                    var proveedor = await _proveedoresRepository.GetByCodigo(beneficiarioOp.CODIGO_PROVEEDOR);
+                    if (proveedor==null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Codigo Proveedor Invalido";
+                        return result;
+                    }
+
+                    codigoProveedor = proveedor.CODIGO_PROVEEDOR;
                 }
-                
-                
-                var proveedor = await _proveedoresRepository.GetByCodigo(beneficiarioOp.CODIGO_PROVEEDOR);
-                if (proveedor==null)
+                else
+                {
+                    var proveedorDto = await _proveedoresRepository.GetByCodigo((int)dto.CodigoBeneficiarioOP);
+                    if (proveedorDto==null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Codigo Proveedor Invalido";
+                        return result;
+                    }
+
+                    dto.NumeroOrdenPago = "";
+                    dto.CodigoOrdenPago = 0;
+                    dto.CodigoBeneficiarioOP = 0;
+                    
+                    codigoProveedor = proveedorDto.CODIGO_PROVEEDOR;
+                }
+              
+               
+                var proveedorFind = await _proveedoresRepository.GetByCodigo(codigoProveedor);
+                if (proveedorFind==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Codigo Proveedor Invalido";
                     return result;
                 }
-                /*var cuenta=await _sisCuentaBancoRepository.GetByCodigoCuenta(proveedor.NUMERO_CUENTA);
-                if (cuenta == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo Cuenta Banco invalido";
-                    return result;
-                }*/
+              
                 
-                var ordenPago= await _ordenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (ordenPago == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "No existe Orden Pago";
-                    return result;
-                }
-
-                dto.NumeroOrdenPago = ordenPago.NUMERO_ORDEN_PAGO;
 
 
 
@@ -110,15 +151,7 @@ public partial class AdmPagosService
             
             
 
-                var tipoChequeID = await _admDescriptivaRepository.GetByCodigo(lote.TIPO_PAGO_ID);
-                if (tipoChequeID==null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Pago Invalido";
-                    return result;
-                }
-
+              
                 int numeroChequera = 0;
                 int numeroCheque = 0;
                 var ossConfigChequera = await _ossConfigRepository.GetByClave(lote.TIPO_PAGO_ID.ToString());
@@ -136,14 +169,14 @@ public partial class AdmPagosService
                 entity.NUMERO_CHEQUERA =numeroChequera;
                 entity.NUMERO_CHEQUE = numeroCheque;
                 entity.FECHA_CHEQUE = lote.FECHA_PAGO;
-                entity.CODIGO_PROVEEDOR = beneficiarioOp.CODIGO_PROVEEDOR;
+                entity.CODIGO_PROVEEDOR = codigoProveedor;
                 entity.PRINT_COUNT = 0;
                 entity.MOTIVO = dto.Motivo;
                 entity.STATUS = "PE";
                 entity.ENDOSO = "S";
                 entity.CODIGO_PRESUPUESTO = lote.CODIGO_PRESUPUESTO;
                 entity.TIPO_CHEQUE_ID =lote.TIPO_PAGO_ID;
-                entity.NUMERO_CUENTA = proveedor.NUMERO_CUENTA;
+                entity.NUMERO_CUENTA = proveedorFind.NUMERO_CUENTA;
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
                 entity.FECHA_INS = DateTime.Now;
