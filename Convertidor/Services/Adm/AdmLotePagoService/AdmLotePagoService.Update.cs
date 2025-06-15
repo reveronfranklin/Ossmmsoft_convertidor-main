@@ -54,6 +54,15 @@ public partial class AdmLotePagoService
                     return result;
                 }
                 
+                var descriptivaTipoPagoActual = await _admDescriptivaRepository.GetByCodigo(lotePago.TIPO_PAGO_ID);
+                if (descriptivaTipoPago!=null && descriptivaTipoPagoActual!=null && descriptivaTipoPagoActual.EXTRA2!=descriptivaTipoPago.EXTRA2)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Tipo de Pago Invalido, No puede ser Modificado el Tipo de Pago de: {descriptivaTipoPagoActual.EXTRA2} a: {descriptivaTipoPago.EXTRA2}";
+                    return result;
+                }
+
                 
                 var presupuesto=await _presupuestosRepository.GetByCodigo(conectado.Empresa,dto.CodigoPresupuesto);
                 if (presupuesto==null)
@@ -66,7 +75,7 @@ public partial class AdmLotePagoService
                 
                 lotePago.FECHA_PAGO=dto.FechaPago;
                 lotePago.CODIGO_CUENTA_BANCO=dto.CodigoCuentaBanco;
-                lotePago.TIPO_PAGO_ID=dto.TipoPagoId;
+                //lotePago.TIPO_PAGO_ID=dto.TipoPagoId;
                 lotePago.TITULO = dto.Titulo;
                 lotePago.SEARCH_TEXT = $"{descriptivaTipoPago.DESCRIPCION}-{cuentaBanco.NO_CUENTA}-{banco.NOMBRE}-{lotePago.STATUS}-{lotePago.TITULO}";
                 lotePago.CODIGO_PRESUPUESTO=dto.CodigoPresupuesto;
