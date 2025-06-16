@@ -2,6 +2,7 @@
 ﻿using Convertidor.Data.Entities.Bm;
 using Convertidor.Data.Interfaces.Bm;
 using Convertidor.Dtos.Bm;
+using Convertidor.Services.Bm.Replica;
 using Convertidor.Utility;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -24,6 +25,9 @@ namespace Convertidor.Services.Bm
         private readonly IBmConteoHistoricoRepository _bmConteoHistoricoRepository;
         private readonly IBmConteoDetalleHistoricoRepository _bmConteoDetalleHistoricoRepository;
         private readonly IConfiguration _configuration;
+        private readonly IBmReplicaConteoService _replicaConteoService;
+
+
         public BmConteoService(IBmConteoRepository repository,
                                 ISisUsuarioRepository sisUsuarioRepository,
                                 IRhPersonasRepository rhPersonasRepository,
@@ -32,7 +36,8 @@ namespace Convertidor.Services.Bm
                                 IBmDescriptivaRepository bmDescriptivaRepository,
                                 IBmConteoHistoricoRepository bmConteoHistoricoRepository,
                                 IBmConteoDetalleHistoricoRepository bmConteoDetalleHistoricoRepository,
-                                IConfiguration configuration)
+                                IConfiguration configuration,
+                                IBmReplicaConteoService replicaConteoService)
 		{
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -43,8 +48,7 @@ namespace Convertidor.Services.Bm
             _bmConteoHistoricoRepository = bmConteoHistoricoRepository;
             _bmConteoDetalleHistoricoRepository = bmConteoDetalleHistoricoRepository;
             _configuration = configuration;
-           
-
+            _replicaConteoService = replicaConteoService;
         }
 
       
@@ -224,10 +228,20 @@ namespace Convertidor.Services.Bm
         public async Task<ResultDto<BmConteoResponseDto>> Create(BmConteoUpdateDto dto)
         {
 
+            var settings = _configuration.GetSection("Settings").Get<Settings>();
+
+            //SE GENERA EXCEL PRA LA DESCARGA
+            var replicarConteo = @settings.ReplicarConteo;
+            if (replicarConteo == null) replicarConteo = "0";
             ResultDto<BmConteoResponseDto> result = new ResultDto<BmConteoResponseDto>(null);
             try
             {
 
+                if (replicarConteo == "1")
+                {
+                    await _replicaConteoService.ReplicarConteo();
+                }
+                
                 var persona = await _rhPersonasRepository.GetCodigoPersona(dto.CodigoPersonaResponsable);
                 if (persona==null)
                 {
@@ -309,6 +323,8 @@ namespace Convertidor.Services.Bm
                     result.Message = created.Message;
                 }
 
+                
+                
                 return result;
               
                
