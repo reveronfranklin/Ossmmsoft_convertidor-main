@@ -9,15 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/BmReplicaConteoController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Bm/IBmReplicaRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/Replica/BmReplicaRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/Replica/BmReplicaConteoService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/Replica/IBmReplicaConteoService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Adm/Pagos/PagoCreateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/Pagos/PagoCreateDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Create.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.Create.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Settings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Settings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +37,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -454,6 +449,8 @@
       <workItem from="1749774120198" duration="1570000" />
       <workItem from="1749829265071" duration="1091000" />
       <workItem from="1749996418378" duration="1114000" />
+      <workItem from="1750083865039" duration="1727000" />
+      <workItem from="1750085692446" duration="1765000" />
     </task>
     <servers />
   </component>
@@ -5840,13 +5837,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs</url>
-          <line>119</line>
+          <line>123</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" containingFunctionPresentation="Method 'GetAll'">
             <startOffsets>
-              <option value="4753" />
+              <option value="4989" />
             </startOffsets>
             <endOffsets>
-              <option value="4795" />
+              <option value="5031" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1181" />
@@ -5915,6 +5912,136 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1186" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs</url>
+          <line>239</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="8604" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8630" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1189" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs</url>
+          <line>233</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="8354" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8400" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1190" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs</url>
+          <line>37</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="793" />
+            </startOffsets>
+            <endOffsets>
+              <option value="833" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1191" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs</url>
+          <line>241</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="8669" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8714" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1192" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/Replica/BmReplicaConteoService.cs</url>
+          <line>31</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/Replica/BmReplicaConteoService.cs" containingFunctionPresentation="Method 'ReplicarConteo'">
+            <startOffsets>
+              <option value="721" />
+            </startOffsets>
+            <endOffsets>
+              <option value="759" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1193" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/Replica/BmReplicaConteoService.cs</url>
+          <line>44</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/Replica/BmReplicaConteoService.cs" containingFunctionPresentation="Method 'ReplicarConteo'">
+            <startOffsets>
+              <option value="1265" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1285" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1194" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs</url>
+          <line>46</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="1017" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1057" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1195" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs</url>
+          <line>53</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs" containingFunctionPresentation="Method 'CerrarConteo'">
+            <startOffsets>
+              <option value="1245" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1291" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1196" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs</url>
+          <line>62</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="1475" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1515" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1197" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs</url>
+          <line>70</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoController.cs" containingFunctionPresentation="Method 'CreateReportConteo'">
+            <startOffsets>
+              <option value="1710" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1764" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1198" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
