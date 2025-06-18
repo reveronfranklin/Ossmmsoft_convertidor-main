@@ -38,17 +38,11 @@ namespace Convertidor.Data.Repository.Rh
                 //    Asegurarse de que el parseo es estricto al formato "dd/MM/yyyy"
                 var desde = DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 var hasta = DateTime.ParseExact(fechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                var desdeFormateado = desde.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
+                var hastaFormateado = hasta.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
 
-                // 2. Formatear los objetos DateTime a cadenas "dd/MM/yyyy" usando InvariantCulture
-                //    Esto es CRUCIAL para garantizar el formato esperado por el SP
-                string fechaDesdeFormatoSP = desde.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-                string fechaHastaFormatoSP = hasta.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-
-
-                var qry =
-                    $"DECLARE \nBEGIN\nRH_P_RETENCION_FAOV({procesoId},{tipoNomina},{fechaDesdeFormatoSP},{fechaHastaFormatoSP});\nEND;";
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH_P_RETENCION_FAOV({procesoId},{tipoNomina},{fechaDesdeFormatoSP},{fechaHastaFormatoSP});\nEND;";
-                //FormattableString xqueryDiario = $"CALL RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{fechaDesde},{fechaHasta});";
+                var newQuery = $"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desde},{hasta})";
+                FormattableString xqueryDiario =$"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desde},{hasta})";
                 Console.WriteLine(xqueryDiario.ToString());
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 
