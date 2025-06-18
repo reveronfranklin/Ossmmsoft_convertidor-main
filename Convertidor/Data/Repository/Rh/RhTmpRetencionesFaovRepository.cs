@@ -41,8 +41,8 @@ namespace Convertidor.Data.Repository.Rh
                 var desdeFormateado = desde.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
                 var hastaFormateado = hasta.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
 
-                var newQuery = $"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desde},{hasta})";
-                FormattableString xqueryDiario =$"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desde},{hasta})";
+                var newQuery = $"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desdeFormateado},{hastaFormateado})";
+                FormattableString xqueryDiario =$"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desdeFormateado},{hastaFormateado})";
                 Console.WriteLine(xqueryDiario.ToString());
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 
