@@ -28,7 +28,45 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
-        public async Task Add(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
+      
+        public async Task Add(int procesoId, int tipoNomina, string fechaDesde, string fechaHasta)
+        {
+            try
+            {
+                // 1. Parsear las fechas en formato "dd/MM/yyyy" (sin depender de la cultura del sistema)
+                var desde = DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                var hasta = DateTime.ParseExact(fechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                // 2. Usar parámetros de Oracle para evitar problemas de formato
+                using (var connection = new OracleConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (var command = new OracleCommand("RH.RH_P_RETENCION_FAOV", connection))
+                    {
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        // Parámetros con tipos explícitos (evita problemas de formato)
+                        command.Parameters.Add("P_PROCESO_ID", OracleDbType.Int32).Value = procesoId;
+                        command.Parameters.Add("P_CODIGO_TIPO_NOMINA", OracleDbType.Int32).Value = tipoNomina;
+                        command.Parameters.Add("P_FECHA_DESDE", OracleDbType.Date).Value = desde;
+                        command.Parameters.Add("P_FECHA_HASTA", OracleDbType.Date).Value = hasta;
+
+                        // Ejecutar el procedimiento
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+
+                Console.WriteLine("Procedimiento ejecutado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw; // Relanzar la excepción para manejo superior
+            }
+        }
+        
+        public async Task AddOld(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
         {
 
          
