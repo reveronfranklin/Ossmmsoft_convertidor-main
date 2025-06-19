@@ -46,7 +46,7 @@ using Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones;
 using Convertidor.Services.Cnt;
 using Convertidor.Services.Rh.Report.Example;
 using Convertidor.Services.Rh.Report.HistoricoNomina;
-using Microsoft.Extensions.DependencyInjection;
+
 using Convertidor.Services.Presupuesto.Reports.ReporteSolicitudModificacionPresupuestaria;
 using Convertidor.Services.Adm.ReporteSolicitudCompromiso;
 using Convertidor.Services.Destino.ADM;
@@ -756,16 +756,7 @@ var app = builder.Build();
 QuestPDF.Settings.License = LicenseType.Community;
 //SeedData(app);
 
-void SeedData(WebApplication app)
-{
-    IServiceScopeFactory? scopeFactory = app.Services.GetService<IServiceScopeFactory>();
-    using (IServiceScope? scope = scopeFactory!.CreateScope())
-    {
-        SeedDb? service = scope.ServiceProvider.GetService<SeedDb>();
-        service!.GetAll().Wait();
 
-    }
-}
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
