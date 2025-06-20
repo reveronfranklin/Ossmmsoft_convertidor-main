@@ -17,7 +17,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 var result = await _context.RH_TMP_RETENCIONES_FAOV.DefaultIfEmpty().Where(e => e.PROCESO_ID == procesoId).ToListAsync();
-        
+          
                 return (List<RH_TMP_RETENCIONES_FAOV>)result; 
             }
             catch (Exception ex)
@@ -29,8 +29,11 @@ namespace Convertidor.Data.Repository.Rh
         }
 
       
-        public async Task Add(int procesoId, int tipoNomina, string fechaDesde, string fechaHasta)
+        public async Task<ResultDto<bool>> Add(int procesoId, int tipoNomina, string fechaDesde, string fechaHasta)
         {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+
+            
             try
             {
                 // 1. Parsear las fechas en formato "dd/MM/yyyy" (sin depender de la cultura del sistema)
@@ -56,14 +59,18 @@ namespace Convertidor.Data.Repository.Rh
                         await command.ExecuteNonQueryAsync();
                     }
                 }
-
-                Console.WriteLine("Procedimiento ejecutado correctamente.");
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
-                throw; // Relanzar la excepción para manejo superior
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
             }
+            
+            return result;
         }
         
         public async Task AddOld(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
