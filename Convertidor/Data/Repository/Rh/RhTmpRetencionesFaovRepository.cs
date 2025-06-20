@@ -34,8 +34,8 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
                 // 1. Parsear las fechas en formato "dd/MM/yyyy" (sin depender de la cultura del sistema)
-                var desde = DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                var hasta = DateTime.ParseExact(fechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //var desde = DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //var hasta = DateTime.ParseExact(fechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
                 // 2. Usar parámetros de Oracle para evitar problemas de formato
                 using (var connection = new OracleConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -49,8 +49,8 @@ namespace Convertidor.Data.Repository.Rh
                         // Parámetros con tipos explícitos (evita problemas de formato)
                         command.Parameters.Add("P_PROCESO_ID", OracleDbType.Int32).Value = procesoId;
                         command.Parameters.Add("P_CODIGO_TIPO_NOMINA", OracleDbType.Int32).Value = tipoNomina;
-                        command.Parameters.Add("P_FECHA_DESDE", OracleDbType.Date).Value = desde;
-                        command.Parameters.Add("P_FECHA_HASTA", OracleDbType.Date).Value = hasta;
+                        command.Parameters.Add("P_FECHA_DESDE", OracleDbType.Varchar2).Value = fechaDesde;
+                        command.Parameters.Add("P_FECHA_HASTA", OracleDbType.Varchar2).Value = fechaHasta;
 
                         // Ejecutar el procedimiento
                         await command.ExecuteNonQueryAsync();
