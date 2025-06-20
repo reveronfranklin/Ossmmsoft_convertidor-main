@@ -29,7 +29,7 @@ namespace Convertidor.Data.Repository.Rh
         }
 
       
-        public async Task<ResultDto<bool>> Add(int procesoId, int tipoNomina, string fechaDesde, string fechaHasta)
+        public async Task<ResultDto<bool>> AddOLD(int procesoId, int tipoNomina, string fechaDesde, string fechaHasta)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);
 
@@ -73,8 +73,9 @@ namespace Convertidor.Data.Repository.Rh
             return result;
         }
         
-        public async Task AddOld(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
+        public ResultDto<bool> Add(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
         {
+            ResultDto<bool> result = new ResultDto<bool>(false);
 
          
             try
@@ -86,21 +87,26 @@ namespace Convertidor.Data.Repository.Rh
                 var desdeFormateado = desde.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
                 var hastaFormateado = hasta.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
 
-                var newQuery = $"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desdeFormateado},{hastaFormateado})";
-                FormattableString xqueryDiario =$"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{desdeFormateado},{hastaFormateado})";
+                var newQuery = $"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},'{fechaDesde}','{fechaHasta}')";
+                FormattableString xqueryDiario =$"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},'{fechaDesde}','{fechaHasta}')";
                 Console.WriteLine(xqueryDiario.ToString());
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
                 
 
             }
             catch (Exception ex)
             {
-                var mess = ex.Message;
+      
 
-               Console.WriteLine(mess);
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = ex.Message;
             }
 
+            return result;
 
         }
 

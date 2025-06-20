@@ -10,7 +10,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/RhTmpRetencionesFaovController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/RhTmpRetencionesFaovController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/RH/IRhTmpRetencionesFaovRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/RH/IRhTmpRetencionesFaovRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" afterDir="false" />
@@ -39,6 +38,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -460,7 +460,7 @@
       <workItem from="1750342395387" duration="3405000" />
       <workItem from="1750431262486" duration="30000" />
       <workItem from="1750431305568" duration="452000" />
-      <workItem from="1750431762329" duration="6806000" />
+      <workItem from="1750431762329" duration="8898000" />
     </task>
     <servers />
   </component>
@@ -2369,19 +2369,6 @@
           <option name="timeStamp" value="549" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs</url>
-          <line>98</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" containingFunctionPresentation="Method 'Add'">
-            <startOffsets>
-              <option value="4262" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4284" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="553" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs</url>
           <line>479</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" containingFunctionPresentation="Method 'Update'">
@@ -2425,10 +2412,10 @@
           <line>52</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
             <startOffsets>
-              <option value="2202" />
+              <option value="2197" />
             </startOffsets>
             <endOffsets>
-              <option value="2274" />
+              <option value="2269" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="563" />
@@ -2438,10 +2425,10 @@
           <line>70</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
             <startOffsets>
-              <option value="2944" />
+              <option value="2939" />
             </startOffsets>
             <endOffsets>
-              <option value="3013" />
+              <option value="3008" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="564" />
@@ -2451,10 +2438,10 @@
           <line>98</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
             <startOffsets>
-              <option value="4726" />
+              <option value="4721" />
             </startOffsets>
             <endOffsets>
-              <option value="4786" />
+              <option value="4781" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="565" />
@@ -2464,10 +2451,10 @@
           <line>112</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
             <startOffsets>
-              <option value="5227" />
+              <option value="5222" />
             </startOffsets>
             <endOffsets>
-              <option value="5249" />
+              <option value="5244" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="566" />
@@ -6110,10 +6097,10 @@
           <line>45</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="1743" />
+              <option value="1746" />
             </startOffsets>
             <endOffsets>
-              <option value="1772" />
+              <option value="1775" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1211" />
