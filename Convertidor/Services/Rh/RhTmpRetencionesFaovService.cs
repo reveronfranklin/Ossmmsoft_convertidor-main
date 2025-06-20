@@ -36,8 +36,17 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 int procesoId = 0;
                 procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
-
-                await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                await _repository.Delete(procesoId);
+                var resultExecute = await _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                if (resultExecute.IsValid == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = resultExecute.Message;
+                    result.LinkData = "";
+                    return result;
+                   
+                }
                 var retenciones = await _repository.GetByProcesoId(procesoId);
                 if (retenciones != null)
                 {

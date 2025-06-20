@@ -23,6 +23,7 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> GetRetencionesFaov(FilterRetencionesDto filter)
         {
                 var result = await _service.GetRetencionesFaov(filter);
+                Console.WriteLine(result);
             return Ok(result);
         }
 
