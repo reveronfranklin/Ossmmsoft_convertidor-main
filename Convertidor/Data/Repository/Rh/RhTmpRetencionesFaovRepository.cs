@@ -29,7 +29,7 @@ namespace Convertidor.Data.Repository.Rh
         }
 
       
-        public async Task<ResultDto<bool>> AddOLD(int procesoId, int tipoNomina, string fechaDesde, string fechaHasta)
+        public async Task<ResultDto<bool>> Addold(int procesoId, int tipoNomina, string fechaDesde, string fechaHasta)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);
 
@@ -72,26 +72,42 @@ namespace Convertidor.Data.Repository.Rh
             
             return result;
         }
-        
-        public ResultDto<bool> Add(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
-        {
-            ResultDto<bool> result = new ResultDto<bool>(false);
 
-         
+
+        public  int ConvertirFechaANumero(string fechaStr)
+        {
+            // 1. Parsear la fecha en formato "dd/MM/yyyy"
+            DateTime fecha = DateTime.ParseExact(fechaStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            // 2. Formatear como "yyyyMM" y convertir a número
+            string anioMes = fecha.ToString("yyyyMM");
+            return int.Parse(anioMes); // Retorna 202606
+        }
+
+
+        public async Task<ResultDto<List<RH_TMP_RETENCIONES_FAOV>>> Add(int procesoId, int tipoNomina,string fechaDesde, string fechaHasta)
+        {
+            ResultDto<List<RH_TMP_RETENCIONES_FAOV>> result = new ResultDto<List<RH_TMP_RETENCIONES_FAOV>>(null);
+          
+
             try
             {
                 // 1. Parsear las cadenas de entrada a objetos DateTime
                 //    Asegurarse de que el parseo es estricto al formato "dd/MM/yyyy"
-                var desde = DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                var hasta = DateTime.ParseExact(fechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                var desdeFormateado = desde.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
-                var hastaFormateado = hasta.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
+                //var desde = DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //var hasta = DateTime.ParseExact(fechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //var desdeFormateado = desde.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
+                //var hastaFormateado = hasta.ToString("dd-MMM-yy", new CultureInfo("es-ES")).ToUpper();
 
-                var newQuery = $"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},'{fechaDesde}','{fechaHasta}')";
-                FormattableString xqueryDiario =$"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},'{fechaDesde}','{fechaHasta}')";
+                var desde = ConvertirFechaANumero(fechaDesde);
+                var hasta = ConvertirFechaANumero(fechaHasta);
+
+                var newQuery = $"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{fechaDesde},{fechaHasta})";
+                FormattableString xqueryDiario =$"CALL RH.RH_P_RETENCION_FAOV({procesoId},{tipoNomina},{fechaDesde},{fechaHasta})";
                 Console.WriteLine(xqueryDiario.ToString());
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-                result.Data = true;
+                var data = await GetByProcesoId(procesoId);
+                result.Data = data;
                 result.IsValid = true;
                 result.Message = "";
                 
@@ -101,7 +117,7 @@ namespace Convertidor.Data.Repository.Rh
             {
       
 
-                result.Data = false;
+                result.Data = null;
                 result.IsValid = false;
                 result.Message = ex.Message;
             }

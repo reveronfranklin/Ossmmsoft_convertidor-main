@@ -36,16 +36,9 @@ namespace Convertidor.Data.Repository.Rh
 
             try
             {
-                string format = "dd/MM/yyyy";
-                var fechaDesde =
-                    $"{filter.FechaDesdeObj.Day.ToString()}/{filter.FechaDesdeObj.Month.ToString()}/{filter.FechaDesdeObj.Year.ToString()}";
-                var fechaHasta =
-                    $"{filter.FechaHastaObj.Day.ToString()}/{filter.FechaHastaObj.Month.ToString()}/{filter.FechaHastaObj.Year.ToString()}";
-            
-                DateTime desde = DateTime.ParseExact(fechaDesde, format,CultureInfo.InvariantCulture);
-                DateTime hasta= DateTime.ParseExact(fechaHasta, format, CultureInfo.InvariantCulture);
 
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH.RH_P_RETENCION_SSO({procesoId},{filter.TipoNomina},{desde},{hasta});\nEND;";
+              
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH.RH_P_RETENCION_SSO({procesoId},{filter.TipoNomina},{filter.FechaDesde},{filter.FechaHasta});\nEND;";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 

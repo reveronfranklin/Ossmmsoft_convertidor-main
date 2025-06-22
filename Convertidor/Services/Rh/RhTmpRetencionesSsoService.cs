@@ -1,4 +1,5 @@
-﻿using Convertidor.Services.Sis;
+﻿using System.Globalization;
+using Convertidor.Services.Sis;
 using Ganss.Excel;
 
 namespace Convertidor.Data.Repository.Rh
@@ -61,18 +62,20 @@ namespace Convertidor.Data.Repository.Rh
 
                 }
                 var linkData=$"";
-                if (result.Data.Count > 0)
+                if (result.Data != null && result.Data.Count > 0)
                 {
                     ExcelMapper mapper = new ExcelMapper();
                     var settings = _configuration.GetSection("Settings").Get<Settings>();
                     var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
-                    DateTime desde = Convert.ToDateTime(filter.FechaDesde);
+                    DateTime desde = DateTime.ParseExact(filter.FechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
                     var mesString = "00" + desde.Month.ToString();
                     var diaString = "00" + desde.Day.ToString();
                     string mes = mesString.Substring(mesString.Length - 2, 2);
                     string dia = diaString.Substring(diaString.Length - 2, 2);
                     var desdeFilter = desde.Year + mes + dia;
-                    DateTime hasta = Convert.ToDateTime(filter.FechaHasta);
+                    DateTime hasta = DateTime.ParseExact(filter.FechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
                     var mesHastaString = "00" + hasta.Month.ToString();
                     var diaHastaString = "00" + hasta.Day.ToString();
                     string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);

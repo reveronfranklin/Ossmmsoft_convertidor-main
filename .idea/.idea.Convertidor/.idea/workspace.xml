@@ -10,9 +10,19 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/RH/IRhTmpRetencionesFaovRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/RH/IRhTmpRetencionesFaovRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhDocumentosAdjuntosRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhDocumentosAdjuntosRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesCahRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesCahRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFjpRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFjpRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesSindRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesSindRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesSsoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesSsoRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesCahService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesCahService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFjpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFjpService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesIncesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesIncesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesSindService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesSindService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesSsoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesSsoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +125,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.idesettings.quicklists&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -171,11 +181,11 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Publish to folder.PublicacionLinuxDev(1)" />
+      <item itemvalue="Publish to folder.PublicacionLinux" />
+      <item itemvalue="Publish to folder.Publish Convertidor to folder" />
       <item itemvalue=".NET Launch Settings Profile.Convertidor" />
       <item itemvalue="Docker.Convertidor/Dockerfile" />
-      <item itemvalue="Publish to folder.PublicacionLinux" />
-      <item itemvalue="Publish to folder.PublicacionLinuxDev(1)" />
-      <item itemvalue="Publish to folder.Publish Convertidor to folder" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -460,7 +470,9 @@
       <workItem from="1750342395387" duration="3405000" />
       <workItem from="1750431262486" duration="30000" />
       <workItem from="1750431305568" duration="452000" />
-      <workItem from="1750431762329" duration="8898000" />
+      <workItem from="1750431762329" duration="10225000" />
+      <workItem from="1750449786548" duration="767000" />
+      <workItem from="1750450567102" duration="3838000" />
     </task>
     <servers />
   </component>
@@ -1031,13 +1043,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs</url>
-          <line>60</line>
+          <line>52</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesIncesRepository.cs" containingFunctionPresentation="Method 'Add'">
             <startOffsets>
-              <option value="2090" />
+              <option value="1502" />
             </startOffsets>
             <endOffsets>
-              <option value="2112" />
+              <option value="1524" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="215" />
@@ -1067,19 +1079,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="218" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesSsoService.cs</url>
-          <line>30</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesSsoService.cs" containingFunctionPresentation="Method 'GetRetencionesSso'">
-            <startOffsets>
-              <option value="1076" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1175" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="224" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs</url>
@@ -2406,58 +2405,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="560" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
-          <line>52</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
-            <startOffsets>
-              <option value="2197" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2269" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="563" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
-          <line>70</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
-            <startOffsets>
-              <option value="2939" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3008" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="564" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
-          <line>98</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
-            <startOffsets>
-              <option value="4721" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4781" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="565" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs</url>
-          <line>112</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhTmpRetencionesFaovService.cs" containingFunctionPresentation="Method 'GetRetencionesFaov'">
-            <startOffsets>
-              <option value="5222" />
-            </startOffsets>
-            <endOffsets>
-              <option value="5244" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="566" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/FilesController.cs</url>
@@ -6091,19 +6038,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1206" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs</url>
-          <line>45</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhTmpRetencionesFaovRepository.cs" containingFunctionPresentation="Method 'Add'">
-            <startOffsets>
-              <option value="1746" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1775" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1211" />
         </line-breakpoint>
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
