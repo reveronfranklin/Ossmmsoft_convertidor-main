@@ -36,9 +36,7 @@ namespace Convertidor.Data.Repository.Rh
             try
             {
 
-                var desde =DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", null);
-                var hasta= DateTime.ParseExact(fechaDesde, "dd/MM/yyyy", null);
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH.RH_P_RETENCION_SIND({procesoId},{tipoNomina},{desde},{hasta});\nEND;";
+                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nRH.RH_P_RETENCION_SIND({procesoId},{tipoNomina},{fechaDesde},{fechaHasta});\nEND;";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 

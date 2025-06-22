@@ -1,4 +1,5 @@
-﻿using Convertidor.Services.Sis;
+﻿using System.Globalization;
+using Convertidor.Services.Sis;
 using Ganss.Excel;
 
 namespace Convertidor.Data.Repository.Rh
@@ -36,8 +37,8 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 int procesoId = 0;
                 procesoId = await _ossConfigService.GetNextByClave("CONSECUTIVO_RETENCIONES");
-                await _repository.Delete(procesoId);
-                var resultExecute =  _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
+                //await _repository.Delete(procesoId);
+                var resultExecute = await  _repository.Add(procesoId, filter.TipoNomina, filter.FechaDesde, filter.FechaHasta);
                 if (resultExecute.IsValid == false)
                 {
                     result.Data = null;
@@ -47,10 +48,10 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                    
                 }
-                var retenciones = await _repository.GetByProcesoId(procesoId);
-                if (retenciones != null)
+                //var retenciones = await _repository.GetByProcesoId(procesoId);
+                if (resultExecute.Data != null)
                 {
-                    var listRetenciones = await MapListRhTmpRetencionesFaovDto(retenciones);
+                    var listRetenciones = await MapListRhTmpRetencionesFaovDto(resultExecute.Data);
                     var contador = 0;
                     foreach (var item in listRetenciones)
                     {
@@ -59,61 +60,17 @@ namespace Convertidor.Data.Repository.Rh
                     }
                     result.Data = listRetenciones.OrderBy(x=>x.FechaNomina).ToList();;
                    
-                    await _repository.Delete(procesoId);
+                    //await _repository.Delete(procesoId);
 
                 }
-                
-                var linkData = $"";
-                var linkDataArlternative= $"";
-                if (result.Data.Count > 0)
-                {
-                                    ExcelMapper mapper = new ExcelMapper();
-                var settings = _configuration.GetSection("Settings").Get<Settings>();
-                var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
-                DateTime desde = Convert.ToDateTime(filter.FechaDesde);
-                var mesString = "00" + desde.Month.ToString();
-                var diaString = "00" + desde.Day.ToString();
-                string mes = mesString.Substring(mesString.Length - 2, 2);
-                string dia = diaString.Substring(diaString.Length - 2, 2);
-                var desdeFilter = desde.Year + mes + dia;
 
-                DateTime hasta = Convert.ToDateTime(filter.FechaHasta);
-                var mesHastaString = "00" + hasta.Month.ToString();
-                var diaHastaString = "00" + hasta.Day.ToString();
-                string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);
-                string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
-                var hastaFilter = hasta.Year + mesHasta + diaHasta;
-                var fileName = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.xlsx";
-                var fileNameTxt = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.txt";
-                string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
-                string newFileTxt = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileNameTxt);
-                if (File.Exists(newFile))
-                {
-                    File.Delete(newFile);
-                }
-                if (File.Exists(newFileTxt))
-                {
-                    File.Delete(newFileTxt);
-                }
+                var generatedFile = GenerateExcel(result.Data, filter);               
                 
-                mapper.Save(newFile, result.Data, $"RetencionesFAOV", true);
-                
-                using(TextWriter tw = new StreamWriter(newFileTxt))
-                {
-                    foreach (var s in result.Data)
-                        tw.WriteLine(s.RegistroConcat);
-                    tw.Close();
-                }
-                linkData = $"/ExcelFiles/{fileName}";
-                linkDataArlternative= $"/ExcelFiles/{fileNameTxt}";
-     
-                }
-                
-
-                result.IsValid = true;
-                result.Message = "";
-                result.LinkData = linkData;
-                result.LinkDataArlternative= linkDataArlternative;
+                result.IsValid = generatedFile.IsValid;
+                result.CantidadRegistros=result.Data.Count;
+                result.Message = generatedFile.Message;
+                result.LinkData = generatedFile.LinkData;
+                result.LinkDataArlternative = generatedFile.LinkDataArlternative; ;
                 return result;
             }
             catch (Exception ex)
@@ -127,6 +84,84 @@ namespace Convertidor.Data.Repository.Rh
 
         
     }
+
+        public ResultDto<List<RhTmpRetencionesFaovDto>> GenerateExcel(List<RhTmpRetencionesFaovDto> data, FilterRetencionesDto filter)
+        {
+            ResultDto<List<RhTmpRetencionesFaovDto>> result = new ResultDto<List<RhTmpRetencionesFaovDto>>(null);
+            try
+            {
+                var linkData = $"";
+                var linkDataArlternative = $"";
+                if (data.Count > 0)
+                {
+                        ExcelMapper mapper = new ExcelMapper();
+                        var settings = _configuration.GetSection("Settings").Get<Settings>();
+                        var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
+          
+                    DateTime desde = DateTime.ParseExact(filter.FechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                
+                    var mesString = "00" + desde.Month.ToString();
+                        var diaString = "00" + desde.Day.ToString();
+                        string mes = mesString.Substring(mesString.Length - 2, 2);
+                        string dia = diaString.Substring(diaString.Length - 2, 2);
+                        var desdeFilter = desde.Year + mes + dia;
+
+
+                    DateTime hasta = DateTime.ParseExact(filter.FechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                    var mesHastaString = "00" + hasta.Month.ToString();
+                        var diaHastaString = "00" + hasta.Day.ToString();
+                        string mesHasta = mesHastaString.Substring(mesHastaString.Length - 2, 2);
+                        string diaHasta = diaHastaString.Substring(diaHastaString.Length - 2, 2);
+                        var hastaFilter = hasta.Year + mesHasta + diaHasta;
+                        var fileName = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.xlsx";
+                        var fileNameTxt = $"RetencionesFAOV-desde-{desdeFilter}-Hasta-{hastaFilter}-TipoNomina-{filter.TipoNomina}.txt";
+                        string newFile = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileName);
+                        string newFileTxt = Path.Combine(Directory.GetCurrentDirectory(), ruta, fileNameTxt);
+                        if (File.Exists(newFile))
+                        {
+                            File.Delete(newFile);
+                        }
+                        if (File.Exists(newFileTxt))
+                        {
+                            File.Delete(newFileTxt);
+                        }
+                
+                        mapper.Save(newFile, data, $"RetencionesFAOV", true);
+                
+                        using(TextWriter tw = new StreamWriter(newFileTxt))
+                        {
+                            foreach (var s in data)
+                                tw.WriteLine(s.RegistroConcat);
+                            tw.Close();
+                        }
+                        linkData = $"/ExcelFiles/{fileName}";
+                        linkDataArlternative= $"/ExcelFiles/{fileNameTxt}";
+     
+                }
+                
+
+
+
+                result.Data = data;
+                result.Message ="Archivo Generado Satisfactoriamente";
+                result.IsValid = true;
+                result.LinkData = linkData;
+                result.LinkDataArlternative = linkDataArlternative;
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Data= null;
+               result.Message=e.Message;
+                result.IsValid=false;
+                result.LinkData = "";
+                result.LinkDataArlternative = "";
+                return result;
+
+            }
+        }
 
         public List<RH_H_RETENCIONES_FAOV> MapRetencionesFaovTmpH(List<RH_TMP_RETENCIONES_FAOV> retenciones)
         {
