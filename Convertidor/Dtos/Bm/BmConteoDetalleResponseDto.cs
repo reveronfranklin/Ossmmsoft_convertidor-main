@@ -32,7 +32,7 @@
 		public FechaDto FechaObj { get; set; }
 		public string Comentario { get; set; } = string.Empty;
 		public int CantidadContadaOtroConteo { get; set; }
-		public string CodigoPlaca { get { return $"{CodigoGrupo}-{CodigoNivel1}-{CodigoNivel2}-{NumeroPlaca}"; } }
+		public string CodigoPlaca { get { return $"{NumeroPlaca}"; } }
 	
 	}
 }
