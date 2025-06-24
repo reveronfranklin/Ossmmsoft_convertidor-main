@@ -26,6 +26,7 @@ namespace Convertidor.Services.Bm
         private readonly IBmConteoDetalleHistoricoRepository _bmConteoDetalleHistoricoRepository;
         private readonly IConfiguration _configuration;
         private readonly IBmReplicaConteoService _replicaConteoService;
+        private readonly IBmConteoHistoricoService _bmConteoHistoricoService;
 
 
         public BmConteoService(IBmConteoRepository repository,
@@ -37,7 +38,8 @@ namespace Convertidor.Services.Bm
                                 IBmConteoHistoricoRepository bmConteoHistoricoRepository,
                                 IBmConteoDetalleHistoricoRepository bmConteoDetalleHistoricoRepository,
                                 IConfiguration configuration,
-                                IBmReplicaConteoService replicaConteoService)
+                                IBmReplicaConteoService replicaConteoService,
+                                IBmConteoHistoricoService bmConteoHistoricoService)
 		{
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -49,6 +51,7 @@ namespace Convertidor.Services.Bm
             _bmConteoDetalleHistoricoRepository = bmConteoDetalleHistoricoRepository;
             _configuration = configuration;
             _replicaConteoService = replicaConteoService;
+            _bmConteoHistoricoService = bmConteoHistoricoService;
         }
 
       
@@ -551,6 +554,7 @@ namespace Convertidor.Services.Bm
                         {
                             var deleted = await _repository.Delete(conteo);
                         }
+                        await _bmConteoHistoricoService.CreateReportConteoHistorico(dto.CodigoBmConteo);
                     }
                    
                 }
