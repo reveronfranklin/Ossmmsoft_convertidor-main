@@ -34,8 +34,16 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> CreateReportConteoHistorico(BmConteoFilterDto dto)
         {
+
+            ResultDto<string> result = new ResultDto<string>("");
             await _service.CreateReportConteoHistorico(dto.CodigoBmConteo);
-            return Ok();
+            result.Data = $"{dto.CodigoBmConteo}.pdf";
+            result.IsValid = true;
+            result.LinkData = result.Data;
+            result.Message = "";
+            
+            
+            return Ok(result);
         }
 
 
