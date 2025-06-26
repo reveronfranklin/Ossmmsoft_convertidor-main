@@ -13,7 +13,11 @@ namespace Convertidor.Data
 
        
         
+        
+        public DbSet<ADM_V_NOTAS_TERCEROS> ADM_V_NOTAS_TERCEROS { get; set; }
+
         public DbSet<ADM_V_PAGAR_A_LA_OP_TERCEROS> ADM_V_PAGAR_A_LA_OP_TERCEROS { get; set; }
+      
         public DbSet<ADM_DESCRIPTIVAS> ADM_DESCRIPTIVAS { get; set; }
 
         public DbSet<ADM_TITULOS> ADM_TITULOS { get; set; }
@@ -143,6 +147,14 @@ namespace Convertidor.Data
                   
                     builder.ToTable("ADM_V_COMPROMISO_PENDIENTE");
                 });
+            modelBuilder
+                .Entity<ADM_V_NOTAS_TERCEROS>(builder =>
+                {
+                    builder.HasNoKey();
+                  
+                    builder.ToTable("ADM_V_NOTAS_TERCEROS");
+                });
+            
             
             modelBuilder
                 .Entity<ADM_V_OP_POR_PAGAR>(builder =>
