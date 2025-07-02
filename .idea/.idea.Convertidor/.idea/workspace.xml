@@ -9,17 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmPagosNotasTercerosController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_V_NOTAS_TERCEROS.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmPagosNotasTercerosRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmPagosNotasTercerosRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/Pagos/PagoTerceroFilterDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Dtos/Adm/Pagos/PagoTercerosReportDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmAdmPagosNotasTercerosService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmPagosNotasTercerosService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextAdm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextAdm.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -477,7 +467,8 @@
       <workItem from="1750450567102" duration="3838000" />
       <workItem from="1750597415881" duration="12387000" />
       <workItem from="1750955619859" duration="1111000" />
-      <workItem from="1750958035742" duration="4323000" />
+      <workItem from="1750958035742" duration="10715000" />
+      <workItem from="1751495323099" duration="192000" />
     </task>
     <servers />
   </component>
