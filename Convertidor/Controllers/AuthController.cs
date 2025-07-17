@@ -270,6 +270,7 @@ namespace Convertidor.Controllers
             return refreshToken;
         }
         
+        
         [HttpPost]
         [Route("[action]"), Authorize]
         public async Task<ActionResult<ResultLoginDto>> CheckStatus(ResultRefreshTokenDto refreshTokento)
