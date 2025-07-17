@@ -103,7 +103,7 @@ namespace Convertidor.Controllers
             // Ruta donde se guardará el archivo PDF
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var destino = @settings.ExcelFiles;
-            var filePatch = $"{destino}/{dto.CodigoOrdenPago}.pdf";
+            var filePatch = $"{destino}{@settings.SeparatorPatch}{dto.CodigoOrdenPago}.pdf";
             
         // URL de la API
         string apiUrl = "http://ossmmasoft.com.ve:4000/api-v1.0/payment-orders/pdf/report";
