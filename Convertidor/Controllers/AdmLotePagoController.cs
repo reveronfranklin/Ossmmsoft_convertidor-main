@@ -208,6 +208,7 @@ namespace Convertidor.Controllers
                 }
                 else
                 {
+                    Console.WriteLine("Error en la solicitud HTTP: " + response.StatusCode);
                     var fileName = "NO_DATA.pdf";
                     filePatch = $"{destino}/{fileName}";
                     var provider = new FileExtensionContentTypeProvider();
