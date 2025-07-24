@@ -128,11 +128,9 @@ namespace Convertidor.Controllers
         // Cuerpo de la solicitud en formato JSON
         var requestBody = new
         {
-            CodigoLotePago = dto.CodigoLotePago,
-            CodigoPago = dto.CodigoPago,
-            usuario = dto.Usuario,
-            Report=dto.Report
-            
+            codigoLotePago = dto.CodigoLotePago,
+            codigoPago = dto.CodigoPago,
+
         };
 
         // Convertir el cuerpo a JSON
