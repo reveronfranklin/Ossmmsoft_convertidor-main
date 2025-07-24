@@ -101,7 +101,7 @@ namespace Convertidor.Controllers
         
    
         
-          [HttpPost]
+        [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Report(AdmLotePagoReportDto dto)
         {
