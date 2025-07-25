@@ -498,6 +498,7 @@ builder.Services.AddTransient<IAdmBeneficiariosPagosRepository, AdmBeneficiarios
 builder.Services.AddTransient<IAdmPagoElectronicoRepository, AdmPagoElectronicoRepository>();
 builder.Services.AddTransient<IAdmAdmProveedoresContactoRepository, AdmAdmProveedoresContactoRepository>();
 builder.Services.AddTransient<IAdmPagosNotasTercerosRepository, AdmPagosNotasTercerosRepository>();
+builder.Services.AddTransient<IAdmvNotaRepository, AdmvNotaRepository>();
 
 
 
@@ -511,7 +512,8 @@ builder.Services.AddTransient<IAdmPagosNotasTercerosRepository, AdmPagosNotasTer
        
 
 
-    
+builder.Services.AddTransient<IAdmNotaDebitoPagoElectronicService, AdmNotaDebitoPagoElectronicService>(); 
+
 builder.Services.AddTransient<IAdmPagosNotasTercerosService, AdmPagosNotasTercerosService>(); 
 
     

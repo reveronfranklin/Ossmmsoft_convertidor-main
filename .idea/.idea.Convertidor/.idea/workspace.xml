@@ -12,7 +12,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmNotaDebitoController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_V_NOTAS.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmvNotaRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmVNotaRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmNotaDebitoPagoElectronicService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/IAdmNotaDebitoPagoElectronicService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextAdm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextAdm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Queries.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.Queries.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +47,9 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -474,7 +486,7 @@
       <workItem from="1752090303694" duration="1763000" />
       <workItem from="1752540304825" duration="2226000" />
       <workItem from="1752760354620" duration="4713000" />
-      <workItem from="1753382838731" duration="9560000" />
+      <workItem from="1753382838731" duration="17176000" />
     </task>
     <servers />
   </component>
@@ -6030,13 +6042,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Program.cs</url>
-          <line>662</line>
+          <line>664</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Program.cs" containingFunctionPresentation="">
             <startOffsets>
-              <option value="43211" />
+              <option value="43388" />
             </startOffsets>
             <endOffsets>
-              <option value="43245" />
+              <option value="43422" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1206" />
@@ -6079,6 +6091,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1214" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs</url>
+          <line>49</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs" containingFunctionPresentation="Method 'GetReport'">
+            <startOffsets>
+              <option value="1873" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1917" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1215" />
         </line-breakpoint>
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
