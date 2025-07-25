@@ -36,13 +36,14 @@ public async Task<IActionResult> GetReport([FromBody] dynamic jsonBody) // Usa d
 
         // 2. Token de autenticación (x-refresh-token)
         string refreshToken = "eH6FFBS6Z8jBSMLTvcVHcc/SnGrA4y3pbrR5c76dN1UD+qK91AUv8hH7HJPHni1NEwGkC8IqGNpPDiVAm1ZCYw==";
-        string usuario = jsonBody.Usuario ?? "OSSMMADEV"; // Acceso dinámico
+       
+        string usuario = jsonBody.GetProperty("Usuario").GetString() ?? "OSSMMADEV";
         var sisUsuario = await _sisUsuarioRepository.GetByLogin(usuario);
         if (sisUsuario != null) refreshToken = sisUsuario.REFRESHTOKEN;
 
         // 3. URL de la API (usa la proporcionada o una por defecto)
-        string apiUrl = jsonBody.Report ?? "http://ossmmasoft.com.ve:4000/api-v1.0/payment-orders/pdf/report";
-
+    
+        string apiUrl = jsonBody.GetProperty("Report").GetString() ?? "http://ossmmasoft.com.ve:4000/api-v1.0/payment-orders/pdf/report";
         // 4. Pasar el body COMPLETO tal cual a la API externa
         string jsonRequest = JsonConvert.SerializeObject(jsonBody);
 
