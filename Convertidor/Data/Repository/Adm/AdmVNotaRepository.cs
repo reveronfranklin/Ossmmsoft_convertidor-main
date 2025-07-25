@@ -26,8 +26,8 @@ namespace Convertidor.Data.Repository.Adm
                 var tiposCheque = new List<int> { 573, 818, 834 }; // Lista de valores permitidos
                 var data = await _context.ADM_V_NOTAS
                     .Where(x => x.CODIGO_LOTE_PAGO == codigoLote && 
-                                x.TIPO_PAGO_ID.HasValue && // Confirmar que tiene valor
-                                tiposCheque.Contains((int)x.TIPO_PAGO_ID.Value)) // Convertir de long a int
+                                (x.TIPO_PAGO_ID==573 || x.TIPO_PAGO_ID==818  || x.TIPO_PAGO_ID==834))
+                              
                     .ToListAsync();
 
                 result.CantidadRegistros = data.Count;
