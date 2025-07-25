@@ -22,6 +22,8 @@ public class ADM_V_NOTAS
     public string? ETIQUETA2 { get; set; }
     public int? TIPO_PAGO_ID { get; set; }
     public string? TITULO_REPORTE { get; set; }
+    
+
 
 
 }
