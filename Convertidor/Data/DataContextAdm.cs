@@ -61,6 +61,11 @@ namespace Convertidor.Data
         public DbSet<ADM_BENEFICIARIOS_CH> ADM_BENEFICIARIOS_CH { get; set; }
         public DbSet<ADM_PAGOS_ELECTRONICOS> ADM_PAGOS_ELECTRONICOS { get; set; }
         
+        public DbSet<ADM_V_NOTAS> ADM_V_NOTAS { get; set; }
+
+        
+        
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          
@@ -146,6 +151,13 @@ namespace Convertidor.Data
                     builder.HasNoKey();
                   
                     builder.ToTable("ADM_V_COMPROMISO_PENDIENTE");
+                });
+            modelBuilder
+                .Entity<ADM_V_NOTAS>(builder =>
+                {
+                    builder.HasNoKey();
+                  
+                    builder.ToTable("ADM_V_NOTAS");
                 });
             modelBuilder
                 .Entity<ADM_V_NOTAS_TERCEROS>(builder =>

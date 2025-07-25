@@ -15,6 +15,8 @@ public partial class AdmLotePagoService
             
             return result;
         }
+        
+        
         public async Task<ResultDto<List<AdmLotePagoResponseDto>>> GetAll(AdmLotePagoFilterDto filter)
         {
             ResultDto<List<AdmLotePagoResponseDto>> result = new ResultDto<List<AdmLotePagoResponseDto>>(null);
