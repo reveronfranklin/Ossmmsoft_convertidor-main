@@ -12,9 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmLotePagoController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -476,7 +475,7 @@
       <workItem from="1752090303694" duration="1763000" />
       <workItem from="1752540304825" duration="2226000" />
       <workItem from="1752760354620" duration="4713000" />
-      <workItem from="1753382838731" duration="8029000" />
+      <workItem from="1753382838731" duration="8907000" />
     </task>
     <servers />
   </component>
@@ -6068,19 +6067,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1211" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs</url>
-          <line>26</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/ReportController.cs" containingFunctionPresentation="Method 'GetReport'">
-            <startOffsets>
-              <option value="721" />
-            </startOffsets>
-            <endOffsets>
-              <option value="737" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1213" />
         </line-breakpoint>
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
