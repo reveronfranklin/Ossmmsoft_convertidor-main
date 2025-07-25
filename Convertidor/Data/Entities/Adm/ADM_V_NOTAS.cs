@@ -20,7 +20,7 @@ public class ADM_V_NOTAS
     public string? DETALLE_IMP_RET { get; set; }
     public decimal? MONTO_IMP_RET { get; set; }   
     public string? ETIQUETA2 { get; set; }
-    public long? TIPO_PAGO_ID { get; set; }
+    public int TIPO_PAGO_ID { get; set; }
     public string? TITULO_REPORTE { get; set; }
     
 
