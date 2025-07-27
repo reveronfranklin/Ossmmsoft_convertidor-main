@@ -8,7 +8,8 @@
         Task<ResultDto<RhProcesosResponseDtoDto>> Update(RhProcesosUpdateDtoDto dto);
         Task<ResultDto<RhProcesosResponseDtoDto>> Create(RhProcesosUpdateDtoDto dto);
         Task<ResultDto<RhProcesosDeleteDtoDto>> Delete(RhProcesosDeleteDtoDto dto);
-        
+        Task<ResultDto<List<RhProcesosDto>>> GetByProceso(RhProcesosFilterDtoDto filter);
+
 	}
 }
 

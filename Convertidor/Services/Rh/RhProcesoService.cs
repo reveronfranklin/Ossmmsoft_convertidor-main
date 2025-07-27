@@ -65,6 +65,33 @@
 
         }
         
+        public async Task<ResultDto<List<RhProcesosDto>>> GetByProceso(RhProcesosFilterDtoDto filter)
+        {
+
+            ResultDto<List<RhProcesosDto>> result = new ResultDto<List<RhProcesosDto>>(null);
+            try
+            {
+                var proceso = await _repository.GetByCodigo(filter.CodigoProceso);
+                List<RH_PROCESOS> procesos = new List<RH_PROCESOS>();
+                procesos.Add(proceso);
+                var listDto = await MapListProceso(procesos);
+
+                result.Data = listDto;
+                result.IsValid = true;
+                result.Message = "";
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+
+        }
 
         public async Task<ResultDto<List<RhProcesosResponseDtoDto>>> GetAllRhProcesoResponseDto()
         {
