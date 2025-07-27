@@ -2,6 +2,7 @@
 {
 	public class ListConceptosDto
 	{
+		public int IdDetalleProceso { get; set; }
         public int CodigoConcepto { get; set; }
         public string Codigo { get; set; } = string.Empty;
         public int CodigoTipoNomina { get; set; }
