@@ -146,6 +146,7 @@
                         {
                             var concepto = await _rhConceptosRepository.GetByCodigoTipoNomina(itemDetalle.CODIGO_CONCEPTO, itemDetalle.CODIGO_TIPO_NOMINA);
                             ListConceptosDto itemlistConceptosDto = new ListConceptosDto();
+                            itemlistConceptosDto.IdDetalleProceso = itemDetalle.CODIGO_DETALLE_PROCESO;
                             itemlistConceptosDto.Codigo = concepto.CODIGO;
                             itemlistConceptosDto.CodigoConcepto = concepto.CODIGO_CONCEPTO;
                             itemlistConceptosDto.CodigoTipoNomina = concepto.CODIGO_TIPO_NOMINA;
