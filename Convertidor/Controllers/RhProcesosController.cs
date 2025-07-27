@@ -46,6 +46,15 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
         
+        
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetByProceso(RhProcesosFilterDtoDto filter)
+        {
+            var result = await _service.GetByProceso(filter);
+            return Ok(result);
+        }
+        
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Create(RhProcesosUpdateDtoDto dto)
