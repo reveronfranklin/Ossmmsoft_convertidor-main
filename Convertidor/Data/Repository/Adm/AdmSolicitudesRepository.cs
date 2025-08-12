@@ -126,6 +126,58 @@ namespace Convertidor.Data.Repository.Adm
             
         }
         
+        public async Task<string> LimpiaMontoLetras()
+        {
+
+            try
+            {
+                FormattableString xqueryDiario =
+                    $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.MONTO_LETRAS='' WHERE MONTO_LETRAS IS NULL  ";
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
+        }
+
+        
+        public async Task<string> LimpiaMotivo()
+        {
+
+            try
+            {
+                FormattableString xqueryDiario =
+                    $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.MOTIVO='' WHERE MOTIVO IS NULL  ";
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
+        }
+        
+        public async Task<string> UpdateSearchTextBypresupuesto(int codigoPresupuesto)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.SEARCH_TEXT = TRIM(NUMERO_SOLICITUD) || STATUS || TRIM(MOTIVO) || (SELECT DENOMINACION FROM PRE.PRE_INDICE_CAT_PRG WHERE PRE.PRE_INDICE_CAT_PRG.CODIGO_ICP  = ADM.ADM_SOLICITUDES.CODIGO_SOLICITANTE) || (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  = ADM.ADM_SOLICITUDES.TIPO_SOLICITUD_ID) || (SELECT NOMBRE_PROVEEDOR FROM ADM.ADM_PROVEEDORES   WHERE  ADM.ADM_PROVEEDORES.CODIGO_PROVEEDOR  =ADM.ADM_SOLICITUDES.CODIGO_PROVEEDOR) WHERE CODIGO_PRESUPUESTO ={codigoPresupuesto}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
+        }
+        
         
         public async Task<ResultDto<List<AdmSolicitudesResponseDto>>> GetByPresupuesto(AdmSolicitudesFilterDto filter) 
         {
@@ -146,7 +198,9 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
               
-               // var updateSearchText = await UpdateSearchText(filter.CodigoPresupuesto);
+               await UpdateSearchTextBypresupuesto(filter.CodigoPresupuesto);
+               await LimpiaMontoLetras();
+               await LimpiaMotivo();
                 var totalRegistros = 0;
                 var totalPage = 0;
               

@@ -6,14 +6,12 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace Convertidor.Data.Repository.Presupuesto
 {
-	public class PRE_V_SALDOSRepository: IPRE_V_SALDOSRepository
+    public class PRE_V_SALDOSRepository : IPRE_V_SALDOSRepository
     {
-		
-
         private readonly DataContextPre _context;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
-        public PRE_V_SALDOSRepository(DataContextPre context,ISisUsuarioRepository sisUsuarioRepository)
+        public PRE_V_SALDOSRepository(DataContextPre context, ISisUsuarioRepository sisUsuarioRepository)
         {
             _context = context;
             _sisUsuarioRepository = sisUsuarioRepository;
@@ -26,7 +24,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
                 var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.CODIGO_SALDO == codigo).FirstOrDefaultAsync();
+                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.CODIGO_SALDO == codigo)
+                    .FirstOrDefaultAsync();
 
                 return (PRE_V_SALDOS)result;
             }
@@ -35,106 +34,97 @@ namespace Convertidor.Data.Repository.Presupuesto
                 var res = ex.InnerException.Message;
                 return null;
             }
-
         }
-        public async Task<ResultDto<List<ListIcpPucConDisponible>> > GetListIcpPucConDisponible(FilterPresupuestoDto filter)
+
+        public async Task<ResultDto<List<ListIcpPucConDisponible>>> GetListIcpPucConDisponible(
+            FilterPresupuestoDto filter)
         {
-            
             ResultDto<List<ListIcpPucConDisponible>> result = new ResultDto<List<ListIcpPucConDisponible>>(null);
 
             if (filter.PageNumber == 0) filter.PageNumber = 1;
             if (filter.PageSize == 0) filter.PageSize = 100;
-            if (filter.PageSize >100) filter.PageSize = 100;
+            if (filter.PageSize > 100) filter.PageSize = 100;
             if (filter.SearchText == null) filter.SearchText = "";
             var totalRegistros = 0;
             var totalPage = 0;
             List<PRE_V_SALDOS> preVSaldos;
 
-            if ( filter.SearchText.Length > 0)
+            if (filter.SearchText.Length > 0)
             {
-                preVSaldos = await _context.PRE_V_SALDOS.
-                    Where(x => 
-                        x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && 
-                        x.DISPONIBLE>0 &&
+                preVSaldos = await _context.PRE_V_SALDOS.Where(x =>
+                        x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                        x.DISPONIBLE > 0 &&
                         x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
-                    .OrderBy(x=>x.CODIGO_ICP_CONCAT)
-                    .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                    .OrderBy(x => x.CODIGO_ICP_CONCAT)
+                    .ThenBy(x => x.CODIGO_PUC_CONCAT)
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize)
                     .ToListAsync();
 
                 totalRegistros = _context.PRE_V_SALDOS
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
-                                x.DISPONIBLE>0 &&
-                                x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
-                    .Count();
+                    .Count(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                x.DISPONIBLE > 0 &&
+                                x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()));
 
                 totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
             }
             else
             {
-                preVSaldos = await _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0)
-                    
-                    .OrderBy(x=>x.CODIGO_ICP_CONCAT)
-                    .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                preVSaldos = await _context.PRE_V_SALDOS.Where(x =>
+                        x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE > 0)
+                    .OrderBy(x => x.CODIGO_ICP_CONCAT)
+                    .ThenBy(x => x.CODIGO_PUC_CONCAT)
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize)
                     .ToListAsync();
 
-                totalRegistros = _context.PRE_V_SALDOS.Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE>0).Count();
+                totalRegistros = _context.PRE_V_SALDOS.Count(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.DISPONIBLE > 0);
 
                 totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
             }
-           
-            
+
+
             if (preVSaldos.Count > 0)
             {
-
-               
-
                 var resumen = from s in preVSaldos
                     group s by new
                     {
-                        CodigoSaldo=s.CODIGO_SALDO,
-                        CodigoIcp = s.CODIGO_ICP , 
-                        CodigoIcpConcat =s.CODIGO_ICP_CONCAT,
-                        DenominacionIcp=s.DENOMINACION_ICP,
-                        CodigoPuc=s.CODIGO_PUC,
-                        CodigoPucConcat=s.CODIGO_PUC_CONCAT,
-                        DenominacionPuc=s.DENOMINACION_PUC,
-                        FinanciadoId=s.FINANCIADO_ID,
-                        CodigoFinanciado=s.CODIGO_FINANCIADO.HasValue ? (int)s.CODIGO_FINANCIADO.Value : 0,
-                        DenominacionFinanciado=s.DESCRIPCION_FINANCIADO,
-                        Disponible=s.DISPONIBLE
-                        
-                    } into g
+                        CodigoSaldo = s.CODIGO_SALDO,
+                        CodigoIcp = s.CODIGO_ICP,
+                        CodigoIcpConcat = s.CODIGO_ICP_CONCAT,
+                        DenominacionIcp = s.DENOMINACION_ICP,
+                        CodigoPuc = s.CODIGO_PUC,
+                        CodigoPucConcat = s.CODIGO_PUC_CONCAT,
+                        DenominacionPuc = s.DENOMINACION_PUC,
+                        FinanciadoId = s.FINANCIADO_ID,
+                        CodigoFinanciado = s.CODIGO_FINANCIADO.HasValue ? (int)s.CODIGO_FINANCIADO.Value : 0,
+                        DenominacionFinanciado = s.DESCRIPCION_FINANCIADO,
+                        Disponible = s.DISPONIBLE
+                    }
+                    into g
                     select new ListIcpPucConDisponible
                     {
                         CodigoSaldo = g.Key.CodigoSaldo,
-                        CodigoIcp=g.Key.CodigoIcp,
-                        CodigoIcpConcat=g.Key.CodigoIcpConcat,
-                        DenominacionIcp=g.Key.DenominacionIcp,
-                        CodigoPucConcat=g.Key.CodigoPucConcat,
+                        CodigoIcp = g.Key.CodigoIcp,
+                        CodigoIcpConcat = g.Key.CodigoIcpConcat,
+                        DenominacionIcp = g.Key.DenominacionIcp,
+                        CodigoPucConcat = g.Key.CodigoPucConcat,
                         CodigoPuc = g.Key.CodigoPuc,
-                        DenominacionPuc=g.Key.DenominacionPuc,
+                        DenominacionPuc = g.Key.DenominacionPuc,
                         FinanciadoId = (int)g.Key.FinanciadoId,
-                        CodigoFinanciado =(int) g.Key.CodigoFinanciado,
+                        CodigoFinanciado = (int)g.Key.CodigoFinanciado,
                         DenominacionFinanciado = g.Key.DenominacionFinanciado,
-                        Disponible=(decimal)g.Key.Disponible
-                        
-                               
-
+                        Disponible = (decimal)g.Key.Disponible
                     };
-                
+
                 result.CantidadRegistros = totalRegistros;
                 result.TotalPage = totalPage;
                 result.Page = filter.PageNumber;
                 result.IsValid = true;
                 result.Message = "";
                 result.Data = resumen.ToList();
-               
-                return result;
 
+                return result;
             }
             else
             {
@@ -144,68 +134,60 @@ namespace Convertidor.Data.Repository.Presupuesto
                 result.IsValid = false;
                 result.Message = "No Datata";
                 result.Data = null;
-               
+
                 return result;
             }
 
-           
+
             return result;
         }
 
-    public async Task<ListIcpPucConDisponible> GetListIcpPucConDisponibleCodigoSaldo(int codigoSaldo)
+        public async Task<ListIcpPucConDisponible> GetListIcpPucConDisponibleCodigoSaldo(int codigoSaldo)
         {
-           ListIcpPucConDisponible result = new ListIcpPucConDisponible();
+            ListIcpPucConDisponible result = new ListIcpPucConDisponible();
 
             var preVSaldos = await _context.PRE_V_SALDOS
-                .Where(x => x.CODIGO_SALDO == codigoSaldo && x.DISPONIBLE>0)
-                
-                .OrderBy(x=>x.CODIGO_ICP_CONCAT)
-                .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                .Where(x => x.CODIGO_SALDO == codigoSaldo && x.DISPONIBLE > 0)
+                .OrderBy(x => x.CODIGO_ICP_CONCAT)
+                .ThenBy(x => x.CODIGO_PUC_CONCAT)
                 .ToListAsync();
 
-            if (preVSaldos!=null)
+            if (preVSaldos != null)
             {
-
-          
-
                 var resumen = from s in preVSaldos
                     group s by new
                     {
-                        CodigoSaldo=s.CODIGO_SALDO,
-                        CodigoIcp = s.CODIGO_ICP , 
-                        CodigoIcpConcat =s.CODIGO_ICP_CONCAT,
-                        DenominacionIcp=s.DENOMINACION_ICP,
-                        CodigoPuc=s.CODIGO_PUC,
-                        CodigoPucConcat=s.CODIGO_PUC_CONCAT,
-                        DenominacionPuc=s.DENOMINACION_PUC,
-                        FinanciadoId=s.FINANCIADO_ID,
-                        CodigoFinanciado=s.CODIGO_FINANCIADO.HasValue ? (int)s.CODIGO_FINANCIADO.Value : 0,
-                        DenominacionFinanciado=s.DESCRIPCION_FINANCIADO,
-                        Disponible=s.DISPONIBLE
-                        
-                    } into g
+                        CodigoSaldo = s.CODIGO_SALDO,
+                        CodigoIcp = s.CODIGO_ICP,
+                        CodigoIcpConcat = s.CODIGO_ICP_CONCAT,
+                        DenominacionIcp = s.DENOMINACION_ICP,
+                        CodigoPuc = s.CODIGO_PUC,
+                        CodigoPucConcat = s.CODIGO_PUC_CONCAT,
+                        DenominacionPuc = s.DENOMINACION_PUC,
+                        FinanciadoId = s.FINANCIADO_ID,
+                        CodigoFinanciado = s.CODIGO_FINANCIADO.HasValue ? (int)s.CODIGO_FINANCIADO.Value : 0,
+                        DenominacionFinanciado = s.DESCRIPCION_FINANCIADO,
+                        Disponible = s.DISPONIBLE
+                    }
+                    into g
                     select new ListIcpPucConDisponible
                     {
                         CodigoSaldo = g.Key.CodigoSaldo,
-                        CodigoIcp=g.Key.CodigoIcp,
-                        CodigoIcpConcat=g.Key.CodigoIcpConcat,
-                        DenominacionIcp=g.Key.DenominacionIcp,
-                        CodigoPucConcat=g.Key.CodigoPucConcat,
+                        CodigoIcp = g.Key.CodigoIcp,
+                        CodigoIcpConcat = g.Key.CodigoIcpConcat,
+                        DenominacionIcp = g.Key.DenominacionIcp,
+                        CodigoPucConcat = g.Key.CodigoPucConcat,
                         CodigoPuc = g.Key.CodigoPuc,
-                        DenominacionPuc=g.Key.DenominacionPuc,
+                        DenominacionPuc = g.Key.DenominacionPuc,
                         FinanciadoId = (int)g.Key.FinanciadoId,
-                        CodigoFinanciado =(int) g.Key.CodigoFinanciado,
+                        CodigoFinanciado = (int)g.Key.CodigoFinanciado,
                         DenominacionFinanciado = g.Key.DenominacionFinanciado,
-                        Disponible=(decimal)g.Key.Disponible
-                        
-                               
-
+                        Disponible = (decimal)g.Key.Disponible
                     };
                 result = resumen.FirstOrDefault();
-
             }
 
-           
+
             return result;
         }
 
@@ -217,10 +199,10 @@ namespace Convertidor.Data.Repository.Presupuesto
                 // Consulta optimizada que hace todo en la base de datos
                 var financiados = await _context.PRE_V_SALDOS
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto)
-                    .GroupBy(x => new 
-                    { 
-                        x.FINANCIADO_ID, 
-                        x.DESCRIPTIVA_FINANCIADO 
+                    .GroupBy(x => new
+                    {
+                        x.FINANCIADO_ID,
+                        x.DESCRIPTIVA_FINANCIADO
                     })
                     .Select(g => new PreFinanciadoDto
                     {
@@ -234,7 +216,6 @@ namespace Convertidor.Data.Repository.Presupuesto
             }
             catch (Exception ex)
             {
-             
                 return new List<PreFinanciadoDto>();
             }
         }
@@ -244,28 +225,26 @@ namespace Convertidor.Data.Repository.Presupuesto
             List<PreFinanciadoDto> result = new List<PreFinanciadoDto>();
 
             var preVSaldos = await _context.PRE_V_SALDOS
-                
-                
-                .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto )
-                .OrderBy(x=>x.CODIGO_ICP_CONCAT)
-                .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto)
+                .OrderBy(x => x.CODIGO_ICP_CONCAT)
+                .ThenBy(x => x.CODIGO_PUC_CONCAT)
                 .ToListAsync();
 
             if (preVSaldos.Count > 0)
             {
-
-          
-
                 var resumen = from s in preVSaldos
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO , FinanciadoId =s.FINANCIADO_ID,DescripcionFinanciado=s.DESCRIPTIVA_FINANCIADO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
-                                  g.Key.DescripcionFinanciado,
-                                  g.Key.FinanciadoId,
-                               
-
-                              };
+                    group s by new
+                    {
+                        CodigoPresupuesto = s.CODIGO_PRESUPUESTO, FinanciadoId = s.FINANCIADO_ID,
+                        DescripcionFinanciado = s.DESCRIPTIVA_FINANCIADO
+                    }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
+                        g.Key.DescripcionFinanciado,
+                        g.Key.FinanciadoId,
+                    };
                 if (resumen.Count() > 0)
                 {
                     foreach (var item in resumen)
@@ -273,52 +252,43 @@ namespace Convertidor.Data.Repository.Presupuesto
                         PreFinanciadoDto resultItem = new PreFinanciadoDto();
                         resultItem.FinanciadoId = (int)item.FinanciadoId;
 
-                        
+
                         resultItem.DescripcionFinanciado = item.DescripcionFinanciado;
                         result.Add(resultItem);
-
                     }
-
                 }
-
             }
 
 
-            return result.OrderBy(x=>x.FinanciadoId).ToList();
+            return result.OrderBy(x => x.FinanciadoId).ToList();
         }
 
 
-        public void RecalculaSaldosPreIcpPucFi(int codigo_presupuesto,int codigoIcp,int codigoPuc,int codigoFinanciado)
+        public void RecalculaSaldosPreIcpPucFi(int codigo_presupuesto, int codigoIcp, int codigoPuc,
+            int codigoFinanciado)
         {
-            
-
-            
             try
             {
-
-                
                 /*FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE_P_CREATE_SALDOS_DIARIOS({codigo_presupuesto},{codigoIcp},{codigoPuc},{codigoFinanciado});\nEND;";
 
                 var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-                
+
 
                 FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_P_ACTUALIZAR_SALDOS({codigo_presupuesto},{codigoIcp},{codigoPuc},{codigoFinanciado});\nEND;";
                 var result = _context.Database.ExecuteSqlInterpolated(xquery);*/
 
-            
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_CREATE_SALDOS_DIARIOS({DateTime.Now},{codigo_presupuesto});\nEND;";
 
-                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-                
+                FormattableString xqueryDiario =
+                    $"DECLARE \nBEGIN\nPRE.PRE_CREATE_SALDOS_DIARIOS({DateTime.Now},{codigo_presupuesto});\nEND;";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
 
                 FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
                 var result = _context.Database.ExecuteSqlInterpolated(xquery);
 
-                
-                
 
-                var aprobacion = result; 
-
+                var aprobacion = result;
             }
             catch (Exception ex)
             {
@@ -326,14 +296,11 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                 throw;
             }
-
-            
         }
-        
+
 
         public async Task RecalcularSaldo(int codigo_presupuesto)
         {
-
             /*var presupuestoActual = await _context.PRE_V_SALDOS.DefaultIfEmpty().OrderByDescending(x => x.CODIGO_PRESUPUESTO).FirstOrDefaultAsync();
             if (presupuestoActual!=null)
             {
@@ -342,30 +309,26 @@ namespace Convertidor.Data.Repository.Presupuesto
                     return;
                 }
             }*/
-           
 
 
             var parameters = new OracleParameter[]
             {
-                    new OracleParameter("Codigo_Presupuesto", codigo_presupuesto)
+                new OracleParameter("Codigo_Presupuesto", codigo_presupuesto)
             };
 
             try
             {
+                FormattableString xqueryDiario =
+                    $"DECLARE \nBEGIN\nPRE.PRE_CREATE_SALDOS_DIARIOS({DateTime.Now},{codigo_presupuesto});\nEND;";
 
-                
-                FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_CREATE_SALDOS_DIARIOS({DateTime.Now},{codigo_presupuesto});\nEND;";
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
 
-                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-                
 
-                 FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
-                        var result = _context.Database.ExecuteSqlInterpolated(xquery);
+                FormattableString xquery = $"DECLARE \nBEGIN\nPRE.PRE_ACTUALIZAR_SALDOS({codigo_presupuesto});\nEND;";
+                var result = _context.Database.ExecuteSqlInterpolated(xquery);
 
-            
 
-                var aprobacion = result; 
-
+                var aprobacion = result;
             }
             catch (Exception ex)
             {
@@ -373,53 +336,43 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                 throw;
             }
-
-
-
-
         }
 
         public async Task<IEnumerable<PRE_V_SALDOS>> GetAll(FilterPRE_V_SALDOSDto filter)
         {
             try
             {
-
                 var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x=>x.CODIGO_EMPRESA==filter.CodigoEmpresa && x.ANO>=filter.AnoDesde && x.ANO<= filter.AnoHasta)
-                    .OrderBy(x=>x.CODIGO_ICP_CONCAT)
-                    .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                    .Where(x => x.CODIGO_EMPRESA == filter.CodigoEmpresa && x.ANO >= filter.AnoDesde &&
+                                x.ANO <= filter.AnoHasta)
+                    .OrderBy(x => x.CODIGO_ICP_CONCAT)
+                    .ThenBy(x => x.CODIGO_PUC_CONCAT)
                     .ToListAsync();
                 return (IEnumerable<PRE_V_SALDOS>)result;
             }
             catch (Exception ex)
             {
-
                 return null;
             }
-
         }
 
         public async Task<List<PRE_V_SALDOS>> GetAllByPresupuesto(int codigoPresupuesto)
         {
             try
             {
-
                 var result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO== codigoPresupuesto)
-                    
-                    .OrderBy(x=>x.CODIGO_ICP_CONCAT)
-                    .ThenBy(x=> x.CODIGO_PUC_CONCAT)
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto)
+                    .OrderBy(x => x.CODIGO_ICP_CONCAT)
+                    .ThenBy(x => x.CODIGO_PUC_CONCAT)
                     .ToListAsync();
                 return (List<PRE_V_SALDOS>)result;
             }
             catch (Exception ex)
             {
-
                 return null;
             }
-
         }
-        
+
         public async Task<bool> PresupuestoExiste(int codigoPresupuesto)
         {
             try
@@ -427,34 +380,33 @@ namespace Convertidor.Data.Repository.Presupuesto
                 bool existe = await _context.PRE_V_SALDOS
                     .AsNoTracking() // Opcional: mejora rendimiento si solo es para consulta
                     .AnyAsync(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto);
-        
+
                 return existe;
             }
             catch (Exception ex)
             {
-              
                 return false;
             }
         }
+
         public async Task<bool> PresupuestoExisteBk(int codigoPresupuesto)
         {
             try
             {
                 bool result = false;
                 var saldo = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO== codigoPresupuesto).FirstOrDefaultAsync();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto).FirstOrDefaultAsync();
                 if (saldo != null)
                 {
                     result = true;
                 }
+
                 return result;
             }
             catch (Exception ex)
             {
-
                 return false;
             }
-
         }
 
 
@@ -462,74 +414,67 @@ namespace Convertidor.Data.Repository.Presupuesto
         {
             try
             {
-
-
                 List<PRE_V_SALDOS> result = new List<PRE_V_SALDOS>();
 
-                
 
-                if(filter.CodigoPresupuesto == 0 && filter.CodigoPucConcat.Length == 0)
+                if (filter.CodigoPresupuesto == 0 && filter.CodigoPucConcat.Length == 0)
                 {
-
                     var last = await _context.PRE_PRESUPUESTOS.DefaultIfEmpty()
-                    .OrderByDescending(x => x.CODIGO_PRESUPUESTO)
-                    .FirstOrDefaultAsync();
+                        .OrderByDescending(x => x.CODIGO_PRESUPUESTO)
+                        .FirstOrDefaultAsync();
                     result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == last.CODIGO_PRESUPUESTO).ToListAsync();
-
-
+                        .Where(x => x.CODIGO_PRESUPUESTO == last.CODIGO_PRESUPUESTO).ToListAsync();
                 }
-                if (filter.CodigoPresupuesto>0 && filter.CodigoPucConcat.Length>0)
+
+                if (filter.CodigoPresupuesto > 0 && filter.CodigoPucConcat.Length > 0)
                 {
                     result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto && x.CODIGO_PUC_CONCAT == filter.CodigoPucConcat).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                    x.CODIGO_PUC_CONCAT == filter.CodigoPucConcat).ToListAsync();
                 }
+
                 if (filter.CodigoPresupuesto > 0 && filter.CodigoPucConcat.Length == 0)
                 {
                     result = await _context.PRE_V_SALDOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto ).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto).ToListAsync();
                 }
-
-
 
 
                 return (List<PRE_V_SALDOS>)result;
             }
             catch (Exception ex)
             {
-
                 return null;
             }
-
         }
-   
 
-        public async Task<ResultDto<List<PreDenominacionPorPartidaDto?>>> GetPreVDenominacionPorPartidaPuc(FilterPreDenominacionDto filter)
+
+        public async Task<ResultDto<List<PreDenominacionPorPartidaDto?>>> GetPreVDenominacionPorPartidaPuc(
+            FilterPreDenominacionDto filter)
         {
-            ResultDto<List<PreDenominacionPorPartidaDto?>> result = new ResultDto<List<PreDenominacionPorPartidaDto?>>(null);
+            ResultDto<List<PreDenominacionPorPartidaDto?>> result =
+                new ResultDto<List<PreDenominacionPorPartidaDto?>>(null);
             List<PreDenominacionPorPartidaDto> resultDetail = new List<PreDenominacionPorPartidaDto>();
 
 
             try
             {
-
                 var planVSaldos = await _context.PRE_V_SALDOS
-                 .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto).ToListAsync();
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto).ToListAsync();
 
                 var planUnicoCuenta = await _context.PRE_PLAN_UNICO_CUENTAS
-               .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto ).ToListAsync();
+                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto).ToListAsync();
 
 
-
-                if (filter.Nivel>=1)
+                if (filter.Nivel >= 1)
                 {
                     var planUnicoCuentaPorPartidaNivelUno = planUnicoCuenta
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
-                    x.CODIGO_GRUPO == filter.CodigoGrupo &&
-                    x.CODIGO_NIVEL1 != "00" &&
-                    x.CODIGO_NIVEL2 == "00" &&
-                    x.CODIGO_NIVEL3 == "00" &&
-                    x.CODIGO_NIVEL4 == "00" && x.CODIGO_NIVEL5 == "00").ToList();
+                        .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                    x.CODIGO_GRUPO == filter.CodigoGrupo &&
+                                    x.CODIGO_NIVEL1 != "00" &&
+                                    x.CODIGO_NIVEL2 == "00" &&
+                                    x.CODIGO_NIVEL3 == "00" &&
+                                    x.CODIGO_NIVEL4 == "00" && x.CODIGO_NIVEL5 == "00").ToList();
 
                     if (planUnicoCuentaPorPartidaNivelUno.Count() > 0)
                     {
@@ -544,37 +489,52 @@ namespace Convertidor.Data.Repository.Presupuesto
                             resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
                             resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
                             resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
-                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
+                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." +
+                                                               item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." +
+                                                               item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
                             resultDetailItem.DenominacionPuc = item.DENOMINACION;
 
 
-                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelUno(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1,filter);
-                            resultDetailItem.Modificado = await GetModificadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                            resultDetailItem.Comprometido = await GetComprometidoNivelUno(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                            resultDetailItem.Bloqueado = await GetBloqueadoNivelUno(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                            resultDetailItem.Causado = await GetCausadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                            resultDetailItem.Pagado = await GetPagadoNivelUno(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelUno(planVSaldos,
+                                resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, filter);
+                            resultDetailItem.Modificado = await GetModificadoNivelUno(planVSaldos, filter.FinanciadoId,
+                                filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1);
+                            resultDetailItem.Comprometido = await GetComprometidoNivelUno(planVSaldos,
+                                filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1);
+                            resultDetailItem.Bloqueado = await GetBloqueadoNivelUno(planVSaldos, filter.FinanciadoId,
+                                resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.Causado = await GetCausadoNivelUno(planVSaldos, filter.FinanciadoId,
+                                filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1);
+                            resultDetailItem.Pagado = await GetPagadoNivelUno(planVSaldos, filter.FinanciadoId,
+                                filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1);
                             resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                            resultDetailItem.Disponibilidad = (resultDetailItem.Presupuestado + resultDetailItem.Modificado) - resultDetailItem.Comprometido;
-                            resultDetailItem.Asignacion = await GetAsignacionNivelUno(planVSaldos, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
-                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
+                            resultDetailItem.Disponibilidad =
+                                (resultDetailItem.Presupuestado + resultDetailItem.Modificado) -
+                                resultDetailItem.Comprometido;
+                            resultDetailItem.Asignacion = await GetAsignacionNivelUno(planVSaldos,
+                                resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1);
+                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(
+                                resultDetailItem.Asignacion, resultDetailItem.Comprometido,
+                                resultDetailItem.Modificado);
                             resultDetail.Add(resultDetailItem);
-
                         }
-
                     }
-
                 }
+
                 if (filter.Nivel >= 2)
                 {
                     var planUnicoCuentaPorPartidaNivelDos = planUnicoCuenta
-                    .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
-                                x.CODIGO_GRUPO == filter.CodigoGrupo &&
-                                x.CODIGO_NIVEL1 != "00" &&
-                                x.CODIGO_NIVEL2 != "00" &&
-                                x.CODIGO_NIVEL3 == "00" &&
-                                x.CODIGO_NIVEL4 == "00" &&
-                                x.CODIGO_NIVEL5 == "00").ToList();
+                        .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                    x.CODIGO_GRUPO == filter.CodigoGrupo &&
+                                    x.CODIGO_NIVEL1 != "00" &&
+                                    x.CODIGO_NIVEL2 != "00" &&
+                                    x.CODIGO_NIVEL3 == "00" &&
+                                    x.CODIGO_NIVEL4 == "00" &&
+                                    x.CODIGO_NIVEL5 == "00").ToList();
 
                     if (planUnicoCuentaPorPartidaNivelDos.Count > 0)
                     {
@@ -589,38 +549,55 @@ namespace Convertidor.Data.Repository.Presupuesto
                             resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
                             resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
                             resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
-                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
+                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." +
+                                                               item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." +
+                                                               item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
                             resultDetailItem.DenominacionPuc = item.DENOMINACION;
 
 
-                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelDos(planVSaldos, resultDetailItem.CodigoPresupuesto,filter.FinanciadoId, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                            resultDetailItem.Modificado = await GetModificadoNivelDos(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelDos(planVSaldos,
+                                resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Modificado = await GetModificadoNivelDos(planVSaldos, filter.FinanciadoId,
+                                filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
 
-                            resultDetailItem.Comprometido = await GetComprometidoNivelDos(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                            resultDetailItem.Bloqueado = await GetBloqueadoNivelDos(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                            resultDetailItem.Causado = await GetCausadoNivelDos(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                            resultDetailItem.Pagado = await GetPagadoNivelDos(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Comprometido = await GetComprometidoNivelDos(planVSaldos,
+                                filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Bloqueado = await GetBloqueadoNivelDos(planVSaldos, filter.FinanciadoId,
+                                resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1,
+                                item.CODIGO_NIVEL2);
+                            resultDetailItem.Causado = await GetCausadoNivelDos(planVSaldos, filter.FinanciadoId,
+                                filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.Pagado = await GetPagadoNivelDos(planVSaldos, filter.FinanciadoId,
+                                filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
                             resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
-                            resultDetailItem.Asignacion = await GetAsignacionNivelDos(planVSaldos, resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
-                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
+                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado +
+                                resultDetailItem.Modificado - resultDetailItem.Comprometido;
+                            resultDetailItem.Asignacion = await GetAsignacionNivelDos(planVSaldos,
+                                resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2);
+                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(
+                                resultDetailItem.Asignacion, resultDetailItem.Comprometido,
+                                resultDetailItem.Modificado);
                             resultDetail.Add(resultDetailItem);
-
                         }
-
                     }
                 }
 
                 if (filter.Nivel >= 3)
                 {
                     var planUnicoCuentaPorPartidaNivelTres = planUnicoCuenta
-                     .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
-                                 x.CODIGO_GRUPO == filter.CodigoGrupo &&
-                                 x.CODIGO_NIVEL1 != "00" &&
-                                 x.CODIGO_NIVEL2 != "00" &&
-                                 x.CODIGO_NIVEL3 != "00" &&
-                                 x.CODIGO_NIVEL4 == "00" &&
-                                 x.CODIGO_NIVEL5 == "00").ToList();
+                        .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                    x.CODIGO_GRUPO == filter.CodigoGrupo &&
+                                    x.CODIGO_NIVEL1 != "00" &&
+                                    x.CODIGO_NIVEL2 != "00" &&
+                                    x.CODIGO_NIVEL3 != "00" &&
+                                    x.CODIGO_NIVEL4 == "00" &&
+                                    x.CODIGO_NIVEL5 == "00").ToList();
 
                     if (planUnicoCuentaPorPartidaNivelTres.Count > 0)
                     {
@@ -635,41 +612,57 @@ namespace Convertidor.Data.Repository.Presupuesto
                             resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
                             resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
                             resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
-                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
+                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." +
+                                                               item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." +
+                                                               item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
                             resultDetailItem.DenominacionPuc = item.DENOMINACION;
 
 
-                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelTres(planVSaldos, resultDetailItem.CodigoPresupuesto,filter.FinanciadoId, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-                            resultDetailItem.Modificado = await GetModificadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelTres(planVSaldos,
+                                resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Modificado = await GetModificadoNivelTres(planVSaldos, filter.FinanciadoId,
+                                filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto,
+                                item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
 
-                            resultDetailItem.Comprometido = await GetComprometidoNivelTres(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-                            resultDetailItem.Bloqueado = await GetBloqueadoNivelTres(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-                            resultDetailItem.Causado = await GetCausadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
-                            resultDetailItem.Pagado = await GetPagadoNivelTres(planVSaldos, filter.FinanciadoId, filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Comprometido = await GetComprometidoNivelTres(planVSaldos,
+                                filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Bloqueado = await GetBloqueadoNivelTres(planVSaldos, filter.FinanciadoId,
+                                resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1,
+                                item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Causado = await GetCausadoNivelTres(planVSaldos, filter.FinanciadoId,
+                                filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto,
+                                item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Pagado = await GetPagadoNivelTres(planVSaldos, filter.FinanciadoId,
+                                filter.FechaDesde, filter.FechaHasta, resultDetailItem.CodigoPresupuesto,
+                                item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
                             resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
-                            resultDetailItem.Asignacion = await GetAsignacionNivelTres(planVSaldos, resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
+                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado +
+                                resultDetailItem.Modificado - resultDetailItem.Comprometido;
+                            resultDetailItem.Asignacion = await GetAsignacionNivelTres(planVSaldos,
+                                resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3);
 
 
-
-                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
+                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(
+                                resultDetailItem.Asignacion, resultDetailItem.Comprometido,
+                                resultDetailItem.Modificado);
                             resultDetail.Add(resultDetailItem);
-
                         }
-
                     }
                 }
 
                 if (filter.Nivel >= 4)
                 {
                     var planUnicoCuentaPorPartidaNivelCuatro = planUnicoCuenta
-                .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
-                            x.CODIGO_GRUPO == filter.CodigoGrupo &&
-                            x.CODIGO_NIVEL1 != "00" &&
-                            x.CODIGO_NIVEL2 != "00" &&
-                            x.CODIGO_NIVEL3 != "00" &&
-                            x.CODIGO_NIVEL4 != "00" &&
-                            x.CODIGO_NIVEL5 == "00").ToList();
+                        .Where(x => x.CODIGO_PRESUPUESTO == filter.CodigoPresupuesto &&
+                                    x.CODIGO_GRUPO == filter.CodigoGrupo &&
+                                    x.CODIGO_NIVEL1 != "00" &&
+                                    x.CODIGO_NIVEL2 != "00" &&
+                                    x.CODIGO_NIVEL3 != "00" &&
+                                    x.CODIGO_NIVEL4 != "00" &&
+                                    x.CODIGO_NIVEL5 == "00").ToList();
 
                     if (planUnicoCuentaPorPartidaNivelCuatro.Count > 0)
                     {
@@ -684,52 +677,64 @@ namespace Convertidor.Data.Repository.Presupuesto
                             resultDetailItem.CodigoEspecifica = item.CODIGO_NIVEL3;
                             resultDetailItem.CodigoSubEspecifica = item.CODIGO_NIVEL4;
                             resultDetailItem.CodigoNivel5 = item.CODIGO_NIVEL5;
-                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." + item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." + item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
+                            resultDetailItem.CodigoPucConcat = item.CODIGO_GRUPO + "." + item.CODIGO_NIVEL1 + "." +
+                                                               item.CODIGO_NIVEL2 + "." + item.CODIGO_NIVEL3 + "." +
+                                                               item.CODIGO_NIVEL4 + "." + item.CODIGO_NIVEL5;
                             resultDetailItem.DenominacionPuc = item.DENOMINACION;
 
 
-                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelCuatro(planVSaldos, resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                            resultDetailItem.Modificado = await GetModificadoNivelCuatro(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Presupuestado = await GetPresupuestadoNivelCuatro(planVSaldos,
+                                resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Modificado = await GetModificadoNivelCuatro(planVSaldos,
+                                filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto,
+                                item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3,
+                                item.CODIGO_NIVEL4);
 
-                            resultDetailItem.Comprometido = await GetComprometidoNivelCuatro(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                            resultDetailItem.Bloqueado = await GetBloqueadoNivelCuatro(planVSaldos, filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                            resultDetailItem.Causado = await GetCausadoNivelCuatro(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                            resultDetailItem.Pagado = await GetPagadoNivelCuatro(planVSaldos, filter.FinanciadoId, filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Comprometido = await GetComprometidoNivelCuatro(planVSaldos,
+                                filter.FinanciadoId, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Bloqueado = await GetBloqueadoNivelCuatro(planVSaldos, filter.FinanciadoId,
+                                resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO, item.CODIGO_NIVEL1,
+                                item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Causado = await GetCausadoNivelCuatro(planVSaldos, filter.FinanciadoId,
+                                filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.Pagado = await GetPagadoNivelCuatro(planVSaldos, filter.FinanciadoId,
+                                filter.FechaHasta, resultDetailItem.CodigoPresupuesto, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
                             resultDetailItem.Deuda = resultDetailItem.Comprometido - resultDetailItem.Pagado;
-                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado + resultDetailItem.Modificado - resultDetailItem.Comprometido;
-                            resultDetailItem.Asignacion = await GetAsignacionNivelCuatro(planVSaldos, resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO, item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
-                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(resultDetailItem.Asignacion, resultDetailItem.Comprometido, resultDetailItem.Modificado);
+                            resultDetailItem.Disponibilidad = resultDetailItem.Presupuestado +
+                                resultDetailItem.Modificado - resultDetailItem.Comprometido;
+                            resultDetailItem.Asignacion = await GetAsignacionNivelCuatro(planVSaldos,
+                                resultDetailItem.CodigoPresupuesto, filter.FinanciadoId, item.CODIGO_GRUPO,
+                                item.CODIGO_NIVEL1, item.CODIGO_NIVEL2, item.CODIGO_NIVEL3, item.CODIGO_NIVEL4);
+                            resultDetailItem.DisponibilidadFinan = GetDisponibilidadFinanciera(
+                                resultDetailItem.Asignacion, resultDetailItem.Comprometido,
+                                resultDetailItem.Modificado);
                             resultDetail.Add(resultDetailItem);
-
                         }
-
                     }
-
                 }
 
-               
-               
 
                 var sortData = resultDetail.OrderBy(x => x.CodigoPartida)
-                                            .ThenBy(x => x.CodigoPartida)
-                                            .ThenBy(x => x.CodigoGenerica)
-                                            .ThenBy(x => x.CodigoEspecifica)
-                                            .ThenBy(x => x.CodigoSubEspecifica)
-                                            .ThenBy(x => x.CodigoNivel5).ToList();
+                    .ThenBy(x => x.CodigoPartida)
+                    .ThenBy(x => x.CodigoGenerica)
+                    .ThenBy(x => x.CodigoEspecifica)
+                    .ThenBy(x => x.CodigoSubEspecifica)
+                    .ThenBy(x => x.CodigoNivel5).ToList();
                 if (resultDetail.Count > 0)
                 {
-
                     result.IsValid = true;
                     result.Data = sortData;
                     result.Message = "";
-
                 }
                 else
                 {
                     result.IsValid = true;
                     result.Data = null;
                     result.Message = "No data";
-
                 }
 
                 return result;
@@ -741,9 +746,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 result.Message = ex.Message;
                 return result;
             }
-
-          
         }
+
         public decimal GetDisponibilidadFinanciera(decimal asignacion, decimal comprometido, decimal modificado)
         {
             //SUM(case when(NVL(AA.ASIGNACION - NVL(BB.COMPROMETIDO, 0) + NVL(CC.MODIFICADO, 0), 0)) > 0 then(NVL(AA.ASIGNACION - NVL(BB.COMPROMETIDO, 0) + NVL(CC.MODIFICADO, 0), 0)) else 0 end) DISPONIBILIDAD_FINAN
@@ -751,7 +755,7 @@ namespace Convertidor.Data.Repository.Presupuesto
             decimal result;
             result = 0;
 
-            var calculo = (asignacion -comprometido ) + modificado;
+            var calculo = (asignacion - comprometido) + modificado;
             if (calculo > 0)
             {
                 result = calculo;
@@ -767,90 +771,91 @@ namespace Convertidor.Data.Repository.Presupuesto
 
         #region NivelUno
 
-            public async Task<decimal> GetPresupuestadoNivelUno(List<PRE_V_SALDOS> saldos,int codigoPresupuesto, string codigoGrupo, string codigoPartida, FilterPreDenominacionDto filter)
-            {
-                decimal result = 0;
+        public async Task<decimal> GetPresupuestadoNivelUno(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,
+            string codigoGrupo, string codigoPartida, FilterPreDenominacionDto filter)
+        {
+            decimal result = 0;
 
 
             //filter
-                List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
+            List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
 
-                if (filter.FinanciadoId > 0) {
-                    preVSaldos = saldos.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.FINANCIADO_ID==filter.FinanciadoId && x.CODIGO_GRUPO == codigoGrupo && x.CODIGO_PARTIDA == codigoPartida).ToList();
-                }
-                else {
-                    preVSaldos = saldos.Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_GRUPO == codigoGrupo && x.CODIGO_PARTIDA == codigoPartida).ToList();
-                }
-               
-
-                if (preVSaldos.Count > 0)
-                {
-                   
-                    var resumen = from s in preVSaldos.Where(x=>x.ASIGNACION>=0)
-                                  group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                                  select new
-                                  {
-                                      g.Key.CodigoPresupuesto,
-
-                                      PRESUPUESTADO = g.Sum(s => s.PRESUPUESTADO),
-
-                                  };
-                    if (resumen.Count() > 0)
-                    {
-                        var itemResumen = resumen.FirstOrDefault();
-                        if (itemResumen != null)
-                        {
-                            result = itemResumen.PRESUPUESTADO;
-                        }
-
-
-                    }
-
+            if (filter.FinanciadoId > 0)
+            {
+                preVSaldos = saldos.Where(x =>
+                    x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.FINANCIADO_ID == filter.FinanciadoId &&
+                    x.CODIGO_GRUPO == codigoGrupo && x.CODIGO_PARTIDA == codigoPartida).ToList();
             }
-         
+            else
+            {
+                preVSaldos = saldos.Where(x =>
+                    x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_GRUPO == codigoGrupo &&
+                    x.CODIGO_PARTIDA == codigoPartida).ToList();
+            }
+
+
+            if (preVSaldos.Count > 0)
+            {
+                var resumen = from s in preVSaldos.Where(x => x.ASIGNACION >= 0)
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
+
+                        PRESUPUESTADO = g.Sum(s => s.PRESUPUESTADO),
+                    };
+                if (resumen.Count() > 0)
+                {
+                    var itemResumen = resumen.FirstOrDefault();
+                    if (itemResumen != null)
+                    {
+                        result = itemResumen.PRESUPUESTADO;
+                    }
+                }
+            }
+
 
             return result;
+        }
+
+        public async Task<decimal> GetModificadoNivelUno(List<PRE_V_SALDOS> saldos, int finaciadoId,
+            DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida)
+        {
+            decimal result = 0;
+            List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
+            if (finaciadoId > 0)
+            {
+                preVSaldos = saldos
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == finaciadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
+            }
+            else
+            {
+                preVSaldos = saldos
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
             }
 
-        public async Task<decimal> GetModificadoNivelUno(List<PRE_V_SALDOS> saldos,int finaciadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida)
+
+            if (preVSaldos.Count > 0)
             {
-
-                decimal result = 0;
-                List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-                if (finaciadoId > 0) {
-                    preVSaldos = saldos
-                           .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                       x.FINANCIADO_ID == finaciadoId &&
-                                       x.CODIGO_GRUPO == codigoGrupo &&
-                                       x.CODIGO_PARTIDA == codigoPartida).ToList();
-                }
-                else {
-                  preVSaldos = saldos
-                          .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                  
-                                      x.CODIGO_GRUPO == codigoGrupo &&
-                                      x.CODIGO_PARTIDA == codigoPartida).ToList();
-                }
-           
-
-                if (preVSaldos.Count > 0)
+                foreach (var item in preVSaldos)
                 {
-                    foreach (var item in preVSaldos)
-                    {
                     // SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
                     List<PRE_SALDOS_DIARIOS> preVSaldosDiarios = new List<PRE_SALDOS_DIARIOS>();
-                   
-                        preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                                                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                                                x.CODIGO_SALDO == item.CODIGO_SALDO &&
-                                                                x.FECHA_SALDO <= fechaHasta).ToListAsync();
 
-
-                   
+                    preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                    x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
 
 
                     if (preVSaldosDiarios.Count > 0)
-                        {
+                    {
                         /*foreach (var itemDiario in preVSaldosDiarios)
                         {
                             if (finaciadoId == 92 || finaciadoId == 0)
@@ -873,14 +878,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                         if (finaciadoId != 92 && finaciadoId != 0)
                         {
                             var resumen = from s in preVSaldos
-                                          group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                                          select new
-                                          {
-                                              g.Key.CodigoPresupuesto,
+                                group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                                into g
+                                select new
+                                {
+                                    g.Key.CodigoPresupuesto,
 
-                                              MODIFICADO = g.Sum(s => s.MODIFICADO),
-
-                                          };
+                                    MODIFICADO = g.Sum(s => s.MODIFICADO),
+                                };
                             if (resumen.Count() > 0)
                             {
                                 var itemResumen = resumen.FirstOrDefault();
@@ -888,23 +893,20 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = itemResumen.MODIFICADO;
                                 }
-
-
                             }
-
                         }
                         else
                         {
                             var resumen = from s in preVSaldos
-                                          where s.FINANCIADO_ID!=719
-                                          group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                                          select new
-                                          {
-                                              g.Key.CodigoPresupuesto,
+                                where s.FINANCIADO_ID != 719
+                                group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                                into g
+                                select new
+                                {
+                                    g.Key.CodigoPresupuesto,
 
-                                              MODIFICADO = g.Sum(s => s.MODIFICADO),
-
-                                          };
+                                    MODIFICADO = g.Sum(s => s.MODIFICADO),
+                                };
                             if (resumen.Count() > 0)
                             {
                                 var itemResumen = resumen.FirstOrDefault();
@@ -912,116 +914,113 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = itemResumen.MODIFICADO;
                                 }
-
-
                             }
                         }
-                           
-
-
-                    }
-
                     }
                 }
-
-                return result;
             }
-            public async Task<decimal> GetComprometidoNivelUno(List<PRE_V_SALDOS> saldos, int finaciadoId, int codigoPresupuesto, string codigoGrupo, string codigoPartida)
+
+            return result;
+        }
+
+        public async Task<decimal> GetComprometidoNivelUno(List<PRE_V_SALDOS> saldos, int finaciadoId,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida)
+        {
+            decimal result = 0;
+            List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
+            if (finaciadoId > 0)
             {
+                preVSaldos = saldos
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == finaciadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
+            }
+            else
+            {
+                preVSaldos = saldos
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
+            }
 
-                decimal result = 0;
-                List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-                if (finaciadoId > 0) {
-                    preVSaldos = saldos
-                           .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                       x.FINANCIADO_ID == finaciadoId &&
-                                       x.CODIGO_GRUPO == codigoGrupo &&
-                                       x.CODIGO_PARTIDA == codigoPartida).ToList();
-                }
-                else {
-                    preVSaldos = saldos
-                          .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                     
-                                      x.CODIGO_GRUPO == codigoGrupo &&
-                                      x.CODIGO_PARTIDA == codigoPartida).ToList();
-                 }
-           
 
-                if (preVSaldos.Count > 0)
+            if (preVSaldos.Count > 0)
+            {
+                foreach (var item in preVSaldos)
                 {
-                    foreach (var item in preVSaldos)
+                    //   SUM(nvl(CASE WHEN (:P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.COMPROMETIDO) ELSE C.COMPROMETIDO END,0)) COMPROMETIDO,
+                    if (finaciadoId == 92 || finaciadoId == 0)
                     {
-                        //   SUM(nvl(CASE WHEN (:P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.COMPROMETIDO) ELSE C.COMPROMETIDO END,0)) COMPROMETIDO,
-                        if (finaciadoId == 92 || finaciadoId == 0)
-                        {
-                            if (item.FINANCIADO_ID != 719)
-                            {
-                              
-                                result = result + item.COMPROMETIDO;
-                            }
-
-                        }
-                        else
+                        if (item.FINANCIADO_ID != 719)
                         {
                             result = result + item.COMPROMETIDO;
                         }
                     }
-                }
-
-                return result;
-            }
-            public async Task<decimal> GetBloqueadoNivelUno(List<PRE_V_SALDOS> saldos, int finaciadoId, int codigoPresupuesto, string codigoGrupo, string codigoPartida)
-            {
-
-                decimal result = 0;
-                List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-                if (finaciadoId > 0) {
-                preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID == finaciadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida).ToList();
-                }
-                else {
-
-                    preVSaldos = saldos
-                               .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                         
-                                           x.CODIGO_GRUPO == codigoGrupo &&
-                                           x.CODIGO_PARTIDA == codigoPartida).ToList();
-                }
-               
-
-                if (preVSaldos.Count > 0)
-                {
-                    foreach (var item in preVSaldos)
+                    else
                     {
-                        result = result + item.BLOQUEADO;
+                        result = result + item.COMPROMETIDO;
                     }
                 }
-
-                return result;
             }
-            public async Task<decimal> GetCausadoNivelUno(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida)
-        {
 
+            return result;
+        }
+
+        public async Task<decimal> GetBloqueadoNivelUno(List<PRE_V_SALDOS> saldos, int finaciadoId,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida)
+        {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (finaciadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID == financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == finaciadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                              
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
             }
-           
+
+
+            if (preVSaldos.Count > 0)
+            {
+                foreach (var item in preVSaldos)
+                {
+                    result = result + item.BLOQUEADO;
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<decimal> GetCausadoNivelUno(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida)
+        {
+            decimal result = 0;
+            List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
+            if (financiadoId > 0)
+            {
+                preVSaldos = saldos
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
+            }
+            else
+            {
+                preVSaldos = saldos
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
+            }
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1029,7 +1028,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 {
                     // SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
                     if (preVSaldosDiarios.Count > 0)
                     {
                         foreach (var itemDiario in preVSaldosDiarios)
@@ -1044,7 +1044,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = result + itemDiario.CAUSADO;
                                 }
-
                             }
                             else
                             {
@@ -1052,33 +1051,34 @@ namespace Convertidor.Data.Repository.Presupuesto
                             }
                         }
                     }
-
                 }
             }
 
             return result;
         }
-            public async Task<decimal> GetPagadoNivelUno(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida)
-        {
 
+        public async Task<decimal> GetPagadoNivelUno(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida)
+        {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
 
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                  .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                              x.FINANCIADO_ID == financiadoId &&
-                              x.CODIGO_GRUPO == codigoGrupo &&
-                              x.CODIGO_PARTIDA == codigoPartida).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                      .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                 
-                                  x.CODIGO_GRUPO == codigoGrupo &&
-                                  x.CODIGO_PARTIDA == codigoPartida).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida).ToList();
             }
-          
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1086,7 +1086,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 {
                     // SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
                     if (preVSaldosDiarios.Count > 0)
                     {
                         foreach (var itemDiario in preVSaldosDiarios)
@@ -1101,7 +1102,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = result + itemDiario.PAGADO;
                                 }
-
                             }
                             else
                             {
@@ -1109,71 +1109,73 @@ namespace Convertidor.Data.Repository.Presupuesto
                             }
                         }
                     }
-
                 }
             }
 
             return result;
         }
-            public async Task<decimal> GetAsignacionNivelUno(List<PRE_V_SALDOS> saldos, int codigoPresupuesto, string codigoGrupo, string codigoPartida)
-            {
-                decimal result = 0;
+
+        public async Task<decimal> GetAsignacionNivelUno(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,
+            string codigoGrupo, string codigoPartida)
+        {
+            decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
 
             preVSaldos = saldos
-                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                    x.CODIGO_GRUPO == codigoGrupo &&
-                                    x.CODIGO_PARTIDA == codigoPartida).ToList();
-          
+                .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                            x.CODIGO_GRUPO == codigoGrupo &&
+                            x.CODIGO_PARTIDA == codigoPartida).ToList();
+
             var resumen = from s in preVSaldos
-                          group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                          select new
-                          {
-                              g.Key.CodigoPresupuesto,
-                              ASIGNACION = g.Sum(s => s.ASIGNACION),
-                           
-                          };
-            if (resumen.Count()>0)
+                group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                into g
+                select new
+                {
+                    g.Key.CodigoPresupuesto,
+                    ASIGNACION = g.Sum(s => s.ASIGNACION),
+                };
+            if (resumen.Count() > 0)
             {
                 var itemResumen = resumen.FirstOrDefault();
                 if (itemResumen != null)
                 {
                     result = itemResumen.ASIGNACION;
                 }
-               
-               
             }
             //var finalre = DateTime.Now;
             //var diffre = finalre - iniciore;
 
             return result;
-        
-            }
+        }
+
         #endregion
 
 
         #region NivelDos
 
-        public async Task<decimal> GetPresupuestadoNivelDos(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica)
+        public async Task<decimal> GetPresupuestadoNivelDos(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,
+            int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                x.FINANCIADO_ID==financiadoId &&
+                                x.FINANCIADO_ID == financiadoId &&
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1186,14 +1188,14 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                 }*/
                 var resumen = from s in preVSaldos.Where(x => x.ASIGNACION >= 0)
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  PRESUPUESTADO = g.Sum(s => s.PRESUPUESTADO),
-
-                              };
+                        PRESUPUESTADO = g.Sum(s => s.PRESUPUESTADO),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -1201,17 +1203,19 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.PRESUPUESTADO;
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetModificadoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
+
+        public async Task<decimal> GetModificadoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId,
+            DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                 x.FINANCIADO_ID == financiadoId &&
@@ -1219,15 +1223,15 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1235,38 +1239,39 @@ namespace Convertidor.Data.Repository.Presupuesto
                 {
                     // SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
                     if (preVSaldosDiarios.Count > 0)
                     {
-                       /* foreach (var itemDiario in preVSaldosDiarios)
-                        {
-                            if (finaciadoId == 92 || finaciadoId == 0)
-                            {
-                                if (item.FINANCIADO_ID == 719)
-                                {
-                                    result = result + 0;
-                                }
-                                else
-                                {
-                                    result = result + itemDiario.MODIFICADO;
-                                }
+                        /* foreach (var itemDiario in preVSaldosDiarios)
+                         {
+                             if (finaciadoId == 92 || finaciadoId == 0)
+                             {
+                                 if (item.FINANCIADO_ID == 719)
+                                 {
+                                     result = result + 0;
+                                 }
+                                 else
+                                 {
+                                     result = result + itemDiario.MODIFICADO;
+                                 }
 
-                            }
-                            else
-                            {
-                                result = result + itemDiario.MODIFICADO;
-                            }
-                        }*/
+                             }
+                             else
+                             {
+                                 result = result + itemDiario.MODIFICADO;
+                             }
+                         }*/
 
                         var resumen = from s in preVSaldos
-                                      group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                                      select new
-                                      {
-                                          g.Key.CodigoPresupuesto,
+                            group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                            into g
+                            select new
+                            {
+                                g.Key.CodigoPresupuesto,
 
-                                          MODIFICADO = g.Sum(s => s.MODIFICADO),
-
-                                      };
+                                MODIFICADO = g.Sum(s => s.MODIFICADO),
+                            };
                         if (resumen.Count() > 0)
                         {
                             var itemResumen = resumen.FirstOrDefault();
@@ -1274,37 +1279,37 @@ namespace Convertidor.Data.Repository.Presupuesto
                             {
                                 result = itemResumen.MODIFICADO;
                             }
-
-
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetComprometidoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
+
+        public async Task<decimal> GetComprometidoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId>0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID == financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                             
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-           
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1320,38 +1325,40 @@ namespace Convertidor.Data.Repository.Presupuesto
                         {
                             result = result + item.COMPROMETIDO;
                         }
-
                     }
                     else
                     {
                         result = result + item.COMPROMETIDO;
                     }
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetBloqueadoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
+
+        public async Task<decimal> GetBloqueadoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) { 
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                  .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                              x.FINANCIADO_ID == financiadoId &&
-                              x.CODIGO_GRUPO == codigoGrupo &&
-                              x.CODIGO_PARTIDA == codigoPartida &&
-                              x.CODIGO_GENERICA == codigoGenerica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                  .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                            
-                              x.CODIGO_GRUPO == codigoGrupo &&
-                              x.CODIGO_PARTIDA == codigoPartida &&
-                              x.CODIGO_GENERICA == codigoGenerica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-          
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1361,14 +1368,14 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                 }*/
                 var resumen = from s in preVSaldos
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  BLOQUEADO = g.Sum(s => s.BLOQUEADO),
-
-                              };
+                        BLOQUEADO = g.Sum(s => s.BLOQUEADO),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -1376,34 +1383,35 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.BLOQUEADO;
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetCausadoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
+
+        public async Task<decimal> GetCausadoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID == financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                            
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica).ToList();
+            }
 
-            }
-           
 
             if (preVSaldos.Count > 0)
             {
@@ -1411,7 +1419,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 {
                     // SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
                     if (preVSaldosDiarios.Count > 0)
                     {
                         foreach (var itemDiario in preVSaldosDiarios)
@@ -1426,7 +1435,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = result + itemDiario.CAUSADO;
                                 }
-
                             }
                             else
                             {
@@ -1434,17 +1442,19 @@ namespace Convertidor.Data.Repository.Presupuesto
                             }
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetPagadoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
+
+        public async Task<decimal> GetPagadoNivelDos(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                 x.FINANCIADO_ID == financiadoId &&
@@ -1452,15 +1462,15 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-           
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1468,7 +1478,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                 {
                     // SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
                     if (preVSaldosDiarios.Count > 0)
                     {
                         foreach (var itemDiario in preVSaldosDiarios)
@@ -1483,7 +1494,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = result + itemDiario.PAGADO;
                                 }
-
                             }
                             else
                             {
@@ -1491,52 +1501,53 @@ namespace Convertidor.Data.Repository.Presupuesto
                             }
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetAsignacionNivelDos(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica)
+
+        public async Task<decimal> GetAsignacionNivelDos(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,
+            int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) { 
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID==financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica).ToList();
-
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica).ToList();
-
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica).ToList();
             }
 
             if (preVSaldos.Count > 0)
             {
                 /*foreach (var item in preVSaldos)
                 {
-                 
+
                         result = result + item.ASIGNACION;
-                   
+
 
                 }*/
                 var resumen = from s in preVSaldos
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  ASIGNACION = g.Sum(s => s.ASIGNACION),
-
-                              };
+                        ASIGNACION = g.Sum(s => s.ASIGNACION),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -1544,52 +1555,53 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.ASIGNACION;
                     }
-
-
                 }
             }
+
             return result;
         }
+
         #endregion
 
         #region NivelTres
 
-        public async Task<decimal> GetPresupuestadoNivelTres(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
+        public async Task<decimal> GetPresupuestadoNivelTres(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,
+            int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                   x.FINANCIADO_ID==financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-           
+
 
             if (preVSaldos.Count > 0)
             {
-               
-
                 var resumen = from s in preVSaldos.Where(x => x.ASIGNACION >= 0)
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  PRESUPUESTADO = g.Sum(s => s.PRESUPUESTADO),
-
-                              };
+                        PRESUPUESTADO = g.Sum(s => s.PRESUPUESTADO),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -1597,35 +1609,38 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.PRESUPUESTADO;
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetModificadoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechadesde, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
+
+        public async Task<decimal> GetModificadoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId,
+            DateTime fechadesde, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida,
+            string codigoGenerica, string codigoEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID == financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                             
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-          
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1634,20 +1649,20 @@ namespace Convertidor.Data.Repository.Presupuesto
                     //         SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
 
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO >= fechadesde && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO >= fechadesde && x.FECHA_SALDO <= fechaHasta).ToListAsync();
 
                     if (preVSaldosDiarios.Count > 0)
                     {
-                       
                         var resumen = from s in preVSaldos
-                                      group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                                      select new
-                                      {
-                                          g.Key.CodigoPresupuesto,
+                            group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                            into g
+                            select new
+                            {
+                                g.Key.CodigoPresupuesto,
 
-                                          MODIFICADO = g.Sum(s => s.MODIFICADO),
-
-                                      };
+                                MODIFICADO = g.Sum(s => s.MODIFICADO),
+                            };
                         if (resumen.Count() > 0)
                         {
                             var itemResumen = resumen.FirstOrDefault();
@@ -1655,45 +1670,45 @@ namespace Convertidor.Data.Repository.Presupuesto
                             {
                                 result = itemResumen.MODIFICADO;
                             }
-
-
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetComprometidoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
+
+        public async Task<decimal> GetComprometidoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID == financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                             
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-        
+
 
             if (preVSaldos.Count > 0)
             {
                 foreach (var item in preVSaldos)
                 {
-
                     if (financiadoId == 92 || financiadoId == 0)
                     {
                         if (item.FINANCIADO_ID == 719)
@@ -1704,22 +1719,25 @@ namespace Convertidor.Data.Repository.Presupuesto
                         {
                             result = result + item.COMPROMETIDO;
                         }
-
                     }
                     else
                     {
                         result = result + item.COMPROMETIDO;
                     }
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetBloqueadoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
+
+        public async Task<decimal> GetBloqueadoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                 x.FINANCIADO_ID == financiadoId &&
@@ -1728,30 +1746,28 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 x.CODIGO_GENERICA == codigoGenerica &&
                                 x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            else {
-
+            else
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica &&
                                 x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            
+
 
             if (preVSaldos.Count > 0)
             {
-               
                 var resumen = from s in preVSaldos
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  BLOQUEADO = g.Sum(s => s.BLOQUEADO),
-
-                              };
+                        BLOQUEADO = g.Sum(s => s.BLOQUEADO),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -1759,35 +1775,38 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.BLOQUEADO;
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetCausadoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechadesde, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
+
+        public async Task<decimal> GetCausadoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechadesde,
+            DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID == financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                             
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-           
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1796,7 +1815,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                     //         SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
 
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO >= fechadesde && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO >= fechadesde && x.FECHA_SALDO <= fechaHasta).ToListAsync();
 
                     if (preVSaldosDiarios.Count > 0)
                     {
@@ -1812,7 +1832,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = result + itemDiario.CAUSADO;
                                 }
-
                             }
                             else
                             {
@@ -1820,17 +1839,20 @@ namespace Convertidor.Data.Repository.Presupuesto
                             }
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetPagadoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechadesde, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
+
+        public async Task<decimal> GetPagadoNivelTres(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechadesde,
+            DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                 x.FINANCIADO_ID == financiadoId &&
@@ -1839,17 +1861,16 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 x.CODIGO_GENERICA == codigoGenerica &&
                                 x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                          
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica &&
                                 x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
-
             }
-            
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1858,7 +1879,8 @@ namespace Convertidor.Data.Repository.Presupuesto
                     //         SUM(nvl(CASE WHEN ( :P_FINANCIADO_ID = 92 OR NVL(:P_FINANCIADO_ID,0) = 0) THEN DECODE(A.FINANCIADO_ID,719,0,C.MODIFICADO) ELSE C.MODIFICADO END,0)) MODIFICADO,
 
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO >= fechadesde && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO >= fechadesde && x.FECHA_SALDO <= fechaHasta).ToListAsync();
 
                     if (preVSaldosDiarios.Count > 0)
                     {
@@ -1874,7 +1896,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = result + itemDiario.PAGADO;
                                 }
-
                             }
                             else
                             {
@@ -1882,26 +1903,29 @@ namespace Convertidor.Data.Repository.Presupuesto
                             }
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetAsignacionNivelTres(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
+
+        public async Task<decimal> GetAsignacionNivelTres(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,
+            int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                                x.FINANCIADO_ID==financiadoId &&
+                                x.FINANCIADO_ID == financiadoId &&
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica &&
                                 x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                 x.CODIGO_GRUPO == codigoGrupo &&
@@ -1909,26 +1933,26 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 x.CODIGO_GENERICA == codigoGenerica &&
                                 x.CODIGO_ESPECIFICA == codigoEspecifica).ToList();
             }
-            
+
 
             if (preVSaldos.Count > 0)
             {
                 /*foreach (var item in preVSaldos)
                 {
-                 
+
                         result = result + item.ASIGNACION;
-                   
+
 
                 }*/
                 var resumen = from s in preVSaldos
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  ASIGNACION = g.Sum(s => s.ASIGNACION),
-
-                              };
+                        ASIGNACION = g.Sum(s => s.ASIGNACION),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -1936,40 +1960,44 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.ASIGNACION;
                     }
-
-
                 }
             }
+
             return result;
         }
-       #endregion
+
+        #endregion
 
         #region NivelCuatro
 
-        public async Task<decimal> GetPresupuestadoNivelCuatro(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica, string codigoSubEspecifica)
+        public async Task<decimal> GetPresupuestadoNivelCuatro(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,
+            int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica,
+            string codigoSubEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID==financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                               x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                               x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            
+
 
             if (preVSaldos.Count > 0)
             {
@@ -1982,14 +2010,14 @@ namespace Convertidor.Data.Repository.Presupuesto
 
                 }*/
                 var resumen = from s in preVSaldos.Where(x => x.ASIGNACION >= 0)
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  PRESUPUESTADO = g.Sum(s => s.PRESUPUESTADO),
-
-                              };
+                        PRESUPUESTADO = g.Sum(s => s.PRESUPUESTADO),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -1997,17 +2025,20 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.PRESUPUESTADO;
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetModificadoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica, string codigoSubEspecifica)
+
+        public async Task<decimal> GetModificadoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId,
+            DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica, string codigoSubEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                 x.FINANCIADO_ID == financiadoId &&
@@ -2017,17 +2048,17 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 x.CODIGO_ESPECIFICA == codigoEspecifica &&
                                 x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                             
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica &&
                                 x.CODIGO_ESPECIFICA == codigoEspecifica &&
                                 x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-           
+
 
             if (preVSaldos.Count > 0)
             {
@@ -2038,19 +2069,19 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
                     if (preVSaldosDiarios.Count > 0)
                     {
-                       
                         var resumen = from s in preVSaldos
-                                      group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                                      select new
-                                      {
-                                          g.Key.CodigoPresupuesto,
+                            group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                            into g
+                            select new
+                            {
+                                g.Key.CodigoPresupuesto,
 
-                                          MODIFICADO = g.Sum(s => s.MODIFICADO),
-
-                                      };
+                                MODIFICADO = g.Sum(s => s.MODIFICADO),
+                            };
                         if (resumen.Count() > 0)
                         {
                             var itemResumen = resumen.FirstOrDefault();
@@ -2058,47 +2089,47 @@ namespace Convertidor.Data.Repository.Presupuesto
                             {
                                 result = itemResumen.MODIFICADO;
                             }
-
-
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetComprometidoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica, string codigoSubEspecifica)
+
+        public async Task<decimal> GetComprometidoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica, string codigoSubEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID == financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                               x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                            
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                               x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-          
+
 
             if (preVSaldos.Count > 0)
             {
                 foreach (var item in preVSaldos)
                 {
-
                     if (financiadoId == 92 || financiadoId == 0)
                     {
                         if (item.FINANCIADO_ID == 719)
@@ -2109,22 +2140,25 @@ namespace Convertidor.Data.Repository.Presupuesto
                         {
                             result = result + item.COMPROMETIDO;
                         }
-
                     }
                     else
                     {
                         result = result + item.COMPROMETIDO;
                     }
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetBloqueadoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica, string codigoSubEspecifica)
+
+        public async Task<decimal> GetBloqueadoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId,
+            int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica, string codigoSubEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
                                 x.FINANCIADO_ID == financiadoId &&
@@ -2134,35 +2168,35 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 x.CODIGO_ESPECIFICA == codigoEspecifica &&
                                 x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
                     .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               
                                 x.CODIGO_GRUPO == codigoGrupo &&
                                 x.CODIGO_PARTIDA == codigoPartida &&
                                 x.CODIGO_GENERICA == codigoGenerica &&
                                 x.CODIGO_ESPECIFICA == codigoEspecifica &&
                                 x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            
+
 
             if (preVSaldos.Count > 0)
             {
                 /*foreach (var item in preVSaldos)
                 {
                     result = result + item.BLOQUEADO;
-                   
+
 
                 }*/
                 var resumen = from s in preVSaldos
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  BLOQUEADO = g.Sum(s => s.BLOQUEADO),
-
-                              };
+                        BLOQUEADO = g.Sum(s => s.BLOQUEADO),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -2170,37 +2204,40 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.BLOQUEADO;
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetCausadoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica, string codigoSubEspecifica)
+
+        public async Task<decimal> GetCausadoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId,
+            DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica, string codigoSubEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId>0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                 .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                             x.FINANCIADO_ID == financiadoId &&
-                             x.CODIGO_GRUPO == codigoGrupo &&
-                             x.CODIGO_PARTIDA == codigoPartida &&
-                             x.CODIGO_GENERICA == codigoGenerica &&
-                             x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                             x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                 .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                           
-                             x.CODIGO_GRUPO == codigoGrupo &&
-                             x.CODIGO_PARTIDA == codigoPartida &&
-                             x.CODIGO_GENERICA == codigoGenerica &&
-                             x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                             x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-         
+
 
             if (preVSaldos.Count > 0)
             {
@@ -2211,7 +2248,8 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
                     if (preVSaldosDiarios.Count > 0)
                     {
                         foreach (var itemDiario in preVSaldosDiarios)
@@ -2226,7 +2264,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = result + itemDiario.CAUSADO;
                                 }
-
                             }
                             else
                             {
@@ -2234,37 +2271,40 @@ namespace Convertidor.Data.Repository.Presupuesto
                             }
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetPagadoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId, DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica, string codigoSubEspecifica)
+
+        public async Task<decimal> GetPagadoNivelCuatro(List<PRE_V_SALDOS> saldos, int financiadoId,
+            DateTime fechaHasta, int codigoPresupuesto, string codigoGrupo, string codigoPartida, string codigoGenerica,
+            string codigoEspecifica, string codigoSubEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId > 0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                 .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                             x.FINANCIADO_ID == financiadoId &&
-                             x.CODIGO_GRUPO == codigoGrupo &&
-                             x.CODIGO_PARTIDA == codigoPartida &&
-                             x.CODIGO_GENERICA == codigoGenerica &&
-                             x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                             x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                 .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                           
-                             x.CODIGO_GRUPO == codigoGrupo &&
-                             x.CODIGO_PARTIDA == codigoPartida &&
-                             x.CODIGO_GENERICA == codigoGenerica &&
-                             x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                             x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-         
+
 
             if (preVSaldos.Count > 0)
             {
@@ -2275,7 +2315,8 @@ namespace Convertidor.Data.Repository.Presupuesto
 
 
                     var preVSaldosDiarios = await _context.PRE_SALDOS_DIARIOS.DefaultIfEmpty()
-                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO && x.FECHA_SALDO <= fechaHasta).ToListAsync();
+                        .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto && x.CODIGO_SALDO == item.CODIGO_SALDO &&
+                                    x.FECHA_SALDO <= fechaHasta).ToListAsync();
                     if (preVSaldosDiarios.Count > 0)
                     {
                         foreach (var itemDiario in preVSaldosDiarios)
@@ -2290,7 +2331,6 @@ namespace Convertidor.Data.Repository.Presupuesto
                                 {
                                     result = result + itemDiario.PAGADO;
                                 }
-
                             }
                             else
                             {
@@ -2298,55 +2338,59 @@ namespace Convertidor.Data.Repository.Presupuesto
                             }
                         }
                     }
-
-
                 }
             }
+
             return result;
         }
-        public async Task<decimal> GetAsignacionNivelCuatro(List<PRE_V_SALDOS> saldos, int codigoPresupuesto, int financiadoId,string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica, string codigoSubEspecifica)
+
+        public async Task<decimal> GetAsignacionNivelCuatro(List<PRE_V_SALDOS> saldos, int codigoPresupuesto,
+            int financiadoId, string codigoGrupo, string codigoPartida, string codigoGenerica, string codigoEspecifica,
+            string codigoSubEspecifica)
         {
             decimal result = 0;
             List<PRE_V_SALDOS> preVSaldos = new List<PRE_V_SALDOS>();
-            if (financiadoId>0) {
+            if (financiadoId > 0)
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.FINANCIADO_ID==financiadoId &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                               x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.FINANCIADO_ID == financiadoId &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-            else {
+            else
+            {
                 preVSaldos = saldos
-                   .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
-                               x.CODIGO_GRUPO == codigoGrupo &&
-                               x.CODIGO_PARTIDA == codigoPartida &&
-                               x.CODIGO_GENERICA == codigoGenerica &&
-                               x.CODIGO_ESPECIFICA == codigoEspecifica &&
-                               x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
+                    .Where(x => x.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                                x.CODIGO_GRUPO == codigoGrupo &&
+                                x.CODIGO_PARTIDA == codigoPartida &&
+                                x.CODIGO_GENERICA == codigoGenerica &&
+                                x.CODIGO_ESPECIFICA == codigoEspecifica &&
+                                x.CODIGO_SUBESPECIFICA == codigoSubEspecifica).ToList();
             }
-           
+
 
             if (preVSaldos.Count > 0)
             {
                 /*foreach (var item in preVSaldos)
                 {
-                   
+
                         result = result + item.ASIGNACION;
-                    
+
 
                 }*/
                 var resumen = from s in preVSaldos
-                              group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO } into g
-                              select new
-                              {
-                                  g.Key.CodigoPresupuesto,
+                    group s by new { CodigoPresupuesto = s.CODIGO_PRESUPUESTO }
+                    into g
+                    select new
+                    {
+                        g.Key.CodigoPresupuesto,
 
-                                  ASIGNACION = g.Sum(s => s.ASIGNACION),
-
-                              };
+                        ASIGNACION = g.Sum(s => s.ASIGNACION),
+                    };
                 if (resumen.Count() > 0)
                 {
                     var itemResumen = resumen.FirstOrDefault();
@@ -2354,23 +2398,12 @@ namespace Convertidor.Data.Repository.Presupuesto
                     {
                         result = itemResumen.ASIGNACION;
                     }
-
-
                 }
             }
+
             return result;
         }
+
         #endregion
-
-
-
-
-
-
-
-
-
-
     }
 }
-
