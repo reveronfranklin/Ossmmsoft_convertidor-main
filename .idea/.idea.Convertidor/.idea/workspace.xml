@@ -13,9 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PRE_V_SALDOSRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -484,7 +482,7 @@
       <workItem from="1754422282491" duration="1600000" />
       <workItem from="1755008720556" duration="438000" />
       <workItem from="1755011264052" duration="2185000" />
-      <workItem from="1755013461700" duration="56000" />
+      <workItem from="1755013461700" duration="3030000" />
     </task>
     <servers />
   </component>
@@ -3258,13 +3256,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
-          <line>280</line>
+          <line>285</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'TokenValid'">
             <startOffsets>
-              <option value="8543" />
+              <option value="8738" />
             </startOffsets>
             <endOffsets>
-              <option value="8653" />
+              <option value="8848" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="828" />
@@ -3557,13 +3555,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs</url>
-          <line>383</line>
+          <line>388</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Sis/SisUsuarioRepository.cs" containingFunctionPresentation="Method 'Login'">
             <startOffsets>
-              <option value="12723" />
+              <option value="12918" />
             </startOffsets>
             <endOffsets>
-              <option value="12744" />
+              <option value="12939" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="861" />
@@ -5597,32 +5595,6 @@
           <option name="timeStamp" value="1170" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProveedoresRepository.cs</url>
-          <line>58</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProveedoresRepository.cs" containingFunctionPresentation="Method 'GetByAll'">
-            <startOffsets>
-              <option value="1623" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1659" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1171" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProveedoresRepository.cs</url>
-          <line>54</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmProveedoresRepository.cs" containingFunctionPresentation="Method 'GetByAll'">
-            <startOffsets>
-              <option value="1531" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1545" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1172" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmUbicacionesResponsableController.cs</url>
           <line>41</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmUbicacionesResponsableController.cs" containingFunctionPresentation="Method 'GetByUsuarioResponsable'">
@@ -5974,19 +5946,6 @@
           <option name="timeStamp" value="1205" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Program.cs</url>
-          <line>664</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Program.cs" containingFunctionPresentation="">
-            <startOffsets>
-              <option value="43388" />
-            </startOffsets>
-            <endOffsets>
-              <option value="43422" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1206" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoHistoricoController.cs</url>
           <line>36</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoHistoricoController.cs" containingFunctionPresentation="Method 'CreateReportConteoHistorico'">
@@ -6063,6 +6022,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1217" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs</url>
+          <line>123</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AuthController.cs" containingFunctionPresentation="Method 'Login'">
+            <startOffsets>
+              <option value="3688" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3727" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1218" />
         </line-breakpoint>
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
