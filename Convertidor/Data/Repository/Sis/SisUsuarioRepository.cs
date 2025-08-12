@@ -185,7 +185,11 @@ namespace Convertidor.Data.Repository.Sis
                new UserRole { Role="pre" },
                new UserRole { Role="rh" },
                new UserRole { Role="bm" },
-                new UserRole { Role="DEV" },
+               new UserRole { Role="DEV" },
+               new UserRole { Role="adm" },
+               new UserRole { Role="tes" },
+               new UserRole { Role="cnt" },
+               
             };
 
             return result;
@@ -222,10 +226,11 @@ namespace Convertidor.Data.Repository.Sis
                 {
                     UserRole resultItem = new UserRole();
                     resultItem.Role = item.SISTEMA;
-                    if (RolExists(resultItem.Role))
+                    result.Add(resultItem);
+                    /*if (RolExists(resultItem.Role))
                     {
                         result.Add(resultItem);
-                    }
+                    }*/
 
                 }
             }
