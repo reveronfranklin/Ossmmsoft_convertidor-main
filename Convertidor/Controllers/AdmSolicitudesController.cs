@@ -41,14 +41,14 @@ namespace Convertidor.Controllers
            var conectado = await _sisUsuarioRepository.GetConectado();
 
             Console.WriteLine(conectado);
-            var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.View);
+           /* var userValid = await _authModelUserServices.ValidUserModel(conectado.Usuario, AdmModels.AdmModelsName.AdmSolicitudes, ActionType.View);
             if (userValid.IsValid == false)
             {
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = $"{userValid.Message} Usuario:{conectado.Usuario} {conectado.Empresa}";
                 return Ok(result);
-            }
+            }*/
             
             result = await _service.GetByPresupuesto(filter);
             return Ok(result);
