@@ -459,15 +459,7 @@ namespace Convertidor.Services.Rh
                     {
                         string fileName = file.FileName;
                         fileName = file.FileName.Replace(" ", "_");
-                        var findPlacaFoto =
-                            await _repository.GetByNumeroDocumentoAdjunto(codigoDocumento, fileName);
-                        if (findPlacaFoto != null)
-                        {
-                            result.Data = null;
-                            result.IsValid = false;
-                            result.Message = $"Ya existe la foto: {file.FileName}";
-                            return result;
-                        }
+                       
 
                         if (fileName.Length > 13)
                         {
@@ -482,6 +474,10 @@ namespace Convertidor.Services.Rh
                             Directory.CreateDirectory($"{destino}{codigoDocumento}");
                         }
                         var filePatch = $"{destino}{codigoDocumento}/{fileName}";
+                        if (File.Exists($"{filePatch}"))
+                        {
+                            File.Delete($"{filePatch}");
+                        }
                         if (!File.Exists($"{filePatch}"))
                         {
                             using (var stream = System.IO.File.Create(filePatch))

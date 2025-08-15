@@ -362,15 +362,7 @@ namespace Convertidor.Services.Bm
           
                         string fileName = files.FileName;
                         fileName = files.FileName.Replace(" ", "_");
-                        var findPlacaFoto =
-                            await _repository.GetByNumeroPlacaFoto(numeroPlacaObj.NUMERO_PLACA, fileName);
-                        if (findPlacaFoto != null)
-                        {
-                            result.Data = "";
-                            result.IsValid = false;
-                            result.Message = $"Ya existe la foto: {files.FileName}";
-                            return result;
-                        }
+
 
                         if (fileName.Length > 13)
                         {
@@ -385,6 +377,13 @@ namespace Convertidor.Services.Bm
                             Directory.CreateDirectory($"{destino}{numeroPlaca}");
                         }
                         var filePatch = $"{destino}{numeroPlaca}/{fileName}";
+                        
+                        // Eliminar el archivo si ya existe
+                        if (File.Exists(filePatch))
+                        {
+                            File.Delete(filePatch);
+                        }
+                        
                         if (!File.Exists($"{filePatch}"))
                         {
                             using (var stream = System.IO.File.Create(filePatch))
@@ -463,15 +462,7 @@ namespace Convertidor.Services.Bm
                     {
                         string fileName = file.FileName;
                         fileName = file.FileName.Replace(" ", "_");
-                        var findPlacaFoto =
-                            await _repository.GetByNumeroPlacaFoto(numeroPlacaObj.NUMERO_PLACA, fileName);
-                        if (findPlacaFoto != null)
-                        {
-                            result.Data = null;
-                            result.IsValid = false;
-                            result.Message = $"Ya existe la foto: {file.FileName}";
-                            return result;
-                        }
+                      
 
                         if (fileName.Length > 13)
                         {
@@ -486,6 +477,10 @@ namespace Convertidor.Services.Bm
                             Directory.CreateDirectory($"{destino}{numeroPlaca}");
                         }
                         var filePatch = $"{destino}{numeroPlaca}/{fileName}";
+                        if (File.Exists($"{filePatch}"))
+                        {
+                            File.Delete($"{filePatch}");
+                        }
                         if (!File.Exists($"{filePatch}"))
                         {
                             using (var stream = System.IO.File.Create(filePatch))

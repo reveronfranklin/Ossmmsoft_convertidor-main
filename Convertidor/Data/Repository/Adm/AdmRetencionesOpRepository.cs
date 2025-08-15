@@ -30,6 +30,22 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+        public async Task<ADM_RETENCIONES_OP> GetByOrdenPagoCodigoRetencionTipoRetencionPorcentaje(int codigoOrdenPago,int codigoRetencion,int tipoRetencionId,decimal porcentajeRetencion)
+        {
+            try
+            {
+                var result = await _context.ADM_RETENCIONES_OP
+                    .Where(e => e.CODIGO_ORDEN_PAGO == codigoOrdenPago && e.CODIGO_RETENCION==codigoRetencion && e.TIPO_RETENCION_ID==tipoRetencionId && e.POR_RETENCION==porcentajeRetencion).FirstOrDefaultAsync();
+
+                return (ADM_RETENCIONES_OP)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
         public async Task<ADM_RETENCIONES_OP> GetCodigoRetencionOp(int codigoRetencionOp)
         {
             try
