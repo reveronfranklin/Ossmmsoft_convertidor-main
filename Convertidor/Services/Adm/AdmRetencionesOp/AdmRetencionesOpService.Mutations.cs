@@ -143,7 +143,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Codigo retencion orden pago ya existe";
+                    result.Message = "Codigo retención orden pago ya existe";
                     return result;
                 }
                 var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
@@ -159,7 +159,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "tipo retencion Id invalido";
+                    result.Message = "tipo retención Id invalido";
                     return result;
                 }
 
@@ -173,7 +173,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     {
                         result.Data = null;
                         result.IsValid = false;
-                        result.Message = "Codigo retencion invalido";
+                        result.Message = "Codigo retención invalido";
                         return result;
                     }
                 }
@@ -182,14 +182,14 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Por retencion invalido";
+                    result.Message = "Por retención invalido";
                     return result;
                 }
                 if (dto.MontoRetencion < 0)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Monto retencion invalido";
+                    result.Message = "Monto retención invalido";
                     return result;
                 }
 
@@ -212,6 +212,18 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     return result;
                 }
 
+                var retencionOp =
+                    await _repository.GetByOrdenPagoCodigoRetencionTipoRetencionPorcentaje(
+                        dto.CodigoOrdenPago, dto.CodigoRetencion, dto.TipoRetencionId, dto.PorRetencion);
+                if (retencionOp != null)
+                {
+                    var admRetencion = await _admRetencionesRepository.GetCodigoRetencion(dto.CodigoRetencion);
+                    
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"Ya existe esta retención para la Orden de Pago:{dto.CodigoOrdenPago}- {tipoRetencion.DESCRIPCION}-{admRetencion.CONCEPTO_PAGO}-{dto.PorRetencion}%";
+                    return result;
+                }
 
                 ADM_RETENCIONES_OP entity = new ADM_RETENCIONES_OP();
                 entity.CODIGO_RETENCION_OP = await _repository.GetNextKey();
