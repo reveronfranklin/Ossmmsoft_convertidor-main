@@ -180,7 +180,7 @@ public partial class AdmOrdenPagoService
                 compromisoOp.CodigoPresupuesto = compromiso.CodigoPresupuesto;
                 compromisoOp.CodigoOrdenPago = created.Data.CODIGO_ORDEN_PAGO;
                 compromisoOp.CodigoValContrato = 0;
-                compromisoOp.OrigenCompromisoId = dto.TipoOrdenPagoId; 
+                compromisoOp.OrigenCompromisoId = compromiso.OrigenId; 
                 compromisoOp.CodigoIdentificador = compromiso.CodigoCompromiso; 
                 var compromisOpCreated = await _admCompromisoOpService.Create(compromisoOp);
                 
