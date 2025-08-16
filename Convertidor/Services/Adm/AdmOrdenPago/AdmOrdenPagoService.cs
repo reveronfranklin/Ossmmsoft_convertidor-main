@@ -25,6 +25,7 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
         private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
         private readonly IAdmDocumentosOpRepository _admDocumentosOpRepository;
         private readonly IAdmBeneficiariosOpRepository _admBeneficiariosOpRepository;
+        private readonly IAdmCompromisosPendientesRepository _admCompromisosPendientesRepository;
 
 
         public AdmOrdenPagoService(IAdmOrdenPagoRepository repository,
@@ -41,7 +42,8 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
                                      IAdmBeneficariosOpService admBeneficariosOpService,
                                      IAdmPucOrdenPagoRepository admPucOrdenPagoRepository,
                                      IAdmDocumentosOpRepository admDocumentosOpRepository,
-                                     IAdmBeneficiariosOpRepository admBeneficiariosOpRepository)
+                                     IAdmBeneficiariosOpRepository admBeneficiariosOpRepository,
+                                     IAdmCompromisosPendientesRepository  admCompromisosPendientesRepository)
         {
       
             _repository = repository;
@@ -59,6 +61,7 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
             _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
             _admDocumentosOpRepository = admDocumentosOpRepository;
             _admBeneficiariosOpRepository = admBeneficiariosOpRepository;
+            _admCompromisosPendientesRepository = admCompromisosPendientesRepository;
         }
         
 

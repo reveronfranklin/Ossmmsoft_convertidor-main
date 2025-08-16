@@ -15,6 +15,8 @@ public class ADM_V_COMPROMISO_PENDIENTE
     public string MOTIVO { get; set; }  
     public string ESTATUS_FISCO_VALOR { get; set; } 
     public decimal MONTO_POR_CAUSAR { get; set; }  
+    public int ORIGEN_COMPROMISO_ID { get; set; }
+    
  
     
 }
