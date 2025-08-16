@@ -30,6 +30,23 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
+        public async Task<ADM_V_COMPROMISO_PENDIENTE> GetCompromisosPendientesPorCodigoCompromiso(int codigoCompromiso)
+        {
+            try
+            {
+                var result = await _context.ADM_V_COMPROMISO_PENDIENTE
+                    .Where(e =>  e.CODIGO_IDENTIFICADOR==codigoCompromiso).FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+        
    
 
 

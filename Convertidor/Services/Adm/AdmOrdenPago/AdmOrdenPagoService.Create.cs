@@ -130,6 +130,18 @@ public partial class AdmOrdenPagoService
                     result.Message = "Numero comprobante2 Invalido";
                     return result;
                 }
+                
+             
+
+               var compromisoPendiente= await  _admCompromisosPendientesRepository.GetCompromisosPendientesPorCodigoCompromiso(compromiso
+                    .CodigoCompromiso);
+               if (compromisoPendiente==null)
+               {
+                   result.Data = null;
+                   result.IsValid = false;
+                   result.Message = "COMPROMISO NO ESTA PENDIENTE";
+                   return result;
+               } 
                
 
             ADM_ORDEN_PAGO entity = new ADM_ORDEN_PAGO();
@@ -180,7 +192,7 @@ public partial class AdmOrdenPagoService
                 compromisoOp.CodigoPresupuesto = compromiso.CodigoPresupuesto;
                 compromisoOp.CodigoOrdenPago = created.Data.CODIGO_ORDEN_PAGO;
                 compromisoOp.CodigoValContrato = 0;
-                compromisoOp.OrigenCompromisoId = compromiso.OrigenId; 
+                compromisoOp.OrigenCompromisoId = compromisoPendiente.ORIGEN_COMPROMISO_ID; 
                 compromisoOp.CodigoIdentificador = compromiso.CodigoCompromiso; 
                 var compromisOpCreated = await _admCompromisoOpService.Create(compromisoOp);
                 
