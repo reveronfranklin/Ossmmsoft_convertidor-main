@@ -43,7 +43,25 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 if (beneficiarioCompromiso != null)
                 {
                     AdmBeneficiariosOpUpdateMontoDto dto = new AdmBeneficiariosOpUpdateMontoDto();
-                    dto.Monto = totalMontoDocumentos - totalRetenciones;
+                    if (totalMontoDocumentos > 0)
+                    {
+                        dto.Monto = totalMontoDocumentos - totalRetenciones;
+                    }
+                    else
+                    {
+                        
+                        decimal totaCompromiso = 0;
+                        var pucOrdenPago=  await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+                        if (pucOrdenPago.Count > 0)
+                        {
+                            totaCompromiso = pucOrdenPago.Sum(x => x.MONTO);
+                        }
+                        dto.Monto = totaCompromiso - totalRetenciones;
+                       
+                        
+                    }
+                  
+                   
                     dto.CodigoBeneficiarioOp = beneficiarioCompromiso.CODIGO_BENEFICIARIO_OP;
                     await _admBeneficariosOpService.UpdateMonto(dto);
                 }
