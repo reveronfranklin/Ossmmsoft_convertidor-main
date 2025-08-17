@@ -19,6 +19,8 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
         private readonly IOssConfigRepository _ossConfigRepository;
         private readonly IAdmBeneficariosOpService _admBeneficariosOpService;
         private readonly IAdmCompromisoOpRepository _admCompromisoOpRepository;
+        private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
+        private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
 
         public AdmRetencionesOpService(IAdmRetencionesOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -31,7 +33,9 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                                      IAdmDocumentosOpRepository admDocumentosOpRepository,
                                      IOssConfigRepository ossConfigRepository,
                                      IAdmBeneficariosOpService admBeneficariosOpService,
-                                     IAdmCompromisoOpRepository admCompromisoOpRepository
+                                     IAdmCompromisoOpRepository admCompromisoOpRepository,
+                                     IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository
                                      )
         {
             _repository = repository;
@@ -46,6 +50,8 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             _ossConfigRepository = ossConfigRepository;
             _admBeneficariosOpService = admBeneficariosOpService;
             _admCompromisoOpRepository = admCompromisoOpRepository;
+            _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
+            _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
         }
 
       
