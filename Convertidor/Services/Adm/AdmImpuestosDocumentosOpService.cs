@@ -172,7 +172,6 @@ namespace Convertidor.Services.Adm
                     admRetencionesOpDto.CodigoRetencion = (int)admRetencionesOp.CODIGO_RETENCION;
                     admRetencionesOpDto.TipoRetencionId = (int)admRetencionesOp.TIPO_RETENCION_ID;
                     admRetencionesOpDto.PorRetencion = (int)admRetencionesOp.POR_RETENCION;
-                    admRetencionesOpDto.MontoRetencion = dto.MontoRetenido;
                     admRetencionesOpDto.BaseImponible = dto.BaseImponible;
                     admRetencionesOpDto.MontoRetencion = dto.MontoRetenido;
                     admRetencionesOpDto.CodigoPresupuesto = (int)admRetencionesOp.CODIGO_PRESUPUESTO;
@@ -201,11 +200,11 @@ namespace Convertidor.Services.Adm
                 }
                 
             
-                var impuestosDocumentosOp = await _repository.GetByDocumento(dto.CodigoDocumentoOp);
+               /* var impuestosDocumentosOp = await _repository.GetByDocumento(dto.CodigoDocumentoOp);
     
                 // Calcular el total Monto Retenido
                 var totalMontoRetenido = impuestosDocumentosOp.Sum(t => t.MONTO_RETENIDO);
-                await ReplicarMotoRetenidoDocumento(dto.CodigoDocumentoOp,(decimal)totalMontoRetenido);
+                await ReplicarMotoRetenidoDocumento(dto.CodigoDocumentoOp,(decimal)totalMontoRetenido);*/
                 
             }
             
@@ -587,6 +586,15 @@ namespace Convertidor.Services.Adm
 
 
                 var deleted = await _repository.Delete(dto.CodigoImpuestoDocumentoOp);
+                
+                
+                var documentoOp = await _admDocumentosOpRepository.GetCodigoDocumentoOp(codigoImpuestoDocumentoOp.CODIGO_DOCUMENTO_OP);
+                
+                var admRetencionesOp = await _admRetencionesOpRepository.GetByOrdenPagoCodigoRetencionTipoRetencion(documentoOp.CODIGO_ORDEN_PAGO,codigoImpuestoDocumentoOp.CODIGO_RETENCION,codigoImpuestoDocumentoOp.TIPO_RETENCION_ID);
+                if (admRetencionesOp != null)
+                {
+                    await _admRetencionesOpRepository.Delete(admRetencionesOp.CODIGO_RETENCION_OP);
+                }
 
                 if (deleted.Length > 0)
                 {
