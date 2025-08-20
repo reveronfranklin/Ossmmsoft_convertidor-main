@@ -269,7 +269,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 var created = await _repository.Add(entity);
                 if (created.IsValid && created.Data != null)
                 {
-
+                    
                     await ReplicaRetencionesEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
                     await ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
 
