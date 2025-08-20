@@ -13,8 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPago/AdmOrdenPagoService.Create.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmOrdenPago/AdmOrdenPagoService.Create.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +39,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -496,7 +496,7 @@
       <workItem from="1755279468036" duration="6230000" />
       <workItem from="1755433889122" duration="7843000" />
       <workItem from="1755611740139" duration="4855000" />
-      <workItem from="1755630362075" duration="7008000" />
+      <workItem from="1755630362075" duration="11879000" />
     </task>
     <servers />
   </component>
@@ -3702,10 +3702,10 @@
           <line>493</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
             <startOffsets>
-              <option value="28886" />
+              <option value="28892" />
             </startOffsets>
             <endOffsets>
-              <option value="28938" />
+              <option value="28944" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="891" />
@@ -5233,26 +5233,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs</url>
-          <line>682</line>
+          <line>683</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
             <startOffsets>
-              <option value="38158" />
+              <option value="38188" />
             </startOffsets>
             <endOffsets>
-              <option value="38178" />
+              <option value="38189" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1140" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs</url>
-          <line>687</line>
+          <line>689</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
             <startOffsets>
-              <option value="38301" />
+              <option value="38349" />
             </startOffsets>
             <endOffsets>
-              <option value="38320" />
+              <option value="38368" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1141" />
@@ -5288,10 +5288,10 @@
           <line>545</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
             <startOffsets>
-              <option value="31289" />
+              <option value="31295" />
             </startOffsets>
             <endOffsets>
-              <option value="31371" />
+              <option value="31377" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1150" />
@@ -5301,10 +5301,10 @@
           <line>635</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
             <startOffsets>
-              <option value="35845" />
+              <option value="35851" />
             </startOffsets>
             <endOffsets>
-              <option value="35931" />
+              <option value="35937" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1151" />
@@ -5366,10 +5366,10 @@
           <line>653</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
             <startOffsets>
-              <option value="36792" />
+              <option value="36798" />
             </startOffsets>
             <endOffsets>
-              <option value="36888" />
+              <option value="36894" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1156" />
@@ -6036,6 +6036,97 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1229" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
+          <line>573</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="24964" />
+            </startOffsets>
+            <endOffsets>
+              <option value="25073" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1230" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
+          <line>592</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="25809" />
+            </startOffsets>
+            <endOffsets>
+              <option value="26027" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1231" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
+          <line>590</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="25656" />
+            </startOffsets>
+            <endOffsets>
+              <option value="25775" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1232" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs</url>
+          <line>16</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs" containingFunctionPresentation="Method 'ReconstruirRetenciones'">
+            <startOffsets>
+              <option value="652" />
+            </startOffsets>
+            <endOffsets>
+              <option value="725" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1233" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs</url>
+          <line>535</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="23712" />
+            </startOffsets>
+            <endOffsets>
+              <option value="23756" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1234" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs</url>
+          <line>92</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" containingFunctionPresentation="Method 'Replicar'">
+            <startOffsets>
+              <option value="2810" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2885" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1235" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs</url>
+          <line>658</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Destino/ADM/AdmOrdenPagoDestinoService.cs" containingFunctionPresentation="Method 'CopiarOrdenPago'">
+            <startOffsets>
+              <option value="37065" />
+            </startOffsets>
+            <endOffsets>
+              <option value="37157" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1237" />
         </line-breakpoint>
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />

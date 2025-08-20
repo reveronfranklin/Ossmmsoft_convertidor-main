@@ -404,7 +404,7 @@ namespace Convertidor.Services.Destino.ADM
                 await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.TIPO_PAGO_ID);          
                 await _admDescriptivaDestinoRepository.Delete((int)ordenPagoOrigen.FRECUENCIA_PAGO_ID);
                 await _admDocumentosOpDestinoRepository.DeleteByOrdenPago(codigoOrdenPago);
-          
+                
                 
                 return "";
             }
@@ -656,19 +656,21 @@ namespace Convertidor.Services.Destino.ADM
                {
                    foreach (var item in documentosOpOrigen)
                    {
+                       await _admImpuestoDocumentosOpDestinoRepository.DeleteByDocumento(item.CODIGO_DOCUMENTO_OP);
+                       
                        var newDocumentos = _mapper.Map<Convertidor.Data.EntitiesDestino.ADM.ADM_DOCUMENTOS_OP>(item);
                        await _admDocumentosOpDestinoRepository.Add(newDocumentos);
 
-
+                  
                        var impuestosOrigen =
                           await _admImpuestosDocumentosOpRepository.GetByDocumento(item.CODIGO_DOCUMENTO_OP);
+                       
                        if (impuestosOrigen.Count > 0)
                        {
                            foreach (var itemImpuesto in impuestosOrigen)
                            {
 
-                               await _admImpuestoDocumentosOpDestinoRepository.DeleteByDocumento(itemImpuesto
-                                   .CODIGO_DOCUMENTO_OP);
+                           
                                var newImpuestoDocumentos = _mapper.Map<Convertidor.Data.EntitiesDestino.ADM.ADM_IMPUESTOS_DOCUMENTOS_OP>(itemImpuesto);
                                await _admImpuestoDocumentosOpDestinoRepository.Add(newImpuestoDocumentos);
                            }
