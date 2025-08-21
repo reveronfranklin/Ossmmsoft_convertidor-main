@@ -14,6 +14,23 @@ namespace Convertidor.Data.Repository.Adm
         }
 
         
+        public async Task<ADM_RETENCIONES_OP> GetComprobante(int codigoOrdenPago,int tipoRetencionId)
+        {
+            try
+            {
+                var result = await _context.ADM_RETENCIONES_OP
+                    .Where(e => e.CODIGO_ORDEN_PAGO == codigoOrdenPago &&  e.TIPO_RETENCION_ID==tipoRetencionId).FirstOrDefaultAsync();
+
+                return (ADM_RETENCIONES_OP)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+        
         public async Task<ADM_RETENCIONES_OP> GetByOrdenPagoCodigoRetencionTipoRetencion(int codigoOrdenPago,int codigoRetencion,int tipoRetencionId)
         {
             try

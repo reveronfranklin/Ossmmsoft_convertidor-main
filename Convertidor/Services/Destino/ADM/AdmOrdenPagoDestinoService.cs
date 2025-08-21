@@ -657,7 +657,13 @@ namespace Convertidor.Services.Destino.ADM
                    foreach (var item in documentosOpOrigen)
                    {
                        await _admImpuestoDocumentosOpDestinoRepository.DeleteByDocumento(item.CODIGO_DOCUMENTO_OP);
-                       
+
+                       var comprobante = await _admRetencionesOpRepository.GetComprobante(item.CODIGO_ORDEN_PAGO, 849);
+                       if (comprobante != null)
+                       {
+                           item.NUMERO_COMPROBANTE = comprobante.NUMERO_COMPROBANTE;
+                       }
+                      
                        var newDocumentos = _mapper.Map<Convertidor.Data.EntitiesDestino.ADM.ADM_DOCUMENTOS_OP>(item);
                        await _admDocumentosOpDestinoRepository.Add(newDocumentos);
 
