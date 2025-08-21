@@ -5,6 +5,7 @@ namespace Convertidor.Data.Interfaces.Adm
     public interface IAdmRetencionesOpRepository
     {
         Task<ADM_RETENCIONES_OP> GetCodigoRetencionOp(int codigoRetencionOp);
+        Task<ADM_RETENCIONES_OP> GetComprobante(int codigoOrdenPago, int tipoRetencionId);
 
         Task<ADM_RETENCIONES_OP> GetByOrdenPagoCodigoRetencionTipoRetencion(int codigoOrdenPago, int codigoRetencion,
             int tipoRetencionId);

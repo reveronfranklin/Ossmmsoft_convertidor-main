@@ -30,6 +30,7 @@
         public int CODIGO_PRESUPUESTO { get; set; }
         public string? NUMERO_EXPEDIENTE { get; set; }=string.Empty;
         public int? ESTATUS_FISCO_ID { get; set; }
+        public string? NUMERO_COMPROBANTE { get; set; }=string.Empty;
 
     }
 }
