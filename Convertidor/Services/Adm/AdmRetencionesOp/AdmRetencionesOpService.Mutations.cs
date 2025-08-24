@@ -131,6 +131,42 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
         }
 
 
+        public async Task<string> GetNumeroComprobanteIva(string codigoTipoRetencion,int codigoPesupuesto,int codigoOrdenPago)
+        {
+            string result = "";
+         
+            
+            var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoOrdenPago);
+            if (ordenPago != null )
+            {
+                if (ordenPago.NUMERO_COMPROBANTE > 0)
+                {
+                    result = ordenPago.NUMERO_COMPROBANTE.ToString();
+              
+                }
+                else
+                {
+                    var sisDescriptiva = await _sisDescriptivaRepository.GetByExtra1(codigoTipoRetencion);
+                    if (sisDescriptiva != null)
+                    {
+                        var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(codigoPesupuesto, sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
+                        result = numeroSolicitud.Data;
+                        ordenPago.NUMERO_COMPROBANTE=decimal.Parse(result);
+                        await _admOrdenPagoRepository.Update(ordenPago);
+                    }
+
+                }
+               
+                
+            }
+        
+            
+           
+            return result;
+
+        } 
+        
+
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Create(AdmRetencionesOpUpdateDto dto)
         {
             ResultDto<AdmRetencionesOpResponseDto> result = new ResultDto<AdmRetencionesOpResponseDto>(null);
@@ -244,21 +280,8 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 }
                 else
                 {
-                    entity.NUMERO_COMPROBANTE = "";
-                    var sisDescriptiva = await _sisDescriptivaRepository.GetByExtra1(tipoRetencion.CODIGO);
-                    if (sisDescriptiva != null)
-                    {
-                        var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie((int)entity.CODIGO_PRESUPUESTO, sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
-                        if (!numeroSolicitud.IsValid)
-                        {
-                            result.Data = null;
-                            result.IsValid = numeroSolicitud.IsValid;
-                            result.Message = numeroSolicitud.Message;
-                            return result;
-                        }
-                        entity.NUMERO_COMPROBANTE = numeroSolicitud.Data;
-                    }
-
+                    entity.NUMERO_COMPROBANTE = await GetNumeroComprobanteIva(tipoRetencion.CODIGO,(int)entity.CODIGO_PRESUPUESTO,dto.CodigoOrdenPago);
+                  
                 }
 
 
