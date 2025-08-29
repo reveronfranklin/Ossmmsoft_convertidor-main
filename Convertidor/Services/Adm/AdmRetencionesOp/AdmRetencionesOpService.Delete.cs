@@ -26,7 +26,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 }
 
                 var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoRetencionOp.CODIGO_ORDEN_PAGO);
-                if (ordenPago != null && ordenPago.STATUS == "AP")
+                if (ordenPago != null && ordenPago.STATUS != "PE")
                 {
                     result.Data = dto;
                     result.IsValid = false;
