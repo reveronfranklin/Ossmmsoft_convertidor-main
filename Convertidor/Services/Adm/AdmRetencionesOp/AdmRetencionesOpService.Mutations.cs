@@ -30,6 +30,14 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Message = "Codigo orden pago invalido";
                     return result;
                 }
+                
+                if (codigoOrdenPago != null && codigoOrdenPago.STATUS != "PE")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No puede Modificar, Orden de Pago";
+                    return result;
+                }
                 var tipoRetencionId = await _admDescriptivaRepository.GetByCodigo(dto.TipoRetencionId);
                 if (tipoRetencionId == null)
                 {
@@ -190,6 +198,14 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Message = "Codigo orden pago invalido";
                     return result;
                 }
+                if (codigoOrdenPago != null && codigoOrdenPago.STATUS != "PE")
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "No puede Modificar, Orden de Pago";
+                    return result;
+                }
+                
                 var tipoRetencion = await _admDescriptivaRepository.GetByCodigo(dto.TipoRetencionId);
                 if (tipoRetencion == null)
                 {
