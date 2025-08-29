@@ -13,6 +13,9 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             try
             {
 
+                
+                
+                
                 var codigoRetencionOp = await _repository.GetCodigoRetencionOp(dto.CodigoRetencionOp);
                 if (codigoRetencionOp == null)
                 {
@@ -22,6 +25,15 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     return result;
                 }
 
+                var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoRetencionOp.CODIGO_ORDEN_PAGO);
+                if (ordenPago != null && ordenPago.STATUS == "AP")
+                {
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "No puede eliminar, Orden de Pago APROBADA";
+                    return result;
+                }
+                
 
                 var deleted = await _repository.Delete(dto.CodigoRetencionOp);
 
