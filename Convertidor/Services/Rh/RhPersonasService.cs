@@ -831,10 +831,21 @@ namespace Convertidor.Data.Repository.Rh
                 persona.NUMERO_IDENTIFICACION = dto.NumeroIdentificacion;
            
               
-                string formato = "dd/MM/yyyy"; // Ajusta este formato a tus necesidades
+                //string formato = "dd/MM/yyyy"; // Ajusta este formato a tus necesidades
              
              
-                DateTime fechaConvertida = DateTime.ParseExact( dto.FechaNacimiento, formato, CultureInfo.InvariantCulture);
+                //DateTime fechaConvertida = DateTime.ParseExact( dto.FechaNacimiento, formato, CultureInfo.InvariantCulture);
+               
+                
+                
+                // Primero convierte desde ISO 8601
+                DateTime fechaConvertida = DateTime.ParseExact(dto.FechaNacimiento, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'", 
+                    CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+
+                // Luego formatea como deseas para usar en Oracle
+                string fechaParaOracle = fechaConvertida.ToString("dd/MM/yyyy");
+                
+                
                 persona.FECHA_NACIMIENTO = fechaConvertida;
                 persona.FECHA_UPD = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();

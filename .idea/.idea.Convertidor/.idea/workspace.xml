@@ -13,7 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Delete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Delete.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +39,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -56,6 +54,7 @@
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmImpuestosDocumentosOpRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmChequesRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmImpuestosDocumentosOpRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmOrdenPagoRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesOpRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" root0="FORCE_HIGHLIGHTING" />
@@ -495,7 +494,8 @@
       <workItem from="1755630362075" duration="15476000" />
       <workItem from="1755791930649" duration="5063000" />
       <workItem from="1756044781134" duration="6099000" />
-      <workItem from="1756501307580" duration="316000" />
+      <workItem from="1756501307580" duration="1764000" />
+      <workItem from="1756767969567" duration="659000" />
     </task>
     <servers />
   </component>
@@ -1313,13 +1313,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
-          <line>856</line>
+          <line>867</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="32399" />
+              <option value="32885" />
             </startOffsets>
             <endOffsets>
-              <option value="32418" />
+              <option value="32904" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="274" />
@@ -5947,13 +5947,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
-          <line>250</line>
+          <line>266</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="10039" />
+              <option value="10689" />
             </startOffsets>
             <endOffsets>
-              <option value="10254" />
+              <option value="10904" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1219" />
@@ -6116,13 +6116,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
-          <line>171</line>
+          <line>179</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="6804" />
+              <option value="7129" />
             </startOffsets>
             <endOffsets>
-              <option value="6901" />
+              <option value="7226" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1238" />
@@ -6168,26 +6168,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
-          <line>138</line>
+          <line>146</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'GetNumeroComprobanteIva'">
             <startOffsets>
-              <option value="5597" />
+              <option value="5922" />
             </startOffsets>
             <endOffsets>
-              <option value="5679" />
+              <option value="6004" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1242" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
-          <line>272</line>
+          <line>288</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="11371" />
+              <option value="12021" />
             </startOffsets>
             <endOffsets>
-              <option value="11406" />
+              <option value="12056" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1243" />
@@ -6204,6 +6204,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1244" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
+          <line>833</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="31524" />
+            </startOffsets>
+            <endOffsets>
+              <option value="31554" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1245" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
+          <line>848</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="32249" />
+            </startOffsets>
+            <endOffsets>
+              <option value="32292" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1246" />
         </line-breakpoint>
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
