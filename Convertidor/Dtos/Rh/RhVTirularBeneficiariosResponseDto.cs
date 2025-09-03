@@ -6,12 +6,16 @@ public class RhVTitularBeneficiariosResponseDto
     public int Id { get; set; }
     public string? CedulaTitular { get; set; }
     public string? CedulaBeneficiario { get; set; }
-    public string? NombreTituBene { get; set; }
     public string? ApellidosTituBene { get; set; }       
+
+    public string? NombreTituBene { get; set; }
+
+    public string? Sexo { get; set; }
+    
     public DateTime? FechaNacimientoFamiliar { get; set; } 
     public string? FechaNacimientoFamiliarString { get; set; } 
     public FechaDto? FechaNacimientoFamiliarObj { get; set; } 
-    public string? Sexo { get; set; }
+
     public string? EstadoCivil { get; set; }
     public string? CdLocalidad { get; set; }
     public string? CdGrupo { get; set; }
