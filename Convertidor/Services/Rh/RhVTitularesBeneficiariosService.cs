@@ -122,7 +122,7 @@ namespace Convertidor.Services.Adm
                 itemResult.CargoNominal = dtos.CARGO_NOMINAL;
                 itemResult.AntiguedadCmc = dtos.ANTIGUEDAD_CMC;
                 itemResult.AntiguedadOtros = dtos.ANTIGUEDAD_OTROS;
-            
+         
                 return itemResult;
 
             }
