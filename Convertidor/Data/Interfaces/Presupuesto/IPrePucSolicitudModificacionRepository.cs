@@ -23,4 +23,7 @@ public interface IPrePucSolicitudModificacionRepository
     Task<PRE_PUC_SOL_MODIFICACION> GetAllByIcpPucFinanciadoSolicitud(int codigoPresupuesto, int codigoIcp,
         int codigoPuc, string financiadoId, int codigoSolicitud);
 
+    Task<PRE_PUC_SOL_MODIFICACION> GetAllByIcpPucFinanciadoSolicitud(int codigoPresupuesto, int codigoIcp,
+        int codigoPuc, string financiadoId, int codigoSolicitud, int codigoFinanciado);
+
 }

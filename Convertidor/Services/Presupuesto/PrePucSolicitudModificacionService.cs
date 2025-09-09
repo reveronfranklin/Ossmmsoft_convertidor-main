@@ -229,10 +229,10 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
                     return result;
 
                 }
-
+                PRE_SALDOS codigoSaldo = new PRE_SALDOS();
                 if (dto.CodigoSaldo > 0)
                 {
-                    var codigoSaldo = await _preSaldosRepository.GetByCodigo(dto.CodigoSaldo);
+                    codigoSaldo = await _preSaldosRepository.GetByCodigo(dto.CodigoSaldo);
                     if (codigoSaldo ==null)
                     {
                         result.Data = null;
@@ -346,7 +346,7 @@ public class PrePucSolicitudModificacionService: IPrePucSolicitudModificacionSer
 
                 }
                 
-                var pucSolModificacionCombinacion = await _repository.GetAllByIcpPucFinanciadoSolicitud(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.FinanciadoId.ToString(),dto.CodigoSolModificacion);
+                var pucSolModificacionCombinacion = await _repository.GetAllByIcpPucFinanciadoSolicitud(dto.CodigoPresupuesto,dto.CodigoIcp,dto.CodigoPuc,dto.FinanciadoId.ToString(),dto.CodigoSolModificacion,codigoSaldo.CODIGO_FINANCIADO);
                 if (pucSolModificacionCombinacion != null)
                 {
                     result.Data = null;

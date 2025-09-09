@@ -13,8 +13,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhVTirularBeneficiariosResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Dtos/Rh/RhVTirularBeneficiariosResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Presupuesto/IPrePucSolicitudModificacionRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Interfaces/Presupuesto/IPrePucSolicitudModificacionRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PrePucSolicitudModificacionRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PrePucSolicitudModificacionRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucSolicitudModificacionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucSolicitudModificacionService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +41,9 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -78,6 +82,7 @@
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/CuerpoComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/EncabezadoComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Rh/IRhProcesosService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Services/Rh/RhVTitularesBeneficiariosService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/AuthModelUserServices.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/IOssAuthGroupPermissionService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs" root0="FORCE_HIGHLIGHTING" />
@@ -500,6 +505,7 @@
       <workItem from="1756767969567" duration="2999000" />
       <workItem from="1756853594438" duration="1417000" />
       <workItem from="1756913794127" duration="2217000" />
+      <workItem from="1757456633652" duration="1628000" />
     </task>
     <servers />
   </component>
@@ -552,13 +558,13 @@
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PrePucSolicitudModificacionRepository.cs</url>
-          <line>229</line>
+          <line>245</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Presupuesto/PrePucSolicitudModificacionRepository.cs" containingFunctionPresentation="Method 'DeleteByCodigoSolicitud'">
             <startOffsets>
-              <option value="7780" />
+              <option value="8668" />
             </startOffsets>
             <endOffsets>
-              <option value="7933" />
+              <option value="8821" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="5" />
@@ -1788,26 +1794,13 @@
           <line>359</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucSolicitudModificacionService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="14794" />
+              <option value="14878" />
             </startOffsets>
             <endOffsets>
-              <option value="14840" />
+              <option value="14924" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="379" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucSolicitudModificacionService.cs</url>
-          <line>348</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucSolicitudModificacionService.cs" containingFunctionPresentation="Method 'Create'">
-            <startOffsets>
-              <option value="14185" />
-            </startOffsets>
-            <endOffsets>
-              <option value="14378" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="380" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreSolModificacionService.cs</url>
@@ -6234,6 +6227,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1249" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/PreSolModificacionController.cs</url>
+          <line>57</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/PreSolModificacionController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="1435" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1475" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1250" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucSolicitudModificacionService.cs</url>
+          <line>348</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Presupuesto/PrePucSolicitudModificacionService.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="14239" />
+            </startOffsets>
+            <endOffsets>
+              <option value="14462" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1251" />
         </line-breakpoint>
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
