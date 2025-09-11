@@ -29,9 +29,15 @@ public partial class AdmDocumentosOpService
         
         public async Task ReplicaIvaDocumentoEnAdmRetenciones(int codigoDocumento)
         {
+            
+           
+            
             var codigoDocumentoOp = await _repository.GetCodigoDocumentoOp(codigoDocumento);
             if (codigoDocumentoOp != null && codigoDocumentoOp.MONTO_RETENIDO>0)
             {
+                var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+                var totalMontoRetenido = documentos.Sum(x => x.MONTO_RETENIDO);
+                var totalBaseImponible = documentos.Sum(x => x.BASE_IMPONIBLE);
                 int codigoRetencion = 0;
                 int tipoRetencionId = 0;
                 var descriptivaRetencion =await _admDescriptivaRepository.GetByCodigo((int)codigoDocumentoOp.ESTATUS_FISCO_ID);
@@ -72,8 +78,10 @@ public partial class AdmDocumentosOpService
                 else
                 {
                
-                    var montoRetencion= retencionOp.MONTO_RETENCION + codigoDocumentoOp.MONTO_RETENIDO;
-                    var baseImponible= retencionOp.BASE_IMPONIBLE + codigoDocumentoOp.BASE_IMPONIBLE;
+                    
+                    
+                    var montoRetencion= totalMontoRetenido;
+                    var baseImponible=totalBaseImponible;
 
                     var response= await _admRetencionesOpRepository.UpdateMontos(retencionOp.CODIGO_RETENCION_OP,(decimal)montoRetencion,(decimal)baseImponible);
                     
