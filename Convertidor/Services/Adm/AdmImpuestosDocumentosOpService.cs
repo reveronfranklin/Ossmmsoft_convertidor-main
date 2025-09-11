@@ -299,7 +299,7 @@ namespace Convertidor.Services.Adm
                 }
                 
                 var esValidoTotalBaseImpuestoVsBaseDocumento =
-                    await EsValidoTotalBaseImpuestoVsBaseDocumentoUpdate(dto.CodigoDocumentoOp, dto.CodigoImpuestoDocumentoOp,dto.BaseImponible);
+                    await EsValidoTotalBaseImpuestoVsBaseDocumentoUpdate(dto.CodigoDocumentoOp, dto.CodigoImpuestoDocumentoOp,dto.BaseImponible+dto.MontoImpuestoExento);
                 if (esValidoTotalBaseImpuestoVsBaseDocumento ==false)
                 {
                     result.Data = null;
