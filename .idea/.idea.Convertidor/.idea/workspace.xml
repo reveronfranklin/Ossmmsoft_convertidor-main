@@ -13,7 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +39,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
@@ -503,7 +504,7 @@
       <workItem from="1756913794127" duration="2217000" />
       <workItem from="1757456633652" duration="2528000" />
       <workItem from="1757545507251" duration="659000" />
-      <workItem from="1757603352643" duration="1511000" />
+      <workItem from="1757603352643" duration="2978000" />
     </task>
     <servers />
   </component>
@@ -4229,10 +4230,10 @@
           <line>463</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="20753" />
+              <option value="20777" />
             </startOffsets>
             <endOffsets>
-              <option value="20779" />
+              <option value="20803" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="975" />
@@ -4242,10 +4243,10 @@
           <line>520</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="23204" />
+              <option value="23228" />
             </startOffsets>
             <endOffsets>
-              <option value="23242" />
+              <option value="23266" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="976" />
@@ -4274,10 +4275,10 @@
           <line>333</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="15637" />
+              <option value="15661" />
             </startOffsets>
             <endOffsets>
-              <option value="15680" />
+              <option value="15704" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="983" />
@@ -4287,10 +4288,10 @@
           <line>541</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="24070" />
+              <option value="24094" />
             </startOffsets>
             <endOffsets>
-              <option value="24113" />
+              <option value="24137" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="984" />
@@ -4300,10 +4301,10 @@
           <line>454</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="20314" />
+              <option value="20338" />
             </startOffsets>
             <endOffsets>
-              <option value="20458" />
+              <option value="20482" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="985" />
@@ -4651,10 +4652,10 @@
           <line>353</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'EsValidoTotalBaseImpuestoVsBaseDocumentoCreate'">
             <startOffsets>
-              <option value="16293" />
+              <option value="16317" />
             </startOffsets>
             <endOffsets>
-              <option value="16312" />
+              <option value="16336" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1036" />
@@ -4664,10 +4665,10 @@
           <line>413</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="18536" />
+              <option value="18560" />
             </startOffsets>
             <endOffsets>
-              <option value="18649" />
+              <option value="18673" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1037" />
@@ -6010,10 +6011,10 @@
           <line>573</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="24964" />
+              <option value="24988" />
             </startOffsets>
             <endOffsets>
-              <option value="25073" />
+              <option value="25097" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1230" />
@@ -6023,10 +6024,10 @@
           <line>592</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="25809" />
+              <option value="25833" />
             </startOffsets>
             <endOffsets>
-              <option value="26027" />
+              <option value="26051" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1231" />
@@ -6036,10 +6037,10 @@
           <line>590</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="25656" />
+              <option value="25680" />
             </startOffsets>
             <endOffsets>
-              <option value="25775" />
+              <option value="25799" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1232" />
@@ -6049,10 +6050,10 @@
           <line>535</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmImpuestosDocumentosOpService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="23712" />
+              <option value="23736" />
             </startOffsets>
             <endOffsets>
-              <option value="23756" />
+              <option value="23780" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1234" />
