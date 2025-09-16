@@ -174,6 +174,24 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
 
         } 
         
+        public async Task<string> GetNumeroComprobanteNoIva(string codigoTipoRetencion,int codigoPesupuesto,int codigoOrdenPago)
+        {
+            string result = "";
+         
+            
+            var sisDescriptiva = await _sisDescriptivaRepository.GetByExtra1(codigoTipoRetencion);
+            if (sisDescriptiva != null)
+            {
+                var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(codigoPesupuesto, sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
+                result = numeroSolicitud.Data;
+                
+            }
+
+            
+           
+            return result;
+
+        } 
 
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Create(AdmRetencionesOpUpdateDto dto)
         {
@@ -296,7 +314,15 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 }
                 else
                 {
-                    entity.NUMERO_COMPROBANTE = await GetNumeroComprobanteIva(tipoRetencion.CODIGO,(int)entity.CODIGO_PRESUPUESTO,dto.CodigoOrdenPago);
+                    if (tipoRetencion.CODIGO == "IVA")
+                    {
+                        entity.NUMERO_COMPROBANTE = await GetNumeroComprobanteIva(tipoRetencion.CODIGO,(int)entity.CODIGO_PRESUPUESTO,dto.CodigoOrdenPago);
+
+                    }else
+                    {
+                        entity.NUMERO_COMPROBANTE = await GetNumeroComprobanteNoIva(tipoRetencion.CODIGO,(int)entity.CODIGO_PRESUPUESTO,dto.CodigoOrdenPago);
+
+                    }
                   
                 }
 
