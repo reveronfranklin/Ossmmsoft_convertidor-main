@@ -38,6 +38,7 @@ public partial class AdmDocumentosOpService
                 var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
                 var totalMontoRetenido = documentos.Sum(x => x.MONTO_RETENIDO);
                 var totalBaseImponible = documentos.Sum(x => x.BASE_IMPONIBLE);
+                var totalExento = documentos.Sum(x => x.MONTO_IMPUESTO_EXENTO);
                 int codigoRetencion = 0;
                 int tipoRetencionId = 0;
                 var descriptivaRetencion =await _admDescriptivaRepository.GetByCodigo((int)codigoDocumentoOp.ESTATUS_FISCO_ID);
@@ -70,7 +71,7 @@ public partial class AdmDocumentosOpService
                         admRetencionesOpDto.CodigoRetencion = admRetencion.CODIGO_RETENCION;
                     }
                     admRetencionesOpDto.MontoRetencion = codigoDocumentoOp.MONTO_RETENIDO;
-                    admRetencionesOpDto.BaseImponible = codigoDocumentoOp.BASE_IMPONIBLE;
+                    admRetencionesOpDto.BaseImponible = codigoDocumentoOp.BASE_IMPONIBLE + codigoDocumentoOp.MONTO_IMPUESTO_EXENTO;
                     admRetencionesOpDto.CodigoPresupuesto = codigoDocumentoOp.CODIGO_PRESUPUESTO;
                     admRetencionesOpDto.NumeroComprobante = "";
                     await _admRetencionesOpService.Create(admRetencionesOpDto);
@@ -81,7 +82,7 @@ public partial class AdmDocumentosOpService
                     
                     
                     var montoRetencion= totalMontoRetenido;
-                    var baseImponible=totalBaseImponible;
+                    var baseImponible=totalBaseImponible + totalExento;
 
                     var response= await _admRetencionesOpRepository.UpdateMontos(retencionOp.CODIGO_RETENCION_OP,(decimal)montoRetencion,(decimal)baseImponible);
                     

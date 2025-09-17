@@ -13,8 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_RETENCIONES_OP.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/EntitiesDestino/ADM/ADM_RETENCIONES_OP.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -513,7 +511,8 @@
       <workItem from="1757545507251" duration="659000" />
       <workItem from="1757603352643" duration="3901000" />
       <workItem from="1757681161565" duration="2043000" />
-      <workItem from="1758032719859" duration="5370000" />
+      <workItem from="1758032719859" duration="6230000" />
+      <workItem from="1758119989482" duration="34000" />
     </task>
     <servers />
   </component>
