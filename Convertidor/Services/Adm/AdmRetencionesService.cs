@@ -13,18 +13,20 @@ namespace Convertidor.Services.Adm
    
     
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
-       
+        private readonly IAdmRetencionesRepository _admRetencionesRepository;
+
 
         public AdmRetencionesService(IAdmRetencionesRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
-                                     IAdmDescriptivaRepository admDescriptivaRepository
+                                     IAdmDescriptivaRepository admDescriptivaRepository,
+                                     IAdmRetencionesRepository admRetencionesRepository
                                 
                                      )
         {
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
-    
+            _admRetencionesRepository = admRetencionesRepository;
         }
 
       
@@ -354,6 +356,16 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                var admRetecionesOp = await _admRetencionesRepository.GetCodigoRetencion(dto.CodigoRetencion);
+                if (admRetecionesOp != null)
+                {
+                    
+                    result.Data = dto;
+                    result.IsValid = false;
+                    result.Message = "Retencion ya tiene Movimiento en ADM";
+                    return result;
+                    
+                }
 
                 var deleted = await _repository.Delete(dto.CodigoRetencion);
 
