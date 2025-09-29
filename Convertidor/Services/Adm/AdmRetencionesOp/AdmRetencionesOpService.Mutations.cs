@@ -193,6 +193,46 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
 
         } 
 
+        
+        public async Task<bool> IsValidTotalDocumentosVsTotalCompromisoCreate(int codigoOrdenPago,decimal montoDocumento)
+        {
+            bool result = true;
+            decimal totalMontoDocumentos = 0;
+            decimal totalPucOrdenPago = 0;
+            decimal totalRetenciones = 0;
+            var pucOrdenPago = await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago);
+            if (pucOrdenPago != null && pucOrdenPago.Count() > 0)
+            {
+                totalPucOrdenPago = pucOrdenPago.Sum(t => t.MONTO);
+            }
+            var documentosOp = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
+          
+            if (documentosOp != null && documentosOp.Count() > 0)
+            {
+                totalMontoDocumentos = documentosOp.Sum(t => t.BASE_IMPONIBLE);
+
+            }
+
+            var retenciones = await _repository.GetByOrdenPago(codigoOrdenPago);
+            if (retenciones != null && retenciones.Count() > 0)
+            {
+                totalRetenciones = (decimal)retenciones.Sum(t => t.MONTO_RETENCION);
+
+            }
+            
+            
+            
+
+            if (totalMontoDocumentos + totalRetenciones + montoDocumento > totalPucOrdenPago)
+            {
+                result = false;
+            }
+            
+           
+            
+            return result;
+        }
+        
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Create(AdmRetencionesOpUpdateDto dto)
         {
             ResultDto<AdmRetencionesOpResponseDto> result = new ResultDto<AdmRetencionesOpResponseDto>(null);
@@ -221,6 +261,15 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "No puede Modificar, Orden de Pago";
+                    return result;
+                }
+                
+                var isValidMonto= await IsValidTotalDocumentosVsTotalCompromisoCreate(dto.CodigoOrdenPago, dto.MontoRetencion);
+                if (isValidMonto == false)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "La suma de los documentos + las retenciones superan el compromiso";
                     return result;
                 }
                 
