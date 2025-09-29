@@ -17,8 +17,6 @@ public partial class AdmDocumentosOpService
             if (documentosOp != null && documentosOp.Count() > 0)
             {
                 totalMontoDocumentos = documentosOp.Sum(t => t.MONTO_DOCUMENTO);
-              
-
 
             }
 
