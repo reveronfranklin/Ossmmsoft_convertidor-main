@@ -194,7 +194,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
         } 
 
         
-        public async Task<bool> IsValidTotalDocumentosVsTotalCompromisoCreate(int codigoOrdenPago,decimal montoDocumento)
+        public async Task<bool> IsValidTotalDocumentosVsTotalCompromisoCreate(int codigoOrdenPago,decimal montoRetencion)
         {
             bool result = true;
             decimal totalMontoDocumentos = 0;
@@ -227,7 +227,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             
             
 
-            if (totalMontoDocumentos + totalRetenciones + montoDocumento > totalPucOrdenPago)
+            if (totalMontoDocumentos - (totalRetenciones + montoRetencion) > totalPucOrdenPago)
             {
                 result = false;
             }
