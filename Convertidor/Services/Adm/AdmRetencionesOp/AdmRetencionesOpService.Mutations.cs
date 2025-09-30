@@ -216,7 +216,11 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             var retenciones = await _repository.GetByOrdenPago(codigoOrdenPago);
             if (retenciones != null && retenciones.Count() > 0)
             {
-                totalRetenciones = (decimal)retenciones.Sum(t => t.MONTO_RETENCION);
+                var descriptivaIva = await _admDescriptivaRepository.GetByCodigoDescriptivaTexto("IVA");
+                
+                totalRetenciones = (decimal)retenciones
+                    .Where(X=>X.TIPO_RETENCION_ID!=descriptivaIva.DESCRIPCION_ID)
+                    .Sum(t => t.MONTO_RETENCION);
 
             }
             
