@@ -22,6 +22,8 @@ namespace Convertidor.Data
         public DbSet<ADM_CONTACTO_PROVEEDOR> ADM_CONTACTO_PROVEEDOR { get; set; }
         public DbSet<ADM_DESCRIPTIVAS> ADM_DESCRIPTIVAS { get; set; }
         public DbSet<ADM_ORDEN_PAGO> ADM_ORDEN_PAGO { get; set; }
+        public DbSet<ADM_PRE_ORDEN_PAGO> ADM_PRE_ORDEN_PAGO { get; set; }
+        
         public DbSet<ADM_PUC_ORDEN_PAGO> ADM_PUC_ORDEN_PAGO { get; set; }
         public DbSet<PRE_V_SALDOS> PRE_V_SALDOS { get; set; }
         public DbSet<ADM_RETENCIONES_OP> ADM_RETENCIONES_OP { get; set; }
@@ -144,6 +146,21 @@ namespace Convertidor.Data
                     builder.HasKey(table => new
                     {
                         table.CODIGO_ORDEN_PAGO,
+                   
+
+                    });
+                  
+                   
+                });
+            
+            modelBuilder
+                .Entity<ADM_PRE_ORDEN_PAGO>(builder =>
+                {
+
+                    builder.ToTable("ADM_PRE_ORDEN_PAGO");
+                    builder.HasKey(table => new
+                    {
+                        table.Id,
                    
 
                     });
