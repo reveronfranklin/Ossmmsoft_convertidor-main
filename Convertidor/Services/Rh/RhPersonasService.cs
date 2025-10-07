@@ -839,9 +839,19 @@ namespace Convertidor.Data.Repository.Rh
                 
                 
                 // Primero convierte desde ISO 8601
-                DateTime fechaConvertida = DateTime.ParseExact(dto.FechaNacimiento, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'", 
-                    CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+                //DateTime fechaConvertida = DateTime.ParseExact(dto.FechaNacimiento, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'", 
+                 //   CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+                
+                
+                
 
+                if (DateTime.TryParseExact(dto.FechaNacimiento, "dd/MM/yyyy", 
+                        CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fechaConvertida))
+                {
+                    // Fecha convertida exitosamente
+                    Console.WriteLine($"Fecha convertida: {fechaConvertida}");
+                }
+                    
                 // Luego formatea como deseas para usar en Oracle
                 string fechaParaOracle = fechaConvertida.ToString("dd/MM/yyyy");
                 
