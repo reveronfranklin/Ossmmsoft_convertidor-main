@@ -236,6 +236,7 @@ namespace Convertidor.Services.Bm
             var settings = _configuration.GetSection("Settings").Get<Settings>();
             var destino = @settings.BmFiles;
             var destinoReport = @settings.ExcelFiles;
+            var totalconteo=detalle.Count();
           
             var fileName = $"{destinoReport}/{codigoConteo.ToString()}.pdf";
             try
@@ -256,7 +257,7 @@ namespace Convertidor.Services.Bm
                             {
                                 col.Item().AlignCenter().Text("Historico Conteo").Bold().FontSize(14);
 
-                                col.Item().AlignCenter().Text($"{connteo.Data.Titulo} (Total BM-I 84)").FontSize(12);
+                                col.Item().AlignCenter().Text($"{connteo.Data.Titulo} (Total BM-I {totalconteo})").FontSize(12);
 
                             });
                             fila.RelativeItem().Border(0).Column(col =>
