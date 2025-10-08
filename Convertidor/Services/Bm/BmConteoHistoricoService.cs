@@ -256,7 +256,7 @@ namespace Convertidor.Services.Bm
                             {
                                 col.Item().AlignCenter().Text("Historico Conteo").Bold().FontSize(14);
 
-                                col.Item().AlignCenter().Text($"{connteo.Data.Titulo}").FontSize(12);
+                                col.Item().AlignCenter().Text($"{connteo.Data.Titulo} (Total BM-I 84)").FontSize(12);
 
                             });
                             fila.RelativeItem().Border(0).Column(col =>
@@ -265,7 +265,8 @@ namespace Convertidor.Services.Bm
                                 .Text($"Conteo : {connteo.Data.CodigoBmConteo}").Bold().FontSize(14);
 
                                 col.Item().Border(1).Background(Colors.LightBlue.Medium).AlignCenter()
-                                .Text($"{connteo.Data.Fecha.ToShortDateString()}").FontSize(9);
+                                //.Text($"{connteo.Data.Fecha.ToShortDateString()}").FontSize(9);
+                                .Text($"{connteo.Data.Fecha:dd/MM/yyyy}").FontSize(9);
 
                                 col.Spacing(4);
 
