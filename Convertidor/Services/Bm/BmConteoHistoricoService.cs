@@ -237,7 +237,8 @@ namespace Convertidor.Services.Bm
             var destino = @settings.BmFiles;
             var destinoReport = @settings.ExcelFiles;
             var totalconteo=detalle.Count();
-          
+            var totalContado = detalle.Sum(x => x.CANTIDAD_CONTADA);
+            var diferencia = detalle.Sum(x => x.DIFERENCIA);
             var fileName = $"{destinoReport}/{codigoConteo.ToString()}.pdf";
             try
             {
@@ -319,25 +320,25 @@ namespace Convertidor.Services.Bm
                                                         {
                                                             columnas.RelativeColumn(1);
                                                             columnas.RelativeColumn(4);
-                                                            columnas.RelativeColumn(2);
-                                                            columnas.RelativeColumn(2);
-                                                            columnas.RelativeColumn(2);
+                                                            columnas.RelativeColumn(1);
+                                                            columnas.RelativeColumn(1);
+                                                            columnas.RelativeColumn(1);
 
 
                                                             tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignCenter()
-                                                            .Padding(2).Text($"{item.CONTEO}").FontSize(8);
+                                                            .Padding(2).Text($"{item.CONTEO}").FontSize(7);
 
                                                             tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                                            .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
+                                                            .Padding(2).Text($"{item.NUMERO_PLACA + " "} {item.ARTICULO}").FontSize(7);
 
                                                             tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
-                                                            .Padding(2).Text(item.CANTIDAD).FontSize(8);
+                                                            .Padding(2).Text(item.CANTIDAD).FontSize(7);
 
                                                             tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
-                                                            .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
+                                                            .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(7);
 
                                                             tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
-                                                            .Padding(2).Text(item.DIFERENCIA).FontSize(8);
+                                                            .Padding(2).Text(item.DIFERENCIA).FontSize(7);
 
 
 
@@ -388,9 +389,9 @@ namespace Convertidor.Services.Bm
 
                             col1.Item().Row(pie =>
                             {
-                                pie.ConstantItem(350).PaddingRight(2).AlignRight().Element(BlockTotales).Text(connteo.Data.TotalCantidad);
-                                pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(connteo.Data.TotalCantidadContada);
-                                pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(connteo.Data.TotalDiferencia);
+                                pie.ConstantItem(350).PaddingRight(2).AlignRight().Element(BlockTotales).Text(totalconteo);
+                                pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(totalContado);
+                                pie.RelativeColumn().PaddingRight(2).Element(BlockTotales).AlignRight().Text(diferencia);
 
                             });
                         });
