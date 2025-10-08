@@ -181,7 +181,7 @@ namespace Convertidor.Services.Bm
                     .Background(Colors.Grey.Lighten3)
                     .ShowOnce()
                     .MinWidth(50)
-                    .MinHeight(50)
+                    .MinHeight(20)
                     .AlignCenter()
                     .AlignMiddle();
             }
@@ -293,48 +293,64 @@ namespace Convertidor.Services.Bm
                                 foreach (var itemResumenIcp in resumenIcp)
                                 {
 
+                                
+                                    var comentariosUnicos = detalle
+                                        .Where(x => x.CODIGO_ICP == itemResumenIcp.CodigoIcp)
+                                        .GroupBy(x => x.COMENTARIO) // Agrupa por comentario
+                                        .Select(g => g.Key) // Selecciona el comentario único
+                                        .ToList();
+                                    
                                     tabla.Cell().RowSpan(5).ColumnSpan(5).Element(BlockResumenIcp).Text(itemResumenIcp.UnidadTrabajo);
-
-                                    foreach (var item in detalle.Where(x=> x.CODIGO_ICP== itemResumenIcp.CodigoIcp).ToList())
-                                    {
+                                    foreach (var comentario in comentariosUnicos)
+                                    { 
+                                        var textoComentario = comentario;
+                                        if (string.IsNullOrEmpty(comentario))
+                                        {
+                                            textoComentario="SIN DIFERENCIA";
+                                        }
+                                        tabla.Cell().ColumnSpan(5).Element(Block).Text(textoComentario);
+                                                 foreach (var item in detalle.Where(x=> x.CODIGO_ICP== itemResumenIcp.CodigoIcp && x.COMENTARIO==comentario).ToList())
+                                                 {
                                         
 
-                                        tabla.ColumnsDefinition(async columnas =>
-                                        {
-                                            columnas.RelativeColumn(1);
-                                            columnas.RelativeColumn(4);
-                                            columnas.RelativeColumn(2);
-                                            columnas.RelativeColumn(2);
-                                            columnas.RelativeColumn(2);
+                                                        tabla.ColumnsDefinition(async columnas =>
+                                                        {
+                                                            columnas.RelativeColumn(1);
+                                                            columnas.RelativeColumn(4);
+                                                            columnas.RelativeColumn(2);
+                                                            columnas.RelativeColumn(2);
+                                                            columnas.RelativeColumn(2);
 
 
-                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignCenter()
-                                            .Padding(2).Text($"{item.CONTEO}").FontSize(8);
+                                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignCenter()
+                                                            .Padding(2).Text($"{item.CONTEO}").FontSize(8);
 
-                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
-                                            .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
+                                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9")
+                                                            .Padding(2).Text($"{item.NUMERO_PLACA + "        "} {item.ARTICULO}").FontSize(8);
 
-                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
-                                            .Padding(2).Text(item.CANTIDAD).FontSize(8);
+                                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                                            .Padding(2).Text(item.CANTIDAD).FontSize(8);
 
-                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
-                                            .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
+                                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                                            .Padding(2).Text(item.CANTIDAD_CONTADA).FontSize(8);
 
-                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
-                                            .Padding(2).Text(item.DIFERENCIA).FontSize(8);
+                                                            tabla.Cell().BorderBottom(0.5f).BorderColor("#d9d9d9").AlignRight()
+                                                            .Padding(2).Text(item.DIFERENCIA).FontSize(8);
 
 
 
-                                        });
+                                                        });
 
-                                      
+                                                      
 
-                                        if (item.COMENTARIO != null && item.COMENTARIO.Length > 0)
-                                        {
-                                            tabla.Cell().ColumnSpan(5).Element(Block).Text(item.COMENTARIO);
-                                        }
+                                                       /* if (item.COMENTARIO != null && item.COMENTARIO.Length > 0)
+                                                        {
+                                                            tabla.Cell().ColumnSpan(5).Element(Block).Text(item.COMENTARIO);
+                                                        }*/
+                                                 }
+
                                     }
-
+                                  
                                 }
 
 
