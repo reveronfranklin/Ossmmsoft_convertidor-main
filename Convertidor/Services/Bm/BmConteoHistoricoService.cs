@@ -392,6 +392,19 @@ namespace Convertidor.Services.Bm
 
                             });
                         });
+                        
+                        page.Footer().Row(row =>
+                        {
+                            row.RelativeItem().Text($"Generado: {DateTime.Now:dd/MM/yyyy HH:mm}");
+                            row.RelativeItem().AlignCenter().Text(text =>
+                            {
+                                text.Span("Página ");
+                                text.CurrentPageNumber();
+                                text.Span(" de ");
+                                text.TotalPages();
+                            });
+                            row.RelativeItem().AlignRight().Text($"Conteo: {codigoConteo}");
+                        });
                     });
                 }).GeneratePdf(fileName);
 
