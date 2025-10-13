@@ -407,6 +407,7 @@ namespace Convertidor.Services.Bm
             itemDetalle.USUARIO_UPD = item.USUARIO_UPD;
             itemDetalle.FECHA_UPD = item.FECHA_UPD;
             itemDetalle.CODIGO_EMPRESA = item.CODIGO_EMPRESA;
+            itemDetalle.REPLICAR_COMENTARIO = item.REPLICAR_COMENTARIO;
             return itemDetalle;
         }
         public async Task<ResultDto<BmConteoDeleteDto>> Delete(BmConteoDeleteDto dto)
