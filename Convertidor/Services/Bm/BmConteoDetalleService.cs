@@ -138,7 +138,8 @@ namespace Convertidor.Services.Bm
                                       FechaMovimientoObj = Fecha.GetFechaDto(s.FECHA_MOVIMIENTO),
                                       CodigoBien=s.CODIGO_BIEN,
                                       CodigoMovBien=s.CODIGO_MOV_BIEN,
-                                      Comentario=s.COMENTARIO
+                                      Comentario=s.COMENTARIO,
+                                      ReplicarComentario=s.REPLICAR_COMENTARIO
                                     
                                       
                                   } into g
@@ -167,8 +168,8 @@ namespace Convertidor.Services.Bm
                                       FechaMovimientoObj = g.Key.FechaMovimientoObj,
                                       CodigoBien=g.Key.CodigoBien,
                                       CodigoMovBien=g.Key.CodigoMovBien,
-                                      Comentario=g.Key.Comentario
-                                   
+                                      Comentario=g.Key.Comentario,
+                                      ReplicarComentario=g.Key.ReplicarComentario
                                     
 
                                   };
@@ -231,7 +232,8 @@ namespace Convertidor.Services.Bm
                                       FechaMovimientoObj = Fecha.GetFechaDto(s.FECHA_MOVIMIENTO),
                                       CodigoBien=s.CODIGO_BIEN,
                                       CodigoMovBien=s.CODIGO_MOV_BIEN,
-                                      Comentario=s.COMENTARIO
+                                      Comentario=s.COMENTARIO,
+                                      ReplicarComentario=s.REPLICAR_COMENTARIO
                                     
                                       
                                   } into g
@@ -260,7 +262,8 @@ namespace Convertidor.Services.Bm
                                       FechaMovimientoObj = g.Key.FechaMovimientoObj,
                                       CodigoBien=g.Key.CodigoBien,
                                       CodigoMovBien=g.Key.CodigoMovBien,
-                                      Comentario=g.Key.Comentario
+                                      Comentario=g.Key.Comentario,
+                                      ReplicarComentario = g.Key.ReplicarComentario,
                                    
                                     
 
@@ -377,6 +380,11 @@ namespace Convertidor.Services.Bm
                 conteo.CANTIDAD_CONTADA = dto.CantidadContada;
                 conteo.DIFERENCIA = conteo.CANTIDAD - conteo.CANTIDAD_CONTADA;
                 conteo.COMENTARIO = dto.Comentario;
+                conteo.REPLICAR_COMENTARIO = 0;
+                if (dto.ReplicarComentario)
+                {
+                    conteo.REPLICAR_COMENTARIO = 1;
+                }
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 conteo.CODIGO_EMPRESA = conectado.Empresa;
@@ -644,6 +652,14 @@ namespace Convertidor.Services.Bm
                     conteoDetalle.DIFERENCIA =conteoDetalle.CANTIDAD-conteoDetalle.CANTIDAD_CONTADA;
                     conteoDetalle.CODIGO_ICP = ubicacion.CODIGO_ICP;
                     conteoDetalle.UNIDAD_TRABAJO = ubicacion.UNIDAD_EJECUTORA;
+                    if (item.UbicacionFisica != null && item.UbicacionFisica != 0)
+                    {
+                        conteoDetalle.CODIGO_ICP_FISICO = item.UbicacionFisica;
+                    }
+                    else
+                    {
+                        conteoDetalle.CODIGO_ICP_FISICO = ubicacion.CODIGO_ICP;
+                    }
                     await _repository.Update(conteoDetalle);
                 }
                 else
@@ -675,6 +691,15 @@ namespace Convertidor.Services.Bm
                         entity.CODIGO_BIEN = bm1.CodigoBien;
                         entity.CODIGO_MOV_BIEN = bm1.CodigoMovBien;
                         entity.COMENTARIO = "";
+                        entity.REPLICAR_COMENTARIO = 0;
+                        if (item.UbicacionFisica != null && item.UbicacionFisica != 0)
+                        {
+                            entity.CODIGO_ICP_FISICO = item.UbicacionFisica;
+                        }
+                        else
+                        {
+                            entity.CODIGO_ICP_FISICO = ubicacion.CODIGO_ICP;
+                        }
                         
                        
                         entity.CODIGO_EMPRESA = conectado.Empresa;

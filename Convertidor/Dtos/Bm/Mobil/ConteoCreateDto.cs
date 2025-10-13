@@ -8,4 +8,8 @@ public class ConteoCreateDto
     public string KeyUbicacionResponsable { get; set; }
     public string NroPlaca { get; set; }
     public string UnidadEjecutora { get; set; }
+    public int UbicacionFisica { get; set; }
+    
+    
+
 }

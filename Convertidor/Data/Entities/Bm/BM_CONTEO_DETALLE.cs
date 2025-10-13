@@ -29,4 +29,8 @@ public class BM_CONTEO_DETALLE
     public int USUARIO_UPD { get; set; }
     public DateTime FECHA_UPD { get; set; }
     public int CODIGO_EMPRESA { get; set; }
+    
+    public int REPLICAR_COMENTARIO { get; set; }
+    public int CODIGO_ICP_FISICO { get; set; }
+    
 }
