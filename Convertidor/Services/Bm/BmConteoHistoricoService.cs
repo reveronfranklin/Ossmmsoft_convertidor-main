@@ -311,6 +311,7 @@ namespace Convertidor.Services.Bm
                                         {
                                             textoComentario="SIN DIFERENCIA";
                                         }
+                                       
                                         tabla.Cell().ColumnSpan(5).Element(Block).Text(textoComentario);
                                                  foreach (var item in detalle.Where(x=> x.CODIGO_ICP== itemResumenIcp.CodigoIcp && x.COMENTARIO==comentario).ToList())
                                                  {

@@ -408,6 +408,21 @@ namespace Convertidor.Services.Bm
             itemDetalle.FECHA_UPD = item.FECHA_UPD;
             itemDetalle.CODIGO_EMPRESA = item.CODIGO_EMPRESA;
             itemDetalle.REPLICAR_COMENTARIO = item.REPLICAR_COMENTARIO;
+            if (item.CODIGO_ICP_FISICO >0)
+            {
+                itemDetalle.CODIGO_ICP_FISICO = item.CODIGO_ICP_FISICO;
+
+            }
+            else
+            {
+                itemDetalle.CODIGO_ICP_FISICO = item.CODIGO_ICP;
+            }
+           
+            if (itemDetalle.CODIGO_ICP_FISICO != itemDetalle.CODIGO_ICP)
+            {
+                itemDetalle.COMENTARIO = itemDetalle.COMENTARIO + " Ubicado en Otra Dependencia";
+            }
+            
             return itemDetalle;
         }
         public async Task<ResultDto<BmConteoDeleteDto>> Delete(BmConteoDeleteDto dto)

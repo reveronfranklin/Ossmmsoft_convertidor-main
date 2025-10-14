@@ -65,6 +65,36 @@ namespace Convertidor.Data.Repository.Bm
             }
 
         }
+
+        public ResultDto<bool> ReplicarComentario(int codigoConteo,string comentario)
+        {
+            ResultDto<bool> result = new ResultDto<bool>(false);
+         
+           
+            try
+            {
+             
+                FormattableString xqueryDiario = $"UPDATE  BMC.BM_CONTEO_DETALLE SET COMENTARIO = {comentario}  WHERE CODIGO_BM_CONTEO ={codigoConteo} AND DIFERENCIA!=0  AND (COMENTARIO IS NULL OR COMENTARIO = '')";
+
+                var resultDiario =  _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                result.Data = true;
+                result.IsValid = true;
+                result.Message = "";
+              
+
+            }
+            catch (Exception e)
+            {
+                result.Data = false;
+                result.IsValid = false;
+                result.Message = e.Message;
+         
+            }
+   
+            return result;
+
+        }
+
         
         public async Task<bool> ExisteConteo(int codigoConteo)
         {
