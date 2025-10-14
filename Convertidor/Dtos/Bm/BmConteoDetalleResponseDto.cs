@@ -33,7 +33,7 @@
 		public string Comentario { get; set; } = string.Empty;
 		public int CantidadContadaOtroConteo { get; set; }
 		public string CodigoPlaca { get { return $"{NumeroPlaca}"; } }
-		public int ReplicarComentario { get; set; }
+		public bool ReplicarComentario { get; set; }
 	
 	}
 }

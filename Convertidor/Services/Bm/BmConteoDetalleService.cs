@@ -169,7 +169,7 @@ namespace Convertidor.Services.Bm
                                       CodigoBien=g.Key.CodigoBien,
                                       CodigoMovBien=g.Key.CodigoMovBien,
                                       Comentario=g.Key.Comentario,
-                                      ReplicarComentario=g.Key.ReplicarComentario
+                                      ReplicarComentario = g.Key.ReplicarComentario == 1
                                     
 
                                   };
@@ -263,7 +263,7 @@ namespace Convertidor.Services.Bm
                                       CodigoBien=g.Key.CodigoBien,
                                       CodigoMovBien=g.Key.CodigoMovBien,
                                       Comentario=g.Key.Comentario,
-                                      ReplicarComentario = g.Key.ReplicarComentario,
+                                      ReplicarComentario = g.Key.ReplicarComentario == 1
                                    
                                     
 
