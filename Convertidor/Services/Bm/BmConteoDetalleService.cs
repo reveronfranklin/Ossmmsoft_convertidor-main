@@ -384,7 +384,10 @@ namespace Convertidor.Services.Bm
                 if (dto.ReplicarComentario)
                 {
                     conteo.REPLICAR_COMENTARIO = 1;
+                    
                 }
+                
+                
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 conteo.CODIGO_EMPRESA = conectado.Empresa;
@@ -392,6 +395,12 @@ namespace Convertidor.Services.Bm
                 conteo.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(conteo);
+                if (dto.ReplicarComentario)
+                {
+                   _repository.ReplicarComentario(conteo.CODIGO_BM_CONTEO,dto.Comentario);
+                    
+                }
+                
                 BmConteoFilterDto filterConteo = new BmConteoFilterDto();
                 filterConteo.CodigoBmConteo = conteo.CODIGO_BM_CONTEO;
                 result = await GetAllByConteo(filterConteo);

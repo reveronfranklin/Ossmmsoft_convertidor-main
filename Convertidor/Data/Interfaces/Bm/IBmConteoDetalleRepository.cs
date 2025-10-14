@@ -22,4 +22,6 @@ public interface IBmConteoDetalleRepository
 
     ResultDto<bool> CrearDesdeBm1(string unidadTrabajo, int codigoEmpresa, int usuario, int codigoConteo,
         int cantidadConteos);
+
+    ResultDto<bool> ReplicarComentario(int codigoConteo, string comentario);
 }
