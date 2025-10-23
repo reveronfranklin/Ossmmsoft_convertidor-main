@@ -9,5 +9,6 @@ namespace Convertidor.Services.Adm.AdmDocumentosOp
         Task<ResultDto<AdmDocumentosOpResponseDto>> Update(AdmDocumentosOpUpdateDto dto);
         Task<ResultDto<AdmDocumentosOpResponseDto>> Create(AdmDocumentosOpUpdateDto dto);
         Task<ResultDto<AdmDocumentosOpDeleteDto>> Delete(AdmDocumentosOpDeleteDto dto);
+        Task<decimal> GetBaseImponibleByCodigoOrdenPago(int codigoOrdenPago);
     }
 }

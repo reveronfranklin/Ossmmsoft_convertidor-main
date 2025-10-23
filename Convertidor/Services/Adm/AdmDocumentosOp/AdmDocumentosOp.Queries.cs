@@ -4,64 +4,79 @@ namespace Convertidor.Services.Adm.AdmDocumentosOp;
 
 public partial class AdmDocumentosOpService
 {
-    
-    
-       public async Task<ResultDto<List<AdmDocumentosOpResponseDto>>> GetAll()
+
+
+    public async Task<ResultDto<List<AdmDocumentosOpResponseDto>>> GetAll()
+    {
+
+        ResultDto<List<AdmDocumentosOpResponseDto>> result = new ResultDto<List<AdmDocumentosOpResponseDto>>(null);
+        try
         {
-
-            ResultDto<List<AdmDocumentosOpResponseDto>> result = new ResultDto<List<AdmDocumentosOpResponseDto>>(null);
-            try
+            var documentosOp = await _repository.GetAll();
+            var cant = documentosOp.Count();
+            if (documentosOp != null && documentosOp.Count() > 0)
             {
-                var documentosOp = await _repository.GetAll();
-                var cant = documentosOp.Count();
-                if (documentosOp != null && documentosOp.Count() > 0)
-                {
-                    var listDto = await MapListDocumentosOpDto(documentosOp);
-                    // Calcular el total del BaseImponible
-                    decimal totalBaseImponible = listDto.Sum(t => t.BaseImponible);
+                var listDto = await MapListDocumentosOpDto(documentosOp);
+                // Calcular el total del BaseImponible
+                decimal totalBaseImponible = listDto.Sum(t => t.BaseImponible);
 
-                    // Calcular el total del Impuesto
-                    decimal totalMontoImpuesto = listDto.Sum(t => t.MontoImpuesto);
-                    
-                    // Calcular el total del Impuesto exento
-                    decimal totalMontoImpuestoExento = listDto.Sum(t => t.MontoImpuestoExento);
+                // Calcular el total del Impuesto
+                decimal totalMontoImpuesto = listDto.Sum(t => t.MontoImpuesto);
 
-                    // Calcular el total del Impuesto exento
-                    decimal totalMontoRetenido = listDto.Sum(t => t.MontoRetenido);
+                // Calcular el total del Impuesto exento
+                decimal totalMontoImpuestoExento = listDto.Sum(t => t.MontoImpuestoExento);
 
-                    result.Total1 = totalBaseImponible;
-                    result.Total2 = totalMontoImpuesto;
-                    result.Total3 = totalMontoImpuestoExento;
-                    result.Total4 = totalMontoRetenido;
-                    result.Page = 1;
-                    result.TotalPage = 1;
-                    result.CantidadRegistros=listDto.Count();
-                    result.Data = listDto;
-                    result.IsValid = true;
-                    result.Message = "";
+                // Calcular el total del Impuesto exento
+                decimal totalMontoRetenido = listDto.Sum(t => t.MontoRetenido);
+
+                result.Total1 = totalBaseImponible;
+                result.Total2 = totalMontoImpuesto;
+                result.Total3 = totalMontoImpuestoExento;
+                result.Total4 = totalMontoRetenido;
+                result.Page = 1;
+                result.TotalPage = 1;
+                result.CantidadRegistros = listDto.Count();
+                result.Data = listDto;
+                result.IsValid = true;
+                result.Message = "";
 
 
-                    return result;
-                }
-                else
-                {
-                    result.CantidadRegistros = 0;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "No data";
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Data = null;
-                result.IsValid = false;
-                result.Message = ex.Message;
                 return result;
             }
+            else
+            {
+                result.CantidadRegistros = 0;
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "No data";
 
+                return result;
+            }
         }
+        catch (Exception ex)
+        {
+            result.Data = null;
+            result.IsValid = false;
+            result.Message = ex.Message;
+            return result;
+        }
+
+    }
+        
+    public async Task<decimal> GetBaseImponibleByCodigoOrdenPago(int codigoOrdenPago)
+    {
+        decimal result = 0;
+        var documentosOp = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);
+         if (documentosOp != null && documentosOp.Count() > 0)
+        {
+            // Calcular el total del BaseImponible
+            decimal totalBaseImponible = documentosOp.Sum(t => t.BASE_IMPONIBLE);
+            // Calcular el total del Impuesto exento
+            decimal totalMontoImpuestoExento = documentosOp.Sum(t => t.MONTO_IMPUESTO_EXENTO);
+            result = totalBaseImponible - totalMontoImpuestoExento;
+        }
+        return result;
+    }
 
         public async Task<ResultDto<List<AdmDocumentosOpResponseDto>>> GetByCodigoOrdenPago(AdmDocumentosFilterDto dto)
         {

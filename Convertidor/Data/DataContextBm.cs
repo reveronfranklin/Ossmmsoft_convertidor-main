@@ -21,6 +21,8 @@ namespace Convertidor.Data
 
         public DbSet<BM_V_UBICA_RESPONSABLE> BM_V_UBICA_RESPONSABLE { get; set; }
         public DbSet<BM_V_UBICACIONES> BM_V_UBICACIONES { get; set; }
+        public DbSet<BM_CONTEO_MOTIVO> BM_CONTEO_MOTIVO { get; set; }
+        
         
         
         
@@ -44,9 +46,22 @@ namespace Convertidor.Data
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-         
+            
             base.OnModelCreating(modelBuilder);
+            
+            modelBuilder
+                .Entity<BM_CONTEO_MOTIVO>(builder =>
+                {
 
+                    builder.HasKey(table => new
+                    {
+                        table.CODIGO_BM_CONTEO_MOTIVO,
+
+                    });
+                    builder.ToTable("BM_CONTEO_MOTIVO");
+                });
+            
+            
             modelBuilder
                 .Entity<BM_PLACAS_CUARENTENA>(builder =>
                 {
