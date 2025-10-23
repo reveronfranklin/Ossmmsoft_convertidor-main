@@ -7,6 +7,25 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
     // Usa 'partial' para indicar que la clase se define en múltiples archivos
     public partial class AdmRetencionesOpService
     {
+
+
+ 
+    public async Task<decimal> GetBaseImponibleByCodigoOrdenPago(int codigoOrdenPago)
+    {
+        decimal result = 0;
+        var documentosOp = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
+         if (documentosOp != null && documentosOp.Count() > 0)
+        {
+            // Calcular el total del BaseImponible
+            decimal totalBaseImponible = documentosOp.Sum(t => t.BASE_IMPONIBLE);
+            // Calcular el total del Impuesto exento
+            decimal totalMontoImpuestoExento = documentosOp.Sum(t => t.MONTO_IMPUESTO_EXENTO);
+            result = totalBaseImponible + totalMontoImpuestoExento;
+        }
+        return result;
+    }
+
+
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Update(AdmRetencionesOpUpdateDto dto)
         {
             ResultDto<AdmRetencionesOpResponseDto> result = new ResultDto<AdmRetencionesOpResponseDto>(null);
@@ -102,7 +121,12 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Message = "Base imponible Invalida";
                     return result;
                 }
-
+            var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago);
+                if (baseImponible>0)
+                {
+                    dto.BaseImponible = baseImponible;
+                    dto.MontoRetencion = baseImponible * dto.PorRetencion / 100;
+                }
 
                 codigoRetencionOp.CODIGO_RETENCION_OP = dto.CodigoRetencionOp;
                 codigoRetencionOp.CODIGO_ORDEN_PAGO = dto.CodigoOrdenPago;
@@ -191,10 +215,10 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
            
             return result;
 
-        } 
+        }
 
-        
-        public async Task<bool> IsValidTotalDocumentosVsTotalCompromisoCreate(int codigoOrdenPago,decimal montoRetencion)
+
+        public async Task<bool> IsValidTotalDocumentosVsTotalCompromisoCreate(int codigoOrdenPago, decimal montoRetencion)
         {
             bool result = true;
             decimal totalMontoDocumentos = 0;
@@ -206,7 +230,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 totalPucOrdenPago = pucOrdenPago.Sum(t => t.MONTO);
             }
             var documentosOp = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
-          
+
             if (documentosOp != null && documentosOp.Count() > 0)
             {
                 totalMontoDocumentos = documentosOp.Sum(t => t.MONTO_DOCUMENTO);
@@ -216,17 +240,17 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             var retenciones = await _repository.GetByOrdenPago(codigoOrdenPago);
             if (retenciones != null && retenciones.Count() > 0)
             {
-              //  var descriptivaIva = await _admDescriptivaRepository.GetByCodigoDescriptivaTexto("IVA");
-                
+                //  var descriptivaIva = await _admDescriptivaRepository.GetByCodigoDescriptivaTexto("IVA");
+
                 totalRetenciones = (decimal)retenciones.Sum(t => t.MONTO_RETENCION);
-                    //.Where(X=>X.TIPO_RETENCION_ID!=descriptivaIva.DESCRIPCION_ID)
-                 
+                //.Where(X=>X.TIPO_RETENCION_ID!=descriptivaIva.DESCRIPCION_ID)
+
 
             }
 
 
             var totalRetencion = totalRetenciones + montoRetencion;
-            if (totalMontoDocumentos -totalRetencion < 0)
+            if (totalMontoDocumentos - totalRetencion < 0)
             {
                 result = false;
             }
@@ -237,13 +261,15 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result = false;
                 }
             }
-            
-          
-            
-           
-            
+
+
+
+
+
             return result;
         }
+        
+        
         
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Create(AdmRetencionesOpUpdateDto dto)
         {
@@ -359,6 +385,15 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Message = $"Ya existe esta retención para la Orden de Pago:{dto.CodigoOrdenPago}- {tipoRetencion.DESCRIPCION}-{conceptoPago}-{dto.PorRetencion}%";
                     return result;
                 }
+
+                var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago);
+                if (baseImponible>0)
+                {
+                    dto.BaseImponible = baseImponible;
+                    dto.MontoRetencion = baseImponible * dto.PorRetencion / 100;
+                }
+             
+                
 
                 ADM_RETENCIONES_OP entity = new ADM_RETENCIONES_OP();
                 entity.CODIGO_RETENCION_OP = await _repository.GetNextKey();
