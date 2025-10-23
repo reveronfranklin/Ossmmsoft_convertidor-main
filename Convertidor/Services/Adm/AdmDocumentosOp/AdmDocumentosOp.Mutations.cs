@@ -11,7 +11,7 @@ public partial class AdmDocumentosOpService
             //1- Eliminar todas las Retenciones de la orden de pago adm_retenciones_op
             var descriptivaIva = await _admDescriptivaRepository.GetByCodigoDescriptivaTexto("IVA");
             
-            //await _admRetencionesOpRepository.DeleteByOrdePagoSinIva(codigoOrdenPago,descriptivaIva.DESCRIPCION_ID);
+            await _admRetencionesOpRepository.DeleteByOrdePagoSinIva(codigoOrdenPago,descriptivaIva.DESCRIPCION_ID);
             
             //2- recorrer todos los documentos de la orden de pago y ejecutar por cada uno
             var documentos = await _repository.GetByCodigoOrdenPago(codigoOrdenPago);
@@ -78,12 +78,9 @@ public partial class AdmDocumentosOpService
                 }
                 else
                 {
-               
-                    
                     
                     var montoRetencion= totalMontoRetenido;
                     var baseImponible=totalBaseImponible + totalExento;
-
                     var response= await _admRetencionesOpRepository.UpdateMontos(retencionOp.CODIGO_RETENCION_OP,(decimal)montoRetencion,(decimal)baseImponible);
                     
                 }
