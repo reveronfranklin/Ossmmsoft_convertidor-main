@@ -36,7 +36,8 @@ namespace Convertidor.Controllers
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GetByTipoNomina(FilterTipoNomina filter)
-        { var result = await _service.GetByTipoNomina(filter);
+        { 
+            var result = await _service.GetByTipoNomina(filter);
             return Ok(result);
         }
 

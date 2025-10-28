@@ -32,7 +32,15 @@ public class RH_V_TITULAR_BENEFICIARIOS
     public string? UNIDAD_ADSCRIPCION { get; set; }= String.Empty;
     public string? CARGO_NOMINAL { get; set; }= String.Empty;
     public string? ANTIGUEDAD_CMC { get; set; }= String.Empty;
-    public string?   ANTIGUEDAD_OTROS { get; set; }= String.Empty;
+    public string ? ANTIGUEDAD_OTROS { get; set; } = String.Empty;
+    public decimal? SUELDO_BASICO { get; set; } //SUELDO_BASICO
+     public decimal? ANOS_ANTIGUEDAD_VACA { get; set; } 
+       public decimal? DIAS_ANTIGUEDAD_VACA { get; set; }
+    public string? PERIODOS_VACA { get; set; } = String.Empty;
+
+  public string ? PERIODOS_VACA_PP_DISFRU { get; set; } = String.Empty;
+
+    
     public decimal?   ORDER_BY { get; set; }
     
 }

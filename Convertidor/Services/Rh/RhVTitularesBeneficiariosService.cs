@@ -122,6 +122,25 @@ namespace Convertidor.Services.Adm
                 itemResult.CargoNominal = dtos.CARGO_NOMINAL;
                 itemResult.AntiguedadCmc = dtos.ANTIGUEDAD_CMC;
                 itemResult.AntiguedadOtros = dtos.ANTIGUEDAD_OTROS;
+                itemResult.SueldoBasico = (decimal)dtos.SUELDO_BASICO;
+                itemResult.AnosAntiguedadVaca = (decimal)dtos.ANOS_ANTIGUEDAD_VACA;
+                itemResult.DiasAntiguedadVaca = (decimal)dtos.DIAS_ANTIGUEDAD_VACA;
+                   itemResult.PeriodosVaca = (string)dtos.PERIODOS_VACA;
+                if (dtos.PERIODOS_VACA == null)
+                {
+                    itemResult.PeriodosVaca = "";
+                }
+                 itemResult.PeriodosVacappDisfru = (string)dtos.PERIODOS_VACA_PP_DISFRU;
+                if (dtos.PERIODOS_VACA_PP_DISFRU == null)
+                {
+                    itemResult.PeriodosVacappDisfru = "";
+                }
+                  
+             
+               
+
+   
+
          
                 return itemResult;
 

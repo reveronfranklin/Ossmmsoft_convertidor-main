@@ -12,7 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d61ceac1-48b9-449a-ac0f-3e77155ace4d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Convertidor/Data/Entities/Bm/BM_CONTEO_MOTIVO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Convertidor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Convertidor/Data/DataContextBm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Convertidor/Data/DataContextBm.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,14 +40,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.Designer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor.Translations/TraduccionErrores.resx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -53,9 +47,11 @@
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmOrdenPagoController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmProveedoresController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/AdmSolicitudesController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoHistoricoController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/OssAuthContentTypeController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/OssGroupPermissionController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Controllers/RhTmpRetencionesFaovController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Data/DestinoInterfaces/ADM/IAdmPreOrdenPagoRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_CHEQUES.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Entities/Adm/ADM_PAGOS_ELECTRONICOS.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Interfaces/Adm/IAdmImpuestosDocumentosOpRepository.cs" root0="FORCE_HIGHLIGHTING" />
@@ -66,20 +62,25 @@
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmRetencionesRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Data/Repository/Adm/AdmSolicitudesRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Dtos/Adm/AdmSolicitudesFilterDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Dtos/Adm/PreOrdenPago/AdmPreOdenPagoUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Dtos/Adm/PreOrdenPago/AdmPreOrdenPagoFilterDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Dtos/Bm/BmConteoUpdateDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmBeneficiariosOpService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDetalleSolicitudService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Create.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOpService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmLotePagoService/AdmLotePagoService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Delete.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mapping.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/AdmPagosService/AdmPagosService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Adm/Pagos/IAdmPagoElectronicoService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Bm/BM_V_BM1Service.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Bm/Replica/BmReplicaConteoService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Convertidor/Services/Destino/ADM/IAdmPreOrdenPagoService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/PreCompromisosService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/CuerpoComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Presupuesto/Reports/ReporteOrdenServicioPresupuestario/EncabezadoComponent.cs" root0="FORCE_HIGHLIGHTING" />
@@ -89,7 +90,6 @@
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/IOssAuthGroupPermissionService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/OssAuthGroupPermissionService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Convertidor/Services/Sis/SisBancoService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7262732eee179af215faab36a7f3c3cfac93ba12af52a3888d839fe7e53420/ActionMethodExecutor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file:///usr/local/share/dotnet/sdk/8.0.405/Sdks/Microsoft.NET.Sdk/analyzers/build/config/analysislevel_6_default.globalconfig" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -138,16 +138,59 @@
   }
 }</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.Convertidor">
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
     <configuration name="PublicacionLinux" type="DotNetFolderPublish" factoryName="Publish to folder">
-      <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" runtime="linux-x64" target_folder="$PROJECT_DIR$/../PublicacionLinux" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733" />
+      <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" target_folder="$PROJECT_DIR$/../PublicacionLinux" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733">
+        <runtimes>
+          <item value="linux-x64" />
+        </runtimes>
+      </riderPublish>
       <method v="2" />
     </configuration>
     <configuration name="PublicacionLinuxDev(1)" type="DotNetFolderPublish" factoryName="Publish to folder">
-      <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" runtime="linux-x64" target_folder="$PROJECT_DIR$/../PublicacionLinux" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733" />
+      <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" target_folder="$PROJECT_DIR$/../PublicacionLinux" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733">
+        <runtimes>
+          <item value="linux-x64" />
+        </runtimes>
+      </riderPublish>
+      <method v="2" />
+    </configuration>
+    <configuration name="PublicacionLinuxDev(1)" type="DotNetFolderPublish" factoryName="Publish to folder">
+      <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" target_folder="$PROJECT_DIR$/../PublicacionLinux" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733">
+        <runtimes>
+          <item value="linux-x64" />
+        </runtimes>
+      </riderPublish>
+      <method v="2" />
+    </configuration>
+    <configuration name="PublicacionLinux" type="DotNetFolderPublish" factoryName="Publish to folder">
+      <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" target_folder="$PROJECT_DIR$/../PublicacionLinux" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733">
+        <runtimes>
+          <item value="linux-x64" />
+        </runtimes>
+      </riderPublish>
       <method v="2" />
     </configuration>
     <configuration name="Publish Convertidor to folder" type="DotNetFolderPublish" factoryName="Publish to folder">
-      <riderPublish configuration="Release" platform="Any CPU" runtime="linux-x64" target_folder="$PROJECT_DIR$/Convertidor/bin/Release/net6.0/linux-x64/publish" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733" />
+      <riderPublish configuration="Release" platform="Any CPU" target_folder="$PROJECT_DIR$/Convertidor/bin/Release/net6.0/linux-x64/publish" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733">
+        <runtimes>
+          <item value="linux-x64" />
+        </runtimes>
+      </riderPublish>
+      <method v="2" />
+    </configuration>
+    <configuration name="Publish Convertidor to folder" type="DotNetFolderPublish" factoryName="Publish to folder">
+      <riderPublish configuration="Release" platform="Any CPU" target_folder="$PROJECT_DIR$/Convertidor/bin/Release/net6.0/linux-x64/publish" target_framework="net6.0" uuid_high="3185765775840201281" uuid_low="-7765667018891865733">
+        <runtimes>
+          <item value="linux-x64" />
+        </runtimes>
+      </riderPublish>
       <method v="2" />
     </configuration>
     <configuration name="Convertidor" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
@@ -161,9 +204,37 @@
       <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
       <option name="SEND_DEBUG_REQUEST" value="1" />
       <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
       <method v="2">
         <option name="Build" />
       </method>
+    </configuration>
+    <configuration name="Convertidor" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Convertidor/Convertidor.csproj" />
+      <option name="LAUNCH_PROFILE_TFM" value="net6.0" />
+      <option name="LAUNCH_PROFILE_NAME" value="Convertidor" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
+      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
+      <option name="SEND_DEBUG_REQUEST" value="1" />
+      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="Convertidor/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="convertidor" />
+          <option name="contextFolderPath" value="$PROJECT_DIR$" />
+          <option name="sourceFilePath" value="Convertidor/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
     </configuration>
     <configuration name="Convertidor/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
@@ -513,6 +584,19 @@
       <workItem from="1757681161565" duration="2043000" />
       <workItem from="1758032719859" duration="6230000" />
       <workItem from="1758119989482" duration="34000" />
+      <workItem from="1758128741809" duration="2747000" />
+      <workItem from="1758653443905" duration="1084000" />
+      <workItem from="1758820323275" duration="1101000" />
+      <workItem from="1758839939195" duration="4363000" />
+      <workItem from="1759187285707" duration="2365000" />
+      <workItem from="1759272367280" duration="5892000" />
+      <workItem from="1759503642616" duration="27465000" />
+      <workItem from="1759869158544" duration="1141000" />
+      <workItem from="1759938956695" duration="6617000" />
+      <workItem from="1759950833300" duration="4603000" />
+      <workItem from="1760370552428" duration="14979000" />
+      <workItem from="1760543715881" duration="1053000" />
+      <workItem from="1760545389630" duration="1000" />
     </task>
     <servers />
   </component>
@@ -640,19 +724,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="51" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs</url>
-          <line>85</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" containingFunctionPresentation="Method 'Update'">
-            <startOffsets>
-              <option value="2077" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2117" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Rh/RhPersonasRepository.cs</url>
@@ -1330,13 +1401,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
-          <line>867</line>
+          <line>877</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="32885" />
+              <option value="33314" />
             </startOffsets>
             <endOffsets>
-              <option value="32904" />
+              <option value="33333" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="274" />
@@ -2434,19 +2505,6 @@
           <option name="timeStamp" value="570" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmOrdenPagoDestinoRepository.cs</url>
-          <line>88</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmOrdenPagoDestinoRepository.cs" containingFunctionPresentation="Method 'Delete'">
-            <startOffsets>
-              <option value="2685" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2703" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="580" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmPucOrdenPagoDestinoRepository.cs</url>
           <line>51</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmPucOrdenPagoDestinoRepository.cs" containingFunctionPresentation="Method 'Add'">
@@ -2571,26 +2629,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesService.cs</url>
-          <line>139</line>
+          <line>141</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="4897" />
+              <option value="5118" />
             </startOffsets>
             <endOffsets>
-              <option value="4956" />
+              <option value="5177" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="685" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesService.cs</url>
-          <line>234</line>
+          <line>236</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesService.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="8553" />
+              <option value="8774" />
             </startOffsets>
             <endOffsets>
-              <option value="8612" />
+              <option value="8833" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="686" />
@@ -2958,19 +3016,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="759" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmOrdenPagoDestinoRepository.cs</url>
-          <line>53</line>
-          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmOrdenPagoDestinoRepository.cs" containingFunctionPresentation="Method 'Add'">
-            <startOffsets>
-              <option value="1545" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1564" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="765" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmSolicitudesService.cs</url>
@@ -3871,39 +3916,39 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs</url>
-          <line>294</line>
+          <line>297</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs" containingFunctionPresentation="Method 'ComparaConteo'">
             <startOffsets>
-              <option value="13884" />
+              <option value="14188" />
             </startOffsets>
             <endOffsets>
-              <option value="13933" />
+              <option value="14237" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="924" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs</url>
-          <line>342</line>
+          <line>345</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs" containingFunctionPresentation="Method 'ComparaConteo'">
             <startOffsets>
-              <option value="16281" />
+              <option value="16585" />
             </startOffsets>
             <endOffsets>
-              <option value="16311" />
+              <option value="16615" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="926" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs</url>
-          <line>616</line>
+          <line>633</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoDetalleService.cs" containingFunctionPresentation="Method 'RecibeConteo'">
             <startOffsets>
-              <option value="27130" />
+              <option value="27878" />
             </startOffsets>
             <endOffsets>
-              <option value="27189" />
+              <option value="27937" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="927" />
@@ -4384,39 +4429,39 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs</url>
-          <line>57</line>
+          <line>58</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs" containingFunctionPresentation="Method 'Delete'">
             <startOffsets>
-              <option value="1416" />
+              <option value="1432" />
             </startOffsets>
             <endOffsets>
-              <option value="1456" />
+              <option value="1472" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="993" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs</url>
-          <line>49</line>
+          <line>50</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="1191" />
+              <option value="1207" />
             </startOffsets>
             <endOffsets>
-              <option value="1231" />
+              <option value="1247" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="994" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs</url>
-          <line>41</line>
+          <line>42</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="966" />
+              <option value="982" />
             </startOffsets>
             <endOffsets>
-              <option value="1006" />
+              <option value="1022" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="995" />
@@ -4449,13 +4494,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs</url>
-          <line>33</line>
+          <line>34</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmChequesController.cs" containingFunctionPresentation="Method 'GetByLote'">
             <startOffsets>
-              <option value="738" />
+              <option value="754" />
             </startOffsets>
             <endOffsets>
-              <option value="781" />
+              <option value="797" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1002" />
@@ -5925,13 +5970,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
-          <line>284</line>
+          <line>345</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="11353" />
+              <option value="13635" />
             </startOffsets>
             <endOffsets>
-              <option value="11568" />
+              <option value="13850" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1219" />
@@ -6081,13 +6126,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
-          <line>197</line>
+          <line>249</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="7793" />
+              <option value="9626" />
             </startOffsets>
             <endOffsets>
-              <option value="7890" />
+              <option value="9723" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1238" />
@@ -6107,26 +6152,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs</url>
-          <line>52</line>
+          <line>53</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs" containingFunctionPresentation="Method 'ReplicaIvaDocumentoEnAdmRetenciones'">
             <startOffsets>
-              <option value="2401" />
+              <option value="2481" />
             </startOffsets>
             <endOffsets>
-              <option value="2609" />
+              <option value="2689" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1240" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs</url>
-          <line>42</line>
+          <line>43</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs" containingFunctionPresentation="Method 'ReplicaIvaDocumentoEnAdmRetenciones'">
             <startOffsets>
-              <option value="1806" />
+              <option value="1886" />
             </startOffsets>
             <endOffsets>
-              <option value="1917" />
+              <option value="1997" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1241" />
@@ -6146,26 +6191,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
-          <line>306</line>
+          <line>371</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'Create'">
             <startOffsets>
-              <option value="12685" />
+              <option value="15132" />
             </startOffsets>
             <endOffsets>
-              <option value="12720" />
+              <option value="15167" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1243" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs</url>
-          <line>75</line>
+          <line>76</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmDocumentosOp/AdmDocumentosOp.Mutations.cs" containingFunctionPresentation="Method 'ReplicaIvaDocumentoEnAdmRetenciones'">
             <startOffsets>
-              <option value="4164" />
+              <option value="4286" />
             </startOffsets>
             <endOffsets>
-              <option value="4223" />
+              <option value="4345" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1244" />
@@ -6185,13 +6230,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs</url>
-          <line>848</line>
+          <line>858</line>
           <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Rh/RhPersonasService.cs" containingFunctionPresentation="Method 'Update'">
             <startOffsets>
-              <option value="32249" />
+              <option value="32678" />
             </startOffsets>
             <endOffsets>
-              <option value="32292" />
+              <option value="32721" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1246" />
@@ -6312,6 +6357,214 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1256" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmRetencionesController.cs</url>
+          <line>55</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmRetencionesController.cs" containingFunctionPresentation="Method 'Delete'">
+            <startOffsets>
+              <option value="1410" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1450" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1257" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
+          <line>278</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="10931" />
+            </startOffsets>
+            <endOffsets>
+              <option value="11042" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1258" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs</url>
+          <line>227</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Adm/AdmRetencionesOp/AdmRetencionesOpService.Mutations.cs" containingFunctionPresentation="Method 'IsValidTotalDocumentosVsTotalCompromisoCreate'">
+            <startOffsets>
+              <option value="9020" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9075" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1261" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmPreOrdenPagoController.cs</url>
+          <line>38</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmPreOrdenPagoController.cs" containingFunctionPresentation="Method 'Create'">
+            <startOffsets>
+              <option value="865" />
+            </startOffsets>
+            <endOffsets>
+              <option value="905" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1262" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmPreOrdenPagoController.cs</url>
+          <line>46</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmPreOrdenPagoController.cs" containingFunctionPresentation="Method 'CreateLote'">
+            <startOffsets>
+              <option value="1112" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1156" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1263" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmPreOrdenPagoController.cs</url>
+          <line>54</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmPreOrdenPagoController.cs" containingFunctionPresentation="Method 'GetAll'">
+            <startOffsets>
+              <option value="1354" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1394" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1264" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/AdmPreOrdenPagoController.cs</url>
+          <line>62</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/AdmPreOrdenPagoController.cs" containingFunctionPresentation="Method 'DeleteAll'">
+            <startOffsets>
+              <option value="1567" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1607" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1266" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmPreOrdenPagoRepository.cs</url>
+          <line>233</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/DestinoRepository/ADM/AdmPreOrdenPagoRepository.cs" containingFunctionPresentation="Method 'DeleteALL'">
+            <startOffsets>
+              <option value="7586" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7654" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1268" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs</url>
+          <line>85</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/RhPersonaController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="2077" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2117" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1269" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoHistoricoService.cs</url>
+          <line>308</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoHistoricoService.cs" containingFunctionPresentation="Lambda expression inside Method 'CreateReportConteoHistorico'">
+            <startOffsets>
+              <option value="11193" />
+            </startOffsets>
+            <endOffsets>
+              <option value="11226" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1271" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoHistoricoService.cs</url>
+          <line>228</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoHistoricoService.cs" containingFunctionPresentation="Method 'CreateReportConteoHistorico'">
+            <startOffsets>
+              <option value="7543" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7595" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1272" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoHistoricoService.cs</url>
+          <line>305</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoHistoricoService.cs" containingFunctionPresentation="Lambda expression inside Method 'CreateReportConteoHistorico'">
+            <startOffsets>
+              <option value="10933" />
+            </startOffsets>
+            <endOffsets>
+              <option value="11031" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1274" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoDetalleController.cs</url>
+          <line>55</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoDetalleController.cs" containingFunctionPresentation="Method 'Update'">
+            <startOffsets>
+              <option value="1422" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1462" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1275" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Controllers/BmConteoDetalleController.cs</url>
+          <line>29</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Controllers/BmConteoDetalleController.cs" containingFunctionPresentation="Method 'GetAllByConteo'">
+            <startOffsets>
+              <option value="666" />
+            </startOffsets>
+            <endOffsets>
+              <option value="717" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1276" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs</url>
+          <line>412</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Services/Bm/BmConteoService.cs" containingFunctionPresentation="Method 'BmConteoDetalleToHistorico'">
+            <startOffsets>
+              <option value="16206" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16261" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1277" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoDetalleRepository.cs</url>
+          <line>87</line>
+          <properties documentPath="$PROJECT_DIR$/Convertidor/Data/Repository/Bm/BmConteoDetalleRepository.cs" containingFunctionPresentation="Method 'ReplicarComentario'">
+            <startOffsets>
+              <option value="2925" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2945" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1278" />
         </line-breakpoint>
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
