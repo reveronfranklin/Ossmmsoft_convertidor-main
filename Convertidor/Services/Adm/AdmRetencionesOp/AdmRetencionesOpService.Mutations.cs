@@ -9,14 +9,14 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
     {
 
 
- 
-    public async Task<decimal> GetBaseImponibleByCodigoOrdenPago(int codigoOrdenPago,string tipoRetencion)
-    {
-        decimal result = 0;
-        var documentosOp = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
-         if (documentosOp != null && documentosOp.Count() > 0)
+
+        public async Task<decimal> GetBaseImponibleByCodigoOrdenPago(int codigoOrdenPago, string tipoRetencion)
         {
-            // Calcular el total del BaseImponible
+            decimal result = 0;
+            var documentosOp = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
+            if (documentosOp != null && documentosOp.Count() > 0)
+            {
+                // Calcular el total del BaseImponible
                 decimal totalBaseImponible = documentosOp.Sum(t => t.BASE_IMPONIBLE);
                 // Calcular el total del Impuesto exento
                 decimal totalMontoImpuestoExento = documentosOp.Sum(t => t.MONTO_IMPUESTO_EXENTO);
@@ -26,11 +26,13 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                      totalBaseImponible = documentosOp.Sum(t => t.MONTO_IMPUESTO);
                      totalMontoImpuestoExento = 0;
                 }*/
-               
-            result = totalBaseImponible + totalMontoImpuestoExento;
+
+                result = totalBaseImponible + totalMontoImpuestoExento;
+            }
+            return result;
         }
-        return result;
-    }
+    
+
 
 
         public async Task<ResultDto<AdmRetencionesOpResponseDto>> Update(AdmRetencionesOpUpdateDto dto)
@@ -134,7 +136,12 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 if (baseImponible>0 && dto.PorRetencion>0)
                 {
                     dto.BaseImponible = baseImponible;
-                    dto.MontoRetencion = baseImponible * dto.PorRetencion / 100;
+                    if(tipoRetencionId.CODIGO != "IVA")
+                    {
+                         dto.MontoRetencion = baseImponible * dto.PorRetencion / 100;
+                    }
+                   
+
                 }
 
                 codigoRetencionOp.CODIGO_RETENCION_OP = dto.CodigoRetencionOp;
@@ -399,7 +406,11 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 if (baseImponible > 0  && dto.PorRetencion > 0)
                 {
                     dto.BaseImponible = baseImponible;
-                    dto.MontoRetencion = baseImponible * dto.PorRetencion / 100;
+                      if(tipoRetencion.CODIGO != "IVA")
+                      {
+                           dto.MontoRetencion = baseImponible * dto.PorRetencion / 100;
+                      }
+                   
                 }
             
                
