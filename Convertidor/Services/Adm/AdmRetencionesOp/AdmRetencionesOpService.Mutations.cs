@@ -21,11 +21,11 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 // Calcular el total del Impuesto exento
                 decimal totalMontoImpuestoExento = documentosOp.Sum(t => t.MONTO_IMPUESTO_EXENTO);
 
-                if (tipoRetencion == "IVA")
+                /*if (tipoRetencion == "IVA")
                 {
                      totalBaseImponible = documentosOp.Sum(t => t.MONTO_IMPUESTO);
                      totalMontoImpuestoExento = 0;
-                }
+                }*/
                
             result = totalBaseImponible + totalMontoImpuestoExento;
         }
