@@ -10,16 +10,23 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
 
 
  
-    public async Task<decimal> GetBaseImponibleByCodigoOrdenPago(int codigoOrdenPago)
+    public async Task<decimal> GetBaseImponibleByCodigoOrdenPago(int codigoOrdenPago,string tipoRetencion)
     {
         decimal result = 0;
         var documentosOp = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
          if (documentosOp != null && documentosOp.Count() > 0)
         {
             // Calcular el total del BaseImponible
-            decimal totalBaseImponible = documentosOp.Sum(t => t.BASE_IMPONIBLE);
-            // Calcular el total del Impuesto exento
-            decimal totalMontoImpuestoExento = documentosOp.Sum(t => t.MONTO_IMPUESTO_EXENTO);
+                decimal totalBaseImponible = documentosOp.Sum(t => t.BASE_IMPONIBLE);
+                // Calcular el total del Impuesto exento
+                decimal totalMontoImpuestoExento = documentosOp.Sum(t => t.MONTO_IMPUESTO_EXENTO);
+
+                if (tipoRetencion == "IVA")
+                {
+                     totalBaseImponible = documentosOp.Sum(t => t.MONTO_IMPUESTO);
+                     totalMontoImpuestoExento = 0;
+                }
+               
             result = totalBaseImponible + totalMontoImpuestoExento;
         }
         return result;
@@ -65,6 +72,8 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Message = "tipo retencion Id invalido";
                     return result;
                 }
+
+                
 
                 var retenciones = await _admRetencionesRepository.GetAll();
                 var retencionesPorTipo =
@@ -121,7 +130,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Message = "Base imponible Invalida";
                     return result;
                 }
-            var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago);
+                var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago,tipoRetencionId.CODIGO);
                 if (baseImponible>0)
                 {
                     dto.BaseImponible = baseImponible;
@@ -386,12 +395,15 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     return result;
                 }
 
-                var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago);
-                if (baseImponible>0 )
+                var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago,tipoRetencion.CODIGO );
+                if (baseImponible > 0 )
                 {
                     dto.BaseImponible = baseImponible;
                     dto.MontoRetencion = baseImponible * dto.PorRetencion / 100;
                 }
+            
+               
+               
              
                 
 
