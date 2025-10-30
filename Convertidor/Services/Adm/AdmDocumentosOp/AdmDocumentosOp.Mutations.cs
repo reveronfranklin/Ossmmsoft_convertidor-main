@@ -71,8 +71,8 @@ public partial class AdmDocumentosOpService
                         admRetencionesOpDto.CodigoRetencion = admRetencion.CODIGO_RETENCION;
                     }
                     admRetencionesOpDto.MontoRetencion = codigoDocumentoOp.MONTO_RETENIDO;
-                    //admRetencionesOpDto.BaseImponible = codigoDocumentoOp.BASE_IMPONIBLE + codigoDocumentoOp.MONTO_IMPUESTO_EXENTO;
-                    admRetencionesOpDto.BaseImponible = codigoDocumentoOp.MONTO_IMPUESTO ;
+                    admRetencionesOpDto.BaseImponible = codigoDocumentoOp.BASE_IMPONIBLE + codigoDocumentoOp.MONTO_IMPUESTO_EXENTO;
+                   
                    
                     admRetencionesOpDto.CodigoPresupuesto = codigoDocumentoOp.CODIGO_PRESUPUESTO;
                     admRetencionesOpDto.NumeroComprobante = "";
