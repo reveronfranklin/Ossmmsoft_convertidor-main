@@ -396,7 +396,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 }
 
                 var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago,tipoRetencion.CODIGO );
-                if (baseImponible > 0 )
+                if (baseImponible > 0  && dto.PorRetencion > 0)
                 {
                     dto.BaseImponible = baseImponible;
                     dto.MontoRetencion = baseImponible * dto.PorRetencion / 100;
