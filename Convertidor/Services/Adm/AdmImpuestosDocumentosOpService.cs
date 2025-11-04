@@ -297,9 +297,10 @@ namespace Convertidor.Services.Adm
                     result.Message = "Monto Excento no puede ser mayor a el monto del impuesto";
                     return result;
                 }
-                
+
                 var esValidoTotalBaseImpuestoVsBaseDocumento =
-                    await EsValidoTotalBaseImpuestoVsBaseDocumentoUpdate(dto.CodigoDocumentoOp, dto.CodigoImpuestoDocumentoOp,dto.BaseImponible+dto.MontoImpuestoExento);
+                    await EsValidoTotalBaseImpuestoVsBaseDocumentoUpdate(dto.CodigoDocumentoOp, dto.CodigoImpuestoDocumentoOp, dto.BaseImponible + dto.MontoImpuestoExento);
+                
                 if (esValidoTotalBaseImpuestoVsBaseDocumento ==false)
                 {
                     result.Data = null;
@@ -498,7 +499,9 @@ namespace Convertidor.Services.Adm
                 }
 
                 var esValidoTotalBaseImpuestoVsBaseDocumento =
-                   await EsValidoTotalBaseImpuestoVsBaseDocumentoCreate(dto.CodigoDocumentoOp, dto.BaseImponible);
+                   await EsValidoTotalBaseImpuestoVsBaseDocumentoCreate(dto.CodigoDocumentoOp, dto.BaseImponible+dto.MontoImpuestoExento);
+
+
                 if (esValidoTotalBaseImpuestoVsBaseDocumento ==false)
                 {
                     result.Data = null;
