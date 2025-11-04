@@ -73,22 +73,23 @@ namespace Convertidor.Data.DestinoRepository.ADM{
                         .Take(filter.PageSize)
                         .ToListAsync();
                 }
-                if (filter.SearchText.Length>0)
+                if (filter.SearchText.Length > 0)
                 {
                     totalRegistros = _context.ADM_PRE_ORDEN_PAGO
                         .Where(x => x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .Count();
 
                     totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
-                    
+
                     pageData = await _context.ADM_PRE_ORDEN_PAGO.DefaultIfEmpty()
-                        .Where(x =>x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
+                        .Where(x => x.SEARCH_TEXT.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()))
                         .OrderByDescending(x => x.Id)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
                 }
              
+                result.IsValid = true;
                 result.CantidadRegistros = totalRegistros;
                 result.TotalPage = totalPage;
                 result.Page = filter.PageNumber;
@@ -96,7 +97,7 @@ namespace Convertidor.Data.DestinoRepository.ADM{
                 result.Message = "";
                 result.Data = pageData;
                 return result;
-                return result;
+              
             }
             catch (Exception ex)
             {
