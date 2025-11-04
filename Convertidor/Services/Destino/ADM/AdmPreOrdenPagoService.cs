@@ -85,11 +85,9 @@ namespace Convertidor.Services.Destino.ADM
             foreach (var item in dto)
             {
                 var created = await Create(item);
-                if (!created.IsValid)
-                {
-                    result.IsValid = false;
-                    result.Message = created.Message;
-                }
+                result.IsValid = created.IsValid;
+                result.Message = created.Message;
+               
             }
             return result;
         }
@@ -156,7 +154,7 @@ namespace Convertidor.Services.Destino.ADM
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Ya existe el registro para esta Factura";
+                    result.Message = $"Ya existe el registro para esta Factura: {dto.NumeroFactura}";
                 }
                 
               
