@@ -653,7 +653,15 @@ builder.Services.AddTransient<ITmpLibrosService, TmpLibrosService>();
 
 
 
+// Configure HttpClient
+builder.Services.AddHttpClient("GatewayClient", client =>
+{
+    client.DefaultRequestHeaders.Add("User-Agent", "GatewayAPI/1.0");
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
 
+// Register services
+builder.Services.AddScoped<IHttpService, HttpService>();
 
 
 // Register AutoMapper
