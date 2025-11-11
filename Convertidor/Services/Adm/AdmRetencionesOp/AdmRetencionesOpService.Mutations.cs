@@ -319,7 +319,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 }
                 
                 var isValidMonto= await IsValidTotalDocumentosVsTotalCompromisoCreate(dto.CodigoOrdenPago, dto.MontoRetencion);
-                if (isValidMonto == false)
+                if (isValidMonto == false && codigoOrdenPago.CON_FACTURA==1)
                 {
                     result.Data = null;
                     result.IsValid = false;
