@@ -502,7 +502,7 @@ namespace Convertidor.Services.Adm
                    await EsValidoTotalBaseImpuestoVsBaseDocumentoCreate(dto.CodigoDocumentoOp, dto.BaseImponible+dto.MontoImpuestoExento);
 
 
-                if (esValidoTotalBaseImpuestoVsBaseDocumento ==false)
+                if (esValidoTotalBaseImpuestoVsBaseDocumento ==false && tipoRetencion.CODIGO=="IVA")
                 {
                     result.Data = null;
                     result.IsValid = false;
