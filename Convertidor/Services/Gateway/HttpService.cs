@@ -20,7 +20,7 @@ public class HttpService : IHttpService
         try
         {
             using var client = _httpClientFactory.CreateClient("GatewayClient");
-            client.Timeout = TimeSpan.FromSeconds(request.TimeoutSeconds);
+            client.Timeout = TimeSpan.FromSeconds(request.TimeoutMs);
 
             var httpRequest = new HttpRequestMessage(new HttpMethod(request.Method), request.Url);
 
