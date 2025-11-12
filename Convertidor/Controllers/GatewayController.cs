@@ -15,7 +15,7 @@ public class GatewayController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("execute")]
+  [HttpPost("execute")]
     public async Task<ActionResult<GatewayResponse>> ExecuteRequest([FromBody] HttpRequestModel request)
     {
         if (string.IsNullOrEmpty(request.Url))
@@ -41,7 +41,6 @@ public class GatewayController : ControllerBase
             return StatusCode(result.StatusCode, result);
         }
     }
-
     [HttpPost("batch")]
     public async Task<ActionResult<List<GatewayResponse>>> ExecuteBatchRequests([FromBody] List<HttpRequestModel> requests)
     {

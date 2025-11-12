@@ -8,4 +8,10 @@ public class HttpRequestModel
     public Dictionary<string, string> FormData { get; set; } = new();
     public List<FileModel> Files { get; set; }
     public int TimeoutMs { get; set; } = 30000;
+
+   public object Body { get; set; }
+   public int TimeoutSeconds { get; set; } = 30;
+
+
+    
 }
