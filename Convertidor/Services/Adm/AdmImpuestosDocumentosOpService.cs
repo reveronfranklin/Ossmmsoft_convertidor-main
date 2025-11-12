@@ -598,6 +598,19 @@ namespace Convertidor.Services.Adm
                 {
                     await _admRetencionesOpRepository.Delete(admRetencionesOp.CODIGO_RETENCION_OP);
                 }
+                AdmImpuestosDocumentosOpUpdateDto dtoUpdate = new AdmImpuestosDocumentosOpUpdateDto();
+
+                dtoUpdate.CodigoImpuestoDocumentoOp = codigoImpuestoDocumentoOp.CODIGO_IMPUESTO_DOCUMENTO_OP;
+                dtoUpdate.CodigoDocumentoOp = codigoImpuestoDocumentoOp.CODIGO_DOCUMENTO_OP;
+                dtoUpdate.CodigoRetencion = codigoImpuestoDocumentoOp.CODIGO_RETENCION;
+                dtoUpdate.TipoRetencionId = codigoImpuestoDocumentoOp.TIPO_RETENCION_ID;
+                dtoUpdate.BaseImponible = codigoImpuestoDocumentoOp.BASE_IMPONIBLE;
+                dtoUpdate.MontoImpuesto = codigoImpuestoDocumentoOp.MONTO_IMPUESTO;
+                dtoUpdate.MontoImpuestoExento = codigoImpuestoDocumentoOp.MONTO_IMPUESTO_EXENTO;
+                dtoUpdate.MontoRetenido = (decimal)codigoImpuestoDocumentoOp.MONTO_RETENIDO;
+                dtoUpdate.MontoImpuesto = (decimal)codigoImpuestoDocumentoOp.MONTO_IMPUESTO;
+
+                await ReplicaImpuestoAdmRetencionesOp(dtoUpdate);
 
                 if (deleted.Length > 0)
                 {
