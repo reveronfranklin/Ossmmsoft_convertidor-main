@@ -352,7 +352,7 @@ namespace Convertidor.Data.Repository.Sis
                         userData.FullName = resultDiario.USUARIO;
                         userData.Role = "admin";
                         userData.Roles = roles;
-                        userData.Email = $"{resultDiario.LOGIN}@ossmasoft.com";
+                        userData.Email = $"{resultDiario.LOGIN}@ossmmasoft.com";
                         var settings = _configuration.GetSection("Settings").Get<Settings>();
                         userData.TituloMenu  = @settings.TituloMenu;  
                         var ossConfig = await _ossConfigRepository.GetByClave("TITULO_MENU");
