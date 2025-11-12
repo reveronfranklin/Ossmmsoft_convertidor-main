@@ -54,6 +54,7 @@ using Convertidor.Services.Presupuesto.Reports.ReporteCompromisoPresupuestario;
 using Convertidor.Services.Presupuesto.Reports.ReporteOrdenSercicioPresupuestario;
 using Convertidor.Data.Repository.Bm.Replica;
 using Convertidor.Services.Bm.Replica;
+using Microsoft.AspNetCore.Http.Features;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -676,7 +677,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<SeedDb>();
-
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10485760; // 10MB
+});
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
