@@ -86,13 +86,25 @@ public partial class AdmOrdenPagoService
 
         }
         
+
+        public async Task<decimal> GetMontoPagado(int codigoOrdenPago)
+        {
+            decimal result = 0;
+            var admPucOrdenPago =await  _admPucOrdenPagoService.GetByOrdenPago(codigoOrdenPago);
+            if (admPucOrdenPago!= null && admPucOrdenPago.Data.Count > 0)
+            {
+                 
+                result = admPucOrdenPago.Data.Sum(t => t.MontoPagado);
+            }
+
+            return result;
+        }
         
-        public async Task<string> ValidaAnularOrdenPago(ADM_ORDEN_PAGO ordenPago)
+        public async Task<string> ValidaAnularOrdenPago(ADM_ORDEN_PAGO ordenPago, decimal totalPagado)
         {
             
             string result = "";
-            decimal totalPagado=0;
-       
+           
             if (ordenPago.STATUS != "AP")
             {
                
@@ -100,15 +112,8 @@ public partial class AdmOrdenPagoService
                 return result;
                
             }
-            AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
            
-            
-            var admPucOrdenPago =await  _admPucOrdenPagoService.GetByOrdenPago(ordenPago.CODIGO_ORDEN_PAGO);
-            if (admPucOrdenPago.Data.Count > 0)
-            {
-                 
-                totalPagado = admPucOrdenPago.Data.Sum(t => t.MontoPagado);
-            }
+
 
             if (totalPagado!=0)
             {

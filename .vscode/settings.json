@@ -1,5 +1,12 @@
 {
+  "dotnet-test-explorer.testProjectPath": "**/*Tests.csproj",
+  "testExplorer.addToEditorContextMenu": true,
+  "testExplorer.mergeSuites": true,
+  "testExplorer.showCollapseButton": true,
+  "testExplorer.showOnRun": true,
+  "testExplorer.useNativeTesting": true,
   "dotnet.defaultSolution": "Convertidor.sln",
+
   "cSpell.words": [
     "Aprobada",
     "Convertidor",
