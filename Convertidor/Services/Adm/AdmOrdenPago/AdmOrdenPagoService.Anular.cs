@@ -19,8 +19,8 @@ public partial class AdmOrdenPagoService
                     result.Message = "Codigo Orden Pago no existe";
                     return result;
                 }
-
-                var validaAnularOrdenPago =await ValidaAnularOrdenPago(codigoOrdenPago);
+                var totalPagado = await GetMontoPagado(dto.CodigoOrdenPago);
+                var validaAnularOrdenPago =await ValidaAnularOrdenPago(codigoOrdenPago,totalPagado);
                 
                 if (validaAnularOrdenPago!="")
                 {

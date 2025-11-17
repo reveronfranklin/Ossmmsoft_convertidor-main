@@ -168,6 +168,9 @@ public class GatewayController : ControllerBase
     }
 
 
+
+
+
     private bool IsValidUrl(string url)
     {
         return Uri.TryCreate(url, UriKind.Absolute, out var uriResult) 
