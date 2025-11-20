@@ -31,7 +31,7 @@ public partial class AdmOrdenPagoService
             }
 
 
-            if (dto.FechaOrdenPago == null)
+            if (dto.FechaOrdenPago ==null)
             {
                 result.Data = null;
                 result.IsValid = false;

@@ -1,4 +1,5 @@
-﻿using Convertidor.Services.Sis;
+﻿using Convertidor.Dtos.Presupuesto;
+using Convertidor.Services.Sis;
 
 namespace Convertidor.Data.Repository.Rh
 {
@@ -15,13 +16,14 @@ namespace Convertidor.Data.Repository.Rh
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly ISisUbicacionService _sisUbicacionService;
         private readonly IRhPersonasRepository _personasRepository;
-  
+        private readonly IRhDescriptivaRepository _descriptivaRepository;
 
         public RhDireccionesService(IRhDireccionesRepository repository,
 
                                     ISisUsuarioRepository sisUsuarioRepository,
                                     ISisUbicacionService sisUbicacionService,
-                                    IRhPersonasRepository personasRepository
+                                    IRhPersonasRepository personasRepository,
+                                    IRhDescriptivaRepository descriptivaRepository
                                    )
         {
             _repository = repository;
@@ -29,7 +31,7 @@ namespace Convertidor.Data.Repository.Rh
             _sisUsuarioRepository = sisUsuarioRepository;
             _sisUbicacionService = sisUbicacionService;
             _personasRepository = personasRepository;
-            
+            _descriptivaRepository = descriptivaRepository;
         }
        
         public async Task<List<RhDireccionesResponseDto>> GetByCodigoPersona(int codigoPersona)
@@ -63,29 +65,90 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
             itemResult.DireccionId = dtos.DIRECCION_ID;
             itemResult.PaisId = dtos.PAIS_ID;
+            itemResult.Pais="";
+            var pais = await _sisUbicacionService.GetPais(dtos.PAIS_ID);
+            if (pais != null)
+            {
+                itemResult.Pais = pais.Descripcion;
+            }
+            itemResult.Estado="";
             itemResult.EstadoId = dtos.ESTADO_ID;
+            var estado= await _sisUbicacionService.GetEstado(dtos.PAIS_ID, dtos.ESTADO_ID);
+            if (estado != null)
+            {
+                itemResult.Estado = estado.Descripcion;
+            }
+
+            itemResult.Municipio = "";
             itemResult.MunicipioId = dtos.MUNICIPIO_ID;
+            var municipio = await _sisUbicacionService.GetMunicipio(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID);
+            if (municipio != null)
+            {
+                itemResult.Municipio = municipio.Descripcion;
+            }
+            itemResult.Ciudad = "";
             itemResult.CiudadId = dtos.CIUDAD_ID;
+            var ciudad = await _sisUbicacionService.GetCiudad(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID, dtos.CIUDAD_ID);
+            if (ciudad != null)
+            {
+                itemResult.Ciudad = ciudad.Descripcion;
+            }
+            itemResult.Parroquia = "";
             itemResult.ParroquiaId = dtos.PARROQUIA_ID;
+            var parroquia = await _sisUbicacionService.GetParroquia(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID, dtos.CIUDAD_ID, dtos.PARROQUIA_ID);
+            if(parroquia != null)
+            {
+                itemResult.Parroquia = parroquia.Descripcion;
+            }
+            itemResult.Sector="";
             itemResult.SectorId = dtos.SECTOR_ID;
+            var sector = await _sisUbicacionService.GetSector(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID, dtos.CIUDAD_ID, dtos.PARROQUIA_ID, dtos.SECTOR_ID);
+            if (sector != null)
+            {
+                itemResult.Sector = sector.Descripcion;
+            }
+            itemResult.Urbanizacion = "";
+            var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID, dtos.CIUDAD_ID, dtos.PARROQUIA_ID, dtos.SECTOR_ID, dtos.URBANIZACION_ID);
+            if (urbanizacion != null)
+            {
+                itemResult.Urbanizacion = urbanizacion.Descripcion;
+            }
             itemResult.UrbanizacionId = dtos.URBANIZACION_ID;
+            itemResult.Manzana = "";
             itemResult.ManzanaId = dtos.MANZANA_ID;
             itemResult.ParcelaId = dtos.PARCELA_ID;
             itemResult.VialidadId = dtos.VIALIDAD_ID; 
             itemResult.Vialidad = dtos.VIALIDAD;
             itemResult.TipoViviendaId = dtos.TIPO_VIVIENDA_ID;
-            itemResult.ViviendaId = dtos.VIVIENDA_ID;
+            itemResult.TipoVivienda="";
+            var tipoVivienda = await _descriptivaRepository.GetByCodigoDescriptiva(dtos.TIPO_VIVIENDA_ID);
+            if(tipoVivienda != null)
+            {
+                itemResult.TipoVivienda = tipoVivienda.DESCRIPCION;
+            }
+          
             itemResult.Vivienda = dtos.VIVIENDA;
+            
             itemResult.TipoNivelId = dtos.TIPO_NIVEL_ID;
+            itemResult.TipoNivel = "";
+            var tipoNivel   = await _descriptivaRepository.GetByCodigoDescriptiva(dtos.TIPO_NIVEL_ID);
+            if (tipoNivel != null)
+            {
+                   itemResult.TipoNivel = tipoNivel.DESCRIPCION;
+            }
             itemResult.Nivel = dtos.NIVEL;
             itemResult.NroVivienda = dtos.NRO_VIVIENDA;
             itemResult.ComplementoDir = dtos.COMPLEMENTO_DIR;
             itemResult.TenenciaId = dtos.TENENCIA_ID;
+            itemResult.Tenencia = "";
+            var tenencia = await _descriptivaRepository.GetByCodigoDescriptiva(dtos.TENENCIA_ID);
+            if(tenencia != null)
+            {
+                itemResult.Tenencia = tenencia.DESCRIPCION;
+            }
             itemResult.CodigoPostal = dtos.CODIGO_POSTAL;
             itemResult.Principal = dtos.PRINCIPAL;
-            itemResult.Extra1 = dtos.EXTRA1;
-            itemResult.Extra2 = dtos.EXTRA2;
-            itemResult.Extra3 = dtos.EXTRA3;
+           
             
 
             return itemResult;
@@ -103,33 +166,8 @@ namespace Convertidor.Data.Repository.Rh
 
                 RhDireccionesResponseDto itemResult = new RhDireccionesResponseDto();
 
-                itemResult.CodigoDireccion = item.CODIGO_DIRECCION;
-                itemResult.CodigoPersona = item.CODIGO_PERSONA;
-                itemResult.DireccionId = item.DIRECCION_ID; 
-                itemResult.PaisId = item.PAIS_ID;
-                itemResult.EstadoId = item.ESTADO_ID;
-                itemResult.MunicipioId = item.MUNICIPIO_ID;
-                itemResult.CiudadId = item.CIUDAD_ID;
-                itemResult.ParroquiaId = item.PARROQUIA_ID;
-                itemResult.SectorId = item.SECTOR_ID;
-                itemResult.UrbanizacionId = item.URBANIZACION_ID;
-                itemResult.ManzanaId = item.MANZANA_ID;
-                itemResult.ParcelaId = item.PARCELA_ID;
-                itemResult.VialidadId = item.VIALIDAD_ID;
-                itemResult.Vialidad = item.VIALIDAD;
-                itemResult.TipoViviendaId = item.TIPO_VIVIENDA_ID;
-                itemResult.ViviendaId = item.VIVIENDA_ID;
-                itemResult.Vivienda = item.VIVIENDA;
-                itemResult.TipoNivelId = item.TIPO_NIVEL_ID;
-                itemResult.Nivel = item.NIVEL;
-                itemResult.NroVivienda = item.NRO_VIVIENDA;
-                itemResult.ComplementoDir = item.COMPLEMENTO_DIR;
-                itemResult.TenenciaId = item.TENENCIA_ID;
-                itemResult.CodigoPostal = item.CODIGO_POSTAL;
-                itemResult.Principal = item.PRINCIPAL;
-                itemResult.Extra1 = item.EXTRA1;
-                itemResult.Extra2 = item.EXTRA2;
-                itemResult.Extra3 = item.EXTRA3;
+                itemResult = await MapDireccionesDto(item);
+               
                
                 result.Add(itemResult);
 
