@@ -64,6 +64,13 @@ namespace Convertidor.Data.Repository.Rh
             itemResult.CodigoDireccion = dtos.CODIGO_DIRECCION;
             itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
             itemResult.DireccionId = dtos.DIRECCION_ID;
+            itemResult.Direccion=string.Empty;
+            var direccion = await _descriptivaRepository.GetByCodigoDescriptiva(dtos.DIRECCION_ID);
+            if(direccion != null)
+            {
+                itemResult.Direccion = direccion.DESCRIPCION;
+            }
+
             itemResult.PaisId = dtos.PAIS_ID;
             itemResult.Pais="";
             var pais = await _sisUbicacionService.GetPais(dtos.PAIS_ID);

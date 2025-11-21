@@ -91,6 +91,32 @@ public class SisUbicacionService : ISisUbicacionService
 
     }
 
+
+ public async Task<List<SelectListDescriptiva>> GetEstadosPorPais(FiltersEstado filter)
+    {
+        List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
+        try
+        {
+            var estados = await _repository.GetEstadosPorPais(filter.CodigoPais);
+            foreach (var item in estados)
+            {
+                SelectListDescriptiva resultItem = new SelectListDescriptiva();
+                resultItem.Id = (int)item.ENTIDAD;
+                resultItem.Descripcion = item.EXTRA1;
+                result.Add(resultItem);
+            }
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            var msg = ex.InnerException.Message;
+            return null;
+        }
+
+
+    }
+
     public async Task<SelectListDescriptiva> GetEstado(int pais, int codigoEstado)
     {
         SelectListDescriptiva result = new SelectListDescriptiva();
@@ -140,6 +166,31 @@ public class SisUbicacionService : ISisUbicacionService
 
     }
 
+     public async Task<List<SelectListDescriptiva>> GetMunicipiosPorPaisEstado(FiltersMunicipio filter)
+    {
+        List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
+        try
+        {
+            var municipios = await _repository.GetMunicipiosPorPaisEstado(filter.CodigoPais, filter.CodigoEstado);  
+            foreach (var item in municipios)
+            {
+                SelectListDescriptiva resultItem = new SelectListDescriptiva();
+                resultItem.Id = (int)item.MUNICIPIO;
+                resultItem.Descripcion = item.EXTRA1;
+                result.Add(resultItem);
+            }
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            var msg = ex.InnerException.Message;
+            return null;
+        }
+
+
+    }
+
     public async Task<SelectListDescriptiva> GetMunicipio(int pais, int estado, int codigoMunicipio)
     {
         SelectListDescriptiva result = new SelectListDescriptiva();
@@ -170,6 +221,30 @@ public class SisUbicacionService : ISisUbicacionService
         try
         {
             var municipios = await _repository.GetCiudades();
+            foreach (var item in municipios)
+            {
+                SelectListDescriptiva resultItem = new SelectListDescriptiva();
+                resultItem.Id = (int)item.CIUDAD;
+                resultItem.Descripcion = item.EXTRA1;
+                result.Add(resultItem);
+            }
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            var msg = ex.InnerException.Message;
+            return null;
+        }
+
+
+    }
+     public async Task<List<SelectListDescriptiva>> GetCiudadesPorPaisEstadoMunicipio(FiltersCiudad filter)
+    {
+        List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
+        try
+        {
+            var municipios = await _repository.GetCiudadesPorPaisEstadoMunicipio(filter.CodigoPais, filter.CodigoEstado, filter.CodigoMunicipio);
             foreach (var item in municipios)
             {
                 SelectListDescriptiva resultItem = new SelectListDescriptiva();

@@ -5,6 +5,7 @@
         public int CodigoDireccion { get; set; }
         public int CodigoPersona { get; set; }
         public int DireccionId { get; set; }
+        public string Direccion { get; set; }
         public int PaisId { get; set; }
         public string Pais { get; set; }
         public int EstadoId { get; set; }
