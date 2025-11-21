@@ -114,11 +114,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Urbanizacion = urbanizacion.Descripcion;
             }
             itemResult.UrbanizacionId = dtos.URBANIZACION_ID;
-            itemResult.Manzana = "";
-            itemResult.ManzanaId = dtos.MANZANA_ID;
-            itemResult.ParcelaId = dtos.PARCELA_ID;
-            itemResult.VialidadId = dtos.VIALIDAD_ID; 
-            itemResult.Vialidad = dtos.VIALIDAD;
+         
             itemResult.TipoViviendaId = dtos.TIPO_VIVIENDA_ID;
             itemResult.TipoVivienda="";
             var tipoVivienda = await _descriptivaRepository.GetByCodigoDescriptiva(dtos.TIPO_VIVIENDA_ID);
@@ -126,7 +122,7 @@ namespace Convertidor.Data.Repository.Rh
             {
                 itemResult.TipoVivienda = tipoVivienda.DESCRIPCION;
             }
-          
+            dtos.VIVIENDA ??= string.Empty;
             itemResult.Vivienda = dtos.VIVIENDA;
             
             itemResult.TipoNivelId = dtos.TIPO_NIVEL_ID;
@@ -136,6 +132,7 @@ namespace Convertidor.Data.Repository.Rh
             {
                    itemResult.TipoNivel = tipoNivel.DESCRIPCION;
             }
+            dtos.NIVEL ??= string.Empty;
             itemResult.Nivel = dtos.NIVEL;
             itemResult.NroVivienda = dtos.NRO_VIVIENDA;
             itemResult.ComplementoDir = dtos.COMPLEMENTO_DIR;
@@ -147,7 +144,12 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Tenencia = tenencia.DESCRIPCION;
             }
             itemResult.CodigoPostal = dtos.CODIGO_POSTAL;
-            itemResult.Principal = dtos.PRINCIPAL;
+            itemResult.Principal = false;
+            if(dtos.PRINCIPAL == 1)
+            {
+                itemResult.Principal = true;
+            }
+      
            
             
 
