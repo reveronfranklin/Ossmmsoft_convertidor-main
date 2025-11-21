@@ -77,6 +77,30 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+
+
+        public async Task<List<SIS_UBICACION_NACIONAL>> GetEstadosPorPais(int codigoPais)
+        {
+          
+            try
+            {
+                var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
+                    .Where(x=> x.PAIS != 0 && x.ENTIDAD!=0 &&  x.MUNICIPIO ==0 && x.CIUDAD ==0 && x.PARROQUIA ==0 && 
+                    x.SECTOR == 0 && x.URBANIZACION ==0 && x.PAIS==codigoPais)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+       
+
         public async Task<List<SIS_UBICACION_NACIONAL>> GetMunicipios()
         {
 
@@ -97,6 +121,26 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+          public async Task<List<SIS_UBICACION_NACIONAL>> GetMunicipiosPorPaisEstado(int codigoPais,int codigoEstado)
+        {
+
+            try
+            {
+                var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
+                    .Where(x => x.PAIS != 0 && x.ENTIDAD != 0 && x.MUNICIPIO != 0 && x.CIUDAD == 0 && x.PARROQUIA == 0 && 
+                    x.SECTOR == 0 && x.URBANIZACION == 0 && x.PAIS==codigoPais && x.ENTIDAD==codigoEstado)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
         public async Task<List<SIS_UBICACION_NACIONAL>> GetCiudades()
         {
 
@@ -105,6 +149,26 @@ namespace Convertidor.Data.Repository.Sis
                 var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
                     .Where(x => x.PAIS != 0 && x.ENTIDAD != 0 && x.MUNICIPIO == 0 && x.CIUDAD != 0 && x.PARROQUIA == 0 && 
                     x.SECTOR == 0 && x.URBANIZACION == 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
+
+         public async Task<List<SIS_UBICACION_NACIONAL>> GetCiudadesPorPaisEstadoMunicipio(int codigoPais,int codigoEstado,int codigoMunicipio)
+        {
+
+            try
+            {
+                var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
+                    .Where(x => x.CIUDAD != 0 && x.PARROQUIA == 0 && 
+                    x.SECTOR == 0 && x.URBANIZACION == 0 && x.PAIS==codigoPais && x.ENTIDAD==codigoEstado && x.MUNICIPIO==codigoMunicipio   )
                     .ToListAsync();
                 return result;
             }

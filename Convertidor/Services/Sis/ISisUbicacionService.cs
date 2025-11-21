@@ -4,8 +4,11 @@ public interface ISisUbicacionService
 {
     Task<List<SelectListDescriptiva>> GetPaises();
     Task<List<SelectListDescriptiva>> GetEstados();
+    Task<List<SelectListDescriptiva>> GetEstadosPorPais(FiltersEstado filter);
     Task<List<SelectListDescriptiva>> GetMunicipios();
+     Task<List<SelectListDescriptiva>> GetMunicipiosPorPaisEstado(FiltersMunicipio filter) ;
     Task<List<SelectListDescriptiva>> GetCiudades();
+    Task<List<SelectListDescriptiva>> GetCiudadesPorPaisEstadoMunicipio(FiltersCiudad filter) ;
     Task<List<SelectListDescriptiva>> GetParroquias();
     Task<List<SelectListDescriptiva>> Getsectores();
     Task<List<SelectListDescriptiva>> GetUrbanizaciones();
