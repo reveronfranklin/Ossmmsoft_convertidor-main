@@ -24,3 +24,11 @@ public class FiltersEstado
 		public int CodigoEstado { get; set; }
 		public int CodigoMunicipio { get; set; }
 	}
+
+	public class FiltersParroquia
+	{
+		public int CodigoPais { get; set; }
+		public int CodigoEstado { get; set; }
+		public int CodigoMunicipio { get; set; }
+		public int CodigoCiudad { get; set; }
+	}

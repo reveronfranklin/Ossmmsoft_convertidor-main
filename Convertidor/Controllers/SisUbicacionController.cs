@@ -60,6 +60,16 @@ namespace Convertidor.Controllers
             var result = await _service.GetCiudadesPorPaisEstadoMunicipio(filter);
             return Ok(result);
         }
+
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetParroquiasPorPaisEstadoMunicipioCiudad(FiltersParroquia filter)
+        {
+            var result = await _service.GetParroquiasPorPaisEstadoMunicipioCiudad(filter);
+            return Ok(result);
+        }
+
       
     }
 }

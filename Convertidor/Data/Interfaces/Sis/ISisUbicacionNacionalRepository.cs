@@ -14,6 +14,7 @@ namespace Convertidor.Data.Interfaces.Sis
         Task<List<SIS_UBICACION_NACIONAL>> GetCiudades();
         Task<List<SIS_UBICACION_NACIONAL>> GetCiudadesPorPaisEstadoMunicipio(int codigoPais,int codigoEstado,int codigoMunicipio);
         Task<List<SIS_UBICACION_NACIONAL>> GetParroquias();
+         Task<List<SIS_UBICACION_NACIONAL>> GetParroquiasPorPaisEstadoMunicipioCiudad(int codigoPais,int codigoEstado,int codigoMunicipio,int codigoCiudad);
         Task<List<SIS_UBICACION_NACIONAL>> GetSectores();
         Task<List<SIS_UBICACION_NACIONAL>> GetUrbanizaciones();
         Task<SIS_UBICACION_NACIONAL> GetPais(int pais);
