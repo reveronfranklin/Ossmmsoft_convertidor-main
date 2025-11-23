@@ -200,6 +200,25 @@ namespace Convertidor.Data.Repository.Sis
 
 
         }
+          public async Task<List<SIS_UBICACION_NACIONAL>> GetParroquiasPorPaisEstadoMunicipioCiudad(int codigoPais,int codigoEstado,int codigoMunicipio,int codigoCiudad)
+        {
+
+            try
+            {
+                var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
+                    .Where(x => x.PAIS == codigoPais && x.ENTIDAD == codigoEstado && x.MUNICIPIO == codigoMunicipio && x.CIUDAD == codigoCiudad && x.PARROQUIA != 0 && 
+                    x.SECTOR == 0 && x.URBANIZACION == 0)
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException.Message;
+                return null;
+            }
+
+
+        }
 
         public async Task<List<SIS_UBICACION_NACIONAL>> GetSectores()
         {

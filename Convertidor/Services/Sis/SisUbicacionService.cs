@@ -264,6 +264,31 @@ public class SisUbicacionService : ISisUbicacionService
 
     }
 
+     public async Task<List<SelectListDescriptiva>> GetParroquiasPorPaisEstadoMunicipioCiudad(FiltersParroquia filter)
+    {
+        List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
+        try
+        {
+            var parroquias = await _repository.GetParroquiasPorPaisEstadoMunicipioCiudad(filter.CodigoPais, filter.CodigoEstado, filter.CodigoMunicipio,filter.CodigoCiudad);
+            foreach (var item in parroquias)
+            {
+                SelectListDescriptiva resultItem = new SelectListDescriptiva();
+                resultItem.Id = (int)item.CIUDAD;
+                resultItem.Descripcion = item.EXTRA1;
+                result.Add(resultItem);
+            }
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            var msg = ex.InnerException.Message;
+            return null;
+        }
+
+
+    }
+
     public async Task<SelectListDescriptiva> GetCiudad(int pais, int estado,int municipio, int codigoCiudad)
     {
         SelectListDescriptiva result = new SelectListDescriptiva();
