@@ -262,8 +262,15 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Parroquia Invalida";
                     return result;
                 }
+                if(!string.IsNullOrEmpty(dto.ComplementoDir) && dto.ComplementoDir.Trim().Length > 200){
+                    
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Complemento de Dir es muy largo, Maximo 200 caracteres";
+                    return result;
+                }
 
-                var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId, dto.MunicipioId,
+                /*var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId, dto.MunicipioId,
                     dto.CiudadId, dto.ParroquiaId, dto.SectorId);
                 if (sector is null)
                 {
@@ -272,9 +279,9 @@ namespace Convertidor.Data.Repository.Rh
                     result.IsValid = false;
                     result.Message = "Sector Invalido";
                     return result;
-                }
+                }*/
 
-                var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dto.PaisId, dto.EstadoId, dto.MunicipioId,
+                /*var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dto.PaisId, dto.EstadoId, dto.MunicipioId,
                     dto.CiudadId, dto.ParroquiaId, dto.SectorId, dto.UrbanizacionId);
                 if (urbanizacion is null)
                 {
@@ -283,7 +290,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.IsValid = false;
                     result.Message = "Urbanizacion Invalida";
                     return result;
-                }
+                }*/
 
                
 
@@ -295,12 +302,12 @@ namespace Convertidor.Data.Repository.Rh
                 direccion.MUNICIPIO_ID = dto.MunicipioId;
                 direccion.CIUDAD_ID = dto.CiudadId;
                 direccion.PARROQUIA_ID = dto.ParroquiaId;
-                direccion.SECTOR_ID = dto.SectorId;
-                direccion.URBANIZACION_ID = dto.UrbanizacionId;
-                direccion.MANZANA_ID = dto.ManzanaId;
-                direccion.PARCELA_ID = dto.ParcelaId;
-                direccion.VIALIDAD_ID = dto.VialidadId;
-                direccion.VIALIDAD = dto.Vialidad;
+                //direccion.SECTOR_ID = dto.SectorId;
+                //direccion.URBANIZACION_ID = dto.UrbanizacionId;
+                //direccion.MANZANA_ID = dto.ManzanaId;
+                //direccion.PARCELA_ID = dto.ParcelaId;
+                //direccion.VIALIDAD_ID = dto.VialidadId;
+                //direccion.VIALIDAD = dto.Vialidad;
                 direccion.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
                 direccion.VIVIENDA_ID = dto.ViviendaId;
                 direccion.TIPO_NIVEL_ID = dto.TipoNivelId;
@@ -309,7 +316,15 @@ namespace Convertidor.Data.Repository.Rh
                 direccion.COMPLEMENTO_DIR = dto.ComplementoDir;
                 direccion.TENENCIA_ID = dto.TenenciaId;
                 direccion.CODIGO_POSTAL = dto.CodigoPostal;
-                direccion.PRINCIPAL = dto.Principal;
+               if (dto.Principal == true)
+                {
+                    direccion.PRINCIPAL=1;
+                }
+                else
+                {
+                    direccion.PRINCIPAL=0;
+                }
+            
 
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
@@ -396,8 +411,14 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Parroquia Invalida";
                     return result;
                 }
-
-                var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId,dto.MunicipioId,
+                if(!string.IsNullOrEmpty(dto.ComplementoDir) && dto.ComplementoDir.Trim().Length > 200){
+                    
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Complemento de Dir es muy largo, Maximo 200 caracteres";
+                    return result;
+                }
+                /*var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId,dto.MunicipioId,
                     dto.CiudadId,dto.ParroquiaId, dto.SectorId);
                 if (sector is null)
                 {
@@ -417,7 +438,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.IsValid = false;
                     result.Message = "Urbanizacion Invalida";
                     return result;
-                }
+                }*/
 
                 RH_DIRECCIONES entity = new RH_DIRECCIONES();
 
@@ -429,12 +450,12 @@ namespace Convertidor.Data.Repository.Rh
                 entity.MUNICIPIO_ID = dto.MunicipioId;
                 entity.CIUDAD_ID = dto.CiudadId;
                 entity.PARROQUIA_ID = dto.ParroquiaId;
-                entity.SECTOR_ID = dto.SectorId;
-                entity.URBANIZACION_ID = dto.UrbanizacionId;
-                entity.MANZANA_ID = dto.ManzanaId;
-                entity.PARCELA_ID = dto.ParcelaId;
-                entity.VIALIDAD_ID = dto.VialidadId;
-                entity.VIALIDAD = dto.Vialidad;
+                //entity.SECTOR_ID = dto.SectorId;
+                //entity.URBANIZACION_ID = dto.UrbanizacionId;
+                //entity.MANZANA_ID = dto.ManzanaId;
+                //entity.PARCELA_ID = dto.ParcelaId;
+                //entity.VIALIDAD_ID = dto.VialidadId;
+                //entity.VIALIDAD = dto.Vialidad;
                 entity.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
                 entity.VIVIENDA_ID = dto.ViviendaId;
                 entity.TIPO_NIVEL_ID = dto.TipoNivelId;
@@ -443,7 +464,15 @@ namespace Convertidor.Data.Repository.Rh
                 entity.COMPLEMENTO_DIR = dto.ComplementoDir;
                 entity.TENENCIA_ID = dto.TenenciaId;
                 entity.CODIGO_POSTAL = dto.CodigoPostal;
-                entity.PRINCIPAL = dto.Principal;
+                if (dto.Principal == true)
+                {
+                    entity.PRINCIPAL=1;
+                }
+                else
+                {
+                    entity.PRINCIPAL=0;
+                }
+            
 
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
