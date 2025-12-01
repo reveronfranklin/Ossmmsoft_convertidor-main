@@ -1,4 +1,5 @@
 using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Adm.Proveedores;
 
 namespace Convertidor.Services.Adm.Proveedores.AdmProveedores;
 
@@ -19,7 +20,7 @@ public partial class AdmProveedoresService
                     return result;
                 }
                 
-                var resultDto =  MapProveedorDto(proveedor);
+                var resultDto = await MapProveedorDto(proveedor);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -50,7 +51,7 @@ public partial class AdmProveedoresService
                     return result;
                 }
                 
-                var resultDto =  MapListProveedorDto(proveedor);
+                var resultDto = await MapListProveedorDto(proveedor);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -65,4 +66,42 @@ public partial class AdmProveedoresService
             }
            
         }
+
+
+    public async Task<ResultDto<List<AdmProveedorResponseDto>>> GetAll(AdmProveedoresFilterDto filter)
+        {
+            ResultDto<List<AdmProveedorResponseDto>> result = new ResultDto<List<AdmProveedorResponseDto>>(null);
+            try
+            {
+
+                var proveedor = await _repository.GetByAll(filter);
+                if (proveedor == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor no existe";
+                    return result;
+                }
+                
+                var resultDto = await  MapListProveedorDto(proveedor.Data);
+                result.CantidadRegistros = proveedor.CantidadRegistros;
+                result.TotalPage = proveedor.TotalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = resultDto;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+           
+        }
+
+
+
 }

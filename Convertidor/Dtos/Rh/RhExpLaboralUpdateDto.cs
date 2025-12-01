@@ -10,13 +10,11 @@ public class RhExpLaboralUpdateDto
     public string Cargo { get; set; } = string.Empty;
     public DateTime FechaDesde { get; set; }
     public DateTime FechaHasta { get; set; }
-    public int UltimoSueldo { get; set; }
+    public decimal UltimoSueldo { get; set; }
     public string Supervisor { get; set; } = string.Empty;
     public string CargoSupervisor { get; set; } = string.Empty;
     public string Telefono { get; set; } = string.Empty;
     public string Descripcion { get; set; } = string.Empty;
-    public string Extra1 { get; set; } = string.Empty;
-    public string Extra2 { get; set; } = string.Empty;
-    public string Extra3 { get; set; } = string.Empty;
+
 
 }

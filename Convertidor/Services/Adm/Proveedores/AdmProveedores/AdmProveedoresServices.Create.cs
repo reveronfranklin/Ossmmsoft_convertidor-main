@@ -42,15 +42,7 @@ public partial class AdmProveedoresService
                     }
                 }
                
-                var nacionalidad = _personaServices.GetListNacionalidad().Where(x => x== dto.Nacionalidad).FirstOrDefault();
-                if (String.IsNullOrEmpty(nacionalidad))
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Nacionalidad Invalida";
-                    return result;
-                    
-                }
+               
                 if (dto.Cedula<= 0)
                 {
                     result.Data = null;
@@ -66,75 +58,32 @@ public partial class AdmProveedoresService
                     return result;
                 }
 
-                if (!DateValidate.IsDate(dto.FechaRifString))
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Rif Invalida";
-                    return result;
-                }
-
-                if (dto.Nit is not null && dto.Nit.Length > 0)
-                {
-                    if (!DateValidate.IsDate(dto.FechaNitString))
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Fecha Nit Invalida";
-                        return result;
-                    }
-                }
-                if (dto.NumeroRegistroContraloria is not null && dto.NumeroRegistroContraloria.Length > 0)
-                {
-                    if (!DateValidate.IsDate(dto.FechaRegistroContraloriaString))
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Fecha Registro Contraloria Invalida";
-                        return result;
-                    }
-                }
+               
                 
-                if (dto.CapitalPagado<=0)
+                if (dto.CapitalPagado<0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Capital Pagado Invalido";
                     return result;
                 }
-                if (dto.CapitalSuscrito<=0)
+                if (dto.CapitalSuscrito<0)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Capital Suscrito Invalido";
                     return result;
                 }
-                if (dto.Status.Length<=0)
+
+                  var conectado = await _sisUsuarioRepository.GetConectado();
+                var existedProveedor = await _repository.GetByNombre(conectado.Empresa, dto.NombreProveedor);
+               if (existedProveedor != null)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Status Invalido";
+                    result.Message = "Proveedor ya existe";
                     return result;
-                }
-                var impuestos = await _repositoryPreDescriptiva.GetByTitulo(33);
-                if (impuestos.Count<=0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Impuesto  Invalido";
-                    return result;
-                }
-                else
-                {
-                    var impuesto = impuestos.Where(x => x.DESCRIPCION_ID== dto.TipoImpuestoId);
-                    if (impuesto is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Tipo Impuesto  Invalido";
-                        return result;
-                    }
-                }
+               }
 
                 ADM_PROVEEDORES proveedor = new ADM_PROVEEDORES();
                 proveedor.CODIGO_PROVEEDOR = await _repository.GetNextKey();
@@ -150,8 +99,8 @@ public partial class AdmProveedoresService
                 proveedor.FECHA_REGISTRO_CONTRALORIA = dto.FechaRegistroContraloria;
                 proveedor.CAPITAL_PAGADO = dto.CapitalPagado;
                 proveedor.CAPITAL_SUSCRITO = dto.CapitalSuscrito;
-                proveedor.TIPO_IMPUESTO_ID = dto.TipoImpuestoId;
-                proveedor.STATUS = dto.Status;
+              
+                proveedor.STATUS ="A";
                 proveedor.CODIGO_PERSONA = dto.CodigoPersona;
                 proveedor.CODIGO_AUXILIAR_GASTO_X_PAGAR = dto.CodigoAuxiliarGastoXPagar;
                 proveedor.CODIGO_AUXILIAR_ORDEN_PAGO = dto.CodigoAuxiliarOrdenPago;
@@ -159,7 +108,7 @@ public partial class AdmProveedoresService
                 proveedor.CODIGO_AUXILIAR_ORDEN_PAGO = dto.CodigoAuxiliarOrdenPago;
                 proveedor.NUMERO_CUENTA = dto.NumeroCuenta;
                 proveedor.FECHA_UPD = DateTime.Now;
-                var conectado = await _sisUsuarioRepository.GetConectado();
+              
                 proveedor.CODIGO_EMPRESA = conectado.Empresa;
                 proveedor.FECHA_INS = DateTime.Now;
                 proveedor.USUARIO_UPD = conectado.Usuario;
@@ -167,7 +116,7 @@ public partial class AdmProveedoresService
                 
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto =  MapProveedorDto(created.Data);
+                    var resultDto = await MapProveedorDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";
