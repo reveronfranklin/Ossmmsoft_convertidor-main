@@ -3,6 +3,7 @@
 // HTML to PDF
 using Convertidor.Dtos.Adm;
 using Convertidor.Services.Adm;
+using Convertidor.Dtos.Adm.Proveedores;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,6 +33,14 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAll(AdmProveedoresFilterDto filter)
+        {
+            var result = await _service.GetAll(filter);
+            return Ok(result);
+        }
+        
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetAllProveedoresContactos()
@@ -71,6 +80,14 @@ namespace Convertidor.Controllers
         public async Task<IActionResult> Delete(AdmProveedorDeleteDto dto)
         {
             var result = await _service.Delete(dto);
+            return Ok(result);
+
+        }
+         [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Activar(AdmProveedorDeleteDto dto)
+        {
+            var result = await _service.Activar(dto);
             return Ok(result);
 
         }

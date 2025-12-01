@@ -1,5 +1,7 @@
 ﻿using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
+using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Adm.Proveedores;
 using Microsoft.EntityFrameworkCore;
 
 namespace Convertidor.Data.Repository.Adm
@@ -19,6 +21,22 @@ namespace Convertidor.Data.Repository.Adm
             try
             {
                 var result = await _context.ADM_PROVEEDORES.DefaultIfEmpty().Where(e => e.CODIGO_PROVEEDOR == id).FirstOrDefaultAsync();
+
+                return (ADM_PROVEEDORES)result;
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return null;
+            }
+
+        }
+
+ public async Task<ADM_PROVEEDORES> GetByNombre(int codigoEmpresa, string nombreProveedor)
+        {
+            try
+            {
+                var result = await _context.ADM_PROVEEDORES.DefaultIfEmpty().Where(e => e.CODIGO_EMPRESA == codigoEmpresa && e.NOMBRE_PROVEEDOR == nombreProveedor).FirstOrDefaultAsync();
 
                 return (ADM_PROVEEDORES)result;
             }
@@ -61,6 +79,82 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+
+
+        public async Task<ResultDto<List<ADM_PROVEEDORES>>> GetByAll(AdmProveedoresFilterDto filter)
+        {
+
+            ResultDto<List<ADM_PROVEEDORES>> result = new ResultDto<List<ADM_PROVEEDORES>>(null);
+
+            if (filter.PageNumber == 0) filter.PageNumber = 1;
+            if (filter.PageSize == 0) filter.PageSize = 100;
+            if (filter.PageSize >100) filter.PageSize = 100;
+
+            if (string.IsNullOrEmpty(filter.SearchText))
+            {
+                filter.SearchText = "";
+            }
+
+             var totalRegistros = 0;
+             var totalPage = 0;
+            List<ADM_PROVEEDORES> pageData = new List<ADM_PROVEEDORES>(); 
+
+            try
+            {
+
+           
+               if ( filter.SearchText.Length==0)
+                {
+                    totalRegistros = _context.ADM_PROVEEDORES
+                        
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                   
+                    
+                    pageData = await _context.ADM_PROVEEDORES.DefaultIfEmpty()
+                        
+                        .OrderBy(x => x.NOMBRE_PROVEEDOR)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+                if ( filter.SearchText.Length>0)
+                {
+                    totalRegistros = _context.ADM_PROVEEDORES
+                        .Where(x => x.NOMBRE_PROVEEDOR.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.RIF.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) )
+                        .Count();
+
+                    totalPage = (totalRegistros + filter.PageSize - 1) / filter.PageSize;
+                    
+                    pageData = await _context.ADM_PROVEEDORES.DefaultIfEmpty()
+                        .Where(x => x.NOMBRE_PROVEEDOR.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) || x.RIF.Trim().ToLower().Contains(filter.SearchText.Trim().ToLower()) )
+                           .OrderBy(x => x.NOMBRE_PROVEEDOR)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+                }
+           
+               
+                result.CantidadRegistros = totalRegistros;
+                result.TotalPage = totalPage;
+                result.Page = filter.PageNumber;
+                result.IsValid = true;
+                result.Message = "";
+                result.Data = pageData;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.CantidadRegistros = 0;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                result.Data = null;
+                return result;
+            }
+
+        }
+
 
 
      

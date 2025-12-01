@@ -10,7 +10,7 @@
         public string CARGO { get; set; }
         public DateTime FECHA_DESDE { get; set; }
         public DateTime FECHA_HASTA { get; set; }
-        public int ULTIMO_SUELDO { get; set; }
+        public decimal ULTIMO_SUELDO { get; set; }
         public string SUPERVISOR { get; set; }
         public string CARGO_SUPERVISOR { get; set; }
         public string TELEFONO { get; set; }

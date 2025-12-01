@@ -14,7 +14,7 @@
         public string FechaHastaString { get; set; }
         public FechaDto FechaDesdeObj { get; set; }
         public FechaDto FechaHastaObj { get; set; }
-        public int UltimoSueldo { get; set; }
+        public decimal UltimoSueldo { get; set; }
         public string Supervisor { get; set; } 
         public string CargoSupervisor { get; set; }
         public string Telefono { get; set; } 

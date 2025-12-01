@@ -20,23 +20,56 @@ public partial class AdmProveedoresService
                 result.Message = "Proveedor no existe";
                 return result;
             }
+            proveedor.STATUS="I";
+
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            proveedor.CODIGO_EMPRESA = conectado.Empresa;
+            proveedor.USUARIO_UPD = conectado.Usuario;
+            await _repository.Update(proveedor);
+            result.Data = dto;
+            result.IsValid = true;
+            result.Message = "Proveedor Eliminado";
+           
 
 
-            var deleted = await _repository.Delete(dto.CodigoProveedor);
+        }
+        catch (Exception ex)
+        {
+            result.Data = dto;
+            result.IsValid = false;
+            result.Message = ex.Message;
+        }
 
-            if (deleted.Length > 0)
+
+
+        return result;
+    }
+
+  public async Task<ResultDto<AdmProveedorDeleteDto>> Activar(AdmProveedorDeleteDto dto)
+    {
+
+        ResultDto<AdmProveedorDeleteDto> result = new ResultDto<AdmProveedorDeleteDto>(null);
+        try
+        {
+
+            var proveedor = await _repository.GetByCodigo(dto.CodigoProveedor);
+            if (proveedor == null)
             {
-                result.Data = dto;
+                result.Data = null;
                 result.IsValid = false;
-                result.Message = deleted;
+                result.Message = "Proveedor no existe";
+                return result;
             }
-            else
-            {
-                result.Data = dto;
-                result.IsValid = true;
-                result.Message = deleted;
+            proveedor.STATUS="A";
 
-            }
+            var conectado = await _sisUsuarioRepository.GetConectado();
+            proveedor.CODIGO_EMPRESA = conectado.Empresa;
+            proveedor.USUARIO_UPD = conectado.Usuario;
+            await _repository.Update(proveedor);
+            result.Data = dto;
+            result.IsValid = true;
+            result.Message = "Proveedor Activado";
+           
 
 
         }

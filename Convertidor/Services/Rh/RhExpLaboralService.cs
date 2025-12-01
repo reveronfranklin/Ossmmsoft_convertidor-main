@@ -73,6 +73,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.Supervisor = dtos.SUPERVISOR;
                 if (dtos.CARGO_SUPERVISOR == null) dtos.CARGO_SUPERVISOR = "";
                 itemResult.CargoSupervisor = dtos.CARGO_SUPERVISOR;
+                if(dtos.TELEFONO==null) dtos.TELEFONO="";
                 itemResult.Telefono = dtos.TELEFONO;
                 if (dtos.SUPERVISOR == null) dtos.SUPERVISOR = "";
                 itemResult.Supervisor = dtos.SUPERVISOR;
@@ -104,7 +105,10 @@ namespace Convertidor.Data.Repository.Rh
 
 
         }
-
+        public static bool ValidarUnSoloGyP(string texto)
+        {
+            return texto?.Length == 1 && (texto[0] == 'G' || texto[0] == 'P');
+        }
 
         public async Task<ResultDto<RhExpLaboralResponseDto>> Update(RhExpLaboralUpdateDto dto)
         {
@@ -137,21 +141,24 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Nombre Empresa Invalido";
                     return result;
                 }
-                if (dto.TipoEmpresa is not null &&dto.TipoEmpresa.Length>1)
+
+                var valido=ValidarUnSoloGyP(dto.TipoEmpresa);
+                if (!valido)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Empresa Invalido";
+                    result.Message = "Tipo Empresa Invalido, debe ser G o P";
                     return result;
                 }
                
-                if (dto.Cargo is not null && dto.Cargo.Length>50)
+                if (string.IsNullOrEmpty(dto.Cargo) || dto.Cargo.Length>50)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Cargo Invalido";
                     return result;
                 }
+
                 if (!DateValidate.IsDate(dto.FechaDesde.ToShortDateString()))
                 {
                     result.Data = null;
@@ -171,10 +178,7 @@ namespace Convertidor.Data.Repository.Rh
 
                 if (dto.UltimoSueldo == null)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Ultimo sueldo Invalido";
-                    return result;
+                    dto.UltimoSueldo = 0;
                 }
                 if (dto.Supervisor is not null && dto.Supervisor.Length > 50)
                 {
@@ -204,28 +208,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Descripcion Invalida";
                     return result;
                 }
-                if(dto.Extra1 is not null&& dto.Extra1.Length>100) 
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
-
+               
 
                 codigoExpLaboral.CODIGO_EXP_LABORAL = dto.CodigoExpLaboral;
                 codigoExpLaboral.NOMBRE_EMPRESA = dto.NombreEmpresa;
@@ -299,13 +282,15 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Nombre Empresa Invalido";
                     return result;
                 }
-                if (dto.TipoEmpresa is not null && dto.TipoEmpresa.Length > 1)
+                 var valido=ValidarUnSoloGyP(dto.TipoEmpresa);
+                if (!valido)
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Empresa Invalido";
+                    result.Message = "Tipo Empresa Invalido, debe ser G o P";
                     return result;
                 }
+               
                 
                 if (dto.Cargo == string.Empty && dto.Cargo.Length > 50)
                 {
@@ -366,28 +351,7 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Descripcion Invalida";
                     return result;
                 }
-                if (dto.Extra1 is not null && dto.Extra1.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra1 Invalido";
-                    return result;
-                }
-                if (dto.Extra2 is not null && dto.Extra2.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra2 Invalido";
-                    return result;
-                }
-                if (dto.Extra3 is not null && dto.Extra3.Length > 100)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Extra3 Invalido";
-                    return result;
-                }
-
+               
 
 
 
