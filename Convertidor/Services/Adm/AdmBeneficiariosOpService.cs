@@ -158,7 +158,7 @@ namespace Convertidor.Services.Adm
                     {
                         entity.MONTO = pucOrdenPago.Sum(x => x.MONTO);
                     }
-                    entity.MONTO_PAGADO =    entity.MONTO ;
+                    entity.MONTO_PAGADO =    0;
                     entity.MONTO_ANULADO = 0;//entity.MONTO ;
                     entity.CODIGO_PRESUPUESTO = compromiso.CODIGO_PRESUPUESTO;
 
@@ -198,8 +198,8 @@ namespace Convertidor.Services.Adm
                             {
                                 entity.MONTO = retencionesOp.Sum(x => (decimal)x.MONTO_RETENCION);
                             }
-                            entity.MONTO_PAGADO =    entity.MONTO ;
-                            entity.MONTO_ANULADO =    entity.MONTO ;
+                            entity.MONTO_PAGADO =   0 ;
+                            entity.MONTO_ANULADO =   0 ;
                             entity.CODIGO_PRESUPUESTO = codigoPresupuesto;
 
 
