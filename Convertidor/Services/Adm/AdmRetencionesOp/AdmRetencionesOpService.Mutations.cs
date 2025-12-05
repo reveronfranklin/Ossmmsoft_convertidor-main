@@ -134,8 +134,11 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 }
                 var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago,tipoRetencionId.CODIGO);
                 
-                if(dto.CodigoRetencion==0) baseImponible=0;
-                
+                 if (dto.CodigoRetencion==0) {
+                    baseImponible=0;
+                    dto.BaseImponible=0;
+                };
+
                 if (baseImponible>0 && dto.PorRetencion>0)
                 {
                     dto.BaseImponible = baseImponible;
@@ -407,7 +410,10 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
 
                 var baseImponible = await GetBaseImponibleByCodigoOrdenPago(dto.CodigoOrdenPago,tipoRetencion.CODIGO );
                 
-                if (dto.CodigoRetencion==0) baseImponible=0;
+                if (dto.CodigoRetencion==0) {
+                    baseImponible=0;
+                    dto.BaseImponible=0;
+                };
                 if (baseImponible > 0  && dto.PorRetencion > 0)
                 {
                     dto.BaseImponible = baseImponible;
