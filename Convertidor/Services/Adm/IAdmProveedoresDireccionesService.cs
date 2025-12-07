@@ -1,4 +1,4 @@
-using Convertidor.Dtos.Adm;
+using Convertidor.Dtos.Adm.Proveedores.Direcciones;
 
 namespace Convertidor.Services.Adm;
 

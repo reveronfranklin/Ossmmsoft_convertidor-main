@@ -1,4 +1,4 @@
-namespace Convertidor.Dtos.Adm;
+namespace Convertidor.Dtos.Adm.Proveedores.Direcciones;
 
 public class AdmProveedorDireccionFilterDto
 {
