@@ -1,4 +1,4 @@
-namespace Convertidor.Dtos.Adm;
+namespace Convertidor.Dtos.Adm.Proveedores.Direcciones;
 
 public class AdmProveedorDireccionUpdateDto
 {
@@ -14,8 +14,6 @@ public class AdmProveedorDireccionUpdateDto
     public int UrbanizacionId  { get; set; } 
     public int ManzanaId  { get; set; } 
     public int ParcelaId  { get; set; } 
-    public int VialidadId  { get; set; } 
-    public string Vialidad  { get; set; } = String.Empty;
     public int TipoViviendaId  { get; set; } 
     public string Vivienda  { get; set; } = String.Empty;
     public int TipoNivelId  { get; set; } 
@@ -25,5 +23,5 @@ public class AdmProveedorDireccionUpdateDto
     public string ComplementoDir  { get; set; } = String.Empty;   
     public int TenenciaId  { get; set; } 
     public int CodigoPostal  { get; set; } 
-    public int Principal  { get; set; }    
+    public bool Principal  { get; set; }    
 }

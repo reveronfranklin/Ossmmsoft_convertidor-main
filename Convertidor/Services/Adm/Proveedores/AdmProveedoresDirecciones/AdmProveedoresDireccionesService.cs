@@ -1,6 +1,7 @@
 ﻿using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
-using Convertidor.Dtos.Adm;
+
+using Convertidor.Dtos.Adm.Proveedores.Direcciones;
 using Convertidor.Services.Sis;
 
 
@@ -11,7 +12,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
 
       
         private readonly IAdmDireccionProveedorRepository _repository;
-        private readonly IAdmDescriptivaRepository _repositoryPreDescriptiva;
+        private readonly IAdmDescriptivaRepository _repositoryDescriptiva;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
 
         private readonly IAdmProveedoresRepository _proveedorRepository;
@@ -19,14 +20,14 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
        
 
         public AdmProveedoresDireccionesService(IAdmDireccionProveedorRepository repository,
-                                      IAdmDescriptivaRepository repositoryPreDescriptiva,
+                                      IAdmDescriptivaRepository repositoryDescriptiva,
                                       ISisUsuarioRepository sisUsuarioRepository,
                      
                                       IAdmProveedoresRepository proveedorRepository,
                                       ISisUbicacionService sisUbicacionService)
 		{
             _repository = repository;
-            _repositoryPreDescriptiva = repositoryPreDescriptiva;
+            _repositoryDescriptiva = repositoryDescriptiva;
             _sisUsuarioRepository = sisUsuarioRepository;
 
             _proveedorRepository = proveedorRepository;
@@ -44,29 +45,98 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
             
             itemResult.CodigoDirProveedor = dtos.CODIGO_DIR_PROVEEDOR;
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
+            var tiposDireccion = await _repositoryDescriptiva.GetByCodigo(dtos.TIPO_DIRECCION_ID);
+            if (tiposDireccion != null)
+            {
+                itemResult.TipoDireccion = tiposDireccion.DESCRIPCION;
+            }
 
-            itemResult.TipoDireccionId = dtos.TIPO_DIRECCION_ID;
             itemResult.PaisId = dtos.PAIS_ID;
-            itemResult.EstadoId =dtos.ESTADO_ID;
+            itemResult.Pais="";
+            var pais = await _sisUbicacionService.GetPais(dtos.PAIS_ID);
+            if (pais != null)
+            {
+                itemResult.Pais = pais.Descripcion;
+            }
+            itemResult.Estado="";
+            itemResult.EstadoId = dtos.ESTADO_ID;
+            var estado= await _sisUbicacionService.GetEstado(dtos.PAIS_ID, dtos.ESTADO_ID);
+            if (estado != null)
+            {
+                itemResult.Estado = estado.Descripcion;
+            }
+
+            itemResult.Municipio = "";
             itemResult.MunicipioId = dtos.MUNICIPIO_ID;
+            var municipio = await _sisUbicacionService.GetMunicipio(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID);
+            if (municipio != null)
+            {
+                itemResult.Municipio = municipio.Descripcion;
+            }
+            itemResult.Ciudad = "";
             itemResult.CiudadId = dtos.CIUDAD_ID;
+            var ciudad = await _sisUbicacionService.GetCiudad(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID, dtos.CIUDAD_ID);
+            if (ciudad != null)
+            {
+                itemResult.Ciudad = ciudad.Descripcion;
+            }
+            itemResult.Parroquia = "";
             itemResult.ParroquiaId = dtos.PARROQUIA_ID;
+            var parroquia = await _sisUbicacionService.GetParroquia(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID, dtos.CIUDAD_ID, dtos.PARROQUIA_ID);
+            if(parroquia != null)
+            {
+                itemResult.Parroquia = parroquia.Descripcion;
+            }
+            itemResult.Sector="";
             itemResult.SectorId = dtos.SECTOR_ID;
+            var sector = await _sisUbicacionService.GetSector(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID, dtos.CIUDAD_ID, dtos.PARROQUIA_ID, dtos.SECTOR_ID);
+            if (sector != null)
+            {
+                itemResult.Sector = sector.Descripcion;
+            }
+            itemResult.Urbanizacion = "";
+            var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dtos.PAIS_ID, dtos.ESTADO_ID, dtos.MUNICIPIO_ID, dtos.CIUDAD_ID, dtos.PARROQUIA_ID, dtos.SECTOR_ID, dtos.URBANIZACION_ID);
+            if (urbanizacion != null)
+            {
+                itemResult.Urbanizacion = urbanizacion.Descripcion;
+            }
             itemResult.UrbanizacionId = dtos.URBANIZACION_ID;
-            itemResult.ManzanaId = dtos.MANZANA_ID;
-            itemResult.ParcelaId = dtos.PARCELA_ID;
-            itemResult.VialidadId = dtos.VIALIDAD_ID;
-            itemResult.Vialidad = dtos.VIALIDAD;
+         
             itemResult.TipoViviendaId = dtos.TIPO_VIVIENDA_ID;
+            itemResult.TipoVivienda="";
+            var tipoVivienda = await _repositoryDescriptiva.GetByCodigoDescriptiva(dtos.TIPO_VIVIENDA_ID);
+            if(tipoVivienda != null)
+            {
+                itemResult.TipoVivienda = tipoVivienda.DESCRIPCION;
+            }
+            dtos.VIVIENDA ??= string.Empty;
             itemResult.Vivienda = dtos.VIVIENDA;
-            itemResult.TipoNivelId= dtos.TIPO_NIVEL_ID;
+            
+            itemResult.TipoNivelId = dtos.TIPO_NIVEL_ID;
+            itemResult.TipoNivel = "";
+            var tipoNivel   = await _repositoryDescriptiva.GetByCodigoDescriptiva(dtos.TIPO_NIVEL_ID);
+            if (tipoNivel != null)
+            {
+                   itemResult.TipoNivel = tipoNivel.DESCRIPCION;
+            }
+            dtos.NIVEL ??= string.Empty;
             itemResult.Nivel = dtos.NIVEL;
-            itemResult.TipoUnidadId = dtos.TIPO_UNIDAD_ID;
-            itemResult.NumeroUnidad = dtos.NUMERO_UNIDAD;
+            itemResult.NroUnidad = dtos.NUMERO_UNIDAD;
             itemResult.ComplementoDir = dtos.COMPLEMENTO_DIR;
             itemResult.TenenciaId = dtos.TENENCIA_ID;
+            itemResult.Tenencia = "";
+            var tenencia = await _repositoryDescriptiva.GetByCodigoDescriptiva(dtos.TENENCIA_ID);
+            if(tenencia != null)
+            {
+                itemResult.Tenencia = tenencia.DESCRIPCION;
+            }
             itemResult.CodigoPostal = dtos.CODIGO_POSTAL;
-            itemResult.Principal = dtos.PRINCIPAL;
+            itemResult.Principal = false;
+            if(dtos.PRINCIPAL == 1)
+            {
+                itemResult.Principal = true;
+            }
+      
            
           
             return itemResult;
@@ -191,7 +261,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                
                 
                 
-                var tiposDireccion = await _repositoryPreDescriptiva.GetByIdAndTitulo(4,dto.TipoDireccionId);
+                var tiposDireccion = await _repositoryDescriptiva.GetByIdAndTitulo(4,dto.TipoDireccionId);
                 if (tiposDireccion==false)
                 {
                     result.Data = null;
@@ -199,7 +269,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                     result.Message = "Tipo Direccion  Invalido";
                     return result;
                 }
-                var tipoVivienda = await _repositoryPreDescriptiva.GetByIdAndTitulo(6,dto.TipoViviendaId);
+                var tipoVivienda = await _repositoryDescriptiva.GetByIdAndTitulo(6,dto.TipoViviendaId);
                 if (tipoVivienda==false)
                 {
                     result.Data = null;
@@ -208,14 +278,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                     return result;
                 }
 
-                if (String.IsNullOrEmpty(dto.Vialidad))
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Vialidad Invalido";
-                    return result;
-                    
-                }
+               
                 if (String.IsNullOrEmpty(dto.Vivienda))
                 {
                     result.Data = null;
@@ -250,10 +313,14 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                 proveedorContacto.URBANIZACION_ID = dto.UrbanizacionId;
                 proveedorContacto.TIPO_DIRECCION_ID = dto.TipoDireccionId;
                 proveedorContacto.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
-                proveedorContacto.VIALIDAD_ID = dto.VialidadId;
-                proveedorContacto.VIALIDAD = dto.Vialidad;
+
                 proveedorContacto.VIVIENDA = dto.Vivienda;
-                proveedorContacto.PRINCIPAL = dto.Principal;
+                 proveedorContacto.PRINCIPAL = 0;
+                if (dto.Principal == true)
+                {
+                    proveedorContacto.PRINCIPAL = 1;
+                }
+                
                 proveedorContacto.FECHA_UPD = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 proveedorContacto.CODIGO_EMPRESA = conectado.Empresa;
@@ -376,7 +443,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                
                 
                 
-                var tiposDireccion = await _repositoryPreDescriptiva.GetByIdAndTitulo(4,dto.TipoDireccionId);
+                var tiposDireccion = await _repositoryDescriptiva.GetByIdAndTitulo(4,dto.TipoDireccionId);
                 if (tiposDireccion==false)
                 {
                     result.Data = null;
@@ -384,7 +451,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                     result.Message = "Tipo Direccion  Invalido";
                     return result;
                 }
-                var tipoVivienda = await _repositoryPreDescriptiva.GetByIdAndTitulo(6,dto.TipoViviendaId);
+                var tipoVivienda = await _repositoryDescriptiva.GetByIdAndTitulo(6,dto.TipoViviendaId);
                 if (tipoVivienda==false)
                 {
                     result.Data = null;
@@ -393,14 +460,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                     return result;
                 }
 
-                if (String.IsNullOrEmpty(dto.Vialidad))
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Vialidad Invalido";
-                    return result;
-                    
-                }
+               
                 if (String.IsNullOrEmpty(dto.Vivienda))
                 {
                     result.Data = null;
@@ -437,10 +497,14 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                 entity.URBANIZACION_ID = dto.UrbanizacionId;
                 entity.TIPO_DIRECCION_ID = dto.TipoDireccionId;
                 entity.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
-                entity.VIALIDAD_ID = dto.VialidadId;
-                entity.VIALIDAD = dto.Vialidad;
+
                 entity.VIVIENDA = dto.Vivienda;
-                entity.PRINCIPAL = dto.Principal;
+                entity.PRINCIPAL = 0;
+                if (dto.Principal == true)
+                {
+                    entity.PRINCIPAL = 1;
+                }
+                
               
                
                 var conectado = await _sisUsuarioRepository.GetConectado();
