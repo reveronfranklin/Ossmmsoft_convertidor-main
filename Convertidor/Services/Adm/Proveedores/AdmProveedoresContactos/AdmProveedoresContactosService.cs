@@ -45,11 +45,24 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresContactos
             }
             itemResult.Nombre = dtos.NOMBRE;
             itemResult.Apellido = dtos.APELLIDO;
+            itemResult.DescripcionIdentificacion="";
+            var descriptivaIdentificacion = await _repositoryPreDescriptiva.GetByCodigo(dtos.IDENTIFICACION_ID);
+            if (descriptivaIdentificacion != null)
+            {
+                itemResult.DescripcionIdentificacion = descriptivaIdentificacion.DESCRIPCION;
+            }
             itemResult.IdentificacionId = dtos.IDENTIFICACION_ID;
+
+
             itemResult.Identificacion = dtos.IDENTIFICACION;
             itemResult.Sexo = dtos.SEXO;
             itemResult.TipoContactoId = dtos.TIPO_CONTACTO_ID;
-            itemResult.Principal = dtos.PRINCIPAL;
+              itemResult.Principal = false;
+            if (dtos.PRINCIPAL == 1)
+            {
+                itemResult.Principal = true;
+            }
+         
            
           
             return itemResult;
@@ -152,7 +165,14 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresContactos
                 proveedorContacto.IDENTIFICACION = dto.Identificacion;
                 proveedorContacto.SEXO = dto.Sexo;
                 proveedorContacto.TIPO_CONTACTO_ID = dto.TipoContactoId;
-                proveedorContacto.PRINCIPAL = dto.Principal;
+                if (dto.Principal == true)
+                {
+                     proveedorContacto.PRINCIPAL = 1;
+                }else
+                {
+                    proveedorContacto.PRINCIPAL = 0;
+                }
+             
                 proveedorContacto.FECHA_UPD = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 proveedorContacto.CODIGO_EMPRESA = conectado.Empresa;
@@ -254,7 +274,13 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresContactos
                 entity.IDENTIFICACION = dto.Identificacion;
                 entity.SEXO = dto.Sexo;
                 entity.TIPO_CONTACTO_ID = dto.TipoContactoId;
-                entity.PRINCIPAL = dto.Principal;
+                if (dto.Principal == true)
+                {
+                     entity.PRINCIPAL = 1;
+                }else
+                {
+                    entity.PRINCIPAL = 0;
+                }
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.FECHA_INS = DateTime.Now;

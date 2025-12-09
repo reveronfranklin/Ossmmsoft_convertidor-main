@@ -10,5 +10,5 @@ public class AdmProveedorContactoUpdateDto
     public string Identificacion { get; set; } = string.Empty;
     public string Sexo { get; set; } = string.Empty;
     public int TipoContactoId  { get; set; } 
-    public int Principal  { get; set; }    
+    public bool Principal  { get; set; }    
 }
