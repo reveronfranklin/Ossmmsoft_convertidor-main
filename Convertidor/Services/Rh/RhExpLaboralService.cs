@@ -57,8 +57,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
                 itemResult.NombreEmpresa = dtos.NOMBRE_EMPRESA;
                 itemResult.TipoEmpresa = dtos.TIPO_EMPRESA;
-                if (dtos.RAMO_ID == null) dtos.RAMO_ID = 0;
-                itemResult.RamoId = dtos.RAMO_ID;
+            
                 itemResult.Cargo = dtos.CARGO;
                 itemResult.FechaDesde = dtos.FECHA_DESDE;
                 itemResult.FechaHasta = dtos.FECHA_HASTA;
@@ -110,23 +109,11 @@ namespace Convertidor.Data.Repository.Rh
             return texto?.Length == 1 && (texto[0] == 'G' || texto[0] == 'P');
         }
 
-        public async Task<ResultDto<RhExpLaboralResponseDto>> Update(RhExpLaboralUpdateDto dto)
+        public async Task<ResultDto<RhExpLaboralResponseDto>> Validate(RhExpLaboralUpdateDto dto)
         {
 
-            ResultDto<RhExpLaboralResponseDto> result = new ResultDto<RhExpLaboralResponseDto>(null);
-            try
-            {
-                var codigoExpLaboral = await _repository.GetByCodigo(dto.CodigoExpLaboral);
-                if (codigoExpLaboral == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo exp laboral no existe";
-                    return result;
-                }
-
-
-                var codigoPersona = await _rhPersonasRepository.GetCodigoPersona(dto.CodigoPersona);
+              ResultDto<RhExpLaboralResponseDto> result = new ResultDto<RhExpLaboralResponseDto>(null);
+              var codigoPersona = await _rhPersonasRepository.GetCodigoPersona(dto.CodigoPersona);
                 if (codigoPersona == null)
                 {
                     result.Data = null;
@@ -208,8 +195,33 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Descripcion Invalida";
                     return result;
                 }
-               
+                 result.Data = null;
+                 result.IsValid = true;
+                 result.Message = "";
+                return result;
 
+        }
+
+        public async Task<ResultDto<RhExpLaboralResponseDto>> Update(RhExpLaboralUpdateDto dto)
+        {
+
+            ResultDto<RhExpLaboralResponseDto> result = new ResultDto<RhExpLaboralResponseDto>(null);
+            try
+            {
+                var codigoExpLaboral = await _repository.GetByCodigo(dto.CodigoExpLaboral);
+                if (codigoExpLaboral == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Codigo exp laboral no existe";
+                    return result;
+                }
+
+                var validateDto =await Validate(dto);
+                if (validateDto.IsValid == false)
+                {
+                    return validateDto;
+                }
                 codigoExpLaboral.CODIGO_EXP_LABORAL = dto.CodigoExpLaboral;
                 codigoExpLaboral.NOMBRE_EMPRESA = dto.NombreEmpresa;
                 codigoExpLaboral.TIPO_EMPRESA = dto.TipoEmpresa;
@@ -266,93 +278,11 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Ya existe el Codigo ExpLaboral";
                     return result;
                 }
-                var codigoPersona = await _rhPersonasRepository.GetCodigoPersona(dto.CodigoPersona);
-                if (codigoPersona == null)
+                var validateDto =await Validate(dto);
+                if (validateDto.IsValid == false)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Codigo persona no existe";
-                    return result;
+                    return validateDto;
                 }
-          
-                if (dto.NombreEmpresa is not null && dto.NombreEmpresa.Length > 50)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Nombre Empresa Invalido";
-                    return result;
-                }
-                 var valido=ValidarUnSoloGyP(dto.TipoEmpresa);
-                if (!valido)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Tipo Empresa Invalido, debe ser G o P";
-                    return result;
-                }
-               
-                
-                if (dto.Cargo == string.Empty && dto.Cargo.Length > 50)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cargo Invalido";
-                    return result;
-                }
-                if (!DateValidate.IsDate(dto.FechaDesde.ToShortDateString()))
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha inicial Invalida";
-                    result.LinkData = "";
-                    return result;
-                }
-                if (!DateValidate.IsDate(dto.FechaHasta.ToShortDateString()))
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Fecha Final Invalida";
-                    result.LinkData = "";
-                    return result;
-                }
-
-                if (dto.UltimoSueldo == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Ultimo sueldo Invalido";
-                    return result;
-                }
-                if (dto.Supervisor == string.Empty && dto.Supervisor.Length > 50)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Supervisor Invalido";
-                    return result;
-                }
-                if (dto.CargoSupervisor == string.Empty && dto.CargoSupervisor.Length > 50)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Cargo Supervisor Invalido";
-                    return result;
-                }
-                if (dto.Telefono == string.Empty && dto.Telefono.Length > 20)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Telefono Invalido";
-                    return result;
-                }
-                if (dto.Descripcion == string.Empty && dto.Descripcion.Length > 1000)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Descripcion Invalida";
-                    return result;
-                }
-               
-
 
 
                 RH_EXP_LABORAL entity = new RH_EXP_LABORAL();
