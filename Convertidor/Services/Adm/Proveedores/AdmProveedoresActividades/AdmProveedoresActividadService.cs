@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
 using Convertidor.Utility;
+using NPOI.Util;
 
 
 namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
@@ -106,31 +107,21 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
                 }
 
                 
-                var tiposProveedorActividad = await _repositoryPreDescriptiva.GetByTitulo(13);
-                if (tiposProveedorActividad.Count<=0)
+                var tiposProveedorActividad = await _repositoryPreDescriptiva.GetByIdAndTitulo(13,dto.ActividadId);
+                if (tiposProveedorActividad==false)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo Proveedor Actividad  Invalido";
                     return result;
                 }
-                else
-                {
-                    var tipoProveedor = tiposProveedorActividad.Where(x => x.DESCRIPCION_ID== dto.ActividadId);
-                    if (tipoProveedor is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Tipo Proveedor  Invalido";
-                        return result;
-                    }
-                }
+                
                
                
              
              
 
-                if (!DateValidate.IsDate(dto.FechaIniString))
+                if (!DateValidate.IsDate(dto.FechaIni.ToString()))
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -138,7 +129,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
                     return result;
                 }
 
-                if (!DateValidate.IsDate(dto.FechaFinString))
+                if (!DateValidate.IsDate(dto.FechaFin.ToString()))
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -193,31 +184,21 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
                 }
 
                 
-                var tiposProveedorActividad = await _repositoryPreDescriptiva.GetByTitulo(13);
-                if (tiposProveedorActividad.Count<=0)
+                var tiposProveedorActividad = await _repositoryPreDescriptiva.GetByIdAndTitulo(13,dto.ActividadId);
+                if (tiposProveedorActividad==false)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Tipo Proveedor Actividad  Invalido";
                     return result;
                 }
-                else
-                {
-                    var tipoProveedor = tiposProveedorActividad.Where(x => x.DESCRIPCION_ID== dto.ActividadId);
-                    if (tipoProveedor is null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Tipo Proveedor  Invalido";
-                        return result;
-                    }
-                }
+                
                
                
              
              
 
-                if (!DateValidate.IsDate(dto.FechaIniString))
+                 if (!DateValidate.IsDate(dto.FechaIni.ToString()))
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -225,14 +206,19 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
                     return result;
                 }
 
-                if (!DateValidate.IsDate(dto.FechaFinString))
+                if (!DateValidate.IsDate(dto.FechaFin.ToString()))
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Fecha Inicial Invalida";
                     return result;
                 }
+
+              
                 ADM_ACT_PROVEEDOR entity = new ADM_ACT_PROVEEDOR();
+            
+
+                entity.CODIGO_ACT_PROVEEDOR = await _repository.GetNextKey();
                 entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;
                 entity.ACTIVIDAD_ID = dto.ActividadId;
                 entity.FECHA_INI = dto.FechaIni;
