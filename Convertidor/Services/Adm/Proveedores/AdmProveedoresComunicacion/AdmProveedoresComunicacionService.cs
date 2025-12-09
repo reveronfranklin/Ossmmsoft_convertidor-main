@@ -51,9 +51,14 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
             }
             itemResult.CodigoArea = dtos.CODIGO_AREA;
             itemResult.LineaComunicacion = dtos.LINEA_COMUNICACION;
-            itemResult.Principal = dtos.PRINCIPAL;
+            itemResult.Principal = false;
+            if(dtos.PRINCIPAL == 1)
+            {
+                itemResult.Principal = true;
+            }
+    
             itemResult.Extension = dtos.EXTENSION;
-            itemResult.CodigoPresupuesto = dtos.CODIGO_PRESUPUESTO;
+         
 
             return itemResult;
         }
@@ -109,7 +114,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Proveedor Actividad  Invalido";
+                       result.Message = "Tipo Comunicacion Invalido";
                     return result;
                 }
 
@@ -120,8 +125,16 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
                 proveedorComunicacion.CODIGO_AREA = dto.CodigoArea;
                 proveedorComunicacion.LINEA_COMUNICACION = dto.LineaComunicacion;
                 proveedorComunicacion.EXTENSION = dto.Extension;
-                proveedorComunicacion.PRINCIPAL = dto.Principal;
-                proveedorComunicacion.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                if(dto.Principal == true)
+                {
+                    proveedorComunicacion.PRINCIPAL = 1;
+                }
+                else
+                {
+                    proveedorComunicacion.PRINCIPAL = 0;
+                }
+      
+                proveedorComunicacion.CODIGO_PRESUPUESTO =0;
                 proveedorComunicacion.FECHA_UPD = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 proveedorComunicacion.CODIGO_EMPRESA = conectado.Empresa;
@@ -168,7 +181,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
                 {
                     result.Data = null;
                     result.IsValid = false;
-                    result.Message = "Tipo Proveedor Actividad  Invalido";
+                    result.Message = "Tipo Comunicacion Invalido";
                     return result;
                 }
 
@@ -185,8 +198,16 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
                 entity.CODIGO_AREA = dto.CodigoArea;
                 entity.LINEA_COMUNICACION = dto.LineaComunicacion;
                 entity.EXTENSION = dto.Extension;
-                entity.PRINCIPAL = dto.Principal;
-                entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
+                 if(dto.Principal == true)
+                {
+                    entity.PRINCIPAL = 1;
+                }
+                else
+                {
+                    entity.PRINCIPAL = 0;
+                }
+      
+                entity.CODIGO_PRESUPUESTO = 0;
                 entity.FECHA_UPD = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 entity.CODIGO_EMPRESA = conectado.Empresa;
