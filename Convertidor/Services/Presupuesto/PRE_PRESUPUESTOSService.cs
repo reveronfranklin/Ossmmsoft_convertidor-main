@@ -459,8 +459,10 @@ namespace Convertidor.Services.Presupuesto
                 }
 
                 var entity = MapCreatePrePresupuestoDtoToPrePresupuesto(dto);
+
                 entity.CODIGO_PRESUPUESTO = await _pRE_PRESUPUESTOSRepository.GetNextKey();
                 var conectado = await _sisUsuarioRepository.GetConectado();
+                entity.FECHA_APROBACION=null;
                 entity.CODIGO_EMPRESA = conectado.Empresa;
                 entity.USUARIO_INS = conectado.Usuario;
                 var created = await _pRE_PRESUPUESTOSRepository.Add(entity);
@@ -571,12 +573,12 @@ namespace Convertidor.Services.Presupuesto
                 DateTime fechaHasta = DateTime.ParseExact(dto.FechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 presupuesto.FECHA_HASTA = fechaHasta;
           
-                string format = "yyyy-MM-ddTHH:mm:ss.fffZ";
+                /*string format = "dd/MM/yyyy";
 
                 DateTime fechaAprobacion = DateTime.ParseExact(dto.FechaAprobacion, format, CultureInfo.InvariantCulture);
-
+*/
                 
-                presupuesto.FECHA_APROBACION = fechaAprobacion;  
+                presupuesto.FECHA_APROBACION = null ; //fechaAprobacion;  
                 
                 presupuesto.NUMERO_ORDENANZA = dto.NumeroOrdenanza;
                 DateTime fechaOrdenanza = DateTime.ParseExact(dto.FechaOrdenanza, "dd/MM/yyyy", CultureInfo.InvariantCulture);
