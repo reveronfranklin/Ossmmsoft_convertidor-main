@@ -571,7 +571,7 @@ namespace Convertidor.Services.Presupuesto
                 DateTime fechaHasta = DateTime.ParseExact(dto.FechaHasta, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 presupuesto.FECHA_HASTA = fechaHasta;
           
-                string format = "yyyy-MM-ddTHH:mm:ss.fffZ";
+                string format = "dd/MM/yyyy";
 
                 DateTime fechaAprobacion = DateTime.ParseExact(dto.FechaAprobacion, format, CultureInfo.InvariantCulture);
 
