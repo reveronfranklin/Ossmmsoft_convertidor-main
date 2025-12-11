@@ -639,12 +639,7 @@ namespace Convertidor.Services.Presupuesto
                     result.Message = "Presupuesto no existe";
                     return result;
                 }
-                if(presupuesto.FECHA_APROBACION!=null) {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = " No existe un Presupuesto Activo.";
-                    return result;
-                }
+                
                 var presupuestoExiste = await _PRE_ASIGNACIONESRepository.PresupuestoExisteConMonto(codigoPresupuesto);
                 if (!presupuestoExiste)
                 {
