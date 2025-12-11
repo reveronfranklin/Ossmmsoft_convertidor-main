@@ -624,15 +624,18 @@ namespace Convertidor.Services.Presupuesto
             try
             {
 
-                if (!Convertidor.Utility.DateValidate.IsDate(fechaAprobacion))
-                {
-                    result.IsValid = false;
-                    result.Message = "Fecha de Aprobacion invalida";
-                    return result;
-                }
+               
                 
                 var presupuesto = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, codigoPresupuesto);
                 if (presupuesto==null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Presupuesto no existe";
+                    return result;
+                }
+                 var presupuestoAnterior = await _pRE_PRESUPUESTOSRepository.GetByCodigo(conectado.Empresa, codigoPresupuesto-1);
+                if (presupuestoAnterior==null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -658,10 +661,33 @@ namespace Convertidor.Services.Presupuesto
                     return result;
                 }
                 
-                await _pRE_PRESUPUESTOSRepository.AprobarPresupuesto(codigoPresupuesto, conectado.Usuario,
+                
+                DateTime fechaAprob = DateTime.ParseExact(fechaAprobacion, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime fechaDesde = presupuestoAnterior.FECHA_DESDE;  // Ya es DateTime!
+
+                // Validación CORRECTA: fechaAprob debe ser >= fechaDesde
+                if (fechaAprob < fechaDesde)  // Si fechaAprob es MENOR que fechaDesde → ERROR
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = $"La fecha de aprobación ({fechaAprob:dd/MM/yyyy}) debe ser mayor o igual a la fecha desde ({fechaDesde:dd/MM/yyyy}) del presupuesto anterior";
+                    return result;
+                }
+
+                var aprobado=await _pRE_PRESUPUESTOSRepository.AprobarPresupuesto(codigoPresupuesto, conectado.Usuario,
                     conectado.Empresa);
-           
-                presupuesto.FECHA_APROBACION = Convert.ToDateTime(fechaAprobacion, CultureInfo.InvariantCulture);  
+                if (aprobado.Length > 0)
+                {
+                     result.Data = null;
+                     result.IsValid = false;
+                     result.Message = aprobado;
+                     return result;
+                }
+
+               
+
+
+                presupuesto.FECHA_APROBACION = fechaAprob;  
                 presupuesto.USUARIO_UPD = conectado.Usuario;
                 presupuesto.CODIGO_EMPRESA = conectado.Empresa;
                 presupuesto.FECHA_UPD = DateTime.Now;

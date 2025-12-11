@@ -23,7 +23,8 @@ namespace Convertidor.Data.Interfaces.Presupuesto
 
         Task RecalcularSaldo(int codigo_presupuesto);
         Task<PRE_PRESUPUESTOS> GetLast();
-        Task AprobarPresupuesto(int codigoPresupuesto, int codigoUsuario, int codigoEmpresa);
+        
+        Task<string> AprobarPresupuesto(int codigoPresupuesto,int codigoUsuario,int codigoEmpresa);
 
 
 	}
