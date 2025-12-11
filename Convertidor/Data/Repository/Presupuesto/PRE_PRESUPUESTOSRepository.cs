@@ -209,7 +209,9 @@ namespace Convertidor.Data.Repository.Presupuesto
                 PRE_PRESUPUESTOS entityUpdate = await GetByCodigo(entity.CODIGO_EMPRESA, entity.CODIGO_PRESUPUESTO);
                 if (entityUpdate != null)
                 {
-                    
+                    entity.DESCRIPCION = entity.DESCRIPCION ?? "";
+                    entity.DENOMINACION = entity.DENOMINACION ?? "";
+
                     entity.DENOMINACION = entity.DENOMINACION.ToUpper();
                     entity.DESCRIPCION = entity.DESCRIPCION.ToUpper();
                     entity.FECHA_DESDE = entity.FECHA_DESDE.Date;
@@ -269,9 +271,10 @@ namespace Convertidor.Data.Repository.Presupuesto
         }
 
         
-        public async Task AprobarPresupuesto(int codigoPresupuesto,int codigoUsuario,int codigoEmpresa)
+        public async Task<string> AprobarPresupuesto(int codigoPresupuesto,int codigoUsuario,int codigoEmpresa)
         {
-
+            if(codigoUsuario==0) codigoUsuario=1;
+            var result ="";
          
             try
             {
@@ -279,14 +282,14 @@ namespace Convertidor.Data.Repository.Presupuesto
                 FormattableString xqueryDiario = $"DECLARE \nBEGIN\nPRE.PRE_PKG_CLONAR_PRESUPUESTO.INSERT_PRE_SALDO({codigoPresupuesto},{codigoUsuario},{codigoEmpresa});\nEND;";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-
+                return result;
 
             }
             catch (Exception ex)
             {
                 var mess = ex.InnerException.Message;
-
-                throw;
+                result=mess;
+               return result;
             }
 
 
