@@ -662,7 +662,12 @@ namespace Convertidor.Services.Presupuesto
                 }
                 
                 
-                DateTime fechaAprob = DateTime.ParseExact(fechaAprobacion, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+               // DateTime fechaAprob = DateTime.ParseExact(fechaAprobacion, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime fechaAprob = DateTime.Parse(fechaAprobacion, 
+    CultureInfo.InvariantCulture, 
+    DateTimeStyles.RoundtripKind);
+                
+                
                 DateTime fechaDesde = presupuestoAnterior.FECHA_DESDE;  // Ya es DateTime!
 
                 // Validación CORRECTA: fechaAprob debe ser >= fechaDesde
