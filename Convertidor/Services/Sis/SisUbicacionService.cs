@@ -273,7 +273,7 @@ public class SisUbicacionService : ISisUbicacionService
             foreach (var item in parroquias)
             {
                 SelectListDescriptiva resultItem = new SelectListDescriptiva();
-                resultItem.Id = (int)item.CIUDAD;
+                resultItem.Id = (int)item.PARROQUIA;
                 resultItem.Descripcion = item.EXTRA1;
                 result.Add(resultItem);
             }
