@@ -12,6 +12,7 @@ public interface ISisUbicacionService
     Task<List<SelectListDescriptiva>> GetParroquias();
     Task<List<SelectListDescriptiva>> GetParroquiasPorPaisEstadoMunicipioCiudad(FiltersParroquia filter);
     Task<List<SelectListDescriptiva>> GetSectoresPorPaisEstadoMunicipioCiudadParroquias(FiltersSector filter);
+    Task<List<SelectListDescriptiva>> GetUrnanizacionesPorPaisEstadoMunicipioCiudadParroquiasSector(FiltersUrbanizacion filter);
     Task<List<SelectListDescriptiva>> Getsectores();
     Task<List<SelectListDescriptiva>> GetUrbanizaciones();
     Task<SelectListDescriptiva> GetPais(int Pais);

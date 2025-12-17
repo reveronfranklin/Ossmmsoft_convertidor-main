@@ -41,3 +41,13 @@ public class FiltersEstado
 		public int CodigoCiudad { get; set; }
 		public int CodigoParroquia { get; set; }
 	}
+
+		public class FiltersUrbanizacion
+	{
+		public int CodigoPais { get; set; }
+		public int CodigoEstado { get; set; }
+		public int CodigoMunicipio { get; set; }
+		public int CodigoCiudad { get; set; }
+		public int CodigoParroquia { get; set; }
+		public int CodigoSector { get; set; }
+	}
