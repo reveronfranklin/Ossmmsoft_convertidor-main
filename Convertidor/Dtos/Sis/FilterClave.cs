@@ -32,3 +32,12 @@ public class FiltersEstado
 		public int CodigoMunicipio { get; set; }
 		public int CodigoCiudad { get; set; }
 	}
+
+	public class FiltersSector
+	{
+		public int CodigoPais { get; set; }
+		public int CodigoEstado { get; set; }
+		public int CodigoMunicipio { get; set; }
+		public int CodigoCiudad { get; set; }
+		public int CodigoParroquia { get; set; }
+	}
