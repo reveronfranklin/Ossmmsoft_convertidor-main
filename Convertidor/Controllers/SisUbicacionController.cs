@@ -78,6 +78,15 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+
+         [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> GetUrbanizacionesPorPaisEstadoMunicipioCiudadParroquiasSector(FiltersUrbanizacion filter)
+        {
+            var result = await _service.GetUrnanizacionesPorPaisEstadoMunicipioCiudadParroquiasSector(filter);
+            return Ok(result);
+        }
+
       
     }
 }
