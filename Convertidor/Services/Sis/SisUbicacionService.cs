@@ -404,6 +404,33 @@ public class SisUbicacionService : ISisUbicacionService
         }
     }
 
+ 
+ public async Task<List<SelectListDescriptiva>> GetSectoresPorPaisEstadoMunicipioCiudadParroquias(FiltersSector filter)
+    {
+        List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
+        try
+        {
+            var parroquias = await _repository.GetSectoresPorPaisEstadoMunicipioCiudadParroquias(filter);
+            foreach (var item in parroquias)
+            {
+                SelectListDescriptiva resultItem = new SelectListDescriptiva();
+                resultItem.Id = (int)item.SECTOR;
+                resultItem.Descripcion = item.EXTRA1;
+                result.Add(resultItem);
+            }
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            var msg = ex.InnerException.Message;
+            return null;
+        }
+
+
+    }
+
+
     public async Task<List<SelectListDescriptiva>> GetUrbanizaciones()
     {
         List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
