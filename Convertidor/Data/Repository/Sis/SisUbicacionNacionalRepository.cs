@@ -186,7 +186,7 @@ namespace Convertidor.Data.Repository.Sis
               try
             {
                 var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
-                    .Where(x =>  x.PAIS==filter.CodigoPais && x.ENTIDAD==filter.CodigoEstado && x.MUNICIPIO==filter.CodigoMunicipio && x.CIUDAD==filter.CodigoCiudad && x.PARROQUIA==filter.CodigoParroquia && x.SECTOR>0 ) 
+                    .Where(x =>  x.PAIS==filter.CodigoPais && x.ENTIDAD==filter.CodigoEstado && x.MUNICIPIO==filter.CodigoMunicipio && x.CIUDAD==filter.CodigoCiudad && x.PARROQUIA==filter.CodigoParroquia && x.SECTOR==0 ) 
                     .ToListAsync();
                 return result;
             }
@@ -371,8 +371,8 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                 var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
-                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == 0 && 
-                    x.CIUDAD == 0 && x.PARROQUIA == 0 && x.SECTOR == Sector && x.URBANIZACION==0).FirstOrDefaultAsync();
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == municipio && 
+                    x.CIUDAD == ciudad&& x.PARROQUIA == parroquia && x.SECTOR == Sector && x.URBANIZACION==0).FirstOrDefaultAsync();
                 return result;
             }
             catch (Exception ex)
@@ -391,8 +391,8 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                 var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
-                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == 0 &&
-                    x.CIUDAD == 0 && x.PARROQUIA == 0 && x.SECTOR == 0 && x.URBANIZACION == urbanizacion).FirstOrDefaultAsync();
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO == municipio &&
+                    x.CIUDAD == ciudad && x.PARROQUIA == parroquia&& x.SECTOR ==Sector && x.URBANIZACION == urbanizacion).FirstOrDefaultAsync();
                 return result;
             }
             catch (Exception ex)
