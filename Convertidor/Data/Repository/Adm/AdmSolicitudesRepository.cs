@@ -117,6 +117,9 @@ namespace Convertidor.Data.Repository.Adm
                 FormattableString xqueryDiario = $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.SEARCH_TEXT = TRIM(NUMERO_SOLICITUD) || STATUS || TRIM(MOTIVO) || (SELECT DENOMINACION FROM PRE.PRE_INDICE_CAT_PRG WHERE PRE.PRE_INDICE_CAT_PRG.CODIGO_ICP  = ADM.ADM_SOLICITUDES.CODIGO_SOLICITANTE) || (SELECT DESCRIPCION FROM ADM.ADM_DESCRIPTIVAS    WHERE ADM.ADM_DESCRIPTIVAS.DESCRIPCION_ID  = ADM.ADM_SOLICITUDES.TIPO_SOLICITUD_ID) || (SELECT NOMBRE_PROVEEDOR FROM ADM.ADM_PROVEEDORES   WHERE  ADM.ADM_PROVEEDORES.CODIGO_PROVEEDOR  =ADM.ADM_SOLICITUDES.CODIGO_PROVEEDOR) WHERE CODIGO_SOLICITUS ={codigoSolicitud}";
 
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                FormattableString xquery = $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.MOTIVO ='' WHERE MOTIVO IS NULL";
+                var result = _context.Database.ExecuteSqlInterpolated(xquery);
+
                 return "";
             }
             catch (Exception ex)
@@ -134,6 +137,10 @@ namespace Convertidor.Data.Repository.Adm
                 FormattableString xqueryDiario =
                     $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.MONTO_LETRAS='' WHERE MONTO_LETRAS IS NULL  ";
                 var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+
+                  FormattableString xquery = $"UPDATE ADM.ADM_SOLICITUDES SET ADM.ADM_SOLICITUDES.MOTIVO ='' WHERE MOTIVO IS NULL";
+                var result = _context.Database.ExecuteSqlInterpolated(xquery);
+
                 return "";
             }
             catch (Exception ex)
