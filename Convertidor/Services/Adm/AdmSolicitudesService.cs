@@ -425,6 +425,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                if (dto.Motivo ==null) dto.Motivo="";
                 if (dto.Motivo is not null && dto.Motivo.Length>1150)
                 {
                     result.Data = null;
@@ -432,6 +433,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Motivo Invalido";
                     return result;
                 }
+                 if (dto.Nota ==null) dto.Nota="";
                 if (dto.Nota is not null && dto.Nota.Length > 1000)
                 {
                     result.Data = null;
@@ -621,6 +623,7 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
 
+                if (dto.Motivo ==null) dto.Motivo="";
                 if (  dto.Motivo is not null && dto.Motivo.Length > 1150)
                 {
                     result.Data = null;
@@ -628,6 +631,7 @@ namespace Convertidor.Services.Adm
                     result.Message = "Motivo Invalido";
                     return result;
                 }
+                   if (dto.Nota ==null) dto.Nota="";
                 if (dto.Nota is not null && dto.Nota.Length > 1000)
                 {
                     result.Data = null;
