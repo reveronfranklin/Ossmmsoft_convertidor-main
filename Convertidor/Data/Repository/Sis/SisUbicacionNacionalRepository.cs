@@ -353,8 +353,8 @@ namespace Convertidor.Data.Repository.Sis
             try
             {
                 var result = await _context.SIS_UBICACION_NACIONAL.DefaultIfEmpty()
-                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO==0 && 
-                    x.CIUDAD==0 && x.PARROQUIA ==Parroquia && x.SECTOR==0 && x.URBANIZACION ==0).FirstOrDefaultAsync();
+                    .Where(x => x.PAIS == pais && x.ENTIDAD == estado && x.MUNICIPIO==municipio && 
+                    x.CIUDAD==ciudad && x.PARROQUIA ==Parroquia && x.SECTOR==0 && x.URBANIZACION ==0).FirstOrDefaultAsync();
                 return result;
             }
             catch (Exception ex)
