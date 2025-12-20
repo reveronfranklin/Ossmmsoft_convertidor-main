@@ -269,28 +269,34 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Complemento de Dir es muy largo, Maximo 200 caracteres";
                     return result;
                 }
-
-                /*var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId, dto.MunicipioId,
+                if(dto.SectorId > 0){
+                    var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId, dto.MunicipioId,
                     dto.CiudadId, dto.ParroquiaId, dto.SectorId);
-                if (sector is null)
-                {
-                    sector.Id = dto.SectorId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Sector Invalido";
-                    return result;
-                }*/
+                        if (sector is null)
+                        {
+                            sector.Id = dto.SectorId;
+                            result.Data = null;
+                            result.IsValid = false;
+                            result.Message = "Sector Invalido";
+                            return result;
+                        
+                        }
+                }
 
-                /*var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dto.PaisId, dto.EstadoId, dto.MunicipioId,
-                    dto.CiudadId, dto.ParroquiaId, dto.SectorId, dto.UrbanizacionId);
-                if (urbanizacion is null)
+                if (dto.UrbanizacionId > 0)
                 {
-                    urbanizacion.Id = dto.UrbanizacionId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Urbanizacion Invalida";
-                    return result;
-                }*/
+                    var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dto.PaisId, dto.EstadoId, dto.MunicipioId,
+                    dto.CiudadId, dto.ParroquiaId, dto.SectorId, dto.UrbanizacionId);
+                    if (urbanizacion is null)
+                    {
+                        urbanizacion.Id = dto.UrbanizacionId;
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Urbanizacion Invalida";
+                        return result;
+                    }
+                }
+               
 
                
 
@@ -302,8 +308,8 @@ namespace Convertidor.Data.Repository.Rh
                 direccion.MUNICIPIO_ID = dto.MunicipioId;
                 direccion.CIUDAD_ID = dto.CiudadId;
                 direccion.PARROQUIA_ID = dto.ParroquiaId;
-                //direccion.SECTOR_ID = dto.SectorId;
-                //direccion.URBANIZACION_ID = dto.UrbanizacionId;
+                direccion.SECTOR_ID = dto.SectorId;
+                direccion.URBANIZACION_ID = dto.UrbanizacionId;
                 //direccion.MANZANA_ID = dto.ManzanaId;
                 //direccion.PARCELA_ID = dto.ParcelaId;
                 //direccion.VIALIDAD_ID = dto.VialidadId;
@@ -418,27 +424,34 @@ namespace Convertidor.Data.Repository.Rh
                     result.Message = "Complemento de Dir es muy largo, Maximo 200 caracteres";
                     return result;
                 }
-                /*var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId,dto.MunicipioId,
-                    dto.CiudadId,dto.ParroquiaId, dto.SectorId);
-                if (sector is null)
-                {
-                    sector.Id = dto.SectorId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Sector Invalido";
-                    return result;
+                if(dto.SectorId > 0){
+                    var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId, dto.MunicipioId,
+                    dto.CiudadId, dto.ParroquiaId, dto.SectorId);
+                        if (sector is null)
+                        {
+                            sector.Id = dto.SectorId;
+                            result.Data = null;
+                            result.IsValid = false;
+                            result.Message = "Sector Invalido";
+                            return result;
+                        
+                        }
                 }
 
-                var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dto.PaisId, dto.EstadoId,dto.MunicipioId,
-                    dto.CiudadId,dto.ParroquiaId,dto.SectorId, dto.UrbanizacionId);
-                if (urbanizacion is null)
+                if (dto.UrbanizacionId > 0)
                 {
-                    urbanizacion.Id = dto.UrbanizacionId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Urbanizacion Invalida";
-                    return result;
-                }*/
+                    var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dto.PaisId, dto.EstadoId, dto.MunicipioId,
+                    dto.CiudadId, dto.ParroquiaId, dto.SectorId, dto.UrbanizacionId);
+                    if (urbanizacion is null)
+                    {
+                        urbanizacion.Id = dto.UrbanizacionId;
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Urbanizacion Invalida";
+                        return result;
+                    }
+                }
+               
 
                 RH_DIRECCIONES entity = new RH_DIRECCIONES();
 
@@ -450,8 +463,8 @@ namespace Convertidor.Data.Repository.Rh
                 entity.MUNICIPIO_ID = dto.MunicipioId;
                 entity.CIUDAD_ID = dto.CiudadId;
                 entity.PARROQUIA_ID = dto.ParroquiaId;
-                //entity.SECTOR_ID = dto.SectorId;
-                //entity.URBANIZACION_ID = dto.UrbanizacionId;
+                entity.SECTOR_ID = dto.SectorId;
+                entity.URBANIZACION_ID = dto.UrbanizacionId;
                 //entity.MANZANA_ID = dto.ManzanaId;
                 //entity.PARCELA_ID = dto.ParcelaId;
                 //entity.VIALIDAD_ID = dto.VialidadId;
