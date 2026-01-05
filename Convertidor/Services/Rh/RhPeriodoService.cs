@@ -729,6 +729,7 @@ namespace Convertidor.Data.Repository.Rh
 
 
                 var deleted = await _repository.Delete(dto.CodigoPeriodo);
+               
 
                 if (deleted.Length > 0)
                 {

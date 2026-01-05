@@ -168,6 +168,26 @@ namespace Convertidor.Data.Repository.Rh
 
         }
 
+        public async Task<string> DeleteTmpNomina(int codigoPeriodo)
+        {
+             try
+            {
+
+                 FormattableString xquery = $"DELETE FROM RH.\"RH_PERIODOS\" WHERE  \"CODIGO_PERIODO\" = {codigoPeriodo}";
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(xquery);
+              
+                
+                FormattableString xquerySaldo = $"DELETE FROM RH.\"RH_TMP_NOMINA\" WHERE  \"CODIGO_PERIODO\" = {codigoPeriodo}";
+               await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
+
+             
+                return "PeriodoEliminada";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public async Task<string> Delete(int codigoPeriodo)
         {
 
@@ -176,8 +196,12 @@ namespace Convertidor.Data.Repository.Rh
                 RH_PERIODOS entity = await GetByCodigo(codigoPeriodo);
                 if (entity != null)
                 {
-                    _context.RH_PERIODOS.Remove(entity);
+                    await DeleteTmpNomina(codigoPeriodo);
+
+                    /*_context.RH_PERIODOS.Remove(entity);
                     await _context.SaveChangesAsync();
+                    await DeleteTmpNomina(codigoPeriodo);*/
+
                 }
                 return "";
             }
