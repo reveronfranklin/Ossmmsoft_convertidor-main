@@ -72,6 +72,43 @@ namespace Convertidor.Services.Adm
         }
 
 
+        public async Task<List<SelectListDescriptiva>> GetByTituloSimple(int tituloId)
+        {
+
+            List<SelectListDescriptiva> result = new List<SelectListDescriptiva>();
+            try
+            {
+                var descriptivas = await _repository.GetByTitulo(tituloId);
+             
+                if (descriptivas.Count>0)
+                {
+
+                    foreach (var item in descriptivas)
+                    {
+                        
+                        SelectListDescriptiva resultItem  = new SelectListDescriptiva();
+                        
+                        resultItem.Id = item.DESCRIPCION_ID;
+                        
+                        resultItem.Descripcion = item.DESCRIPCION;
+                        result.Add(resultItem);
+                        
+                        
+                    }
+                }
+
+
+                return result.OrderBy(x=>x.Descripcion).ToList();
+            }
+            catch (Exception ex)
+            {
+                var res = ex.InnerException.Message;
+                return null;
+            }
+
+        }
+
+
         public async Task<ResultDto<List<AdmDescriptivasGetDto>>> GetByTitulo(int tituloId)
         {
 

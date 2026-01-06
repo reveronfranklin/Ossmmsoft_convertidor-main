@@ -12,6 +12,7 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmDescriptivasGetDto>> Create(AdmDescriptivasUpdateDto dto);
         Task<ResultDto<AdmDescriptivaDeleteDto>> Delete(AdmDescriptivaDeleteDto dto);
         Task<ResultDto<List<AdmDescriptivasGetDto>>> GetByTitulo(int tituloId);
+        Task<List<SelectListDescriptiva>> GetByTituloSimple(int tituloId);
         Task<ResultDto<List<AdmDescriptivasGetDto>>> GetByCodigoTitulo(string codigo);
     }
 }
