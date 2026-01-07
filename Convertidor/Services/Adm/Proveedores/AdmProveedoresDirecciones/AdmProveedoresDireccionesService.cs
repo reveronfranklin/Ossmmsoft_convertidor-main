@@ -45,6 +45,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
             
             itemResult.CodigoDirProveedor = dtos.CODIGO_DIR_PROVEEDOR;
             itemResult.CodigoProveedor = dtos.CODIGO_PROVEEDOR;
+            itemResult.TipoDireccionId = dtos.TIPO_DIRECCION_ID;
             var tiposDireccion = await _repositoryDescriptiva.GetByCodigo(dtos.TIPO_DIRECCION_ID);
             if (tiposDireccion != null)
             {
