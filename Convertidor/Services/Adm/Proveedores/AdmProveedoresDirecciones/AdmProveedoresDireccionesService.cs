@@ -169,8 +169,8 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
             try
             {
 
-                var proveedorContacto = await _repository.GetByCodigo(dto.CodigoDirProveedor);
-                if (proveedorContacto == null)
+                var entity = await _repository.GetByCodigo(dto.CodigoDirProveedor);
+                if (entity == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -304,30 +304,34 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                     
                 }
                 
-                proveedorContacto.PAIS_ID = dto.PaisId;
-                proveedorContacto.ESTADO_ID = dto.EstadoId;
-                proveedorContacto.MUNICIPIO_ID = dto.MunicipioId;
-                proveedorContacto.CIUDAD_ID = dto.CiudadId;
-                proveedorContacto.PARROQUIA_ID = dto.ParroquiaId;
-                proveedorContacto.SECTOR_ID = dto.SectorId;
-                proveedorContacto.URBANIZACION_ID = dto.UrbanizacionId;
-                proveedorContacto.TIPO_DIRECCION_ID = dto.TipoDireccionId;
-                proveedorContacto.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
-
-                proveedorContacto.VIVIENDA = dto.Vivienda;
-                 proveedorContacto.PRINCIPAL = 0;
+                entity.PAIS_ID = dto.PaisId;
+                entity.ESTADO_ID = dto.EstadoId;
+                entity.MUNICIPIO_ID = dto.MunicipioId;
+                entity.CIUDAD_ID = dto.CiudadId;
+                entity.PARROQUIA_ID = dto.ParroquiaId;
+                entity.SECTOR_ID = dto.SectorId;
+                entity.URBANIZACION_ID = dto.UrbanizacionId;
+                entity.TIPO_DIRECCION_ID = dto.TipoDireccionId;
+                entity.COMPLEMENTO_DIR =dto.ComplementoDir;
+                entity.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
+                entity.TIPO_NIVEL_ID = dto.TipoNivelId;
+                entity.CODIGO_POSTAL = dto.CodigoPostal;
+                entity.TENENCIA_ID = dto.TenenciaId;
+                entity.VIVIENDA = dto.Vivienda;
+                entity.PRINCIPAL = 0;
                 if (dto.Principal == true)
                 {
-                    proveedorContacto.PRINCIPAL = 1;
+                    entity.PRINCIPAL = 1;
                 }
                 
-                proveedorContacto.FECHA_UPD = DateTime.Now;
-                var conectado = await _sisUsuarioRepository.GetConectado();
-                proveedorContacto.CODIGO_EMPRESA = conectado.Empresa;
-                proveedorContacto.USUARIO_UPD = conectado.Usuario;
-                await _repository.Update(proveedorContacto);
                 
-                var resultDto = await  MapProveedorDireccionDto(proveedorContacto);
+                entity.FECHA_UPD = DateTime.Now;
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                entity.CODIGO_EMPRESA = conectado.Empresa;
+                entity.USUARIO_UPD = conectado.Usuario;
+                await _repository.Update(entity);
+                
+                var resultDto = await  MapProveedorDireccionDto(entity);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -496,8 +500,11 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                 entity.SECTOR_ID = dto.SectorId;
                 entity.URBANIZACION_ID = dto.UrbanizacionId;
                 entity.TIPO_DIRECCION_ID = dto.TipoDireccionId;
+                entity.COMPLEMENTO_DIR =dto.ComplementoDir;
                 entity.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
-
+                entity.TIPO_NIVEL_ID = dto.TipoNivelId;
+                entity.CODIGO_POSTAL = dto.CodigoPostal;
+                entity.TENENCIA_ID = dto.TenenciaId;
                 entity.VIVIENDA = dto.Vivienda;
                 entity.PRINCIPAL = 0;
                 if (dto.Principal == true)
