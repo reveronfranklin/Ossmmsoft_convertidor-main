@@ -36,5 +36,6 @@ public class AdmProveedorDireccionResponseDto
     public string Tenencia { get; set; } = string.Empty;
     public int CodigoPostal { get; set; }
     public bool Principal { get; set; }
+     public string NroVivienda  { get; set; } = String.Empty;   
 
 }
