@@ -319,6 +319,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                 entity.CODIGO_POSTAL = dto.CodigoPostal;
                 entity.TENENCIA_ID = dto.TenenciaId;
                 entity.VIVIENDA = dto.Vivienda;
+                entity.NUMERO_UNIDAD=dto.NroVivienda;
                 entity.PRINCIPAL = 0;
                 if (dto.Principal == true)
                 {
@@ -512,7 +513,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                 {
                     entity.PRINCIPAL = 1;
                 }
-                
+                entity.NUMERO_UNIDAD=dto.NroVivienda;
               
                
                 var conectado = await _sisUsuarioRepository.GetConectado();

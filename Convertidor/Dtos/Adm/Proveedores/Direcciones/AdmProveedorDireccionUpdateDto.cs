@@ -23,5 +23,6 @@ public class AdmProveedorDireccionUpdateDto
     public string ComplementoDir  { get; set; } = String.Empty;   
     public int TenenciaId  { get; set; } 
     public int CodigoPostal  { get; set; } 
-    public bool Principal  { get; set; }    
+    public bool Principal  { get; set; }   
+      public string NroVivienda  { get; set; } = String.Empty;    
 }
