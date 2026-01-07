@@ -123,6 +123,7 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
             dtos.NIVEL ??= string.Empty;
             itemResult.Nivel = dtos.NIVEL;
             itemResult.NroUnidad = dtos.NUMERO_UNIDAD;
+            itemResult.NroVivienda = dtos.NUMERO_UNIDAD;
             itemResult.ComplementoDir = dtos.COMPLEMENTO_DIR;
             itemResult.TenenciaId = dtos.TENENCIA_ID;
             itemResult.Tenencia = "";
