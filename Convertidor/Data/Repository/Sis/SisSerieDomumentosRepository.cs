@@ -168,7 +168,7 @@ namespace Convertidor.Data.Repository.Sis
 
            
                 
-                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.DefaultIfEmpty().Where(x => x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN == null).FirstOrDefaultAsync();
+                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.DefaultIfEmpty().Where(x =>x.CODIGO_PRESUPUESTO== codigoPresupuesto && x.TIPO_DOCUMENTO_ID == tipoDocumentoId ).FirstOrDefaultAsync();
                 if (serieDocumentos != null)
                 {
                     var serieCompuesta = "";

@@ -37,7 +37,7 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetAll(AdmProveedoresFilterDto filter)
         {
-            var result = await _service.GetAll(filter);
+            var result = await _service.GetAll();
             return Ok(result);
         }
         
