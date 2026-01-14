@@ -83,6 +83,14 @@ namespace Convertidor.Controllers
             return Ok(result);
 
         }
+          [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Inactivar(AdmProveedorDeleteDto dto)
+        {
+            var result = await _service.Delete(dto);
+            return Ok(result);
+
+        }
          [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Activar(AdmProveedorDeleteDto dto)

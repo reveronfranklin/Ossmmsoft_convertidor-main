@@ -19,7 +19,7 @@ public class AdmProveedorUpdateDto
     public decimal CapitalPagado  { get; set; }	
     public decimal CapitalSuscrito  { get; set; }	 
   
-    public string Status  { get; set; } = String.Empty;
+    public Boolean Activo  { get; set; } = true;
     public int CodigoPersona  { get; set; }	
     public int CodigoAuxiliarGastoXPagar  { get; set; }
     public int CodigoAuxiliarOrdenPago  { get; set; }
