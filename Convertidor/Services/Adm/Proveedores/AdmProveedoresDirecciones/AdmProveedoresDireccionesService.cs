@@ -227,38 +227,13 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                     return result;
                 }
 
-                var parroquia = await _sisUbicacionService.GetParroquia(dto.PaisId, dto.EstadoId, dto.MunicipioId,
-                    dto.CiudadId, dto.ParroquiaId);
-                if (parroquia is null)
-                {
-                    parroquia.Id = dto.ParroquiaId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Parroquia Invalida";
-                    return result;
-                }
+                if(dto.ParroquiaId==null) dto.ParroquiaId=0;
+                if (dto.SectorId == null) dto.SectorId = 0;
+                if (dto.UrbanizacionId == null) dto.UrbanizacionId = 0;
 
-                var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId, dto.MunicipioId,
-                    dto.CiudadId, dto.ParroquiaId, dto.SectorId);
-                if (sector is null)
-                {
-                    sector.Id = dto.SectorId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Sector Invalido";
-                    return result;
-                }
+               
 
-                var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dto.PaisId, dto.EstadoId, dto.MunicipioId,
-                    dto.CiudadId, dto.ParroquiaId, dto.SectorId, dto.UrbanizacionId);
-                if (urbanizacion is null)
-                {
-                    urbanizacion.Id = dto.UrbanizacionId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Urbanizacion Invalida";
-                    return result;
-                }
+               
 
                
                 
@@ -310,9 +285,9 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                 entity.ESTADO_ID = dto.EstadoId;
                 entity.MUNICIPIO_ID = dto.MunicipioId;
                 entity.CIUDAD_ID = dto.CiudadId;
-                entity.PARROQUIA_ID = dto.ParroquiaId;
-                entity.SECTOR_ID = dto.SectorId;
-                entity.URBANIZACION_ID = dto.UrbanizacionId;
+                entity.PARROQUIA_ID = (int)dto.ParroquiaId;
+                entity.SECTOR_ID = (int)dto.SectorId;
+                entity.URBANIZACION_ID = (int)dto.UrbanizacionId;
                 entity.TIPO_DIRECCION_ID = dto.TipoDireccionId;
                 entity.COMPLEMENTO_DIR =dto.ComplementoDir;
                 entity.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
@@ -414,38 +389,10 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                     return result;
                 }
 
-                var parroquia = await _sisUbicacionService.GetParroquia(dto.PaisId, dto.EstadoId, dto.MunicipioId,
-                    dto.CiudadId, dto.ParroquiaId);
-                if (parroquia is null)
-                {
-                    parroquia.Id = dto.ParroquiaId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Parroquia Invalida";
-                    return result;
-                }
-
-                var sector = await _sisUbicacionService.GetSector(dto.PaisId, dto.EstadoId, dto.MunicipioId,
-                    dto.CiudadId, dto.ParroquiaId, dto.SectorId);
-                if (sector is null)
-                {
-                    sector.Id = dto.SectorId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Sector Invalido";
-                    return result;
-                }
-
-                var urbanizacion = await _sisUbicacionService.GetUrbanizacion(dto.PaisId, dto.EstadoId, dto.MunicipioId,
-                    dto.CiudadId, dto.ParroquiaId, dto.SectorId, dto.UrbanizacionId);
-                if (urbanizacion is null)
-                {
-                    urbanizacion.Id = dto.UrbanizacionId;
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Urbanizacion Invalida";
-                    return result;
-                }
+               
+                if(dto.ParroquiaId==null) dto.ParroquiaId=0;
+                if (dto.SectorId == null) dto.SectorId = 0;
+                if (dto.UrbanizacionId == null) dto.UrbanizacionId = 0;
 
                
                 
@@ -499,9 +446,9 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresDirecciones
                 entity.ESTADO_ID = dto.EstadoId;
                 entity.MUNICIPIO_ID = dto.MunicipioId;
                 entity.CIUDAD_ID = dto.CiudadId;
-                entity.PARROQUIA_ID = dto.ParroquiaId;
-                entity.SECTOR_ID = dto.SectorId;
-                entity.URBANIZACION_ID = dto.UrbanizacionId;
+                entity.PARROQUIA_ID = (int)dto.ParroquiaId;
+                entity.SECTOR_ID = (int)dto.SectorId;
+                entity.URBANIZACION_ID = (int)dto.UrbanizacionId;
                 entity.TIPO_DIRECCION_ID = dto.TipoDireccionId;
                 entity.COMPLEMENTO_DIR =dto.ComplementoDir;
                 entity.TIPO_VIVIENDA_ID = dto.TipoViviendaId;
