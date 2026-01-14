@@ -53,7 +53,14 @@ public partial class AdmProveedoresService
             itemResult.CapitalPagado = dtos.CAPITAL_PAGADO;
             if (dtos.CAPITAL_SUSCRITO==null) dtos.CAPITAL_SUSCRITO = 0;
             itemResult.CapitalSuscrito = dtos.CAPITAL_SUSCRITO;
-            itemResult.Status = dtos.STATUS;    
+            if(dtos.STATUS=="A")
+            {
+                itemResult.Activo = true;
+            }
+            else
+            {
+                itemResult.Activo = false;
+            }   
             if(dtos.ESTATUS_FISCO_ID==null) dtos.ESTATUS_FISCO_ID = 0;
             itemResult.EstatusFisicoId=  dtos.ESTATUS_FISCO_ID;
             itemResult.EstatusFisico = "";

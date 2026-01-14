@@ -83,13 +83,7 @@ public partial class AdmProveedoresService
                     result.Message = "Capital Suscrito Invalido";
                     return result;
                 }
-                if (dto.Status.Length<=0)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Status Invalido";
-                    return result;
-                }
+               
                
 
                 proveedor.NOMBRE_PROVEEDOR = dto.NombreProveedor;
@@ -104,8 +98,14 @@ public partial class AdmProveedoresService
                 proveedor.FECHA_REGISTRO_CONTRALORIA = dto.FechaRegistroContraloria;
                 proveedor.CAPITAL_PAGADO = dto.CapitalPagado;
                 proveedor.CAPITAL_SUSCRITO = dto.CapitalSuscrito;
-            
-                proveedor.STATUS = dto.Status;
+                if(dto.Activo==true)
+                {
+                    proveedor.STATUS="A"; 
+                }else
+                {
+                    proveedor.STATUS="I";
+                }
+        
                 proveedor.CODIGO_PERSONA = dto.CodigoPersona;
                 proveedor.CODIGO_AUXILIAR_GASTO_X_PAGAR = dto.CodigoAuxiliarGastoXPagar;
                 proveedor.CODIGO_AUXILIAR_ORDEN_PAGO = dto.CodigoAuxiliarOrdenPago;

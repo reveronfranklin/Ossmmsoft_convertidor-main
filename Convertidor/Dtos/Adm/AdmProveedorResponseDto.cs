@@ -23,8 +23,9 @@ public class AdmProveedorResponseDto
     public decimal? CapitalPagado  { get; set; }	
     public decimal? CapitalSuscrito  { get; set; }	 
 
-    public string? Status  { get; set; } = String.Empty;
+  
     public int? EstatusFisicoId  { get; set; }
     public string? EstatusFisico  { get; set; } = String.Empty;
     public string? NumeroCuenta  { get; set; } = String.Empty;
+    public Boolean Activo  { get; set; } = true;
 }
