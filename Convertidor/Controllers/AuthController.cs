@@ -330,10 +330,19 @@ namespace Convertidor.Controllers
 
             
 
-                var cookieOptions = new CookieOptions
+            /*var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Expires = newRefreshToken.Expires
+            };*/
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = newRefreshToken.Expires,
+                Domain = ".ossmmasoft.com",
+                SameSite = SameSiteMode.None,
+                Secure = true
             };
             Response.Cookies.Append("X-Refresh-Token", newRefreshToken.Refresh_Token, cookieOptions);
             Response.Cookies.Append("X-Auth-Token", newRefreshToken.Token, cookieOptions);
