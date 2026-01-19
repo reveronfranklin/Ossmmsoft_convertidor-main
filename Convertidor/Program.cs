@@ -770,10 +770,21 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
     ConnectionMultiplexer.Connect(redisConnectionString));*/
 
-builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+/*builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));
+}));*/
+
+builder.Services.AddCors(o => o.AddPolicy("corspolicy", builder =>
+            {
+                builder
+                   
+                    //.AllowAnyOrigin()
+                    .WithOrigins("https://ossmmasoft.com.ve:3001","http://localhost:3001","http://localhost:3000")
+                    .AllowAnyMethod()
+                    .AllowCredentials()
+                    .AllowAnyHeader();
+            }));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
