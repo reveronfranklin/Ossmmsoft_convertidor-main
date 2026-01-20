@@ -336,16 +336,16 @@ namespace Convertidor.Controllers
                 Expires = newRefreshToken.Expires
             };*/
 
-            /*var cookieOptions = new CookieOptions
+            var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Expires = newRefreshToken.Expires,
                 Domain = ".ossmmasoft.com",
                 SameSite = SameSiteMode.None,
                 Secure = true
-            };*/
+            };
 
-          bool isDev = true; // Puedes usar IWebHostEnvironment para automatizar esto
+          /*bool isDev = true; // Puedes usar IWebHostEnvironment para automatizar esto
 
             var cookieOptions = new CookieOptions
             {
@@ -355,7 +355,7 @@ namespace Convertidor.Controllers
                 SameSite = isDev ? SameSiteMode.Lax : SameSiteMode.None,
                 // CLAVE: En local, NO pongas Domain. Deja que el navegador use el dominio por defecto
                 Domain = isDev ? null : ".ossmmasoft.com.ve" 
-            };
+            };*/
 
 
             Response.Cookies.Append("X-Refresh-Token", newRefreshToken.Refresh_Token, cookieOptions);
