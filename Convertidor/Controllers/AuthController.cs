@@ -345,14 +345,19 @@ namespace Convertidor.Controllers
                 Secure = true
             };*/
 
+          bool isDev = true; // Puedes usar IWebHostEnvironment para automatizar esto
+
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Expires = newRefreshToken.Expires,
-                // Domain = ".ossmmasoft.com", // Comenta esto para localhost
-                SameSite = SameSiteMode.Lax,    // Cambia None por Lax
-                Secure = false                  // Cambia true por false
+                Secure = !isDev, // En localhost HTTP debe ser false
+                SameSite = isDev ? SameSiteMode.Lax : SameSiteMode.None,
+                // CLAVE: En local, NO pongas Domain. Deja que el navegador use el dominio por defecto
+                Domain = isDev ? null : ".ossmmasoft.com.ve" 
             };
+
+
             Response.Cookies.Append("X-Refresh-Token", newRefreshToken.Refresh_Token, cookieOptions);
             Response.Cookies.Append("X-Auth-Token", newRefreshToken.Token, cookieOptions);
             var sisUsuario = await _service.GetByLogin(newRefreshToken.Login);
