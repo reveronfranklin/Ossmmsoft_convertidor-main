@@ -340,7 +340,7 @@ namespace Convertidor.Controllers
             {
                 HttpOnly = true,
                 Expires = newRefreshToken.Expires,
-                Domain = ".ossmmasoft.com",
+                Domain = ".ossmmasoft.com.ve",
                 SameSite = SameSiteMode.None,
                 Secure = true
             };
