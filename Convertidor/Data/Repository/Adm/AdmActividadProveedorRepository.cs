@@ -83,6 +83,32 @@ namespace Convertidor.Data.Repository.Adm
 
 
         }
+         public async Task<bool> ValidateExist(int codigoProveedor,int actividadId)
+        {
+            try
+            {
+                
+                var actividad = await _context.ADM_ACT_PROVEEDOR.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_PROVEEDOR == codigoProveedor && e.ACTIVIDAD_ID==actividadId  ).FirstOrDefaultAsync();
+
+                if (actividad == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return false;
+            }
+
+        }
+
 
         public async Task<ResultDto<ADM_ACT_PROVEEDOR>> Update(ADM_ACT_PROVEEDOR entity)
         {

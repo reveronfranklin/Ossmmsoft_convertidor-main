@@ -185,9 +185,15 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
                     return result;
                 }
 
-
-               
-               
+    
+               var existeComunicacion = await _repository.ValidateExist(dto.CodigoProveedor,dto.TipoComunicacionId,dto.CodigoArea,dto.LineaComunicacion);
+               if (existeComunicacion==true)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Tipo Comunicacion Invalido, Ya Existe";
+                    return result;
+                }
              
              
                 

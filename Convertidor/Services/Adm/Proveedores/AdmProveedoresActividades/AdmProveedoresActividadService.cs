@@ -192,7 +192,14 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
                     result.Message = "Tipo Proveedor Actividad  Invalido";
                     return result;
                 }
-                
+                var existsActivaidad = await _repository.ValidateExist(dto.CodigoProveedor,dto.ActividadId);
+                 if (existsActivaidad==true)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Actividad ya existe";
+                    return result;
+                }
                
                
              
