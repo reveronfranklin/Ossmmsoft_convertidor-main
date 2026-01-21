@@ -11,6 +11,6 @@ public interface IAdmComunicacionProveedorRepository
     Task<string> Delete(int id);
     Task<int> GetNextKey();
     Task<ADM_COM_PROVEEDOR> GetBycodigoProveedor(int codigoProveedor);
-
+ Task<bool> ValidateExist(int codigoProveedor,int tipoCominicacionId,string codigoArea,string lineaComunicacion);
 
 }

@@ -49,7 +49,31 @@ namespace Convertidor.Data.Repository.Adm
         }
 
 
-     
+        public async Task<bool> ValidateExist(int codigoProveedor,int identificacionId,string identificacion,string nombre,string apellido)
+        {
+            try
+            {
+                
+                var comunicacion = await _context.ADM_CONTACTO_PROVEEDOR.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_PROVEEDOR == codigoProveedor && e.IDENTIFICACION_ID==identificacionId && e.IDENTIFICACION==identificacion && e.NOMBRE==nombre && e.APELLIDO==apellido ).FirstOrDefaultAsync();
+
+                if (comunicacion == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return false;
+            }
+
+        }
       
 
 

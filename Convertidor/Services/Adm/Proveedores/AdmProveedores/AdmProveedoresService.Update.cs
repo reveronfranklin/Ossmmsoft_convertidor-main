@@ -83,8 +83,16 @@ public partial class AdmProveedoresService
                     result.Message = "Capital Suscrito Invalido";
                     return result;
                 }
-               
-               
+
+                if (dto.FechaRif == null)
+                {
+                    
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Fecha Rif Invalida";
+                        return result;
+                    
+                }
 
                 proveedor.NOMBRE_PROVEEDOR = dto.NombreProveedor;
                 proveedor.TIPO_PROVEEDOR_ID = dto.TipoProveedorId;

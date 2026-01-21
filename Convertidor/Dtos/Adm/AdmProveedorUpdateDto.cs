@@ -8,7 +8,7 @@ public class AdmProveedorUpdateDto
     public string Nacionalidad  { get; set; } = String.Empty;
     public int Cedula  { get; set; }	
     public string Rif  { get; set; } = String.Empty;
-    public DateTime FechaRif  { get; set; }	 
+    public DateTime? FechaRif  { get; set; }	 
 
     public string? Nit  { get; set; } = String.Empty;
     public DateTime? FechaNit  { get; set; }	

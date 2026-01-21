@@ -265,6 +265,18 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresContactos
                     return result;
                     
                 }
+
+                var contactoExists = await _repository.ValidateExist(dto.CodigoProveedor,dto.IdentificacionId,dto.Identificacion,dto.Nombre,dto.Apellido);
+                if (contactoExists==true)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Contacto ya existe";
+                    return result;
+                    
+                }
+               
+               
                 ADM_CONTACTO_PROVEEDOR entity = new ADM_CONTACTO_PROVEEDOR();
                 entity.CODIGO_CONTACTO_PROVEEDOR = await _repository.GetNextKey();
                 entity.CODIGO_PROVEEDOR = dto.CodigoProveedor;

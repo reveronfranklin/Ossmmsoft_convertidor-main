@@ -47,6 +47,33 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
+        public async Task<bool> ValidateExist(int codigoProveedor,int tipoCominicacionId,string codigoArea,string lineaComunicacion)
+        {
+            try
+            {
+                
+                var comunicacion = await _context.ADM_COM_PROVEEDOR.DefaultIfEmpty()
+                    .Where(e => e.CODIGO_PROVEEDOR == codigoProveedor && e.TIPO_COMUNICACION_ID==tipoCominicacionId && e.CODIGO_AREA==codigoArea && e.LINEA_COMUNICACION==lineaComunicacion).FirstOrDefaultAsync();
+
+                if (comunicacion == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                var res = ex.Message;
+                return false;
+            }
+
+        }
+
+
         public async Task<ADM_COM_PROVEEDOR> GetBycodigoProveedor(int codigoProveedor)
         {
             try
