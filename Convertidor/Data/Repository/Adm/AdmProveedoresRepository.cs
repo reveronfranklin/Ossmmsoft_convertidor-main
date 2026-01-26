@@ -1,8 +1,11 @@
-﻿using Convertidor.Data.Entities.Adm;
+﻿using System.Text;
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Adm.Proveedores;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+
 
 namespace Convertidor.Data.Repository.Adm
 {
@@ -11,9 +14,14 @@ namespace Convertidor.Data.Repository.Adm
 		
         private readonly DataContextAdm _context;
 
-        public AdmProveedoresRepository(DataContextAdm context)
+         private readonly IDistributedCache _distributedCache;
+         private const string ProveedoresCacheKey = "ResultDto<List<AdmProveedorResponseDto>>";
+
+        public AdmProveedoresRepository(DataContextAdm context, IDistributedCache distributedCache)
         {
             _context = context;
+            _distributedCache = distributedCache;
+        
         }
       
         public async Task<ADM_PROVEEDORES> GetByCodigo(int id)
@@ -68,7 +76,9 @@ namespace Convertidor.Data.Repository.Adm
         {
             try
             {
-                var result = await _context.ADM_PROVEEDORES.DefaultIfEmpty().ToListAsync();
+               
+
+                var  result = await _context.ADM_PROVEEDORES.DefaultIfEmpty().ToListAsync();
 
                 return result;
             }
@@ -164,6 +174,7 @@ namespace Convertidor.Data.Repository.Adm
 
         public async Task<ResultDto<ADM_PROVEEDORES>> Add(ADM_PROVEEDORES entity)
         {
+            
             ResultDto<ADM_PROVEEDORES> result = new ResultDto<ADM_PROVEEDORES>(null);
             try
             {
@@ -172,7 +183,7 @@ namespace Convertidor.Data.Repository.Adm
 
                 await _context.ADM_PROVEEDORES.AddAsync(entity);
                 await _context.SaveChangesAsync();
-
+                await _distributedCache.RemoveAsync(ProveedoresCacheKey);
 
                 result.Data = entity;
                 result.IsValid = true;
@@ -206,6 +217,7 @@ namespace Convertidor.Data.Repository.Adm
 
                     _context.ADM_PROVEEDORES.Update(entity);
                     await _context.SaveChangesAsync();
+                      await _distributedCache.RemoveAsync(ProveedoresCacheKey);
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -238,6 +250,7 @@ namespace Convertidor.Data.Repository.Adm
                 {
                     _context.ADM_PROVEEDORES.Remove(entity);
                     await _context.SaveChangesAsync();
+                    await _distributedCache.RemoveAsync(ProveedoresCacheKey);
                 }
                 return "";
             }

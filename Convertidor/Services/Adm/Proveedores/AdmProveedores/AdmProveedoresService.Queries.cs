@@ -1,6 +1,7 @@
+using System.Text;
 using Convertidor.Dtos.Adm;
 using Convertidor.Dtos.Adm.Proveedores;
-
+using Microsoft.Extensions.Caching.Distributed;
 namespace Convertidor.Services.Adm.Proveedores.AdmProveedores;
 
 public partial class AdmProveedoresService
@@ -42,17 +43,35 @@ public partial class AdmProveedoresService
             try
             {
 
-                var proveedor = await _repository.GetByAll();
-                if (proveedor == null)
+                 
+                var cacheKey = $"ResultDto<List<AdmProveedorResponseDto>>";
+                var listProveedores = await _distributedCache.GetAsync(cacheKey);
+                if (listProveedores!= null)
                 {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Proveedor no existe";
-                    return result;
+                    result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<AdmProveedorResponseDto>>> (listProveedores);
                 }
+                else
+                {
+                   
+                    var proveedor = await _repository.GetByAll();
+                    if (proveedor == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Proveedor no existe";
+                        return result;
+                    }
                 
-                var resultDto = await MapListProveedorDto(proveedor);
-                result.Data = resultDto;
+                    result.Data = await MapListProveedorDto(proveedor);
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
+                        .SetSlidingExpiration(TimeSpan.FromDays(20));
+                    var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                }
+
+              
                 result.IsValid = true;
                 result.Message = "";
                 return result;
@@ -73,23 +92,43 @@ public partial class AdmProveedoresService
             ResultDto<List<AdmProveedorResponseDto>> result = new ResultDto<List<AdmProveedorResponseDto>>(null);
             try
             {
-
-                var proveedor = await _repository.GetByAll(filter);
-                if (proveedor == null)
-                {
-                    result.Data = null;
-                    result.IsValid = false;
-                    result.Message = "Proveedor no existe";
-                    return result;
-                }
                 
-                var resultDto = await  MapListProveedorDto(proveedor.Data);
-                result.CantidadRegistros = proveedor.CantidadRegistros;
-                result.TotalPage = proveedor.TotalPage;
+
+
+
+                 var cacheKey = $"ResultDto<List<AdmProveedorResponseDto>>";
+                var listProveedores = await _distributedCache.GetAsync(cacheKey);
+                if (listProveedores!= null)
+                {
+                    result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<AdmProveedorResponseDto>>> (listProveedores);
+                }
+                else
+                {
+                   
+                    var proveedor = await _repository.GetByAll();
+                    if (proveedor == null)
+                    {
+                        result.Data = null;
+                        result.IsValid = false;
+                        result.Message = "Proveedor no existe";
+                        return result;
+                    }
+                
+                    result.Data = await MapListProveedorDto(proveedor);
+                    var options = new DistributedCacheEntryOptions()
+                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
+                        .SetSlidingExpiration(TimeSpan.FromDays(20));
+                    var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
+                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
+                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                }
+
+                result.CantidadRegistros =result.Data.Count();
+                result.TotalPage = 1;
                 result.Page = filter.PageNumber;
                 result.IsValid = true;
                 result.Message = "";
-                result.Data = resultDto;
+             
                 return result;
             }
             catch (Exception ex)
