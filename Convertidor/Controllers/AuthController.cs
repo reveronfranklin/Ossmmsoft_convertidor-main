@@ -324,6 +324,64 @@ namespace Convertidor.Controllers
         }
 
 
+        public async Task<ResultLoginDto> ServiceCheckStatus(ResultRefreshTokenDto refreshTokento)
+        {
+            ResultLoginDto resultLogin = new ResultLoginDto();
+            //3mBx+k508wTfnpi0K+txwKWz64QFdTfsd6cP6G634khKNzs11W6zSaa2ffzx4B7D2LyXppCQcgU9odwFjK2iSQ==
+                var refreshToken = refreshTokento.RefreshToken;
+            // Request.Cookies["X-Refresh-Token"];
+            //var token = Request.Cookies["osmmasoftToken"];
+            string? userName = string.Empty;
+            userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name); 
+            var sisUsuarioValid = await _service.TokenValid(refreshToken);
+            
+            if (sisUsuarioValid.Data==false)
+            {
+                
+                resultLogin.Message = "Invalid Refresh Token.";
+                return resultLogin;
+            }
+            
+            var sisUsuario = await _sisUsuarioRepository.GetUserByTokenValid(refreshToken);
+            if (sisUsuario==null)
+            {
+                resultLogin.Message = "Invalid Refresh Token.";
+                return resultLogin;
+            }
+            if (!sisUsuario.REFRESHTOKEN.Equals(refreshToken))
+            {
+                resultLogin.Message = "Invalid Refresh Token.";
+                return resultLogin;
+                //var esDiferente = "";
+            }
+            if (sisUsuario.TOKENEXPIRES < DateTime.Now)
+            {
+                resultLogin.Message = "Token expired.";
+                return resultLogin;
+            }
+
+            var roles= await _sisUsuarioRepository.GetRolByUserName(sisUsuario.LOGIN);
+
+            resultLogin.Message = "";
+            resultLogin.RefreshToken = refreshTokento.RefreshToken ;
+            resultLogin.AccessToken = refreshTokento.AccessToken;
+            resultLogin.Name = sisUsuario.LOGIN;
+            UserData userData = new UserData();
+            userData.Id = sisUsuario.CODIGO_USUARIO;
+            userData.username = sisUsuario.LOGIN;
+            userData.FullName = sisUsuario.USUARIO;
+            userData.Roles = roles;
+            userData.Role = "admin";
+            userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
+            resultLogin.UserData = userData;
+
+        
+            
+
+            return resultLogin;
+        }
+
+
         [HttpGet("validate-session")]
         // [Authorize] // Descomenta esto si quieres que el middleware de .NET valide el token automáticamente
         public async Task<IActionResult> ValidateSession()
@@ -338,7 +396,7 @@ namespace Convertidor.Controllers
             ResultRefreshTokenDto result = new ResultRefreshTokenDto();
             result.AccessToken = authToken;
             result.RefreshToken = refreshToken;
-            var response = await CheckStatus(result);
+            var response = await ServiceCheckStatus(result);
            
             return Ok(response);
         }

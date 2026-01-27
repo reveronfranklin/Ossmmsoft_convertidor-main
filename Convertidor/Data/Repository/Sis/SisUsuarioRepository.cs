@@ -301,6 +301,23 @@ namespace Convertidor.Data.Repository.Sis
             return result;
         }
         
+        public async Task<SIS_USUARIOS> GetUserByTokenValid(string refreshToken)
+        {
+          
+            var sisUsuario = await _context.SIS_USUARIOS.Where(x => x.REFRESHTOKEN == refreshToken).FirstOrDefaultAsync();
+            if (sisUsuario != null)
+            {
+               return sisUsuario;
+                
+            }else
+            {
+                return null;
+            }
+           
+
+
+        }
+
         public async Task<ResultLoginDto> Login(LoginDto dto)
         {
 
