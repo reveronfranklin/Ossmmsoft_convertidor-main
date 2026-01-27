@@ -796,6 +796,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer=false,
             ValidateAudience=false
         };
+        options.Events = new JwtBearerEvents {
+            OnMessageReceived = context => {
+                // Le indicamos al API que busque el JWT en nuestra cookie personalizada
+                context.Token = context.Request.Cookies["X-Refresh-Token"];
+                return Task.CompletedTask;
+            }
+        };
 
     });
 
