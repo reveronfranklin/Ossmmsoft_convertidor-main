@@ -17,6 +17,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ADM_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo);
         Task<List<ADM_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk);
         Task<bool> GetByIdAndTitulo(int tituloId, int id);
+        Task<List<ADM_DESCRIPTIVAS>> GetByCodigos(List<int> codigos);
 	}
 }
 

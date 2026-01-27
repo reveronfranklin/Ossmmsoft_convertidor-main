@@ -62,7 +62,7 @@ public partial class AdmProveedoresService
                         return result;
                     }
                 
-                    result.Data = await MapListProveedorDto(proveedor);
+                    result.Data = await MapListProveedorDtoParallel(proveedor);
                     var options = new DistributedCacheEntryOptions()
                         .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
                         .SetSlidingExpiration(TimeSpan.FromDays(20));
@@ -114,7 +114,7 @@ public partial class AdmProveedoresService
                         return result;
                     }
                 
-                    result.Data = await MapListProveedorDto(proveedor);
+                    result.Data = await MapListProveedorDtoParallel(proveedor);
                     var options = new DistributedCacheEntryOptions()
                         .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
                         .SetSlidingExpiration(TimeSpan.FromDays(20));
