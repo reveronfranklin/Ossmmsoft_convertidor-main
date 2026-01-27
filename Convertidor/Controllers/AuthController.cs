@@ -323,7 +323,25 @@ namespace Convertidor.Controllers
             return Ok(authResponse);
         }
 
-      
+
+        [HttpGet("validate-session")]
+        // [Authorize] // Descomenta esto si quieres que el middleware de .NET valide el token automáticamente
+        public async Task<IActionResult> ValidateSession()
+        {
+            // 1. Intentar obtener los tokens de las cookies de la cabecera
+            var authToken = Request.Cookies["X-Auth-Token"];
+            var refreshToken = Request.Cookies["X-Refresh-Token"];
+            if (string.IsNullOrEmpty(refreshToken)|| string.IsNullOrEmpty(authToken))
+        {
+            return Unauthorized(new { message = "Sesión no válida o expirada" });
+        }
+            ResultRefreshTokenDto result = new ResultRefreshTokenDto();
+            result.AccessToken = authToken;
+            result.RefreshToken = refreshToken;
+            var response = await CheckStatus(result);
+            return Ok(response);
+        }
+
 
         private async Task SetRefreshToken(RefreshToken newRefreshToken)
         {
