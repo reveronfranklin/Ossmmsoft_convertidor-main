@@ -332,13 +332,14 @@ namespace Convertidor.Controllers
             var authToken = Request.Cookies["X-Auth-Token"];
             var refreshToken = Request.Cookies["X-Refresh-Token"];
             if (string.IsNullOrEmpty(refreshToken)|| string.IsNullOrEmpty(authToken))
-        {
-            return Unauthorized(new { message = "Sesión no válida o expirada" });
-        }
+            {
+                return Unauthorized(new { message = "Sesión no válida o expirada" });
+            }
             ResultRefreshTokenDto result = new ResultRefreshTokenDto();
             result.AccessToken = authToken;
             result.RefreshToken = refreshToken;
             var response = await CheckStatus(result);
+           
             return Ok(response);
         }
 
