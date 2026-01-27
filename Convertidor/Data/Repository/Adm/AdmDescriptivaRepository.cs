@@ -78,6 +78,26 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+
+        public async Task<List<ADM_DESCRIPTIVAS>> GetByCodigos(List<int> codigos)
+        {
+            if (codigos == null || !codigos.Any())
+                return new List<ADM_DESCRIPTIVAS>();
+            try
+            {
+                 return await _context.ADM_DESCRIPTIVAS
+                .Where(x => codigos.Contains(x.DESCRIPCION_ID))
+                .DefaultIfEmpty() // Importante para solo lectura
+                .ToListAsync();
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                 return new List<ADM_DESCRIPTIVAS>();
+            }
+           
+        }
+
         public async Task<bool> GetByIdAndTitulo(int tituloId,int id)
         {
             try

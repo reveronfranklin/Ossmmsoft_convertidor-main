@@ -16,6 +16,8 @@ namespace Convertidor.Data.Interfaces.Presupuesto
         Task<PRE_DESCRIPTIVAS> GetByCodigoDescriptivaTexto(string codigo);
         Task<List<PRE_DESCRIPTIVAS>> GetByFKID(int descripcionIdFk);
         Task<bool> GetByIdAndTitulo(int tituloId, int id);
+
+        Task<List<PRE_DESCRIPTIVAS>> GetByCodigos(List<int> codigos);
 	}
 }
 

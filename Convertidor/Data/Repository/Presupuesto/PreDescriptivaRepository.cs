@@ -59,6 +59,17 @@ namespace Convertidor.Data.Repository.Rh
             }
 
         }
+
+        public async Task<List<PRE_DESCRIPTIVAS>> GetByCodigos(List<int> codigos)
+        {
+            if (codigos == null || !codigos.Any())
+                return new List<PRE_DESCRIPTIVAS>();
+
+            return await _context.PRE_DESCRIPTIVAS
+                .Where(x => codigos.Contains(x.DESCRIPCION_ID))
+                .AsNoTracking() // Importante para solo lectura
+                .ToListAsync();
+        }
         public async Task<List<PRE_DESCRIPTIVAS>> GetAll()
         {
             try

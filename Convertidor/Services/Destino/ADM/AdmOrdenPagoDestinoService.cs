@@ -174,9 +174,9 @@ namespace Convertidor.Services.Destino.ADM
             newDescriptiva.EXTRA2 = descriptivaOrigen.EXTRA2;
             newDescriptiva.EXTRA3= descriptivaOrigen.EXTRA3;
             newDescriptiva.USUARIO_INS = descriptivaOrigen.USUARIO_INS;
-            newDescriptiva.FECHA_INS = descriptivaOrigen.FECHA_INS;
+            newDescriptiva.FECHA_INS = (DateTime)descriptivaOrigen.FECHA_INS;
             newDescriptiva.USUARIO_UPD = descriptivaOrigen.USUARIO_UPD;
-            newDescriptiva.FECHA_UPD = descriptivaOrigen.FECHA_UPD;
+            newDescriptiva.FECHA_UPD = (DateTime)descriptivaOrigen.FECHA_UPD;
             newDescriptiva.CODIGO_EMPRESA = descriptivaOrigen.CODIGO_EMPRESA;
             return newDescriptiva;
         }
