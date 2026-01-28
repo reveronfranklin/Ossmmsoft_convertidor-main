@@ -130,6 +130,8 @@ namespace Convertidor.Controllers
                     var refreshToken = GenerateRefreshToken(result.AccessToken);
                     refreshToken.Login = dto.Login;
                     result.RefreshToken = refreshToken.Refresh_Token;
+                    result.Environment=_configuration.GetSection("Environment").Value;
+                    result.IsAuthenticated = true;
                     await SetRefreshToken(refreshToken);
                     return Ok(result);
                 }
@@ -165,6 +167,8 @@ namespace Convertidor.Controllers
                     var refreshToken = GenerateRefreshToken(result.AccessToken);
                     refreshToken.Login = dto.Login;
                     result.RefreshToken = refreshToken.Refresh_Token;
+                    result.Environment=_configuration.GetSection("Environment").Value;
+                    result.IsAuthenticated = true;
                     await SetRefreshToken(refreshToken);
                     AuthResponse authResponse = new AuthResponse();
                     authResponse.Id = result.UserData.Id.ToString();
@@ -237,7 +241,8 @@ namespace Convertidor.Controllers
             //ResultRefreshTokenDto result = new ResultRefreshTokenDto();
             //result.accessToken = token;
             //result.refreshToken = newRefreshToken.Refresh_Token;
-
+            resultLogin.Environment=_configuration.GetSection("Environment").Value;
+            resultLogin.IsAuthenticated = true;
             resultLogin.Message = "";
             resultLogin.RefreshToken = newRefreshToken.Refresh_Token; 
             resultLogin.AccessToken = token;
