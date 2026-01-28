@@ -6,6 +6,7 @@ using Convertidor.Dtos.Sis;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Cryptography;
 using System.Security.Claims;
+using System.Drawing;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,12 +22,13 @@ namespace Convertidor.Controllers
         private IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthModelUserServices _authModelUserServices;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
-
+       private readonly IConfiguration _configuration;
 
         public SisUsuariosController(ISisUsuarioServices service,
                                     IHttpContextAccessor httpContextAccessor,
                                     IAuthModelUserServices authModelUserServices,
-                                    ISisUsuarioRepository sisUsuarioRepository
+                                    ISisUsuarioRepository sisUsuarioRepository,
+                                    IConfiguration configuration
                                     )
         {
 
@@ -34,6 +36,7 @@ namespace Convertidor.Controllers
             _httpContextAccessor = httpContextAccessor;
             _authModelUserServices = authModelUserServices;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _configuration = configuration;
         }
 
 
@@ -334,7 +337,7 @@ namespace Convertidor.Controllers
             string? userName = string.Empty;
             userName = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name); 
             var sisUsuarioValid = await _service.TokenValid(refreshToken);
-            
+            resultLogin.IsAuthenticated=sisUsuarioValid.Data;
             if (sisUsuarioValid.Data==false)
             {
                 
@@ -359,9 +362,9 @@ namespace Convertidor.Controllers
                 resultLogin.Message = "Token expired.";
                 return resultLogin;
             }
-
+            resultLogin.Environment=_configuration.GetSection("Environment").Value;
             var roles= await _sisUsuarioRepository.GetRolByUserName(sisUsuario.LOGIN);
-
+            
             resultLogin.Message = "";
             resultLogin.RefreshToken = refreshTokento.RefreshToken ;
             resultLogin.AccessToken = refreshTokento.AccessToken;
@@ -389,13 +392,13 @@ namespace Convertidor.Controllers
             // 1. Intentar obtener los tokens de las cookies de la cabecera
             var authToken = Request.Cookies["X-Auth-Token"];
             var refreshToken = Request.Cookies["X-Refresh-Token"];
-            if (string.IsNullOrEmpty(refreshToken)|| string.IsNullOrEmpty(authToken))
+            if (string.IsNullOrEmpty(refreshToken))
             {
                 return Unauthorized(new { message = "Sesión no válida o expirada" });
             }
             ResultRefreshTokenDto result = new ResultRefreshTokenDto();
             result.AccessToken = authToken;
-            result.RefreshToken = refreshToken;
+            result.RefreshToken = refreshToken; 
             var response = await ServiceCheckStatus(result);
            
             return Ok(response);

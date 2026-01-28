@@ -9,6 +9,8 @@
         public string AccessToken { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
+        public string Environment { get; set; } = string.Empty;
+         public bool IsAuthenticated { get; set; } = false;
         public UserData? UserData { get; set; }
     }
 
