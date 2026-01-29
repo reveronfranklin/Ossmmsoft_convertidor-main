@@ -112,7 +112,12 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresContactos
                     result.Message = "Proveedor no existe";
                     return result;
                 }
-
+                if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
+                    return result;
+                }
                 
                 var tiposContacto = await _repositoryPreDescriptiva.GetByIdAndTitulo(10,dto.TipoContactoId);
                 if (tiposContacto==false)
@@ -219,7 +224,12 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresContactos
                     result.Message = "Proveedor no existe";
                     return result;
                 }
-
+                if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
+                    return result;
+                }
                 
                 var tiposContacto = await _repositoryPreDescriptiva.GetByIdAndTitulo(10,dto.TipoContactoId);
                 if (tiposContacto==false)
@@ -342,8 +352,8 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresContactos
             try
             {
 
-                var proveedor = await _repository.GetByCodigo(dto.CodigoContactoProveedor);
-                if (proveedor == null)
+                var proveedorContacto = await _repository.GetByCodigo(dto.CodigoContactoProveedor);
+                if (proveedorContacto == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -351,6 +361,20 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresContactos
                     return result;
                 }
 
+                var proveedor = await _proveedorRepository.GetByCodigo(proveedorContacto.CODIGO_PROVEEDOR);
+                if (proveedor == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor no existe";
+                    return result;
+                }
+                if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
+                    return result;
+                }
 
                 var deleted = await _repository.Delete(dto.CodigoContactoProveedor);
 
