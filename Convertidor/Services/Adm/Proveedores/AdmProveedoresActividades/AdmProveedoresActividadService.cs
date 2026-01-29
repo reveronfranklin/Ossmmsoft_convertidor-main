@@ -105,7 +105,12 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
                     result.Message = "Proveedor no existe";
                     return result;
                 }
-
+                if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
+                    return result;
+                }
                 
                 var tiposProveedorActividad = await _repositoryPreDescriptiva.GetByIdAndTitulo(13,dto.ActividadId);
                 if (tiposProveedorActividad==false)
@@ -182,7 +187,12 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
                     result.Message = "Proveedor no existe";
                     return result;
                 }
-
+                if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
+                    return result;
+                }
                 
                 var tiposProveedorActividad = await _repositoryPreDescriptiva.GetByIdAndTitulo(13,dto.ActividadId);
                 if (tiposProveedorActividad==false)
@@ -280,8 +290,8 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
             try
             {
 
-                var proveedor = await _repository.GetByCodigo(dto.CodigoActProveedor);
-                if (proveedor == null)
+                var proveedorAct = await _repository.GetByCodigo(dto.CodigoActProveedor);
+                if (proveedorAct == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -289,6 +299,21 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresActividades
                     return result;
                 }
 
+
+                var proveedor = await _proveedorRepository.GetByCodigo(proveedorAct.CODIGO_PROVEEDOR);
+                if (proveedor == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor no existe";
+                    return result;
+                }
+                if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
+                    return result;
+                }
 
                 var deleted = await _repository.Delete(dto.CodigoActProveedor);
 

@@ -107,6 +107,12 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
                     result.Message = "Proveedor no existe";
                     return result;
                 }
+                 if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
+                    return result;
+                }
 
                 
                 var tiposComunicacion = await _repositoryPreDescriptiva.GetByIdAndTitulo(5,dto.TipoComunicacionId);
@@ -175,6 +181,12 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
                     return result;
                 }
 
+                if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
+                    return result;
+                }
                 
                 var tiposComunicacion = await _repositoryPreDescriptiva.GetByIdAndTitulo(5,dto.TipoComunicacionId);
                 if (tiposComunicacion==false)
@@ -263,12 +275,28 @@ namespace Convertidor.Services.Adm.Proveedores.AdmProveedoresComunicacion
             try
             {
 
-                var proveedor = await _repository.GetByCodigo(dto.CodigoComProveedor);
-                if (proveedor == null)
+                var proveedorCom = await _repository.GetByCodigo(dto.CodigoComProveedor);
+                if (proveedorCom == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Proveedor Actividad no existe";
+                    return result;
+                }
+
+                var proveedor = await _proveedorRepository.GetByCodigo(proveedorCom.CODIGO_PROVEEDOR);
+                if (proveedor == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor no existe";
+                    return result;
+                }
+
+                if(proveedor.STATUS=="I") {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor Inactivo";
                     return result;
                 }
 
