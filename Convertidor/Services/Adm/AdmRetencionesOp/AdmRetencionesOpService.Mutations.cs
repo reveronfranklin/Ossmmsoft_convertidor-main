@@ -203,9 +203,20 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     var sisDescriptiva = await _sisDescriptivaRepository.GetByExtra1(codigoTipoRetencion);
                     if (sisDescriptiva != null)
                     {
-                        var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(codigoPesupuesto, sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
-                        result = numeroSolicitud.Data;
-                        ordenPago.NUMERO_COMPROBANTE=decimal.Parse(result);
+                        var consecutivoInfinito="IVA";
+                        if (codigoTipoRetencion==consecutivoInfinito)
+                        {
+                            var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerieOracle(sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
+                            ordenPago.NUMERO_COMPROBANTE=decimal.Parse(numeroSolicitud.Data);
+                        }
+                        else
+                        {
+                            var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(codigoPesupuesto, sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
+                            result = numeroSolicitud.Data;
+                            ordenPago.NUMERO_COMPROBANTE=decimal.Parse(result);
+                           
+                        }
+                       
                         await _admOrdenPagoRepository.Update(ordenPago);
                     }
 

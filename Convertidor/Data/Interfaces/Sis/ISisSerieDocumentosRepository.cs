@@ -11,6 +11,6 @@ public interface ISisSerieDocumentosRepository
     Task<ResultDto<SIS_SERIE_DOCUMENTOS>> Update(SIS_SERIE_DOCUMENTOS entity);
     Task<int> GetNextKey();
     Task<ResultDto<string>> GenerateNextSerie(int codigoPresupuesto, int tipoDocumentoId, string codigo);
-
+     Task<ResultDto<string>> GenerateNextSerieOracle(int tipoDocumentoId,string codigo);
 
 }
