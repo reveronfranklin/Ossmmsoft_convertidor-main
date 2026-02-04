@@ -212,8 +212,62 @@ namespace Convertidor.Data.Repository.Sis
             return result;
         }
         
+          public async Task<ResultDto<string>> GenerateNextSerieOracle(int tipoDocumentoId,string codigo)
+        {
+
+            
+            ResultDto<string> result = new ResultDto<string>(null);
+            try
+            {
+
+           
+                
+                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.Where(x => x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN == null).FirstOrDefaultAsync();
+             
+                if (serieDocumentos != null)
+                {
+                    var serieCompuesta = "";
+                    serieDocumentos.NUMERO_SERIE_ACTUAL =serieDocumentos.NUMERO_SERIE_ACTUAL+ 1;
+                    int number =  serieDocumentos.NUMERO_SERIE_ACTUAL;;
+                    string paddedNumber = number.ToString().PadLeft(serieDocumentos.MAX_DIGITOS, '0');
+
+                    var serieLetras = serieDocumentos.SERIE_LETRAS;
+                    if (serieLetras == "{RRRRMM}")
+                    {
+                        var mes = DateTime.Now.Month.ToString().PadLeft(2, '0');
+                        serieLetras = $"{DateTime.Now.Year}{mes} ";
+                    }
+                    serieCompuesta = $"{serieLetras.Trim()}{paddedNumber.Trim()}";
+                  
+                    serieDocumentos.SERIE_COMPUESTA_ACTUAL = serieCompuesta;
+                    _context.SIS_SERIE_DOCUMENTOS.Update(serieDocumentos);
+                    await _context.SaveChangesAsync();
+                    result.Data = serieCompuesta;
+                    result.IsValid = true;
+                    result.Message = "";
+                    
+
+                }
+                else
+                {
+                    result.Data = "";
+                    result.IsValid = false;
+                    result.Message = "No existe serie de documentos para este Presupuesto";
+                }
+                return result;
+                
+            }
+            catch (Exception ex)
+            {
+                result.Data = "";
+                result.IsValid = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
         
-        public async Task<string> GenerateNextSerieOracle(int tipoDocumentoId,string codigo)
+        public async Task<string> GenerateNextSerieOracleBk(int tipoDocumentoId,string codigo)
         {
 
             string result = "";
@@ -222,7 +276,7 @@ namespace Convertidor.Data.Repository.Sis
 
                 await Execute(codigo);
                 
-                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.DefaultIfEmpty().Where(x => x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN == null).FirstOrDefaultAsync();
+                var serieDocumentos = await _context.SIS_SERIE_DOCUMENTOS.Where(x => x.TIPO_DOCUMENTO_ID == tipoDocumentoId && x.FECHA_VIGENCIA_FIN == null).FirstOrDefaultAsync();
                 if (serieDocumentos != null)
                 {
                     result = serieDocumentos.SERIE_COMPUESTA_ACTUAL;
