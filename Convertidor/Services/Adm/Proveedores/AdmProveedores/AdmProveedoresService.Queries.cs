@@ -44,32 +44,17 @@ public partial class AdmProveedoresService
             {
 
                  
-                var cacheKey = $"ResultDto<List<AdmProveedorResponseDto>>";
-                var listProveedores = await _distributedCache.GetAsync(cacheKey);
-                if (listProveedores!= null)
+                var proveedor = await _repository.GetByAll();
+                if (proveedor == null)
                 {
-                    result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<AdmProveedorResponseDto>>> (listProveedores);
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor no existe";
+                    return result;
                 }
-                else
-                {
-                   
-                    var proveedor = await _repository.GetByAll();
-                    if (proveedor == null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Proveedor no existe";
-                        return result;
-                    }
-                
-                    result.Data = await MapListProveedorDtoParallel(proveedor);
-                    var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
-                        .SetSlidingExpiration(TimeSpan.FromDays(20));
-                    var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
-                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
-                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
-                }
+            
+                result.Data = await MapListProveedorDtoParallel(proveedor);
+                    
 
               
                 result.IsValid = true;
@@ -96,32 +81,20 @@ public partial class AdmProveedoresService
 
 
 
-                 var cacheKey = $"ResultDto<List<AdmProveedorResponseDto>>";
-                var listProveedores = await _distributedCache.GetAsync(cacheKey);
-                if (listProveedores!= null)
-                {
-                    result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<AdmProveedorResponseDto>>> (listProveedores);
-                }
-                else
-                {
+              
+           
                    
-                    var proveedor = await _repository.GetByAll();
-                    if (proveedor == null)
-                    {
-                        result.Data = null;
-                        result.IsValid = false;
-                        result.Message = "Proveedor no existe";
-                        return result;
-                    }
-                
-                    result.Data = await MapListProveedorDtoParallel(proveedor);
-                    var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
-                        .SetSlidingExpiration(TimeSpan.FromDays(20));
-                    var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
-                    var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
-                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                var proveedor = await _repository.GetByAll();
+                if (proveedor == null)
+                {
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = "Proveedor no existe";
+                    return result;
                 }
+            
+                result.Data = await MapListProveedorDtoParallel(proveedor);
+         
 
                 result.CantidadRegistros =result.Data.Count();
                 result.TotalPage = 1;
