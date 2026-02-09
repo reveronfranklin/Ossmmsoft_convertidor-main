@@ -14,13 +14,13 @@ namespace Convertidor.Data.Repository.Adm
 		
         private readonly DataContextAdm _context;
 
-         private readonly IDistributedCache _distributedCache;
+        // private readonly IDistributedCache _distributedCache;
          private const string ProveedoresCacheKey = "ResultDto<List<AdmProveedorResponseDto>>";
 
-        public AdmProveedoresRepository(DataContextAdm context, IDistributedCache distributedCache)
+        public AdmProveedoresRepository(DataContextAdm context)
         {
             _context = context;
-            _distributedCache = distributedCache;
+           // _distributedCache = distributedCache;
         
         }
       
@@ -183,7 +183,7 @@ namespace Convertidor.Data.Repository.Adm
 
                 await _context.ADM_PROVEEDORES.AddAsync(entity);
                 await _context.SaveChangesAsync();
-                await _distributedCache.RemoveAsync(ProveedoresCacheKey);
+                //await _distributedCache.RemoveAsync(ProveedoresCacheKey);
 
                 result.Data = entity;
                 result.IsValid = true;
@@ -217,7 +217,7 @@ namespace Convertidor.Data.Repository.Adm
 
                     _context.ADM_PROVEEDORES.Update(entity);
                     await _context.SaveChangesAsync();
-                      await _distributedCache.RemoveAsync(ProveedoresCacheKey);
+                      //await _distributedCache.RemoveAsync(ProveedoresCacheKey);
                     result.Data = entity;
                     result.IsValid = true;
                     result.Message = "";
@@ -250,7 +250,7 @@ namespace Convertidor.Data.Repository.Adm
                 {
                     _context.ADM_PROVEEDORES.Remove(entity);
                     await _context.SaveChangesAsync();
-                    await _distributedCache.RemoveAsync(ProveedoresCacheKey);
+                   // await _distributedCache.RemoveAsync(ProveedoresCacheKey);
                 }
                 return "";
             }
