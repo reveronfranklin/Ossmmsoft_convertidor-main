@@ -290,6 +290,7 @@ namespace Convertidor.Data.Repository.Adm
                     itemData.DescripcionTipoSolicitud = "";
                     itemData.CodigoProveedor = item.CODIGO_PROVEEDOR;
                     itemData.NombreProveedor = "";
+                    if (item.MOTIVO == null) item.MOTIVO = "";
                     itemData.Motivo = item.MOTIVO.Trim();
                     itemData.Nota = item.NOTA;
                     itemData.Status = item.STATUS;
