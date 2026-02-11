@@ -455,6 +455,24 @@ namespace Convertidor.Data.Repository.Sis
 
         }
 
+
+        public async Task<string> Logout(string login)
+        {
+
+            try
+            {
+                var fechaExpired = DateTime.Now.AddDays(-1);
+                FormattableString xquery = $"UPDATE SIS.SIS_USUARIOS SET TOKENEXPIRES={fechaExpired} WHERE LOGIN={login};";
+                var result = _context.Database.ExecuteSqlInterpolated(xquery);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+                
+
+        }
         public string GetToken(SIS_USUARIOS usuario) {
             
             List<Claim> claims = new List<Claim>

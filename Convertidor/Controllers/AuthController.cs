@@ -208,6 +208,17 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> Logout(LogoutDto logoutDto) 
+        {
+      
+            var result = await _service.Logout(logoutDto.Login);
+          
+            return Ok(result);
+        }
+
         
         [HttpPost]
         [Route("[action]"),Authorize]
@@ -278,6 +289,8 @@ namespace Convertidor.Controllers
             return refreshToken;
         }
         
+        
+
         
         [HttpPost]
         [Route("[action]"), Authorize]

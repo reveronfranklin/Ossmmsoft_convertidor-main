@@ -538,7 +538,13 @@ namespace Convertidor.Services.Sis
 
         }
 
-        
+        public async Task<string> Logout(string login)
+        {
+            
+           var result = await _repository.Logout(login);
+           return result;
+        }
+
         public async  Task<List<RoleMenuDto>> GetMenuOld(string usuario)
         {
 
