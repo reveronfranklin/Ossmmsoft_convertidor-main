@@ -8,7 +8,7 @@ namespace Convertidor.Services.Sis
 
 
 
-
+        Task<string> Logout(string login);
 		Task<ResultLoginDto> Login(LoginDto dto);
 
 		Task<ResultDto<bool>> TokenValid(string refreshToken);
