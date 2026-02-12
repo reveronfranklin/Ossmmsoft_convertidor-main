@@ -439,7 +439,7 @@ namespace Convertidor.Controllers
                 HttpOnly = true,
                 Expires = newRefreshToken.Expires,
                 Domain = ".ossmmasoft.com.ve",
-                SameSite = SameSiteMode.None,
+                SameSite = SameSiteMode.Lax,
                 Secure = true
             };
 
