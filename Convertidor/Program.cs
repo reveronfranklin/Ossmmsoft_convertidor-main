@@ -779,8 +779,16 @@ builder.Services.AddCors(o => o.AddPolicy("corspolicy", builder =>
             {
                 builder
                    
-                    //.AllowAnyOrigin()
-                    .WithOrigins("https://ossmmasoft.com.ve:3001","http://localhost:3001","http://localhost:3000", "https://localhost:3000","https://localhost:3001","http://dev.ossmmasoft.com.ve:3001","https://dev.ossmmasoft.com.ve:3443","https://dev.ossmmasoft.com.ve:3001/login")
+                    .AllowAnyOrigin()
+                    .WithOrigins(
+                        "https://ossmmasoft.com.ve:3001",
+                        "http://localhost:3001",
+                        "http://localhost:3000", 
+                        "https://localhost:3000",
+                        "https://localhost:3001",
+                        "http://dev.ossmmasoft.com.ve:3001",
+                        "https://dev.ossmmasoft.com.ve:3443",
+                        "https://dev.ossmmasoft.com.ve:3001")
                     .AllowAnyMethod()
                     .AllowCredentials()
                     .AllowAnyHeader();

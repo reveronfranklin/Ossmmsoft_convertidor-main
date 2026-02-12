@@ -19,13 +19,13 @@ public partial class AdmLotePagoService
                     return result;
                 }
 
-                if (lotePago.STATUS != "PE" )
+                /*if (lotePago.STATUS != "PE" )
                 {
                     result.Data = null;
                     result.IsValid = false;
                     result.Message = "Lote de pago debe estar Pendiente para poder Aprobarlo";
                     return result;
-                }
+                }*/
                 
                 lotePago.STATUS = dto.Status;
                 lotePago.SEARCH_TEXT = await GetSearchText(lotePago);
