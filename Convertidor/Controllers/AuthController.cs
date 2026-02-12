@@ -439,8 +439,8 @@ namespace Convertidor.Controllers
                 HttpOnly = true,
                 Expires = newRefreshToken.Expires,
                 Domain = ".ossmmasoft.com.ve",
-                SameSite = SameSiteMode.Lax,
-                Secure = true
+                SameSite = SameSiteMode.Lax/*,
+                Secure = true*/
             };
 
           /*bool isDev = true; // Puedes usar IWebHostEnvironment para automatizar esto
