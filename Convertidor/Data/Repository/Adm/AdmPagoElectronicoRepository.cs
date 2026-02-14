@@ -27,6 +27,10 @@ namespace Convertidor.Data.Repository.Adm
 
         try
         {
+            if (usuario == 0)
+            {
+                usuario = -1;
+            }
             var query = $"CALL ADM_P_PAGO_ELECTRONICO_BANESCO({codigoLote},{codigoPresupuesto},{codigoEmpresa},{usuario})";
             FormattableString xquerySaldo = $"CALL ADM_P_PAGO_ELECTRONICO_BANESCO({codigoLote},{codigoPresupuesto},{codigoEmpresa},{usuario})";
             var resultQUERY = await _context.Database.ExecuteSqlInterpolatedAsync(xquerySaldo);
