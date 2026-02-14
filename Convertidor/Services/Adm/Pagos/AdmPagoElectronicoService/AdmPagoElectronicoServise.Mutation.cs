@@ -47,6 +47,12 @@ public partial class AdmPagoElectronicoService
                     result.LinkData = linkData;
                     result.LinkDataArlternative= linkData;
                     return result;
+                }else
+                {
+                    result.IsValid = false;
+                    result.Message = pagoElectronico.Message;
+                    result.LinkData = "";
+                    result.LinkDataArlternative = "";
                 }
 
                 return result;
