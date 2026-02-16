@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Cryptography;
 using System.Security.Claims;
 using System.Drawing;
+using Microsoft.AspNetCore.Authentication;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -208,18 +209,51 @@ namespace Convertidor.Controllers
             return Ok(result);
         }
 
+[HttpPost]
+[Route("[action]")]
+public async Task<ActionResult> Logout(LogoutDto logoutDto) 
+{
+    try
+    {
+        // 1. Eliminar token de la base de datos
+        var result = await _service.Logout(logoutDto.Login);
 
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<ActionResult> Logout(LogoutDto logoutDto) 
+        // 2. Definir cookies a eliminar
+        var cookiesToDelete = new[] { "X-Refresh-Token", "X-Auth-Token" };
+
+        // Opciones de cookie: Deben ser IDENTICAS a las usadas en el Login
+        var cookieOptions = new CookieOptions
         {
-      
-            var result = await _service.Logout(logoutDto.Login);
-          
-            return Ok(result);
+            Path = "/",
+            HttpOnly = true,
+            Secure = true, // Debe ser true si SameSite es None
+            Domain = ".ossmmasoft.com.ve", 
+            Expires = DateTime.UnixEpoch, // Fecha fija en el pasado (1970)
+            SameSite = SameSiteMode.None
+        };
+
+        foreach (var cookieName in cookiesToDelete)
+        {
+            // ELIMINAMOS EL IF. Enviamos la cookie expirada siempre.
+            Response.Cookies.Append(cookieName, "", cookieOptions);
         }
 
-        
+        return Ok(new { 
+            success = true, 
+            IsValid = true,
+            message = "Sesión cerrada exitosamente",
+            data = result 
+        });
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { 
+            success = false, 
+            message = "Error al cerrar sesión",
+            error = ex.Message 
+        });
+    }
+}
         [HttpPost]
         [Route("[action]"),Authorize]
         public async Task<ActionResult<ResultLoginDto>> RefreshToken(ResultRefreshTokenDto refreshTokento)
