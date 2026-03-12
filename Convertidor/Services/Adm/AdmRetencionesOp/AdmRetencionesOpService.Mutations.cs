@@ -449,6 +449,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 entity.MONTO_RETENCION = dto.MontoRetencion;
                 entity.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
                 entity.BASE_IMPONIBLE = dto.BaseImponible;
+                //Se asigna el numero de comprobante
                 if (tipoRetencion.CODIGO == "ISLR")
                 {
                     string paddedNumber = dto.CodigoOrdenPago.ToString().PadLeft(8, '0');
