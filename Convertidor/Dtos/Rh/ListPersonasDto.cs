@@ -42,6 +42,7 @@
         public string DescripcionCargo { get; set; } = string.Empty;
         
         public int CodigoIcp { get; set; }
+         public int CodigoTipoNomina { get; set; }
         public string DescripcionIcp { get; set; } = string.Empty;
         public TiempoServicioResponseDto? TiempoServicio { get; set; }
         public string NombreCompleto { get { return $"{Nombre} {Apellido}"; } }
@@ -49,6 +50,8 @@
         public string DescripcionStatus { get { return GetStatus(Status); } }
         
         public decimal Sueldo { get; set; } 
+
+
         private string GetStatus(string status)
         {
 

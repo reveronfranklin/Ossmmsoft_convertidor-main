@@ -342,6 +342,7 @@ namespace Convertidor.Data.Repository.Rh
                 var relacionCargo = await CargoActual(dtos.CODIGO_PERSONA);
                 if(relacionCargo is not null)
                 {
+                    itemResult.CodigoTipoNomina = relacionCargo.CODIGO_TIPO_NOMINA;
                     itemResult.Sueldo = relacionCargo.SUELDO;
                     itemResult.CodigoCargo = relacionCargo.CODIGO_CARGO;
                     itemResult.DescripcionCargo = "";
