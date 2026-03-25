@@ -418,10 +418,10 @@ namespace Convertidor.Services.Bm
                 itemDetalle.CODIGO_ICP_FISICO = item.CODIGO_ICP;
             }
            
-            if (itemDetalle.CODIGO_ICP_FISICO != itemDetalle.CODIGO_ICP)
+            /*if (itemDetalle.CODIGO_ICP_FISICO != itemDetalle.CODIGO_ICP)
             {
                 itemDetalle.COMENTARIO = itemDetalle.COMENTARIO + " Ubicado en Otra Dependencia";
-            }
+            }*/
             
             return itemDetalle;
         }
