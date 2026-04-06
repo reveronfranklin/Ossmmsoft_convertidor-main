@@ -774,7 +774,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
 {
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));*/
-
+//Prueba
 builder.Services.AddCors(o => o.AddPolicy("corspolicy", builder =>
             {
                 builder
