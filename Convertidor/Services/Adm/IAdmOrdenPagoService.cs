@@ -10,6 +10,7 @@ namespace Convertidor.Services.Adm
         Task<ResultDto<AdmOrdenPagoDeleteDto>> Delete(AdmOrdenPagoDeleteDto dto);
         Task<ResultDto<AdmOrdenPagoResponseDto>> Aprobar(AdmOrdenPagoAprobarAnular dto);
         Task<ResultDto<AdmOrdenPagoResponseDto>> Anular(AdmOrdenPagoAprobarAnular dto);
+        Task<ResultDto<AdmOrdenPagoResponseDto>> Retornar(AdmOrdenPagoRetornar dto);
         Task<decimal> GetMontoPagado(int codigoOrdenPago);
 
     }

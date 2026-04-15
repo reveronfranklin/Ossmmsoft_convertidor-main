@@ -770,12 +770,12 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
     ConnectionMultiplexer.Connect(redisConnectionString));*/
 
-/*builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));*/
+}));
 //Prueba
-builder.Services.AddCors(o => o.AddPolicy("corspolicy", builder =>
+/*builder.Services.AddCors(o => o.AddPolicy("corspolicy", builder =>
             {
                 builder
                    
@@ -792,7 +792,7 @@ builder.Services.AddCors(o => o.AddPolicy("corspolicy", builder =>
                     .AllowAnyMethod()
                     .AllowCredentials()
                     .AllowAnyHeader();
-            }));
+            }));*/
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {

@@ -125,5 +125,30 @@ public partial class AdmOrdenPagoService
 
         }
 
+          public async Task<string> ValidaRetornarOrdenPago(ADM_ORDEN_PAGO ordenPago, decimal totalPagado)
+        {
+            
+            string result = "";
+           
+            if (ordenPago.STATUS != "AP")
+            {
+               
+                result = "Orden de pago no esta pendiente";
+                return result;
+               
+            }
+           
+
+
+            if (totalPagado!=0)
+            {
+                result = $"Orden de Pago ya tiene Pagos: {totalPagado} ";
+            }
+            
+            
+            return result;
+
+        }
+
 
 }

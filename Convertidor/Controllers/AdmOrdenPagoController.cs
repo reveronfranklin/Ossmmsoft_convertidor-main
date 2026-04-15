@@ -79,6 +79,14 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> Retornar(AdmOrdenPagoRetornar dto)
+        {
+            var result = await _service.Retornar(dto);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(AdmOrdenPagoDeleteDto dto)
         {
             var result = await _service.Delete(dto);
