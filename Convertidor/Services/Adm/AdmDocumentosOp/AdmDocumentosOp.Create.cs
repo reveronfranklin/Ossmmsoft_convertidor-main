@@ -7,6 +7,8 @@ public partial class AdmDocumentosOpService
 {
         public async Task<ResultDto<AdmDocumentosOpResponseDto>> Create(AdmDocumentosOpUpdateDto dto)
         {
+
+            //Create AdmDocumentosOp
             ResultDto<AdmDocumentosOpResponseDto> result = new ResultDto<AdmDocumentosOpResponseDto>(null);
             try
             {
