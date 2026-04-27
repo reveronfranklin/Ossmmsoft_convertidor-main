@@ -435,10 +435,6 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                    
                 }
             
-               
-               
-             
-                
 
                 ADM_RETENCIONES_OP entity = new ADM_RETENCIONES_OP();
                 entity.CODIGO_RETENCION_OP = await _repository.GetNextKey();
@@ -483,7 +479,8 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     
                     await ReplicaRetencionesEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
                     await ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
-                    await _admDocumentosOpRepository.UpdateNroComprobante(dto.CodigoDocumento,  entity.NUMERO_COMPROBANTE);
+                    //Se actualiza el numero de comprobante
+                    //await _admDocumentosOpRepository.UpdateNroComprobante(dto.CodigoDocumento,  entity.NUMERO_COMPROBANTE);
                     var resultDto = await MapRetencionesOpDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
