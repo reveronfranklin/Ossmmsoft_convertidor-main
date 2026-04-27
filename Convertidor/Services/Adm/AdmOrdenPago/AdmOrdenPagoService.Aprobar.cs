@@ -4,7 +4,7 @@ namespace Convertidor.Services.Adm.AdmOrdenPago;
 
 public partial class AdmOrdenPagoService 
 {
-            public async Task<ResultDto<AdmOrdenPagoResponseDto>> Aprobar(AdmOrdenPagoAprobarAnular dto)
+        public async Task<ResultDto<AdmOrdenPagoResponseDto>> Aprobar(AdmOrdenPagoAprobarAnular dto)
         {
             ResultDto<AdmOrdenPagoResponseDto> result = new ResultDto<AdmOrdenPagoResponseDto>(null);
             try

@@ -207,6 +207,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                         if (codigoTipoRetencion==consecutivoInfinito)
                         {
                             var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerieOracle(sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
+                            result = numeroSolicitud.Data;
                             ordenPago.NUMERO_COMPROBANTE=decimal.Parse(numeroSolicitud.Data);
                         }
                         else
