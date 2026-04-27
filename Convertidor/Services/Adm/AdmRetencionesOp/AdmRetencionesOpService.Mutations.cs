@@ -483,7 +483,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     
                     await ReplicaRetencionesEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
                     await ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(dto.CodigoOrdenPago);
-
+                    await _admDocumentosOpRepository.UpdateNroComprobante(dto.CodigoDocumento,  entity.NUMERO_COMPROBANTE);
                     var resultDto = await MapRetencionesOpDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;

@@ -4,6 +4,8 @@
     {
         public int CodigoRetencionOp { get; set; }
         public int CodigoOrdenPago { get; set; }
+        public int CodigoDocumento { get; set; }
+        
         public int TipoRetencionId { get; set; }
         public int CodigoRetencion { get; set; }
         public decimal PorRetencion { get; set; }

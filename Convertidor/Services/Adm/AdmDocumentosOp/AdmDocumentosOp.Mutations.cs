@@ -59,6 +59,7 @@ public partial class AdmDocumentosOpService
                     AdmRetencionesOpUpdateDto admRetencionesOpDto = new AdmRetencionesOpUpdateDto();
                     admRetencionesOpDto.CodigoRetencionOp = 0;
                     admRetencionesOpDto.CodigoOrdenPago = codigoDocumentoOp.CODIGO_ORDEN_PAGO;
+                    admRetencionesOpDto.CodigoDocumento=codigoDocumento;
                     admRetencionesOpDto.CodigoRetencion = 0;
                     admRetencionesOpDto.TipoRetencionId = 0;
                     descriptivaRetencion =await _admDescriptivaRepository.GetByCodigo((int)codigoDocumentoOp.ESTATUS_FISCO_ID);

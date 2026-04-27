@@ -12,5 +12,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> Delete(int codigoDocumentoOp);
         Task<int> GetNextKey();
         Task<string> UpdateMontoRetenido(int codigoDocumentoOp, decimal monto);
+
+        Task<string> UpdateNroComprobante(int codigoDocumentoOp,string nroComprobante);
     }
 }

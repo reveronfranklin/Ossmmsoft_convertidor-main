@@ -135,6 +135,27 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
+        public async Task<string> UpdateNroComprobante(int codigoDocumentoOp,string nroComprobante)
+        {
+
+
+            try
+            {
+            
+                
+                FormattableString xqueryDiario = $"UPDATE  ADM.ADM_DOCUMENTOS_OP SET NUMERO_COMPROBANTE = {nroComprobante} WHERE CODIGO_DOCUMENTO_OP= {codigoDocumentoOp};";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
+       
       
         
       
