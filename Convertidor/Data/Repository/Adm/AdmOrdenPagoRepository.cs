@@ -47,6 +47,23 @@ namespace Convertidor.Data.Repository.Adm
             }
 
         }
+
+          public async Task<string> UpdateNumeroComprobante(int codigoOrdenPago, decimal numeroComprobante)
+        {
+
+            try
+            {
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_ORDEN_PAGO SET ADM.ADM_ORDEN_PAGO.NUMERO_COMPROBANTE =  {numeroComprobante} WHERE CODIGO_ORDEN_PAGO ={codigoOrdenPago}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
         
         public async Task<ResultDto<List<ADM_ORDEN_PAGO>>> GetByPresupuesto(AdmOrdenPagoFilterDto filter) 
         {

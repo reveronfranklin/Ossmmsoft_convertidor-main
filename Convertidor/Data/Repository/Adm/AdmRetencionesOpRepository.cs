@@ -96,6 +96,23 @@ namespace Convertidor.Data.Repository.Adm
                 return ex.Message;
             }
         }
+        public async Task<string> UpdaNumeroComprobante(int codigoRetencionOp,string numeroComprobante)
+        {
+            try
+            {
+              
+                FormattableString xqueryDiario = $"UPDATE ADM.ADM_RETENCIONES_OP SET NUMERO_COMPROBANTE={numeroComprobante} WHERE CODIGO_RETENCION_OP= {codigoRetencionOp}";
+
+                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
+                
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<string> DeleteByOrdePago(int codigoOrdenPago)
         {
 

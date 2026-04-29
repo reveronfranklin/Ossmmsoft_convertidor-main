@@ -14,5 +14,6 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
 
         Task<ADM_RETENCIONES_OP> GetByOrdenPagoCodigoRetencionTipoRetencion(int codigoOrdenPago, int codigoRetencion,
             int tipoRetencionId);
+         Task UpdateNumeroComprobanteIvaPorOrdenPago(int codigoOrdenPago);
     }
 }

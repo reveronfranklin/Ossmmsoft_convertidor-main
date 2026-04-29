@@ -3,6 +3,7 @@ using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Convertidor.Services.Adm.AdmRetencionesOp;
 using Convertidor.Utility;
 
 namespace Convertidor.Services.Adm.AdmOrdenPago
@@ -26,7 +27,7 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
         private readonly IAdmDocumentosOpRepository _admDocumentosOpRepository;
         private readonly IAdmBeneficiariosOpRepository _admBeneficiariosOpRepository;
         private readonly IAdmCompromisosPendientesRepository _admCompromisosPendientesRepository;
-
+        private readonly IAdmRetencionesOpService _admRetencionesOpService;
 
         public AdmOrdenPagoService(IAdmOrdenPagoRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -43,7 +44,8 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
                                      IAdmPucOrdenPagoRepository admPucOrdenPagoRepository,
                                      IAdmDocumentosOpRepository admDocumentosOpRepository,
                                      IAdmBeneficiariosOpRepository admBeneficiariosOpRepository,
-                                     IAdmCompromisosPendientesRepository  admCompromisosPendientesRepository)
+                                     IAdmCompromisosPendientesRepository  admCompromisosPendientesRepository,
+                                     IAdmRetencionesOpService admRetencionesOpServices)
         {
       
             _repository = repository;
@@ -62,6 +64,7 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
             _admDocumentosOpRepository = admDocumentosOpRepository;
             _admBeneficiariosOpRepository = admBeneficiariosOpRepository;
             _admCompromisosPendientesRepository = admCompromisosPendientesRepository;
+            _admRetencionesOpService = admRetencionesOpServices;
         }
         
 

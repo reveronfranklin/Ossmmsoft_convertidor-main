@@ -39,7 +39,8 @@ public partial class AdmOrdenPagoService
 
                 await _repository.Update(codigoOrdenPago);
                 
-                
+                await _admRetencionesOpService.UpdateNumeroComprobanteIvaPorOrdenPago(dto.CodigoOrdenPago);
+               
                 await _preSaldosRepository.RecalcularSaldo(codigoOrdenPago.CODIGO_PRESUPUESTO);
                 var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);

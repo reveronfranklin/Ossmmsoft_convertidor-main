@@ -20,6 +20,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> DeleteByOrdePago(int codigoOrdenPago);
         Task<string> DeleteByOrdePagoSinIva(int codigoOrdenPago, int idDescriptivaIva);
         Task<int> GetNextKey();
+         Task<string> UpdaNumeroComprobante(int codigoRetencionOp,string numeroComprobante);
         Task<string> UpdateMontos(int codigoRetencionOp, decimal montoRetencion, decimal baseImponible);
     }
 }

@@ -184,6 +184,56 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             return result;
         }
 
+        
+        public async Task UpdateNumeroComprobanteIvaPorOrdenPago(int codigoOrdenPago)
+        {
+            var documentosOrdenPago = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
+            if (documentosOrdenPago == null || !documentosOrdenPago.Any())
+            {
+                return;
+            }
+
+            var retencionesOp = await _repository.GetByOrdenPago(codigoOrdenPago);
+            if (retencionesOp == null || !retencionesOp.Any())
+            {
+                return;
+            }
+
+            var tipoRetencionCache = new Dictionary<int, string>();
+            var retencionYaActualizada = new HashSet<int>();
+
+            foreach (var documento in documentosOrdenPago)
+            {
+                foreach (var item in retencionesOp)
+                {
+                    if (retencionYaActualizada.Contains(item.CODIGO_RETENCION_OP))
+                    {
+                        continue;
+                    }
+
+                    if (!tipoRetencionCache.TryGetValue(item.TIPO_RETENCION_ID, out var codigoTipoRetencion))
+                    {
+                        var tipoRetencion = await _admDescriptivaRepository.GetByCodigo(item.TIPO_RETENCION_ID);
+                        codigoTipoRetencion = tipoRetencion?.CODIGO ?? string.Empty;
+                        tipoRetencionCache[item.TIPO_RETENCION_ID] = codigoTipoRetencion;
+                    }
+
+                    if (codigoTipoRetencion != "IVA")
+                    {
+                        continue;
+                    }
+
+                    var numeroComprobante = await GetNumeroComprobanteIva(
+                        codigoTipoRetencion,
+                        documento.CODIGO_PRESUPUESTO,
+                        item.CODIGO_ORDEN_PAGO
+                    );
+
+                    await _repository.UpdaNumeroComprobante(item.CODIGO_RETENCION_OP, numeroComprobante);
+                    retencionYaActualizada.Add(item.CODIGO_RETENCION_OP);
+                }
+            }
+        }
 
         public async Task<string> GetNumeroComprobanteIva(string codigoTipoRetencion,int codigoPesupuesto,int codigoOrdenPago)
         {
@@ -218,7 +268,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                            
                         }
                        
-                        await _admOrdenPagoRepository.Update(ordenPago);
+                        await _admOrdenPagoRepository.UpdateNumeroComprobante(codigoOrdenPago,decimal.Parse(result));
                     }
 
                 }
@@ -457,13 +507,19 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 }
                 else
                 {
-                    if (tipoRetencion.CODIGO == "IVA")
+                   /* if (tipoRetencion.CODIGO == "IVA")
                     {
                         entity.NUMERO_COMPROBANTE = await GetNumeroComprobanteIva(tipoRetencion.CODIGO,(int)entity.CODIGO_PRESUPUESTO,dto.CodigoOrdenPago);
 
                     }else
                     {
                         entity.NUMERO_COMPROBANTE = await GetNumeroComprobanteNoIva(tipoRetencion.CODIGO,(int)entity.CODIGO_PRESUPUESTO,dto.CodigoOrdenPago);
+
+                    }*/
+
+                    if (tipoRetencion.CODIGO != "IVA")
+                    {
+                         entity.NUMERO_COMPROBANTE = await GetNumeroComprobanteNoIva(tipoRetencion.CODIGO,(int)entity.CODIGO_PRESUPUESTO,dto.CodigoOrdenPago);
 
                     }
                   
