@@ -78,6 +78,9 @@ namespace Convertidor.Services.Adm
 
         public async Task ActualizaMontoDesdePucOrdenPago(AdmOrdenPagoBeneficiarioFlterDto filter)
         {
+
+
+            await _repository.DeleteByOrdenPago(filter.CodigoOrdenPago);
             var conectado = await _sisUsuarioRepository.GetConectado();
             var compromisos = await _admCompromisoOpRepository.GetCodigoOrdenPago(filter.CodigoOrdenPago,filter.CodigoPresupuesto);
             if (compromisos.Count > 0)
