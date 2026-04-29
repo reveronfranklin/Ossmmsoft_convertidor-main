@@ -41,6 +41,7 @@ public partial class AdmDocumentosOpService
 
                var deleted = await _repository.Delete(dto.CodigoDocumentoOp);
                await ReconstruirRetenciones(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+               //Armamos filter para reconstruir Beneficiarios OP
                 AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
                 filter.CodigoOrdenPago = codigoDocumentoOp.CODIGO_ORDEN_PAGO;
                 filter.CodigoPresupuesto=codigoDocumentoOp.CODIGO_PRESUPUESTO;
