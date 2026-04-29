@@ -41,6 +41,10 @@ public partial class AdmDocumentosOpService
 
                var deleted = await _repository.Delete(dto.CodigoDocumentoOp);
                await ReconstruirRetenciones(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
+                AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
+                filter.CodigoOrdenPago = codigoDocumentoOp.CODIGO_ORDEN_PAGO;
+                filter.CodigoPresupuesto=codigoDocumentoOp.CODIGO_PRESUPUESTO;
+               await _admBeneficariosOpService.ActualizaMontoDesdePucOrdenPago(filter);
                var documentos = await _repository.GetByCodigoOrdenPago(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
                var cantidadDocumentos = 0;
                if (documentos != null && documentos.Count() > 0)

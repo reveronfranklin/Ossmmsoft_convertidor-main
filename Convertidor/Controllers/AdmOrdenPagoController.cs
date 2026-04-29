@@ -114,12 +114,12 @@ namespace Convertidor.Controllers
             var filePatch = $"{destino}{@settings.SeparatorPatch}{dto.CodigoOrdenPago}.pdf";
             
         // URL de la API
-        string apiUrl = "http://ossmmasoft.com.ve:4000/api-v1.0/payment-orders/pdf/report";
+        string apiUrl =@settings.ApiUrlReport; //"http://ossmmasoft.com.ve:4000/api-v1.0/payment-orders/pdf/report";
         apiUrl = dto.Report;
 
         // Token de autenticación (x-refresh-token)
-        string refreshToken = "eH6FFBS6Z8jBSMLTvcVHcc/SnGrA4y3pbrR5c76dN1UD+qK91AUv8hH7HJPHni1NEwGkC8IqGNpPDiVAm1ZCYw==";
-        dto.Usuario = "OSSMMADEV";
+        string refreshToken =@settings.RefreshTokenReport; //"eH6FFBS6Z8jBSMLTvcVHcc/SnGrA4y3pbrR5c76dN1UD+qK91AUv8hH7HJPHni1NEwGkC8IqGNpPDiVAm1ZCYw==";
+        dto.Usuario =@settings.UsuarioReport; //"OSSMMADEV";
         var sisUsuario = await _sisUsuarioRepository.GetByLogin(dto.Usuario);
         if (sisUsuario != null)
         {

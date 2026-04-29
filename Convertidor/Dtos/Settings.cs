@@ -19,6 +19,9 @@
         public string  SeparatorPatch { get; set; }
         public string  ReplicarConteo { get; set; }
         public string TituloMenu { get; set; }
+        public string ApiUrlReport { get; set; }
+         public string UsuarioReport { get; set; }
+        public string RefreshTokenReport { get; set; }
 
 
 	}

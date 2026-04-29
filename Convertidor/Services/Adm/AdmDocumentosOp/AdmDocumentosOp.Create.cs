@@ -239,6 +239,10 @@ public partial class AdmDocumentosOpService
                 {
                     
                     await ReconstruirRetenciones(dto.CodigoOrdenPago);
+                    AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
+                    filter.CodigoOrdenPago = codigoOrdenPago.CODIGO_ORDEN_PAGO;
+                    filter.CodigoPresupuesto=codigoOrdenPago.CODIGO_PRESUPUESTO;
+                    await _admBeneficariosOpService.ActualizaMontoDesdePucOrdenPago(filter);
                     var resultDto = await MapDocumentosOpDto(created.Data);
                     result.CantidadRegistros = cantidadDocumentos;
                     result.Data = resultDto;
