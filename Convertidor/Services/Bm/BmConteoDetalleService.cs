@@ -602,12 +602,12 @@ namespace Convertidor.Services.Bm
               
                 var keyArray = item.KeyUbicacionResponsable.Split("-");
                 CodigoBmConteo=Convert.ToInt32(keyArray[0]);
-                var conteo = await _repository.GetByCodigo(CodigoBmConteo);
-                if (conteo == null)
+                var conteo = await _repository.GetByCodigo(item.Id);
+                /*if (conteo == null)
                 {
                     result=$"No existe un conteo con id:{CodigoBmConteo}";
                     return result;
-                }
+                }*/
 
                 var existeConteo = await _repository.ExisteConteo(CodigoBmConteo);
                 if (existeConteo == false)

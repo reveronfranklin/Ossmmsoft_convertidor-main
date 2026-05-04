@@ -36,24 +36,34 @@ namespace Convertidor.Data.Repository.Catastro
         {
            
           
-            var lista = from s in  _context.BM_V_BM1
-                group s by new
-                {
-                    CodigoIcp=s.CODIGO_ICP,
-                    UnidadTrabajo = s.UNIDAD_TRABAJO,
-                                    
-                 
-                                      
-                } into g
-                select new ICPGetDto()
-                {
+            try
+            {
+                var lista = from s in  _context.BM_V_BM1
+                            group s by new
+                            {
+                                CodigoIcp=s.CODIGO_ICP,
+                                UnidadTrabajo = s.UNIDAD_TRABAJO,
+                                                
+                            
+                                                
+                            } into g
+                            select new ICPGetDto()
+                            {
 
-                    CodigoIcp = g.Key.CodigoIcp,
-                    UnidadTrabajo = g.Key.UnidadTrabajo,
-                                   
+                                CodigoIcp = g.Key.CodigoIcp,
+                                UnidadTrabajo = g.Key.UnidadTrabajo,
+                                            
 
-                };
-            return lista.ToList();
+                            };
+                        return lista.ToList();
+            }
+            catch (System.Exception err)
+            {
+                Console.WriteLine(err.InnerException.Message);
+                return new List<ICPGetDto>();
+            }
+
+          
 
         }
         
