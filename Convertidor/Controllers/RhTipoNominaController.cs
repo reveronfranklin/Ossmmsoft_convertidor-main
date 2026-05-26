@@ -60,7 +60,7 @@ namespace Convertidor.Controllers
         // Cuerpo de la solicitud en formato JSON
         var requestBody = new
         {
-            CodigoTipoNomina = dto.CodigoTipoNomina,
+            codigoTipoNomina = dto.CodigoTipoNomina,
         };
 
         // Convertir el cuerpo a JSON
