@@ -595,7 +595,7 @@ namespace Convertidor.Services.Bm
         public async Task<string> ValidateConteo(List<ConteoCreateDto> dto)
         {
             
-            string result = "";
+            var errores = new List<string>();
             foreach (var item in dto)
             {
                 int CodigoBmConteo = 0;
@@ -612,21 +612,19 @@ namespace Convertidor.Services.Bm
                 var existeConteo = await _repository.ExisteConteo(CodigoBmConteo);
                 if (existeConteo == false)
                 {
-                    result=$"No existe un conteo con id:{CodigoBmConteo} en detalle de Conteo";
-                    return result;
+                    errores.Add($"No existe un conteo con id:{CodigoBmConteo} en detalle de Conteo");
                 }
                 
                 var bm1 = await _bm1Service.GetByNroPlaca(item.NroPlaca);
                 if (bm1 == null)
                 {
-                    result=$"Placa no encontrada: {item.NroPlaca}";
-                    return result;
+                    errores.Add($"Placa no encontrada: {item.NroPlaca}");
                 }
                 
 
             }
 
-            return result;
+            return string.Join(Environment.NewLine, errores);
         }
         public async Task<ResultDto<bool>>  RecibeConteo(List<ConteoCreateDto> dto)
         {
@@ -760,4 +758,3 @@ namespace Convertidor.Services.Bm
     }
 
 }
-

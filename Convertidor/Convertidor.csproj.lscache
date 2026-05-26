@@ -157,6 +157,7 @@ Controllers/
  EmailController.cs
  FilesController.cs
  GatewayController.cs
+ HealthController.cs
  HistoricoMovimientoController.cs
  HistoricoNominaController.cs
  HistoricoNominaDestinoController.cs
@@ -566,6 +567,7 @@ Data/
   HistoricoRetenciones.cs
   IndiceCategoriaPrograma.cs
   PRE/PRE_V_SALDOS.cs
+ Interceptors/DatabaseConnectionLoggingInterceptor.cs
  Interfaces/Adm/
   IAdmActividadProveedorRepository.cs
   IAdmAdmProveedoresContactoRepository.cs
@@ -2711,6 +2713,15 @@ WeatherForecast.cs
  questpdf/2023.12.6/lib/net6.0/QuestPDF.dll
  runtime.osx.10.10-x64.corecompat.system.drawing/5.8.64/lib/netstandard2.0/runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll
  scrutor/3.3.0/lib/netcoreapp3.1/Scrutor.dll
+ serilog.aspnetcore/5.0.0/lib/net5.0/Serilog.AspNetCore.dll
+ serilog.extensions.hosting/4.2.0/lib/netstandard2.1/Serilog.Extensions.Hosting.dll
+ serilog.extensions.logging/3.1.0/lib/netstandard2.0/Serilog.Extensions.Logging.dll
+ serilog.formatting.compact/1.1.0/lib/netstandard2.0/Serilog.Formatting.Compact.dll
+ serilog.settings.configuration/3.3.0/lib/netstandard2.0/Serilog.Settings.Configuration.dll
+ serilog.sinks.console/4.0.1/lib/net5.0/Serilog.Sinks.Console.dll
+ serilog.sinks.debug/2.0.0/lib/netstandard2.1/Serilog.Sinks.Debug.dll
+ serilog.sinks.file/5.0.0/lib/net5.0/Serilog.Sinks.File.dll
+ serilog/2.10.0/lib/netstandard2.1/Serilog.dll
  sharpziplib/1.3.3/lib/netstandard2.1/ICSharpCode.SharpZipLib.dll
  sixlabors.fonts/1.0.0-beta18/lib/netcoreapp3.1/SixLabors.Fonts.dll
  sixlabors.imagesharp/2.1.3/lib/netcoreapp3.1/SixLabors.ImageSharp.dll

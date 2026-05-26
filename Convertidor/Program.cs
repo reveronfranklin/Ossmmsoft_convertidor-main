@@ -1,5 +1,6 @@
 
 using Convertidor.Data;
+using Convertidor.Data.Interceptors;
 using Convertidor.Data.Interfaces;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Bm;
@@ -23,6 +24,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using Convertidor.Data.DestinoInterfaces.ADM;
@@ -59,9 +61,25 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog((context, services, loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.File(
+            Path.Combine(context.HostingEnvironment.ContentRootPath, "logs", "api-.log"),
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 30,
+            shared: true,
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}");
+});
+
 // Add services to the container
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<DatabaseConnectionLoggingInterceptor>();
 
 
 
@@ -711,55 +729,77 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionRH");
-builder.Services.AddDbContext<DataContext>(options =>
-      options.UseOracle(connectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContext>((serviceProvider, options) =>
+      options.UseOracle(connectionString, b => b.UseOracleSQLCompatibility("11"))
+          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+          .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 var preConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionPRE");
-builder.Services.AddDbContext<DataContextPre>(options =>
-      options.UseOracle(preConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextPre>((serviceProvider, options) =>
+      options.UseOracle(preConnectionString, b => b.UseOracleSQLCompatibility("11"))
+          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+          .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 
 
 var rmConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionRM");
-builder.Services.AddDbContext<DataContextRm>(options =>
-      options.UseOracle(rmConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextRm>((serviceProvider, options) =>
+      options.UseOracle(rmConnectionString, b => b.UseOracleSQLCompatibility("11"))
+          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+          .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 var catConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionCAT");
-builder.Services.AddDbContext<DataContextCat>(options =>
-      options.UseOracle(catConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextCat>((serviceProvider, options) =>
+      options.UseOracle(catConnectionString, b => b.UseOracleSQLCompatibility("11"))
+          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+          .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 var sisConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionSIS");
-builder.Services.AddDbContext<DataContextSis>(options =>
-      options.UseOracle(sisConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextSis>((serviceProvider, options) =>
+      options.UseOracle(sisConnectionString, b => b.UseOracleSQLCompatibility("11"))
+          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+          .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 var bmConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionBM");
-builder.Services.AddDbContext<DataContextBm>(options =>
-    options.UseOracle(bmConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextBm>((serviceProvider, options) =>
+    options.UseOracle(bmConnectionString, b => b.UseOracleSQLCompatibility("11"))
+        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+        .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 
 var bmConteoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionBMC");
-builder.Services.AddDbContext<DataContextBmConteo>(options =>
-    options.UseOracle(bmConteoConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextBmConteo>((serviceProvider, options) =>
+    options.UseOracle(bmConteoConnectionString, b => b.UseOracleSQLCompatibility("11"))
+        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+        .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 var rhConteoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionRHC");
-builder.Services.AddDbContext<DataContextRhC>(options =>
-    options.UseOracle(rhConteoConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextRhC>((serviceProvider, options) =>
+    options.UseOracle(rhConteoConnectionString, b => b.UseOracleSQLCompatibility("11"))
+        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+        .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 
 
 var admConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionADM");
-builder.Services.AddDbContext<DataContextAdm>(options =>
-    options.UseOracle(admConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextAdm>((serviceProvider, options) =>
+    options.UseOracle(admConnectionString, b => b.UseOracleSQLCompatibility("11"))
+        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+        .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 var cntConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionCNT");
-builder.Services.AddDbContext<DataContextCnt>(options =>
-    options.UseOracle(cntConnectionString, b => b.UseOracleSQLCompatibility("11")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DataContextCnt>((serviceProvider, options) =>
+    options.UseOracle(cntConnectionString, b => b.UseOracleSQLCompatibility("11"))
+        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+        .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 
 
 var destinoConnectionString = builder.Configuration.GetConnectionString("DefaultConnectionPostgres");
-builder.Services.AddDbContext<DestinoDataContext>(options =>
-      options.UseNpgsql(destinoConnectionString).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+builder.Services.AddDbContext<DestinoDataContext>((serviceProvider, options) =>
+      options.UseNpgsql(destinoConnectionString)
+          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+          .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -854,4 +894,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
