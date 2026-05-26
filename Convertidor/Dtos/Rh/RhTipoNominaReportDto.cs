@@ -2,7 +2,7 @@
 {
     public class RhTipoNominaReportDto
     {
-        public int CodigoPersonaodigoTipoNomina { get; set; }
+        public int CodigoTipoNomina { get; set; }
         public string Report { get; set; }
         public string Usuario { get; set; }
     }
