@@ -26,6 +26,7 @@ namespace Convertidor.Controllers
 
             _service = service;
             _configuration = configuration;
+            _sisUsuarioRepository = sisUsuarioRepository;
 
         }
         
