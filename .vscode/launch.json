@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Debug Convertidor API",
+      "type": "dotnet",
+      "request": "launch",
+      "preLaunchTask": "build Convertidor",
+      "projectPath": "${workspaceFolder}/Convertidor/Convertidor.csproj",
+      "launchConfigurationId": "TargetFramework=net6.0;Profile=Convertidor",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  ]
+}

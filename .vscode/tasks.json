@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build Convertidor",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/Convertidor/Convertidor.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}
