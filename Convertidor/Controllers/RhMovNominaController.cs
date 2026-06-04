@@ -31,6 +31,8 @@ namespace Convertidor.Controllers
         }
         
 
+        
+
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetAll()
