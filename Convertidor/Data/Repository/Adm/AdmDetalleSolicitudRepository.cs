@@ -368,7 +368,8 @@ namespace Convertidor.Data.Repository.Adm
                 List<ADM_DETALLE_SOLICITUD> pageData = new List<ADM_DETALLE_SOLICITUD>();
                 var detalle = await _context.ADM_DETALLE_SOLICITUD.DefaultIfEmpty()
                     .Where(x =>x.CODIGO_SOLICITUD==filter.CodigoSolicitud)
-                    .OrderBy(X=>X.CODIGO_DETALLE_SOLICITUD)
+                    .OrderBy(x => x.NRO_FILA ?? x.CODIGO_DETALLE_SOLICITUD)
+                    .ThenBy(x => x.CODIGO_DETALLE_SOLICITUD)
                     .ToListAsync();
                
                 totalRegistros = detalle.Count;
@@ -399,6 +400,7 @@ namespace Convertidor.Data.Repository.Adm
                     AdmDetalleSolicitudResponseDto resultItem = new AdmDetalleSolicitudResponseDto();
                     resultItem.CodigoDetalleSolicitud = item.CODIGO_DETALLE_SOLICITUD;
                     resultItem.CodigoSolicitud = item.CODIGO_SOLICITUD;
+                    resultItem.NroFila = item.NRO_FILA ?? detalle.IndexOf(item) + 1;
                     resultItem.Cantidad = item.CANTIDAD;
                     resultItem.CantidadComprada = item.CANTIDAD_COMPRADA;
                     resultItem.CantidadAnulada = item.CANTIDAD_ANULADA;
@@ -575,6 +577,53 @@ namespace Convertidor.Data.Repository.Adm
             }
         }
 
+        public async Task<ResultDto<ADM_DETALLE_SOLICITUD>> AddEnFila(ADM_DETALLE_SOLICITUD entity)
+        {
+            ResultDto<ADM_DETALLE_SOLICITUD> result = new ResultDto<ADM_DETALLE_SOLICITUD>(null);
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await ReenumerarFilas(entity.CODIGO_SOLICITUD);
+
+                var maxNroFila = await _context.ADM_DETALLE_SOLICITUD
+                    .Where(x => x.CODIGO_SOLICITUD == entity.CODIGO_SOLICITUD)
+                    .MaxAsync(x => (int?)x.NRO_FILA) ?? 0;
+
+                var nroFilaDestino = entity.NRO_FILA ?? maxNroFila + 1;
+                if (nroFilaDestino < 1 || nroFilaDestino > maxNroFila + 1)
+                {
+                    nroFilaDestino = maxNroFila + 1;
+                }
+
+                FormattableString desplazarFilas = $@"
+                    UPDATE ADM.ADM_DETALLE_SOLICITUD
+                       SET NRO_FILA = NRO_FILA + 1
+                     WHERE CODIGO_SOLICITUD = {entity.CODIGO_SOLICITUD}
+                       AND NRO_FILA >= {nroFilaDestino}";
+
+                _context.Database.ExecuteSqlInterpolated(desplazarFilas);
+
+                entity.NRO_FILA = nroFilaDestino;
+                await _context.ADM_DETALLE_SOLICITUD.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                result.Data = entity;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
+            }
+        }
+
         public async Task<ResultDto<ADM_DETALLE_SOLICITUD>>Update(ADM_DETALLE_SOLICITUD entity) 
         {
             ResultDto<ADM_DETALLE_SOLICITUD> result = new ResultDto<ADM_DETALLE_SOLICITUD>(null);
@@ -611,6 +660,45 @@ namespace Convertidor.Data.Repository.Adm
                     _context.ADM_DETALLE_SOLICITUD.Remove(entity);
                     await _context.SaveChangesAsync();
                 }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public async Task<int> GetSiguienteNroFila(int codigoSolicitud)
+        {
+            var maxNroFila = await _context.ADM_DETALLE_SOLICITUD
+                .Where(x => x.CODIGO_SOLICITUD == codigoSolicitud)
+                .MaxAsync(x => (int?)x.NRO_FILA) ?? 0;
+
+            return maxNroFila + 1;
+        }
+
+        public async Task<string> ReenumerarFilas(int codigoSolicitud)
+        {
+            try
+            {
+                var detalles = await _context.ADM_DETALLE_SOLICITUD
+                    .Where(x => x.CODIGO_SOLICITUD == codigoSolicitud)
+                    .OrderBy(x => x.NRO_FILA ?? x.CODIGO_DETALLE_SOLICITUD)
+                    .ThenBy(x => x.CODIGO_DETALLE_SOLICITUD)
+                    .ToListAsync();
+
+                var nroFila = 1;
+                foreach (var detalle in detalles)
+                {
+                    if (detalle.NRO_FILA != nroFila)
+                    {
+                        detalle.NRO_FILA = nroFila;
+                    }
+
+                    nroFila++;
+                }
+
+                await _context.SaveChangesAsync();
                 return "";
             }
             catch (Exception ex)

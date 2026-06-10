@@ -4,6 +4,7 @@
     {
         public int CodigoDetalleSolicitud { get; set; }
         public int CodigoSolicitud { get; set; }
+        public int NroFila { get; set; }
         public decimal Cantidad { get; set; }
         public decimal CantidadComprada { get; set; }
         public decimal CantidadAnulada { get; set; }

@@ -11,9 +11,12 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<ResultDto<List<AdmDetalleSolicitudResponseDto>>> GetByCodigoSolicitud(AdmSolicitudesFilterDto filter);
         Task<ADM_DETALLE_SOLICITUD> GetByCodigoSolicitudProducto(int codigoSolicitud, int codigoProducto);
         Task<ResultDto<ADM_DETALLE_SOLICITUD>> Add(ADM_DETALLE_SOLICITUD entity);
+        Task<ResultDto<ADM_DETALLE_SOLICITUD>> AddEnFila(ADM_DETALLE_SOLICITUD entity);
         Task<ResultDto<ADM_DETALLE_SOLICITUD>> Update(ADM_DETALLE_SOLICITUD entity);
         Task<string> Delete(int codigoSolicitud);
         Task<int> GetNextKey();
+        Task<int> GetSiguienteNroFila(int codigoSolicitud);
+        Task<string> ReenumerarFilas(int codigoSolicitud);
 
         Task RecalculaImpuesto(int codigoPresupuesto, int codigoSolicitud);
         Task<TotalesResponseDto> GetTotales(int codigoPresupuesto, int codigoSolicitud);

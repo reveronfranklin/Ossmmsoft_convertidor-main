@@ -41,6 +41,7 @@ namespace Convertidor.Services.Adm
             AdmDetalleSolicitudResponseDto itemResult = new AdmDetalleSolicitudResponseDto();
             itemResult.CodigoDetalleSolicitud = dtos.CODIGO_DETALLE_SOLICITUD;
             itemResult.CodigoSolicitud = dtos.CODIGO_SOLICITUD;
+            itemResult.NroFila = dtos.NRO_FILA ?? 0;
             itemResult.Cantidad = dtos.CANTIDAD;
             itemResult.CantidadComprada = dtos.CANTIDAD_COMPRADA;
             itemResult.CantidadAnulada = dtos.CANTIDAD_ANULADA;
@@ -667,8 +668,29 @@ namespace Convertidor.Services.Adm
              
               
 
+            await _repository.ReenumerarFilas(dto.CodigoSolicitud);
+
+            var siguienteNroFila = await _repository.GetSiguienteNroFila(dto.CodigoSolicitud);
+            var posicionInsercion = dto.PosicionInsercion?.Trim().ToUpper();
+            var nroFilaDestino = siguienteNroFila;
+            if (dto.NroFilaReferencia.HasValue && dto.NroFilaReferencia.Value > 0)
+            {
+                nroFilaDestino = posicionInsercion == "DESPUES"
+                    ? dto.NroFilaReferencia.Value + 1
+                    : dto.NroFilaReferencia.Value;
+            }
+
+            if (nroFilaDestino < 1 || nroFilaDestino > siguienteNroFila)
+            {
+                result.Data = null;
+                result.IsValid = false;
+                result.Message = "Numero de fila invalido";
+                return result;
+            }
+
             ADM_DETALLE_SOLICITUD entity = new ADM_DETALLE_SOLICITUD();
             entity.CODIGO_DETALLE_SOLICITUD = await _repository.GetNextKey();
+            entity.NRO_FILA = nroFilaDestino;
             entity.CODIGO_SOLICITUD = dto.CodigoSolicitud;
             entity.CANTIDAD = dto.Cantidad;
             entity.CANTIDAD_COMPRADA = 0;
@@ -716,7 +738,7 @@ namespace Convertidor.Services.Adm
             entity.USUARIO_INS = conectado.Usuario;
             entity.FECHA_INS = DateTime.Now;
 
-            var created = await _repository.Add(entity);
+            var created = await _repository.AddEnFila(entity);
            
             
             if (created.IsValid && created.Data != null)
@@ -776,6 +798,8 @@ namespace Convertidor.Services.Adm
                     return result;
                 }
                 
+                var codigoSolicitud = codigoDetalleSolicitud.CODIGO_SOLICITUD;
+                var codigoPresupuesto = codigoDetalleSolicitud.CODIGO_PRESUPUESTO;
                 var deleted = await _repository.Delete(dto.CodigoDetalleSolicitud);
                 
                 if (deleted.Length > 0)
@@ -789,6 +813,8 @@ namespace Convertidor.Services.Adm
                     result.Data = dto;
                     result.IsValid = true;
                     result.Message = deleted;
+                    await _repository.ReenumerarFilas(codigoSolicitud);
+                    await _repository.RecalculaImpuesto(codigoPresupuesto, codigoSolicitud);
 
                 }
 
@@ -807,4 +833,3 @@ namespace Convertidor.Services.Adm
         }
     }
  }
-

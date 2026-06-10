@@ -25,6 +25,7 @@
         public int CODIGO_EMPRESA { get; set; }
         public int CODIGO_PRESUPUESTO { get; set; }
         public int? CODIGO_PRODUCTO { get; set; }
+        public int? NRO_FILA { get; set; }
         
         public decimal? TOTAL { get; set; }
         public decimal? TOTAL_MAS_IMPUESTO { get; set; }
@@ -32,4 +33,3 @@
         public string SEARCH_TEXT  { get; set; }= string.Empty;
     }
 }
-

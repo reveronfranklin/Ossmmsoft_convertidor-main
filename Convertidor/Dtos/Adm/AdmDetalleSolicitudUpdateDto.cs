@@ -10,8 +10,9 @@
         public decimal PrecioUnitario { get; set; }
         public int TipoImpuestoId { get; set; }
         public int CodigoProducto { get; set; }
+        public int? NroFilaReferencia { get; set; }
+        public string PosicionInsercion { get; set; } = string.Empty;
         
     }
 }
-
 
