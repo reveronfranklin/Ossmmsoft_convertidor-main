@@ -204,12 +204,20 @@ namespace Convertidor.Data.Repository.Adm
                     FormattableString xqueryDiarioTipoImpuesto = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET MONTO_IMPUESTO=0,TOTAL_MAS_IMPUESTO=TRUNC(TOTAL, 2)  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID <> {tipoImpuesto}";
 
                     var resultDiarioTipoImpuesto =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioTipoImpuesto);
-                    
-                    
+
+
                     //FormattableString xqueryDiarioDESCRIPCION = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET DESCRIPCION='IVA'  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} AND TIPO_IMPUESTO_ID = {tipoImpuesto}";
 
                     //var resultDiarioDescripcion =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioDESCRIPCION);
-                    
+
+                }
+                else
+                {
+                    FormattableString xqueryDiarioTipoImpuesto = $"UPDATE ADM.ADM_DETALLE_SOLICITUD SET MONTO_IMPUESTO= ((PRECIO_UNITARIO * CANTIDAD) * POR_IMPUESTO )/100 ,TOTAL_MAS_IMPUESTO=TRUNC(TOTAL, 2) +  ((PRECIO_UNITARIO * CANTIDAD) * POR_IMPUESTO )/100  WHERE CODIGO_PRESUPUESTO={codigoPresupuesto} AND CODIGO_SOLICITUD ={codigoSolicitud} ";
+
+                    var resultDiarioTipoImpuesto =  _context.Database.ExecuteSqlInterpolated(xqueryDiarioTipoImpuesto);
+
+
                 }
 
             }

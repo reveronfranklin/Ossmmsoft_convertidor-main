@@ -278,7 +278,7 @@ namespace Convertidor.Services.Adm.ReporteSolicitudCompromiso
 
                 if (detalle.Data.Count > 0 )
                 {
-                    var cuerpo = detalle.Data.OrderBy(x=>x.CodigoDetalleSolicitud).ToList();
+                    var cuerpo = detalle.Data.OrderBy(x=>x.NroFila).ThenBy(x=>x.CodigoDetalleSolicitud).ToList();
                             foreach (var item in cuerpo)
                             {
 
