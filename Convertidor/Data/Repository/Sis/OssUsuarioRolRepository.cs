@@ -1,5 +1,7 @@
 ﻿using Convertidor.Data.Entities.Sis;
 using Microsoft.EntityFrameworkCore;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 
 namespace Convertidor.Data.Repository.Sis
 {
@@ -77,12 +79,42 @@ namespace Convertidor.Data.Repository.Sis
                 var usuarioNormalizado = usuario.Trim();
                 var usuarioMayusculas = usuarioNormalizado.ToUpper();
                 var usuarioMinusculas = usuarioNormalizado.ToLower();
-                var result = await _context.OSS_USUARIO_ROL
-                    .Where(x =>
-                        x.USUARIO == usuarioNormalizado ||
-                        x.USUARIO == usuarioMayusculas ||
-                        x.USUARIO == usuarioMinusculas)
-                    .ToListAsync();
+                var result = new List<OSS_USUARIO_ROL>();
+                var connectionString = _context.Database.GetDbConnection().ConnectionString;
+
+                using var connection = new OracleConnection(connectionString);
+                await connection.OpenAsync();
+
+                using var command = new OracleCommand(@"
+                    SELECT CODIGO_USUARIO_ROL,
+                           CODIGO_USUARIO,
+                           USUARIO,
+                           DESCRIPCION,
+                           JSON_MENU
+                      FROM SIS.OSS_USUARIO_ROL
+                     WHERE USUARIO IN (:p_USUARIO, :p_USUARIO_MAYUS, :p_USUARIO_MINUS)
+                     ORDER BY CODIGO_USUARIO_ROL", connection)
+                {
+                    BindByName = true
+                };
+
+                command.Parameters.Add("p_USUARIO", OracleDbType.Varchar2).Value = usuarioNormalizado;
+                command.Parameters.Add("p_USUARIO_MAYUS", OracleDbType.Varchar2).Value = usuarioMayusculas;
+                command.Parameters.Add("p_USUARIO_MINUS", OracleDbType.Varchar2).Value = usuarioMinusculas;
+
+                using var reader = (OracleDataReader)await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    result.Add(new OSS_USUARIO_ROL
+                    {
+                        CODIGO_USUARIO_ROL = GetInt32(reader, "CODIGO_USUARIO_ROL"),
+                        CODIGO_USUARIO = GetInt32(reader, "CODIGO_USUARIO"),
+                        USUARIO = GetString(reader, "USUARIO"),
+                        DESCRIPCION = GetString(reader, "DESCRIPCION"),
+                        JSON_MENU = GetClobString(reader, "JSON_MENU")
+                    });
+                }
+
                 return result;
             }
             catch (Exception ex)
@@ -92,6 +124,30 @@ namespace Convertidor.Data.Repository.Sis
             }
 
 
+        }
+
+        private static int GetInt32(OracleDataReader reader, string columnName)
+        {
+            var ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? 0 : Convert.ToInt32(reader.GetValue(ordinal));
+        }
+
+        private static string GetString(OracleDataReader reader, string columnName)
+        {
+            var ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? string.Empty : reader.GetValue(ordinal).ToString() ?? string.Empty;
+        }
+
+        private static string GetClobString(OracleDataReader reader, string columnName)
+        {
+            var ordinal = reader.GetOrdinal(columnName);
+            if (reader.IsDBNull(ordinal))
+            {
+                return string.Empty;
+            }
+
+            using OracleClob clob = reader.GetOracleClob(ordinal);
+            return clob.IsNull ? string.Empty : clob.Value;
         }
 
         public async Task<ResultDto<OSS_USUARIO_ROL>> Add(OSS_USUARIO_ROL entity)
