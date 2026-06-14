@@ -320,7 +320,7 @@ public async Task<ActionResult> Logout(LogoutDto logoutDto)
 
             string token = _service.GetToken(sisUsuario);
             var newRefreshToken = GenerateRefreshToken(token);
-            SetRefreshToken(newRefreshToken);
+            await SetRefreshToken(newRefreshToken);
             //ResultRefreshTokenDto result = new ResultRefreshTokenDto();
             //result.accessToken = token;
             //result.refreshToken = newRefreshToken.Refresh_Token;
