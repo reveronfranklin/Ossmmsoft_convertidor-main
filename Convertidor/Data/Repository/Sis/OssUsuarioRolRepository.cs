@@ -90,8 +90,7 @@ namespace Convertidor.Data.Repository.Sis
                     SELECT CODIGO_USUARIO_ROL,
                            CODIGO_USUARIO,
                            USUARIO,
-                           DESCRIPCION,
-                           JSON_MENU
+                           DESCRIPCION
                       FROM SIS.OSS_USUARIO_ROL
                      WHERE USUARIO IN (:p_USUARIO, :p_USUARIO_MAYUS, :p_USUARIO_MINUS)
                      ORDER BY CODIGO_USUARIO_ROL", connection)
@@ -112,8 +111,13 @@ namespace Convertidor.Data.Repository.Sis
                         CODIGO_USUARIO = GetInt32(reader, "CODIGO_USUARIO"),
                         USUARIO = GetString(reader, "USUARIO"),
                         DESCRIPCION = GetString(reader, "DESCRIPCION"),
-                        JSON_MENU = GetClobString(reader, "JSON_MENU")
+                        JSON_MENU = string.Empty
                     });
+                }
+
+                foreach (var item in result)
+                {
+                    item.JSON_MENU = await GetJsonMenu(connection, item.CODIGO_USUARIO_ROL);
                 }
 
                 return result;
@@ -125,6 +129,63 @@ namespace Convertidor.Data.Repository.Sis
             }
 
 
+        }
+
+        private static async Task<string> GetJsonMenu(OracleConnection connection, int codigoUsuarioRol)
+        {
+            var jsonFromSubstring = await TryGetJsonMenuSubstring(connection, codigoUsuarioRol);
+            if (!string.IsNullOrWhiteSpace(jsonFromSubstring))
+            {
+                return jsonFromSubstring;
+            }
+
+            try
+            {
+                using var command = new OracleCommand(@"
+                    SELECT JSON_MENU
+                      FROM SIS.OSS_USUARIO_ROL
+                     WHERE CODIGO_USUARIO_ROL = :p_CODIGO_USUARIO_ROL", connection)
+                {
+                    BindByName = true
+                };
+
+                command.Parameters.Add("p_CODIGO_USUARIO_ROL", OracleDbType.Int32).Value = codigoUsuarioRol;
+
+                using var reader = (OracleDataReader)await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    return GetClobString(reader, "JSON_MENU");
+                }
+            }
+            catch
+            {
+                return string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        private static async Task<string> TryGetJsonMenuSubstring(OracleConnection connection, int codigoUsuarioRol)
+        {
+            try
+            {
+                using var command = new OracleCommand(@"
+                    SELECT DBMS_LOB.SUBSTR(JSON_MENU, 4000, 1) JSON_MENU
+                      FROM SIS.OSS_USUARIO_ROL
+                     WHERE CODIGO_USUARIO_ROL = :p_CODIGO_USUARIO_ROL", connection)
+                {
+                    BindByName = true
+                };
+
+                command.Parameters.Add("p_CODIGO_USUARIO_ROL", OracleDbType.Int32).Value = codigoUsuarioRol;
+
+                var value = await command.ExecuteScalarAsync();
+                return value == null || value == DBNull.Value ? string.Empty : value.ToString() ?? string.Empty;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private static int GetInt32(OracleDataReader reader, string columnName)
