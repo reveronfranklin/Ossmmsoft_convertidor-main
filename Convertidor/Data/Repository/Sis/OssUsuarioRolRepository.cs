@@ -80,7 +80,8 @@ namespace Convertidor.Data.Repository.Sis
                 var usuarioMayusculas = usuarioNormalizado.ToUpper();
                 var usuarioMinusculas = usuarioNormalizado.ToLower();
                 var result = new List<OSS_USUARIO_ROL>();
-                var connectionString = _context.Database.GetDbConnection().ConnectionString;
+                var connectionString = _configuration.GetConnectionString("DefaultConnectionSIS")
+                    ?? _context.Database.GetDbConnection().ConnectionString;
 
                 using var connection = new OracleConnection(connectionString);
                 await connection.OpenAsync();
