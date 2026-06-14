@@ -74,9 +74,14 @@ namespace Convertidor.Data.Repository.Sis
                     return new List<OSS_USUARIO_ROL>();
                 }
 
-                var usuarioNormalizado = usuario.Trim().ToUpper();
+                var usuarioNormalizado = usuario.Trim();
+                var usuarioMayusculas = usuarioNormalizado.ToUpper();
+                var usuarioMinusculas = usuarioNormalizado.ToLower();
                 var result = await _context.OSS_USUARIO_ROL
-                    .Where(x => x.USUARIO != null && x.USUARIO.Trim().ToUpper() == usuarioNormalizado)
+                    .Where(x =>
+                        x.USUARIO == usuarioNormalizado ||
+                        x.USUARIO == usuarioMayusculas ||
+                        x.USUARIO == usuarioMinusculas)
                     .ToListAsync();
                 return result;
             }
