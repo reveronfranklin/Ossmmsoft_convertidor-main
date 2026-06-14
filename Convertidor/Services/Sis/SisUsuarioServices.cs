@@ -504,6 +504,10 @@ namespace Convertidor.Services.Sis
 
             List<RoleMenuDto> result = new List<RoleMenuDto> ();
 
+            if (string.IsNullOrWhiteSpace(usuario))
+            {
+                return result;
+            }
 
             
             
@@ -515,13 +519,19 @@ namespace Convertidor.Services.Sis
             {
                 foreach (var item in roles)
                 {
-                    RoleMenuDto resultItem = new RoleMenuDto();
-                    resultItem.Role = item.DESCRIPCION;
+                    if (item == null)
+                    {
+                        continue;
+                    }
 
-                    var jsonValid = JsonValidator.IsValidJson(item.JSON_MENU);
+                    RoleMenuDto resultItem = new RoleMenuDto();
+                    resultItem.Role = item.DESCRIPCION ?? string.Empty;
+
+                    var jsonMenu = item.JSON_MENU ?? string.Empty;
+                    var jsonValid = JsonValidator.IsValidJson(jsonMenu);
                     if (jsonValid)
                     {
-                        resultItem.Menu = item.JSON_MENU;
+                        resultItem.Menu = jsonMenu;
                     }
                     else
                     {
@@ -658,4 +668,3 @@ namespace Convertidor.Services.Sis
 
     }
 }
-

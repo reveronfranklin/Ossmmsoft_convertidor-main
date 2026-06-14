@@ -69,13 +69,21 @@ namespace Convertidor.Data.Repository.Sis
         {
             try
             {
-                var result = await _context.OSS_USUARIO_ROL.DefaultIfEmpty().Where(x => x.USUARIO.Trim().ToLower() == usuario.Trim().ToLower()).ToListAsync();
+                if (string.IsNullOrWhiteSpace(usuario))
+                {
+                    return new List<OSS_USUARIO_ROL>();
+                }
+
+                var usuarioNormalizado = usuario.Trim().ToUpper();
+                var result = await _context.OSS_USUARIO_ROL
+                    .Where(x => x.USUARIO != null && x.USUARIO.Trim().ToUpper() == usuarioNormalizado)
+                    .ToListAsync();
                 return result;
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException.Message;
-                return null;
+                var msg = ex.InnerException?.Message ?? ex.Message;
+                return new List<OSS_USUARIO_ROL>();
             }
 
 
@@ -177,4 +185,3 @@ namespace Convertidor.Data.Repository.Sis
     }
 
 }
-
