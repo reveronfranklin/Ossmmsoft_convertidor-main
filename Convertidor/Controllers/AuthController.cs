@@ -61,6 +61,44 @@ namespace Convertidor.Controllers
             return Ok(menu);
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> GetMenuByUsuario(SisUsuariosFilterDto filter)
+        {
+            if (filter == null || string.IsNullOrWhiteSpace(filter.Login))
+            {
+                return BadRequest("Usuario requerido.");
+            }
+
+            var refreshToken = Request.Headers["X-Refresh-Token"].FirstOrDefault();
+
+            if (string.IsNullOrWhiteSpace(refreshToken))
+            {
+                return Unauthorized("Refresh token requerido.");
+            }
+
+            var sisUsuario = await _service.GetByLogin(filter.Login);
+
+            if (sisUsuario == null)
+            {
+                return Unauthorized("Usuario no valido.");
+            }
+
+            if (!string.Equals(sisUsuario.REFRESHTOKEN, refreshToken, StringComparison.Ordinal))
+            {
+                return Unauthorized("Refresh token no valido para el usuario.");
+            }
+
+            if (!sisUsuario.TOKENEXPIRES.HasValue || sisUsuario.TOKENEXPIRES.Value < DateTime.Now)
+            {
+                return Unauthorized("Refresh token vencido.");
+            }
+
+            var menu = await _service.GetMenu(sisUsuario.LOGIN);
+
+            return Ok(menu);
+        }
+
         [HttpGet]
         [Route("[action]")]
         public async Task<ActionResult> GetAll()
