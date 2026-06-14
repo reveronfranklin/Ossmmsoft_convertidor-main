@@ -370,6 +370,7 @@ namespace Convertidor.Data.Repository.Sis
                         userData.Role = "admin";
                         userData.Roles = roles;
                         userData.Email = $"{resultDiario.LOGIN}@ossmmasoft.com";
+                        userData.IsSuperuser = resultDiario.IS_SUPERUSER == 1;
                         var settings = _configuration.GetSection("Settings").Get<Settings>();
                         userData.TituloMenu  = @settings.TituloMenu;  
                         var ossConfig = await _ossConfigRepository.GetByClave("TITULO_MENU");
@@ -500,4 +501,3 @@ namespace Convertidor.Data.Repository.Sis
     }
 
 }
-

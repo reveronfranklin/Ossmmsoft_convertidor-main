@@ -336,6 +336,7 @@ public async Task<ActionResult> Logout(LogoutDto logoutDto)
             userData.FullName = sisUsuario.USUARIO;
             userData.Role = "admin";
             userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
+            userData.IsSuperuser = sisUsuario.IS_SUPERUSER == 1;
             resultLogin.UserData = userData;
 
 
@@ -402,6 +403,7 @@ public async Task<ActionResult> Logout(LogoutDto logoutDto)
             userData.FullName = sisUsuario.USUARIO;
             userData.Role = "admin";
             userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
+            userData.IsSuperuser = sisUsuario.IS_SUPERUSER == 1;
             resultLogin.UserData = userData;
 
             AuthResponse authResponse = new AuthResponse();
@@ -466,6 +468,7 @@ public async Task<ActionResult> Logout(LogoutDto logoutDto)
             userData.Roles = roles;
             userData.Role = "admin";
             userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
+            userData.IsSuperuser = sisUsuario.IS_SUPERUSER == 1;
             resultLogin.UserData = userData;
 
         
