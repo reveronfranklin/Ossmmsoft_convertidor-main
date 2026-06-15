@@ -334,7 +334,7 @@ public async Task<ActionResult> Logout(LogoutDto logoutDto)
             userData.Id = sisUsuario.CODIGO_USUARIO;
             userData.username = sisUsuario.LOGIN;
             userData.FullName = sisUsuario.USUARIO;
-            userData.Role = "admin";
+            userData.Role = sisUsuario.IS_SUPERUSER == 1 ? "admin" : "user";
             userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
             userData.IsSuperuser = sisUsuario.IS_SUPERUSER == 1;
             resultLogin.UserData = userData;
@@ -401,7 +401,7 @@ public async Task<ActionResult> Logout(LogoutDto logoutDto)
             userData.Id = sisUsuario.CODIGO_USUARIO;
             userData.username = sisUsuario.LOGIN;
             userData.FullName = sisUsuario.USUARIO;
-            userData.Role = "admin";
+            userData.Role = sisUsuario.IS_SUPERUSER == 1 ? "admin" : "user";
             userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
             userData.IsSuperuser = sisUsuario.IS_SUPERUSER == 1;
             resultLogin.UserData = userData;
@@ -466,7 +466,7 @@ public async Task<ActionResult> Logout(LogoutDto logoutDto)
             userData.username = sisUsuario.LOGIN;
             userData.FullName = sisUsuario.USUARIO;
             userData.Roles = roles;
-            userData.Role = "admin";
+            userData.Role = sisUsuario.IS_SUPERUSER == 1 ? "admin" : "user";
             userData.Email = $"{sisUsuario.LOGIN}@ossmasoft.com";
             userData.IsSuperuser = sisUsuario.IS_SUPERUSER == 1;
             resultLogin.UserData = userData;

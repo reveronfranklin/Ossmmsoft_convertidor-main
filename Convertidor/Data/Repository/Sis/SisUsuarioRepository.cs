@@ -367,7 +367,7 @@ namespace Convertidor.Data.Repository.Sis
                         userData.Id = resultDiario.CODIGO_USUARIO;
                         userData.username = resultDiario.LOGIN;
                         userData.FullName = resultDiario.USUARIO;
-                        userData.Role = "admin";
+                        userData.Role = resultDiario.IS_SUPERUSER == 1 ? "admin" : "user";
                         userData.Roles = roles;
                         userData.Email = $"{resultDiario.LOGIN}@ossmmasoft.com";
                         userData.IsSuperuser = resultDiario.IS_SUPERUSER == 1;
