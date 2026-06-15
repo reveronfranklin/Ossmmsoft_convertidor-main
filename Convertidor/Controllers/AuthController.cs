@@ -69,8 +69,8 @@ namespace Convertidor.Controllers
             {
                 return BadRequest("Usuario requerido.");
             }
-
-            var refreshToken = Request.Headers["X-Refresh-Token"].FirstOrDefault();
+            var sisUsuario = await _service.GetByLogin(filter.Login);
+            /*var refreshToken = Request.Headers["X-Refresh-Token"].FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(refreshToken))
             {
@@ -92,7 +92,7 @@ namespace Convertidor.Controllers
             if (!sisUsuario.TOKENEXPIRES.HasValue || sisUsuario.TOKENEXPIRES.Value < DateTime.Now)
             {
                 return Unauthorized("Refresh token vencido.");
-            }
+            }*/
 
             var menu = await _service.GetMenu(sisUsuario.LOGIN);
 
