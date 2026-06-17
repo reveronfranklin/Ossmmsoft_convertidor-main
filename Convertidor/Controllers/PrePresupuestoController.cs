@@ -80,31 +80,61 @@ namespace Convertidor.Controllers
         [Route("[action]")]
         public async Task<IActionResult>  GetAllFilter(FilterPRE_PRESUPUESTOSDto filter)
         {
-            if (filter.CodigoPresupuesto == 0)
+            try
             {
-                var ultimoPresupuesto = await _prePresupuestoService.GetUltimo();
-                filter.CodigoPresupuesto = ultimoPresupuesto.CODIGO_PRESUPUESTO;
-            }
-            
-                ResultDto<List<GetPRE_PRESUPUESTOSDto>> result = new ResultDto<List<GetPRE_PRESUPUESTOSDto>>(null);
-                var cacheKey = $"List<GetPRE_PRESUPUESTOSDto>-{filter.CodigoPresupuesto.ToString()}-{filter.FinanciadoId.ToString()}-{filter.FechaDesde.ToShortDateString()}-{filter.FechaHasta.ToShortDateString()}";
-                var listPresupuesto= await _distributedCache.GetAsync(cacheKey);
-                if (filter.CodigoPresupuesto> 0 &&  listPresupuesto!= null)
+                if (filter.CodigoPresupuesto == 0)
                 {
-                    result = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<GetPRE_PRESUPUESTOSDto>> > (listPresupuesto);
+                    var ultimoPresupuesto = await _prePresupuestoService.GetUltimo();
+                    filter.CodigoPresupuesto = ultimoPresupuesto.CODIGO_PRESUPUESTO;
                 }
-                else
+
+                var cacheKey = $"List<GetPRE_PRESUPUESTOSDto>-{filter.CodigoPresupuesto}-{filter.FinanciadoId}-{filter.FechaDesde:yyyyMMdd}-{filter.FechaHasta:yyyyMMdd}";
+                byte[]? listPresupuesto = null;
+
+                try
                 {
-                    result = await _prePresupuestoService.GetAll(filter);
+                    listPresupuesto = await _distributedCache.GetAsync(cacheKey);
+                }
+                catch
+                {
+                    listPresupuesto = null;
+                }
+
+                if (filter.CodigoPresupuesto > 0 && listPresupuesto != null)
+                {
+                    var cachedResult = System.Text.Json.JsonSerializer.Deserialize<ResultDto<List<GetPRE_PRESUPUESTOSDto>>>(listPresupuesto);
+                    if (cachedResult != null)
+                    {
+                        return Ok(cachedResult);
+                    }
+                }
+
+                var result = await _prePresupuestoService.GetAll(filter);
+
+                try
+                {
                     var options = new DistributedCacheEntryOptions()
                         .SetAbsoluteExpiration(DateTime.Now.AddDays(20))
                         .SetSlidingExpiration(TimeSpan.FromDays(20));
                     var serializedList = System.Text.Json.JsonSerializer.Serialize(result);
                     var redisListBytes = Encoding.UTF8.GetBytes(serializedList);
-                    await _distributedCache.SetAsync(cacheKey,redisListBytes,options);
+                    await _distributedCache.SetAsync(cacheKey, redisListBytes, options);
                 }
-               
+                catch
+                {
+                    // El cache no debe impedir que el dashboard responda.
+                }
+
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Error al consultar presupuesto",
+                    detail = ex.Message
+                });
+            }
         }
 
         [HttpPost]
