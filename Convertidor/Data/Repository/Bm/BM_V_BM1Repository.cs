@@ -298,6 +298,25 @@ namespace Convertidor.Data.Repository.Catastro
 
         }
 
+        public async Task<DateTime?> GetFechaPrimerMovimiento()
+        {
+            try
+            {
+                var conectado = await _sisUsuarioRepository.GetConectado();
+                var result = await _context.BM_V_BM1
+                    .Where(b => b.CODIGO_EMPRESA == conectado.Empresa)
+                    .Select(b => (DateTime?)b.FECHA_MOVIMIENTO)
+                    .MinAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException?.Message ?? ex.Message;
+                return null;
+            }
+        }
+
 
 
         public async Task<List<BM_V_BM1>> GetByPlaca(int codigoBien)
@@ -343,4 +362,3 @@ namespace Convertidor.Data.Repository.Catastro
 
     }
 }
-

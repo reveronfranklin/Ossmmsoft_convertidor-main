@@ -10,6 +10,7 @@ public interface IBM_V_BM1Repository
     Task<List<BM_V_BM1>> GetByPlaca(int codigoBien);
     Task<BM_V_BM1> GetByNroPlaca(string nroPlaca);
     Task<List<BM_V_BM1>> GetAllByCodigoIcp(int codigoIcp);
+    Task<DateTime?> GetFechaPrimerMovimiento();
     List<ICPGetDto> GetICP();
 
     Task<List<ProductResponse>> GetProductMobil(ProductFilterDto filter);

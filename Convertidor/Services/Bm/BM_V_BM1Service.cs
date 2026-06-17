@@ -471,6 +471,27 @@ namespace Convertidor.Services.Bm
            response.Message = "";
            return response;
         }
+
+        public async Task<ResultDto<DateTime?>> GetFechaPrimerMovimiento()
+        {
+            ResultDto<DateTime?> response = new ResultDto<DateTime?>(null);
+            try
+            {
+                var fechaPrimerMovimiento = await _repository.GetFechaPrimerMovimiento();
+                response.Data = fechaPrimerMovimiento;
+                response.IsValid = true;
+                response.Message = "";
+                response.LinkData = "";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.IsValid = false;
+                response.Message = ex.InnerException?.Message ?? ex.Message;
+                return response;
+            }
+        }
         
         public async Task<ResultDto<List<Bm1GetDto>>> GetByListIcp(Bm1Filter filter)
         {
