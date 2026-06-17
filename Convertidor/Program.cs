@@ -801,10 +801,7 @@ builder.Services.AddDbContext<DestinoDataContext>((serviceProvider, options) =>
           .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
           .AddInterceptors(serviceProvider.GetRequiredService<DatabaseConnectionLoggingInterceptor>()));
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = "localhost:6379";
-});
+builder.Services.AddDistributedMemoryCache();
 
 /*var redisConnectionString = builder.Configuration.GetConnectionString("redisConnection");
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
