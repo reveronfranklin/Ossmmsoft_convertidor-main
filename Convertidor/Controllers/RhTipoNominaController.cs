@@ -35,6 +35,7 @@ namespace Convertidor.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        [Obsolete("ReportePersonal fue migrado a OssmmasoftVerticalSlice: POST /api/ReportePersonal/pdf. Mantener temporalmente solo por compatibilidad.")]
         public async Task<IActionResult> Report(RhTipoNominaReportDto dto)
         {
 

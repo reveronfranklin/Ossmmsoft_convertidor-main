@@ -25,6 +25,7 @@ namespace Convertidor.Controllers
         
         [HttpPost]
         [Route("[action]")]
+        [Obsolete("ReporteGeneralNomina fue migrado a OssmmasoftVerticalSlice: POST /api/ReporteGeneralNomina/pdf. Mantener temporalmente solo por compatibilidad.")]
         public async Task<IActionResult>  GeneratePdf(FilterRepoteNomina filter)
         {
            var result =await  _service.GeneratePdf(filter);
