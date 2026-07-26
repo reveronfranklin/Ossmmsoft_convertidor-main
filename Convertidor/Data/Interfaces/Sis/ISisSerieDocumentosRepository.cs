@@ -12,5 +12,6 @@ public interface ISisSerieDocumentosRepository
     Task<int> GetNextKey();
     Task<ResultDto<string>> GenerateNextSerie(int codigoPresupuesto, int tipoDocumentoId, string codigo);
      Task<ResultDto<string>> GenerateNextSerieOracle(int tipoDocumentoId,string codigo);
+     Task<ResultDto<string>> ReservarSerieAtomica(int tipoDocumentoId);
 
 }

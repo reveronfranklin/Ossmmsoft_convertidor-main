@@ -96,20 +96,26 @@ namespace Convertidor.Data.Repository.Adm
                 return ex.Message;
             }
         }
-        public async Task<string> UpdaNumeroComprobante(int codigoRetencionOp,string numeroComprobante)
+        public async Task<ResultDto<int>> UpdaNumeroComprobante(int codigoRetencionOp,string numeroComprobante)
         {
+            ResultDto<int> result = new ResultDto<int>(0);
             try
             {
-              
+
                 FormattableString xqueryDiario = $"UPDATE ADM.ADM_RETENCIONES_OP SET NUMERO_COMPROBANTE={numeroComprobante} WHERE CODIGO_RETENCION_OP= {codigoRetencionOp}";
 
-                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-                
-                return "";
+                var filasAfectadas = await _context.Database.ExecuteSqlInterpolatedAsync(xqueryDiario);
+                result.Data = filasAfectadas;
+                result.IsValid = filasAfectadas > 0;
+                result.Message = filasAfectadas > 0 ? "" : "No se encontró la retención para actualizar el número de comprobante";
+                return result;
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                result.Data = 0;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
             }
         }
 

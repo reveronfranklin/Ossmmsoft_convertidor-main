@@ -1,9 +1,22 @@
+using Convertidor.Data.Entities.Adm;
 using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Services.Adm.AdmOrdenPago;
 
 public partial class AdmOrdenPagoService 
 {
+            private async Task ActualizarMontoLetras(int codigoOrdenPago)
+        {
+            var partidas = await _admPucOrdenPagoRepository.GetByOrdenPago(codigoOrdenPago) ?? new List<ADM_PUC_ORDEN_PAGO>();
+            var montoTotal = partidas.Sum(item => item.MONTO);
+            var error = await _repository.UpdateMontoEnLetras(codigoOrdenPago, montoTotal);
+
+            if (!string.IsNullOrWhiteSpace(error))
+            {
+                throw new InvalidOperationException($"Error al actualizar monto en letras: {error}");
+            }
+        }
+
             public async Task<ResultDto<bool>> CrearPucOrdenPagoDesdeCompromiso(int codigoCompromiso,int codigoOrdenPago)
         {
             ResultDto<bool> result = new ResultDto<bool>(false);

@@ -113,6 +113,7 @@ namespace Convertidor.Services.Adm
                 await _admBeneficariosOpService.ActualizaMontoDesdePucOrdenPago(filter);
 
                 await _prePresupuestosRepository.RecalcularSaldo(ordenPagoPuc.CODIGO_PRESUPUESTO);
+                await ActualizarMontoLetras(ordenPagoPuc.CODIGO_ORDEN_PAGO);
                 result.Data = true;
                 result.IsValid = true;
                 result.Message = "";
@@ -456,6 +457,7 @@ namespace Convertidor.Services.Adm
                     total);
                 
                 await _prePresupuestosRepository.RecalcularSaldo(codigoPucOrdenPago.CODIGO_PRESUPUESTO);
+                await ActualizarMontoLetras(codigoPucOrdenPago.CODIGO_ORDEN_PAGO);
                 var resultDto = await MapPucOrdenPagoDto(codigoPucOrdenPago);
                 result.Data = resultDto;
                 result.IsValid = true;
@@ -656,6 +658,7 @@ namespace Convertidor.Services.Adm
                         total);
                     
                     await _prePresupuestosRepository.RecalcularSaldo(entity.CODIGO_PRESUPUESTO);
+                    await ActualizarMontoLetras(entity.CODIGO_ORDEN_PAGO);
                     var resultDto = await MapPucOrdenPagoDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
@@ -711,6 +714,7 @@ namespace Convertidor.Services.Adm
                 }
                 else
                 {
+                    await ActualizarMontoLetras(codigoPucOrdenPago.CODIGO_ORDEN_PAGO);
                     result.Data = dto;
                     result.IsValid = true;
                     result.Message = deleted;
@@ -730,6 +734,17 @@ namespace Convertidor.Services.Adm
 
             return result;
         }
+
+        private async Task ActualizarMontoLetras(int codigoOrdenPago)
+        {
+            var partidas = await _repository.GetByOrdenPago(codigoOrdenPago) ?? new List<ADM_PUC_ORDEN_PAGO>();
+            var montoTotal = partidas.Sum(item => item.MONTO);
+            var error = await _admOrdenPagoRepository.UpdateMontoEnLetras(codigoOrdenPago, montoTotal);
+
+            if (!string.IsNullOrWhiteSpace(error))
+            {
+                throw new InvalidOperationException($"Error al actualizar monto en letras: {error}");
+            }
+        }
     }
  }
-

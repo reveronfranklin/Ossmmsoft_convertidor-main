@@ -1,4 +1,5 @@
 using Convertidor.Dtos.Adm;
+using Microsoft.Extensions.Logging;
 
 namespace Convertidor.Services.Adm.AdmOrdenPago;
 
@@ -30,17 +31,30 @@ public partial class AdmOrdenPagoService
                     return result;
                 }
 
+                var comprobante = await _admRetencionesOpService.AsignarComprobanteIvaOrdenPago(dto.CodigoOrdenPago);
+                if (!comprobante.IsValid || comprobante.Data == null || comprobante.Data.Estado == EstadoAsignacionComprobante.Error)
+                {
+                    _logger.LogWarning("Aprobar: orden {CodigoOrdenPago} no pudo aprobarse por fallo en la asignacion de comprobante IVA: {Mensaje}", dto.CodigoOrdenPago, comprobante.Message);
+                    result.Data = null;
+                    result.IsValid = false;
+                    result.Message = comprobante.Message;
+                    return result;
+                }
+
+                if (comprobante.Data.NumeroComprobante.HasValue)
+                {
+                    codigoOrdenPago.NUMERO_COMPROBANTE = comprobante.Data.NumeroComprobante;
+                }
+
                 codigoOrdenPago.STATUS = "AP";
 
-                
+
                 codigoOrdenPago.CODIGO_EMPRESA = conectado.Empresa;
                 codigoOrdenPago.USUARIO_UPD = conectado.Usuario;
                 codigoOrdenPago.FECHA_UPD = DateTime.Now;
 
                 await _repository.Update(codigoOrdenPago);
-                
-                await _admRetencionesOpService.UpdateNumeroComprobanteIvaPorOrdenPago(dto.CodigoOrdenPago);
-               
+
                 await _preSaldosRepository.RecalcularSaldo(codigoOrdenPago.CODIGO_PRESUPUESTO);
                 var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);

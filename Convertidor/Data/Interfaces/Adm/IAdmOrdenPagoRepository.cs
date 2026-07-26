@@ -18,6 +18,6 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> UpdateDatosAgenteRetencion(int codigoOrdenPago, AdmAgenteRetencionDto agenteRetencion);
 
         
-        Task<string> UpdateNumeroComprobante(int codigoOrdenPago, decimal numeroComprobante);
+        Task<ResultDto<int>> UpdateNumeroComprobante(int codigoOrdenPago, decimal numeroComprobante);
     }
 }

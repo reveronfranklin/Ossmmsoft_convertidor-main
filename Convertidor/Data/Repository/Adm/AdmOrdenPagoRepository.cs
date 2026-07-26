@@ -48,19 +48,26 @@ namespace Convertidor.Data.Repository.Adm
 
         }
 
-          public async Task<string> UpdateNumeroComprobante(int codigoOrdenPago, decimal numeroComprobante)
+          public async Task<ResultDto<int>> UpdateNumeroComprobante(int codigoOrdenPago, decimal numeroComprobante)
         {
+            ResultDto<int> result = new ResultDto<int>(0);
 
             try
             {
                 FormattableString xqueryDiario = $"UPDATE ADM.ADM_ORDEN_PAGO SET ADM.ADM_ORDEN_PAGO.NUMERO_COMPROBANTE =  {numeroComprobante} WHERE CODIGO_ORDEN_PAGO ={codigoOrdenPago}";
 
-                var resultDiario = _context.Database.ExecuteSqlInterpolated(xqueryDiario);
-                return "";
+                var filasAfectadas = await _context.Database.ExecuteSqlInterpolatedAsync(xqueryDiario);
+                result.Data = filasAfectadas;
+                result.IsValid = filasAfectadas > 0;
+                result.Message = filasAfectadas > 0 ? "" : "No se encontró la orden de pago para actualizar el número de comprobante";
+                return result;
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                result.Data = 0;
+                result.IsValid = false;
+                result.Message = ex.Message;
+                return result;
             }
 
         }

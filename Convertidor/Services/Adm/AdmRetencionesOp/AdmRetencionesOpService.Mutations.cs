@@ -1,5 +1,8 @@
+using System.Globalization;
 using Convertidor.Data.Entities.Adm;
+using Convertidor.Data.Entities.Sis;
 using Convertidor.Dtos.Adm;
+using Microsoft.Extensions.Logging;
 
 
 namespace Convertidor.Services.Adm.AdmRetencionesOp
@@ -184,104 +187,219 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             return result;
         }
 
-        
-        public async Task UpdateNumeroComprobanteIvaPorOrdenPago(int codigoOrdenPago)
+
+        public async Task<ResultDto<AsignacionComprobanteOpDto>> AsignarComprobanteIvaOrdenPago(int codigoOrdenPago)
         {
-            var documentosOrdenPago = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
-            if (documentosOrdenPago == null || !documentosOrdenPago.Any())
-            {
-                return;
-            }
+            ResultDto<AsignacionComprobanteOpDto> result = new ResultDto<AsignacionComprobanteOpDto>(null);
+            var data = new AsignacionComprobanteOpDto { CodigoOrdenPago = codigoOrdenPago };
 
-            var retencionesOp = await _repository.GetByOrdenPago(codigoOrdenPago);
-            if (retencionesOp == null || !retencionesOp.Any())
+            try
             {
-                return;
-            }
+                var documentosOrdenPago = await _admDocumentosOpRepository.GetByCodigoOrdenPago(codigoOrdenPago);
+                if (documentosOrdenPago == null)
+                {
+                    _logger.LogWarning("AsignarComprobanteIvaOrdenPago: fallo al consultar documentos de la orden {CodigoOrdenPago}", codigoOrdenPago);
+                    data.Estado = EstadoAsignacionComprobante.Error;
+                    result.Data = data;
+                    result.IsValid = false;
+                    result.Message = "No se pudieron consultar los documentos de la orden de pago";
+                    return result;
+                }
 
-            var tipoRetencionCache = new Dictionary<int, string>();
-            var retencionYaActualizada = new HashSet<int>();
+                var retencionesOp = await _repository.GetByOrdenPago(codigoOrdenPago);
+                if (retencionesOp == null)
+                {
+                    _logger.LogWarning("AsignarComprobanteIvaOrdenPago: fallo al consultar retenciones de la orden {CodigoOrdenPago}", codigoOrdenPago);
+                    data.Estado = EstadoAsignacionComprobante.Error;
+                    result.Data = data;
+                    result.IsValid = false;
+                    result.Message = "No se pudieron consultar las retenciones de la orden de pago";
+                    return result;
+                }
 
-            foreach (var documento in documentosOrdenPago)
-            {
+                var tipoRetencionCache = new Dictionary<int, string>();
+                var retencionesIva = new List<ADM_RETENCIONES_OP>();
+
                 foreach (var item in retencionesOp)
                 {
-                    if (retencionYaActualizada.Contains(item.CODIGO_RETENCION_OP))
-                    {
-                        continue;
-                    }
-
                     if (!tipoRetencionCache.TryGetValue(item.TIPO_RETENCION_ID, out var codigoTipoRetencion))
                     {
                         var tipoRetencion = await _admDescriptivaRepository.GetByCodigo(item.TIPO_RETENCION_ID);
-                        codigoTipoRetencion = tipoRetencion?.CODIGO ?? string.Empty;
+                        if (tipoRetencion == null)
+                        {
+                            _logger.LogWarning("AsignarComprobanteIvaOrdenPago: retencion {CodigoRetencionOp} con TipoRetencionId {TipoRetencionId} sin descriptiva configurada", item.CODIGO_RETENCION_OP, item.TIPO_RETENCION_ID);
+                            data.Estado = EstadoAsignacionComprobante.Error;
+                            result.Data = data;
+                            result.IsValid = false;
+                            result.Message = $"La retención {item.CODIGO_RETENCION_OP} tiene un Tipo de Retención sin descriptiva configurada";
+                            return result;
+                        }
+
+                        codigoTipoRetencion = tipoRetencion.CODIGO ?? string.Empty;
                         tipoRetencionCache[item.TIPO_RETENCION_ID] = codigoTipoRetencion;
                     }
 
-                    if (codigoTipoRetencion != "IVA")
+                    if (codigoTipoRetencion == "IVA")
+                    {
+                        retencionesIva.Add(item);
+                    }
+                }
+
+                data.CantidadRetencionesIva = retencionesIva.Count;
+
+                if (retencionesIva.Count == 0)
+                {
+                    _logger.LogInformation("AsignarComprobanteIvaOrdenPago: orden {CodigoOrdenPago} sin retenciones IVA, no aplica", codigoOrdenPago);
+                    data.Estado = EstadoAsignacionComprobante.NoAplica;
+                    result.Data = data;
+                    result.IsValid = true;
+                    result.Message = "";
+                    return result;
+                }
+
+                var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoOrdenPago);
+                if (ordenPago == null)
+                {
+                    data.Estado = EstadoAsignacionComprobante.Error;
+                    result.Data = data;
+                    result.IsValid = false;
+                    result.Message = "Codigo Orden Pago no existe";
+                    return result;
+                }
+
+                // Idempotencia: reutilizar un numero ya persistido, en la orden o en alguna de sus retenciones IVA,
+                // antes de reservar una nueva serie. Esto evita consumir una segunda serie en un reintento.
+                decimal? numeroExistente = null;
+                if (ordenPago.NUMERO_COMPROBANTE.HasValue && ordenPago.NUMERO_COMPROBANTE.Value > 0)
+                {
+                    numeroExistente = ordenPago.NUMERO_COMPROBANTE.Value;
+                }
+                else
+                {
+                    foreach (var retencion in retencionesIva)
+                    {
+                        if (!string.IsNullOrWhiteSpace(retencion.NUMERO_COMPROBANTE) &&
+                            decimal.TryParse(retencion.NUMERO_COMPROBANTE, NumberStyles.Number, CultureInfo.InvariantCulture, out var numeroRetencion) &&
+                            numeroRetencion > 0)
+                        {
+                            numeroExistente = numeroRetencion;
+                            break;
+                        }
+                    }
+                }
+
+                decimal numeroComprobante;
+                if (numeroExistente.HasValue)
+                {
+                    numeroComprobante = numeroExistente.Value;
+                    data.Estado = EstadoAsignacionComprobante.Reutilizado;
+                    _logger.LogInformation("AsignarComprobanteIvaOrdenPago: orden {CodigoOrdenPago} reutiliza comprobante {NumeroComprobante}", codigoOrdenPago, numeroComprobante);
+                }
+                else
+                {
+                    var descriptivasIva = (await _sisDescriptivaRepository.GetALL())
+                        ?.Where(x => x.EXTRA1 == "IVA").ToList() ?? new List<SIS_DESCRIPTIVAS>();
+
+                    if (descriptivasIva.Count == 0)
+                    {
+                        data.Estado = EstadoAsignacionComprobante.Error;
+                        result.Data = data;
+                        result.IsValid = false;
+                        result.Message = "No existe descriptiva de series configurada para IVA";
+                        return result;
+                    }
+
+                    if (descriptivasIva.Count > 1)
+                    {
+                        _logger.LogWarning("AsignarComprobanteIvaOrdenPago: {Cantidad} descriptivas SIS configuradas con EXTRA1='IVA'", descriptivasIva.Count);
+                        data.Estado = EstadoAsignacionComprobante.Error;
+                        result.Data = data;
+                        result.IsValid = false;
+                        result.Message = "Existe más de una descriptiva SIS configurada con EXTRA1='IVA'; la configuración es ambigua";
+                        return result;
+                    }
+
+                    var sisDescriptiva = descriptivasIva[0];
+
+                    var reserva = await _serieDocumentosRepository.ReservarSerieAtomica(sisDescriptiva.DESCRIPCION_ID);
+                    if (!reserva.IsValid)
+                    {
+                        _logger.LogWarning("AsignarComprobanteIvaOrdenPago: fallo al reservar serie para orden {CodigoOrdenPago}: {Mensaje}", codigoOrdenPago, reserva.Message);
+                        data.Estado = EstadoAsignacionComprobante.Error;
+                        result.Data = data;
+                        result.IsValid = false;
+                        result.Message = reserva.Message;
+                        return result;
+                    }
+
+                    if (!decimal.TryParse(reserva.Data, NumberStyles.Number, CultureInfo.InvariantCulture, out numeroComprobante))
+                    {
+                        data.Estado = EstadoAsignacionComprobante.Error;
+                        result.Data = data;
+                        result.IsValid = false;
+                        result.Message = $"El número de serie generado '{reserva.Data}' no tiene un formato numérico válido para NUMERO_COMPROBANTE";
+                        return result;
+                    }
+
+                    data.Estado = EstadoAsignacionComprobante.Generado;
+                    _logger.LogInformation("AsignarComprobanteIvaOrdenPago: orden {CodigoOrdenPago} genera comprobante {NumeroComprobante}", codigoOrdenPago, numeroComprobante);
+                }
+
+                data.NumeroComprobante = numeroComprobante;
+                data.NumeroComprobanteTexto = numeroComprobante.ToString(CultureInfo.InvariantCulture);
+
+                if (!ordenPago.NUMERO_COMPROBANTE.HasValue || ordenPago.NUMERO_COMPROBANTE.Value <= 0)
+                {
+                    var actualizaOrden = await _admOrdenPagoRepository.UpdateNumeroComprobante(codigoOrdenPago, numeroComprobante);
+                    if (!actualizaOrden.IsValid)
+                    {
+                        _logger.LogWarning("AsignarComprobanteIvaOrdenPago: fallo al persistir comprobante {NumeroComprobante} en ADM_ORDEN_PAGO de la orden {CodigoOrdenPago}: {Mensaje}", numeroComprobante, codigoOrdenPago, actualizaOrden.Message);
+                        data.Estado = EstadoAsignacionComprobante.Error;
+                        result.Data = data;
+                        result.IsValid = false;
+                        result.Message = $"No se pudo persistir el comprobante en ADM_ORDEN_PAGO. Comprobante {data.NumeroComprobanteTexto} reservado; reintente la aprobación para completar la asignación.";
+                        return result;
+                    }
+                }
+
+                foreach (var retencion in retencionesIva)
+                {
+                    if (!string.IsNullOrWhiteSpace(retencion.NUMERO_COMPROBANTE))
                     {
                         continue;
                     }
 
-                    var numeroComprobante = await GetNumeroComprobanteIva(
-                        codigoTipoRetencion,
-                        documento.CODIGO_PRESUPUESTO,
-                        item.CODIGO_ORDEN_PAGO
-                    );
+                    var actualizaRetencion = await _repository.UpdaNumeroComprobante(retencion.CODIGO_RETENCION_OP, data.NumeroComprobanteTexto);
+                    if (!actualizaRetencion.IsValid)
+                    {
+                        _logger.LogWarning("AsignarComprobanteIvaOrdenPago: fallo al persistir comprobante {NumeroComprobante} en ADM_RETENCIONES_OP (Codigo Retencion Op: {CodigoRetencionOp}): {Mensaje}", numeroComprobante, retencion.CODIGO_RETENCION_OP, actualizaRetencion.Message);
+                        data.Estado = EstadoAsignacionComprobante.Error;
+                        result.Data = data;
+                        result.IsValid = false;
+                        result.Message = $"Comprobante {data.NumeroComprobanteTexto} no se pudo persistir en ADM_RETENCIONES_OP (Codigo Retencion Op: {retencion.CODIGO_RETENCION_OP}). La orden permanece pendiente; reintente la aprobación para completar la asignación.";
+                        return result;
+                    }
 
-                    await _repository.UpdaNumeroComprobante(item.CODIGO_RETENCION_OP, numeroComprobante);
-                    retencionYaActualizada.Add(item.CODIGO_RETENCION_OP);
+                    data.CantidadRetencionesActualizadas++;
                 }
+
+                result.Data = data;
+                result.IsValid = true;
+                result.Message = "";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AsignarComprobanteIvaOrdenPago: error tecnico procesando la orden {CodigoOrdenPago}", codigoOrdenPago);
+                data.Estado = EstadoAsignacionComprobante.Error;
+                result.Data = data;
+                result.IsValid = false;
+                result.Message = $"Error tecnico: {ex.Message}";
+                return result;
             }
         }
 
-        public async Task<string> GetNumeroComprobanteIva(string codigoTipoRetencion,int codigoPesupuesto,int codigoOrdenPago)
-        {
-            string result = "";
-         
-            
-            var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoOrdenPago);
-            if (ordenPago != null )
-            {
-                if (ordenPago.NUMERO_COMPROBANTE > 0)
-                {
-                    result = ordenPago.NUMERO_COMPROBANTE.ToString();
-              
-                }
-                else
-                {
-                    var sisDescriptiva = await _sisDescriptivaRepository.GetByExtra1(codigoTipoRetencion);
-                    if (sisDescriptiva != null)
-                    {
-                        var consecutivoInfinito="IVA";
-                        if (codigoTipoRetencion==consecutivoInfinito)
-                        {
-                            var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerieOracle(sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
-                            result = numeroSolicitud.Data;
-                            ordenPago.NUMERO_COMPROBANTE=decimal.Parse(numeroSolicitud.Data);
-                        }
-                        else
-                        {
-                            var numeroSolicitud = await _serieDocumentosRepository.GenerateNextSerie(codigoPesupuesto, sisDescriptiva.DESCRIPCION_ID, sisDescriptiva.CODIGO_DESCRIPCION);
-                            result = numeroSolicitud.Data;
-                            ordenPago.NUMERO_COMPROBANTE=decimal.Parse(result);
-                           
-                        }
-                       
-                        await _admOrdenPagoRepository.UpdateNumeroComprobante(codigoOrdenPago,decimal.Parse(result));
-                    }
 
-                }
-               
-                
-            }
-        
-            
-           
-            return result;
-
-        } 
-        
         public async Task<string> GetNumeroComprobanteNoIva(string codigoTipoRetencion,int codigoPesupuesto,int codigoOrdenPago)
         {
             string result = "";

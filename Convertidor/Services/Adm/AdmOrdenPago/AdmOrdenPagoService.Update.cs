@@ -175,7 +175,10 @@ public partial class AdmOrdenPagoService
                 codigoOrdenPago.USUARIO_UPD = conectado.Usuario;
                 codigoOrdenPago.FECHA_UPD = DateTime.Now;
 
+                await ActualizarDatosAgenteRetencion(codigoOrdenPago, conectado.Empresa);
+
                 await _repository.Update(codigoOrdenPago);
+                await ActualizarMontoLetras(codigoOrdenPago.CODIGO_ORDEN_PAGO);
                 var descriptivas = await _admDescriptivaRepository.GetAll();
                 var proveedores = await _admProveedoresRepository.GetByCodigo(codigoOrdenPago.CODIGO_PROVEEDOR);
                 var resultDto = await MapOrdenPagoDto(codigoOrdenPago,descriptivas,proveedores);

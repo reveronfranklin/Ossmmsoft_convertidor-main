@@ -1,5 +1,8 @@
-﻿using Convertidor.Data.Entities.Sis;
+﻿using System.Data;
+using Convertidor.Data.Entities.Sis;
 using Microsoft.EntityFrameworkCore;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 
 namespace Convertidor.Data.Repository.Sis
 {
@@ -267,6 +270,55 @@ namespace Convertidor.Data.Repository.Sis
             return result;
         }
         
+        public async Task<ResultDto<string>> ReservarSerieAtomica(int tipoDocumentoId)
+        {
+            ResultDto<string> result = new ResultDto<string>(null);
+
+            try
+            {
+                using (var connection = new OracleConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (var command = new OracleCommand("SIS.SIS_P_RESERVAR_SERIE", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.BindByName = true;
+
+                        command.Parameters.Add("p_tipo_documento_id", OracleDbType.Int32).Value = tipoDocumentoId;
+                        var serieCompuesta = command.Parameters.Add("p_serie_compuesta", OracleDbType.Varchar2, 40);
+                        serieCompuesta.Direction = ParameterDirection.Output;
+
+                        await command.ExecuteNonQueryAsync();
+
+                        result.Data = ((OracleString)serieCompuesta.Value).IsNull ? "" : ((OracleString)serieCompuesta.Value).Value;
+                        result.IsValid = true;
+                        result.Message = "";
+                    }
+                }
+            }
+            catch (OracleException ex) when (ex.Number == 20001)
+            {
+                result.Data = "";
+                result.IsValid = false;
+                result.Message = "No existe serie de documentos activa para el tipo de documento configurado";
+            }
+            catch (OracleException ex) when (ex.Number == 20002)
+            {
+                result.Data = "";
+                result.IsValid = false;
+                result.Message = "Existe más de una serie de documentos activa para el tipo de documento configurado";
+            }
+            catch (Exception ex)
+            {
+                result.Data = "";
+                result.IsValid = false;
+                result.Message = $"Fallo al reservar serie de documentos: {ex.Message}";
+            }
+
+            return result;
+        }
+
         public async Task<string> GenerateNextSerieOracleBk(int tipoDocumentoId,string codigo)
         {
 

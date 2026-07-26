@@ -5,13 +5,16 @@ using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
 using Convertidor.Services.Adm.AdmOrdenPago;
+using Convertidor.Services.Adm.AdmRetencionesOp;
 using Convertidor.Data.Entities.ADM;
+using Convertidor.Data.Entities.Sis;
 using Convertidor.Dtos;
 using Convertidor.Dtos.Sis;
 using Convertidor.Dtos.Presupuesto;
 using Convertidor.Services.Adm;
 using Convertidor.Services.Presupuesto;
 using Convertidor.Data.Interfaces.Sis;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Convertidor.Tests.Services.Adm
 {
@@ -19,6 +22,8 @@ namespace Convertidor.Tests.Services.Adm
     {
         private readonly Mock<IAdmOrdenPagoRepository> _mockRepository;
         private readonly Mock<ISisUsuarioRepository> _mockSisUsuarioRepository;
+        private readonly Mock<ISisEmpresaRepository> _mockSisEmpresaRepository;
+        private readonly Mock<ISisDescriptivaRepository> _mockSisDescriptivaRepository;
         private readonly Mock<IAdmProveedoresRepository> _mockProveedoresRepository;
         private readonly Mock<IPRE_PRESUPUESTOSRepository> _mockPresupuestosRepository;
         private readonly Mock<IAdmDescriptivaRepository> _mockDescriptivaRepository;
@@ -33,13 +38,16 @@ namespace Convertidor.Tests.Services.Adm
         private readonly Mock<IAdmDocumentosOpRepository> _mockDocumentosOpRepository;
         private readonly Mock<IAdmBeneficiariosOpRepository> _mockBeneficiariosOpRepository;
         private readonly Mock<IAdmCompromisosPendientesRepository> _mockCompromisosPendientesRepository;
-        
+        private readonly Mock<IAdmRetencionesOpService> _mockRetencionesOpService;
+
         private readonly AdmOrdenPagoService _service;
 
         public AdmOrdenPagoServiceTests()
         {
             _mockRepository = new Mock<IAdmOrdenPagoRepository>();
             _mockSisUsuarioRepository = new Mock<ISisUsuarioRepository>();
+            _mockSisEmpresaRepository = new Mock<ISisEmpresaRepository>();
+            _mockSisDescriptivaRepository = new Mock<ISisDescriptivaRepository>();
             _mockProveedoresRepository = new Mock<IAdmProveedoresRepository>();
             _mockPresupuestosRepository = new Mock<IPRE_PRESUPUESTOSRepository>();
             _mockDescriptivaRepository = new Mock<IAdmDescriptivaRepository>();
@@ -54,10 +62,28 @@ namespace Convertidor.Tests.Services.Adm
             _mockDocumentosOpRepository = new Mock<IAdmDocumentosOpRepository>();
             _mockBeneficiariosOpRepository = new Mock<IAdmBeneficiariosOpRepository>();
             _mockCompromisosPendientesRepository = new Mock<IAdmCompromisosPendientesRepository>();
+            _mockRetencionesOpService = new Mock<IAdmRetencionesOpService>();
+
+            _mockSisEmpresaRepository.Setup(x => x.GetByCodigo(13)).ReturnsAsync(new SIS_EMPRESAS
+            {
+                CODIGO_EMPRESA = 13,
+                NOMBRE_EMPRESA = "CONCEJO MUNICIPAL DE CHACAO",
+                IDENTIFICACION_ID = 1,
+                NUMERO_IDENTIFICACION = "200000000",
+                EXTRA4 = "CHACAO",
+                EXTRA6 = "0212-0000000"
+            });
+            _mockSisDescriptivaRepository.Setup(x => x.GetById(1)).ReturnsAsync(new SIS_DESCRIPTIVAS
+            {
+                DESCRIPCION_ID = 1,
+                CODIGO_DESCRIPCION = "G"
+            });
 
             _service = new AdmOrdenPagoService(
                 _mockRepository.Object,
                 _mockSisUsuarioRepository.Object,
+                _mockSisEmpresaRepository.Object,
+                _mockSisDescriptivaRepository.Object,
                 _mockProveedoresRepository.Object,
                 _mockPresupuestosRepository.Object,
                 _mockDescriptivaRepository.Object,
@@ -71,9 +97,18 @@ namespace Convertidor.Tests.Services.Adm
                 _mockPucOrdenPagoRepository.Object,
                 _mockDocumentosOpRepository.Object,
                 _mockBeneficiariosOpRepository.Object,
-                _mockCompromisosPendientesRepository.Object
+                _mockCompromisosPendientesRepository.Object,
+                _mockRetencionesOpService.Object,
+                NullLogger<AdmOrdenPagoService>.Instance
             );
         }
+
+        private static ResultDto<AsignacionComprobanteOpDto> ComprobanteNoAplica() => new ResultDto<AsignacionComprobanteOpDto>(
+            new AsignacionComprobanteOpDto { Estado = EstadoAsignacionComprobante.NoAplica })
+        {
+            IsValid = true,
+            Message = ""
+        };
 
         [Fact]
         public async Task Create_WithValidData_ShouldReturnSuccess()
@@ -135,6 +170,9 @@ namespace Convertidor.Tests.Services.Adm
             Assert.True(result.IsValid);
             Assert.NotNull(result.Data);
             Assert.Equal(1, result.Data.CodigoOrdenPago);
+            _mockRepository.Verify(x => x.Add(It.Is<ADM_ORDEN_PAGO>(orden =>
+                orden.NOMBRE_AGENTE_RETENCION == "CONCEJO MUNICIPAL DE CHACAO"
+                && orden.RIF_AGENTE_RETENCION == "G200000000")), Times.Once);
         }
 
         [Fact]
@@ -229,21 +267,25 @@ namespace Convertidor.Tests.Services.Adm
             // Arrange
             var dto = new AdmOrdenPagoAprobarAnular { CodigoOrdenPago = 1 };
                 var conectado = new UserConectadoDto { Empresa = 13, Usuario = 1 };
-            var existingOrdenPago = new ADM_ORDEN_PAGO 
-            { 
-                CODIGO_ORDEN_PAGO = 1, 
+            var existingOrdenPago = new ADM_ORDEN_PAGO
+            {
+                CODIGO_ORDEN_PAGO = 1,
                 STATUS = "PE",
-                CODIGO_PRESUPUESTO = 1
+                CODIGO_PRESUPUESTO = 1,
+                FRECUENCIA_PAGO_ID = 1,
+                TIPO_PAGO_ID = 1
             };
 
 
-            var existingOrdenPagoAprobado = new ADM_ORDEN_PAGO 
-            { 
-                CODIGO_ORDEN_PAGO = 1, 
+            var existingOrdenPagoAprobado = new ADM_ORDEN_PAGO
+            {
+                CODIGO_ORDEN_PAGO = 1,
                 STATUS = "AP",
-                CODIGO_PRESUPUESTO = 19
+                CODIGO_PRESUPUESTO = 19,
+                FRECUENCIA_PAGO_ID = 1,
+                TIPO_PAGO_ID = 1
             };
-            ResultDto<ADM_ORDEN_PAGO> resultDto = new ResultDto<ADM_ORDEN_PAGO> (null);  
+            ResultDto<ADM_ORDEN_PAGO> resultDto = new ResultDto<ADM_ORDEN_PAGO> (null);
             resultDto.Data = existingOrdenPagoAprobado;
             resultDto.IsValid = true;
             resultDto.Message = "";
@@ -253,6 +295,12 @@ namespace Convertidor.Tests.Services.Adm
              _mockRepository.Setup(x => x.Update(It.IsAny<ADM_ORDEN_PAGO>())).ReturnsAsync(resultDto);
             _mockProveedoresRepository.Setup(x => x.GetByCodigo(It.IsAny<int>())).ReturnsAsync(new ADM_PROVEEDORES());
             _mockDescriptivaRepository.Setup(x => x.GetAll()).ReturnsAsync(new List<ADM_DESCRIPTIVAS>());
+            _mockRetencionesOpService.Setup(x => x.AsignarComprobanteIvaOrdenPago(dto.CodigoOrdenPago))
+                .ReturnsAsync(ComprobanteNoAplica());
+            _mockBeneficariosOpService.Setup(x => x.GetByOrdenPago(It.IsAny<AdmOrdenPagoBeneficiarioFlterDto>()))
+                .ReturnsAsync(new ResultDto<List<AdmBeneficiariosOpResponseDto>>(new List<AdmBeneficiariosOpResponseDto>()) { IsValid = true });
+            _mockPucOrdenPagoService.Setup(x => x.GetByOrdenPago(It.IsAny<int>()))
+                .ReturnsAsync(new ResultDto<List<AdmPucOrdenPagoResponseDto>>(new List<AdmPucOrdenPagoResponseDto>()) { IsValid = true });
 
             // Act
             var result = await _service.Aprobar(dto);
@@ -260,6 +308,116 @@ namespace Convertidor.Tests.Services.Adm
             // Assert
             Assert.True(result.IsValid);
             Assert.Equal("AP", result.Data.Status);
+        }
+
+        [Fact]
+        public async Task Aprobar_SinRetencionesIva_ShouldApproveWithoutComprobante()
+        {
+            // Arrange
+            var dto = new AdmOrdenPagoAprobarAnular { CodigoOrdenPago = 1 };
+            var conectado = new UserConectadoDto { Empresa = 13, Usuario = 1 };
+            var existingOrdenPago = new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1, STATUS = "PE", CODIGO_PRESUPUESTO = 1, FRECUENCIA_PAGO_ID = 1, TIPO_PAGO_ID = 1 };
+            var existingOrdenPagoAprobado = new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1, STATUS = "AP", CODIGO_PRESUPUESTO = 19, FRECUENCIA_PAGO_ID = 1, TIPO_PAGO_ID = 1 };
+            ResultDto<ADM_ORDEN_PAGO> resultDto = new ResultDto<ADM_ORDEN_PAGO>(null)
+            {
+                Data = existingOrdenPagoAprobado,
+                IsValid = true,
+                Message = ""
+            };
+
+            _mockSisUsuarioRepository.Setup(x => x.GetConectado()).ReturnsAsync(conectado);
+            _mockRepository.Setup(x => x.GetCodigoOrdenPago(dto.CodigoOrdenPago)).ReturnsAsync(existingOrdenPago);
+            _mockRepository.Setup(x => x.Update(It.IsAny<ADM_ORDEN_PAGO>())).ReturnsAsync(resultDto);
+            _mockProveedoresRepository.Setup(x => x.GetByCodigo(It.IsAny<int>())).ReturnsAsync(new ADM_PROVEEDORES());
+            _mockDescriptivaRepository.Setup(x => x.GetAll()).ReturnsAsync(new List<ADM_DESCRIPTIVAS>());
+            _mockRetencionesOpService.Setup(x => x.AsignarComprobanteIvaOrdenPago(dto.CodigoOrdenPago))
+                .ReturnsAsync(ComprobanteNoAplica());
+            _mockBeneficariosOpService.Setup(x => x.GetByOrdenPago(It.IsAny<AdmOrdenPagoBeneficiarioFlterDto>()))
+                .ReturnsAsync(new ResultDto<List<AdmBeneficiariosOpResponseDto>>(new List<AdmBeneficiariosOpResponseDto>()) { IsValid = true });
+            _mockPucOrdenPagoService.Setup(x => x.GetByOrdenPago(It.IsAny<int>()))
+                .ReturnsAsync(new ResultDto<List<AdmPucOrdenPagoResponseDto>>(new List<AdmPucOrdenPagoResponseDto>()) { IsValid = true });
+
+            // Act
+            var result = await _service.Aprobar(dto);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal("AP", result.Data.Status);
+            _mockRepository.Verify(x => x.Update(It.Is<ADM_ORDEN_PAGO>(o => o.NUMERO_COMPROBANTE == null || o.NUMERO_COMPROBANTE == 0)), Times.Once);
+        }
+
+        [Fact]
+        public async Task Aprobar_ConComprobanteGenerado_ShouldPersistirNumeroYAprobar()
+        {
+            // Arrange
+            var dto = new AdmOrdenPagoAprobarAnular { CodigoOrdenPago = 1 };
+            var conectado = new UserConectadoDto { Empresa = 13, Usuario = 1 };
+            var existingOrdenPago = new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1, STATUS = "PE", CODIGO_PRESUPUESTO = 1, FRECUENCIA_PAGO_ID = 1, TIPO_PAGO_ID = 1 };
+            var existingOrdenPagoAprobado = new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1, STATUS = "AP", CODIGO_PRESUPUESTO = 19, NUMERO_COMPROBANTE = 555, FRECUENCIA_PAGO_ID = 1, TIPO_PAGO_ID = 1 };
+            ResultDto<ADM_ORDEN_PAGO> resultDto = new ResultDto<ADM_ORDEN_PAGO>(null)
+            {
+                Data = existingOrdenPagoAprobado,
+                IsValid = true,
+                Message = ""
+            };
+            var comprobante = new ResultDto<AsignacionComprobanteOpDto>(
+                new AsignacionComprobanteOpDto { Estado = EstadoAsignacionComprobante.Generado, NumeroComprobante = 555, NumeroComprobanteTexto = "555" })
+            {
+                IsValid = true,
+                Message = ""
+            };
+
+            _mockSisUsuarioRepository.Setup(x => x.GetConectado()).ReturnsAsync(conectado);
+            _mockRepository.Setup(x => x.GetCodigoOrdenPago(dto.CodigoOrdenPago)).ReturnsAsync(existingOrdenPago);
+            _mockRepository.Setup(x => x.Update(It.IsAny<ADM_ORDEN_PAGO>())).ReturnsAsync(resultDto);
+            _mockProveedoresRepository.Setup(x => x.GetByCodigo(It.IsAny<int>())).ReturnsAsync(new ADM_PROVEEDORES());
+            _mockDescriptivaRepository.Setup(x => x.GetAll()).ReturnsAsync(new List<ADM_DESCRIPTIVAS>());
+            _mockRetencionesOpService.Setup(x => x.AsignarComprobanteIvaOrdenPago(dto.CodigoOrdenPago))
+                .ReturnsAsync(comprobante);
+            _mockBeneficariosOpService.Setup(x => x.GetByOrdenPago(It.IsAny<AdmOrdenPagoBeneficiarioFlterDto>()))
+                .ReturnsAsync(new ResultDto<List<AdmBeneficiariosOpResponseDto>>(new List<AdmBeneficiariosOpResponseDto>()) { IsValid = true });
+            _mockPucOrdenPagoService.Setup(x => x.GetByOrdenPago(It.IsAny<int>()))
+                .ReturnsAsync(new ResultDto<List<AdmPucOrdenPagoResponseDto>>(new List<AdmPucOrdenPagoResponseDto>()) { IsValid = true });
+
+            // Act
+            var result = await _service.Aprobar(dto);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal("AP", result.Data.Status);
+            _mockRepository.Verify(x => x.Update(It.Is<ADM_ORDEN_PAGO>(o => o.NUMERO_COMPROBANTE == 555 && o.STATUS == "AP")), Times.Once);
+        }
+
+        [Fact]
+        public async Task Aprobar_ConErrorEnAsignacionComprobante_ShouldNotAprobar()
+        {
+            // Arrange
+            var dto = new AdmOrdenPagoAprobarAnular { CodigoOrdenPago = 1 };
+            var conectado = new UserConectadoDto { Empresa = 13, Usuario = 1 };
+            var existingOrdenPago = new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1, STATUS = "PE", CODIGO_PRESUPUESTO = 1 };
+            var comprobante = new ResultDto<AsignacionComprobanteOpDto>(
+                new AsignacionComprobanteOpDto { Estado = EstadoAsignacionComprobante.Error })
+            {
+                IsValid = false,
+                Message = "No existe descriptiva de series configurada para IVA"
+            };
+
+            _mockSisUsuarioRepository.Setup(x => x.GetConectado()).ReturnsAsync(conectado);
+            _mockRepository.Setup(x => x.GetCodigoOrdenPago(dto.CodigoOrdenPago)).ReturnsAsync(existingOrdenPago);
+            _mockRetencionesOpService.Setup(x => x.AsignarComprobanteIvaOrdenPago(dto.CodigoOrdenPago))
+                .ReturnsAsync(comprobante);
+            _mockBeneficariosOpService.Setup(x => x.GetByOrdenPago(It.IsAny<AdmOrdenPagoBeneficiarioFlterDto>()))
+                .ReturnsAsync(new ResultDto<List<AdmBeneficiariosOpResponseDto>>(new List<AdmBeneficiariosOpResponseDto>()) { IsValid = true });
+            _mockPucOrdenPagoService.Setup(x => x.GetByOrdenPago(It.IsAny<int>()))
+                .ReturnsAsync(new ResultDto<List<AdmPucOrdenPagoResponseDto>>(new List<AdmPucOrdenPagoResponseDto>()) { IsValid = true });
+
+            // Act
+            var result = await _service.Aprobar(dto);
+
+            // Assert
+            Assert.False(result.IsValid);
+            Assert.Equal(comprobante.Message, result.Message);
+            _mockRepository.Verify(x => x.Update(It.IsAny<ADM_ORDEN_PAGO>()), Times.Never);
         }
 
         [Fact]

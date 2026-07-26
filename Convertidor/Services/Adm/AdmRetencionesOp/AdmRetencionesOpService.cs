@@ -2,6 +2,7 @@
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
+using Microsoft.Extensions.Logging;
 
 namespace Convertidor.Services.Adm.AdmRetencionesOp
 {
@@ -21,6 +22,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
         private readonly IAdmCompromisoOpRepository _admCompromisoOpRepository;
         private readonly IPreDetalleCompromisosRepository _preDetalleCompromisosRepository;
         private readonly IAdmPucOrdenPagoRepository _admPucOrdenPagoRepository;
+        private readonly ILogger<AdmRetencionesOpService> _logger;
 
         public AdmRetencionesOpService(IAdmRetencionesOpRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
@@ -35,7 +37,8 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                                      IAdmBeneficariosOpService admBeneficariosOpService,
                                      IAdmCompromisoOpRepository admCompromisoOpRepository,
                                      IPreDetalleCompromisosRepository preDetalleCompromisosRepository,
-                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository
+                                     IAdmPucOrdenPagoRepository admPucOrdenPagoRepository,
+                                     ILogger<AdmRetencionesOpService> logger
                                      )
         {
             _repository = repository;
@@ -52,6 +55,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
             _admCompromisoOpRepository = admCompromisoOpRepository;
             _preDetalleCompromisosRepository = preDetalleCompromisosRepository;
             _admPucOrdenPagoRepository = admPucOrdenPagoRepository;
+            _logger = logger;
         }
 
       

@@ -5,6 +5,7 @@ using Convertidor.Data.Interfaces.Presupuesto;
 using Convertidor.Dtos.Adm;
 using Convertidor.Services.Adm.AdmRetencionesOp;
 using Convertidor.Utility;
+using Microsoft.Extensions.Logging;
 
 namespace Convertidor.Services.Adm.AdmOrdenPago
 {
@@ -13,6 +14,8 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
         public IPRE_V_SALDOSRepository PreSaldosRepository { get; }
         private readonly IAdmOrdenPagoRepository _repository;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
+        private readonly ISisEmpresaRepository _sisEmpresaRepository;
+        private readonly ISisDescriptivaRepository _sisDescriptivaRepository;
         private readonly IAdmProveedoresRepository _admProveedoresRepository;
         private readonly IPRE_PRESUPUESTOSRepository _prePresupuestosRepository;
         private readonly IAdmDescriptivaRepository _admDescriptivaRepository;
@@ -28,9 +31,12 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
         private readonly IAdmBeneficiariosOpRepository _admBeneficiariosOpRepository;
         private readonly IAdmCompromisosPendientesRepository _admCompromisosPendientesRepository;
         private readonly IAdmRetencionesOpService _admRetencionesOpService;
+        private readonly ILogger<AdmOrdenPagoService> _logger;
 
         public AdmOrdenPagoService(IAdmOrdenPagoRepository repository,
                                      ISisUsuarioRepository sisUsuarioRepository,
+                                     ISisEmpresaRepository sisEmpresaRepository,
+                                     ISisDescriptivaRepository sisDescriptivaRepository,
                                      IAdmProveedoresRepository admProveedoresRepository,
                                      IPRE_PRESUPUESTOSRepository prePresupuestosRepository,
                                      IAdmDescriptivaRepository admDescriptivaRepository,
@@ -45,11 +51,14 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
                                      IAdmDocumentosOpRepository admDocumentosOpRepository,
                                      IAdmBeneficiariosOpRepository admBeneficiariosOpRepository,
                                      IAdmCompromisosPendientesRepository  admCompromisosPendientesRepository,
-                                     IAdmRetencionesOpService admRetencionesOpServices)
+                                     IAdmRetencionesOpService admRetencionesOpServices,
+                                     ILogger<AdmOrdenPagoService> logger)
         {
-      
+
             _repository = repository;
             _sisUsuarioRepository = sisUsuarioRepository;
+            _sisEmpresaRepository = sisEmpresaRepository;
+            _sisDescriptivaRepository = sisDescriptivaRepository;
             _admProveedoresRepository = admProveedoresRepository;
             _prePresupuestosRepository = prePresupuestosRepository;
             _admDescriptivaRepository = admDescriptivaRepository;
@@ -65,10 +74,10 @@ namespace Convertidor.Services.Adm.AdmOrdenPago
             _admBeneficiariosOpRepository = admBeneficiariosOpRepository;
             _admCompromisosPendientesRepository = admCompromisosPendientesRepository;
             _admRetencionesOpService = admRetencionesOpServices;
+            _logger = logger;
         }
         
 
   
     }
  }
-

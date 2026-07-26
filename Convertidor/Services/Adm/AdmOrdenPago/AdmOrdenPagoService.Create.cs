@@ -175,11 +175,14 @@ public partial class AdmOrdenPagoService
             entity.USUARIO_INS = conectado.Usuario;
             entity.FECHA_INS = DateTime.Now;
 
+            await ActualizarDatosAgenteRetencion(entity, conectado.Empresa);
+
             var created = await _repository.Add(entity);
             if (created.IsValid && created.Data != null)
             {
                 //CREAR LOS PUC a parir del compromiso
                 await CrearPucOrdenPagoDesdeCompromiso(dto.CodigoCompromiso, created.Data.CODIGO_ORDEN_PAGO);
+                await ActualizarMontoLetras(created.Data.CODIGO_ORDEN_PAGO);
 
                 //CREAMOS EL COMPROMISO DE LA ORDEN DE PAGO
                 AdmCompromisoOpUpdateDto compromisoOp = new AdmCompromisoOpUpdateDto();
