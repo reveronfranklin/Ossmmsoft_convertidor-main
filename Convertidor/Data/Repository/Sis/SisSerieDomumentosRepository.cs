@@ -276,7 +276,16 @@ namespace Convertidor.Data.Repository.Sis
 
             try
             {
-                using (var connection = new OracleConnection(_context.Database.GetDbConnection().ConnectionString))
+                var connectionString = _configuration.GetConnectionString("DefaultConnectionSIS");
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    result.Data = "";
+                    result.IsValid = false;
+                    result.Message = "No esta configurada la conexion SIS para reservar la serie de documentos";
+                    return result;
+                }
+
+                using (var connection = new OracleConnection(connectionString))
                 {
                     await connection.OpenAsync();
 
@@ -350,4 +359,3 @@ namespace Convertidor.Data.Repository.Sis
     }
 
 }
-
