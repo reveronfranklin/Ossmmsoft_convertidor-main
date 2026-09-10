@@ -60,7 +60,8 @@ Ejemplo sintetico de una fila:
 No existe paginacion en esta operacion. Los conteos y totales del envoltorio no
 se calculan; no deben interpretarse como cantidad ni suma de los registros.
 Los importes RPE se copian de la fuente temporal o historica, incluidos ceros,
-signos y decimales. El total se conserva desde Oracle sin recalcularlo.
+signos y decimales. El total se conserva desde Oracle sin recalcularlo. El procedimiento corregido
+redondea el resultado final a dos decimales.
 Los identificadores consecutivos del ejemplo corresponden al camino temporal;
 el mapeo historico mantiene su comportamiento vigente de `id = 0`.
 
@@ -72,8 +73,12 @@ Cada columna lee su campo `monto...` correspondiente de la respuesta. El DataGri
 permite desplazamiento horizontal cuando los anchos minimos exceden el contenedor.
 
 El boton de exportacion genera `data.xlsx` con todas las propiedades de `data`
-mediante `json_to_sheet`, sin recalcular importes. El backend genera adicionalmente
-el Excel expuesto en `linkData` utilizando la misma lista.
+mediante `json_to_sheet`, sin recalcular importes de detalle. Las cinco columnas
+de monto tienen formato `#,##0.00` y una fila final `TOTAL` con formulas
+`ROUND(SUM(...),2)`. La fila incluye todas las filas exportadas y no forma parte
+de `data` en la API. El backend genera adicionalmente el Excel expuesto en
+`linkData` con el mismo formato y sumatorias. Sin datos no se agrega fila de totales.
+La lista React muestra `montoTotalRetencion` con dos decimales.
 
 ## Validacion y errores vigentes
 
@@ -84,3 +89,12 @@ y `linkData` queda vacio. El manejo actual de excepciones del servicio devuelve
 al generar el archivo. Por tanto, `isValid` por si solo no prueba que haya datos
 ni que la exportacion haya tenido exito. Corregir ese comportamiento queda fuera
 del requerimiento 34.
+
+## Instalacion del cambio de precision
+
+Ejecutar `Sql/RH_P_RETENCION_SSO.sql` en Oracle. La definicion de referencia en
+`SqlBase/RH.SQL` contiene el mismo cambio. Esto conserva centavos en nuevos
+calculos; los registros historicos con total ya redondeado a enteros permanecen
+iguales y requieren un proceso separado para recuperar sus importes originales.
+Cambiar solo el formato Excel mostraria, por ejemplo, -124.00 en lugar de -124,
+pero no recuperaria -124.20 sin instalar el ajuste del procedimiento.

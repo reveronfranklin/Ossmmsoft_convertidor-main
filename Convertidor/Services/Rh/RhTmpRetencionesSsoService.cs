@@ -64,7 +64,6 @@ namespace Convertidor.Data.Repository.Rh
                 var linkData=$"";
                 if (result.Data != null && result.Data.Count > 0)
                 {
-                    ExcelMapper mapper = new ExcelMapper();
                     var settings = _configuration.GetSection("Settings").Get<Settings>();
                     var ruta = @settings.ExcelFiles;  //@"/Users/freveron/Documents/MM/App/full-version/public/ExcelFiles";
                     DateTime desde = DateTime.ParseExact(filter.FechaDesde, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -87,7 +86,7 @@ namespace Convertidor.Data.Repository.Rh
                     {
                         File.Delete(newFile);
                     }
-                    mapper.Save(newFile, result.Data, $"RetencionesSSO", true);
+                    RhRetencionesSsoExcel.Save(newFile, result.Data);
                     linkData=$"/ExcelFiles/{fileName}";
                 }
                 
