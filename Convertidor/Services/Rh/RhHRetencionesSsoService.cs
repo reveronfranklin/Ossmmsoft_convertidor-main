@@ -56,6 +56,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.MontoSsoTrabajador = entity.MONTO_SSO_TRABAJADOR;
                 itemResult.MontoRpeTrabajador = entity.MONTO_RPE_TRABAJADOR;
                 itemResult.MontoSsoPatrono = entity.MONTO_SSO_PATRONO;
+                itemResult.MontoRpePatrono = entity.MONTO_RPE_PATRONO;
                 itemResult.MontoTotalRetencion = entity.MONTO_TOTAL_RETENCION;
                 itemResult.FechaNomina = entity.FECHA_NOMINA;
                 itemResult.SiglasTipoNomina = entity.SIGLAS_TIPO_NOMINA;

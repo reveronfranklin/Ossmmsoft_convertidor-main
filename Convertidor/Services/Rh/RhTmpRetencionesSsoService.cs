@@ -164,6 +164,7 @@ namespace Convertidor.Data.Repository.Rh
                 itemResult.MontoSsoTrabajador = entity.MONTO_SSO_TRABAJADOR;
                 itemResult.MontoRpeTrabajador = entity.MONTO_RPE_TRABAJADOR;
                 itemResult.MontoSsoPatrono = entity.MONTO_SSO_PATRONO;
+                itemResult.MontoRpePatrono = entity.MONTO_RPE_PATRONO;
                 itemResult.MontoTotalRetencion = entity.MONTO_TOTAL_RETENCION;
                 itemResult.FechaNomina = entity.FECHA_NOMINA;
                 itemResult.SiglasTipoNomina = entity.SIGLAS_TIPO_NOMINA;
@@ -194,6 +195,8 @@ namespace Convertidor.Data.Repository.Rh
                     FechaIngreso = s.FECHA_INGRESO,
                     MontoSsoTrabajador = s.MONTO_SSO_TRABAJADOR,
                     MontoSsoPatrono=s.MONTO_SSO_PATRONO,
+                    MontoRpeTrabajador=s.MONTO_RPE_TRABAJADOR,
+                    MontoRpePatrono=s.MONTO_RPE_PATRONO,
                     MontoTotalRetencion=s.MONTO_TOTAL_RETENCION,
                     FechaNomina = s.FECHA_NOMINA,
                     SiglasTipoNomina = s.SIGLAS_TIPO_NOMINA,
@@ -213,6 +216,8 @@ namespace Convertidor.Data.Repository.Rh
                     FechaIngreso = g.Key.FechaIngreso,
                     MontoSsoTrabajador=g.Key.MontoSsoTrabajador,
                     MontoSsoPatrono=g.Key.MontoSsoPatrono,
+                    MontoRpeTrabajador=g.Key.MontoRpeTrabajador,
+                    MontoRpePatrono=g.Key.MontoRpePatrono,
                     MontoTotalRetencion=g.Key.MontoTotalRetencion,
                     FechaNomina=g.Key.FechaNomina,
                     SiglasTipoNomina=g.Key.SiglasTipoNomina, 
