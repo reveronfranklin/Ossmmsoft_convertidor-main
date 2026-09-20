@@ -1,4 +1,4 @@
-﻿using Convertidor.Data.Entities.ADM;
+using Convertidor.Data.Entities.ADM;
 using Convertidor.Data.Entities.Presupuesto;
 using Convertidor.Data.Interfaces.Adm;
 using Convertidor.Data.Interfaces.Presupuesto;
@@ -530,6 +530,7 @@ namespace Convertidor.Services.Presupuesto
                        itemData.NumeroCompromiso = item.NUMERO_IDENTIFICADOR.ToString();
                        itemData.Ano = presupuesto.ANO;
                        var compromiso = await _repository.GetByCodigo(item.CODIGO_IDENTIFICADOR);
+                       if (compromiso == null || compromiso.STATUS != "AP") continue;
                        itemData.CodigoSolicitud = compromiso.CODIGO_SOLICITUD;
                        itemData.NumeroSolicitud = "";
                        var solicitud = await _solicitudesRepository.GetByCodigoSolicitud(compromiso.CODIGO_SOLICITUD);
@@ -558,12 +559,23 @@ namespace Convertidor.Services.Presupuesto
                    }
                }
                
-               result.CantidadRegistros = compromisosPendientes.Count;
-               result.TotalPage = 1;
-               result.Page = filter.PageNumber;
+               var searchText = filter.SearchText?.Trim() ?? "";
+               var filtrados = resultData.Where(item =>
+                   string.IsNullOrEmpty(searchText) ||
+                   (item.NumeroCompromiso?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                   (item.NombreProveedor?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                   (item.FechaCompromisoString?.Contains(searchText, StringComparison.OrdinalIgnoreCase) ?? false))
+                   .OrderByDescending(item => item.FechaCompromiso)
+                   .ThenByDescending(item => item.CodigoCompromiso)
+                   .ToList();
+               var pageSize = filter.PageSize > 0 ? filter.PageSize : 5;
+               var pageNumber = Math.Max(0, filter.PageNumber);
+               result.CantidadRegistros = filtrados.Count;
+               result.TotalPage = (int)Math.Ceiling((double)filtrados.Count / pageSize);
+               result.Page = pageNumber;
                result.IsValid = true;
                result.Message = "";
-               result.Data = resultData;
+               result.Data = filtrados.Skip(pageNumber * pageSize).Take(pageSize).ToList();
                return result;
             }
             catch (Exception e)
