@@ -31,6 +31,13 @@ public partial class AdmOrdenPagoService
             }
 
 
+            if (!string.Equals(compromiso.Status?.Trim(), "AP", StringComparison.OrdinalIgnoreCase))
+            {
+                result.IsValid = false;
+                result.Message = "El compromiso debe estar aprobado para crear una orden de pago";
+                return result;
+            }
+
             if (dto.FechaOrdenPago ==null)
             {
                 result.Data = null;

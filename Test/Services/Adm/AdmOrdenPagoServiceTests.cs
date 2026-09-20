@@ -136,6 +136,7 @@ namespace Convertidor.Tests.Services.Adm
             { 
                 CodigoCompromiso = 1, 
                 CodigoProveedor = 1,
+                Status = "AP",
                 FechaCompromiso = DateTime.Now.AddDays(-1)
             };
             ADM_V_COMPROMISO_PENDIENTE compromisoPendiente = new ADM_V_COMPROMISO_PENDIENTE();
@@ -173,6 +174,27 @@ namespace Convertidor.Tests.Services.Adm
             _mockRepository.Verify(x => x.Add(It.Is<ADM_ORDEN_PAGO>(orden =>
                 orden.NOMBRE_AGENTE_RETENCION == "CONCEJO MUNICIPAL DE CHACAO"
                 && orden.RIF_AGENTE_RETENCION == "G200000000")), Times.Once);
+        }
+
+        [Theory]
+        [InlineData("PE")]
+        [InlineData("AN")]
+        [InlineData("")]
+        [InlineData(null)]
+        public async Task Create_CompromisoNoAprobado_ShouldRejectBeforeCreating(string? status)
+        {
+            var dto = new AdmOrdenPagoUpdateDto { CodigoOrdenPago = 0, CodigoCompromiso = 16770 };
+            _mockSisUsuarioRepository.Setup(x => x.GetConectado())
+                .ReturnsAsync(new UserConectadoDto { Empresa = 13, Usuario = 1 });
+            _mockCompromisosService.Setup(x => x.GetByCompromiso(16770))
+                .ReturnsAsync(new PreCompromisosResponseDto { CodigoCompromiso = 16770, Status = status });
+
+            var result = await _service.Create(dto);
+
+            Assert.False(result.IsValid);
+            Assert.Contains("compromiso debe estar aprobado", result.Message);
+            _mockRepository.Verify(x => x.Add(It.IsAny<ADM_ORDEN_PAGO>()), Times.Never);
+            _mockCompromisoOpService.VerifyNoOtherCalls();
         }
 
         [Fact]
