@@ -10,8 +10,7 @@ POST `/api/PreCompromisos/GetCompromisosPendientesByPresupuesto`
   "codigoPresupuesto": 2026,
   "pageNumber": 0,
   "pageSize": 5,
-  "searchText": "cmp-00130",
-  "status": "AP"
+  "searchText": "cmp-00130"
 }
 ```
 
@@ -23,12 +22,12 @@ Ejemplos: `cmp-00130`, `CORPOELEC`, `09/03/2026`, `03/2026`.
 
 ## Disponibilidad
 
-Solo se ofrecen compromisos aprobados (`AP`) con saldo por causar positivo en
+Se ofrecen compromisos no anulados (incluidos `PE` y `AP`) con saldo por causar positivo en
 `ADM_V_COMPROMISO_PENDIENTE` y sin asociacion en `ADM_COMPROMISO_OP` a una orden
 de pago del mismo presupuesto cuyo estado sea distinto de anulado (`AN`).
 La asociacion se compara por identificador y origen para evitar colisiones.
 Una orden pendiente tambien reserva el compromiso. Una orden anulada permite
-volver a ofrecerlo si sigue aprobado y con saldo disponible.
+volver a ofrecerlo si sigue no anulado y con saldo disponible.
 
 La consulta por compromiso utilizada por `AdmOrdenPago/Create` aplica la misma
 exclusion; una seleccion que ya no esta disponible devuelve `isValid: false`
@@ -66,4 +65,4 @@ consulta de nuevo al abrir el selector e invalida la lista al crear una orden.
 - Buscar desde otra pagina debe volver a la primera y actualizar el total.
 - Crear una orden y reabrir el selector: el compromiso debe desaparecer.
 - Intentar crear desde una seleccion antigua debe devolver compromiso no pendiente.
-- Comprobar que una orden anulada no bloquea un compromiso aprobado con saldo.
+- Comprobar que una orden anulada no bloquea un compromiso no anulado con saldo.

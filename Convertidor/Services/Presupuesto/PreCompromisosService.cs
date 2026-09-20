@@ -530,7 +530,10 @@ namespace Convertidor.Services.Presupuesto
                        itemData.NumeroCompromiso = item.NUMERO_IDENTIFICADOR.ToString();
                        itemData.Ano = presupuesto.ANO;
                        var compromiso = await _repository.GetByCodigo(item.CODIGO_IDENTIFICADOR);
-                       if (compromiso == null || compromiso.STATUS != "AP") continue;
+                       // La vista admite compromisos PE con saldo; AP no es requisito
+                       // para este selector. La disponibilidad se valida por saldo y OP.
+                       if (compromiso == null ||
+                           string.Equals(compromiso.STATUS?.Trim(), "AN", StringComparison.OrdinalIgnoreCase)) continue;
                        itemData.CodigoSolicitud = compromiso.CODIGO_SOLICITUD;
                        itemData.NumeroSolicitud = "";
                        var solicitud = await _solicitudesRepository.GetByCodigoSolicitud(compromiso.CODIGO_SOLICITUD);
