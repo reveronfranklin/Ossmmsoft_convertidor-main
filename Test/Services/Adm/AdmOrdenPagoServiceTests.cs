@@ -241,6 +241,76 @@ namespace Convertidor.Tests.Services.Adm
             Assert.NotNull(result.Data);
         }
 
+        [Theory]
+        [InlineData(null, false)]
+        [InlineData(null, true)]
+        [InlineData(0, false)]
+        [InlineData(999, false)]
+        public async Task Update_Correccion_ShouldPreservarTodosLosComprobantes(int? numeroEnviado, bool omitirFecha)
+        {
+            // Arrange
+            var dto = new AdmOrdenPagoUpdateDto
+            {
+                CodigoOrdenPago = 1,
+                CodigoCompromiso = 1,
+                FechaOrdenPago = DateTime.Now,
+                TipoOrdenPagoId = 1,
+                CantidadPago = 1000,
+                FrecuenciaPagoId = 1,
+                TipoPagoId = 1,
+                Motivo = "Test motivo actualizado",
+                CodigoPresupuesto = 1,
+                NumeroComprobante = numeroEnviado,
+                NumeroComprobante2 = numeroEnviado,
+                NumeroComprobante3 = numeroEnviado,
+                NumeroComprobante4 = numeroEnviado,
+                FechaComprobante = omitirFecha ? null : DateTime.Now,
+                ConFactura = false
+            };
+
+               var conectado = new UserConectadoDto { Empresa = 13, Usuario = 1 };
+            var fechaOriginal = new DateTime(2026, 4, 29);
+            var existingOrdenPago = new ADM_ORDEN_PAGO {
+                CODIGO_ORDEN_PAGO = 1, STATUS = "PE",
+                NUMERO_COMPROBANTE = 20260400000123m,
+                NUMERO_COMPROBANTE2 = 20260400000124m,
+                NUMERO_COMPROBANTE3 = 20260400000125m,
+                NUMERO_COMPROBANTE4 = 20260400000126m,
+                FECHA_COMPROBANTE = fechaOriginal
+            };
+            var compromiso = new PreCompromisosResponseDto
+            {
+                CodigoCompromiso = 1,
+                CodigoProveedor = 1,
+                FechaCompromiso = DateTime.Now.AddDays(-1)
+            };
+            var presupuesto = new Data.Entities.Presupuesto.PRE_PRESUPUESTOS { ANO = 2025, CODIGO_PRESUPUESTO = 19, CODIGO_EMPRESA = 13 };
+
+            _mockSisUsuarioRepository.Setup(x => x.GetConectado()).ReturnsAsync(conectado);
+            _mockRepository.Setup(x => x.GetCodigoOrdenPago((int)dto.CodigoOrdenPago)).ReturnsAsync(existingOrdenPago);
+            _mockRepository.Setup(x => x.Update(It.IsAny<ADM_ORDEN_PAGO>())).ReturnsAsync( new ResultDto<ADM_ORDEN_PAGO> (null));
+            _mockCompromisosService.Setup(x => x.GetByCompromiso(dto.CodigoCompromiso)).ReturnsAsync(compromiso);
+            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(dto.TipoOrdenPagoId)).ReturnsAsync(new ADM_DESCRIPTIVAS());
+            _mockDescriptivaRepository.Setup(x => x.GetByIdAndTitulo(15, dto.FrecuenciaPagoId)).ReturnsAsync(true);
+            _mockDescriptivaRepository.Setup(x => x.GetByIdAndTitulo(16, dto.TipoPagoId)).ReturnsAsync(true);
+            _mockPresupuestosRepository.Setup(x => x.GetByCodigo(conectado.Empresa, dto.CodigoPresupuesto)).ReturnsAsync(presupuesto);
+            _mockProveedoresRepository.Setup(x => x.GetByCodigo(It.IsAny<int>())).ReturnsAsync(new ADM_PROVEEDORES());
+            _mockDescriptivaRepository.Setup(x => x.GetAll()).ReturnsAsync(new List<ADM_DESCRIPTIVAS>());
+
+            // Act
+            var result = await _service.Update(dto);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.NotNull(result.Data);
+            _mockRepository.Verify(x => x.Update(It.Is<ADM_ORDEN_PAGO>(o =>
+                o.NUMERO_COMPROBANTE == 20260400000123m &&
+                o.NUMERO_COMPROBANTE2 == 20260400000124m &&
+                o.NUMERO_COMPROBANTE3 == 20260400000125m &&
+                o.NUMERO_COMPROBANTE4 == 20260400000126m &&
+                o.FECHA_COMPROBANTE == fechaOriginal)), Times.Once);
+        }
+
         [Fact]
         public async Task Delete_WithValidOrdenPago_ShouldReturnSuccess()
         {

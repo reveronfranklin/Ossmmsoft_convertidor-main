@@ -129,7 +129,7 @@ public partial class AdmOrdenPagoService
                     result.Message = "Numero comprobante Invalido";
                     return result;
                 }
-                if (dto.FechaComprobante == null)
+                if (dto.FechaComprobante == null && codigoOrdenPago.FECHA_COMPROBANTE == null)
                 {
                     result.Data = null;
                     result.IsValid = false;
@@ -154,16 +154,20 @@ public partial class AdmOrdenPagoService
                 codigoOrdenPago.TIPO_PAGO_ID = dto.TipoPagoId;
                 codigoOrdenPago.MOTIVO = dto.Motivo;
                 codigoOrdenPago.CODIGO_PRESUPUESTO = dto.CodigoPresupuesto;
-                codigoOrdenPago.NUMERO_COMPROBANTE = dto.NumeroComprobante;
-                if (dto.FechaComprobante != null)
+                // Un comprobante emitido conserva su identidad al corregir y reaprobar la OP.
+                // Los clientes antiguos envian null/0; tampoco se permite reemplazarlo.
+                if (codigoOrdenPago.NUMERO_COMPROBANTE.GetValueOrDefault() <= 0)
                 {
-                    codigoOrdenPago.FECHA_COMPROBANTE = (DateTime)dto.FechaComprobante;
+                    codigoOrdenPago.NUMERO_COMPROBANTE = dto.NumeroComprobante;
+                    if (dto.FechaComprobante != null)
+                        codigoOrdenPago.FECHA_COMPROBANTE = dto.FechaComprobante;
                 }
-
-             
-                codigoOrdenPago.NUMERO_COMPROBANTE2=dto.NumeroComprobante2;
-                codigoOrdenPago.NUMERO_COMPROBANTE3 = dto.NumeroComprobante3;
-                codigoOrdenPago.NUMERO_COMPROBANTE4 = dto.NumeroComprobante4;
+                if (codigoOrdenPago.NUMERO_COMPROBANTE2.GetValueOrDefault() <= 0)
+                    codigoOrdenPago.NUMERO_COMPROBANTE2 = dto.NumeroComprobante2;
+                if (codigoOrdenPago.NUMERO_COMPROBANTE3.GetValueOrDefault() <= 0)
+                    codigoOrdenPago.NUMERO_COMPROBANTE3 = dto.NumeroComprobante3;
+                if (codigoOrdenPago.NUMERO_COMPROBANTE4.GetValueOrDefault() <= 0)
+                    codigoOrdenPago.NUMERO_COMPROBANTE4 = dto.NumeroComprobante4;
 
                 codigoOrdenPago.CON_FACTURA = 0;
                 if (dto.ConFactura)
