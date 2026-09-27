@@ -71,3 +71,20 @@ Los compromisos `PE` no se ofrecen, aunque tengan saldo. `AdmOrdenPago/Create`
 revalida el estado y rechaza un compromiso no aprobado incluso si se invoca
 directamente o desde una seleccion anterior. Esta regla no depende de `status`
 enviado por el frontend.
+
+## Disponibilidad al crear la orden
+
+La revalidacion usa codigo de compromiso, presupuesto y origen 805
+(compromisos presupuestarios). Rechaza un compromiso de otro presupuesto.
+La consulta materializa el resultado filtrado como el listado de disponibles,
+sin aplicar FirstOrDefaultAsync en Oracle. Conserva saldo positivo y exclusion
+de ordenes no anuladas.
+
+Una consulta sin filas devuelve `COMPROMISO NO ESTA PENDIENTE`. Un error de
+consulta devuelve `isValid: false` con `Error tecnico al consultar disponibilidad
+del compromiso: ...`; no se presenta como falta de disponibilidad.
+
+Caso reportado: compromiso 16771, presupuesto 20, AP, saldo 234240 y sin OP
+asociada segun consultas aportadas por el usuario. Requiere repetir la creacion
+tras desplegar para confirmar el comportamiento en Oracle; no se ha confirmado
+la excepcion original del servidor.

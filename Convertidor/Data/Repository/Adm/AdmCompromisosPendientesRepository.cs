@@ -44,22 +44,22 @@ namespace Convertidor.Data.Repository.Adm
 
         }
         
-        public async Task<ADM_V_COMPROMISO_PENDIENTE> GetCompromisosPendientesPorCodigoCompromiso(int codigoCompromiso)
+        public async Task<ADM_V_COMPROMISO_PENDIENTE> GetCompromisosPendientesPorCodigoCompromiso(
+            int codigoCompromiso, int codigoPresupuesto, int origenCompromisoId)
         {
-            try
-            {
-                var result = await PendientesDisponibles()
-                    .Where(e =>  e.CODIGO_IDENTIFICADOR==codigoCompromiso).FirstOrDefaultAsync();
+            // Materializar como en el listado evita introducir una limitacion de
+            // filas distinta en el SQL generado por el proveedor Oracle.
+            // Los errores deben llegar al servicio, no convertirse en "sin saldo".
+            var disponibles = await PendientesDisponibles()
+                .AsNoTracking()
+                .Where(e => e.CODIGO_IDENTIFICADOR == codigoCompromiso &&
+                            e.CODIGO_PRESUPUESTO == codigoPresupuesto &&
+                            e.ORIGEN_COMPROMISO_ID == origenCompromisoId)
+                .ToListAsync();
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                var res = ex.Message;
-                return null;
-            }
-
+            return disponibles.FirstOrDefault();
         }
+
         
    
 

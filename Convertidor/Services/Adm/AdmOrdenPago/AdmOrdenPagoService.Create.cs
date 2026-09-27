@@ -136,9 +136,25 @@ public partial class AdmOrdenPagoService
             }
 
 
-            var compromisoPendiente =
-                await _admCompromisosPendientesRepository.GetCompromisosPendientesPorCodigoCompromiso(compromiso
-                    .CodigoCompromiso);
+            if (compromiso.CodigoPresupuesto != dto.CodigoPresupuesto)
+            {
+                result.IsValid = false;
+                result.Message = "El compromiso no pertenece al presupuesto seleccionado";
+                return result;
+            }
+
+            ADM_V_COMPROMISO_PENDIENTE compromisoPendiente;
+            try
+            {
+                compromisoPendiente = await _admCompromisosPendientesRepository
+                    .GetCompromisosPendientesPorCodigoCompromiso(dto.CodigoCompromiso, dto.CodigoPresupuesto, 805);
+            }
+            catch (Exception ex)
+            {
+                result.IsValid = false;
+                result.Message = $"Error tecnico al consultar disponibilidad del compromiso: {ex.Message}";
+                return result;
+            }
             if (compromisoPendiente == null)
             {
                 result.Data = null;
