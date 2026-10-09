@@ -21,7 +21,7 @@ namespace Convertidor.Data.Repository.Cnt
         {
             try
             {
-                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty().ToListAsync();
+                var result = await _context.CNT_COMPROBANTES.Where(x => x.ESTADO_CMP == "FINALIZADO").ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace Convertidor.Data.Repository.Cnt
         {
             try
             {
-                var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty().Where(x => x.CODIGO_COMPROBANTE == codigoComprobante).FirstOrDefaultAsync();
+                var result = await _context.CNT_COMPROBANTES.Where(x => x.ESTADO_CMP == "FINALIZADO").Where(x => x.CODIGO_COMPROBANTE == codigoComprobante).FirstOrDefaultAsync();
 
                 return result;
             }
@@ -54,7 +54,7 @@ namespace Convertidor.Data.Repository.Cnt
             {
                 var conectado = await _sisUsuarioRepository.GetConectado();
                 var result = await _context.CNT_COMPROBANTES.DefaultIfEmpty()
-                    .Where(e => e.CODIGO_EMPRESA == conectado.Empresa && e.NUMERO_COMPROBANTE == numeroComprobante)
+                    .Where(e => e.ESTADO_CMP == "FINALIZADO" && e.CODIGO_EMPRESA == conectado.Empresa && e.NUMERO_COMPROBANTE == numeroComprobante)
                     .FirstOrDefaultAsync();
 
                 return (CNT_COMPROBANTES)result;

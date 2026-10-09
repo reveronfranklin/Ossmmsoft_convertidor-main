@@ -2,6 +2,7 @@
 {
     public class CNT_COMPROBANTES
     {
+        public string ESTADO_CMP { get; set; } = "FINALIZADO";
         public int CODIGO_COMPROBANTE { get; set; }
         public int CODIGO_PERIODO { get; set; }
         public int TIPO_COMPROBANTE_ID { get; set; }
