@@ -3,6 +3,9 @@
 	public class RH_PERSONAS
 	{
         public int CODIGO_PERSONA { get; set; }
+        public int? ESTADO_SALUD_ID { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public bool EstadoSaludPresente { get; set; }
         public int CEDULA { get; set; }
         public string NOMBRE { get; set; } = string.Empty;
         public string APELLIDO { get; set; } = string.Empty;

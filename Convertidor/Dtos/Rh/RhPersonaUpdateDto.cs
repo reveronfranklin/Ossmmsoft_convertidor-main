@@ -1,9 +1,12 @@
+using System.Text.Json;
+
 namespace Convertidor.Dtos.Rh;
 
 public class 
     RhPersonaUpdateDto
 {
     public int CodigoPersona { get; set; }
+    public JsonElement EstadoSaludId { get; set; }
     public int Cedula { get; set; }
     public string Nombre { get; set; } = string.Empty;
     public string Apellido { get; set; } = string.Empty;

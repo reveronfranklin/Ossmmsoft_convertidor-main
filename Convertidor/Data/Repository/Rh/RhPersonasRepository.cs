@@ -13,50 +13,53 @@ namespace Convertidor.Data.Repository.Rh
             _context = context;
             _configuration = configuration;
         }
+        private int Empresa => int.TryParse(_configuration["settings:EmpresaConfig"], out var empresa) && empresa > 0
+            ? empresa : throw new InvalidOperationException("EmpresaConfig debe ser un numero valido.");
+
         public async Task<List<RH_PERSONAS>> GetAll()
         {
+            var empresa = Empresa;
             try
             {
 
-                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p=> p.CODIGO_PERSONA>0).ToListAsync();
+                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p=> p.CODIGO_PERSONA>0 && p.CODIGO_EMPRESA == empresa).ToListAsync();
                 return (List<RH_PERSONAS>)result;
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
-                return null;
+                throw new InvalidOperationException($"Error tecnico al consultar Personas: {ex.Message}", ex);
             }
 
         }
 
         public async Task<RH_PERSONAS> GetCedula(int cedula)
         {
+            var empresa = Empresa;
             try
             {
 
-                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p=> p.CEDULA==cedula).FirstOrDefaultAsync();
+                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p=> p.CEDULA==cedula && p.CODIGO_EMPRESA == empresa).FirstOrDefaultAsync();
                 return (RH_PERSONAS)result;
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
-                return null;
+                throw new InvalidOperationException($"Error tecnico al consultar Personas: {ex.Message}", ex);
             }
 
         }
 
         public async Task<RH_PERSONAS> GetCodigoPersona(int codigoPersona)
         {
+            var empresa = Empresa;
             try
             {
 
-                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p => p.CODIGO_PERSONA == codigoPersona).FirstOrDefaultAsync();
+                var result = await _context.RH_PERSONAS.DefaultIfEmpty().Where(p => p.CODIGO_PERSONA == codigoPersona && p.CODIGO_EMPRESA == empresa).FirstOrDefaultAsync();
                 return (RH_PERSONAS)result;
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
-                return null;
+                throw new InvalidOperationException($"Error tecnico al consultar Personas: {ex.Message}", ex);
             }
 
         }
@@ -68,6 +71,7 @@ namespace Convertidor.Data.Repository.Rh
             {
 
           
+                entity.CODIGO_EMPRESA = Empresa;
                 await _context.RH_PERSONAS.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
@@ -83,7 +87,7 @@ namespace Convertidor.Data.Repository.Rh
             {
                 result.Data = null;
                 result.IsValid = false;
-                result.Message = ex.Message;
+                result.Message = $"Error tecnico: {ex.InnerException?.Message ?? ex.Message}";
                 return result;
             }
 
@@ -103,6 +107,7 @@ namespace Convertidor.Data.Repository.Rh
 
                     entity.CODIGO_EMPRESA = empresa;
                     _context.RH_PERSONAS.Update(entity);
+                    _context.Entry(entity).Property(p => p.ESTADO_SALUD_ID).IsModified = entity.EstadoSaludPresente;
                     await _context.SaveChangesAsync();
                     result.Data = entity;
                     result.IsValid = true;
@@ -115,7 +120,7 @@ namespace Convertidor.Data.Repository.Rh
             {
                 result.Data = null;
                 result.IsValid = false;
-                result.Message = ex.Message;
+                result.Message = $"Error tecnico: {ex.InnerException?.Message ?? ex.Message}";
                 return result;
             }
 
