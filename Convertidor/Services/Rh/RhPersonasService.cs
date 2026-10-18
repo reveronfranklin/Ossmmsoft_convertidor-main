@@ -170,8 +170,7 @@ namespace Convertidor.Data.Repository.Rh
             }
             catch (Exception ex)
             {
-                var res = ex.InnerException.Message;
-                return null;
+                throw new InvalidOperationException($"Error tecnico al consultar Personas: {ex.Message}", ex);
             }
 
         }
@@ -263,6 +262,14 @@ namespace Convertidor.Data.Repository.Rh
                {
                  
                 itemResult.CodigoPersona = dtos.CODIGO_PERSONA;
+                itemResult.EstadoSaludId = dtos.ESTADO_SALUD_ID;
+                if (dtos.ESTADO_SALUD_ID.HasValue)
+                {
+                    var salud = await _rhDescriptivasServices.GetByCodigoDescriptiva(dtos.ESTADO_SALUD_ID.Value);
+                    if (salud != null && salud.TITULO_ID == 72)
+                        itemResult.EstadoSaludDescripcion = salud.DESCRIPCION;
+                }
+
                 itemResult.Cedula = dtos.CEDULA;
                 itemResult.Nombre = dtos.NOMBRE;
                 itemResult.Apellido = dtos.APELLIDO;
@@ -489,6 +496,7 @@ namespace Convertidor.Data.Repository.Rh
 
             var paises = await _sisUbicacionNacionalRepository.GetPaises();
             var comunicaciones = await _rhComunicacionessRepository.GetAll();
+            var estadosSalud = await _rhDescriptivasServices.GetByTitulo(72);
             foreach (var item in dtos)
             {
 
@@ -500,6 +508,8 @@ namespace Convertidor.Data.Repository.Rh
                 }
 
                 itemResult.CodigoPersona = item.CODIGO_PERSONA;
+                itemResult.EstadoSaludId = item.ESTADO_SALUD_ID;
+                itemResult.EstadoSaludDescripcion = estadosSalud?.FirstOrDefault(x => x.Id == item.ESTADO_SALUD_ID)?.Descripcion ?? string.Empty;
                 itemResult.Cedula = item.CEDULA;
                 itemResult.Nombre = item.NOMBRE;
                 itemResult.Apellido = item.APELLIDO;
@@ -690,6 +700,13 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<PersonasDto> result = new ResultDto<PersonasDto>(null);
             try
             {
+                if (!RhPersonaSalud.TryRead(dto.EstadoSaludId, out var saludPresente, out var estadoSalud, out var saludError))
+                {
+                    result.IsValid = false;
+                    result.Message = saludError;
+                    return result;
+                }
+
 
                 var persona = await _repository.GetCodigoPersona(dto.CodigoPersona);
                 if (persona == null)
@@ -816,6 +833,19 @@ namespace Convertidor.Data.Repository.Rh
                     return result;
                 }
                 
+
+                if (saludPresente && estadoSalud.HasValue && estadoSalud != persona.ESTADO_SALUD_ID)
+                {
+                    var salud = await _rhDescriptivasServices.GetByCodigoDescriptiva(estadoSalud.Value);
+                    if (salud == null || salud.TITULO_ID != 72)
+                    {
+                        result.IsValid = false;
+                        result.Message = "Estado de salud no pertenece al titulo 72.";
+                        return result;
+                    }
+                }
+                persona.EstadoSaludPresente = saludPresente;
+                if (saludPresente) persona.ESTADO_SALUD_ID = estadoSalud;
                 persona.CEDULA = dto.Cedula;
                 persona.NOMBRE = dto.Nombre;
                 persona.APELLIDO = dto.Apellido;
@@ -860,15 +890,27 @@ namespace Convertidor.Data.Repository.Rh
                 persona.FECHA_NACIMIENTO = fechaConvertida;
                 persona.FECHA_UPD = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
+                if (conectado.Usuario <= 0)
+                {
+                    result.IsValid = false;
+                    result.Message = "Usuario autenticado no valido.";
+                    return result;
+                }
                 persona.CODIGO_EMPRESA = conectado.Empresa;
                 persona.USUARIO_UPD = conectado.Usuario;
 
 
-                await _repository.Update(persona);
+                var saved = await _repository.Update(persona);
+                if (!saved.IsValid)
+                {
+                    result.IsValid = false;
+                    result.Message = saved.Message;
+                    return result;
+                }
              
                
  
-                var resultDto = await GetPersona(dto.CodigoPersona);
+                var resultDto = await MapObjPersonasDto(persona);
                 result.Data = resultDto;
                 result.IsValid = true;
                 result.Message = "";
@@ -892,6 +934,13 @@ namespace Convertidor.Data.Repository.Rh
             ResultDto<PersonasDto> result = new ResultDto<PersonasDto>(null);
             try
             {
+                if (!RhPersonaSalud.TryRead(dto.EstadoSaludId, out var saludPresente, out var estadoSalud, out var saludError))
+                {
+                    result.IsValid = false;
+                    result.Message = saludError;
+                    return result;
+                }
+
                 
                 var personaFind = await _repository.GetCedula(dto.Cedula);
                 if (personaFind != null)
@@ -1011,6 +1060,19 @@ namespace Convertidor.Data.Repository.Rh
                 }
                 RH_PERSONAS persona = new RH_PERSONAS();
                 persona.CODIGO_PERSONA = await _repository.GetNextKey();
+
+                if (saludPresente && estadoSalud.HasValue)
+                {
+                    var salud = await _rhDescriptivasServices.GetByCodigoDescriptiva(estadoSalud.Value);
+                    if (salud == null || salud.TITULO_ID != 72)
+                    {
+                        result.IsValid = false;
+                        result.Message = "Estado de salud no pertenece al titulo 72.";
+                        return result;
+                    }
+                }
+                persona.EstadoSaludPresente = saludPresente;
+                if (saludPresente) persona.ESTADO_SALUD_ID = estadoSalud;
                 persona.CEDULA = dto.Cedula;
                 persona.NOMBRE = dto.Nombre;
                 persona.APELLIDO = dto.Apellido;
@@ -1031,6 +1093,12 @@ namespace Convertidor.Data.Repository.Rh
                 persona.FECHA_NACIMIENTO = fechaNacimiento;
                 persona.FECHA_INS = DateTime.Now;
                 var conectado = await _sisUsuarioRepository.GetConectado();
+                if (conectado.Usuario <= 0)
+                {
+                    result.IsValid = false;
+                    result.Message = "Usuario autenticado no valido.";
+                    return result;
+                }
                 persona.CODIGO_EMPRESA = conectado.Empresa;
                 persona.USUARIO_INS = conectado.Usuario;
 
@@ -1039,7 +1107,7 @@ namespace Convertidor.Data.Repository.Rh
                 
                 if (created.IsValid && created.Data != null)
                 {
-                    var resultDto = await GetPersona(persona.CODIGO_PERSONA );
+                    var resultDto = await MapObjPersonasDto(created.Data);
                     result.Data = resultDto;
                     result.IsValid = true;
                     result.Message = "";

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 // HTML to PDF
 
@@ -8,7 +9,7 @@ namespace Convertidor.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class RhPersonaController : ControllerBase
     {
        
