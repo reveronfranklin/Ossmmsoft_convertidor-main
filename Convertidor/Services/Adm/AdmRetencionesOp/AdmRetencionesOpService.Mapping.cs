@@ -24,6 +24,9 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     itemResult.DescripcionTipoRetencion = descriptivaTipoRetencion.DESCRIPCION;
                 }
 
+                if (dtos.EXTRA4 == Convertidor.Services.Adm.AdmDocumentosOp.IvaDocumentoRetencion.Marca)
+                    itemResult.DescripcionTipoRetencion = dtos.EXTRA3 ?? string.Empty;
+
                 if (dtos.CODIGO_RETENCION == null)
                 {
                     dtos.CODIGO_RETENCION = 0;

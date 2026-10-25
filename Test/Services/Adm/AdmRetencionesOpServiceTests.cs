@@ -16,6 +16,21 @@ namespace Convertidor.Tests.Services.Adm
 {
     public class AdmRetencionesOpServiceTests
     {
+        [Fact]
+        public async Task MapRetencionAutomaticaMuestraIvaDelDocumentoEnLugarDelCatalogoGenerico()
+        {
+            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(1)).ReturnsAsync(
+                new ADM_DESCRIPTIVAS { DESCRIPCION_ID = 1, CODIGO = "IVA", DESCRIPCION = "I.V.A. (6%)" });
+            var dto = await _service.MapRetencionesOpDto(new ADM_RETENCIONES_OP
+            {
+                TIPO_RETENCION_ID = 1, EXTRA4 = "IVA_DOCUMENTO", EXTRA3 = "I.V.A. (8%)",
+                POR_RETENCION = 100m, MONTO_RETENCION = 17351.11m
+            });
+            Assert.Equal("I.V.A. (8%)", dto.DescripcionTipoRetencion);
+            Assert.Equal(100m, dto.PorRetencion);
+            Assert.Equal(17351.11m, dto.MontoRetencion);
+        }
+
         private readonly Mock<IAdmRetencionesOpRepository> _mockRepository;
         private readonly Mock<ISisUsuarioRepository> _mockSisUsuarioRepository;
         private readonly Mock<IPRE_PRESUPUESTOSRepository> _mockPresupuestosRepository;

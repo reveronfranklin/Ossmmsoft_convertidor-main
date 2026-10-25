@@ -53,6 +53,12 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Message = "Codigo retencion op no existe";
                     return result;
                 }
+                if (codigoRetencionOp.EXTRA4 == Convertidor.Services.Adm.AdmDocumentosOp.IvaDocumentoRetencion.Marca)
+                {
+                    result.IsValid = false;
+                    result.Message = "La retencion IVA es automatica; modifique el documento que la origina";
+                    return result;
+                }
                 var codigoOrdenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(dto.CodigoOrdenPago);
                 if (codigoOrdenPago == null)
                 {

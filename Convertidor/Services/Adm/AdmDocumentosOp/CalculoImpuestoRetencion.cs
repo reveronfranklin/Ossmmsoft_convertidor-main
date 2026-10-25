@@ -21,23 +21,10 @@ public class CalculoImpuestoRetencion
             MontoImpuestoExento = montoImpuestoExento
         };
 
-        if (porcentajeRetencion == 0)
-        {
-            resultado.MontoImpuesto = 0;
-            resultado.MontoRetenido = 0;
-            resultado.BaseImponible = 0;
-        }
-        else
-        {
-            resultado.BaseImponible = (montoDocumento - montoImpuestoExento) / ((porcentajeIva / 100) + 1);
-            resultado.BaseImponible = Math.Round(resultado.BaseImponible, 2);
-
-            resultado.MontoImpuesto = resultado.BaseImponible * (porcentajeIva / 100);
-            resultado.MontoImpuesto = Math.Round(resultado.MontoImpuesto, 2);
-
-            resultado.MontoRetenido = resultado.MontoImpuesto * (porcentajeRetencion / 100);
-            resultado.MontoRetenido = Math.Round(resultado.MontoRetenido, 2);
-        }
+        resultado.BaseImponible = Math.Round(
+            (montoDocumento - montoImpuestoExento) / ((porcentajeIva / 100) + 1), 2);
+        resultado.MontoImpuesto = Math.Round(resultado.BaseImponible * porcentajeIva / 100, 2);
+        resultado.MontoRetenido = Math.Round(resultado.MontoImpuesto * porcentajeRetencion / 100, 2);
 
         return resultado;
     }

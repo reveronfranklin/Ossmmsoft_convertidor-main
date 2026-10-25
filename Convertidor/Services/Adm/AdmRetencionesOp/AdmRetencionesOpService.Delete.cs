@@ -25,6 +25,12 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     return result;
                 }
 
+                if (codigoRetencionOp.EXTRA4 == Convertidor.Services.Adm.AdmDocumentosOp.IvaDocumentoRetencion.Marca)
+                {
+                    result.IsValid = false;
+                    result.Message = "La retencion IVA es automatica; modifique el documento que la origina";
+                    return result;
+                }
                 var ordenPago = await _admOrdenPagoRepository.GetCodigoOrdenPago(codigoRetencionOp.CODIGO_ORDEN_PAGO);
                 if (ordenPago != null && ordenPago.STATUS != "PE")
                 {

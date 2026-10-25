@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Convertidor.Data.Entities.Adm;
 using Convertidor.Dtos.Adm;
 
@@ -12,6 +13,7 @@ public partial class AdmDocumentosOpService
             ResultDto<AdmDocumentosOpResponseDto> result = new ResultDto<AdmDocumentosOpResponseDto>(null);
             try
             {
+                await using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
                 var codigoDocumentoOp = await _repository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
@@ -200,8 +202,8 @@ public partial class AdmDocumentosOpService
                 
                 //buscar la descriptiva y se toma EXTRA1 EL PORCENTAJE DE RERENCION IVA
                 //SI EL PORCENTAJE ES MAYOR A CERO SE REALIZA EL CALCULO DE BASE_IMPONIBLE Y MONTO_IMPUESTO
-                var porcentajeRetencion = decimal.Parse(estatusFisco.EXTRA1);
-                var porcentajeIva = decimal.Parse(tipoImpuesto.EXTRA1);
+                var porcentajeRetencion = IvaDocumentoRetencion.LeerPorcentaje(estatusFisco.EXTRA1);
+                var porcentajeIva = IvaDocumentoRetencion.LeerPorcentaje(tipoImpuesto.EXTRA1);
                 
                 
                 var resultado = CalculoImpuestoRetencion.Calcular(dto.MontoDocumento,  dto.MontoImpuestoExento, porcentajeRetencion, porcentajeIva);
@@ -246,6 +248,7 @@ public partial class AdmDocumentosOpService
                     var resultDto = await MapDocumentosOpDto(created.Data);
                     result.CantidadRegistros = cantidadDocumentos;
                     result.Data = resultDto;
+                    await transaction.CommitAsync();
                     result.IsValid = true;
                     result.Message = "";
                 }
