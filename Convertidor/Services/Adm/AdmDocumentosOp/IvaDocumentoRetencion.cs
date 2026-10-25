@@ -1,9 +1,10 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 using Convertidor.Data.Entities.Adm;
 
 namespace Convertidor.Services.Adm.AdmDocumentosOp;
 
-// Snapshot de la alicuota del documento; TIPO_RETENCION_ID conserva la familia IVA.
+// Tipo IVA y alicuota persistidos desde el documento; el reporte lee la retencion.
 public static class IvaDocumentoRetencion
 {
     public const string Marca = "IVA_DOCUMENTO";
@@ -17,14 +18,35 @@ public static class IvaDocumentoRetencion
         return porcentaje;
     }
 
-    public record Documento(ADM_DOCUMENTOS_OP Datos, int CodigoRetencion, decimal PorRetencion,
-        decimal Alicuota);
+    public static ADM_DESCRIPTIVAS ResolverTipo(IEnumerable<ADM_DESCRIPTIVAS> catalogo,
+        int tituloId, decimal alicuota)
+    {
+        var tipos = catalogo.Where(x => x.CODIGO == "IVA" && x.TITULO_ID == tituloId)
+            .Where(x => AlicuotaCatalogo(x) == alicuota).ToList();
+        if (tipos.Count != 1)
+            throw new InvalidOperationException($"Configuracion de tipo de retencion IVA {alicuota}% ausente o ambigua");
+        return tipos[0];
+    }
 
-    public static List<ADM_RETENCIONES_OP> Agrupar(IEnumerable<Documento> documentos, int tipoIva)
+    private static decimal? AlicuotaCatalogo(ADM_DESCRIPTIVAS tipo)
+    {
+        var porcentajes = Regex.Matches(tipo.DESCRIPCION ?? string.Empty, @"[0-9]+(?:[.,][0-9]+)?\s*%");
+        if (porcentajes.Count == 1)
+            return LeerPorcentaje(porcentajes[0].Value.TrimEnd('%').Trim());
+        if (porcentajes.Count > 1)
+            return null;
+        return decimal.TryParse(tipo.EXTRA1?.Trim().Replace(',', '.'),
+            NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var valor) ? valor : null;
+    }
+
+    public record Documento(ADM_DOCUMENTOS_OP Datos, int CodigoRetencion, decimal PorRetencion,
+        decimal Alicuota, int TipoRetencionId);
+
+    public static List<ADM_RETENCIONES_OP> Agrupar(IEnumerable<Documento> documentos)
     {
         return documentos.Where(x => x.Datos.MONTO_RETENIDO > 0)
             .GroupBy(x => new { x.Datos.CODIGO_ORDEN_PAGO, x.Datos.TIPO_IMPUESTO_ID,
-                x.CodigoRetencion, x.PorRetencion, x.Alicuota })
+                x.CodigoRetencion, x.PorRetencion, x.Alicuota, x.TipoRetencionId })
             .Select(grupo =>
             {
                 var documento = grupo.First().Datos;
@@ -32,7 +54,7 @@ public static class IvaDocumentoRetencion
                 return new ADM_RETENCIONES_OP
                 {
                     CODIGO_ORDEN_PAGO = grupo.Key.CODIGO_ORDEN_PAGO,
-                    TIPO_RETENCION_ID = tipoIva,
+                    TIPO_RETENCION_ID = grupo.Key.TipoRetencionId,
                     CODIGO_RETENCION = grupo.Key.CodigoRetencion,
                     POR_RETENCION = grupo.Key.PorRetencion,
                     BASE_IMPONIBLE = grupo.Sum(x => x.Datos.BASE_IMPONIBLE),
@@ -50,12 +72,14 @@ public static class IvaDocumentoRetencion
     }
 
     public static bool MismoGrupo(ADM_RETENCIONES_OP actual, ADM_RETENCIONES_OP esperado) =>
+        actual.TIPO_RETENCION_ID == esperado.TIPO_RETENCION_ID &&
         actual.EXTRA4 == Marca && actual.EXTRA1 == esperado.EXTRA1 &&
         actual.EXTRA2 == esperado.EXTRA2 && actual.CODIGO_RETENCION == esperado.CODIGO_RETENCION &&
         actual.POR_RETENCION == esperado.POR_RETENCION;
 
     public static void Actualizar(ADM_RETENCIONES_OP actual, ADM_RETENCIONES_OP grupo, string numero)
     {
+        actual.TIPO_RETENCION_ID = grupo.TIPO_RETENCION_ID;
         actual.CODIGO_RETENCION = grupo.CODIGO_RETENCION;
         actual.POR_RETENCION = grupo.POR_RETENCION;
         actual.BASE_IMPONIBLE = grupo.BASE_IMPONIBLE;

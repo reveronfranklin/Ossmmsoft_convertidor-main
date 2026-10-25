@@ -11,6 +11,7 @@ namespace Convertidor.Services.Adm.AdmDocumentosOp
     {
         private readonly IAdmDocumentosOpRepository _repository;
         private readonly Convertidor.Data.DataContextAdm _context;
+        private readonly ILogger<AdmDocumentosOpService> _logger;
         private readonly ISisUsuarioRepository _sisUsuarioRepository;
         private readonly IPRE_PRESUPUESTOSRepository _prePresupuestosRepository;
         private readonly IAdmOrdenPagoRepository _admOrdenPagoRepository;
@@ -33,10 +34,12 @@ namespace Convertidor.Services.Adm.AdmDocumentosOp
                                      IAdmPucOrdenPagoRepository admPucOrdenPagoRepository,
                                      IAdmImpuestosDocumentosOpRepository admImpuestosDocumentosOpRepository,
                                      IAdmBeneficariosOpService admBeneficariosOpService,
-                                     Convertidor.Data.DataContextAdm context)
+                                     Convertidor.Data.DataContextAdm context,
+                                     ILogger<AdmDocumentosOpService> logger = null)
         {
             _repository = repository;
             _context = context;
+            _logger = logger;
             _sisUsuarioRepository = sisUsuarioRepository;
             _prePresupuestosRepository = prePresupuestosRepository;
             _admOrdenPagoRepository = admOrdenPagoRepository;

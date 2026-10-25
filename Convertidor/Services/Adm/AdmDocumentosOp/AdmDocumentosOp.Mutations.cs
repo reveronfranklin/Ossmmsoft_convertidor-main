@@ -14,10 +14,10 @@ public partial class AdmDocumentosOpService
             ? await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable)
             : null;
 
-        var documentos = await _context.ADM_DOCUMENTOS_OP
-            .Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago).ToListAsync();
-        var tiposIva = await _context.ADM_DESCRIPTIVAS.Where(x => x.CODIGO == "IVA")
-            .OrderBy(x => x.DESCRIPCION_ID).ToListAsync();
+        var documentos = await IvaDocumentoConsultas.Documentos(_context.ADM_DOCUMENTOS_OP
+            .Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago)).ToListAsync();
+        var tiposIva = await IvaDocumentoConsultas.Tipos(_context.ADM_DESCRIPTIVAS
+            .Where(x => x.CODIGO == "IVA").OrderBy(x => x.DESCRIPCION_ID)).ToListAsync();
         if (tiposIva.Count == 0)
             throw new InvalidOperationException("No existe configuracion de familia IVA para las retenciones");
 
@@ -29,28 +29,36 @@ public partial class AdmDocumentosOpService
             (!string.IsNullOrWhiteSpace(x.EXTRA1) || !string.IsNullOrWhiteSpace(x.EXTRA2) ||
              !string.IsNullOrWhiteSpace(x.EXTRA3) || !string.IsNullOrWhiteSpace(x.EXTRA4))))
             throw new InvalidOperationException("Los campos de alicuota de la retencion IVA estan ocupados; requiere revision");
-        // La familia controla comprobantes; la alicuota siempre proviene del documento.
-        var tipoIva = existentes.FirstOrDefault()?.TIPO_RETENCION_ID ?? tiposIva[0].DESCRIPCION_ID;
         var entradas = new List<IvaDocumentoRetencion.Documento>();
         foreach (var documento in documentos.Where(x => x.MONTO_RETENIDO > 0))
         {
-            var impuesto = await _admDescriptivaRepository.GetByCodigo(documento.TIPO_IMPUESTO_ID);
+            var impuesto = await IvaDocumentoConsultas.Tipos(_context.ADM_DESCRIPTIVAS
+                .Where(x => x.DESCRIPCION_ID == documento.TIPO_IMPUESTO_ID)).SingleOrDefaultAsync();
             var estatus = documento.ESTATUS_FISCO_ID.HasValue
-                ? await _admDescriptivaRepository.GetByCodigo(documento.ESTATUS_FISCO_ID.Value) : null;
+                ? await IvaDocumentoConsultas.Tipos(_context.ADM_DESCRIPTIVAS
+                    .Where(x => x.DESCRIPCION_ID == documento.ESTATUS_FISCO_ID.Value)).SingleOrDefaultAsync() : null;
             if (impuesto == null || estatus == null)
                 throw new InvalidOperationException($"Configuracion IVA invalida en documento {documento.CODIGO_DOCUMENTO_OP}");
             var alicuota = IvaDocumentoRetencion.LeerPorcentaje(impuesto.EXTRA1);
             var porcentaje = IvaDocumentoRetencion.LeerPorcentaje(estatus.EXTRA1);
             if (porcentaje == 0)
                 throw new InvalidOperationException($"Porcentaje retenido inconsistente en documento {documento.CODIGO_DOCUMENTO_OP}");
-            var conceptos = await _context.ADM_RETENCIONES
-                .Where(x => x.EXTRA1 == estatus.CODIGO && tipoIds.Contains(x.TIPO_RETENCION_ID)).ToListAsync();
-            if (conceptos.Count != 1)
+            var conceptos = await IvaDocumentoConsultas.Conceptos(_context.ADM_RETENCIONES
+                .Where(x => x.EXTRA1 == estatus.CODIGO && tipoIds.Contains(x.TIPO_RETENCION_ID))).ToListAsync();
+            var titulos = tiposIva.Where(x => conceptos.Any(c => c.TIPO_RETENCION_ID == x.DESCRIPCION_ID))
+                .Select(x => x.TITULO_ID).Distinct().ToList();
+            if (titulos.Count != 1)
                 throw new InvalidOperationException($"Configuracion de concepto de retencion ausente o ambigua en documento {documento.CODIGO_DOCUMENTO_OP}");
-            entradas.Add(new IvaDocumentoRetencion.Documento(documento, conceptos[0].CODIGO_RETENCION, porcentaje, alicuota));
+            var tipo = IvaDocumentoRetencion.ResolverTipo(tiposIva, titulos[0], alicuota);
+            var conceptosDelTipo = conceptos.Where(x => x.TIPO_RETENCION_ID == tipo.DESCRIPCION_ID).ToList();
+            var candidatos = conceptosDelTipo.Count > 0 ? conceptosDelTipo : conceptos;
+            if (candidatos.Count != 1)
+                throw new InvalidOperationException($"Concepto de retencion IVA ambiguo en documento {documento.CODIGO_DOCUMENTO_OP}");
+            entradas.Add(new IvaDocumentoRetencion.Documento(documento, candidatos[0].CODIGO_RETENCION,
+                porcentaje, alicuota, tipo.DESCRIPCION_ID));
         }
 
-        var grupos = IvaDocumentoRetencion.Agrupar(entradas, tipoIva);
+        var grupos = IvaDocumentoRetencion.Agrupar(entradas);
         var disponibles = existentes.ToList();
         var numeroOrden = await _context.ADM_ORDEN_PAGO.Where(x => x.CODIGO_ORDEN_PAGO == codigoOrdenPago)
             .Select(x => x.NUMERO_COMPROBANTE).SingleAsync();

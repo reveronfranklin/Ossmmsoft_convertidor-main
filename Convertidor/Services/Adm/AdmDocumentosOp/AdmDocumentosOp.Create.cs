@@ -266,6 +266,7 @@ public partial class AdmDocumentosOpService
             }
             catch (Exception ex)
             {
+                _logger?.LogError(ex, "Error al crear documento en orden de pago {CodigoOrdenPago}", dto.CodigoOrdenPago);
                 result.Data = null;
                 result.IsValid = false;
                 result.Message = ex.Message;

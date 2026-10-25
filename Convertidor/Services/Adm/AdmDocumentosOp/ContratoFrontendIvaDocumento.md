@@ -99,8 +99,13 @@ Se reservan los campos existentes de `ADM_RETENCIONES_OP` para lineas automatica
 | EXTRA3 | Descripcion IVA derivada de esa alicuota |
 | EXTRA4 | Marca `IVA_DOCUMENTO` |
 
-`TIPO_RETENCION_ID` sigue identificando la familia `CODIGO = IVA` utilizada por
-aprobacion y series. No representa por si solo la alicuota de una linea automatica.
+`TIPO_RETENCION_ID` identifica el tipo IVA correspondiente a la alicuota del
+documento dentro del titulo de retenciones, conservando `CODIGO = IVA` para
+aprobacion y series. No se conserva el tipo del 6% para un documento del 8%.
+El identificador del impuesto del documento y el del tipo de retencion son
+catalogos distintos: no se copia directamente el ID 672 al tipo de retencion.
+Se valida una unica opcion de catalogo por alicuota. Si falta IVA 8% en el titulo
+de retenciones, debe configurarse antes de generar o reparar la linea.
 El mapeo y el reporte OP toman la descripcion persistida cuando existe la marca.
 Las filas sin marca conservan su lectura legacy hasta reconciliarlas.
 Si una fila legacy ya tiene contenido en EXTRA1..4, se rechaza su conversion
@@ -117,3 +122,31 @@ retencion IVA con los importes reportados, preserva comprobantes y no hace COMMI
 El script no se ejecuto contra Oracle en esta entrega. Para otras OP pendientes,
 guardar el documento reconcilia sus grupos; historicos aprobados requieren
 diagnostico individual y no deben retornarse solo para corregir esta descripcion.
+
+## Fuente del reporte y correccion del registro existente
+
+La OP PDF consulta exclusivamente las filas de `ADM_RETENCIONES_OP` y su tipo
+asociado. No vuelve a consultar facturas para regenerar retenciones al imprimir.
+El documento es el origen de la escritura de esa tabla, no una sustitucion de
+la tabla en el reporte. La correccion de un registro existente debe persistir
+`TIPO_RETENCION_ID`, alicuota y descripcion correctos antes de emitir el PDF.
+
+La resolucion del tipo usa la alicuota explicita en la descripcion del catalogo
+(por ejemplo `I.V.A. (8%)`) o EXTRA1 numerico si no contiene porcentaje. Busca
+dentro del titulo usado por los conceptos IVA del estatus fiscal; rechaza
+configuracion ausente o duplicada. No elige la primera fila de familia IVA.
+
+Ejecutar primero `DIAG_OP_IVA_18409.sql` para comparar registro persistido,
+catalogo y version del procedimiento instalado. El script de reparacion tambien
+actualiza el identificador del tipo IVA, y aborta si falta el tipo 8% o esta duplicado.
+Ninguno de estos scripts se ha ejecutado contra el servidor en esta entrega.
+
+## Lectura de datos legacy con NULL
+
+La sincronizacion carga solo las columnas necesarias de tipos, conceptos y
+los documentos. No materializa auditoria ni relaciones opcionales del catalogo
+como enteros obligatorios. El payload frontend no requiere cambios por esta
+correccion. Para el caso OP 18410, total 500 e IVA 8% con retencion 100%, los
+importes esperados son base 462.96 e impuesto/retenido 37.04.
+La excepcion completa del alta se registra en el log con el codigo de OP;
+la confirmacion del alta en el ambiente Oracle sigue siendo necesaria.
