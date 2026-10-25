@@ -76,17 +76,21 @@ public class IvaDocumentoRetencionTests
     [Fact]
     public void TipoOchoAusenteNoSeSustituyePorSeis()
     {
-        Assert.Throws<InvalidOperationException>(() =>
+        var error = Assert.Throws<InvalidOperationException>(() =>
             IvaDocumentoRetencion.ResolverTipo(new[] { Tipo(101, "I.V.A. (6%)") }, 1, 8m));
+        Assert.Contains("No existe tipo de retencion IVA 8%", error.Message);
+        Assert.Contains("titulo 1", error.Message);
     }
 
     [Fact]
     public void TiposOchoDuplicadosDevuelvenError()
     {
-        Assert.Throws<InvalidOperationException>(() => IvaDocumentoRetencion.ResolverTipo(new[]
+        var error = Assert.Throws<InvalidOperationException>(() => IvaDocumentoRetencion.ResolverTipo(new[]
         {
             Tipo(101, "I.V.A. (8%)"), Tipo(102, "I.V.A. (8%)")
         }, 1, 8m));
+        Assert.Contains("101, 102", error.Message);
+        Assert.Contains("duplicados", error.Message);
     }
 
     private static ADM_DESCRIPTIVAS Tipo(int id, string descripcion) => new()

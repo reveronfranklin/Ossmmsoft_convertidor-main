@@ -75,7 +75,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     result.Message = "No puede Modificar, Orden de Pago";
                     return result;
                 }
-                var tipoRetencionId = await _admDescriptivaRepository.GetByCodigo(dto.TipoRetencionId);
+                var tipoRetencionId = await _admDescriptivaRepository.GetTipoFiscal(dto.TipoRetencionId);
                 if (tipoRetencionId == null)
                 {
                     result.Data = null;
@@ -230,7 +230,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 {
                     if (!tipoRetencionCache.TryGetValue(item.TIPO_RETENCION_ID, out var codigoTipoRetencion))
                     {
-                        var tipoRetencion = await _admDescriptivaRepository.GetByCodigo(item.TIPO_RETENCION_ID);
+                        var tipoRetencion = await _admDescriptivaRepository.GetTipoFiscal(item.TIPO_RETENCION_ID);
                         if (tipoRetencion == null)
                         {
                             _logger.LogWarning("AsignarComprobanteIvaOrdenPago: retencion {CodigoRetencionOp} con TipoRetencionId {TipoRetencionId} sin descriptiva configurada", item.CODIGO_RETENCION_OP, item.TIPO_RETENCION_ID);
@@ -519,7 +519,7 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                     return result;
                 }
                 
-                var tipoRetencion = await _admDescriptivaRepository.GetByCodigo(dto.TipoRetencionId);
+                var tipoRetencion = await _admDescriptivaRepository.GetTipoFiscal(dto.TipoRetencionId);
                 if (tipoRetencion == null)
                 {
                     result.Data = null;

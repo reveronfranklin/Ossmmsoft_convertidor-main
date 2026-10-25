@@ -19,7 +19,7 @@ namespace Convertidor.Tests.Services.Adm
         [Fact]
         public async Task MapRetencionAutomaticaMuestraIvaDelDocumentoEnLugarDelCatalogoGenerico()
         {
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(1)).ReturnsAsync(
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(1)).ReturnsAsync(
                 new ADM_DESCRIPTIVAS { DESCRIPCION_ID = 1, CODIGO = "IVA", DESCRIPCION = "I.V.A. (6%)" });
             var dto = await _service.MapRetencionesOpDto(new ADM_RETENCIONES_OP
             {
@@ -108,7 +108,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5, NUMERO_COMPROBANTE = "" };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync(DescriptivaIva());
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync(DescriptivaIva());
             _mockOrdenPagoRepository.Setup(x => x.GetCodigoOrdenPago(1))
                 .ReturnsAsync(new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1, NUMERO_COMPROBANTE = 999 });
             _mockRepository.Setup(x => x.UpdaNumeroComprobante(1, "999"))
@@ -128,7 +128,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5, NUMERO_COMPROBANTE = "777" };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync(DescriptivaIva());
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync(DescriptivaIva());
             _mockOrdenPagoRepository.Setup(x => x.GetCodigoOrdenPago(1))
                 .ReturnsAsync(new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1, NUMERO_COMPROBANTE = null });
             _mockOrdenPagoRepository.Setup(x => x.UpdateNumeroComprobante(1, 777))
@@ -148,7 +148,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5 };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync((ADM_DESCRIPTIVAS)null);
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync((ADM_DESCRIPTIVAS)null);
 
             var result = await _service.AsignarComprobanteIvaOrdenPago(1);
 
@@ -161,7 +161,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5 };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync(DescriptivaIva());
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync(DescriptivaIva());
             _mockOrdenPagoRepository.Setup(x => x.GetCodigoOrdenPago(1))
                 .ReturnsAsync(new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1 });
             _mockSisDescriptivaRepository.Setup(x => x.GetALL()).ReturnsAsync(new List<SIS_DESCRIPTIVAS>());
@@ -178,7 +178,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5 };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync(DescriptivaIva());
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync(DescriptivaIva());
             _mockOrdenPagoRepository.Setup(x => x.GetCodigoOrdenPago(1))
                 .ReturnsAsync(new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1 });
             _mockSisDescriptivaRepository.Setup(x => x.GetALL())
@@ -197,7 +197,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5 };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync(DescriptivaIva());
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync(DescriptivaIva());
             _mockOrdenPagoRepository.Setup(x => x.GetCodigoOrdenPago(1))
                 .ReturnsAsync(new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1 });
             _mockSisDescriptivaRepository.Setup(x => x.GetALL())
@@ -221,7 +221,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5 };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync(DescriptivaIva());
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync(DescriptivaIva());
             _mockOrdenPagoRepository.Setup(x => x.GetCodigoOrdenPago(1))
                 .ReturnsAsync(new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1 });
             _mockSisDescriptivaRepository.Setup(x => x.GetALL())
@@ -240,7 +240,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5 };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync(DescriptivaIva());
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync(DescriptivaIva());
             _mockOrdenPagoRepository.Setup(x => x.GetCodigoOrdenPago(1))
                 .ReturnsAsync(new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1 });
             _mockSisDescriptivaRepository.Setup(x => x.GetALL())
@@ -264,7 +264,7 @@ namespace Convertidor.Tests.Services.Adm
         {
             var retencion = new ADM_RETENCIONES_OP { CODIGO_RETENCION_OP = 1, CODIGO_ORDEN_PAGO = 1, TIPO_RETENCION_ID = 5 };
             _mockRepository.Setup(x => x.GetByOrdenPago(1)).ReturnsAsync(new List<ADM_RETENCIONES_OP> { retencion });
-            _mockDescriptivaRepository.Setup(x => x.GetByCodigo(5)).ReturnsAsync(DescriptivaIva());
+            _mockDescriptivaRepository.Setup(x => x.GetTipoFiscal(5)).ReturnsAsync(DescriptivaIva());
             _mockOrdenPagoRepository.Setup(x => x.GetCodigoOrdenPago(1))
                 .ReturnsAsync(new ADM_ORDEN_PAGO { CODIGO_ORDEN_PAGO = 1 });
             _mockSisDescriptivaRepository.Setup(x => x.GetALL())

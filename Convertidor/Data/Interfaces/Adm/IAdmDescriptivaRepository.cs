@@ -10,6 +10,7 @@ namespace Convertidor.Data.Interfaces.Adm
         Task<string> GetDescripcion(int descripcionId);
         Task<List<ADM_DESCRIPTIVAS>> GetAll();
         Task<ADM_DESCRIPTIVAS> GetByCodigo(int descripcionId);
+        Task<ADM_DESCRIPTIVAS> GetTipoFiscal(int descripcionId);
         Task<ResultDto<ADM_DESCRIPTIVAS>> Add(ADM_DESCRIPTIVAS entity);
         Task<ResultDto<ADM_DESCRIPTIVAS>> Update(ADM_DESCRIPTIVAS entity);
         Task<string> Delete(int descripcionId);

@@ -23,8 +23,10 @@ public static class IvaDocumentoRetencion
     {
         var tipos = catalogo.Where(x => x.CODIGO == "IVA" && x.TITULO_ID == tituloId)
             .Where(x => AlicuotaCatalogo(x) == alicuota).ToList();
-        if (tipos.Count != 1)
-            throw new InvalidOperationException($"Configuracion de tipo de retencion IVA {alicuota}% ausente o ambigua");
+        if (tipos.Count == 0)
+            throw new InvalidOperationException($"No existe tipo de retencion IVA {alicuota}% en el titulo {tituloId}. Complete la configuracion de retenciones IVA");
+        if (tipos.Count > 1)
+            throw new InvalidOperationException($"Existen varios tipos de retencion IVA {alicuota}% en el titulo {tituloId}: {string.Join(", ", tipos.Select(x => x.DESCRIPCION_ID))}. Revise los duplicados");
         return tipos[0];
     }
 

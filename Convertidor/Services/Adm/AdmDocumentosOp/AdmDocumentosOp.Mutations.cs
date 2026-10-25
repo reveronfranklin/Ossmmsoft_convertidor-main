@@ -51,10 +51,9 @@ public partial class AdmDocumentosOpService
                 throw new InvalidOperationException($"Configuracion de concepto de retencion ausente o ambigua en documento {documento.CODIGO_DOCUMENTO_OP}");
             var tipo = IvaDocumentoRetencion.ResolverTipo(tiposIva, titulos[0], alicuota);
             var conceptosDelTipo = conceptos.Where(x => x.TIPO_RETENCION_ID == tipo.DESCRIPCION_ID).ToList();
-            var candidatos = conceptosDelTipo.Count > 0 ? conceptosDelTipo : conceptos;
-            if (candidatos.Count != 1)
-                throw new InvalidOperationException($"Concepto de retencion IVA ambiguo en documento {documento.CODIGO_DOCUMENTO_OP}");
-            entradas.Add(new IvaDocumentoRetencion.Documento(documento, candidatos[0].CODIGO_RETENCION,
+            if (conceptosDelTipo.Count != 1)
+                throw new InvalidOperationException($"Concepto IVA {alicuota}% para estatus fiscal {documento.ESTATUS_FISCO_ID} ausente o duplicado. Complete la configuracion de retenciones IVA");
+            entradas.Add(new IvaDocumentoRetencion.Documento(documento, conceptosDelTipo[0].CODIGO_RETENCION,
                 porcentaje, alicuota, tipo.DESCRIPCION_ID));
         }
 

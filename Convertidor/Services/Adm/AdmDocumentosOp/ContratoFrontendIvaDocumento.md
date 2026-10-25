@@ -150,3 +150,34 @@ correccion. Para el caso OP 18410, total 500 e IVA 8% con retencion 100%, los
 importes esperados son base 462.96 e impuesto/retenido 37.04.
 La excepcion completa del alta se registra en el log con el codigo de OP;
 la confirmacion del alta en el ambiente Oracle sigue siendo necesaria.
+
+## Instalacion de configuracion IVA 8% / retencion 100%
+
+Ante el mensaje de tipo IVA 8% ausente, ejecutar `CONFIG_RET_IVA_8.sql` de esta
+carpeta en la base ADM. El script valida impuesto 672 y estatus 664, identifica
+el titulo de retenciones por la configuracion IVA existente y crea el tipo 8%
+y su concepto 100% si faltan. Los nuevos registros se basan en la plantilla
+unica existente; conserva padres, persona, vigencia y empresa de configuracion.
+Puede indicarse `v_usuario` para registrar el usuario aplicativo del operador.
+Es idempotente y rechaza duplicados o plantillas ambiguas en lugar de elegirlas.
+No se modifica el tipo del 6% ni los datos de documentos u ordenes.
+
+Orden de instalacion:
+
+1. Ejecutar el script, revisar la consulta final y confirmar con COMMIT.
+2. Desplegar el backend actualizado y el SP del reporte OP si estan pendientes.
+3. Reintentar el alta de la factura en OP 18410: total 500, base 462.96,
+   impuesto/retenido 37.04, tipo y concepto de retencion IVA 8%.
+4. Para OP 18409 ejecutar su script de reparacion actualizado, que tambien
+   corrige `CODIGO_RETENCION` al concepto correspondiente al tipo IVA 8%.
+5. Verificar tabla, API de retenciones y PDF OP. El reporte lee la tabla de OP.
+
+La generacion exige que tanto el tipo como el concepto pertenezcan al IVA del
+documento. No usa un concepto del 6% como sustituto del 8%. Los mensajes nuevos
+distinguen tipo ausente de tipos duplicados e incluyen titulo e identificadores.
+Los consumidores fiscales de tipos leen solo sus campos necesarios para admitir
+valores NULL de auditoria o relacion padre en los catalogos legacy.
+
+El script toma bloqueos de catalogos para asignar IDs con el esquema MAX+1
+existente; COMMIT o ROLLBACK libera esos bloqueos al finalizar la instalacion.
+No se ha ejecutado contra Oracle en esta entrega.

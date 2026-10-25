@@ -140,6 +140,20 @@ namespace Convertidor.Data.Repository.Adm
         }
 
 
+        // Los consumidores fiscales no requieren auditoria ni FK legacy anulables.
+        public async Task<ADM_DESCRIPTIVAS> GetTipoFiscal(int descripcionId)
+        {
+            return await _context.ADM_DESCRIPTIVAS.Where(x => x.DESCRIPCION_ID == descripcionId)
+                .Select(x => new ADM_DESCRIPTIVAS
+                {
+                    DESCRIPCION_ID = x.DESCRIPCION_ID,
+                    TITULO_ID = (int?)x.TITULO_ID ?? 0,
+                    CODIGO = x.CODIGO,
+                    DESCRIPCION = x.DESCRIPCION,
+                    EXTRA1 = x.EXTRA1
+                }).SingleOrDefaultAsync();
+        }
+
         public async Task<ADM_DESCRIPTIVAS> GetByCodigo(int descripcionId)
         {
             try
