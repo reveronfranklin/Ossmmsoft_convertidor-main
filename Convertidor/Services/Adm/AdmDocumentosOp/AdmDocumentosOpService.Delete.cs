@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Services.Adm.AdmDocumentosOp;
@@ -10,6 +11,7 @@ public partial class AdmDocumentosOpService
             ResultDto<AdmDocumentosOpDeleteDto> result = new ResultDto<AdmDocumentosOpDeleteDto>(null);
             try
             {
+                await using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
                 
           
                 
@@ -38,8 +40,18 @@ public partial class AdmDocumentosOpService
                     return result;
                 }
                 var resultDeleted =_admImpuestosDocumentosOpRepository.DeleteByDocumento(codigoDocumentoOp.CODIGO_DOCUMENTO_OP);
+                if (!string.IsNullOrEmpty(resultDeleted))
+                {
+                    result.Message = resultDeleted;
+                    return result;
+                }
 
                var deleted = await _repository.Delete(dto.CodigoDocumentoOp);
+               if (!string.IsNullOrEmpty(deleted))
+               {
+                   result.Message = deleted;
+                   return result;
+               }
                await ReconstruirRetenciones(codigoDocumentoOp.CODIGO_ORDEN_PAGO);
                //Armamos filter para reconstruir Beneficiarios OP
                 AdmOrdenPagoBeneficiarioFlterDto filter = new AdmOrdenPagoBeneficiarioFlterDto();
@@ -65,6 +77,7 @@ public partial class AdmDocumentosOpService
                     
                     result.CantidadRegistros = cantidadDocumentos;
                     result.Data = dto;
+                    await transaction.CommitAsync();
                     result.IsValid = true;
                     result.Message = deleted;
 

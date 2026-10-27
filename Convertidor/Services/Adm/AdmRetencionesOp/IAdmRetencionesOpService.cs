@@ -1,4 +1,4 @@
-﻿
+
 using Convertidor.Data.Entities.Adm;
 using Convertidor.Dtos.Adm;
 
@@ -6,6 +6,8 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
 {
     public interface IAdmRetencionesOpService
     {
+        Task ReplicaRetencionesEnAdmBeneficiariosOp(int codigoOrdenPago);
+        Task ReplicaRetencionesDocumentosEnAdmBeneficiariosOp(int codigoOrdenPago);
         Task<ResultDto<List<AdmRetencionesOpResponseDto>>> GetAll();
         Task<ResultDto<List<AdmRetencionesOpResponseDto>>> GetByOrdenPago(AdmRetencionesFilterDto filter);
         Task<ResultDto<AdmRetencionesOpResponseDto>> Update(AdmRetencionesOpUpdateDto dto);

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Convertidor.Dtos.Adm;
 
 namespace Convertidor.Services.Adm.AdmDocumentosOp;
@@ -9,6 +10,7 @@ public partial class AdmDocumentosOpService
             ResultDto<AdmDocumentosOpResponseDto> result = new ResultDto<AdmDocumentosOpResponseDto>(null);
             try
             {
+                await using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
                 var conectado = await _sisUsuarioRepository.GetConectado();
 
                 var codigoDocumentoOp = await _repository.GetCodigoDocumentoOp(dto.CodigoDocumentoOp);
@@ -196,8 +198,8 @@ public partial class AdmDocumentosOpService
                 
                 //buscar la descriptiva y se toma EXTRA1 EL PORCENTAJE DE RERENCION IVA
                 //SI EL PORCENTAJE ES MAYOR A CERO SE REALIZA EL CALCULO DE BASE_IMPONIBLE Y MONTO_IMPUESTO
-                var porcentajeRetencion = decimal.Parse(estatusFisco.EXTRA1);
-                var porcentajeIva = decimal.Parse(tipoImpuesto.EXTRA1);
+                var porcentajeRetencion = IvaDocumentoRetencion.LeerPorcentaje(estatusFisco.EXTRA1);
+                var porcentajeIva = IvaDocumentoRetencion.LeerPorcentaje(tipoImpuesto.EXTRA1);
                 
                 
                 
@@ -217,7 +219,12 @@ public partial class AdmDocumentosOpService
                 codigoDocumentoOp.USUARIO_UPD = conectado.Usuario;
                 codigoDocumentoOp.FECHA_UPD = DateTime.Now;
 
-                await _repository.Update(codigoDocumentoOp);
+                var updated = await _repository.Update(codigoDocumentoOp);
+                if (!updated.IsValid)
+                {
+                    result.Message = updated.Message;
+                    return result;
+                }
                 var documentos = await _repository.GetByCodigoOrdenPago(dto.CodigoOrdenPago);
                 var cantidadDocumentos = 0;
                 if (documentos != null && documentos.Count() > 0)
@@ -233,6 +240,7 @@ public partial class AdmDocumentosOpService
                 var resultDto = await MapDocumentosOpDto(codigoDocumentoOp);
                 result.CantidadRegistros = cantidadDocumentos;
                 result.Data = resultDto;
+                await transaction.CommitAsync();
                 result.IsValid = true;
                 result.Message = "";
             }

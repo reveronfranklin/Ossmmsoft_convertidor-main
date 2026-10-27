@@ -18,11 +18,14 @@ namespace Convertidor.Services.Adm.AdmRetencionesOp
                 itemResult.CodigoOrdenPago = dtos.CODIGO_ORDEN_PAGO;
                 itemResult.TipoRetencionId = dtos.TIPO_RETENCION_ID;
                 itemResult.DescripcionTipoRetencion = "";
-                var descriptivaTipoRetencion = await _admDescriptivaRepository.GetByCodigo(dtos.TIPO_RETENCION_ID);
+                var descriptivaTipoRetencion = await _admDescriptivaRepository.GetTipoFiscal(dtos.TIPO_RETENCION_ID);
                 if (descriptivaTipoRetencion != null)
                 {
                     itemResult.DescripcionTipoRetencion = descriptivaTipoRetencion.DESCRIPCION;
                 }
+
+                if (dtos.EXTRA4 == Convertidor.Services.Adm.AdmDocumentosOp.IvaDocumentoRetencion.Marca)
+                    itemResult.DescripcionTipoRetencion = dtos.EXTRA3 ?? string.Empty;
 
                 if (dtos.CODIGO_RETENCION == null)
                 {
