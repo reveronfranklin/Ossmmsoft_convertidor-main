@@ -2,14 +2,13 @@ using System.Globalization;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using Image = QuestPDF.Infrastructure.Image;
 
 namespace Convertidor.Services.Rh.Report.Example
 {
     public class ReciboPagoDocument : IDocument
     {
 
-        public static Image LogoImage { get; } = Image.FromFile("logo.png");
+
 
         
 
@@ -127,7 +126,7 @@ namespace Convertidor.Services.Rh.Report.Example
 
                         void ComposeContent(IContainer container)
                         {
-                            container.PaddingVertical(40).Column(async column =>
+                            container.PaddingVertical(40).Column(column =>
                             {
 
                                 var listaDepartamento = from s in ModelRecibos
@@ -146,33 +145,26 @@ namespace Convertidor.Services.Rh.Report.Example
                                 int contador = 0;
                                 foreach (var itemDepartamento in listaDepartamento)
                                 {
+                                    if (contador > 0) column.Item().PageBreak();
+                                    column.Item().AlignCenter().ShowOnce()
+                                        .Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
+                                    column.Item().PageBreak();
+                                    var recibosEnDepartamento = 0;
 
 
-                                    if (contador % 2 != 0)
-                                    {
-
-                                        column.Item().PageBreak();
-                                        column.Item().AlignCenter().ShowOnce().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
-
-                                        column.Item().PageBreak();
-
-                                    }
-                                    else 
-                                    {
-                                        column.Item().AlignCenter().ShowOnce().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
-                                        column.Item().PageBreak();
-                                    }
 
                                     var listaPersona = from s in ModelRecibos.Where(x=> x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat)
                                                        group s by new
                                                        {
                                                            Cedula = s.Cedula,
+                                                           CodigoPersona = s.CodigoPersona,
 
 
                                                        } into g
                                                        select new
                                                        {
                                                            Cedula = g.Key.Cedula,
+                                                           CodigoPersona = g.Key.CodigoPersona,
 
 
                                                        };
@@ -182,9 +174,12 @@ namespace Convertidor.Services.Rh.Report.Example
 
                                     foreach (var itemPersona in listaPersona)
                                     {
+                                        if (recibosEnDepartamento > 0 && recibosEnDepartamento % 2 == 0)
+                                            column.Item().PageBreak();
+                                        recibosEnDepartamento++;
                                         contador++;
                                       
-                                            var persona = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).FirstOrDefault();
+                                            var persona = ModelRecibos.Where(x => x.CodigoPersona == itemPersona.CodigoPersona && x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat).FirstOrDefault();
                                           
                                             column.Item().Row(row =>
                                             {
@@ -192,7 +187,7 @@ namespace Convertidor.Services.Rh.Report.Example
 
                                             });
 
-                                            var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
+                                            var personaRecibo = ModelRecibos.Where(x => x.CodigoPersona == itemPersona.CodigoPersona && x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat).ToList();
                                             column.Item().Row(row =>
                                             {
                                                 row.RelativeItem().Component(new ReciboPagoComponent("", personaRecibo, contador));
@@ -291,9 +286,10 @@ namespace Convertidor.Services.Rh.Report.Example
                                                group s by new
                                                {
                                                    Cedula = s.Cedula,
+                                                           CodigoPersona = s.CodigoPersona,
                                                    Nombre = s.Nombre,
                                                    Cargo = s.DenominacionCargo,
-                                                   CodigoPersona = s.CodigoPersona,
+
                                                    FechaIngreso = s.FechaIngreso,
                                                    Banco = s.Banco,
                                                    NoCuenta = s.NoCuenta
@@ -302,9 +298,10 @@ namespace Convertidor.Services.Rh.Report.Example
                                                select new
                                                {
                                                    Cedula = g.Key.Cedula,
+                                                           CodigoPersona = g.Key.CodigoPersona,
                                                    Nombre = g.Key.Nombre,
                                                    Cargo = g.Key.Cargo,
-                                                   CodigoPersona = g.Key.CodigoPersona,
+
                                                    FechaIngreso = g.Key.FechaIngreso,
                                                    Banco = g.Key.Banco,
                                                    NoCuenta = g.Key.NoCuenta,
@@ -342,7 +339,7 @@ namespace Convertidor.Services.Rh.Report.Example
                                 foreach (var itemPersona in listaPersona)
                                 {
 
-                                    var modelReciboFiltered = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
+                                    var modelReciboFiltered = ModelRecibos.Where(x => x.CodigoPersona == itemPersona.CodigoPersona).ToList();
                                     table.Cell().ColumnSpan(6).PaddingTop(5).Text($"{itemPersona.Cedula} {itemPersona.Nombre}").FontSize(7);
                                     foreach (var item in modelReciboFiltered)
                                     {
@@ -443,7 +440,7 @@ namespace Convertidor.Services.Rh.Report.Example
 
                         void ComposeContent(IContainer container)
                         {
-                            container.PaddingVertical(40).Column(async column =>
+                            container.PaddingVertical(40).Column(column =>
                             {
 
                                 var listaDepartamento = from s in ModelRecibos
@@ -462,33 +459,26 @@ namespace Convertidor.Services.Rh.Report.Example
                                 int contador = 0;
                                 foreach (var itemDepartamento in listaDepartamento)
                                 {
+                                    if (contador > 0) column.Item().PageBreak();
+                                    column.Item().AlignCenter().ShowOnce()
+                                        .Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
+                                    column.Item().PageBreak();
+                                    var recibosEnDepartamento = 0;
 
 
-                                    if (contador % 2 != 0)
-                                    {
-
-                                        column.Item().PageBreak();
-                                        column.Item().AlignCenter().ShowOnce().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
-
-                                        column.Item().PageBreak();
-
-                                    }
-                                    else
-                                    {
-                                        column.Item().AlignCenter().ShowOnce().Text($"DEPARTAMENTO : {itemDepartamento.CodigoIcpConcat}").SemiBold();
-                                        column.Item().PageBreak();
-                                    }
 
                                     var listaPersona = from s in ModelRecibos.Where(x => x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat)
                                                        group s by new
                                                        {
                                                            Cedula = s.Cedula,
+                                                           CodigoPersona = s.CodigoPersona,
 
 
                                                        } into g
                                                        select new
                                                        {
                                                            Cedula = g.Key.Cedula,
+                                                           CodigoPersona = g.Key.CodigoPersona,
 
 
                                                        };
@@ -498,9 +488,12 @@ namespace Convertidor.Services.Rh.Report.Example
 
                                     foreach (var itemPersona in listaPersona)
                                     {
+                                        if (recibosEnDepartamento > 0 && recibosEnDepartamento % 2 == 0)
+                                            column.Item().PageBreak();
+                                        recibosEnDepartamento++;
                                         contador++;
 
-                                        var persona = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).FirstOrDefault();
+                                        var persona = ModelRecibos.Where(x => x.CodigoPersona == itemPersona.CodigoPersona && x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat).FirstOrDefault();
 
                                         column.Item().Row(row =>
                                         {
@@ -508,7 +501,7 @@ namespace Convertidor.Services.Rh.Report.Example
 
                                         });
 
-                                        var personaRecibo = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
+                                        var personaRecibo = ModelRecibos.Where(x => x.CodigoPersona == itemPersona.CodigoPersona && x.CodigoIcpConcat == itemDepartamento.CodigoIcpConcat).ToList();
                                         column.Item().Row(row =>
                                         {
                                             row.RelativeItem().Component(new ReciboPagoComponent("", personaRecibo, contador));
@@ -607,9 +600,10 @@ namespace Convertidor.Services.Rh.Report.Example
                                                group s by new
                                                {
                                                    Cedula = s.Cedula,
+                                                           CodigoPersona = s.CodigoPersona,
                                                    Nombre = s.Nombre,
                                                    Cargo = s.DenominacionCargo,
-                                                   CodigoPersona = s.CodigoPersona,
+
                                                    FechaIngreso = s.FechaIngreso,
                                                    Banco = s.Banco,
                                                    NoCuenta = s.NoCuenta
@@ -618,9 +612,10 @@ namespace Convertidor.Services.Rh.Report.Example
                                                select new
                                                {
                                                    Cedula = g.Key.Cedula,
+                                                           CodigoPersona = g.Key.CodigoPersona,
                                                    Nombre = g.Key.Nombre,
                                                    Cargo = g.Key.Cargo,
-                                                   CodigoPersona = g.Key.CodigoPersona,
+
                                                    FechaIngreso = g.Key.FechaIngreso,
                                                    Banco = g.Key.Banco,
                                                    NoCuenta = g.Key.NoCuenta,
@@ -658,7 +653,7 @@ namespace Convertidor.Services.Rh.Report.Example
                                 foreach (var itemPersona in listaPersona)
                                 {
 
-                                    var modelReciboFiltered = ModelRecibos.Where(x => x.Cedula == itemPersona.Cedula).ToList();
+                                    var modelReciboFiltered = ModelRecibos.Where(x => x.CodigoPersona == itemPersona.CodigoPersona).ToList();
                                     table.Cell().ColumnSpan(6).PaddingTop(5).Text($"{itemPersona.Cedula} {itemPersona.Nombre}").FontSize(7);
                                     foreach (var item in modelReciboFiltered)
                                     {

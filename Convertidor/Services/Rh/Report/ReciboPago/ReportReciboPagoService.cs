@@ -5,83 +5,85 @@ namespace Convertidor.Services.Rh.Report.Example;
 public class ReportReciboPagoService : IReportReciboPagoService
 {
     private readonly IConfiguration _configuration;
-    private readonly IRhReporteNominaHistoricoService _rhReporteNominaHistoricoService;
-    private readonly IRhTipoNominaService _rhTipoNominaService;
-    private readonly IRhReporteNominaTemporalService _serviceTemporal;
-
+    private readonly IRhReporteNominaHistoricoService _historico;
+    private readonly IRhTipoNominaService _tiposNomina;
+    private readonly IRhReporteNominaTemporalService _temporal;
+    private readonly IWebHostEnvironment _environment;
+    private readonly ILogger<ReportReciboPagoService> _logger;
 
     public ReportReciboPagoService(IConfiguration configuration,
-                                        IRhReporteNominaHistoricoService rhReporteNominaHistoricoService,
-                                        IRhTipoNominaService rhTipoNominaService,
-                                        IRhReporteNominaTemporalService serviceTemporal)
+        IRhReporteNominaHistoricoService historico, IRhTipoNominaService tiposNomina,
+        IRhReporteNominaTemporalService temporal, IWebHostEnvironment environment,
+        ILogger<ReportReciboPagoService> logger)
     {
         _configuration = configuration;
-        _rhReporteNominaHistoricoService = rhReporteNominaHistoricoService;
-        _rhTipoNominaService = rhTipoNominaService;
-        _serviceTemporal = serviceTemporal;
+        _historico = historico;
+        _tiposNomina = tiposNomina;
+        _temporal = temporal;
+        _environment = environment;
+        _logger = logger;
     }
-    
-    
-    
 
-    public async Task GeneratePdf(FilterRepoteNomina filter)
+    public async Task<ResultDto<byte[]>> GeneratePdf(FilterRepoteNomina filter)
     {
-        var settings = _configuration.GetSection("Settings").Get<Settings>();
+        ResultDto<byte[]> Fail(string message) => new(null) { IsValid = false, Message = message };
+        if (filter.CodigoTipoNomina <= 0 || filter.CodigoPeriodo <= 0
+            || filter.CodigoIcp < 0 || filter.CodigoPersona < 0)
+            return Fail("Nomina, periodo o filtros de recibo invalidos.");
+        // No existe un contrato productivo de destinatarios en este flujo.
+        if (filter.SendEmail)
+            return Fail("El envio por correo no esta habilitado para este reporte.");
+        if (!int.TryParse(_configuration["settings:EmpresaConfig"], out var empresa) || empresa <= 0)
+            return Fail("EmpresaConfig debe ser un numero valido.");
 
-        var pathLogo = @settings.BmFiles + "LogoIzquierda.jpeg";
-        var filePath = $"{@settings.ExcelFiles}/ReporteReciboPago-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
-        ResultDto < List < RhReporteNominaResponseDto >> modelRecibos =
-            new ResultDto<List<RhReporteNominaResponseDto>>(null);
-
-        RhTiposNominaFilterDto filterTipoNomina = new RhTiposNominaFilterDto();
-        filterTipoNomina.CodigoTipoNomina = filter.CodigoTipoNomina;
-        var tipoNomina = await _rhTipoNominaService.GetByCodigo(filterTipoNomina);
-            
-        var temporal = await _serviceTemporal.GetByPeriodoTipoNomina(filter);
-        if (temporal.Data!=null && temporal.Data.Count > 0)
+        try
         {
-            if (filter.CodigoIcp!= null && filter.CodigoIcp > 0)
+            // Copia local: generar no modifica los filtros del llamador.
+            var query = new FilterRepoteNomina {
+                CodigoTipoNomina = filter.CodigoTipoNomina, CodigoPeriodo = filter.CodigoPeriodo,
+                CodigoIcp = filter.CodigoIcp, CodigoPersona = filter.CodigoPersona, SendEmail = false
+            };
+            var temporal = await _temporal.GetByPeriodoTipoNomina(query);
+            if (temporal == null || !temporal.IsValid)
+                return Fail("No se pudo consultar la nomina temporal para el recibo.");
+            List<RhReporteNominaResponseDto> Scope(List<RhReporteNominaResponseDto> rows) =>
+                (rows ?? new()).Where(x => x.CodigoEmpresa == empresa
+                    && x.CodigoPeriodo == filter.CodigoPeriodo
+                    && x.CodigoTipoNomina == filter.CodigoTipoNomina).ToList();
+            var rows = Scope(temporal.Data);
+            var isTemporal = rows.Count > 0;
+            if (!isTemporal)
             {
-                modelRecibos.Data = temporal.Data.Where(x => x.CodigoIcp == filter.CodigoIcp).ToList();
-                filter.ImprimirMarcaAgua = true;
+                var historico = await _historico.GetByPeriodoTipoNomina(query);
+                if (historico == null || !historico.IsValid)
+                    return Fail("No se pudo consultar la nomina historica para el recibo.");
+                rows = Scope(historico.Data);
             }
-            else
-            {
-                modelRecibos.Data = temporal.Data;
-                filter.ImprimirMarcaAgua = true;
-            }
-            if (filter.CodigoPersona != null && filter.CodigoPersona > 0)
-            {
-                modelRecibos.Data= temporal.Data.Where(x => x.CodigoIcp == filter.CodigoIcp && x.CodigoPersona==filter.CodigoPersona).ToList();
-                filter.ImprimirMarcaAgua = false;   
-            }
-            modelRecibos = temporal;
+            if (filter.CodigoIcp > 0) rows = rows.Where(x => x.CodigoIcp == filter.CodigoIcp).ToList();
+            if (filter.CodigoPersona > 0) rows = rows.Where(x => x.CodigoPersona == filter.CodigoPersona).ToList();
+            if (rows.Count == 0) return Fail("No hay recibos para los filtros seleccionados.");
+
+            var tipoNomina = await _tiposNomina.GetByCodigo(new RhTiposNominaFilterDto {
+                CodigoTipoNomina = filter.CodigoTipoNomina
+            });
+            if (tipoNomina == null) return Fail("No se pudo consultar el tipo de nomina.");
+            var logo = _configuration["settings:RhReciboLogo"];
+            if (string.IsNullOrWhiteSpace(logo))
+                logo = Path.Combine(_configuration["settings:BmFiles"] ?? "", "LogoIzquierda.jpeg");
+            if (!Path.IsPathRooted(logo)) logo = Path.Combine(_environment.ContentRootPath, logo);
+            if (!File.Exists(logo)) return Fail("No se encontro el logo del recibo. Verifique la configuracion del servidor.");
+
+            // Se conserva la marca provisional de los lotes temporales del generador legacy.
+            var document = new ReciboPagoDocument(rows, logo, tipoNomina.Descripcion,
+                isTemporal && !(filter.CodigoPersona > 0));
+            var pdf = document.GeneratePdf();
+            return new ResultDto<byte[]>(pdf) { IsValid = true, Message = "success" };
         }
-        else
+        catch (Exception ex)
         {
-            var historico = await _rhReporteNominaHistoricoService.GetByPeriodoTipoNomina(filter);
-            if (filter.CodigoIcp!= null && filter.CodigoIcp > 0)
-            {
-                modelRecibos.Data= historico.Data.Where(x => x.CodigoIcp == filter.CodigoIcp).ToList();
-                filter.ImprimirMarcaAgua = false;
-            }
-            else
-            {
-                modelRecibos.Data = historico.Data;
-                filter.ImprimirMarcaAgua = false;
-            }
-
-            if (filter.CodigoPersona != null && filter.CodigoPersona > 0)
-            {
-                modelRecibos.Data= historico.Data.Where(x => x.CodigoIcp == filter.CodigoIcp && x.CodigoPersona==filter.CodigoPersona).ToList();
-                filter.ImprimirMarcaAgua = false;   
-            }
-
+            _logger.LogError(ex, "Error al generar recibo PDF. Nomina {Nomina}, periodo {Periodo}, persona {Persona}",
+                filter.CodigoTipoNomina, filter.CodigoPeriodo, filter.CodigoPersona);
+            return Fail("No se pudo generar el PDF del recibo. Revise los registros del servidor.");
         }
-        var document = new ReciboPagoDocument(modelRecibos.Data, pathLogo, tipoNomina.Descripcion,filter.ImprimirMarcaAgua);
-        document.GeneratePdf(filePath);
-
-           
-        
     }
 }

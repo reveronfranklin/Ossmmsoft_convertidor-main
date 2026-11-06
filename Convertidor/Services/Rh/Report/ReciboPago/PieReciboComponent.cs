@@ -44,13 +44,7 @@ namespace Convertidor.Services.Rh.Report.Example;
 
 
 
-            if (_contador % 2 == 0)
-            {
-                table.Cell().Column(columna =>
-                {
-                  columna.Item().PageBreak();
-                });
-            }
+
 
         });
 

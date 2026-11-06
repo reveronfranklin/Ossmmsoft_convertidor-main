@@ -181,3 +181,50 @@ valores NULL de auditoria o relacion padre en los catalogos legacy.
 El script toma bloqueos de catalogos para asignar IDs con el esquema MAX+1
 existente; COMMIT o ROLLBACK libera esos bloqueos al finalizar la instalacion.
 No se ha ejecutado contra Oracle en esta entrega.
+
+## Script general de todas las alicuotas IVA
+
+`CONFIG_RET_IVA_TODOS.sql` reemplaza la instalacion especifica de 8% cuando se
+requiere completar todo el catalogo. No usa una lista fija de porcentajes:
+lee las filas IVA de la familia del impuesto de referencia y su alicuota EXTRA1.
+Reutiliza una unica configuracion por alicuota y crea los tipos faltantes.
+Para cada alicuota completa los conceptos de los estatus fiscales positivos
+que ya tienen una plantilla IVA en la familia fiscal seleccionada.
+Ejemplos posibles: IVA 6%, 8%, 16% y retenciones 75%/100%, si estan configurados.
+Una retencion fiscal 0% no genera concepto nuevo porque no genera linea retenida.
+Una alicuota IVA 0% del catalogo si se procesa; no equivale a retencion 0%.
+
+Parametros al inicio:
+
+- `v_imp_ref = 672`: identifica el TITULO_ID de impuestos; no limita a IVA 8%.
+- `v_fis_ref = 664`: identifica el TITULO_ID fiscal; no limita a retencion 100%.
+- `v_usuario = NULL`: opcional; utiliza usuario de la plantilla si no se indica.
+- `v_tipo_tpl = NULL`: opcional; con NULL exige equivalencia de las plantillas
+  de cada estatus entre tipos. Si hay configuraciones distintas, revisar y
+  elegir explicitamente el tipo plantilla correcto antes de ejecutar de nuevo.
+
+Las plantillas se comparan en concepto, persona, base, monto, vigencia, campos
+EXTRA2/3 y empresa; tambien se valida su porcentaje frente al estatus fiscal.
+Los conceptos destino existentes deben ser compatibles. No se corrigen ni
+se eliminan automaticamente las diferencias o duplicados encontrados.
+El proceso revierte todos sus cambios al primer error.
+
+Ejecutar como script en SQL Developer, SQLcl o SQL*Plus, revisar salida y consulta
+final, y ejecutar COMMIT para confirmar o ROLLBACK para deshacer. El script toma
+bloqueos en ambos catalogos para asignar IDs mediante el esquema MAX+1 actual;
+los libera al confirmar o revertir. Puede repetirse para nuevas alicuotas agregadas
+al catalogo de impuestos. No modifica OP, documentos, comprobantes ni historicos.
+No crea alicuotas ni estatus que no esten definidos en el catalogo de origen.
+
+Se verificaron estaticamente los identificadores Oracle (maximo 30 caracteres).
+La ejecucion e idempotencia con datos reales siguen pendientes de validar en Oracle.
+
+### Valores legacy negativos en el catalogo
+
+La version actual de `CONFIG_RET_IVA_TODOS.sql` omite y registra por ID/EXTRA1
+los valores negativos (por ejemplo `-12`), superiores a 100, vacios o no numericos.
+No usa ABS, no transforma `-12` en IVA 12% ni modifica el registro original.
+La alicuota positiva 12% se procesa si esta definida como tal en el catalogo.
+La salida DBMS_OUTPUT muestra las omisiones; revisar esos registros por separado.
+Se mantienen los errores para duplicados, plantillas incompatibles o ausencia
+de cualquier combinacion aplicable, con rollback del bloque ante esos errores.

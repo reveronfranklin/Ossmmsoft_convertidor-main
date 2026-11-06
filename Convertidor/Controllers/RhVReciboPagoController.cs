@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 ﻿using Convertidor.Services.Rh.Report.Example;
 using Convertidor.Services.Sis;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +17,14 @@ namespace Convertidor.Controllers
 
         private readonly IRhVReciboPagoService _service;
         private readonly IReportReciboPagoService _reciboPagoService;
-        private readonly IEmailServices _emailService;
 
-        public RhVReciboPagoController(IRhVReciboPagoService service,IReportReciboPagoService reciboPagoService,IEmailServices emailService)
+
+        public RhVReciboPagoController(IRhVReciboPagoService service,IReportReciboPagoService reciboPagoService)
         {
 
             _service = service;
             _reciboPagoService = reciboPagoService;
-            _emailService = emailService;
+
         }
 
 
@@ -51,25 +52,16 @@ namespace Convertidor.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> GeneratePdf(FilterRepoteNomina filter)
         {
-            var filePath = $"ReporteReciboPago-{filter.CodigoTipoNomina}-{filter.CodigoPeriodo}.pdf";
-            await _reciboPagoService.GeneratePdf(filter);
-
-            if (filter.SendEmail)
-            {
-                EmailDto request = new EmailDto();
-                request.FilePath = filePath;
-                //request.To = "jhonny.cordoba@gmail.com";
-                request.To = "reveron.franklin@moore.com.ve.com";
-                request.Subject="Probando envio Recibo de pago";
-              
-                request.Content = "Esto es una prueba de envio del recibo de pago";
-                _emailService.SendEmail(request);
-            }
-            return Ok(filePath);
+            var result = await _reciboPagoService.GeneratePdf(filter);
+            if (!result.IsValid) return Ok(result);
+            Response.Headers["Cache-Control"] = "no-store";
+            Response.Headers["Content-Disposition"] = "inline; filename=recibo-nomina.pdf";
+            return File(result.Data, "application/pdf");
         }
 
     }
